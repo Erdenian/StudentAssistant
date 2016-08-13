@@ -30,11 +30,13 @@
             android:theme="@style/TransparentStatusBar" />
 
         <activity
+            android:name=".activities.AlarmActivity"
+            android:theme="@style/TransparentStatusBar" />
+
+        <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/settings"
             android:theme="@style/AppThemeWithActionBar" />
-
-        <activity android:name=".activities.AlarmActivity" />
 
     </application>
 
