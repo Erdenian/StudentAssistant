@@ -1,9 +1,27 @@
 package ru.erdenian.studentassistant.classes;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import ru.erdenian.studentassistant.R;
+import ru.erdenian.studentassistant.activities.AlarmActivity;
+import ru.erdenian.studentassistant.activities.ScheduleActivity;
+import ru.erdenian.studentassistant.activities.SettingsActivity;
+import ru.erdenian.studentassistant.activities.UniversitySelectionActivity;
 
 /**
  * Created by Erdenian on 18.07.2016.
@@ -55,5 +73,105 @@ public final class Utils {
                 result.add(list.get(i));
 
         return result;
+    }
+
+    public static DrawerLayout initializeNavigationView(Resources resources,
+                                                        Toolbar toolbar, final Activity currentActivity) {
+        View view = currentActivity.getWindow().getDecorView();
+
+        DrawerLayout drawerLayout;
+        LinearLayout llSchedule, llMap, llAlarm,
+                llSettings, llHelp,
+                llUniversitySelectionActivity, llClearData;
+
+        drawerLayout = (DrawerLayout) view.findViewById(R.id.as_drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(currentActivity, drawerLayout, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        final DrawerLayout finalDrawerLayout = drawerLayout;
+        View.OnClickListener onClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.nv_schedule:
+                        if (!(currentActivity instanceof ScheduleActivity)) {
+                            currentActivity.startActivity(new Intent(currentActivity,
+                                    ScheduleActivity.class));
+                            currentActivity.finish();
+                        }
+                        break;
+                    case R.id.nv_map:
+
+                        break;
+                    case R.id.nv_alarm:
+                        if (!(currentActivity instanceof AlarmActivity)) {
+                            currentActivity.startActivity(new Intent(currentActivity,
+                                    AlarmActivity.class));
+                            currentActivity.finish();
+                        }
+                        break;
+                    case R.id.nv_settings:
+                        currentActivity.startActivity(new Intent(currentActivity,
+                                SettingsActivity.class));
+                        break;
+                    case R.id.nv_help:
+
+                        break;
+                    case R.id.nv_university_selection_activity:
+                        currentActivity.startActivity(new Intent(currentActivity,
+                                UniversitySelectionActivity.class));
+                        currentActivity.finish();
+                        break;
+                    case R.id.nv_clear_data:
+                        try {
+                            Runtime.getRuntime().exec("pm clear ru.erdenian.studentassistant");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                }
+                finalDrawerLayout.closeDrawer(GravityCompat.START);
+            }
+        };
+
+        llSchedule = (LinearLayout) view.findViewById(R.id.nv_schedule);
+        if (currentActivity instanceof ScheduleActivity) {
+            llSchedule.setBackgroundColor(resources.getColor(R.color.nav_selected_item_background));
+            ((ImageView) view.findViewById(R.id.nv_schedule_icon))
+                    .setColorFilter(resources.getColor(R.color.colorPrimary));
+            ((TextView) view.findViewById(R.id.nv_schedule_text))
+                    .setTextColor(resources.getColor(R.color.colorPrimary));
+        }
+        llSchedule.setOnClickListener(onClick);
+
+        llMap = (LinearLayout) view.findViewById(R.id.nv_map);
+        llMap.setOnClickListener(onClick);
+
+        llAlarm = (LinearLayout) view.findViewById(R.id.nv_alarm);
+        if (currentActivity instanceof AlarmActivity) {
+            llAlarm.setBackgroundColor(resources.getColor(R.color.nav_selected_item_background));
+            ((ImageView) view.findViewById(R.id.nv_alarm_icon))
+                    .setColorFilter(resources.getColor(R.color.colorPrimary));
+            ((TextView) view.findViewById(R.id.nv_alarm_text))
+                    .setTextColor(resources.getColor(R.color.colorPrimary));
+        }
+        llAlarm.setOnClickListener(onClick);
+
+        llSettings = (LinearLayout) view.findViewById(R.id.nv_settings);
+        llSettings.setOnClickListener(onClick);
+
+        llHelp = (LinearLayout) view.findViewById(R.id.nv_help);
+        llHelp.setOnClickListener(onClick);
+
+        llUniversitySelectionActivity =
+                (LinearLayout) view.findViewById(R.id.nv_university_selection_activity);
+        llUniversitySelectionActivity.setOnClickListener(onClick);
+
+        llClearData = (LinearLayout) view.findViewById(R.id.nv_clear_data);
+        llClearData.setOnClickListener(onClick);
+
+        return drawerLayout;
     }
 }

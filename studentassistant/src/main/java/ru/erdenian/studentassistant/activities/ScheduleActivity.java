@@ -9,14 +9,12 @@ import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -36,7 +34,6 @@ import org.joda.time.Minutes;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -47,6 +44,7 @@ import ru.erdenian.studentassistant.adapters.SchedulePagerAdapter;
 import ru.erdenian.studentassistant.adapters.SemestersSpinnerAdapter;
 import ru.erdenian.studentassistant.classes.Lesson;
 import ru.erdenian.studentassistant.classes.Semester;
+import ru.erdenian.studentassistant.classes.Utils;
 import ru.erdenian.studentassistant.constants.ServerConstants;
 import ru.erdenian.studentassistant.constants.SharedPreferencesConstants;
 import ru.erdenian.studentassistant.fragments.SchedulePageFragment;
@@ -56,7 +54,6 @@ import ru.erdenian.studentassistant.fragments.SchedulePageFragment;
  */
 
 public class ScheduleActivity extends AppCompatActivity implements
-        View.OnClickListener,
         AdapterView.OnItemSelectedListener,
         CalendarDatePickerDialogFragment.OnDateSetListener,
         FutureCallback<File>,
@@ -69,7 +66,6 @@ public class ScheduleActivity extends AppCompatActivity implements
     Toolbar toolbar;
     Spinner spSemesters;
     DrawerLayout drawerLayout;
-    LinearLayout llSchedule, llMap, llAlarm, llSettings, llHelp, llUniversitySelectionActivity, llClearData;
     LinearLayout llProgress;
     TextView tvProgressMessage;
     SwipeRefreshLayout swipeRefreshLayout;
@@ -94,39 +90,7 @@ public class ScheduleActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.as_drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-
-        llSchedule = (LinearLayout) findViewById(R.id.nv_schedule);
-        llSchedule.setBackgroundColor(getResources()
-                .getColor(R.color.nav_selected_item_background));
-        ((ImageView) findViewById(R.id.nv_schedule_icon))
-                .setColorFilter(getResources().getColor(R.color.colorPrimary));
-        ((TextView) findViewById(R.id.nv_schedule_text))
-                .setTextColor(getResources().getColor(R.color.colorPrimary));
-        llSchedule.setOnClickListener(this);
-
-        llMap = (LinearLayout) findViewById(R.id.nv_map);
-        llMap.setOnClickListener(this);
-
-        llAlarm = (LinearLayout) findViewById(R.id.nv_alarm);
-        llAlarm.setOnClickListener(this);
-
-        llSettings = (LinearLayout) findViewById(R.id.nv_settings);
-        llSettings.setOnClickListener(this);
-
-        llHelp = (LinearLayout) findViewById(R.id.nv_help);
-        llHelp.setOnClickListener(this);
-
-        llUniversitySelectionActivity =
-                (LinearLayout) findViewById(R.id.nv_university_selection_activity);
-        llUniversitySelectionActivity.setOnClickListener(this);
-
-        llClearData = (LinearLayout) findViewById(R.id.nv_clear_data);
-        llClearData.setOnClickListener(this);
+        drawerLayout = Utils.initializeNavigationView(getResources(), toolbar, this);
 
         llProgress = (LinearLayout) findViewById(R.id.pb_progress);
         tvProgressMessage = (TextView) findViewById(R.id.pb_progress_message);
@@ -253,39 +217,6 @@ public class ScheduleActivity extends AppCompatActivity implements
     public void onPageScrollStateChanged(int state) {
         swipeRefreshLayout.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
         SchedulePageFragment.setSwipeRefreshLayoutEnabled(state == ViewPager.SCROLL_STATE_IDLE);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.nv_schedule:
-
-                break;
-            case R.id.nv_map:
-
-                break;
-            case R.id.nv_alarm:
-                startActivity(new Intent(this, AlarmActivity.class));
-                break;
-            case R.id.nv_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
-                break;
-            case R.id.nv_help:
-
-                break;
-            case R.id.nv_university_selection_activity:
-                startActivity(new Intent(this, UniversitySelectionActivity.class));
-                finish();
-                break;
-            case R.id.nv_clear_data:
-                try {
-                    Runtime.getRuntime().exec("pm clear ru.erdenian.studentassistant");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                break;
-        }
-        drawerLayout.closeDrawer(GravityCompat.START);
     }
 
     @Override
