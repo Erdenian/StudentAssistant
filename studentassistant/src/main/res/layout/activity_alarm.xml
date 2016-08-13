@@ -6,7 +6,7 @@
 
 
     <TimePicker
-        android:id="@+id/timePicker"
+        android:id="@+id/aa_time_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal" />

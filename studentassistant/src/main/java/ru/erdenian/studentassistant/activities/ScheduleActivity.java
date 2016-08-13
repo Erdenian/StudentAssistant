@@ -69,7 +69,7 @@ public class ScheduleActivity extends AppCompatActivity implements
     Toolbar toolbar;
     Spinner spSemesters;
     DrawerLayout drawerLayout;
-    LinearLayout llSchedule, llMap, llSettings, llHelp, llUniversitySelectionActivity, llClearData;
+    LinearLayout llSchedule, llMap, llAlarm, llSettings, llHelp, llUniversitySelectionActivity, llClearData;
     LinearLayout llProgress;
     TextView tvProgressMessage;
     SwipeRefreshLayout swipeRefreshLayout;
@@ -111,6 +111,9 @@ public class ScheduleActivity extends AppCompatActivity implements
 
         llMap = (LinearLayout) findViewById(R.id.nv_map);
         llMap.setOnClickListener(this);
+
+        llAlarm = (LinearLayout) findViewById(R.id.nv_alarm);
+        llAlarm.setOnClickListener(this);
 
         llSettings = (LinearLayout) findViewById(R.id.nv_settings);
         llSettings.setOnClickListener(this);
@@ -260,6 +263,9 @@ public class ScheduleActivity extends AppCompatActivity implements
                 break;
             case R.id.nv_map:
 
+                break;
+            case R.id.nv_alarm:
+                startActivity(new Intent(this, AlarmActivity.class));
                 break;
             case R.id.nv_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
