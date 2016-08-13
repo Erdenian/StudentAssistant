@@ -6,8 +6,10 @@
 
     <TextView
         android:id="@+id/sdis_title"
-        style="@style/ActionBarSpinnerDropdownItem"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:paddingLeft="@dimen/toolbar_spinner_title_margin_start"
-        android:paddingRight="@dimen/toolbar_spinner_title_margin_start" />
+        android:paddingRight="@dimen/toolbar_spinner_title_margin_start"
+        android:textColor="@color/colorPrimary" />
 
 </LinearLayout>

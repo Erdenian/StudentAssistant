@@ -18,12 +18,10 @@
 
     <style name="TransparentStatusBar" parent="AppTheme" />
 
-    <style name="MSV_ImageButton">
+    <style name="ToolbarButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">?android:attr/selectableItemBackground</item>
-        <item name="android:paddingLeft">@dimen/search_icon_padding</item>
-        <item name="android:paddingRight">@dimen/search_icon_padding</item>
     </style>
 
     <style name="ActionBarTitleWhite" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Title">
@@ -31,10 +29,6 @@
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:textColor">@android:color/white</item>
-    </style>
-
-    <style name="ActionBarSpinnerDropdownItem" parent="ActionBarTitleWhite">
-        <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
     <style name="DatePicker" parent="BetterPickersRadialTimePickerDialog.PrimaryColor">

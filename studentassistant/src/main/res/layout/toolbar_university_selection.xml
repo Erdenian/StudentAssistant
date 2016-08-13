@@ -22,7 +22,7 @@
 
         <ImageButton
             android:id="@+id/tus_back"
-            style="@style/MSV_ImageButton"
+            style="@style/ToolbarButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/toolbar_back_button_margin_end"

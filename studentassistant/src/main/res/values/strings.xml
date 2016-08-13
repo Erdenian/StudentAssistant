@@ -8,28 +8,29 @@
     <string name="search_hint">Поиск</string>
     <string name="getting_universities_list">Получение списка университетов</string>
 
-    <string name="today">Сегодня</string>
-    <string name="calendar">Календарь</string>
     <string name="schedule">Расписание</string>
     <string name="map">Карта</string>
     <string name="alarm">Будильник</string>
-    <string name="settings">Настройки</string>
     <string name="tools">Инструменты</string>
+    <string name="settings">Настройки</string>
     <string name="help">Помощь</string>
+
+    <string name="today">Сегодня</string>
+    <string name="calendar">Календарь</string>
     <string name="holidays">Каникулы</string>
     <string name="day_off">Выходной</string>
     <string name="getting_semesters_list">Получение списка семестров</string>
     <string name="getting_lessons_list">Получение списка занятий</string>
     <string name="week">Неделя</string>
 
+    <string name="show_week_numbers">Номера недель</string>
+    <string name="show_week_numbers_summary">Показывать номера недель над датой</string>
+    <string name="show_week_numbers_key">show_week_numbers</string>
+
     <string name="ok">OK</string>
     <string name="cancel">Отмена</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="show_week_numbers">Номера недель</string>
-    <string name="show_week_numbers_summary">Показывать номера недель над датой</string>
-    <string name="show_week_numbers_key">show_week_numbers</string>
 
 </resources>

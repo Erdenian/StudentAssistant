@@ -5,12 +5,10 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="MSV_ImageButton">
+    <style name="ToolbarButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">?android:attr/selectableItemBackground</item>
-        <item name="android:paddingLeft">@dimen/search_icon_padding</item>
-        <item name="android:paddingRight">@dimen/search_icon_padding</item>
     </style>
 
     <style name="ScheduleCard">
