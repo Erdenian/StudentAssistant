@@ -1,0 +1,810 @@
+[
+  {
+    "classrooms": [
+      "УВЦ"
+    ],
+    "days": [
+      1
+    ],
+    "endTime": "10:30:00.000",
+    "name": "Военная подготовка",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "09:00:00.000",
+    "teachers": [
+      "Болотов Олег Алексеевич"
+    ],
+    "type": "Военная подготовка",
+    "weeks": [
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "3104"
+    ],
+    "days": [
+      2
+    ],
+    "endTime": "10:30:00.000",
+    "name": "Электроника",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "09:00:00.000",
+    "teachers": [
+      "Кузнецов Сергей Николаевич"
+    ],
+    "type": "Лекция",
+    "weeks": [
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "4305"
+    ],
+    "days": [
+      4
+    ],
+    "endTime": "10:30:00.000",
+    "name": "Алгоритмы и структуры данных",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "09:00:00.000",
+    "teachers": [
+      "Колдаев Виктор Дмитриевич"
+    ],
+    "type": "Практика",
+    "weeks": [
+      true,
+      false,
+      true,
+      false
+    ]
+  },
+  {
+    "classrooms": [
+      "4305"
+    ],
+    "days": [
+      5
+    ],
+    "endTime": "10:30:00.000",
+    "name": "Схемотехника",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "09:00:00.000",
+    "teachers": [
+      "Якунин Алексей Николаевич"
+    ],
+    "type": "Практика",
+    "weeks": [
+      true,
+      false,
+      true,
+      false
+    ]
+  },
+  {
+    "classrooms": [
+      "1205"
+    ],
+    "days": [
+      5
+    ],
+    "endTime": "10:30:00.000",
+    "name": "Русский язык и культура речи",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "09:00:00.000",
+    "teachers": [
+      "Жукова Светлана Николаевна"
+    ],
+    "type": "Лекция",
+    "weeks": [
+      false,
+      true,
+      false,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "УВЦ"
+    ],
+    "days": [
+      1
+    ],
+    "endTime": "12:10:00.000",
+    "name": "Военная подготовка",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "10:40:00.000",
+    "teachers": [
+      "Болотов Олег Алексеевич"
+    ],
+    "type": "Военная подготовка",
+    "weeks": [
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "5101"
+    ],
+    "days": [
+      2
+    ],
+    "endTime": "12:10:00.000",
+    "name": "Физкультура",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "10:40:00.000",
+    "type": "Практика",
+    "weeks": [
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "1203"
+    ],
+    "days": [
+      3
+    ],
+    "endTime": "12:10:00.000",
+    "name": "Теория вероятностей и математическая статистика",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "10:40:00.000",
+    "teachers": [
+      "Лесин Виктор Васильевич"
+    ],
+    "type": "Лекция",
+    "weeks": [
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "1201"
+    ],
+    "days": [
+      4
+    ],
+    "endTime": "12:10:00.000",
+    "name": "Безопасность жизнедеятельности",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "10:40:00.000",
+    "teachers": [
+      "Никулина Ирина Михайловна"
+    ],
+    "type": "Лекция",
+    "weeks": [
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "3118"
+    ],
+    "days": [
+      5
+    ],
+    "endTime": "12:10:00.000",
+    "name": "Теория вероятностей и математическая статистика",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "10:40:00.000",
+    "teachers": [
+      "Хахалин Сергей Яковлевич"
+    ],
+    "type": "Лабораторная работа",
+    "weeks": [
+      true,
+      false,
+      false,
+      false
+    ]
+  },
+  {
+    "classrooms": [
+      "3213"
+    ],
+    "days": [
+      6
+    ],
+    "endTime": "12:10:00.000",
+    "name": "Численные методы",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "10:40:00.000",
+    "teachers": [
+      "Васекин Борис Васильевич"
+    ],
+    "type": "Практика",
+    "weeks": [
+      true,
+      false,
+      true,
+      false
+    ]
+  },
+  {
+    "classrooms": [
+      "3302"
+    ],
+    "days": [
+      5
+    ],
+    "endTime": "12:10:00.000",
+    "name": "Теория вероятностей и математическая статистика",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "10:40:00.000",
+    "teachers": [
+      "Хахалин Сергей Яковлевич"
+    ],
+    "type": "Практика",
+    "weeks": [
+      false,
+      true,
+      false,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "3118"
+    ],
+    "days": [
+      6
+    ],
+    "endTime": "12:10:00.000",
+    "name": "Численные методы",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "10:40:00.000",
+    "teachers": [
+      "Васекин Борис Васильевич"
+    ],
+    "type": "Лабораторная работа",
+    "weeks": [
+      false,
+      true,
+      false,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "3244"
+    ],
+    "days": [
+      5
+    ],
+    "endTime": "12:10:00.000",
+    "name": "Теория вероятностей и математическая статистика",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "10:40:00.000",
+    "teachers": [
+      "Хахалин Сергей Яковлевич"
+    ],
+    "type": "Лабораторная работа",
+    "weeks": [
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  {
+    "classrooms": [
+      "5101"
+    ],
+    "days": [
+      5
+    ],
+    "endTime": "12:10:00.000",
+    "name": "Физкультура",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "12:20:00.000",
+    "type": "Практика",
+    "weeks": [
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "3102"
+    ],
+    "days": [
+      6
+    ],
+    "endTime": "13:50:00.000",
+    "name": "Алгоритмы и структуры данных",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "12:20:00.000",
+    "teachers": [
+      "Колдаев Виктор Дмитриевич"
+    ],
+    "type": "Лекция",
+    "weeks": [
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "УВЦ"
+    ],
+    "days": [
+      1
+    ],
+    "endTime": "14:10:00.000",
+    "name": "Военная подготовка",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "12:40:00.000",
+    "teachers": [
+      "Болотов Олег алексеевич"
+    ],
+    "type": "Военная подготовка",
+    "weeks": [
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "3102"
+    ],
+    "days": [
+      2
+    ],
+    "endTime": "14:10:00.000",
+    "name": "Численные методы",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "12:40:00.000",
+    "teachers": [
+      "Гончаров Виктор Анатольевич"
+    ],
+    "type": "Лекция",
+    "weeks": [
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "1203"
+    ],
+    "days": [
+      4
+    ],
+    "endTime": "14:10:00.000",
+    "name": "Арифметико-логические основы и схемотехника ЭВМ",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "12:40:00.000",
+    "teachers": [
+      "Якунин Алексей Николаевич"
+    ],
+    "type": "Лекция",
+    "weeks": [
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "4328"
+    ],
+    "days": [
+      3
+    ],
+    "endTime": "14:10:00.000",
+    "name": "Схемотехника",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "12:40:00.000",
+    "teachers": [
+      "Якунин Алексей Николаевич"
+    ],
+    "type": "Лабораторная работа",
+    "weeks": [
+      false,
+      true,
+      false,
+      false
+    ]
+  },
+  {
+    "classrooms": [
+      "3208"
+    ],
+    "days": [
+      3
+    ],
+    "endTime": "14:10:00.000",
+    "name": "Электроника",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "12:40:00.000",
+    "teachers": [
+      "Белоусов Владимир Николаевич"
+    ],
+    "type": "Лабораторная работа",
+    "weeks": [
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  {
+    "classrooms": [
+      "4212а"
+    ],
+    "days": [
+      3
+    ],
+    "endTime": "14:10:00.000",
+    "name": "Алгоритмы и структуры данных",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "12:40:00.000",
+    "teachers": [
+      "Теплова Яна Олеговна"
+    ],
+    "type": "Лабораторная работа",
+    "weeks": [
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "УВЦ"
+    ],
+    "days": [
+      1
+    ],
+    "endTime": "15:50:00.000",
+    "name": "Военная подготовка",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "14:20:00.000",
+    "teachers": [
+      "Болотов Олег алексеевич"
+    ],
+    "type": "Военная подготовка",
+    "weeks": [
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "3303"
+    ],
+    "days": [
+      2
+    ],
+    "endTime": "15:50:00.000",
+    "name": "Культурология",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "14:20:00.000",
+    "teachers": [
+      "Попова Татьяна Владимировна"
+    ],
+    "type": "Практика",
+    "weeks": [
+      true,
+      false,
+      true,
+      false
+    ]
+  },
+  {
+    "classrooms": [
+      "4207а"
+    ],
+    "days": [
+      4
+    ],
+    "endTime": "15:50:00.000",
+    "name": "Безопасность жизнедеятельности",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "14:20:00.000",
+    "teachers": [
+      "Березина Наталия Вадимовна"
+    ],
+    "type": "Лабораторная работа",
+    "weeks": [
+      true,
+      false,
+      false,
+      false
+    ]
+  },
+  {
+    "classrooms": [
+      "3242"
+    ],
+    "days": [
+      2
+    ],
+    "endTime": "15:50:00.000",
+    "name": "Политология",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "14:20:00.000",
+    "teachers": [
+      "Растимешина Татьяна Владимировна"
+    ],
+    "type": "Практика",
+    "weeks": [
+      false,
+      true,
+      false,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "4328"
+    ],
+    "days": [
+      3
+    ],
+    "endTime": "15:50:00.000",
+    "name": "Схемотехника",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "14:20:00.000",
+    "teachers": [
+      "Якунин Алексей Николаевич"
+    ],
+    "type": "Лабораторная работа",
+    "weeks": [
+      false,
+      true,
+      false,
+      false
+    ]
+  },
+  {
+    "classrooms": [
+      "3223"
+    ],
+    "days": [
+      4
+    ],
+    "endTime": "15:50:00.000",
+    "name": "Русский язык и культура речи",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "14:20:00.000",
+    "teachers": [
+      "Жукова Светлана Николаевна"
+    ],
+    "type": "Практика",
+    "weeks": [
+      false,
+      true,
+      false,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "3208"
+    ],
+    "days": [
+      3
+    ],
+    "endTime": "15:50:00.000",
+    "name": "Электроника",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "14:20:00.000",
+    "teachers": [
+      "Белоусов Владимир Николаевич"
+    ],
+    "type": "Лабораторная работа",
+    "weeks": [
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  {
+    "classrooms": [
+      "4212а"
+    ],
+    "days": [
+      3
+    ],
+    "endTime": "15:50:00.000",
+    "name": "Алгоритмы и структуры данных",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "14:20:00.000",
+    "teachers": [
+      "Теплова Яна Олеговна"
+    ],
+    "type": "Лабораторная работа",
+    "weeks": [
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "УВЦ"
+    ],
+    "days": [
+      1
+    ],
+    "endTime": "17:30:00.000",
+    "name": "Военная подготовка",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "16:00:00.000",
+    "teachers": [
+      "Болотов Олег алексеевич"
+    ],
+    "type": "Военная подготовка",
+    "weeks": [
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "4207а"
+    ],
+    "days": [
+      4
+    ],
+    "endTime": "17:30:00.000",
+    "name": "Безопасность жизнедеятельности",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "16:00:00.000",
+    "teachers": [
+      "Березина Наталия Вадимовна"
+    ],
+    "type": "Лабораторная работа",
+    "weeks": [
+      true,
+      false,
+      false,
+      false
+    ]
+  },
+  {
+    "classrooms": [
+      "1204"
+    ],
+    "days": [
+      3
+    ],
+    "endTime": "17:30:00.000",
+    "name": "Культурология",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "16:00:00.000",
+    "teachers": [
+      "Попова Татьяна Владимировна"
+    ],
+    "type": "Лекция",
+    "weeks": [
+      false,
+      true,
+      false,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "3210"
+    ],
+    "days": [
+      4
+    ],
+    "endTime": "17:30:00.000",
+    "name": "Электроника",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "16:00:00.000",
+    "teachers": [
+      "Белоусов Владимир Николаевич"
+    ],
+    "type": "Практика",
+    "weeks": [
+      false,
+      true,
+      false,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "1203"
+    ],
+    "days": [
+      5
+    ],
+    "endTime": "17:30:00.000",
+    "name": "Политология",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "16:00:00.000",
+    "teachers": [
+      "Растимешина Татьяна Владимировна"
+    ],
+    "type": "Лекция",
+    "weeks": [
+      false,
+      true,
+      false,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "УВЦ"
+    ],
+    "days": [
+      1
+    ],
+    "endTime": "19:40:00.000",
+    "name": "Военная подготовка",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "18:10:00.000",
+    "teachers": [
+      "Болотов Олег алексеевич"
+    ],
+    "type": "Военная подготовка",
+    "weeks": [
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "classrooms": [
+      "УВЦ"
+    ],
+    "days": [
+      1
+    ],
+    "endTime": "21:20:00.000",
+    "name": "Военная подготовка",
+    "repeatType": "EVERY_WEEK",
+    "startTime": "19:50:00.000",
+    "teachers": [
+      "Болотов Олег алексеевич"
+    ],
+    "type": "Военная подготовка",
+    "weeks": [
+      true,
+      true,
+      true,
+      true
+    ]
+  }
+]

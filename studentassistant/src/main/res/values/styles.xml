@@ -1,0 +1,96 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppThemeWithActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/splash</item>
+    </style>
+
+    <style name="TransparentStatusBar" parent="AppTheme" />
+
+    <style name="MSV_ImageButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:paddingLeft">@dimen/search_icon_padding</item>
+        <item name="android:paddingRight">@dimen/search_icon_padding</item>
+    </style>
+
+    <style name="ActionBarTitleWhite" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="ActionBarSpinnerDropdownItem" parent="ActionBarTitleWhite">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="DatePicker" parent="BetterPickersRadialTimePickerDialog.PrimaryColor">
+        <item name="bpBodyUnselectedTextColor">@color/colorPrimaryText</item>
+        <item name="bpDisabledDayTextColor">@color/colorSecondaryText</item>
+    </style>
+
+    <style name="NavigationViewGroupTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/nav_group_title_margin_bottom</item>
+        <item name="android:layout_marginTop">@dimen/nav_group_title_margin_top</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingLeft">@dimen/nav_item_padding_horizontal</item>
+        <item name="android:paddingRight">@dimen/nav_item_padding_horizontal</item>
+        <item name="android:textColor">@color/colorSecondaryText</item>
+    </style>
+
+    <style name="NavigationViewGroup">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/nav_items_container_margin_vertical</item>
+        <item name="android:layout_marginTop">@dimen/nav_items_container_margin_vertical</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="NavigationViewItem">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:paddingBottom">@dimen/nav_item_padding_vertical</item>
+        <item name="android:paddingLeft">@dimen/nav_item_padding_horizontal</item>
+        <item name="android:paddingRight">@dimen/nav_item_padding_horizontal</item>
+        <item name="android:paddingTop">@dimen/nav_item_padding_vertical</item>
+    </style>
+
+    <style name="NavigationViewItemText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginLeft">@dimen/nav_item_text_margin_start</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/colorPrimaryText</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ScheduleCard">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginBottom">@dimen/card_margin_bottom</item>
+        <item name="android:layout_marginLeft">@dimen/card_margin_horizontal</item>
+        <item name="android:layout_marginRight">@dimen/card_margin_horizontal</item>
+        <item name="android:layout_marginTop">@dimen/card_margin_top</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    </style>
+
+</resources>

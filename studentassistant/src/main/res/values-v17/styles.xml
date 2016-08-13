@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="NavigationViewGroupTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/nav_group_title_margin_bottom</item>
+        <item name="android:layout_marginTop">@dimen/nav_group_title_margin_top</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingEnd">@dimen/nav_item_padding_horizontal</item>
+        <item name="android:paddingStart">@dimen/nav_item_padding_horizontal</item>
+        <item name="android:textColor">@color/colorSecondaryText</item>
+    </style>
+
+    <style name="NavigationViewItem">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:paddingBottom">@dimen/nav_item_padding_vertical</item>
+        <item name="android:paddingEnd">@dimen/nav_item_padding_horizontal</item>
+        <item name="android:paddingStart">@dimen/nav_item_padding_horizontal</item>
+        <item name="android:paddingTop">@dimen/nav_item_padding_vertical</item>
+    </style>
+
+    <style name="NavigationViewItemText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginStart">@dimen/nav_item_text_margin_start</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/colorPrimaryText</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ScheduleCard">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginBottom">@dimen/card_margin_bottom</item>
+        <item name="android:layout_marginEnd">@dimen/card_margin_horizontal</item>
+        <item name="android:layout_marginStart">@dimen/card_margin_horizontal</item>
+        <item name="android:layout_marginTop">@dimen/card_margin_top</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    </style>
+
+</resources>

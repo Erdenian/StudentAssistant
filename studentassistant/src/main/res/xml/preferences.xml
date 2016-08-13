@@ -1,0 +1,9 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="@string/show_week_numbers_key"
+        android:summary="@string/show_week_numbers_summary"
+        android:title="@string/show_week_numbers" />
+
+</PreferenceScreen>

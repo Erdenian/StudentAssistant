@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.NavigationView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:fitsSystemWindows="true">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/nav_header_height"
+                android:background="@drawable/side_nav_bar"
+                android:gravity="bottom"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/nav_header_vertical_spacing"
+                    android:src="@android:drawable/sym_def_app_icon"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/nav_header_vertical_spacing"
+                    android:text="Android Studio"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="android.studio@android.com" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/NavigationViewGroup">
+
+                <LinearLayout
+                    android:id="@+id/nv_schedule"
+                    style="@style/NavigationViewItem"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:id="@+id/nv_schedule_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_clock_grey600_24dp"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/nv_schedule_text"
+                        style="@style/NavigationViewItemText"
+                        android:text="@string/schedule" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/nv_map"
+                    style="@style/NavigationViewItem"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:id="@+id/nv_map_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_map_grey600_24dp"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/nv_map_text"
+                        style="@style/NavigationViewItemText"
+                        android:text="@string/map" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/nv_alarm"
+                    style="@style/NavigationViewItem"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:id="@+id/nv_alarm_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_alarm_grey600_24dp"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/nv_alarm_text"
+                        style="@style/NavigationViewItemText"
+                        android:text="@string/alarm" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <include layout="@layout/divider" />
+
+            <TextView
+                style="@style/NavigationViewGroupTitle"
+                android:text="@string/tools" />
+
+            <LinearLayout style="@style/NavigationViewGroup">
+
+                <LinearLayout
+                    android:id="@+id/nv_settings"
+                    style="@style/NavigationViewItem"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_settings_grey600_24dp"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        style="@style/NavigationViewItemText"
+                        android:text="@string/settings" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/nv_help"
+                    style="@style/NavigationViewItem"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_help_circle_grey600_24dp"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        style="@style/NavigationViewItemText"
+                        android:text="@string/help" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <include layout="@layout/divider" />
+
+            <TextView
+                style="@style/NavigationViewGroupTitle"
+                android:text="Debug"
+                tools:ignore="HardcodedText" />
+
+            <LinearLayout style="@style/NavigationViewGroup">
+
+                <LinearLayout
+                    android:id="@+id/nv_university_selection_activity"
+                    style="@style/NavigationViewItem"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_bug_grey600_24dp"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        style="@style/NavigationViewItemText"
+                        android:text="UniversitySelectionActivity"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/nv_clear_data"
+                    style="@style/NavigationViewItem"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_bug_grey600_24dp"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        style="@style/NavigationViewItemText"
+                        android:text="Clear Data"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</android.support.design.widget.NavigationView>
