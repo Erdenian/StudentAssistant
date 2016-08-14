@@ -23,6 +23,9 @@
     <string name="getting_lessons_list">Получение списка занятий</string>
     <string name="week">Неделя</string>
 
+    <string name="turn_alarm_on">Включить будильник</string>
+    <string name="choose_time">Выбрать время</string>
+
     <string name="show_week_numbers">Номера недель</string>
     <string name="show_week_numbers_summary">Показывать номера недель над датой</string>
     <string name="show_week_numbers_key">show_week_numbers</string>

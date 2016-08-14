@@ -176,15 +176,13 @@ public class ScheduleActivity extends AppCompatActivity implements
                 MonthAdapter.CalendarDay last = new MonthAdapter.CalendarDay(lastDay.getYear(),
                         lastDay.getMonthOfYear() - 1, lastDay.getDayOfMonth());
                 new CalendarDatePickerDialogFragment()
-                        .setOnDateSetListener(this)
                         .setFirstDayOfWeek(Calendar.MONDAY)
                         .setPreselectedDate(preselected.getYear(),
                                 preselected.getMonthOfYear() - 1,
                                 preselected.getDayOfMonth())
                         .setDateRange(first, last)
-                        .setDoneText(getString(R.string.ok))
-                        .setCancelText(getString(R.string.cancel))
                         .setThemeCustom(R.style.DatePicker)
+                        .setOnDateSetListener(this)
                         .show(getSupportFragmentManager(), DATE_PICKER_TAG);
                 break;
         }
