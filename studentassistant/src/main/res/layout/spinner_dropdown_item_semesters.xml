@@ -6,8 +6,7 @@
 
     <TextView
         android:id="@+id/sdis_title"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        style="@style/ActionBarTitleWhite"
         android:paddingLeft="@dimen/toolbar_spinner_title_margin_start"
         android:paddingRight="@dimen/toolbar_spinner_title_margin_start"
         android:textColor="@color/colorPrimary" />
