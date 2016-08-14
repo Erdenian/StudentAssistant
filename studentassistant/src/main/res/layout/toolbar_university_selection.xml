@@ -24,7 +24,7 @@
             android:id="@+id/tus_back"
             style="@style/ToolbarButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/toolbar_back_button_margin_end"
             android:layout_marginLeft="@dimen/toolbar_back_button_margin_start"
             android:layout_marginRight="@dimen/toolbar_back_button_margin_end"
