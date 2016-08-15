@@ -36,7 +36,7 @@ public class SchedulePageFragment extends Fragment {
     static SwipeRefreshLayout swipeRefreshLayout;
     static ViewPager viewPager;
     static SchedulePagerAdapter pagerAdapter;
-    static boolean isSwipeRefreshLayoutEnabled;
+    static boolean isSwipeRefreshLayoutEnabled = true;
 
     static ArrayList<Lesson> lessons;
     LocalDate day;
