@@ -2,6 +2,7 @@ package ru.erdenian.studentassistant.constants;
 
 /**
  * Created by Erdenian on 23.07.2016.
+ * Todo: описание класса
  */
 
 public final class SharedPreferencesConstants {

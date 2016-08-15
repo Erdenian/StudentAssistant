@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Erdenian on 01.08.2016.
+ * Todo: описание класса
  */
 
 public class UniversitySelectionListItem {

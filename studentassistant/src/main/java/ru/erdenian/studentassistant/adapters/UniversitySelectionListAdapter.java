@@ -14,6 +14,7 @@ import ru.erdenian.studentassistant.classes.UniversitySelectionListItem;
 
 /**
  * Created by Erdenian on 17.07.2016.
+ * Todo: описание класса
  */
 
 public class UniversitySelectionListAdapter extends BaseAdapter {
@@ -62,6 +63,4 @@ public class UniversitySelectionListAdapter extends BaseAdapter {
 
         return view;
     }
-
-    ;
 }

@@ -14,9 +14,12 @@ import ru.erdenian.studentassistant.fragments.SchedulePageFragment;
 
 /**
  * Created by Erdenian on 26.07.2016.
+ * Todo: описание класса
  */
 
 public class SchedulePagerAdapter extends FragmentStatePagerAdapter {
+
+    static boolean showWeekNumbers = false;
 
     final String TITLE_FORMAT = "EEEE, dd MMMM",
             TITLE_FORMAT_FULL = "EEEE, dd MMMM yyyy";
@@ -24,9 +27,6 @@ public class SchedulePagerAdapter extends FragmentStatePagerAdapter {
     public final int START_PAGE;
     final int COUNT;
 
-    boolean showWeekNumbers = false;
-
-    Semester semester;
     LocalDate firstDay, lastDay, firstWeekMonday, today;
 
     DateTimeFormatter format, formatFull;
@@ -66,8 +66,13 @@ public class SchedulePagerAdapter extends FragmentStatePagerAdapter {
         LocalDate day = firstDay.plusDays(position);
         StringBuffer title = new StringBuffer();
 
+        // Todo: нормальное определение номера недели
         if (showWeekNumbers)
-            title.append("Неделя " + (Days.daysBetween(firstWeekMonday, day).getDays() / 7) + "\n");
+            // Todo: получение строки из strings.xml
+            title.append("Неделя ")
+                    .append(Days.daysBetween(firstWeekMonday, day).getDays() / 7 + 1)
+                    .append("\n");
+
         if (day.getYear() == today.getYear())
             title.append(day.toString(format));
         else
@@ -86,8 +91,8 @@ public class SchedulePagerAdapter extends FragmentStatePagerAdapter {
         return COUNT;
     }
 
-    public void setShowWeekNumbers(boolean showWeekNumbers) {
-        this.showWeekNumbers = showWeekNumbers;
+    public static void setShowWeekNumbers(boolean showWeekNumbers) {
+        SchedulePagerAdapter.showWeekNumbers = showWeekNumbers;
     }
 
     public LocalDate getDate(int position) {

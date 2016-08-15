@@ -30,9 +30,7 @@
     <string name="show_week_numbers_summary">Показывать номера недель над датой</string>
     <string name="show_week_numbers_key">show_week_numbers</string>
 
-    <string name="ok">OK</string>
-    <string name="cancel">Отмена</string>
-
+    <!-- Todo: перевести на русский -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 

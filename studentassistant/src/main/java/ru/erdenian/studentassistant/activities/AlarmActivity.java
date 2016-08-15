@@ -13,12 +13,15 @@ import android.text.TextWatcher;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.util.Locale;
+
 import ru.erdenian.studentassistant.R;
 import ru.erdenian.studentassistant.classes.Utils;
 import ru.erdenian.studentassistant.constants.SharedPreferencesConstants;
 
 /**
  * Created by Erdenian on 13.08.2016.
+ * Todo: описание класса
  */
 
 public class AlarmActivity extends AppCompatActivity implements
@@ -43,7 +46,8 @@ public class AlarmActivity extends AppCompatActivity implements
 
         toolbar = (Toolbar) findViewById(R.id.ta_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.alarm);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle(R.string.alarm);
 
         drawerLayout = Utils.initializeNavigationView(getResources(), toolbar, this);
 
@@ -52,12 +56,14 @@ public class AlarmActivity extends AppCompatActivity implements
         scAlarm.setOnCheckedChangeListener(this);
 
         etHour = (EditText) findViewById(R.id.ca_hour);
-        etHour.setText("" + sharedPreferences.getInt(SharedPreferencesConstants.ALARM_HOUR, 1));
+        etHour.setText(String.format(Locale.getDefault(), "%d",
+                sharedPreferences.getInt(SharedPreferencesConstants.ALARM_HOUR, 1)));
         etHour.setEnabled(scAlarm.isChecked());
         etHour.addTextChangedListener(this);
 
         etMinute = (EditText) findViewById(R.id.ca_minute);
-        etMinute.setText("" + sharedPreferences.getInt(SharedPreferencesConstants.ALARM_MINUTE, 0));
+        etMinute.setText(String.format(Locale.getDefault(), "%d",
+                sharedPreferences.getInt(SharedPreferencesConstants.ALARM_MINUTE, 0)));
         etMinute.setEnabled(scAlarm.isChecked());
         etMinute.addTextChangedListener(this);
     }

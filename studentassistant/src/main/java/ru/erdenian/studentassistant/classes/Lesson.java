@@ -6,6 +6,7 @@ import org.joda.time.LocalTime;
 
 /**
  * Created by Erdenian on 26.07.2016.
+ * Todo: описание класса
  */
 
 public class Lesson {
@@ -61,11 +62,11 @@ public class Lesson {
         }
     }
 
-    public boolean contains(LocalDate day) {
+    public boolean contains(LocalDate dayToCheck) {
         switch (repeatType) {
             case EVERY_WEEK:
-                for (int i = 0; i < days.length; i++) {
-                    if ((day.getDayOfWeek() == days[i]) && checkWeek(day))
+                for (int day : days) {
+                    if ((dayToCheck.getDayOfWeek() == day) && checkWeek(dayToCheck))
                         return true;
                 }
                 break;

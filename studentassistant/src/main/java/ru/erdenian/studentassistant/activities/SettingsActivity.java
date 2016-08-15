@@ -10,6 +10,7 @@ import ru.erdenian.studentassistant.R;
 
 /**
  * Created by Erdenian on 29.07.2016.
+ * Todo: описание класса
  */
 
 public class SettingsActivity extends PreferenceActivity {
@@ -20,7 +21,10 @@ public class SettingsActivity extends PreferenceActivity {
         getFragmentManager().beginTransaction().replace(android.R.id.content,
                 new MainPreferenceFragment()).commit();
 
-        AppCompatDelegate.create(this, null).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        AppCompatDelegate delegate = AppCompatDelegate.create(this, null);
+
+        if (delegate.getSupportActionBar() != null)
+            delegate.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     /*@Override

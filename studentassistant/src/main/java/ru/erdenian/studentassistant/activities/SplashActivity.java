@@ -10,6 +10,7 @@ import ru.erdenian.studentassistant.constants.SharedPreferencesConstants;
 
 /**
  * Created by Erdenian on 23.07.2016.
+ * Todo: описание класса
  */
 
 public class SplashActivity extends AppCompatActivity {

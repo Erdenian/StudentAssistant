@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -25,6 +26,7 @@ import ru.erdenian.studentassistant.activities.UniversitySelectionActivity;
 
 /**
  * Created by Erdenian on 18.07.2016.
+ * Todo: описание класса
  */
 
 public final class Utils {
@@ -37,6 +39,7 @@ public final class Utils {
      * @return значение в px
      */
     public static int dpToPx(Context context, int dp) {
+        // Todo: проверить правильность преобразования
         return Math.round(dp * (context.getResources().getDisplayMetrics().xdpi /
                 DisplayMetrics.DENSITY_DEFAULT));
     }
@@ -138,11 +141,12 @@ public final class Utils {
 
         llSchedule = (LinearLayout) view.findViewById(R.id.nv_schedule);
         if (currentActivity instanceof ScheduleActivity) {
-            llSchedule.setBackgroundColor(resources.getColor(R.color.nav_selected_item_background));
+            llSchedule.setBackgroundColor(ContextCompat.getColor(currentActivity,
+                    R.color.nav_selected_item_background));
             ((ImageView) view.findViewById(R.id.nv_schedule_icon))
-                    .setColorFilter(resources.getColor(R.color.colorPrimary));
+                    .setColorFilter(ContextCompat.getColor(currentActivity, R.color.colorPrimary));
             ((TextView) view.findViewById(R.id.nv_schedule_text))
-                    .setTextColor(resources.getColor(R.color.colorPrimary));
+                    .setTextColor(ContextCompat.getColor(currentActivity, R.color.colorPrimary));
         }
         llSchedule.setOnClickListener(onClick);
 
@@ -151,11 +155,12 @@ public final class Utils {
 
         llAlarm = (LinearLayout) view.findViewById(R.id.nv_alarm);
         if (currentActivity instanceof AlarmActivity) {
-            llAlarm.setBackgroundColor(resources.getColor(R.color.nav_selected_item_background));
+            llAlarm.setBackgroundColor(ContextCompat.getColor(currentActivity,
+                    R.color.nav_selected_item_background));
             ((ImageView) view.findViewById(R.id.nv_alarm_icon))
-                    .setColorFilter(resources.getColor(R.color.colorPrimary));
+                    .setColorFilter(ContextCompat.getColor(currentActivity, R.color.colorPrimary));
             ((TextView) view.findViewById(R.id.nv_alarm_text))
-                    .setTextColor(resources.getColor(R.color.colorPrimary));
+                    .setTextColor(ContextCompat.getColor(currentActivity, R.color.colorPrimary));
         }
         llAlarm.setOnClickListener(onClick);
 

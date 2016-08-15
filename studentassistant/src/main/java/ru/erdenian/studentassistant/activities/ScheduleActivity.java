@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
@@ -51,6 +52,7 @@ import ru.erdenian.studentassistant.fragments.SchedulePageFragment;
 
 /**
  * Created by Erdenian on 23.07.2016.
+ * Todo: описание класса
  */
 
 public class ScheduleActivity extends AppCompatActivity implements
@@ -63,6 +65,16 @@ public class ScheduleActivity extends AppCompatActivity implements
     final String CURRENT_PAGE = "current_page",
             DATE_PICKER_TAG = "tag_date_picker";
 
+    File jsonFolder;
+    String groupId;
+    int savedPage = -1;
+
+    ArrayList<Semester> semesters;
+    Semester currentSemester, selectedSemester;
+    ArrayList<Lesson> lessons;
+
+    SharedPreferences sharedPreferences;
+
     Toolbar toolbar;
     Spinner spSemesters;
     DrawerLayout drawerLayout;
@@ -73,22 +85,27 @@ public class ScheduleActivity extends AppCompatActivity implements
     SchedulePagerAdapter pagerAdapter;
     PagerTabStrip pagerTabStrip;
 
-    ArrayList<Semester> semesters;
-    Semester currentSemester, selectedSemester;
-    ArrayList<Lesson> lessons;
-
-    File jsonFolder;
-    String groupId;
-    int savedPage = -1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
 
+        // Todo: константа с путем к папке
+        jsonFolder = new File(getFilesDir().getAbsolutePath() + "/json");
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        groupId = sp.getString(SharedPreferencesConstants.GROUP_ID, "");
+        if (groupId.equals("")) {
+            startActivity(new Intent(this, UniversitySelectionActivity.class));
+            finish();
+            return;
+        }
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         toolbar = (Toolbar) findViewById(R.id.ts_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         drawerLayout = Utils.initializeNavigationView(getResources(), toolbar, this);
 
@@ -105,20 +122,11 @@ public class ScheduleActivity extends AppCompatActivity implements
         SchedulePageFragment.setViewPager(viewPager);
 
         pagerTabStrip = (PagerTabStrip) findViewById(R.id.pagerTabStrip);
-        pagerTabStrip.setTextColor(getResources().getColor(R.color.colorPrimary));
+        pagerTabStrip.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         pagerTabStrip.setTabIndicatorColorResource(R.color.colorPrimary);
 
         spSemesters = (Spinner) findViewById(R.id.ts_spinner);
         spSemesters.setOnItemSelectedListener(this);
-
-        jsonFolder = new File(getFilesDir().getAbsolutePath() + "/json");
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        groupId = sp.getString(SharedPreferencesConstants.GROUP_ID, "");
-        if (groupId.equals("")) {
-            startActivity(new Intent(this, UniversitySelectionActivity.class));
-            finish();
-            return;
-        }
 
         getSemesters(false);
     }
@@ -139,9 +147,8 @@ public class ScheduleActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
 
-        if (pagerAdapter != null)
-            pagerAdapter.setShowWeekNumbers(PreferenceManager.getDefaultSharedPreferences(this)
-                    .getBoolean(getString(R.string.show_week_numbers_key), false));
+        SchedulePagerAdapter.setShowWeekNumbers(PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean(getString(R.string.show_week_numbers_key), false));
     }
 
     @Override
@@ -198,13 +205,13 @@ public class ScheduleActivity extends AppCompatActivity implements
 
     @Override
     public void onRefresh() {
+        // Todo: нормальное обновление
         getSemesters(true);
         swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
     }
 
     @Override
@@ -225,6 +232,7 @@ public class ScheduleActivity extends AppCompatActivity implements
             super.onBackPressed();
     }
 
+    // Todo: возможно стоит полностью переделать получение json
     @Override
     public void onCompleted(Exception e, File file) {
         if (e != null) {
@@ -253,10 +261,19 @@ public class ScheduleActivity extends AppCompatActivity implements
         if (deletePrevious) {
             File jsonFolder = new File(getFilesDir().getAbsolutePath() + "/json");
             File[] filesList = jsonFolder.listFiles();
+            boolean deleted = true;
+
             if (filesList != null)
                 for (File f : filesList)
-                    f.delete();
-            jsonFolder.delete();
+                    deleted = f.delete() && deleted;
+
+            if (deleted)
+                deleted = jsonFolder.delete();
+
+            //noinspection StatementWithEmptyBody
+            if (!deleted) {
+                // Todo: warning, что файлы не удалены
+            }
         }
 
         File jsonFileSemesters = new File(jsonFolder.getAbsolutePath() + "/semesters.json");
@@ -267,14 +284,14 @@ public class ScheduleActivity extends AppCompatActivity implements
             llProgress.animate().alpha(1);
             tvProgressMessage.setText(R.string.getting_semesters_list);
 
-            jsonFolder.mkdirs();
-            Ion.with(this)
-                    .load(ServerConstants.SERVER_URL +
-                            ServerConstants.ROOT_FOLDER +
-                            groupId +
-                            "/semesters.json")
-                    .write(jsonFileSemesters)
-                    .setCallback(this);
+            if (jsonFolder.mkdirs())
+                Ion.with(this)
+                        .load(ServerConstants.SERVER_URL +
+                                ServerConstants.ROOT_FOLDER +
+                                groupId +
+                                "/semesters.json")
+                        .write(jsonFileSemesters)
+                        .setCallback(this);
         }
     }
 

@@ -26,6 +26,7 @@ import ru.erdenian.studentassistant.classes.Semester;
 
 /**
  * Created by Erdenian on 26.07.2016.
+ * Todo: описание класса
  */
 
 public class SchedulePageFragment extends Fragment {
@@ -76,6 +77,7 @@ public class SchedulePageFragment extends Fragment {
         LinearLayout llCardsParent = (LinearLayout) view.findViewById(R.id.fs_cards_parent);
         timeFormat = DateTimeFormat.forPattern(TIME_FORMAT);
 
+        // Todo: протестить работу при разных входных данных
         for (int i = 0; i < localLessons.size(); i++) {
             final Lesson lesson = localLessons.get(i);
 

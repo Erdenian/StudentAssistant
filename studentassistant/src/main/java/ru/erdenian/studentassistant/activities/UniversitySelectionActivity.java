@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -39,6 +40,7 @@ import ru.erdenian.studentassistant.constants.SharedPreferencesConstants;
 
 /**
  * Created by Erdenian on 18.07.2016.
+ * Todo: описание класса
  */
 
 public class UniversitySelectionActivity extends AppCompatActivity implements
@@ -54,7 +56,12 @@ public class UniversitySelectionActivity extends AppCompatActivity implements
             INDEX = "index",
             TOP = "top";
 
-    int translationLengthToShowBackButton, screenWidth;
+    int translationLengthToShowBackButton, screenWidth, currentState = 0;
+    String json;
+
+    ArrayList<UniversitySelectionListItem> universities, currentList;
+    ArrayList<Integer> selectedItems = new ArrayList<>();
+    ArrayList<String> groupId = new ArrayList<>();
 
     LinearLayout llToolbarBackAndTitle;
     ImageButton ibBack;
@@ -64,13 +71,6 @@ public class UniversitySelectionActivity extends AppCompatActivity implements
     ListView[] listViews = new ListView[2];
 
     InputMethodManager imm;
-
-    String json;
-    int currentState = 0;
-
-    ArrayList<UniversitySelectionListItem> universities, currentList;
-    ArrayList<Integer> selectedItems = new ArrayList<>();
-    ArrayList<String> groupId = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +83,8 @@ public class UniversitySelectionActivity extends AppCompatActivity implements
         screenWidth = getResources().getDisplayMetrics().widthPixels;
 
         setSupportActionBar((Toolbar) findViewById(R.id.tus_toolbar));
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         llToolbarBackAndTitle = (LinearLayout) findViewById(R.id.tus_back_and_title);
 
@@ -101,10 +102,18 @@ public class UniversitySelectionActivity extends AppCompatActivity implements
                         .inflate(R.layout.textview_toolbar_title, null);
             }
         });
+        // Todo: поддержка школ
         tvTitle.setCurrentText(getString(R.string.universities));
+
+        // Todo: разобраться с MaterialSearchView
+        materialSearchView = (MaterialSearchView) findViewById(R.id.tus_search_view);
+        materialSearchView.setHint(getString(R.string.search_hint));
+        materialSearchView.setOnQueryTextListener(this);
+        materialSearchView.setOnSearchViewListener(this);
 
         progressBar = (LinearLayout) findViewById(R.id.pb_progress);
 
+        // Todo: реализовать ViewSwitcher для ListView
         listViews[0] = (ListView) findViewById(R.id.cus_list1);
         listViews[0].setEnabled(false);
         listViews[0].setOnItemClickListener(this);
@@ -115,12 +124,6 @@ public class UniversitySelectionActivity extends AppCompatActivity implements
         listViews[1].setOnItemClickListener(this);
 
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        // Todo: разобраться с MaterialSearchView
-        materialSearchView = (MaterialSearchView) findViewById(R.id.tus_search_view);
-        materialSearchView.setHint(getString(R.string.search_hint));
-        materialSearchView.setOnQueryTextListener(this);
-        materialSearchView.setOnSearchViewListener(this);
     }
 
     @Override
@@ -130,6 +133,7 @@ public class UniversitySelectionActivity extends AppCompatActivity implements
         for (int i = 0; i < currentState; i++)
             bundle.putInt(SELECTED_ITEM + i, selectedItems.get(i));
 
+        // Todo: протетсить работу сохранения позиции скролла
         int index = listViews[0].getFirstVisiblePosition();
         View v = listViews[0].getChildAt(0);
         int top = (v == null) ? 0 : (v.getTop() - listViews[0].getPaddingTop());
@@ -167,6 +171,7 @@ public class UniversitySelectionActivity extends AppCompatActivity implements
         progressBar.setVisibility(View.GONE);
         listViews[0].setEnabled(true);
 
+        // Todo: протетсить работу восстановления позиции скролла
         listViews[0].setSelectionFromTop(bundle.getInt(INDEX), bundle.getInt(TOP));
 
         super.onRestoreInstanceState(bundle);
@@ -255,21 +260,30 @@ public class UniversitySelectionActivity extends AppCompatActivity implements
         currentList = currentList.get(position).getInner();
 
         if (currentList == null) {
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder builder = new StringBuilder();
             for (int i = 0; i < currentState; i++)
-                buffer.append("/" + groupId.get(i));
+                builder.append("/").append(groupId.get(i));
 
             File jsonFolder = new File(getFilesDir().getAbsolutePath() + "/json");
             File[] filesList = jsonFolder.listFiles();
+            boolean deleted = true;
+
             if (filesList != null)
                 for (File f : filesList)
-                    f.delete();
-            jsonFolder.delete();
+                    deleted = f.delete() && deleted;
 
-            SharedPreferences.Editor ed =
+            if (deleted)
+                deleted = jsonFolder.delete();
+
+            //noinspection StatementWithEmptyBody
+            if (!deleted) {
+                // Todo: warning, что файлы не удалены
+            }
+
+            SharedPreferences.Editor editor =
                     PreferenceManager.getDefaultSharedPreferences(this).edit();
-            ed.putString(SharedPreferencesConstants.GROUP_ID, buffer.toString());
-            ed.apply();
+            editor.putString(SharedPreferencesConstants.GROUP_ID, builder.toString());
+            editor.apply();
 
             Intent intent = new Intent(this, ScheduleActivity.class);
             startActivity(intent);
@@ -347,15 +361,23 @@ public class UniversitySelectionActivity extends AppCompatActivity implements
         }
     }
 
+    // Todo: строки для школ
+    @Nullable
     private String getTitleString() {
         int type = currentList.get(0).getType();
         switch (type) {
             case UniversitySelectionListItem.TYPE_UNIVERSITY:
                 return getString(R.string.universities);
+            case UniversitySelectionListItem.TYPE_SCHOOL:
+                return null;
             case UniversitySelectionListItem.TYPE_FACULTY:
                 return getString(R.string.faculties);
+            case UniversitySelectionListItem.TYPE_YEAR:
+                return null;
             case UniversitySelectionListItem.TYPE_GROUP:
                 return getString(R.string.groups);
+            case UniversitySelectionListItem.TYPE_CLASS:
+                return null;
         }
         return null;
     }

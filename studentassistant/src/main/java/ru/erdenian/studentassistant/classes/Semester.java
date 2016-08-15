@@ -4,6 +4,7 @@ import org.joda.time.LocalDate;
 
 /**
  * Created by Erdenian on 27.07.2016.
+ * Todo: описание класса
  */
 
 public class Semester {

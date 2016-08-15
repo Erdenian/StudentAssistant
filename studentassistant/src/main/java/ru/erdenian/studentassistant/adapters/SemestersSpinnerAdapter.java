@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import ru.erdenian.studentassistant.classes.Semester;
 
 /**
  * Created by Erdenian on 28.07.2016.
+ * Todo: описание класса
  */
 
 public class SemestersSpinnerAdapter extends BaseAdapter {
@@ -31,7 +33,9 @@ public class SemestersSpinnerAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = inflater.inflate(R.layout.spinner_semesters, parent, false);
+        // Todo: повторное использование view
+        @SuppressLint("ViewHolder") View view =
+                inflater.inflate(R.layout.spinner_semesters, parent, false);
         TextView tvTitle = (TextView) view.findViewById(R.id.ss_title);
         if (semesters.get(position) != null) {
             tvTitle.setText(semesters.get(position).getName());

@@ -2,6 +2,7 @@ package ru.erdenian.studentassistant.constants;
 
 /**
  * Created by Erdenian on 01.08.2016.
+ * Todo: описание класса
  */
 
 public final class ServerConstants {
