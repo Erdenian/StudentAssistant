@@ -17,6 +17,7 @@
 
     <string name="today">Сегодня</string>
     <string name="calendar">Календарь</string>
+    <string name="edit_schedule">Редактировать расписание</string>
     <string name="holidays">Каникулы</string>
     <string name="day_off">Выходной</string>
     <string name="getting_semesters_list">Получение списка семестров</string>
@@ -33,5 +34,9 @@
     <!-- Todo: перевести на русский -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="title_activity_schedule_editor">ScheduleEditorActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 
 </resources>

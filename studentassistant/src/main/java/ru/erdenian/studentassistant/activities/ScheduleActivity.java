@@ -193,6 +193,9 @@ public class ScheduleActivity extends AppCompatActivity implements
                         .setOnDateSetListener(this)
                         .show(getSupportFragmentManager(), DATE_PICKER_TAG);
                 break;
+            case R.id.ms_schedule_editor:
+                startActivity(new Intent(this, ScheduleEditorActivity.class));
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

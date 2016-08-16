@@ -7,6 +7,13 @@
         android:icon="@drawable/ic_calendar_white_24dp"
         android:orderInCategory="100"
         android:title="@string/calendar"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/ms_schedule_editor"
+        android:icon="@drawable/ic_pencil_white_24dp"
+        android:orderInCategory="200"
+        android:title="@string/edit_schedule"
+        app:showAsAction="never" />
 
 </menu>
