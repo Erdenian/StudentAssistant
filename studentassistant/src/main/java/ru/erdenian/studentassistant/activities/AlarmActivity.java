@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -10,6 +11,8 @@ import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
@@ -18,6 +21,7 @@ import java.util.Locale;
 import ru.erdenian.studentassistant.R;
 import ru.erdenian.studentassistant.classes.Utils;
 import ru.erdenian.studentassistant.constants.SharedPreferencesConstants;
+import ru.erdenian.studentassistant.services.AlarmService;
 
 /**
  * Created by Erdenian on 13.08.2016.
@@ -25,7 +29,7 @@ import ru.erdenian.studentassistant.constants.SharedPreferencesConstants;
  */
 
 public class AlarmActivity extends AppCompatActivity implements
-        CompoundButton.OnCheckedChangeListener, TextWatcher {
+        CompoundButton.OnCheckedChangeListener, TextWatcher, View.OnClickListener {
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -34,6 +38,7 @@ public class AlarmActivity extends AppCompatActivity implements
     DrawerLayout drawerLayout;
     SwitchCompat scAlarm;
     EditText etHour, etMinute;
+    Button btnSaveTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +71,10 @@ public class AlarmActivity extends AppCompatActivity implements
                 sharedPreferences.getInt(SharedPreferencesConstants.ALARM_MINUTE, 0)));
         etMinute.setEnabled(scAlarm.isChecked());
         etMinute.addTextChangedListener(this);
+
+        btnSaveTime = (Button) findViewById(R.id.ca_save_time);
+        btnSaveTime.setEnabled(scAlarm.isChecked());
+        btnSaveTime.setOnClickListener(this);
     }
 
     @Override
@@ -75,6 +84,14 @@ public class AlarmActivity extends AppCompatActivity implements
 
         etHour.setEnabled(b);
         etMinute.setEnabled(b);
+        btnSaveTime.setEnabled(b);
+
+        Intent alarmService = new Intent(this, AlarmService.class);
+
+        if (b)
+            startService(alarmService);
+        else
+            stopService(alarmService);
     }
 
     @Override
@@ -88,13 +105,24 @@ public class AlarmActivity extends AppCompatActivity implements
     @Override
     public void afterTextChanged(Editable editable) {
         if ((etHour.length() == 0) || (etMinute.length() == 0))
-            return;
+            btnSaveTime.setEnabled(false);
+        else
+            btnSaveTime.setEnabled(true);
+    }
 
-        editor.putInt(SharedPreferencesConstants.ALARM_HOUR,
-                Integer.valueOf(etHour.getText().toString()));
-        editor.putInt(SharedPreferencesConstants.ALARM_MINUTE,
-                Integer.valueOf(etMinute.getText().toString()));
-        editor.apply();
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ca_alarm_switch:
+                editor.putInt(SharedPreferencesConstants.ALARM_HOUR,
+                        Integer.valueOf(etHour.getText().toString()));
+                editor.putInt(SharedPreferencesConstants.ALARM_MINUTE,
+                        Integer.valueOf(etMinute.getText().toString()));
+                editor.apply();
+
+                btnSaveTime.setEnabled(false);
+                break;
+        }
     }
 
     @Override

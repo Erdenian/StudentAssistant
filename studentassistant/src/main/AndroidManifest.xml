@@ -38,6 +38,11 @@
             android:label="@string/settings"
             android:theme="@style/AppThemeWithActionBar" />
 
+        <service
+            android:name=".services.AlarmService"
+            android:enabled="true"
+            android:exported="false" />
+
     </application>
 
 </manifest>
