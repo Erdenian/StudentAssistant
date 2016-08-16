@@ -174,6 +174,7 @@ public class ScheduleActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.ms_calendar:
+                // Todo: предвыбор текущей даты
                 LocalDate preselected = currentSemester != null ?
                         new LocalDate() : pagerAdapter.getDate(viewPager.getCurrentItem()),
                         firstDay = selectedSemester.getFirstDay(),
