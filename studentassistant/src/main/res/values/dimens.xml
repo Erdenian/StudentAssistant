@@ -13,9 +13,9 @@
     <dimen name="list_item_title_text_size">20sp</dimen>
     <dimen name="list_item_subtitle_text_size">15sp</dimen>
 
-    <dimen name="toolbar_spinner_margin_start">57dp</dimen>
+    <dimen name="toolbar_spinner_margin_start">56dp</dimen>
     <dimen name="toolbar_spinner_title_margin_start">16dp</dimen>
-    <!-- toolbar_spinner_title_margin_start = 73dp - toolbar_spinner_margin_start -->
+    <!-- toolbar_spinner_title_margin_start = 72dp - toolbar_spinner_margin_start -->
 
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>

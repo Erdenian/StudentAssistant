@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sdis_title"
+    style="@style/ActionBarTitle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
-
-    <TextView
-        android:id="@+id/sdis_title"
-        style="@style/ActionBarTitleWhite"
-        android:paddingLeft="@dimen/toolbar_spinner_title_margin_start"
-        android:paddingRight="@dimen/toolbar_spinner_title_margin_start"
-        android:textColor="@color/colorPrimary" />
-
-</LinearLayout>
+    android:paddingEnd="@dimen/toolbar_spinner_title_margin_start"
+    android:paddingLeft="@dimen/toolbar_spinner_title_margin_start"
+    android:paddingRight="@dimen/toolbar_spinner_title_margin_start"
+    android:paddingStart="@dimen/toolbar_spinner_title_margin_start"
+    android:textColor="@color/colorPrimary" />
