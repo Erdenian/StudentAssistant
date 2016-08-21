@@ -31,13 +31,7 @@
 
         <activity
             android:name=".activities.ScheduleEditorActivity"
-            android:label="@string/title_activity_schedule_editor"
-            android:parentActivityName=".activities.ScheduleActivity"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ru.erdenian.studentassistant.activities.ScheduleActivity" />
-        </activity>
+            android:theme="@style/AppTheme" />
 
         <activity
             android:name=".activities.AlarmActivity"

@@ -112,16 +112,16 @@ public class ScheduleActivity extends AppCompatActivity implements
         llProgress = (LinearLayout) findViewById(R.id.pb_progress);
         tvProgressMessage = (TextView) findViewById(R.id.pb_progress_message);
 
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.cs_swipe_refresh);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         swipeRefreshLayout.setOnRefreshListener(this);
         SchedulePageFragment.setSwipeRefreshLayout(swipeRefreshLayout);
 
-        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager = (ViewPager) findViewById(R.id.cs_view_pager);
         viewPager.addOnPageChangeListener(this);
         SchedulePageFragment.setViewPager(viewPager);
 
-        pagerTabStrip = (PagerTabStrip) findViewById(R.id.pagerTabStrip);
+        pagerTabStrip = (PagerTabStrip) findViewById(R.id.cs_pager_tab_strip);
         pagerTabStrip.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         pagerTabStrip.setTabIndicatorColorResource(R.color.colorPrimary);
 
