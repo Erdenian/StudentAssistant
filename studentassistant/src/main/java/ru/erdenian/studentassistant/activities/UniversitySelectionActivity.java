@@ -32,7 +32,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import ru.erdenian.studentassistant.R;
-import ru.erdenian.studentassistant.Utils.Utils;
+import ru.erdenian.studentassistant.Utils.UiUtils;
 import ru.erdenian.studentassistant.adapters.UniversitySelectionListAdapter;
 import ru.erdenian.studentassistant.classes.UniversitySelectionListItem;
 import ru.erdenian.studentassistant.constants.ServerConstants;
@@ -77,7 +77,7 @@ public class UniversitySelectionActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_university_selection);
 
-        translationLengthToShowBackButton = Utils.dpToPx(this,
+        translationLengthToShowBackButton = UiUtils.dpToPx(this,
                 (int) (-getResources().getDimension(R.dimen.toolbar_margin_start_to_hide_button) /
                         getResources().getDisplayMetrics().density));
         screenWidth = getResources().getDisplayMetrics().widthPixels;
@@ -230,8 +230,16 @@ public class UniversitySelectionActivity extends AppCompatActivity implements
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        listViews[0].setAdapter(new UniversitySelectionListAdapter(this,
-                Utils.search(currentList, newText)));
+        if ((newText == null) || (newText.length() == 0))
+            return true;
+
+        ArrayList<UniversitySelectionListItem> result = new ArrayList<>();
+
+        for (int i = 0; i < currentList.size(); i++)
+            if (currentList.get(i).toString().toLowerCase().contains(newText.toLowerCase()))
+                result.add(currentList.get(i));
+
+        listViews[0].setAdapter(new UniversitySelectionListAdapter(this, result));
         return true;
     }
 

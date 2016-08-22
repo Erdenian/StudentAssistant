@@ -19,7 +19,7 @@ import android.widget.EditText;
 import java.util.Locale;
 
 import ru.erdenian.studentassistant.R;
-import ru.erdenian.studentassistant.Utils.Utils;
+import ru.erdenian.studentassistant.Utils.UiUtils;
 import ru.erdenian.studentassistant.constants.SharedPreferencesConstants;
 import ru.erdenian.studentassistant.services.AlarmService;
 
@@ -54,7 +54,7 @@ public class AlarmActivity extends AppCompatActivity implements
         if (getSupportActionBar() != null)
             getSupportActionBar().setTitle(R.string.alarm);
 
-        drawerLayout = Utils.initializeNavigationView(getResources(), toolbar, this);
+        drawerLayout = UiUtils.initializeNavigationView(getResources(), toolbar, this);
 
         scAlarm = (SwitchCompat) findViewById(R.id.ca_alarm_switch);
         scAlarm.setChecked(sharedPreferences.getBoolean(SharedPreferencesConstants.ENABLE_ALARM, false));

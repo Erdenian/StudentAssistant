@@ -26,7 +26,7 @@ import org.joda.time.LocalDate;
 import java.util.Calendar;
 
 import ru.erdenian.studentassistant.R;
-import ru.erdenian.studentassistant.Utils.Utils;
+import ru.erdenian.studentassistant.Utils.UiUtils;
 import ru.erdenian.studentassistant.adapters.SchedulePagerAdapter;
 import ru.erdenian.studentassistant.adapters.SemestersSpinnerAdapter;
 import ru.erdenian.studentassistant.classes.Semester;
@@ -73,7 +73,7 @@ public class ScheduleActivity extends AppCompatActivity implements
         spSemesters = (Spinner) findViewById(R.id.ts_spinner);
         spSemesters.setOnItemSelectedListener(this);
 
-        drawerLayout = Utils.initializeNavigationView(getResources(), toolbar, this);
+        drawerLayout = UiUtils.initializeNavigationView(getResources(), toolbar, this);
 
         btnAddSchedule = (Button) findViewById(R.id.cs_add_schedule);
         btnAddSchedule.setOnClickListener(this);

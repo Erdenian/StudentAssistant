@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import ru.erdenian.studentassistant.R;
 import ru.erdenian.studentassistant.activities.AlarmActivity;
@@ -29,7 +28,7 @@ import ru.erdenian.studentassistant.activities.UniversitySelectionActivity;
  * Todo: описание класса
  */
 
-public final class Utils {
+public final class UiUtils {
 
     /**
      * Преобразует dp в px
@@ -54,28 +53,6 @@ public final class Utils {
     public static int pxToDp(Context context, int px) {
         return Math.round(px / (context.getResources().getDisplayMetrics().xdpi /
                 DisplayMetrics.DENSITY_DEFAULT));
-    }
-
-    /**
-     * Поиск по списку
-     *
-     * @param list  список
-     * @param query запрос
-     * @param <T>   тип списка
-     * @return список того же типа с найденными элементами
-     */
-    public static <T> ArrayList<T> search(ArrayList<T> list, String query) {
-        // Todo: нормальный поиск
-        if ((query == null) || (query.length() == 0))
-            return list;
-
-        ArrayList<T> result = new ArrayList<>();
-
-        for (int i = 0; i < list.size(); i++)
-            if (list.get(i).toString().toLowerCase().contains(query.toLowerCase()))
-                result.add(list.get(i));
-
-        return result;
     }
 
     public static DrawerLayout initializeNavigationView(Resources resources,
