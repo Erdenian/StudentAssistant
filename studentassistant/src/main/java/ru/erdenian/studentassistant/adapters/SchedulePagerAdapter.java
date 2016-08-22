@@ -6,8 +6,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import ru.erdenian.studentassistant.classes.Semester;
 import ru.erdenian.studentassistant.fragments.SchedulePageFragment;
@@ -27,21 +25,18 @@ public class SchedulePagerAdapter extends FragmentStatePagerAdapter {
     public final int START_PAGE;
     final int COUNT;
 
-    LocalDate firstDay, lastDay, firstWeekMonday, today;
-
-    DateTimeFormatter format, formatFull;
+    Semester semester;
+    LocalDate today;
 
     public SchedulePagerAdapter(FragmentManager fm, Semester semester) {
         super(fm);
 
-        if (semester != null) {
-            today = new LocalDate();
-            firstDay = semester.getFirstDay();
-            lastDay = semester.getLastDay();
-            firstWeekMonday = semester.getFirstWeekMonday();
+        this.semester = semester;
+        this.today = new LocalDate();
 
-            COUNT = Days.daysBetween(firstDay, lastDay).getDays() + 1;
-            int startPage = Days.daysBetween(firstDay, today).getDays();
+        if (semester != null) {
+            COUNT = this.semester.getLength();
+            int startPage = Days.daysBetween(this.semester.getFirstDay(), today).getDays();
             if (startPage >= COUNT)
                 START_PAGE = COUNT - 1;
             else if (startPage < 0)
@@ -50,40 +45,39 @@ public class SchedulePagerAdapter extends FragmentStatePagerAdapter {
                 START_PAGE = startPage;
         } else {
             today = new LocalDate();
-            firstDay = today;
-            lastDay = today;
-            firstWeekMonday = today;
 
             COUNT = 1;
             START_PAGE = 0;
         }
-        format = DateTimeFormat.forPattern(TITLE_FORMAT);
-        formatFull = DateTimeFormat.forPattern(TITLE_FORMAT_FULL);
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        LocalDate day = firstDay.plusDays(position);
         StringBuffer title = new StringBuffer();
 
-        // Todo: нормальное определение номера недели
-        if (showWeekNumbers)
-            // Todo: получение строки из strings.xml
-            title.append("Неделя ")
-                    .append(Days.daysBetween(firstWeekMonday, day).getDays() / 7 + 1)
-                    .append("\n");
+        if (semester != null) {
+            LocalDate day = semester.getFirstDay().plusDays(position);
 
-        if (day.getYear() == today.getYear())
-            title.append(day.toString(format));
-        else
-            title.append(day.toString(formatFull));
+            if (showWeekNumbers)
+                // Todo: получение строки из strings.xml
+                title.append("Неделя ").append(semester.getWeekNumber(day) + 1).append(", ");
+
+            if (day.getYear() == today.getYear())
+                title.append(day.toString(TITLE_FORMAT));
+            else
+                title.append(day.toString(TITLE_FORMAT_FULL));
+        } else {
+            title.append(new LocalDate().toString(TITLE_FORMAT));
+        }
 
         return title;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return SchedulePageFragment.newInstance(firstDay.plusDays(position));
+        if (semester != null)
+            return SchedulePageFragment.newInstance(semester.getFirstDay().plusDays(position));
+        return SchedulePageFragment.newInstance(new LocalDate());
     }
 
     @Override
@@ -96,10 +90,14 @@ public class SchedulePagerAdapter extends FragmentStatePagerAdapter {
     }
 
     public LocalDate getDate(int position) {
-        return firstDay.plusDays(position);
+        if (semester != null)
+            return semester.getFirstDay().plusDays(position);
+        return new LocalDate();
     }
 
     public int getPosition(LocalDate date) {
-        return Days.daysBetween(firstDay, date).getDays();
+        if (semester != null)
+            return Days.daysBetween(semester.getFirstDay(), date).getDays();
+        return 0;
     }
 }

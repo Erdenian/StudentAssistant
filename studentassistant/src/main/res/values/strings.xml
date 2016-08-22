@@ -15,9 +15,11 @@
     <string name="settings">Настройки</string>
     <string name="help">Помощь</string>
 
+    <string name="no_schedule">Нет расписания</string>
     <string name="today">Сегодня</string>
     <string name="calendar">Календарь</string>
     <string name="edit_schedule">Редактировать расписание</string>
+    <string name="add_schedule">Добавить расписание</string>
     <string name="holidays">Каникулы</string>
     <string name="day_off">Выходной</string>
     <string name="getting_semesters_list">Получение списка семестров</string>

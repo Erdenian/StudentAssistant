@@ -32,9 +32,9 @@ import java.io.File;
 import java.util.ArrayList;
 
 import ru.erdenian.studentassistant.R;
+import ru.erdenian.studentassistant.Utils.Utils;
 import ru.erdenian.studentassistant.adapters.UniversitySelectionListAdapter;
 import ru.erdenian.studentassistant.classes.UniversitySelectionListItem;
-import ru.erdenian.studentassistant.classes.Utils;
 import ru.erdenian.studentassistant.constants.ServerConstants;
 import ru.erdenian.studentassistant.constants.SharedPreferencesConstants;
 

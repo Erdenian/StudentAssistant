@@ -19,7 +19,7 @@ import android.widget.EditText;
 import java.util.Locale;
 
 import ru.erdenian.studentassistant.R;
-import ru.erdenian.studentassistant.classes.Utils;
+import ru.erdenian.studentassistant.Utils.Utils;
 import ru.erdenian.studentassistant.constants.SharedPreferencesConstants;
 import ru.erdenian.studentassistant.services.AlarmService;
 

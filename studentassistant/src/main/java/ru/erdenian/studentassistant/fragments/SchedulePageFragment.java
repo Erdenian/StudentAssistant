@@ -2,25 +2,18 @@ package ru.erdenian.studentassistant.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 
 import ru.erdenian.studentassistant.R;
-import ru.erdenian.studentassistant.adapters.SchedulePagerAdapter;
 import ru.erdenian.studentassistant.classes.Lesson;
 import ru.erdenian.studentassistant.classes.Semester;
 
@@ -34,14 +27,9 @@ public class SchedulePageFragment extends Fragment {
     static final String PAGE_DATE = "page_date",
             TIME_FORMAT = "HH:mm";
 
-    static SwipeRefreshLayout swipeRefreshLayout;
-    static ViewPager viewPager;
-    static SchedulePagerAdapter pagerAdapter;
-    static boolean isSwipeRefreshLayoutEnabled = true;
+    static Semester semester;
 
-    static ArrayList<Lesson> lessons;
     LocalDate day;
-    DateTimeFormatter timeFormat;
 
     public static SchedulePageFragment newInstance(LocalDate date) {
         SchedulePageFragment schedulePageFragment = new SchedulePageFragment();
@@ -60,27 +48,19 @@ public class SchedulePageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        if ((lessons == null) || (lessons.size() == 0))
+        if (semester == null)
             return inflater.inflate(R.layout.fragment_holiday, container, false);
 
-        ArrayList<Lesson> localLessons = new ArrayList<>();
-        for (int i = 0; i < lessons.size(); i++) {
-            Lesson lesson = lessons.get(i);
-            if (lesson.contains(day))
-                localLessons.add(lesson);
-        }
+        ArrayList<Lesson> lessons = semester.getLessons(day);
 
-        if (localLessons.size() == 0)
+        if (lessons.size() == 0)
             return inflater.inflate(R.layout.fragment_day_off, container, false);
 
         View view = inflater.inflate(R.layout.fragment_schedule, container, false);
         LinearLayout llCardsParent = (LinearLayout) view.findViewById(R.id.fs_cards_parent);
-        timeFormat = DateTimeFormat.forPattern(TIME_FORMAT);
 
         // Todo: протестить работу при разных входных данных
-        for (int i = 0; i < localLessons.size(); i++) {
-            final Lesson lesson = localLessons.get(i);
-
+        for (final Lesson lesson : lessons) {
             View card = inflater.inflate(R.layout.card_schedule, llCardsParent, false);
 
             TextView tvStartTime = (TextView) card.findViewById(R.id.cs_start_time);
@@ -89,10 +69,10 @@ public class SchedulePageFragment extends Fragment {
             TextView tvType = (TextView) card.findViewById(R.id.cs_type);
             TextView tvName = (TextView) card.findViewById(R.id.cs_name);
 
-            tvStartTime.setText(lesson.getStartTime().toString(timeFormat));
+            tvStartTime.setText(lesson.getStartTime().toString(TIME_FORMAT));
 
             if (lesson.getEndTime() != null)
-                tvEndTime.setText(lesson.getEndTime().toString(timeFormat));
+                tvEndTime.setText(lesson.getEndTime().toString(TIME_FORMAT));
             else
                 card.findViewById(R.id.cs_time_divider).setVisibility(View.GONE);
 
@@ -129,41 +109,10 @@ public class SchedulePageFragment extends Fragment {
 
             llCardsParent.addView(card);
         }
-
-        final LocalDate pageDate = day;
-        final ScrollView scrollView = (ScrollView) view.findViewById(R.id.fs_scroll_view);
-        scrollView.getViewTreeObserver().addOnScrollChangedListener(
-                new ViewTreeObserver.OnScrollChangedListener() {
-                    @Override
-                    public void onScrollChanged() {
-                        if (isSwipeRefreshLayoutEnabled &&
-                                pagerAdapter.getDate(viewPager.getCurrentItem()).equals(pageDate))
-                            swipeRefreshLayout.setEnabled(scrollView.getScrollY() == 0);
-                    }
-                }
-        );
-
         return view;
     }
 
-    public static void setSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout) {
-        SchedulePageFragment.swipeRefreshLayout = swipeRefreshLayout;
-    }
-
-    public static void setViewPager(ViewPager viewPager) {
-        SchedulePageFragment.viewPager = viewPager;
-    }
-
-    public static void setPagerAdapter(SchedulePagerAdapter pagerAdapter) {
-        SchedulePageFragment.pagerAdapter = pagerAdapter;
-    }
-
-    public static void setSwipeRefreshLayoutEnabled(boolean isSwipeRefreshLayoutEnabled) {
-        SchedulePageFragment.isSwipeRefreshLayoutEnabled = isSwipeRefreshLayoutEnabled;
-    }
-
-    public static void setLessons(ArrayList<Lesson> lessons, Semester semester) {
-        SchedulePageFragment.lessons = lessons;
-        Lesson.setFirstWeekMonday(semester != null ? semester.getFirstWeekMonday() : null);
+    public static void setSemester(Semester semester) {
+        SchedulePageFragment.semester = semester;
     }
 }

@@ -1,6 +1,11 @@
 package ru.erdenian.studentassistant.classes;
 
+import android.support.annotation.NonNull;
+
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
+
+import java.util.ArrayList;
 
 /**
  * Created by Erdenian on 27.07.2016.
@@ -9,18 +14,17 @@ import org.joda.time.LocalDate;
 
 public class Semester {
 
-    String id, name;
+    String name;
     LocalDate firstDay, lastDay, firstWeekMonday;
 
-    public Semester(String id, String name, LocalDate firstDay, LocalDate lastDay) {
-        this.id = id;
+    ArrayList<Lesson> lessons;
+
+    public Semester(String name, LocalDate firstDay, LocalDate lastDay) {
         this.name = name;
         this.firstDay = firstDay;
         this.lastDay = lastDay;
-    }
 
-    public String getId() {
-        return id;
+        this.lessons = new ArrayList<>();
     }
 
     public String getName() {
@@ -39,5 +43,37 @@ public class Semester {
         if (firstWeekMonday == null)
             firstWeekMonday = firstDay.minusDays(firstDay.getDayOfWeek() - 1);
         return firstWeekMonday;
+    }
+
+    public void addLesson(Lesson lesson) {
+        lessons.add(lesson);
+    }
+
+    public void removeLesson(Lesson lesson) {
+        lessons.remove(lesson);
+    }
+
+    @NonNull
+    public ArrayList<Lesson> getLessons(LocalDate day) {
+        ArrayList<Lesson> result = new ArrayList<>();
+        for (Lesson lesson : lessons) {
+            int weekNumber = getWeekNumber(day);
+            weekNumber %= lesson.weeks.length;
+            if (lesson.weeks[weekNumber])
+                for (int d : lesson.weekdays)
+                    if (day.getDayOfWeek() == d) {
+                        result.add(lesson);
+                        break;
+                    }
+        }
+        return result;
+    }
+
+    public int getWeekNumber(LocalDate day) {
+        return Days.daysBetween(firstWeekMonday, day).getDays() / 7;
+    }
+
+    public int getLength() {
+        return Days.daysBetween(firstDay, lastDay).getDays() + 1;
     }
 }

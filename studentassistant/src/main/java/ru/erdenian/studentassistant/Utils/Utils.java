@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.classes;
+package ru.erdenian.studentassistant.Utils;
 
 import android.app.Activity;
 import android.content.Context;
