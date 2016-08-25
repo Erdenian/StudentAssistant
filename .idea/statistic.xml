@@ -5,10 +5,10 @@
     <option name="activateWhenOpenProject" value="true" />
     <option name="excludedDirectories">
       <list>
-        <option value="$PROJECT_DIR$/materialsearchview" />
-        <option value="$PROJECT_DIR$/studentassistant/build" />
         <option value="$PROJECT_DIR$/build" />
         <option value="$PROJECT_DIR$/gradle" />
+        <option value="$PROJECT_DIR$/materialsearchview" />
+        <option value="$PROJECT_DIR$/studentassistant/build" />
       </list>
     </option>
   </component>

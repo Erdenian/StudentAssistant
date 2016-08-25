@@ -36,7 +36,6 @@ public class ScheduleEditorActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
     }
 
 
