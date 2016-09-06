@@ -50,11 +50,12 @@ public class UniversitySelectionActivity extends AppCompatActivity implements
         View.OnClickListener,
         FutureCallback<JsonArray> {
 
-    final String JSON = "json4",
+    static final String JSON = "json4",
             CURRENT_STATE = "current_state",
             SELECTED_ITEM = "selected_item",
             INDEX = "index",
-            TOP = "top";
+            TOP = "top",
+            LOG_TAG = "UniversitySelectionActivity";
 
     int translationLengthToShowBackButton, screenWidth, currentState = 0;
     String json;
@@ -327,6 +328,8 @@ public class UniversitySelectionActivity extends AppCompatActivity implements
             case R.id.tus_back:
                 onBackPressed();
                 break;
+            default:
+                //Log.w(LOG_TAG, "Unknown view id");
         }
     }
 

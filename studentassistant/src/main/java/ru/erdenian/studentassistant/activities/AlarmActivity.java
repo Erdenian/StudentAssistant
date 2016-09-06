@@ -115,9 +115,9 @@ public class AlarmActivity extends AppCompatActivity implements
         switch (v.getId()) {
             case R.id.ca_alarm_switch:
                 editor.putInt(SharedPreferencesConstants.ALARM_HOUR,
-                        Integer.valueOf(etHour.getText().toString()));
+                        Integer.parseInt(etHour.getText().toString()));
                 editor.putInt(SharedPreferencesConstants.ALARM_MINUTE,
-                        Integer.valueOf(etMinute.getText().toString()));
+                        Integer.parseInt(etMinute.getText().toString()));
                 editor.apply();
 
                 btnSaveTime.setEnabled(false);

@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,6 +30,8 @@ import ru.erdenian.studentassistant.activities.UniversitySelectionActivity;
  */
 
 public final class UiUtils {
+
+    final static String LOG_TAG = "UiUtils";
 
     /**
      * Преобразует dp в px
@@ -111,6 +114,8 @@ public final class UiUtils {
                             e.printStackTrace();
                         }
                         break;
+                    default:
+                        Log.w(LOG_TAG, "Unknown view id");
                 }
                 finalDrawerLayout.closeDrawer(GravityCompat.START);
             }
