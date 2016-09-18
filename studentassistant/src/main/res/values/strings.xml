@@ -2,6 +2,7 @@
     <string name="app_name">Student Assistant</string>
 
     <string name="universities">Университеты</string>
+    <string name="sanyawhereareyou">Саня ты где?</string>
     <string name="faculties">Факультеты</string>
     <string name="groups">Группы</string>
     <string name="search">Поиск</string>
