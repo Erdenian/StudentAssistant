@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,8 +41,7 @@ public final class Utils {
      */
     public static int dpToPx(Context context, int dp) {
         // Todo: проверить правильность преобразования
-        return Math.round(dp * (context.getResources().getDisplayMetrics().xdpi /
-                DisplayMetrics.DENSITY_DEFAULT));
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
     }
 
     /**

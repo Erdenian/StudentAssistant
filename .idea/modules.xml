@@ -3,7 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/StudentAssistant.iml" filepath="$PROJECT_DIR$/StudentAssistant.iml" />
+      <module fileurl="file://$PROJECT_DIR$/StudentAssistantOld.iml" filepath="$PROJECT_DIR$/StudentAssistantOld.iml" />
       <module fileurl="file://$PROJECT_DIR$/materialsearchview/materialsearchview.iml" filepath="$PROJECT_DIR$/materialsearchview/materialsearchview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/materialsearchview/materialsearchview.iml" filepath="$PROJECT_DIR$/materialsearchview/materialsearchview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/studentassistant/studentassistant.iml" filepath="$PROJECT_DIR$/studentassistant/studentassistant.iml" />
       <module fileurl="file://$PROJECT_DIR$/studentassistant/studentassistant.iml" filepath="$PROJECT_DIR$/studentassistant/studentassistant.iml" />
     </modules>
   </component>
