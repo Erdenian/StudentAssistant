@@ -21,11 +21,12 @@ import lombok.Value;
 public final class Lesson implements Comparable<Lesson> {
 
     /**
-     * Идентификатор пары. Должен быть уникальным для каждой пары. При редактировании существующей пары
-     * должен создаваться новый объект с таким же id, старый объект должен быть удален.
+     * Идентификатор пары. Должен быть уникальным для каждой пары. При редактировании существующей
+     * пары должен создаваться новый объект с таким же id, старый объект должен быть удален.
      *
      * @since 0.0.0
      */
+    @NonNull
     private final long id;
 
     /**
@@ -147,7 +148,8 @@ public final class Lesson implements Comparable<Lesson> {
      * @param dates      даты, по которым повторяется пара ({@link Lesson#dates})
      * @since 0.0.0
      */
-    public Lesson(@NonNull String name, String type, ImmutableSortedSet<String> teachers, ImmutableSortedSet<String> classrooms,
+    public Lesson(@NonNull String name, String type,
+                  ImmutableSortedSet<String> teachers, ImmutableSortedSet<String> classrooms,
                   @NonNull LocalTime startTime, @NonNull LocalTime endTime,
                   @NonNull RepeatType repeatType,
                   int weekday, ImmutableList<Boolean> weeks,
@@ -174,7 +176,8 @@ public final class Lesson implements Comparable<Lesson> {
      * @param dates      даты, по которым повторяется пара ({@link Lesson#dates})
      * @since 0.0.0
      */
-    public Lesson(long id, @NonNull String name, String type, ImmutableSortedSet<String> teachers, ImmutableSortedSet<String> classrooms,
+    public Lesson(@NonNull long id, @NonNull String name, String type,
+                  ImmutableSortedSet<String> teachers, ImmutableSortedSet<String> classrooms,
                   @NonNull LocalTime startTime, @NonNull LocalTime endTime,
                   @NonNull RepeatType repeatType,
                   int weekday, ImmutableList<Boolean> weeks,
@@ -221,9 +224,6 @@ public final class Lesson implements Comparable<Lesson> {
         this.id = id;
     }
 
-    /**
-     * @inheritDoc
-     */
     @Override
     public int compareTo(@android.support.annotation.NonNull Lesson lesson) {
         return ComparisonChain.start()
