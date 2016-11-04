@@ -17,6 +17,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    return void
 }
 
 dependencies {
@@ -26,6 +27,7 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.0.0'
     testCompile 'junit:junit:4.12'
+    provided "org.projectlombok:lombok:1.12.6"
     compile 'joda-time:joda-time:2.9.5'
     compile 'com.google.guava:guava:20.0'
 }
