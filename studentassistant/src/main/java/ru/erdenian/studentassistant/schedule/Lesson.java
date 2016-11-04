@@ -26,7 +26,6 @@ public final class Lesson implements Comparable<Lesson> {
      *
      * @since 0.0.0
      */
-    @NonNull
     private final long id;
 
     /**
@@ -176,7 +175,7 @@ public final class Lesson implements Comparable<Lesson> {
      * @param dates      даты, по которым повторяется пара ({@link Lesson#dates})
      * @since 0.0.0
      */
-    public Lesson(@NonNull long id, @NonNull String name, String type,
+    public Lesson(long id, @NonNull String name, String type,
                   ImmutableSortedSet<String> teachers, ImmutableSortedSet<String> classrooms,
                   @NonNull LocalTime startTime, @NonNull LocalTime endTime,
                   @NonNull RepeatType repeatType,
