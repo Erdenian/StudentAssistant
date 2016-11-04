@@ -223,6 +223,9 @@ public final class Lesson implements Comparable<Lesson> {
         this.id = id;
     }
 
+    /**
+     * @since 0.0.0
+     */
     @Override
     public int compareTo(@android.support.annotation.NonNull Lesson lesson) {
         return ComparisonChain.start()
