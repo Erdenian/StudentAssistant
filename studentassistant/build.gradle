@@ -27,7 +27,7 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.0.0'
     testCompile 'junit:junit:4.12'
-    provided "org.projectlombok:lombok:1.12.6"
+    provided "org.projectlombok:lombok:1.16.10"
     compile 'joda-time:joda-time:2.9.5'
     compile 'com.google.guava:guava:20.0'
 }
