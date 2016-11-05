@@ -20,7 +20,7 @@ import lombok.Value;
  * @since 0.0.0
  */
 @Value
-public class Semester implements Comparable<Semester> {
+public final class Semester implements Comparable<Semester> {
 
     /**
      * Идентификатор семестра. Должен быть уникальным для каждого семестра. При редактировании
@@ -118,8 +118,13 @@ public class Semester implements Comparable<Semester> {
      * @since 0.0.0
      */
     public ImmutableSortedSet<Lesson> getLessons(LocalDate day) {
+        int weekNumber;
+        try {
+            weekNumber = getWeekNumber(day);
+        } catch (IllegalArgumentException iae) {
+            return ImmutableSortedSet.of();
+        }
         List<Lesson> result = new ArrayList<>();
-        int weekNumber = getWeekNumber(day);
         for (Lesson lesson : lessons) {
             if (lesson.repeatsOnDay(day, weekNumber)) {
                 result.add(lesson);
@@ -148,8 +153,8 @@ public class Semester implements Comparable<Semester> {
     @Override
     public int compareTo(@android.support.annotation.NonNull Semester semester) {
         return ComparisonChain.start()
-                .compare(firstDay, semester.firstDay)
                 .compare(lastDay, semester.lastDay)
+                .compare(firstDay, semester.firstDay)
                 .compare(name, semester.name)
                 .result();
     }

@@ -14,7 +14,7 @@ import lombok.Value;
  * @since 0.0.0
  */
 @Value
-public class Homework implements Comparable<Homework> {
+public final class Homework implements Comparable<Homework> {
 
     /**
      * Идентификатор домашнего задания. Должен быть уникальным для каждого задания. При
