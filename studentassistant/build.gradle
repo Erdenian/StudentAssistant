@@ -30,4 +30,6 @@ dependencies {
     provided "org.projectlombok:lombok:1.16.10"
     compile 'joda-time:joda-time:2.9.5'
     compile 'com.google.guava:guava:20.0'
+    compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.4.0'
 }
