@@ -247,6 +247,28 @@ public final class Lesson implements Comparable<Lesson> {
     }
 
     /**
+     * Проверяет, повторяется ли пара в этот день недели.
+     *
+     * @param weekday день недели
+     * @return true, если пара повторяется в этот день недели (даже если не каждую неделю),
+     * false, если нет
+     * @since 0.0.0
+     */
+    boolean repeatsOnWeekday(int weekday) {
+        return ((repeatType == RepeatType.BY_WEEKDAY) && (weekday == this.weekday));
+    }
+
+    /**
+     * Проверяет, повторяется ли пара по датам.
+     *
+     * @return true, если пара повторяется по датам, false, если нет
+     * @since 0.0.0
+     */
+    boolean repeatsOnDate() {
+        return (repeatType == RepeatType.BY_DATE);
+    }
+
+    /**
      * @since 0.0.0
      */
     @Override

@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.schedule;
 
+import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.ImmutableSortedSet;
 
 import org.joda.time.Days;
@@ -146,6 +147,10 @@ public class Semester implements Comparable<Semester> {
      */
     @Override
     public int compareTo(@android.support.annotation.NonNull Semester semester) {
-        return 0;
+        return ComparisonChain.start()
+                .compare(firstDay, semester.firstDay)
+                .compare(lastDay, semester.lastDay)
+                .compare(name, semester.name)
+                .result();
     }
 }
