@@ -1,5 +1,7 @@
 package ru.erdenian.studentassistant.schedule;
 
+import android.util.Log;
+
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
@@ -133,7 +135,7 @@ public final class Lesson implements Comparable<Lesson> {
     private final ImmutableSortedSet<LocalDate> dates;
 
     /**
-     * В качестве идентификатора пары используется {@link System#nanoTime()}.
+     * В качестве идентификатора используется {@link System#nanoTime()}.
      *
      * @param name       название предмета ({@link Lesson#name})
      * @param type       тип пары ({@link Lesson#type})
@@ -221,6 +223,27 @@ public final class Lesson implements Comparable<Lesson> {
         this.dates = dates;
 
         this.id = id;
+    }
+
+    /**
+     * Проверяет, повторяется ли пара в этот день.
+     *
+     * @param day        день, в котором нужно проверить повторение
+     * @param weekNumber номер недели с начала семестра, содержащей данный день
+     * @return true, если пара будет в день day, false, если нет
+     * @since 0.0.0
+     */
+    boolean repeatsOnDay(@NonNull LocalDate day, int weekNumber) {
+        switch (repeatType) {
+            case BY_WEEKDAY:
+                return (weeks.get(weekNumber % weeks.size()) && (day.getDayOfWeek() == weekday));
+            case BY_DATE:
+                return dates.contains(day);
+            default:
+                Log.wtf(this.getClass().getName(),
+                        "В repeatType хранится неизвестное значение: " + repeatType);
+        }
+        return false;
     }
 
     /**

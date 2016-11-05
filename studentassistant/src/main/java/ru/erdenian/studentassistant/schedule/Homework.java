@@ -58,7 +58,7 @@ public class Homework implements Comparable<Homework> {
     private final LocalTime deadlineTime;
 
     /**
-     * В качестве идентификатора домашнего задания используется {@link System#nanoTime()}.
+     * В качестве идентификатора используется {@link System#nanoTime()}.
      *
      * @param subjectName  название предмета ({@link Homework#subjectName})
      * @param description  описаниеа ({@link Homework#description})
