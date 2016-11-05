@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -21,8 +22,8 @@ public class SplashActivity extends AppCompatActivity {
 
         FileUtils.initialize(this);
 
-        /*Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, ScheduleActivity.class);
         startActivity(intent);
-        finish();*/
+        finish();
     }
 }

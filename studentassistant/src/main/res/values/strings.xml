@@ -2,4 +2,15 @@
 
     <string name="app_name">Student Assistant</string>
 
+    <string name="title_activity_schedule">Расписание</string>
+
+    <string name="nav_schedule">Расписание</string>
+    <string name="nav_alarm">Будильник</string>
+    <string name="nav_tools">Инструменты</string>
+    <string name="nav_settings">Настройки</string>
+    <string name="nav_help">Помощь</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
 </resources>
