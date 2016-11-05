@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="FindBugs-IDEA">
-    <plugins>
-      <plugin id="jp.f.dev.findbugs.detect.android" enabled="true" bundled="true" />
-    </plugins>
-    <excludeFilterFiles>
-      <filter file="$PROJECT_DIR$/findbugs-exclude.xml" enabled="true" />
-    </excludeFilterFiles>
-  </component>
+    <component name="FindBugs-IDEA">
+        <plugins>
+            <plugin bundled="true" enabled="true" id="jp.f.dev.findbugs.detect.android"/>
+        </plugins>
+        <excludeFilterFiles>
+            <filter enabled="true" file="$PROJECT_DIR$/findbugs-exclude.xml"/>
+        </excludeFilterFiles>
+    </component>
 </project>
