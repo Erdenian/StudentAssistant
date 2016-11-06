@@ -3,6 +3,10 @@
     <string name="app_name">Student Assistant</string>
 
     <string name="title_activity_schedule">Расписание</string>
+    <string name="menu_schedule_calendar">Календарь</string>
+    <string name="get_schedule_from_server">Загрузить расписание с сервера</string>
+    <string name="add_schedule">Добавить расписание</string>
+    <string name="free_day">Выходной</string>
 
     <string name="nav_schedule">Расписание</string>
     <string name="nav_alarm">Будильник</string>

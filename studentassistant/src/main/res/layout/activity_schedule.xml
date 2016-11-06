@@ -8,9 +8,16 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <include layout="@layout/toolbar_schedule"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <include layout="@layout/content_schedule"/>
+        <include layout="@layout/toolbar_schedule"/>
+
+        <include layout="@layout/content_schedule"/>
+
+    </LinearLayout>
 
     <include layout="@layout/navigation_view"/>
 
