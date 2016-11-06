@@ -1,6 +1,7 @@
 package ru.erdenian.studentassistant.schedule;
 
 import com.fatboyindustrial.gsonjodatime.Converters;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -8,13 +9,18 @@ import com.google.gson.reflect.TypeToken;
 
 import org.joda.time.LocalDate;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 
 import lombok.NonNull;
+import ru.erdenian.gsonguavadeserializers.ImmutableListDeserializer;
+import ru.erdenian.gsonguavadeserializers.ImmutableSortedSetDeserializer;
 import ru.erdenian.studentassistant.ulils.FileUtils;
 
 /**
@@ -67,6 +73,14 @@ public class ScheduleManager {
     }
 
     /**
+     * @return текущий семестр
+     * @since 0.0.0
+     */
+    public static Semester getCurrentSemester() {
+        return getCurrentSemesterIndex() != -1 ? getSemesters().asList().get(getCurrentSemesterIndex()) : null;
+    }
+
+    /**
      * Getter для индекса текущего семестра.
      *
      * @return индекс текущего семестра
@@ -101,16 +115,21 @@ public class ScheduleManager {
      *
      * @since 0.0.0
      */
-    public static void readSchedule() {
+    private static void readSchedule() {
         try {
-            FileReader jsonReader = new FileReader(FileUtils.getScheduleFile());
+            InputStreamReader jsonReader = new InputStreamReader(new FileInputStream(FileUtils.getScheduleFile()), "UTF-8");
 
-            Gson gson = Converters.registerLocalDateTime(new GsonBuilder()).create();
+            Gson gson = Converters.registerAll(new GsonBuilder())
+                    .registerTypeAdapter(ImmutableSortedSet.class, new ImmutableSortedSetDeserializer())
+                    .registerTypeAdapter(ImmutableList.class, new ImmutableListDeserializer())
+                    .create();
             Type type = new TypeToken<ImmutableSortedSet<Semester>>() {
             }.getType();
             semesters = gson.fromJson(jsonReader, type);
         } catch (FileNotFoundException e) {
             semesters = ImmutableSortedSet.of();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
         findCurrentSemester();
     }
@@ -121,10 +140,13 @@ public class ScheduleManager {
      * @see ScheduleManager#semesters
      * @since 0.0.0
      */
-    public static void writeSchedule() {
+    private static void writeSchedule() {
         try {
-            FileWriter jsonWriter = new FileWriter(FileUtils.getScheduleFile());
-            Converters.registerLocalDateTime(new GsonBuilder()).create().toJson(getSemesters(), jsonWriter);
+            FileUtils.getJsonFolder().mkdirs();
+            FileUtils.getScheduleFile().createNewFile();
+            OutputStreamWriter jsonWriter = new OutputStreamWriter(new FileOutputStream(FileUtils.getScheduleFile()), "UTF-8");
+            Converters.registerAll(new GsonBuilder()).create().toJson(getSemesters(), jsonWriter);
+            jsonWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
