@@ -148,6 +148,14 @@ public final class Semester implements Comparable<Semester> {
     }
 
     /**
+     * @return количество дней в семестре
+     * @since 0.0.0
+     */
+    public int getLength() {
+        return Days.daysBetween(firstDay, lastDay).getDays() + 1;
+    }
+
+    /**
      * @since 0.0.0
      */
     @Override
