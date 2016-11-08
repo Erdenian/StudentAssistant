@@ -69,11 +69,11 @@ public class SchedulePageFragment extends Fragment {
         for (final Lesson lesson : lessons) {
             View card = inflater.inflate(R.layout.card_schedule, llCardsParent, false);
 
-            TextView tvStartTime = (TextView) card.findViewById(R.id.cs_start_time);
-            TextView tvEndTime = (TextView) card.findViewById(R.id.cs_end_time);
-            TextView tvClassrooms = (TextView) card.findViewById(R.id.cs_classrooms);
-            TextView tvType = (TextView) card.findViewById(R.id.cs_type);
-            TextView tvName = (TextView) card.findViewById(R.id.cs_name);
+            TextView tvStartTime = (TextView) card.findViewById(R.id.card_schedule_start_time);
+            TextView tvEndTime = (TextView) card.findViewById(R.id.card_schedule_end_time);
+            TextView tvClassrooms = (TextView) card.findViewById(R.id.card_schedule_classrooms);
+            TextView tvType = (TextView) card.findViewById(R.id.card_schedule_type);
+            TextView tvName = (TextView) card.findViewById(R.id.card_schedule_name);
 
             tvStartTime.setText(lesson.getStartTime().toString(TIME_FORMAT));
             tvEndTime.setText(lesson.getEndTime().toString(TIME_FORMAT));
@@ -81,7 +81,7 @@ public class SchedulePageFragment extends Fragment {
             if (lesson.getClassrooms().size() > 0) {
                 tvClassrooms.setText(Joiner.on(", ").join(lesson.getClassrooms()));
             } else {
-                card.findViewById(R.id.cs_classrooms_icon).setVisibility(View.GONE);
+                card.findViewById(R.id.card_schedule_classrooms_icon).setVisibility(View.GONE);
             }
 
             if (lesson.getType() != null)
@@ -92,7 +92,7 @@ public class SchedulePageFragment extends Fragment {
             tvName.setText(lesson.getName());
 
             LinearLayout llTeachersParent =
-                    (LinearLayout) card.findViewById(R.id.cs_teachers_parent);
+                    (LinearLayout) card.findViewById(R.id.card_schedule_teachers_parent);
 
             for (String name : lesson.getTeachers()) {
                 View teacher = inflater.inflate(R.layout.textview_teacher, llTeachersParent, false);
