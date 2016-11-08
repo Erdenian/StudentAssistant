@@ -1,17 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+
+<android.support.v7.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar_schedule"
+    style="@style/Toolbar"
     android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
-    android:theme="@style/AppTheme.AppBarOverlay">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_schedule"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:subtitleTextColor="@android:color/white"
-        app:popupTheme="@style/AppTheme.PopupOverlay"/>
-
-</FrameLayout>
+    android:layout_height="?attr/actionBarSize"/>

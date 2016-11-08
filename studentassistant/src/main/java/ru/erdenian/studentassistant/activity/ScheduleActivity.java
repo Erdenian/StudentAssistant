@@ -81,6 +81,7 @@ public class ScheduleActivity extends AppCompatActivity implements CalendarDateP
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_schedule, menu);
+        UiUtils.colorMenu(this, menu);
         return true;
     }
 
