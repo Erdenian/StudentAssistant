@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
 import com.codetroopers.betterpickers.calendardatepicker.MonthAdapter;
@@ -103,6 +104,9 @@ public class ScheduleActivity extends AppCompatActivity implements CalendarDateP
                         .setThemeCustom(R.style.DatePicker)
                         .setOnDateSetListener(this)
                         .show(getSupportFragmentManager(), "date_picker");
+                break;
+            case R.id.menu_schedule_edit_schedule:
+                Toast.makeText(this, R.string.menu_schedule_edit_schedule, Toast.LENGTH_SHORT).show();
                 break;
             default:
                 Log.wtf(this.getClass().getName(), "Неизвестный id: " + item.getItemId());
