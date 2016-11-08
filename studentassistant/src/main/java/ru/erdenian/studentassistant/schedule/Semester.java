@@ -117,20 +117,20 @@ public final class Semester implements Comparable<Semester> {
      * @return список пар в этот день
      * @since 0.0.0
      */
-    public ImmutableSortedSet<Lesson> getLessons(LocalDate day) {
+    public List<Lesson> getLessons(LocalDate day) {
         int weekNumber;
+        List<Lesson> result = new ArrayList<>();
         try {
             weekNumber = getWeekNumber(day);
         } catch (IllegalArgumentException iae) {
-            return ImmutableSortedSet.of();
+            return result;
         }
-        List<Lesson> result = new ArrayList<>();
         for (Lesson lesson : lessons) {
             if (lesson.repeatsOnDay(day, weekNumber)) {
                 result.add(lesson);
             }
         }
-        return ImmutableSortedSet.copyOf(result);
+        return result;
     }
 
     /**

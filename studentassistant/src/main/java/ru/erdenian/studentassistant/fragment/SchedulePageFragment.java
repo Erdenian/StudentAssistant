@@ -10,9 +10,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableSortedSet;
 
 import org.joda.time.LocalDate;
+
+import java.util.List;
 
 import ru.erdenian.studentassistant.R;
 import ru.erdenian.studentassistant.schedule.Lesson;
@@ -57,7 +58,7 @@ public class SchedulePageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        ImmutableSortedSet<Lesson> lessons = semester.getLessons(day);
+        List<Lesson> lessons = semester.getLessons(day);
 
         if (lessons.size() == 0) {
             return inflater.inflate(R.layout.fragment_free_day, container, false);
