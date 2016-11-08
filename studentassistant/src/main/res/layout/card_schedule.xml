@@ -19,14 +19,14 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/cs_start_time"
+                android:id="@+id/card_schedule_start_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="@dimen/card_primary_text_size"/>
 
             <TextView
-                android:id="@+id/cs_time_divider"
+                android:id="@+id/card_schedule_time_divider"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" - "
@@ -35,7 +35,7 @@
                 tools:ignore="HardcodedText"/>
 
             <TextView
-                android:id="@+id/cs_end_time"
+                android:id="@+id/card_schedule_end_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorSecondaryText"
@@ -44,14 +44,14 @@
             <include layout="@layout/empty_space"/>
 
             <TextView
-                android:id="@+id/cs_classrooms"
+                android:id="@+id/card_schedule_classrooms"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="@dimen/card_secondary_text_size"/>
 
             <ImageView
-                android:id="@+id/cs_classrooms_icon"
+                android:id="@+id/card_schedule_classrooms_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -69,21 +69,21 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/cs_type"
+                android:id="@+id/card_schedule_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="@dimen/card_secondary_text_size"/>
 
             <TextView
-                android:id="@+id/cs_name"
+                android:id="@+id/card_schedule_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="@dimen/card_primary_text_size"/>
 
             <LinearLayout
-                android:id="@+id/cs_teachers_parent"
+                android:id="@+id/card_schedule_teachers_parent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"/>
