@@ -9,6 +9,7 @@
     <string name="activity_schedule_free_day_textview">Выходной</string>
 
     <string name="nav_schedule">Расписание</string>
+    <string name="nav_homework">Домашнее задание</string>
     <string name="nav_alarm">Будильник</string>
     <string name="nav_tools">Инструменты</string>
     <string name="nav_settings">Настройки</string>
