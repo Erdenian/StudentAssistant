@@ -12,18 +12,30 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
 import com.codetroopers.betterpickers.calendardatepicker.MonthAdapter;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSortedSet;
 
 import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import ru.erdenian.studentassistant.R;
 import ru.erdenian.studentassistant.adapter.SchedulePagerAdapter;
+import ru.erdenian.studentassistant.schedule.Homework;
+import ru.erdenian.studentassistant.schedule.Lesson;
+import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener;
 import ru.erdenian.studentassistant.schedule.ScheduleManager;
 import ru.erdenian.studentassistant.schedule.Semester;
 import ru.erdenian.studentassistant.ulils.UiUtils;
@@ -35,11 +47,16 @@ import ru.erdenian.studentassistant.ulils.UiUtils;
  * @version 0.0.0
  * @since 0.0.0
  */
-public class ScheduleActivity extends AppCompatActivity implements CalendarDatePickerDialogFragment.OnDateSetListener {
+public class ScheduleActivity extends AppCompatActivity implements
+        AdapterView.OnItemSelectedListener,
+        CalendarDatePickerDialogFragment.OnDateSetListener, View.OnClickListener, OnScheduleUpdateListener {
 
-    private Semester semester = ScheduleManager.getCurrentSemester();
+    private static final String CURRENT_PAGE = "current_page";
+
+    int savedPage = -1;
 
     private DrawerLayout drawer;
+    private Spinner spSemesters;
     private LinearLayout llAddButtons;
     private ViewPager viewPager;
     private SchedulePagerAdapter pagerAdapter;
@@ -55,10 +72,16 @@ public class ScheduleActivity extends AppCompatActivity implements CalendarDateP
         drawer = UiUtils.initializeDrawerAndNavigationView(this, R.id.activity_schedule_drawer,
                 toolbar, getResources());
 
+        spSemesters = (Spinner) findViewById(R.id.toolbar_schedule_spinner);
+        spSemesters.setOnItemSelectedListener(this);
+
         llAddButtons = (LinearLayout) findViewById(R.id.content_schedule_add_buttons);
+        Button btnGetScheduleFromServer = (Button) findViewById(R.id.content_schedule_get_schedule_from_server);
+        btnGetScheduleFromServer.setOnClickListener(this);
+        Button btnAddSchedule = (Button) findViewById(R.id.content_schedule_add_schedule);
+        btnAddSchedule.setOnClickListener(this);
 
         viewPager = (ViewPager) findViewById(R.id.content_schedule_view_pager);
-
         PagerTabStrip pagerTabStrip = (PagerTabStrip) findViewById(R.id.content_schedule_pager_tab_strip);
         pagerTabStrip.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         pagerTabStrip.setTabIndicatorColorResource(R.color.colorPrimary);
@@ -67,29 +90,76 @@ public class ScheduleActivity extends AppCompatActivity implements CalendarDateP
     @Override
     protected void onStart() {
         super.onStart();
+        ScheduleManager.setOnScheduleUpdateListener(this);
+        onScheduleUpdate();
+    }
 
-        if (ScheduleManager.getSemesters().isEmpty()) {
-            viewPager.setVisibility(View.GONE);
-        } else {
-            pagerAdapter = new SchedulePagerAdapter(getSupportFragmentManager(), semester);
-            viewPager.setAdapter(pagerAdapter);
-            viewPager.setCurrentItem(pagerAdapter.getPosition(LocalDate.now()));
-
-            llAddButtons.setVisibility(View.GONE);
+    @Override
+    public void onScheduleUpdate() {
+        if (pagerAdapter != null) {
+            savedPage = viewPager.getCurrentItem();
         }
+
+        getSupportActionBar().setDisplayShowTitleEnabled(ScheduleManager.getSemesters().size() <= 1);
+        spSemesters.setVisibility((ScheduleManager.getSemesters().size() > 1) ? View.VISIBLE : View.GONE);
+
+        viewPager.setVisibility((ScheduleManager.getSemesters().size() > 0) ? View.VISIBLE : View.GONE);
+        llAddButtons.setVisibility((ScheduleManager.getSemesters().size() == 0) ? View.VISIBLE : View.GONE);
+
+        if (ScheduleManager.getSemesters().size() > 1) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item_semesters, ScheduleManager.getSemestersNames());
+            adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters);
+            spSemesters.setAdapter(adapter);
+            spSemesters.setSelection(ScheduleManager.getSelectedSemesterIndex());
+        } else if (ScheduleManager.getSemesters().size() == 1) {
+            getSupportActionBar().setTitle(ScheduleManager.getSelectedSemester().getName());
+            onItemSelected(null, null, 0, 0);
+        } else {
+            getSupportActionBar().setTitle(R.string.title_activity_schedule);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle bundle) {
+        bundle.putInt(CURRENT_PAGE, viewPager.getCurrentItem());
+        super.onSaveInstanceState(bundle);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle bundle) {
+        savedPage = bundle.getInt(CURRENT_PAGE, -1);
+        super.onRestoreInstanceState(bundle);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_schedule, menu);
+        menu.findItem(R.id.menu_schedule_calendar).setVisible(!ScheduleManager.getSemesters().isEmpty());
         UiUtils.colorMenu(this, menu);
         return true;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        ScheduleManager.setSelectedSemesterIndex(i);
+        pagerAdapter = new SchedulePagerAdapter(getSupportFragmentManager(), ScheduleManager.getSelectedSemester());
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem((savedPage != -1) ? savedPage : pagerAdapter.getPosition(LocalDate.now()), false);
+        savedPage = -1;
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_schedule_calendar:
+                Semester semester = ScheduleManager.getSelectedSemester();
+                if (semester == null)
+                    semester = ScheduleManager.getCurrentSemester();
+
                 Calendar firstDay = Calendar.getInstance();
                 firstDay.setTime(semester.getFirstDay().toDate());
                 Calendar lastDay = Calendar.getInstance();
@@ -107,6 +177,13 @@ public class ScheduleActivity extends AppCompatActivity implements CalendarDateP
                 break;
             case R.id.menu_schedule_edit_schedule:
                 Toast.makeText(this, R.string.menu_schedule_edit_schedule, Toast.LENGTH_SHORT).show();
+
+                List<Semester> semesters = new ArrayList<>(ScheduleManager.getSemesters().asList());
+                semesters.add(new Semester("Семестр " + System.currentTimeMillis(), new LocalDate(2017, 9, 1), new LocalDate(2017, 12, 31),
+                        ImmutableSortedSet.<Lesson>of(), ImmutableSortedSet.<Homework>of()));
+
+                ScheduleManager.setSemesters(ImmutableSortedSet.copyOf(semesters));
+
                 break;
             default:
                 Log.wtf(this.getClass().getName(), "Неизвестный id: " + item.getItemId());
@@ -121,11 +198,44 @@ public class ScheduleActivity extends AppCompatActivity implements CalendarDateP
     }
 
     @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.content_schedule_get_schedule_from_server:
+                Toast.makeText(this, R.string.activity_schedule_get_schedule_from_server_button, Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.content_schedule_add_schedule:
+                addSchedule();
+                break;
+            default:
+                Log.wtf(this.getClass().getName(), "Неизвестный id: " + view.getId());
+                break;
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
+    }
+
+    private void addSchedule() {
+        ImmutableSortedSet<Lesson> lessons = ImmutableSortedSet.of(
+                new Lesson("Конструирование ПО", "Лабораторная работа",
+                        ImmutableSortedSet.of("Федоров Алексей Роальдович", "Федоров Петр Алексеевич"), ImmutableSortedSet.of("4212а"),
+                        new LocalTime(14, 20), new LocalTime(15, 50),
+                        Lesson.RepeatType.BY_WEEKDAY, 5, ImmutableList.of(false, true), null),
+                new Lesson("Конструирование ПО", "Лабораторная работа",
+                        ImmutableSortedSet.of("Федоров Алексей Роальдович"), ImmutableSortedSet.of("4212а"),
+                        new LocalTime(18, 10), new LocalTime(19, 40),
+                        Lesson.RepeatType.BY_WEEKDAY, 5, ImmutableList.of(false, true), null));
+
+        ImmutableSortedSet<Semester> semesters = ImmutableSortedSet.of(
+                new Semester("Семестр 5", new LocalDate(2016, 9, 1), new LocalDate(2016, 12, 31),
+                        lessons, ImmutableSortedSet.<Homework>of()));
+
+        ScheduleManager.setSemesters(semesters);
     }
 }

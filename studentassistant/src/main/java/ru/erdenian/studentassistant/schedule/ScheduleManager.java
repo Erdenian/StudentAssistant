@@ -1,5 +1,7 @@
 package ru.erdenian.studentassistant.schedule;
 
+import android.support.annotation.Nullable;
+
 import com.fatboyindustrial.gsonjodatime.Converters;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
@@ -17,8 +19,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.NonNull;
+import lombok.Setter;
 import ru.erdenian.gsonguavadeserializers.ImmutableListDeserializer;
 import ru.erdenian.gsonguavadeserializers.ImmutableSortedSetDeserializer;
 import ru.erdenian.studentassistant.ulils.FileUtils;
@@ -40,11 +45,24 @@ public class ScheduleManager {
     private static ImmutableSortedSet<Semester> semesters = null;
 
     /**
-     * Индекс текущего семестра. -2 - значение не инициализировано, -1 - сейчас каникулы.
+     * Индекс текущего семестра. -1 - значение не инициализировано, или массив пуст.
      *
      * @since 0.0.0
      */
-    private static int currentSemesterIndex = -2;
+    private static int currentSemesterIndex = -1;
+
+    /**
+     * Выбранный семестр.
+     *
+     * @since 0.0.0
+     */
+    private static int selectedSemesterIndex = -1;
+
+    /**
+     * @since 0.0.0
+     */
+    @Setter
+    private static OnScheduleUpdateListener onScheduleUpdateListener = null;
 
     /**
      * Getter для массива семестров.
@@ -54,8 +72,10 @@ public class ScheduleManager {
      * @since 0.0.0
      */
     public static ImmutableSortedSet<Semester> getSemesters() {
-        if (semesters == null)
+        if (semesters == null) {
             readSchedule();
+            findCurrentSemester();
+        }
         return semesters;
     }
 
@@ -68,16 +88,66 @@ public class ScheduleManager {
      */
     public static void setSemesters(@NonNull ImmutableSortedSet<Semester> semesters) {
         //Todo: код, создающий патчи
+
+        long previousSelectedSemesterId = (getSelectedSemesterIndex() != -1) ?
+                getSemesters().asList().get(getSelectedSemesterIndex()).getId() : -1;
+
         ScheduleManager.semesters = semesters;
         writeSchedule();
+        findCurrentSemester();
+
+        selectedSemesterIndex = getCurrentSemesterIndex();
+
+        if (previousSelectedSemesterId != -1) {
+            for (int i = 0; i < getSemesters().size(); i++) {
+                Semester semester = getSemesters().asList().get(i);
+                if (semester.getId() == previousSelectedSemesterId) {
+                    setSelectedSemesterIndex(i);
+                }
+            }
+        }
+
+        if (onScheduleUpdateListener != null)
+            onScheduleUpdateListener.onScheduleUpdate();
+    }
+
+    /**
+     * @param id идентификатор семестра
+     * @return семестр с данным id, либо null, если его нет
+     * @since 0.0.0
+     */
+    @Nullable
+    public static Semester getSemester(long id) {
+        for (Semester semester : getSemesters()) {
+            if (semester.getId() == id) {
+                return semester;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @return массив названий семестров
+     * @since 0.0.0
+     */
+    public static List<String> getSemestersNames() {
+        List<String> names = new ArrayList<>();
+        for (Semester semester : getSemesters()) {
+            names.add(semester.getName());
+        }
+        return names;
     }
 
     /**
      * @return текущий семестр
      * @since 0.0.0
      */
+    @Nullable
     public static Semester getCurrentSemester() {
-        return getCurrentSemesterIndex() != -1 ? getSemesters().asList().get(getCurrentSemesterIndex()) : null;
+        if (getCurrentSemesterIndex() == -1) {
+            return null;
+        }
+        return getSemesters().asList().get(getCurrentSemesterIndex());
     }
 
     /**
@@ -88,9 +158,40 @@ public class ScheduleManager {
      * @since 0.0.0
      */
     public static int getCurrentSemesterIndex() {
-        if (currentSemesterIndex == -2)
+        if (currentSemesterIndex == -1)
             findCurrentSemester();
         return currentSemesterIndex;
+    }
+
+    /**
+     * @since 0.0.0
+     */
+    @Nullable
+    public static Semester getSelectedSemester() {
+        if (getSelectedSemesterIndex() == -1) {
+            return null;
+        }
+        return getSemesters().asList().get(getSelectedSemesterIndex());
+    }
+
+    /**
+     * @since 0.0.0
+     */
+    public static int getSelectedSemesterIndex() {
+        if (selectedSemesterIndex == -1) {
+            selectedSemesterIndex = getCurrentSemesterIndex();
+        }
+        return selectedSemesterIndex;
+    }
+
+    /**
+     * @since 0.0.0
+     */
+    public static void setSelectedSemesterIndex(int i) {
+        if ((i < 0) || (i > getSemesters().size() - 1)) {
+            throw new IllegalArgumentException("Неверный индекс: " + i);
+        }
+        selectedSemesterIndex = i;
     }
 
     /**
@@ -99,14 +200,20 @@ public class ScheduleManager {
      * @since 0.0.0
      */
     private static void findCurrentSemester() {
+        if (getSemesters().size() < 2) {
+            // Если размер массива 0 или 1, вернуть соответственно -1 или 0
+            currentSemesterIndex = getSemesters().size() - 1;
+        }
+
         LocalDate today = LocalDate.now();
-        for (Semester semester : getSemesters()) {
+        for (int i = 0; i < getSemesters().size(); i++) {
+            Semester semester = getSemesters().asList().get(i);
             if (!today.isBefore(semester.getFirstDay()) && !today.isAfter(semester.getLastDay())) {
                 currentSemesterIndex = getSemesters().asList().indexOf(semester);
                 return;
             }
         }
-        currentSemesterIndex = -1;
+        currentSemesterIndex = getSemesters().size() - 1;
     }
 
     /**
@@ -131,7 +238,6 @@ public class ScheduleManager {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        findCurrentSemester();
     }
 
     /**
