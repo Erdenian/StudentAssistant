@@ -51,6 +51,9 @@ public class UiUtils {
                     case R.id.nav_schedule:
                         Toast.makeText(currentActivity, resources.getText(R.string.nav_schedule), Toast.LENGTH_SHORT).show();
                         break;
+                    case R.id.nav_homework:
+                        Toast.makeText(currentActivity, resources.getText(R.string.nav_homework), Toast.LENGTH_SHORT).show();
+                        break;
                     case R.id.nav_alarm:
                         Toast.makeText(currentActivity, resources.getText(R.string.nav_alarm), Toast.LENGTH_SHORT).show();
                         break;
