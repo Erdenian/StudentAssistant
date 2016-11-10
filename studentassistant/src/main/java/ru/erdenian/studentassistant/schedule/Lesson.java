@@ -209,8 +209,8 @@ public final class Lesson implements Comparable<Lesson> {
         this.name = name;
         this.type = type;
 
-        this.teachers = teachers != null ? teachers : ImmutableSortedSet.<String>of();
-        this.classrooms = classrooms != null ? classrooms : ImmutableSortedSet.<String>of();
+        this.teachers = (teachers != null) ? teachers : ImmutableSortedSet.<String>of();
+        this.classrooms = (classrooms != null) ? classrooms : ImmutableSortedSet.<String>of();
 
         this.startTime = startTime;
         this.endTime = endTime;

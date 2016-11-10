@@ -89,7 +89,7 @@ public final class Homework implements Comparable<Homework> {
         this.subjectName = subjectName;
         this.description = description;
         this.deadlineDay = deadlineDay;
-        this.deadlineTime = deadlineTime != null ? deadlineTime : new LocalTime(23, 59, 59);
+        this.deadlineTime = (deadlineTime != null) ? deadlineTime : new LocalTime(23, 59, 59);
     }
 
     /**
