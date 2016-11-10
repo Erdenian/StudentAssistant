@@ -106,8 +106,8 @@ public final class Semester implements Comparable<Semester> {
         this.name = name;
         this.firstDay = firstDay;
         this.lastDay = lastDay;
-        this.lessons = lessons != null ? lessons : ImmutableSortedSet.<Lesson>of();
-        this.homeworks = homeworks != null ? homeworks : ImmutableSortedSet.<Homework>of();
+        this.lessons = (lessons != null) ? lessons : ImmutableSortedSet.<Lesson>of();
+        this.homeworks = (homeworks != null) ? homeworks : ImmutableSortedSet.<Homework>of();
     }
 
     /**
