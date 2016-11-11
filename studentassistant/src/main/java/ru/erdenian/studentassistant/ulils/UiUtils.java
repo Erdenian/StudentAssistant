@@ -30,6 +30,16 @@ import ru.erdenian.studentassistant.activity.ScheduleActivity;
  */
 public class UiUtils {
 
+    /**
+     * Инициализирует Navigation Bar.
+     *
+     * @param currentActivity Activity, в котором выполняется инициализация
+     * @param drawerId        id DrawerLayout'а
+     * @param toolbar         тулбар
+     * @param resources       ресурсы
+     * @return инициализированный DrawerLayout
+     * @since 0.0.0
+     */
     public static DrawerLayout initializeDrawerAndNavigationView(final Activity currentActivity,
                                                                  int drawerId, Toolbar toolbar,
                                                                  final Resources resources) {
@@ -80,6 +90,13 @@ public class UiUtils {
         return drawerLayout;
     }
 
+    /**
+     * Окрашивает иконки в тулбаре в нужный цвет.
+     *
+     * @param context контекст
+     * @param menu    меню, в котором нужно окрасить иконки
+     * @since 0.0.0
+     */
     public static void colorMenu(Context context, Menu menu) {
         int color = ContextCompat.getColor(context, R.color.action_bar_icons_color);
 
