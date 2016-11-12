@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -27,9 +28,7 @@ import com.google.common.collect.ImmutableSortedSet;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import ru.erdenian.studentassistant.R;
 import ru.erdenian.studentassistant.adapter.SchedulePagerAdapter;
@@ -49,7 +48,9 @@ import ru.erdenian.studentassistant.ulils.UiUtils;
  */
 public class ScheduleActivity extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener,
-        CalendarDatePickerDialogFragment.OnDateSetListener, View.OnClickListener, OnScheduleUpdateListener {
+        CalendarDatePickerDialogFragment.OnDateSetListener,
+        View.OnClickListener,
+        OnScheduleUpdateListener {
 
     private static final String CURRENT_PAGE = "current_page";
 
@@ -176,14 +177,7 @@ public class ScheduleActivity extends AppCompatActivity implements
                         .show(getSupportFragmentManager(), "date_picker");
                 break;
             case R.id.menu_schedule_edit_schedule:
-                Toast.makeText(this, R.string.menu_schedule_edit_schedule, Toast.LENGTH_SHORT).show();
-
-                List<Semester> semesters = new ArrayList<>(ScheduleManager.getSemesters().asList());
-                semesters.add(new Semester("Семестр " + System.currentTimeMillis(), new LocalDate(2017, 9, 1), new LocalDate(2017, 12, 31),
-                        ImmutableSortedSet.<Lesson>of(), ImmutableSortedSet.<Homework>of()));
-
-                ScheduleManager.setSemesters(ImmutableSortedSet.copyOf(semesters));
-
+                startActivity(new Intent(this, SemestersEditorActivity.class));
                 break;
             default:
                 Log.wtf(this.getClass().getName(), "Неизвестный id: " + item.getItemId());
