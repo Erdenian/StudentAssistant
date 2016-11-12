@@ -20,8 +20,11 @@
 
         <activity
             android:name=".activity.ScheduleActivity"
-            android:label="@string/title_activity_schedule"
-            android:theme="@style/AppTheme"/>
+            android:label="@string/title_activity_schedule"/>
+
+        <activity
+            android:name=".activity.SemestersEditorActivity"
+            android:label="@string/title_activity_semesters_editor"/>
 
     </application>
 
