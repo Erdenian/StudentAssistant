@@ -26,6 +26,10 @@
             android:name=".activity.SemestersEditorActivity"
             android:label="@string/title_activity_semesters_editor"/>
 
+        <activity
+            android:name=".activity.LessonsEditorActivity"
+            android:label="@string/title_activity_lessons_editor"/>
+
     </application>
 
 </manifest>

@@ -67,13 +67,13 @@ public class ScheduleActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_schedule);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_with_spinner);
         setSupportActionBar(toolbar);
 
         drawer = UiUtils.initializeDrawerAndNavigationView(this, R.id.activity_schedule_drawer,
                 toolbar, getResources());
 
-        spSemesters = (Spinner) findViewById(R.id.toolbar_schedule_spinner);
+        spSemesters = (Spinner) findViewById(R.id.toolbar_with_spinner_spinner);
         spSemesters.setOnItemSelectedListener(this);
 
         llAddButtons = (LinearLayout) findViewById(R.id.content_schedule_add_buttons);

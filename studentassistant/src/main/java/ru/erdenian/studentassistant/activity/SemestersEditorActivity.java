@@ -1,16 +1,16 @@
 package ru.erdenian.studentassistant.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.common.collect.ImmutableSortedSet;
 
@@ -25,11 +25,10 @@ import ru.erdenian.studentassistant.schedule.Lesson;
 import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener;
 import ru.erdenian.studentassistant.schedule.ScheduleManager;
 import ru.erdenian.studentassistant.schedule.Semester;
-import ru.erdenian.studentassistant.ulils.UiUtils;
 
 public class SemestersEditorActivity extends AppCompatActivity implements
         AdapterView.OnItemClickListener,
-        OnScheduleUpdateListener {
+        OnScheduleUpdateListener, View.OnClickListener {
 
     ListView lvSemesters;
 
@@ -38,13 +37,15 @@ public class SemestersEditorActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_semesters_editor);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_semesters_editor);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         lvSemesters = (ListView) findViewById(R.id.content_semesters_editor_semesters_list);
         lvSemesters.setOnItemClickListener(this);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.activity_semesters_editor_add_semester);
+        fab.setOnClickListener(this);
     }
 
     @Override
@@ -68,26 +69,10 @@ public class SemestersEditorActivity extends AppCompatActivity implements
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_semesters_editor, menu);
-        UiUtils.colorMenu(this, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
-                break;
-            case R.id.menu_semesters_editor_add_semester:
-                Toast.makeText(this, R.string.menu_semesters_editor_add_semeseter, Toast.LENGTH_SHORT).show();
-
-                List<Semester> semesters = new ArrayList<>(ScheduleManager.getSemesters().asList());
-                semesters.add(new Semester("Семестр " + System.currentTimeMillis(), new LocalDate(2017, 9, 1), new LocalDate(2017, 12, 31),
-                        ImmutableSortedSet.<Lesson>of(), ImmutableSortedSet.<Homework>of()));
-                ScheduleManager.setSemesters(ImmutableSortedSet.copyOf(semesters));
-
                 break;
             default:
                 Log.wtf(this.getClass().getName(), "Неизвестный id: " + item.getItemId());
@@ -98,6 +83,23 @@ public class SemestersEditorActivity extends AppCompatActivity implements
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Toast.makeText(this, ScheduleManager.getSemesters().asList().get(i).getName(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, LessonsEditorActivity.class);
+        intent.putExtra(LessonsEditorActivity.SEMESTER_INDEX, i);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.activity_semesters_editor_add_semester:
+                List<Semester> semesters = new ArrayList<>(ScheduleManager.getSemesters().asList());
+                semesters.add(new Semester("Семестр " + System.currentTimeMillis(), new LocalDate(2017, 9, 1), new LocalDate(2017, 12, 31),
+                        ImmutableSortedSet.<Lesson>of(), ImmutableSortedSet.<Homework>of()));
+                ScheduleManager.setSemesters(ImmutableSortedSet.copyOf(semesters));
+                break;
+            default:
+                Log.wtf(this.getClass().getName(), "Неизвестный id: " + view.getId());
+                break;
+        }
     }
 }

@@ -5,9 +5,16 @@
     android:layout_height="wrap_content">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_semesters_editor"
+        android:id="@+id/toolbar_with_spinner"
         style="@style/Toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"/>
+        android:layout_height="?attr/actionBarSize">
+
+        <Spinner
+            android:id="@+id/toolbar_with_spinner_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </android.support.v7.widget.Toolbar>
 
 </android.support.design.widget.AppBarLayout>
