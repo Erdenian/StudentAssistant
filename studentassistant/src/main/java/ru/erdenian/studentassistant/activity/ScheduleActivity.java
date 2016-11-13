@@ -21,14 +21,11 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
-import com.codetroopers.betterpickers.calendardatepicker.MonthAdapter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
-
-import java.util.Calendar;
 
 import ru.erdenian.studentassistant.R;
 import ru.erdenian.studentassistant.adapter.SchedulePagerAdapter;
@@ -165,20 +162,8 @@ public class ScheduleActivity extends AppCompatActivity implements
                 if (semester == null)
                     semester = ScheduleManager.getCurrentSemester();
 
-                Calendar firstDay = Calendar.getInstance();
-                firstDay.setTime(semester.getFirstDay().toDate());
-                Calendar lastDay = Calendar.getInstance();
-                lastDay.setTime(semester.getLastDay().toDate());
-
-                MonthAdapter.CalendarDay startDate = new MonthAdapter.CalendarDay(firstDay);
-                MonthAdapter.CalendarDay endDate = new MonthAdapter.CalendarDay(lastDay);
-
-                new CalendarDatePickerDialogFragment()
-                        .setFirstDayOfWeek(Calendar.MONDAY)
-                        .setDateRange(startDate, endDate)
-                        .setThemeCustom(R.style.DatePicker)
-                        .setOnDateSetListener(this)
-                        .show(getSupportFragmentManager(), "date_picker");
+                UiUtils.showDatePicker(semester.getFirstDay(), semester.getLastDay(), LocalDate.now(),
+                        getSupportFragmentManager(), this);
                 break;
             case R.id.menu_schedule_edit_schedule:
                 startActivity(new Intent(this, SemestersEditorActivity.class));

@@ -30,8 +30,10 @@ public class LessonsEditorActivity extends AppCompatActivity implements
 
     static final String SEMESTER_ID = "semester_id";
 
-    private long selectedSemesterId = -1;
-    private int savedPage = -1;
+    private long semesterId = -1;
+    private int semesterIndex = -1;
+
+    private int savedPage = 0;
 
     private ViewPager viewPager;
     private ScrollView scrollView;
@@ -64,7 +66,7 @@ public class LessonsEditorActivity extends AppCompatActivity implements
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.activity_lessons_editor_add_lesson);
         fab.setOnClickListener(this);
 
-        selectedSemesterId = getIntent().getLongExtra(SEMESTER_ID, -1);
+        semesterId = getIntent().getLongExtra(SEMESTER_ID, -1);
     }
 
     @Override
@@ -76,14 +78,24 @@ public class LessonsEditorActivity extends AppCompatActivity implements
 
     @Override
     public void onScheduleUpdate() {
+        if ((semesterIndex == -1) || (semesterIndex >= ScheduleManager.getSemesters().size()) ||
+                (ScheduleManager.getSemester(semesterIndex).getId() != semesterId)) {
+            semesterIndex = ScheduleManager.getSemesterIndex(semesterId);
+
+            if (semesterIndex == -1) {
+                finish();
+                return;
+            }
+        }
+
         if (pagerAdapter != null) {
             savedPage = viewPager.getCurrentItem();
         }
 
-        pagerAdapter = new ScheduleEditorPagerAdapter(getSupportFragmentManager(), ScheduleManager.getSemester(selectedSemesterId));
+        pagerAdapter = new ScheduleEditorPagerAdapter(getSupportFragmentManager(), ScheduleManager.getSemester(semesterIndex));
         viewPager.setAdapter(pagerAdapter);
-        viewPager.setCurrentItem((savedPage != -1) ? savedPage : 0, false);
-        savedPage = -1;
+        viewPager.setCurrentItem(savedPage, false);
+        savedPage = 0;
 
         // TODO: 13.11.2016 добавить заполнение списка пар по датам
     }
@@ -112,10 +124,12 @@ public class LessonsEditorActivity extends AppCompatActivity implements
                 finish();
                 break;
             case R.id.menu_lessons_editor_edit_semester:
-                startActivity(new Intent(this, SemesterEditorActivity.class));
+                Intent intent = new Intent(this, SemesterEditorActivity.class);
+                intent.putExtra(SemesterEditorActivity.SEMESTER_ID, semesterId);
+                startActivity(intent);
                 break;
             case R.id.menu_lessons_editor_delete_semester:
-
+                ScheduleManager.removeSemester(semesterIndex);
                 break;
             default:
                 Log.wtf(this.getClass().getName(), "Неизвестный id: " + item.getItemId());

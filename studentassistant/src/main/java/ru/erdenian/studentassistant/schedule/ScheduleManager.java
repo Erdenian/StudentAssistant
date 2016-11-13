@@ -112,6 +112,19 @@ public class ScheduleManager {
     }
 
     /**
+     * @param i номер семестра
+     * @return семестр с данным номером
+     * @since 0.0.0
+     */
+    @Nullable
+    public static Semester getSemester(int i) {
+        if ((i < 0) || (i >= getSemesters().size())) {
+            throw new IllegalArgumentException("Неверный индекс: " + i);
+        }
+        return getSemesters().asList().get(i);
+    }
+
+    /**
      * @param id идентификатор семестра
      * @return семестр с данным id, либо null, если его нет
      * @since 0.0.0
@@ -124,6 +137,20 @@ public class ScheduleManager {
             }
         }
         return null;
+    }
+
+    /**
+     * @param id идентификатор семестра
+     * @return номер семестра с данным id, либо -1, если его нет
+     * @since 0.0.0
+     */
+    public static int getSemesterIndex(long id) {
+        for (int i = 0; i < getSemesters().size(); i++) {
+            if (getSemesters().asList().get(i).getId() == id) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -161,6 +188,25 @@ public class ScheduleManager {
         if (currentSemesterIndex == -1)
             findCurrentSemester();
         return currentSemesterIndex;
+    }
+
+    public static void removeSemester(int i) {
+        if ((i < 0) || (i >= getSemesters().size())) {
+            throw new IllegalArgumentException("Неверный индекс: " + i);
+        }
+        List<Semester> semesters = new ArrayList<>(getSemesters().asList());
+        semesters.remove(i);
+        setSemesters(ImmutableSortedSet.copyOf(semesters));
+    }
+
+    public static void removeSemester(long id) {
+        List<Semester> semesters = new ArrayList<>(getSemesters().asList());
+        for (int i = 0; i < semesters.size(); i++) {
+            if (semesters.get(i).getId() == id) {
+                semesters.remove(i);
+            }
+        }
+        setSemesters(ImmutableSortedSet.copyOf(semesters));
     }
 
     /**
