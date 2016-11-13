@@ -64,8 +64,8 @@ public class SchedulePageFragment extends Fragment {
             return inflater.inflate(R.layout.fragment_free_day, container, false);
         }
 
-        View view = inflater.inflate(R.layout.fragment_schedule, container, false);
-        LinearLayout llCardsParent = (LinearLayout) view.findViewById(R.id.fragment_schedule_cards_parent);
+        View view = inflater.inflate(R.layout.scroll_view, container, false);
+        LinearLayout llCardsParent = (LinearLayout) view.findViewById(R.id.scroll_view_items_parent);
 
         for (final Lesson lesson : lessons) {
             View card = inflater.inflate(R.layout.card_schedule, llCardsParent, false);
