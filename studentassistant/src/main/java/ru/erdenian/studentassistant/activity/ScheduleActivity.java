@@ -54,7 +54,8 @@ public class ScheduleActivity extends AppCompatActivity implements
 
     private static final String CURRENT_PAGE = "current_page";
 
-    int savedPage = -1;
+    private long selectedSemesterId = -1;
+    private int savedPage = -1;
 
     private DrawerLayout drawer;
     private Spinner spSemesters;
@@ -145,7 +146,10 @@ public class ScheduleActivity extends AppCompatActivity implements
         ScheduleManager.setSelectedSemesterIndex(i);
         pagerAdapter = new SchedulePagerAdapter(getSupportFragmentManager(), ScheduleManager.getSelectedSemester());
         viewPager.setAdapter(pagerAdapter);
-        viewPager.setCurrentItem((savedPage != -1) ? savedPage : pagerAdapter.getPosition(LocalDate.now()), false);
+        viewPager.setCurrentItem(((savedPage != -1) &&
+                (selectedSemesterId == ScheduleManager.getSelectedSemester().getId())) ?
+                savedPage : pagerAdapter.getPosition(LocalDate.now()), false);
+        selectedSemesterId = ScheduleManager.getSelectedSemester().getId();
         savedPage = -1;
     }
 
