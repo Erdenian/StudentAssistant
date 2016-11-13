@@ -13,12 +13,12 @@
 
         <include layout="@layout/toolbar"/>
 
-        <include layout="@layout/content_semesters_editor"/>
+        <include layout="@layout/content_lessons_editor"/>
 
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/activity_semesters_editor_add_semester"
+        android:id="@+id/activity_lessons_editor_add_lesson"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/toolbar_schedule"/>
+        <include layout="@layout/toolbar_with_spinner"/>
 
         <include layout="@layout/content_schedule"/>
 
