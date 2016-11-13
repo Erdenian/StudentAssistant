@@ -134,6 +134,23 @@ public final class Semester implements Comparable<Semester> {
     }
 
     /**
+     * Возвращает список пар в нужный день недели.
+     *
+     * @param weekday день
+     * @return список пар в этот день недели
+     * @since 0.0.0
+     */
+    public List<Lesson> getLessons(int weekday) {
+        List<Lesson> result = new ArrayList<>();
+        for (Lesson lesson : lessons) {
+            if (lesson.repeatsOnWeekday(weekday)) {
+                result.add(lesson);
+            }
+        }
+        return result;
+    }
+
+    /**
      * Возвращает номер недели в нужный день.
      *
      * @param day день
