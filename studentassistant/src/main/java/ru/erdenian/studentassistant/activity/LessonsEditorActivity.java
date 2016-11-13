@@ -1,12 +1,17 @@
 package ru.erdenian.studentassistant.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
@@ -20,8 +25,11 @@ import ru.erdenian.studentassistant.R;
 import ru.erdenian.studentassistant.schedule.Lesson;
 import ru.erdenian.studentassistant.schedule.ScheduleManager;
 import ru.erdenian.studentassistant.schedule.Semester;
+import ru.erdenian.studentassistant.ulils.UiUtils;
 
-public class LessonsEditorActivity extends AppCompatActivity implements View.OnClickListener {
+public class LessonsEditorActivity extends AppCompatActivity implements
+        View.OnClickListener,
+        AdapterView.OnItemSelectedListener {
 
     static final String SEMESTER_INDEX = "semester_index";
 
@@ -32,9 +40,17 @@ public class LessonsEditorActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lessons_editor);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_with_spinner);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        Spinner spEditTypes = (Spinner) findViewById(R.id.toolbar_with_spinner_spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item_semesters,
+                getResources().getStringArray(R.array.activity_lessons_editor_edit_types));
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters);
+        spEditTypes.setAdapter(adapter);
+        spEditTypes.setOnItemSelectedListener(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.activity_lessons_editor_add_lesson);
         fab.setOnClickListener(this);
@@ -43,10 +59,42 @@ public class LessonsEditorActivity extends AppCompatActivity implements View.OnC
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_lessons_editor, menu);
+        UiUtils.colorMenu(this, menu);
+        return true;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        switch (i) {
+            case 0:
+
+                break;
+            case 1:
+
+                break;
+            default:
+                Log.wtf(this.getClass().getName(), "Неизвестный индекс: " + i);
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                break;
+            case R.id.menu_lessons_editor_edit_semester:
+                startActivity(new Intent(this, SemesterEditorActivity.class));
+                break;
+            case R.id.menu_lessons_editor_delete_semester:
+
                 break;
             default:
                 Log.wtf(this.getClass().getName(), "Неизвестный id: " + item.getItemId());

@@ -28,7 +28,8 @@ import ru.erdenian.studentassistant.schedule.Semester;
 
 public class SemestersEditorActivity extends AppCompatActivity implements
         AdapterView.OnItemClickListener,
-        OnScheduleUpdateListener, View.OnClickListener {
+        OnScheduleUpdateListener,
+        View.OnClickListener {
 
     ListView lvSemesters;
 
@@ -83,6 +84,10 @@ public class SemestersEditorActivity extends AppCompatActivity implements
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+        ScheduleManager.getSemesters();
+
+
         Intent intent = new Intent(this, LessonsEditorActivity.class);
         intent.putExtra(LessonsEditorActivity.SEMESTER_INDEX, i);
         startActivity(intent);
