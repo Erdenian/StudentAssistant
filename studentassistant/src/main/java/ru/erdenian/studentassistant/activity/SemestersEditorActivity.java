@@ -84,12 +84,8 @@ public class SemestersEditorActivity extends AppCompatActivity implements
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-        ScheduleManager.getSemesters();
-
-
         Intent intent = new Intent(this, LessonsEditorActivity.class);
-        intent.putExtra(LessonsEditorActivity.SEMESTER_INDEX, i);
+        intent.putExtra(LessonsEditorActivity.SEMESTER_ID, ScheduleManager.getSemesters().asList().get(i).getId());
         startActivity(intent);
     }
 
