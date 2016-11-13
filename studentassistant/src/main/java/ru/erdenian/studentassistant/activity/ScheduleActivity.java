@@ -82,8 +82,8 @@ public class ScheduleActivity extends AppCompatActivity implements
         Button btnAddSchedule = (Button) findViewById(R.id.content_schedule_add_schedule);
         btnAddSchedule.setOnClickListener(this);
 
-        viewPager = (ViewPager) findViewById(R.id.content_schedule_view_pager);
-        PagerTabStrip pagerTabStrip = (PagerTabStrip) findViewById(R.id.content_schedule_pager_tab_strip);
+        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        PagerTabStrip pagerTabStrip = (PagerTabStrip) findViewById(R.id.view_pager_pager_tab_strip);
         pagerTabStrip.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         pagerTabStrip.setTabIndicatorColorResource(R.color.colorPrimary);
     }
