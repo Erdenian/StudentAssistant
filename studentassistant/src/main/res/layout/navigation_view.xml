@@ -7,4 +7,4 @@
     android:layout_height="match_parent"
     android:layout_gravity="start"
     app:headerLayout="@layout/navigation_view_header"
-    app:menu="@menu/activity_schedule_drawer"/>
+    app:menu="@menu/drawer_schedule"/>

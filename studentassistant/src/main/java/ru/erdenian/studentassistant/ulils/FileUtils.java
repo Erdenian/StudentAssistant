@@ -4,8 +4,6 @@ import android.content.Context;
 
 import java.io.File;
 
-import lombok.Getter;
-
 /**
  * Todo: описание класса.
  *
@@ -34,8 +32,7 @@ public class FileUtils {
      *
      * @since 0.0.0
      */
-    @Getter
-    private static File filesDir;
+    private static String filesDir;
 
     /**
      * Файл с путем к папке с json.
@@ -43,8 +40,7 @@ public class FileUtils {
      * @see FileUtils#JSON_FOLDER_PATH
      * @since 0.0.0
      */
-    @Getter
-    private static File jsonFolder;
+    private static String jsonFolder;
 
     /**
      * Файл с путем к файлу с расписанием.
@@ -52,8 +48,7 @@ public class FileUtils {
      * @see FileUtils#SCHEDULE_FILE_PATH
      * @since 0.0.0
      */
-    @Getter
-    private static File scheduleFile;
+    private static String scheduleFile;
 
     /**
      * Инициализирует все поля.
@@ -62,9 +57,33 @@ public class FileUtils {
      * @since 0.0.0
      */
     public static void initialize(Context context) {
-        filesDir = context.getFilesDir();
+        filesDir = context.getFilesDir().getAbsolutePath();
 
-        jsonFolder = new File(filesDir.getAbsolutePath() + JSON_FOLDER_PATH);
-        scheduleFile = new File(jsonFolder.getAbsolutePath() + SCHEDULE_FILE_PATH);
+        jsonFolder = filesDir + JSON_FOLDER_PATH;
+        scheduleFile = jsonFolder + SCHEDULE_FILE_PATH;
+    }
+
+    /**
+     * @return папка с данными приложения
+     * @since 0.0.0
+     */
+    public static File getFilesDir() {
+        return new File(filesDir);
+    }
+
+    /**
+     * @return папка с json файлами
+     * @since 0.0.0
+     */
+    public static File getJsonFolder() {
+        return new File(jsonFolder);
+    }
+
+    /**
+     * @return файл с сохраненным расписанием
+     * @since 0.0.0
+     */
+    public static File getScheduleFile() {
+        return new File(scheduleFile);
     }
 }

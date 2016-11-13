@@ -12,6 +12,11 @@
 
     <string name="activity_semesters_editor_delete_semester">Удалить семестр</string>
 
+    <string-array name="activity_lessons_editor_edit_types">
+        <item>По дням недели</item>
+        <item>По датам</item>
+    </string-array>
+
     <string name="nav_schedule">Расписание</string>
     <string name="nav_homework">Домашнее задание</string>
     <string name="nav_alarm">Будильник</string>
@@ -22,7 +27,11 @@
     <string name="menu_schedule_calendar">Календарь</string>
     <string name="menu_schedule_edit_schedule">Редактировать расписание</string>
 
+    <string name="menu_lessons_editor_edit_semester">Редактировать семестр</string>
+    <string name="menu_lessons_editor_delete_semester">Удалить семестр</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_semester_editor">SemesterEditorActivity</string>
 
 </resources>
