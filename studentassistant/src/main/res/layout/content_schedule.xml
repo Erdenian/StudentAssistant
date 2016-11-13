@@ -29,17 +29,6 @@
 
     </LinearLayout>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/content_schedule_view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.v4.view.PagerTabStrip
-            android:id="@+id/content_schedule_pager_tab_strip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"/>
-
-    </android.support.v4.view.ViewPager>
+    <include layout="@layout/view_pager"/>
 
 </FrameLayout>
