@@ -93,8 +93,8 @@ public class SemesterEditorActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
+    public void onClick(View v) {
+        switch (v.getId()) {
             case R.id.content_semester_editor_first_day:
                 UiUtils.showDatePicker(ScheduleManager.getSemester(semesterIndex).getFirstDay(),
                         ScheduleManager.getSemester(semesterIndex).getLastDay(), LocalDate.now(),
@@ -109,7 +109,7 @@ public class SemesterEditorActivity extends AppCompatActivity implements
 
                 break;
             default:
-                Log.wtf(this.getClass().getName(), "Неизвестный id: " + view.getId());
+                Log.wtf(this.getClass().getName(), "Неизвестный id: " + v.getId());
                 break;
         }
     }

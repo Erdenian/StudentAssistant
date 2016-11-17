@@ -121,9 +121,9 @@ public class ScheduleActivity extends AppCompatActivity implements
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle bundle) {
-        bundle.putInt(CURRENT_PAGE, viewPager.getCurrentItem());
-        super.onSaveInstanceState(bundle);
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(CURRENT_PAGE, viewPager.getCurrentItem());
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -141,8 +141,8 @@ public class ScheduleActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        ScheduleManager.setSelectedSemesterIndex(i);
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        ScheduleManager.setSelectedSemesterIndex(position);
         pagerAdapter = new SchedulePagerAdapter(getSupportFragmentManager(), selectedSemester);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem((savedPage != -1) ? savedPage : pagerAdapter.getPosition(LocalDate.now()), false);
@@ -150,7 +150,7 @@ public class ScheduleActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
+    public void onNothingSelected(AdapterView<?> parent) {
     }
 
     @Override
@@ -176,8 +176,8 @@ public class ScheduleActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
+    public void onClick(View v) {
+        switch (v.getId()) {
             case R.id.content_schedule_get_schedule_from_server:
                 Toast.makeText(this, R.string.activity_schedule_get_schedule_from_server_button, Toast.LENGTH_SHORT).show();
                 break;
@@ -201,7 +201,7 @@ public class ScheduleActivity extends AppCompatActivity implements
 
                 break;
             default:
-                Log.wtf(this.getClass().getName(), "Неизвестный id: " + view.getId());
+                Log.wtf(this.getClass().getName(), "Неизвестный id: " + v.getId());
                 break;
         }
     }
