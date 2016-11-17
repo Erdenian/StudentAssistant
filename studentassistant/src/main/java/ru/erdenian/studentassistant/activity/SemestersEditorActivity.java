@@ -83,15 +83,15 @@ public class SemestersEditorActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this, LessonsEditorActivity.class);
-        intent.putExtra(LessonsEditorActivity.SEMESTER_ID, ScheduleManager.getSemesters().asList().get(i).getId());
+        intent.putExtra(LessonsEditorActivity.SEMESTER_ID, ScheduleManager.getSemesters().asList().get(position).getId());
         startActivity(intent);
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
+    public void onClick(View v) {
+        switch (v.getId()) {
             case R.id.activity_semesters_editor_add_semester:
                 List<Semester> semesters = new ArrayList<>(ScheduleManager.getSemesters().asList());
                 semesters.add(new Semester("Семестр " + System.currentTimeMillis(), new LocalDate(2017, 9, 1), new LocalDate(2017, 12, 31),
@@ -99,7 +99,7 @@ public class SemestersEditorActivity extends AppCompatActivity implements
                 ScheduleManager.setSemesters(ImmutableSortedSet.copyOf(semesters));
                 break;
             default:
-                Log.wtf(this.getClass().getName(), "Неизвестный id: " + view.getId());
+                Log.wtf(this.getClass().getName(), "Неизвестный id: " + v.getId());
                 break;
         }
     }

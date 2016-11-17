@@ -114,7 +114,7 @@ public class LessonsEditorActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
+    public void onNothingSelected(AdapterView<?> parent) {
     }
 
     @Override
@@ -139,12 +139,12 @@ public class LessonsEditorActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
+    public void onClick(View v) {
+        switch (v.getId()) {
             case R.id.activity_lessons_editor_add_lesson:
                 break;
             default:
-                Log.wtf(this.getClass().getName(), "Неизвестный id: " + view.getId());
+                Log.wtf(this.getClass().getName(), "Неизвестный id: " + v.getId());
                 break;
         }
     }
