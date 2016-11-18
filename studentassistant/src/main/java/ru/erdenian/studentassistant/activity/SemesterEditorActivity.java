@@ -59,15 +59,15 @@ public class SemesterEditorActivity extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        ScheduleManager.setOnScheduleUpdateListener(this);
+        ScheduleManager.INSTANCE.setOnScheduleUpdateListener(this);
         onScheduleUpdate();
     }
 
     @Override
     public void onScheduleUpdate() {
-        if ((semesterIndex == -1) || (semesterIndex >= ScheduleManager.getSemesters().size()) ||
-                (ScheduleManager.getSemester(semesterIndex).getId() != semesterId)) {
-            semesterIndex = ScheduleManager.getSemesterIndex(semesterId);
+        if ((semesterIndex == -1) || (semesterIndex >= ScheduleManager.INSTANCE.getSemesters().size()) ||
+                (ScheduleManager.INSTANCE.getSemesters().asList().get(semesterIndex).getId() != semesterId)) {
+            semesterIndex = ScheduleManager.INSTANCE.getSemesterIndex(semesterId);
 
             if (semesterIndex == -1) {
                 finish();
@@ -96,13 +96,13 @@ public class SemesterEditorActivity extends AppCompatActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.content_semester_editor_first_day:
-                UiUtils.showDatePicker(ScheduleManager.getSemester(semesterIndex).getFirstDay(),
-                        ScheduleManager.getSemester(semesterIndex).getLastDay(), LocalDate.now(),
+                UiUtils.showDatePicker(ScheduleManager.INSTANCE.getSemesters().asList().get(semesterIndex).getFirstDay(),
+                        ScheduleManager.INSTANCE.getSemesters().asList().get(semesterIndex).getLastDay(), LocalDate.now(),
                         getSupportFragmentManager(), this, FIRST_DAY_TAG);
                 break;
             case R.id.content_semester_editor_last_day:
-                UiUtils.showDatePicker(ScheduleManager.getSemester(semesterIndex).getFirstDay(),
-                        ScheduleManager.getSemester(semesterIndex).getLastDay(), LocalDate.now(),
+                UiUtils.showDatePicker(ScheduleManager.INSTANCE.getSemesters().asList().get(semesterIndex).getFirstDay(),
+                        ScheduleManager.INSTANCE.getSemesters().asList().get(semesterIndex).getLastDay(), LocalDate.now(),
                         getSupportFragmentManager(), this, LAST_DAY_TAG);
                 break;
             case R.id.content_semester_editor_save:

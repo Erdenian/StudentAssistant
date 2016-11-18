@@ -52,7 +52,7 @@ public class SemestersEditorActivity extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        ScheduleManager.setOnScheduleUpdateListener(this);
+        ScheduleManager.INSTANCE.setOnScheduleUpdateListener(this);
         onScheduleUpdate();
     }
 
@@ -63,7 +63,7 @@ public class SemestersEditorActivity extends AppCompatActivity implements
         int top = (v == null) ? 0 : (v.getTop() - lvSemesters.getPaddingTop());
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, ScheduleManager.getSemestersNames());
+                android.R.layout.simple_list_item_1, ScheduleManager.INSTANCE.getSemestersNames());
         lvSemesters.setAdapter(adapter);
 
         lvSemesters.setSelectionFromTop(index, top);
@@ -85,7 +85,7 @@ public class SemestersEditorActivity extends AppCompatActivity implements
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this, LessonsEditorActivity.class);
-        intent.putExtra(LessonsEditorActivity.SEMESTER_ID, ScheduleManager.getSemesters().asList().get(position).getId());
+        intent.putExtra(LessonsEditorActivity.SEMESTER_ID, ScheduleManager.INSTANCE.getSemesters().asList().get(position).getId());
         startActivity(intent);
     }
 
@@ -93,10 +93,10 @@ public class SemestersEditorActivity extends AppCompatActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.activity_semesters_editor_add_semester:
-                List<Semester> semesters = new ArrayList<>(ScheduleManager.getSemesters().asList());
+                List<Semester> semesters = new ArrayList<>(ScheduleManager.INSTANCE.getSemesters().asList());
                 semesters.add(new Semester("Семестр " + System.currentTimeMillis(), new LocalDate(2017, 9, 1), new LocalDate(2017, 12, 31),
-                        ImmutableSortedSet.<Lesson>of(), ImmutableSortedSet.<Homework>of()));
-                ScheduleManager.setSemesters(ImmutableSortedSet.copyOf(semesters));
+                        ImmutableSortedSet.<Lesson>of(), ImmutableSortedSet.<Homework>of(), System.nanoTime()));
+                ScheduleManager.INSTANCE.setSemesters(ImmutableSortedSet.copyOf(semesters));
                 break;
             default:
                 Log.wtf(this.getClass().getName(), "Неизвестный id: " + v.getId());

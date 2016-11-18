@@ -72,15 +72,15 @@ public class LessonsEditorActivity extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        ScheduleManager.setOnScheduleUpdateListener(this);
+        ScheduleManager.INSTANCE.setOnScheduleUpdateListener(this);
         onScheduleUpdate();
     }
 
     @Override
     public void onScheduleUpdate() {
-        if ((semesterIndex == -1) || (semesterIndex >= ScheduleManager.getSemesters().size()) ||
-                (ScheduleManager.getSemester(semesterIndex).getId() != semesterId)) {
-            semesterIndex = ScheduleManager.getSemesterIndex(semesterId);
+        if ((semesterIndex == -1) || (semesterIndex >= ScheduleManager.INSTANCE.getSemesters().size()) ||
+                (ScheduleManager.INSTANCE.getSemesters().asList().get(semesterIndex).getId() != semesterId)) {
+            semesterIndex = ScheduleManager.INSTANCE.getSemesterIndex(semesterId);
 
             if (semesterIndex == -1) {
                 finish();
@@ -92,7 +92,7 @@ public class LessonsEditorActivity extends AppCompatActivity implements
             savedPage = viewPager.getCurrentItem();
         }
 
-        pagerAdapter = new ScheduleEditorPagerAdapter(getSupportFragmentManager(), ScheduleManager.getSemester(semesterIndex));
+        pagerAdapter = new ScheduleEditorPagerAdapter(getSupportFragmentManager(), ScheduleManager.INSTANCE.getSemesters().asList().get(semesterIndex));
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(savedPage, false);
         savedPage = 0;
@@ -129,7 +129,7 @@ public class LessonsEditorActivity extends AppCompatActivity implements
                 startActivity(intent);
                 break;
             case R.id.menu_lessons_editor_delete_semester:
-                ScheduleManager.removeSemester(semesterIndex);
+                ScheduleManager.INSTANCE.removeSemester(semesterIndex);
                 break;
             default:
                 Log.wtf(this.getClass().getName(), "Неизвестный id: " + item.getItemId());
