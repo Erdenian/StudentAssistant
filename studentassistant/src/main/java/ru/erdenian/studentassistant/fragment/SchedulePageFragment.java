@@ -13,8 +13,6 @@ import com.google.common.base.Joiner;
 
 import org.joda.time.LocalDate;
 
-import java.util.List;
-
 import ru.erdenian.studentassistant.R;
 import ru.erdenian.studentassistant.schedule.Lesson;
 import ru.erdenian.studentassistant.schedule.ScheduleManager;
@@ -50,7 +48,7 @@ public class SchedulePageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        semester = ScheduleManager.getSemesters().asList().get(getArguments().getInt(PAGE_SEMESTER_INDEX));
+        semester = ScheduleManager.INSTANCE.getSemesters().asList().get(getArguments().getInt(PAGE_SEMESTER_INDEX));
         day = new LocalDate(getArguments().getString(PAGE_DATE));
     }
 
@@ -58,9 +56,9 @@ public class SchedulePageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        List<Lesson> lessons = semester.getLessons(day);
+        Lesson[] lessons = semester.getLessons(day);
 
-        if (lessons.size() == 0) {
+        if (lessons.length == 0) {
             return inflater.inflate(R.layout.fragment_free_day, container, false);
         }
 

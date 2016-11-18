@@ -90,29 +90,32 @@ public class ScheduleActivity extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        ScheduleManager.setOnScheduleUpdateListener(this);
+        ScheduleManager.INSTANCE.setOnScheduleUpdateListener(this);
         onScheduleUpdate();
     }
 
     @Override
     public void onScheduleUpdate() {
-        getSupportActionBar().setDisplayShowTitleEnabled(ScheduleManager.getSemesters().size() <= 1);
-        spSemesters.setVisibility((ScheduleManager.getSemesters().size() > 1) ? View.VISIBLE : View.GONE);
+        getSupportActionBar().setDisplayShowTitleEnabled(ScheduleManager.INSTANCE.getSemesters().size() <= 1);
+        spSemesters.setVisibility((ScheduleManager.INSTANCE.getSemesters().size() > 1) ? View.VISIBLE : View.GONE);
 
-        viewPager.setVisibility((ScheduleManager.getSemesters().size() > 0) ? View.VISIBLE : View.GONE);
-        llAddButtons.setVisibility((ScheduleManager.getSemesters().size() == 0) ? View.VISIBLE : View.GONE);
+        viewPager.setVisibility((ScheduleManager.INSTANCE.getSemesters().size() > 0) ? View.VISIBLE : View.GONE);
+        llAddButtons.setVisibility((ScheduleManager.INSTANCE.getSemesters().size() == 0) ? View.VISIBLE : View.GONE);
 
-        if ((pagerAdapter != null) && (selectedSemester.getId() == ScheduleManager.getSelectedSemester().getId())) {
+        if ((pagerAdapter != null) && (selectedSemester.getId() == ScheduleManager.INSTANCE.getSemesters().asList()
+                .get(ScheduleManager.INSTANCE.getSelectedSemesterIndex()).getId())) {
             savedPage = viewPager.getCurrentItem();
         }
-        selectedSemester = ScheduleManager.getSelectedSemester();
+        if (ScheduleManager.INSTANCE.getSelectedSemesterIndex() != null)
+            selectedSemester = ScheduleManager.INSTANCE.getSemesters().asList()
+                    .get(ScheduleManager.INSTANCE.getSelectedSemesterIndex());
 
-        if (ScheduleManager.getSemesters().size() > 1) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item_semesters, ScheduleManager.getSemestersNames());
+        if (ScheduleManager.INSTANCE.getSemesters().size() > 1) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item_semesters, ScheduleManager.INSTANCE.getSemestersNames());
             adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters);
             spSemesters.setAdapter(adapter);
-            spSemesters.setSelection(ScheduleManager.getSelectedSemesterIndex());
-        } else if (ScheduleManager.getSemesters().size() == 1) {
+            spSemesters.setSelection(ScheduleManager.INSTANCE.getSelectedSemesterIndex());
+        } else if (ScheduleManager.INSTANCE.getSemesters().size() == 1) {
             getSupportActionBar().setTitle(selectedSemester.getName());
             onItemSelected(null, null, 0, 0);
         } else {
@@ -135,14 +138,14 @@ public class ScheduleActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_schedule, menu);
-        menu.findItem(R.id.menu_schedule_calendar).setVisible(!ScheduleManager.getSemesters().isEmpty());
+        menu.findItem(R.id.menu_schedule_calendar).setVisible(!ScheduleManager.INSTANCE.getSemesters().isEmpty());
         UiUtils.colorMenu(this, menu);
         return true;
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        ScheduleManager.setSelectedSemesterIndex(position);
+        ScheduleManager.INSTANCE.setSelectedSemesterIndex(position);
         pagerAdapter = new SchedulePagerAdapter(getSupportFragmentManager(), selectedSemester);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem((savedPage != -1) ? savedPage : pagerAdapter.getPosition(LocalDate.now()), false);
@@ -187,17 +190,17 @@ public class ScheduleActivity extends AppCompatActivity implements
                         new Lesson("Конструирование ПО", "Лабораторная работа",
                                 ImmutableSortedSet.of("Федоров Алексей Роальдович", "Федоров Петр Алексеевич"), ImmutableSortedSet.of("4212а"),
                                 new LocalTime(14, 20), new LocalTime(15, 50),
-                                Lesson.RepeatType.BY_WEEKDAY, 5, ImmutableList.of(false, true), null),
+                                Lesson.RepeatType.BY_WEEKDAY, 5, ImmutableList.of(false, true), null, System.nanoTime()),
                         new Lesson("Конструирование ПО", "Лабораторная работа",
                                 ImmutableSortedSet.of("Федоров Алексей Роальдович"), ImmutableSortedSet.of("4212а"),
                                 new LocalTime(18, 10), new LocalTime(19, 40),
-                                Lesson.RepeatType.BY_WEEKDAY, 5, ImmutableList.of(false, true), null));
+                                Lesson.RepeatType.BY_WEEKDAY, 5, ImmutableList.of(false, true), null, System.nanoTime()));
 
                 ImmutableSortedSet<Semester> semesters = ImmutableSortedSet.of(
                         new Semester("Семестр 5", new LocalDate(2016, 9, 1), new LocalDate(2016, 12, 31),
-                                lessons, ImmutableSortedSet.<Homework>of()));
+                                lessons, ImmutableSortedSet.<Homework>of(), System.nanoTime()));
 
-                ScheduleManager.setSemesters(semesters);
+                ScheduleManager.INSTANCE.setSemesters(semesters);
 
                 break;
             default:

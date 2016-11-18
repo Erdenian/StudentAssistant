@@ -48,7 +48,7 @@ public class ScheduleEditorPageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        semester = ScheduleManager.getSemesters().asList().get(getArguments().getInt(PAGE_SEMESTER_INDEX));
+        semester = ScheduleManager.INSTANCE.getSemesters().asList().get(getArguments().getInt(PAGE_SEMESTER_INDEX));
         weekday = getArguments().getInt(PAGE_WEEKDAY);
     }
 

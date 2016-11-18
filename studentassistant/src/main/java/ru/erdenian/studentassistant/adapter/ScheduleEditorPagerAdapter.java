@@ -38,7 +38,7 @@ public class ScheduleEditorPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return ScheduleEditorPageFragment.newInstance(ScheduleManager.getSemesters().asList().indexOf(semester), position + 1);
+        return ScheduleEditorPageFragment.newInstance(ScheduleManager.INSTANCE.getSemesters().asList().indexOf(semester), position + 1);
     }
 
     @Override
