@@ -20,7 +20,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FileUtils.initialize(this);
+        FileUtils.INSTANCE.initialize(this);
 
         Intent intent = new Intent(this, ScheduleActivity.class);
         startActivity(intent);
