@@ -1,8 +1,8 @@
 package ru.erdenian.studentassistant.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.ulils.FileUtils
 
 /**
@@ -20,7 +20,7 @@ class SplashActivity : AppCompatActivity() {
 
         FileUtils.initialize(this)
 
-        startActivity(Intent(this, ScheduleActivity::class.java))
+        startActivity<ScheduleActivity>()
         finish()
     }
 }
