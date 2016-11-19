@@ -34,7 +34,7 @@ data class Lesson(val name: String, val type: String,
 
     val weeks_ = if (repeatType == RepeatType.BY_WEEKDAY) {
         if (weeks!!.isEmpty())
-            throw IllegalArgumentException("Массив с номерами недель пуст");
+            throw IllegalArgumentException("Массив с номерами недель пуст")
         weeks
     } else null
 
