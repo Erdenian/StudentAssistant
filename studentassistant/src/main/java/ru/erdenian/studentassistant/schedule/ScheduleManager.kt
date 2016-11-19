@@ -31,7 +31,7 @@ object ScheduleManager {
                             .registerTypeAdapter(ImmutableSortedSet::class.java, ImmutableSortedSetDeserializer())
                             .registerTypeAdapter(ImmutableList::class.java, ImmutableListDeserializer())
                             .create()
-                    val jsonReader = InputStreamReader(FileInputStream(FileUtils.getScheduleFile()), "UTF-8")
+                    val jsonReader = InputStreamReader(FileInputStream(FileUtils.scheduleFile), "UTF-8")
                     val type = object : TypeToken<ImmutableSortedSet<Semester>>() {}.type
                     field = gson.fromJson<ImmutableSortedSet<Semester>>(jsonReader, type)
                 } catch (e: FileNotFoundException) {
@@ -55,9 +55,9 @@ object ScheduleManager {
 
             // Запись в файл
             try {
-                FileUtils.getJsonFolder().mkdirs()
-                FileUtils.getScheduleFile().createNewFile()
-                val jsonWriter = OutputStreamWriter(FileOutputStream(FileUtils.getScheduleFile()), "UTF-8")
+                FileUtils.jsonFolder.mkdirs()
+                FileUtils.scheduleFile.createNewFile()
+                val jsonWriter = OutputStreamWriter(FileOutputStream(FileUtils.scheduleFile), "UTF-8")
                 Converters.registerAll(GsonBuilder()).create().toJson(semesters, jsonWriter)
                 jsonWriter.close()
             } catch (e: IOException) {
@@ -135,8 +135,6 @@ object ScheduleManager {
     }
 
     fun removeSemester(id: Long) {
-        val i = getSemesterIndex(id)
-        if (i == null) throw IllegalArgumentException("Неверный id: $id")
-        removeSemester(i)
+        removeSemester(getSemesterIndex(id) ?: throw IllegalArgumentException("Неверный id: $id"))
     }
 }
