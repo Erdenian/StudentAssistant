@@ -135,6 +135,8 @@ object ScheduleManager {
     }
 
     fun removeSemester(id: Long) {
-        semesters = ImmutableSortedSet.copyOf(semesters.filter { it.id != id })
+        val i = getSemesterIndex(id)
+        if (i == null) throw IllegalArgumentException("Неверный id: $id")
+        removeSemester(i)
     }
 }
