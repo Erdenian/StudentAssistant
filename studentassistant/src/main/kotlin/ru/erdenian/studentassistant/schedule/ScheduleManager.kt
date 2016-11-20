@@ -129,6 +129,11 @@ object ScheduleManager {
         return if (currentSemesterIndexLocal != null) semesters.asList()[currentSemesterIndexLocal] else null
     }
 
+    fun getSelectedSemester(): Semester? {
+        val selectedSemesterIndexLocal = selectedSemesterIndex
+        return if (selectedSemesterIndexLocal != null) semesters.asList()[selectedSemesterIndexLocal] else null
+    }
+
     fun removeSemester(i: Int) {
         if (i !in semesters.indices) throw IllegalArgumentException("Неверный индекс: $i")
         semesters = ImmutableSortedSet.copyOf(semesters.filterIndexed { position, semester -> position != i })

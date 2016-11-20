@@ -21,7 +21,6 @@ import ru.erdenian.studentassistant.R;
 import ru.erdenian.studentassistant.adapter.ScheduleEditorPagerAdapter;
 import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener;
 import ru.erdenian.studentassistant.schedule.ScheduleManager;
-import ru.erdenian.studentassistant.ulils.UiUtils;
 
 public class LessonsEditorActivity extends AppCompatActivity implements
         View.OnClickListener,
@@ -103,7 +102,7 @@ public class LessonsEditorActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_lessons_editor, menu);
-        UiUtils.colorMenu(this, menu);
+        //UiUtils.INSTANCE.colorMenu(this, menu);
         return true;
     }
 

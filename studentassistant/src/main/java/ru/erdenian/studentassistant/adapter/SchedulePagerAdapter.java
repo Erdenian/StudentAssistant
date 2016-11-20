@@ -65,4 +65,8 @@ public class SchedulePagerAdapter extends FragmentStatePagerAdapter {
     public int getPosition(@NonNull LocalDate date) {
         return Days.daysBetween(semester.getFirstDay(), date).getDays();
     }
+
+    public LocalDate getDate(int position) {
+        return semester.getFirstDay().plusDays(position);
+    }
 }
