@@ -13,7 +13,7 @@ import org.joda.time.LocalTime
  * @version 0.0.0
  * @since 0.0.0
  */
-data class Lesson(val name: String, val type: String,
+data class Lesson(val name: String, val type: String?,
                   val teachers: ImmutableSortedSet<String>, val classrooms: ImmutableSortedSet<String>,
                   val startTime: LocalTime, val endTime: LocalTime,
                   val repeatType: Lesson.RepeatType,
