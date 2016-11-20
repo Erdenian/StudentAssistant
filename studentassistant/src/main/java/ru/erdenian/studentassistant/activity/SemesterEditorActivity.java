@@ -17,7 +17,6 @@ import org.joda.time.LocalDate;
 import ru.erdenian.studentassistant.R;
 import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener;
 import ru.erdenian.studentassistant.schedule.ScheduleManager;
-import ru.erdenian.studentassistant.ulils.UiUtils;
 
 public class SemesterEditorActivity extends AppCompatActivity implements
         OnScheduleUpdateListener, View.OnClickListener, CalendarDatePickerDialogFragment.OnDateSetListener {
@@ -96,14 +95,14 @@ public class SemesterEditorActivity extends AppCompatActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.content_semester_editor_first_day:
-                UiUtils.showDatePicker(ScheduleManager.INSTANCE.getSemesters().asList().get(semesterIndex).getFirstDay(),
+                /*UiUtils.INSTANCE.showDatePicker(ScheduleManager.INSTANCE.getSemesters().asList().get(semesterIndex).getFirstDay(),
                         ScheduleManager.INSTANCE.getSemesters().asList().get(semesterIndex).getLastDay(), LocalDate.now(),
-                        getSupportFragmentManager(), this, FIRST_DAY_TAG);
+                        getSupportFragmentManager(), this, FIRST_DAY_TAG);*/
                 break;
             case R.id.content_semester_editor_last_day:
-                UiUtils.showDatePicker(ScheduleManager.INSTANCE.getSemesters().asList().get(semesterIndex).getFirstDay(),
+                /*UiUtils.INSTANCE.showDatePicker(ScheduleManager.INSTANCE.getSemesters().asList().get(semesterIndex).getFirstDay(),
                         ScheduleManager.INSTANCE.getSemesters().asList().get(semesterIndex).getLastDay(), LocalDate.now(),
-                        getSupportFragmentManager(), this, LAST_DAY_TAG);
+                        getSupportFragmentManager(), this, LAST_DAY_TAG);*/
                 break;
             case R.id.content_semester_editor_save:
 
