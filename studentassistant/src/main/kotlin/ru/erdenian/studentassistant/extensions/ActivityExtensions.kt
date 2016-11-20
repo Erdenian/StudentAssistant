@@ -28,7 +28,7 @@ fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
             R.id.nav_alarm -> toast(R.string.nav_alarm)
             R.id.nav_settings -> toast(R.string.nav_settings)
             R.id.nav_help -> toast(R.string.nav_help)
-            else -> Log.wtf(this.javaClass.name, "Неизвестный id: ${it.itemId}")
+            else -> throw IllegalArgumentException("Неизвестный id: ${it.itemId}")
         }
 
         drawerLayout.closeDrawer(GravityCompat.START)

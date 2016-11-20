@@ -3,7 +3,6 @@ package ru.erdenian.studentassistant.activity
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -16,10 +15,8 @@ import kotlinx.android.synthetic.main.activity_schedule.*
 import kotlinx.android.synthetic.main.content_schedule.*
 import kotlinx.android.synthetic.main.toolbar_with_spinner.*
 import kotlinx.android.synthetic.main.view_pager.*
-import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
-import org.jetbrains.anko.wtf
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.R
@@ -41,8 +38,7 @@ class ScheduleActivity : AppCompatActivity(),
         AdapterView.OnItemSelectedListener,
         CalendarDatePickerDialogFragment.OnDateSetListener,
         View.OnClickListener,
-        OnScheduleUpdateListener,
-        AnkoLogger {
+        OnScheduleUpdateListener {
 
     companion object {
         private const val CURRENT_PAGE = "current_page"
@@ -137,7 +133,7 @@ class ScheduleActivity : AppCompatActivity(),
             R.id.menu_schedule_calendar -> showDatePicker(this, selectedSemester!!.firstDay, selectedSemester!!.lastDay,
                     pagerAdapter!!.getDate(view_pager.currentItem))
             R.id.menu_schedule_edit_schedule -> startActivity<SemestersEditorActivity>()
-            else -> wtf("Неизвестный id: ${item.itemId}")
+            else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
         }
         return super.onOptionsItemSelected(item)
     }
@@ -167,7 +163,7 @@ class ScheduleActivity : AppCompatActivity(),
 
                 ScheduleManager.semesters = semesters
             }
-            else -> Log.wtf(this.javaClass.name, "Неизвестный id: ${v.id}")
+            else -> throw IllegalArgumentException("Неизвестный id: ${v.id}")
         }
     }
 
