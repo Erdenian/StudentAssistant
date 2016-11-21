@@ -119,7 +119,7 @@ class ScheduleActivity : AppCompatActivity(),
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         ScheduleManager.selectedSemesterIndex = position
-        pagerAdapter = SchedulePagerAdapter(supportFragmentManager, selectedSemester!!)
+        pagerAdapter = SchedulePagerAdapter(supportFragmentManager, selectedSemester!!, false)
         view_pager.adapter = pagerAdapter
         view_pager.setCurrentItem(if (savedPage != -1) savedPage else pagerAdapter!!.getPosition(LocalDate.now()), false)
         savedPage = -1
