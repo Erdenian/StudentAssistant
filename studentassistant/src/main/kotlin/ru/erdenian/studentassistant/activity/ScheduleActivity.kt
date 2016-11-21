@@ -80,8 +80,7 @@ class ScheduleActivity : AppCompatActivity(),
 
         invalidateOptionsMenu()
 
-        if ((pagerAdapter != null) &&
-                (selectedSemester!!.id == ScheduleManager.getSelectedSemester()!!.id)) {
+        if ((pagerAdapter != null) && (selectedSemester!!.id == ScheduleManager.getSelectedSemester()?.id)) {
             savedPage = view_pager.currentItem
         }
         selectedSemester = ScheduleManager.getSelectedSemester()
