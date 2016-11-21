@@ -110,8 +110,9 @@ object ScheduleManager {
         onScheduleUpdateListener = value
     }
 
-    fun getSemester(id: Long) = semesters.asList()[getSemesterIndex(id) ?:
-            throw IllegalArgumentException("Неверный id: $id")]
+    fun getSemester(id: Long): Semester? {
+        return semesters.asList()[getSemesterIndex(id) ?: return null]
+    }
 
     fun getSemesterIndex(id: Long): Int? {
         for ((i, semester) in semesters.withIndex())
