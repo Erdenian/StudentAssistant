@@ -100,10 +100,6 @@ object ScheduleManager {
             if (field == null) field = currentSemesterIndex
             return field
         }
-        set(value) {
-            if (value !in semesters.indices) throw IllegalArgumentException("Неверный индекс: $value")
-            field = value
-        }
 
     private var onScheduleUpdateListener: OnScheduleUpdateListener? = null
     fun setOnScheduleUpdateListener(value: OnScheduleUpdateListener?) {
