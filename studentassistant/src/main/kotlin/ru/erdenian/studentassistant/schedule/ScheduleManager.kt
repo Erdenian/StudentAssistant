@@ -100,18 +100,17 @@ object ScheduleManager {
             if (field == null) field = currentSemesterIndex
             return field
         }
-        set(value) {
-            if (value !in semesters.indices) throw IllegalArgumentException("Неверный индекс: $value")
-            field = value
-        }
 
     private var onScheduleUpdateListener: OnScheduleUpdateListener? = null
     fun setOnScheduleUpdateListener(value: OnScheduleUpdateListener?) {
         onScheduleUpdateListener = value
     }
 
-    fun getSemester(id: Long) = semesters.asList()[getSemesterIndex(id) ?:
-            throw IllegalArgumentException("Неверный id: $id")]
+    operator fun get(i: Int): Semester = semesters.asList()[i]
+
+    operator fun get(id: Long): Semester? {
+        return semesters.asList()[getSemesterIndex(id) ?: return null]
+    }
 
     fun getSemesterIndex(id: Long): Int? {
         for ((i, semester) in semesters.withIndex())
@@ -119,23 +118,26 @@ object ScheduleManager {
         return null
     }
 
-    fun getSemestersNames(): List<String> {
-        val names = ArrayList<String>()
-        for ((name) in semesters) {
-            names.add(name)
+    val semestersNames: List<String>
+        get() {
+            val names = ArrayList<String>()
+            for ((name) in semesters) {
+                names.add(name)
+            }
+            return names
         }
-        return names
-    }
 
-    fun getCurrentSemester(): Semester? {
-        val currentSemesterIndexLocal = currentSemesterIndex
-        return if (currentSemesterIndexLocal != null) semesters.asList()[currentSemesterIndexLocal] else null
-    }
+    val currentSemester: Semester?
+        get() {
+            val currentSemesterIndexLocal = currentSemesterIndex
+            return if (currentSemesterIndexLocal != null) semesters.asList()[currentSemesterIndexLocal] else null
+        }
 
-    fun getSelectedSemester(): Semester? {
-        val selectedSemesterIndexLocal = selectedSemesterIndex
-        return if (selectedSemesterIndexLocal != null) semesters.asList()[selectedSemesterIndexLocal] else null
-    }
+    val selectedSemester: Semester?
+        get() {
+            val selectedSemesterIndexLocal = selectedSemesterIndex
+            return if (selectedSemesterIndexLocal != null) semesters.asList()[selectedSemesterIndexLocal] else null
+        }
 
     fun removeSemester(i: Int) {
         if (i !in semesters.indices) throw IllegalArgumentException("Неверный индекс: $i")

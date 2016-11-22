@@ -18,14 +18,14 @@ data class Semester(val name: String, val firstDay: LocalDate, val lastDay: Loca
 
     val length = Days.daysBetween(firstDay, lastDay).days + 1
 
-    fun getLessons(day: LocalDate): Array<Lesson> {
+    fun getLessons(day: LocalDate): List<Lesson> {
         val weekNumber: Int
         try {
             weekNumber = getWeekNumber(day)
         } catch (iae: IllegalArgumentException) {
-            return emptyArray()
+            return emptyList()
         }
-        return lessons.filter { it.repeatsOnDay(day, weekNumber) }.toTypedArray()
+        return lessons.filter { it.repeatsOnDay(day, weekNumber) }
     }
 
     fun getLessons(weekday: Int): List<Lesson> {

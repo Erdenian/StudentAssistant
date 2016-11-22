@@ -42,7 +42,7 @@ class SemestersEditorActivity : AppCompatActivity(),
     override fun onScheduleUpdate() {
         val scrollPosition = content_semesters_editor_semesters_list.scrollPosition
         content_semesters_editor_semesters_list.adapter =
-                ArrayAdapter(this, android.R.layout.simple_list_item_1, ScheduleManager.getSemestersNames())
+                ArrayAdapter(this, android.R.layout.simple_list_item_1, ScheduleManager.semestersNames)
         content_semesters_editor_semesters_list.scrollPosition = scrollPosition
     }
 
