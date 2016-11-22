@@ -15,7 +15,6 @@ import ru.erdenian.studentassistant.schedule.Lesson
 import ru.erdenian.studentassistant.schedule.ScheduleManager
 import ru.erdenian.studentassistant.schedule.Semester
 
-
 class SchedulePageFragment : Fragment() {
 
     companion object {
