@@ -4,13 +4,6 @@ import android.content.Context
 
 import java.io.File
 
-/**
- * Todo: описание класса.
- *
- * @author Ilya Solovyev
- * @version 0.0.0
- * @since 0.0.0
- */
 object FileUtils {
 
     private const val JSON_FOLDER_PATH = "/json"
@@ -20,7 +13,7 @@ object FileUtils {
 
     val filesDir: File by lazy { File(filesDirPath) }
     val jsonFolder: File by lazy { File(filesDirPath + JSON_FOLDER_PATH) }
-    val scheduleFile: File by lazy { File(filesDirPath + SCHEDULE_FILE_PATH) }
+    val scheduleFile: File by lazy { File(filesDirPath + JSON_FOLDER_PATH + SCHEDULE_FILE_PATH) }
 
     fun initialize(context: Context) {
         try {
