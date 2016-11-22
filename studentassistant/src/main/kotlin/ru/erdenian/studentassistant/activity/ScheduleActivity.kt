@@ -80,13 +80,13 @@ class ScheduleActivity : AppCompatActivity(),
 
         invalidateOptionsMenu()
 
-        if ((pagerAdapter != null) && (selectedSemester!!.id == ScheduleManager.getSelectedSemester()?.id)) {
+        if ((pagerAdapter != null) && (selectedSemester!!.id == ScheduleManager.selectedSemester?.id)) {
             savedPage = view_pager.currentItem
         }
-        selectedSemester = ScheduleManager.getSelectedSemester()
+        selectedSemester = ScheduleManager.selectedSemester
 
         if (ScheduleManager.semesters.size > 1) {
-            val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters, ScheduleManager.getSemestersNames())
+            val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters, ScheduleManager.semestersNames)
             adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters)
             toolbar_with_spinner_spinner.adapter = adapter
             toolbar_with_spinner_spinner.setSelection(ScheduleManager.selectedSemesterIndex!!)
