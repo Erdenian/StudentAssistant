@@ -51,7 +51,7 @@ class SchedulePageFragment : Fragment() {
         }
     }
 
-    private val semester: Semester by lazy { ScheduleManager.getSemester(arguments.getLong(PAGE_SEMESTER_ID, -1))!! }
+    private val semester: Semester by lazy { ScheduleManager[arguments.getLong(PAGE_SEMESTER_ID, -1)]!! }
     private val day: LocalDate by lazy { LocalDate(arguments.getString(PAGE_DATE)) }
     private val weekday: Int by lazy { arguments.getInt(PAGE_WEEKDAY, -1) }
     private val showWeeksAndDates: Boolean by lazy { arguments.getBoolean(SHOW_WEEKS_AND_DATES) }
