@@ -2,6 +2,7 @@ package ru.erdenian.studentassistant.schedule
 
 import android.util.Log
 import com.google.common.collect.ComparisonChain
+import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableSortedSet
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
@@ -10,7 +11,7 @@ data class Lesson(val name: String, val type: String?,
                   val teachers: ImmutableSortedSet<String>, val classrooms: ImmutableSortedSet<String>,
                   val startTime: LocalTime, val endTime: LocalTime,
                   val repeatType: Lesson.RepeatType,
-                  private var weekday_: Int? = null, private var weeks_: List<Boolean>? = null,
+                  private var weekday_: Int? = null, private var weeks_: ImmutableList<Boolean>? = null,
                   private var dates_: ImmutableSortedSet<LocalDate>? = null,
                   val id: Long = System.nanoTime()) : Comparable<Lesson> {
 
