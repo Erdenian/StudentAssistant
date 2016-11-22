@@ -5,13 +5,6 @@ import com.google.common.collect.ImmutableSortedSet
 import org.joda.time.Days
 import org.joda.time.LocalDate
 
-/**
- * Класс семестра.
- *
- * @author Ilya Solovyev
- * @version 0.0.0
- * @since 0.0.0
- */
 data class Semester(val name: String, val firstDay: LocalDate, val lastDay: LocalDate,
                     val lessons: ImmutableSortedSet<Lesson>, val homeworks: ImmutableSortedSet<Homework>,
                     val id: Long = System.nanoTime()) : Comparable<Semester> {
