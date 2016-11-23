@@ -76,7 +76,6 @@ class ScheduleActivity : AppCompatActivity(),
         if ((pagerAdapter != null) && (selectedSemester!!.id == ScheduleManager.selectedSemester?.id)) {
             savedPage = view_pager.currentItem
         }
-        selectedSemester = ScheduleManager.selectedSemester
 
         if (ScheduleManager.semesters.size > 1) {
             val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters, ScheduleManager.semestersNames)
@@ -111,6 +110,8 @@ class ScheduleActivity : AppCompatActivity(),
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         ScheduleManager.selectedSemesterIndex = position
+        selectedSemester = ScheduleManager.selectedSemester
+
         pagerAdapter = SchedulePagerAdapter(supportFragmentManager, selectedSemester!!, false)
         view_pager.adapter = pagerAdapter
         view_pager.setCurrentItem(if (savedPage != -1) savedPage else pagerAdapter!!.getPosition(LocalDate.now()), false)
