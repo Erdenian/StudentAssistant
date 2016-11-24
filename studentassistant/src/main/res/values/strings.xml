@@ -36,6 +36,9 @@
     <string name="menu_lessons_editor_edit_semester">Редактировать семестр</string>
     <string name="menu_lessons_editor_delete_semester">Удалить семестр</string>
 
+    <string name="card_homework_before">До</string>
+
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
