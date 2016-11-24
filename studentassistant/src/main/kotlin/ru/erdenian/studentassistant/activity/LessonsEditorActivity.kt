@@ -16,10 +16,13 @@ import kotlinx.android.synthetic.main.view_pager.*
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.adapter.SchedulePagerAdapter
+import ru.erdenian.studentassistant.extensions.getAnyExtra
 import ru.erdenian.studentassistant.extensions.getCompatColor
+import ru.erdenian.studentassistant.extensions.putExtra
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener
 import ru.erdenian.studentassistant.schedule.ScheduleManager
+import ru.erdenian.studentassistant.schedule.Semester
 
 class LessonsEditorActivity : AppCompatActivity(),
         View.OnClickListener,
@@ -27,13 +30,10 @@ class LessonsEditorActivity : AppCompatActivity(),
         OnScheduleUpdateListener {
 
     companion object {
-        const val SEMESTER_ID = "semester_id"
+        const val SEMESTER = "semester"
     }
 
-    private var savedPage = 0
-    private val semesterId: Long by lazy { intent.getLongExtra(SEMESTER_ID, -1) }
-
-    private var pagerAdapter: SchedulePagerAdapter? = null
+    private val semester: Semester by lazy { intent.getAnyExtra(SEMESTER) as Semester }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,20 +63,7 @@ class LessonsEditorActivity : AppCompatActivity(),
     }
 
     override fun onScheduleUpdate() {
-        val semester = ScheduleManager[semesterId]
-        if (semester == null) {
-            finish()
-            return
-        }
-
-        if (pagerAdapter != null) {
-            savedPage = view_pager.currentItem
-        }
-
-        pagerAdapter = SchedulePagerAdapter(supportFragmentManager, semester, true)
-        view_pager.adapter = pagerAdapter
-        view_pager.setCurrentItem(savedPage, false)
-        savedPage = 0
+        view_pager.adapter = SchedulePagerAdapter(supportFragmentManager, semester, true)
 
         // TODO: 13.11.2016 добавить заполнение списка пар по датам
     }
@@ -87,7 +74,7 @@ class LessonsEditorActivity : AppCompatActivity(),
         return true
     }
 
-    override fun onItemSelected(adapterView: AdapterView<*>, view: View, i: Int, l: Long) {
+    override fun onItemSelected(adapterView: AdapterView<*>, view: View?, i: Int, l: Long) {
         view_pager.visibility = if (i == 0) View.VISIBLE else View.GONE
         scroll_view.visibility = if (i == 1) View.VISIBLE else View.GONE
     }
@@ -99,11 +86,12 @@ class LessonsEditorActivity : AppCompatActivity(),
         when (item.itemId) {
             android.R.id.home -> finish()
             R.id.menu_lessons_editor_edit_semester -> {
-                val intent = Intent(this, SemesterEditorActivity::class.java)
-                intent.putExtra(SemesterEditorActivity.SEMESTER_ID, semesterId)
-                startActivity(intent)
+                with(Intent(this, SemesterEditorActivity::class.java)) {
+                    putExtra(SemesterEditorActivity.SEMESTER, semester)
+                    startActivity(this)
+                }
             }
-            R.id.menu_lessons_editor_delete_semester -> ScheduleManager.removeSemester(semesterId)
+            R.id.menu_lessons_editor_delete_semester -> ScheduleManager.removeSemester(semester.id)
             else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
         }
         return super.onOptionsItemSelected(item)
