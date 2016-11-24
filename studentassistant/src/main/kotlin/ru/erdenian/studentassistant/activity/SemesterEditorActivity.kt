@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.content_semester_editor.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.extensions.getAnyExtra
 import ru.erdenian.studentassistant.extensions.showDatePicker
 import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener
 import ru.erdenian.studentassistant.schedule.ScheduleManager
@@ -24,13 +25,12 @@ class SemesterEditorActivity : AppCompatActivity(),
         TextWatcher {
 
     companion object {
-        val SEMESTER_ID = "semester_id"
+        val SEMESTER = "semester"
         private val FIRST_DAY_TAG = "first_day_tag"
         private val LAST_DAY_TAG = "last_day_tag"
     }
 
-    private val semesterId: Long by lazy { intent.getLongExtra(LessonsEditorActivity.SEMESTER_ID, -1) }
-    private val semester: Semester by lazy { ScheduleManager[semesterId]!! }
+    private val semester: Semester by lazy { intent.getAnyExtra(LessonsEditorActivity.SEMESTER) as Semester }
 
     private lateinit var name: String
     private lateinit var firstDay: LocalDate
@@ -55,12 +55,6 @@ class SemesterEditorActivity : AppCompatActivity(),
     }
 
     override fun onScheduleUpdate() {
-        val semester = ScheduleManager[semesterId]
-        if (semester == null) {
-            finish()
-            return
-        }
-
         content_semester_editor_semester_name_edit_text.setText(semester.name)
         content_semester_editor_first_day.text = semester.firstDay.toString()
         content_semester_editor_last_day.text = semester.lastDay.toString()
@@ -81,8 +75,9 @@ class SemesterEditorActivity : AppCompatActivity(),
     }
 
     override fun afterTextChanged(s: Editable?) {
+        content_semester_editor_semester_name.isErrorEnabled = true
         if (s!!.isEmpty()) content_semester_editor_semester_name.error = "Пустое имя"
-        else name = s.toString()
+        else content_semester_editor_semester_name.isErrorEnabled = false
     }
 
     override fun onClick(v: View) {

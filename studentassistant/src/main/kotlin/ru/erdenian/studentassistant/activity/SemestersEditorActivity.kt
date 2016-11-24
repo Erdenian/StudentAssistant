@@ -3,6 +3,7 @@ package ru.erdenian.studentassistant.activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
@@ -11,8 +12,11 @@ import com.google.common.collect.ImmutableSortedSet
 import kotlinx.android.synthetic.main.activity_semesters_editor.*
 import kotlinx.android.synthetic.main.content_semesters_editor.*
 import kotlinx.android.synthetic.main.toolbar.*
+import org.jetbrains.anko.startActivity
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.extensions.getAnyExtra
+import ru.erdenian.studentassistant.extensions.putExtra
 import ru.erdenian.studentassistant.extensions.scrollPosition
 import ru.erdenian.studentassistant.schedule.*
 import java.util.*
@@ -55,9 +59,10 @@ class SemestersEditorActivity : AppCompatActivity(),
     }
 
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-        val intent = Intent(this, LessonsEditorActivity::class.java)
-        intent.putExtra(LessonsEditorActivity.SEMESTER_ID, ScheduleManager.semesters.asList()[position].id)
-        startActivity(intent)
+        with(Intent(this, LessonsEditorActivity::class.java)) {
+            putExtra(LessonsEditorActivity.SEMESTER, ScheduleManager[position])
+            startActivity(this)
+        }
     }
 
     override fun onClick(v: View) {
