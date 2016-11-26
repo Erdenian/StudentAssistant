@@ -3,21 +3,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/activity_homeworks_editor_choose"
-        android:textColor="@color/colorPrimaryText"
-        android:textSize="@dimen/card_primary_text_size"/>
+    android:orientation="vertical"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp">
 
     <Spinner
         android:id="@+id/content_homeworks_editor_subject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:spinnerMode="dialog"
+
+        android:prompt="@string/activity_homeworks_editor_choose"
         android:textColor="@color/colorPrimaryText"
-        android:textSize="@dimen/card_secondary_text_size"/>
+        android:textSize="@dimen/card_secondary_text_size"
+        android:layout_marginBottom="4dp"/>
 
     <EditText
         android:id="@+id/content_homeworks_editor_description"
