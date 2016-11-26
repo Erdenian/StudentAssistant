@@ -23,8 +23,8 @@
     <string name="activity_semester_editor_last_day">Последний день</string>
     <string name="activity_semester_editor_save">Сохранить</string>
 
-    <string name="activity_homeworks_editor_choose">Выберите предмет</string>
-    <string name="activity_homeworks_editor_description">Введите описание домашнего задания..</string>
+    <string name="activity_homeworks_editor_choose_subject">Выберите предмет</string>
+    <string name="activity_homeworks_editor_description">Описание</string>
     <string name="activity_homeworks_editor_save">Сохранить</string>
 
     <string name="nav_schedule">Расписание</string>
@@ -39,6 +39,8 @@
 
     <string name="menu_lessons_editor_edit_semester">Редактировать семестр</string>
     <string name="menu_lessons_editor_delete_semester">Удалить семестр</string>
+
+    <string name="menu_homework_editor_delete_homework">Удалить задание</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
