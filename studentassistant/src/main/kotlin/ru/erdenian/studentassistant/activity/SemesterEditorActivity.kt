@@ -29,7 +29,7 @@ class SemesterEditorActivity : AppCompatActivity(),
         private val LAST_DAY_TAG = "last_day_tag"
     }
 
-    private val semester: Semester by lazy { intent.getAnyExtra(LessonsEditorActivity.SEMESTER) as Semester }
+    private val semester: Semester by lazy { intent.getAnyExtra(SEMESTER) as Semester }
 
     private lateinit var name: String
     private lateinit var firstDay: LocalDate
