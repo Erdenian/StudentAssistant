@@ -28,7 +28,7 @@ fun Intent.getAnyExtra(name: String, defaultValue: Any? = null): Any? {
         intents1.remove(hashCode)
         intents2.put(this, extras)
     } else {
-        extras = intents2[this]!!
+        extras = intents2[this]
     }
-    return extras.get(name) ?: defaultValue
+    return extras?.get(name) ?: defaultValue
 }
