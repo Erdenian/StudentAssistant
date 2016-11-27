@@ -6,7 +6,8 @@ import org.joda.time.Days
 import org.joda.time.LocalDate
 
 data class Semester(val name: String, val firstDay: LocalDate, val lastDay: LocalDate,
-                    val lessons: ImmutableSortedSet<Lesson>, val homeworks: ImmutableSortedSet<Homework>,
+                    val lessons: ImmutableSortedSet<Lesson> = ImmutableSortedSet.of(),
+                    val homeworks: ImmutableSortedSet<Homework> = ImmutableSortedSet.of(),
                     val id: Long = System.nanoTime()) : Comparable<Semester> {
 
     val length = Days.daysBetween(firstDay, lastDay).days + 1
