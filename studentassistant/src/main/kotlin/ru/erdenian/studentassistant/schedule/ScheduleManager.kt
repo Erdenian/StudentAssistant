@@ -8,17 +8,12 @@ import com.google.gson.reflect.TypeToken
 import org.joda.time.LocalDate
 import ru.erdenian.gsonguavadeserializers.ImmutableListDeserializer
 import ru.erdenian.gsonguavadeserializers.ImmutableSortedSetDeserializer
+import ru.erdenian.studentassistant.extensions.addToNewSet
+import ru.erdenian.studentassistant.extensions.replaceToNewSet
 import ru.erdenian.studentassistant.ulils.FileUtils
 import java.io.*
 import java.util.*
 
-/**
- * Todo: описание класса.
- *
- * @author Ilya Solovyev
- * @version 0.0.0
- * @since 0.0.0
- */
 object ScheduleManager {
 
     private var isInitialized = false
@@ -146,5 +141,11 @@ object ScheduleManager {
 
     fun removeSemester(id: Long) {
         removeSemester(getSemesterIndex(id) ?: throw IllegalArgumentException("Неверный id: $id"))
+    }
+
+    fun addSemester(semester: Semester) {
+        val index = getSemesterIndex(semester.id)
+        if (index == null) semesters = semesters.addToNewSet(semester)
+        else semesters = semesters.replaceToNewSet(get(index), semester)
     }
 }
