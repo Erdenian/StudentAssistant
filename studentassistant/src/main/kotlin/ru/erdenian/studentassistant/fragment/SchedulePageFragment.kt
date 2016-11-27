@@ -11,25 +11,27 @@ import com.google.common.base.Joiner
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.extensions.getAny
+import ru.erdenian.studentassistant.extensions.putAny
 import ru.erdenian.studentassistant.schedule.Lesson
-import ru.erdenian.studentassistant.schedule.ScheduleManager
 import ru.erdenian.studentassistant.schedule.Semester
 
 class SchedulePageFragment : Fragment() {
 
     companion object {
 
-        private const val PAGE_SEMESTER_ID = "page_semester_id"
+        private const val TIME_FORMAT = "HH:mm"
+
+        private const val PAGE_SEMESTER = "page_semester"
         private const val PAGE_DATE = "page_date"
         private const val PAGE_WEEKDAY = "page_weekday"
         private const val SHOW_WEEKS_AND_DATES = "show_weeks_and_dates"
-        private const val TIME_FORMAT = "HH:mm"
 
-        fun newInstance(semesterId: Long, date: LocalDate): SchedulePageFragment {
+        fun newInstance(semester: Semester, date: LocalDate): SchedulePageFragment {
             val schedulePageFragment = SchedulePageFragment()
             val arguments = Bundle()
             with(arguments) {
-                putLong(PAGE_SEMESTER_ID, semesterId)
+                putAny(PAGE_SEMESTER, semester)
                 putString(PAGE_DATE, date.toString())
                 putBoolean(SHOW_WEEKS_AND_DATES, false)
             }
@@ -37,11 +39,11 @@ class SchedulePageFragment : Fragment() {
             return schedulePageFragment
         }
 
-        fun newInstance(semesterId: Long, weekday: Int): SchedulePageFragment {
+        fun newInstance(semester: Semester, weekday: Int): SchedulePageFragment {
             val schedulePageFragment = SchedulePageFragment()
             val arguments = Bundle()
             with(arguments) {
-                putLong(PAGE_SEMESTER_ID, semesterId)
+                putAny(PAGE_SEMESTER, semester)
                 arguments.putInt(PAGE_WEEKDAY, weekday)
                 putBoolean(SHOW_WEEKS_AND_DATES, true)
             }
@@ -50,7 +52,7 @@ class SchedulePageFragment : Fragment() {
         }
     }
 
-    private val semester: Semester by lazy { ScheduleManager[arguments.getLong(PAGE_SEMESTER_ID, -1)]!! }
+    private val semester: Semester by lazy { arguments.getAny(PAGE_SEMESTER) as Semester }
     private val day: LocalDate by lazy { LocalDate(arguments.getString(PAGE_DATE)) }
     private val weekday: Int by lazy { arguments.getInt(PAGE_WEEKDAY, -1) }
     private val showWeeksAndDates: Boolean by lazy { arguments.getBoolean(SHOW_WEEKS_AND_DATES) }
