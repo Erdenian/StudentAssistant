@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.view_pager.*
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.adapter.SchedulePagerAdapter
-import ru.erdenian.studentassistant.extensions.getAnyExtra
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.putExtra
 import ru.erdenian.studentassistant.extensions.setColor
@@ -30,10 +29,10 @@ class LessonsEditorActivity : AppCompatActivity(),
         OnScheduleUpdateListener {
 
     companion object {
-        const val SEMESTER = "semester"
+        const val SEMESTER_ID = "semester_id"
     }
 
-    private val semester: Semester by lazy { intent.getAnyExtra(SEMESTER) as Semester }
+    private lateinit var semester: Semester
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +62,8 @@ class LessonsEditorActivity : AppCompatActivity(),
     }
 
     override fun onScheduleUpdate() {
+        semester = ScheduleManager[intent.getLongExtra(SEMESTER_ID, -1L)]!!
+
         view_pager.adapter = SchedulePagerAdapter(supportFragmentManager, semester, true)
 
         // TODO: 13.11.2016 добавить заполнение списка пар по датам
@@ -91,7 +92,10 @@ class LessonsEditorActivity : AppCompatActivity(),
                     startActivity(this)
                 }
             }
-            R.id.menu_lessons_editor_delete_semester -> ScheduleManager.removeSemester(semester.id)
+            R.id.menu_lessons_editor_delete_semester -> {
+                ScheduleManager.removeSemester(semester.id)
+                finish()
+            }
             else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
         }
         return super.onOptionsItemSelected(item)
