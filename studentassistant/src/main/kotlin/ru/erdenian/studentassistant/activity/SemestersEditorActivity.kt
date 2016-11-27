@@ -7,15 +7,14 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import com.google.common.collect.ImmutableSortedSet
 import kotlinx.android.synthetic.main.activity_semesters_editor.*
 import kotlinx.android.synthetic.main.content_semesters_editor.*
 import kotlinx.android.synthetic.main.toolbar.*
-import org.joda.time.LocalDate
+import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.scrollPosition
-import ru.erdenian.studentassistant.schedule.*
-import java.util.*
+import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener
+import ru.erdenian.studentassistant.schedule.ScheduleManager
 
 class SemestersEditorActivity : AppCompatActivity(),
         AdapterView.OnItemClickListener,
@@ -64,10 +63,7 @@ class SemestersEditorActivity : AppCompatActivity(),
     override fun onClick(v: View) {
         when (v.id) {
             R.id.activity_semesters_editor_add_semester -> {
-                val semesters = ArrayList(ScheduleManager.semesters.asList())
-                semesters.add(Semester("Семестр " + System.currentTimeMillis(), LocalDate(2017, 9, 1), LocalDate(2017, 12, 31),
-                        ImmutableSortedSet.of<Lesson>(), ImmutableSortedSet.of<Homework>(), System.nanoTime()))
-                ScheduleManager.semesters = ImmutableSortedSet.copyOf(semesters)
+                startActivity<SemesterEditorActivity>()
             }
             else -> throw IllegalArgumentException("Неизвестный id: ${v.id}")
         }
