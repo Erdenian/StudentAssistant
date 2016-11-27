@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment
@@ -94,7 +93,7 @@ class SemesterEditorActivity : AppCompatActivity(),
         when (dialog.tag) {
             FIRST_DAY_TAG -> firstDay = newDate
             LAST_DAY_TAG -> lastDay = newDate
-            else -> Log.wtf(this.javaClass.name, "Неизвестный тэг: " + dialog.tag)
+            else -> throw IllegalArgumentException("Неизвестный тэг: ${dialog.tag}")
         }
     }
 }
