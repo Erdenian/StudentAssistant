@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment
 import kotlinx.android.synthetic.main.content_semester_editor.*
+import kotlinx.android.synthetic.main.content_semester_editor.view.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
@@ -18,10 +19,10 @@ import ru.erdenian.studentassistant.schedule.ScheduleManager
 import ru.erdenian.studentassistant.schedule.Semester
 
 class SemesterEditorActivity : AppCompatActivity(),
-        OnScheduleUpdateListener,
         View.OnClickListener,
         CalendarDatePickerDialogFragment.OnDateSetListener,
-        TextWatcher {
+        TextWatcher,
+        OnScheduleUpdateListener {
 
     companion object {
         val SEMESTER = "semester"
@@ -31,9 +32,13 @@ class SemesterEditorActivity : AppCompatActivity(),
 
     private val semester: Semester by lazy { intent.getAnyExtra(SEMESTER) as Semester }
 
+    private lateinit var semestersNames: List<String>
+
     private lateinit var name: String
     private lateinit var firstDay: LocalDate
     private lateinit var lastDay: LocalDate
+
+    private var readyToSave = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,18 +50,33 @@ class SemesterEditorActivity : AppCompatActivity(),
         content_semester_editor_semester_name_edit_text.addTextChangedListener(this)
         content_semester_editor_first_day.setOnClickListener(this)
         content_semester_editor_last_day.setOnClickListener(this)
+
+        name = semester.name
+        firstDay = semester.firstDay
+        lastDay = semester.lastDay
     }
 
     override fun onStart() {
         super.onStart()
         ScheduleManager.setOnScheduleUpdateListener(this)
         onScheduleUpdate()
+        invalidateViews()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (readyToSave)
+            ScheduleManager.addSemester(semester.copy(name = name, firstDay = firstDay, lastDay = lastDay))
     }
 
     override fun onScheduleUpdate() {
-        content_semester_editor_semester_name_edit_text.setText(semester.name)
-        content_semester_editor_first_day.text = semester.firstDay.toString()
-        content_semester_editor_last_day.text = semester.lastDay.toString()
+        semestersNames = ScheduleManager.semestersNames.filter { it != semester.name }
+    }
+
+    fun invalidateViews() {
+        content_semester_editor_semester_name_edit_text.setText(name)
+        content_semester_editor_first_day.text = firstDay.toString()
+        content_semester_editor_last_day.text = lastDay.toString()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -74,16 +94,25 @@ class SemesterEditorActivity : AppCompatActivity(),
     }
 
     override fun afterTextChanged(s: Editable?) {
-        content_semester_editor_semester_name.isErrorEnabled = true
-        if (s!!.isEmpty()) content_semester_editor_semester_name.error = "Пустое имя"
-        else content_semester_editor_semester_name.isErrorEnabled = false
+        with(content_semester_editor_semester_name) {
+            isErrorEnabled = true
+
+            if (s!!.isEmpty()) error = getString(R.string.activity_semester_editor_error_empty_name)
+            else if (semestersNames.contains(s.toString())) error = getString(R.string.activity_semester_editor_error_name_not_avaliable)
+            else {
+                isErrorEnabled = false
+                name = content_semester_editor_semester_name_edit_text.text.toString()
+                readyToSave = true
+            }
+        }
     }
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.content_semester_editor_first_day -> showDatePicker(this, preselected = semester.firstDay, tag = FIRST_DAY_TAG)
-            R.id.content_semester_editor_last_day -> showDatePicker(this, preselected = semester.lastDay, tag = FIRST_DAY_TAG)
-            R.id.content_semester_editor_save -> finish()
+            R.id.content_semester_editor_first_day -> showDatePicker(this,
+                    lastDay = lastDay.minusDays(1), preselected = firstDay, tag = FIRST_DAY_TAG)
+            R.id.content_semester_editor_last_day -> showDatePicker(this,
+                    firstDay = firstDay.plusDays(1), preselected = lastDay, tag = LAST_DAY_TAG)
             else -> throw IllegalArgumentException("Неизвестный id: ${v.id}")
         }
     }
@@ -95,5 +124,6 @@ class SemesterEditorActivity : AppCompatActivity(),
             LAST_DAY_TAG -> lastDay = newDate
             else -> throw IllegalArgumentException("Неизвестный тэг: ${dialog.tag}")
         }
+        invalidateViews()
     }
 }
