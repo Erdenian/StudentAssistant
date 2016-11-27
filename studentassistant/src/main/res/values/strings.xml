@@ -23,6 +23,10 @@
     <string name="activity_semester_editor_last_day">Последний день</string>
     <string name="activity_semester_editor_save">Сохранить</string>
 
+    <string name="activity_homeworks_editor_choose_subject">Выберите предмет</string>
+    <string name="activity_homeworks_editor_description">Описание</string>
+    <string name="activity_homeworks_editor_save">Сохранить</string>
+
     <string name="nav_schedule">Расписание</string>
     <string name="nav_homework">Домашнее задание</string>
     <string name="nav_alarm">Будильник</string>
@@ -38,6 +42,7 @@
 
     <string name="card_homework_before">До</string>
 
+    <string name="menu_homework_editor_delete_homework">Удалить задание</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
