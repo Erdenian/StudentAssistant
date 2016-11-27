@@ -21,7 +21,7 @@ fun Intent.putExtra(name: String, value: Any) {
     extras.put(name, value)
 }
 
-fun Intent.getAnyExtra(name: String): Any? {
+fun Intent.getAnyExtra(name: String, defaultValue: Any? = null): Any? {
     val hashCode = getIntExtra(INTENT_HASH, -1)
     var extras = intents1[hashCode]
     if (extras != null) {
@@ -30,5 +30,5 @@ fun Intent.getAnyExtra(name: String): Any? {
     } else {
         extras = intents2[this]!!
     }
-    return extras.get(name)
+    return extras.get(name) ?: defaultValue
 }
