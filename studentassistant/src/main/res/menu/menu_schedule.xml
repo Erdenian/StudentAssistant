@@ -10,6 +10,11 @@
         app:showAsAction="ifRoom"/>
 
     <item
+        android:id="@+id/menu_schedule_add_schedule"
+        android:title="@string/menu_schedule_add_schedule"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/menu_schedule_edit_schedule"
         android:title="@string/menu_schedule_edit_schedule"
         app:showAsAction="never"/>
