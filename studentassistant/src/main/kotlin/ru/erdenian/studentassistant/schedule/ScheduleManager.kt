@@ -43,7 +43,6 @@ object ScheduleManager {
         set(value) {
             //Todo: код, создающий патчи
 
-            val semestersOld = semesters
             field = value
 
             currentSemesterIndex = null
@@ -61,14 +60,6 @@ object ScheduleManager {
 
             // Поиск нового индекса выбранного семестра
             selectedSemesterIndex = currentSemesterIndex
-
-            val selectedSemesterIndexLocal = selectedSemesterIndex
-            if ((selectedSemesterIndexLocal != null) && semestersOld.isNotEmpty()) {
-                val previousSelectedSemesterId = semestersOld.asList()[selectedSemesterIndexLocal].id
-                for ((i, semester) in semesters.withIndex())
-                    if (semester.id == previousSelectedSemesterId)
-                        selectedSemesterIndex = i
-            }
 
             onScheduleUpdateListener?.onScheduleUpdate()
         }

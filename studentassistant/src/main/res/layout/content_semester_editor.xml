@@ -15,8 +15,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/activity_semester_editor_semester_name"
+            android:imeOptions="flagNoExtractUi"
             android:inputType="text"
-            android:maxLines="1"/>
+            android:maxLines="1">
+
+            <requestFocus/>
+
+        </EditText>
 
     </android.support.design.widget.TextInputLayout>
 
