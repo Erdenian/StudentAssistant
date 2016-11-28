@@ -13,7 +13,6 @@ import kotlinx.android.synthetic.main.activity_lessons_editor.*
 import kotlinx.android.synthetic.main.scroll_view.*
 import kotlinx.android.synthetic.main.toolbar_with_spinner.*
 import kotlinx.android.synthetic.main.view_pager.*
-import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.adapter.SchedulePagerAdapter
 import ru.erdenian.studentassistant.extensions.getCompatColor
@@ -42,7 +41,7 @@ class LessonsEditorActivity : AppCompatActivity(),
 
 
         val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters,
-                resources.getStringArray(R.array.activity_lessons_editor_edit_types))
+                resources.getStringArray(R.array.lesson_repeat_types))
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters)
         toolbar_with_spinner_spinner.adapter = adapter
         toolbar_with_spinner_spinner.onItemSelectedListener = this
@@ -105,7 +104,12 @@ class LessonsEditorActivity : AppCompatActivity(),
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.activity_lessons_editor_add_lesson -> toast("Добавить пару")
+            R.id.activity_lessons_editor_add_lesson -> {
+                with(Intent(this, LessonEditorActivity::class.java)) {
+                    putExtra(LessonEditorActivity.SEMESTER_ID, semesterId)
+                    startActivity(this)
+                }
+            }
             else -> throw IllegalArgumentException("Неизвестный id: ${v.id}")
         }
     }

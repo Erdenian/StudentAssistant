@@ -12,6 +12,16 @@ data class Semester(val name: String, val firstDay: LocalDate, val lastDay: Loca
 
     val length = Days.daysBetween(firstDay, lastDay).days + 1
 
+    fun getLesson(id: Long): Lesson? {
+        return lessons.asList()[getLessonIndex(id) ?: return null]
+    }
+
+    fun getLessonIndex(id: Long): Int? {
+        for ((i, lesson) in lessons.withIndex())
+            if (lesson.id == id) return i
+        return null
+    }
+
     fun getLessons(day: LocalDate): List<Lesson> {
         val weekNumber: Int
         try {

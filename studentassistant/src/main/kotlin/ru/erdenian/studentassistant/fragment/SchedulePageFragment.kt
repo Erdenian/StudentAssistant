@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import com.google.common.base.Joiner
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.activity.LessonEditorActivity
 import ru.erdenian.studentassistant.schedule.Lesson
 import ru.erdenian.studentassistant.schedule.ScheduleManager
 import ru.erdenian.studentassistant.schedule.Semester
@@ -104,7 +106,14 @@ class SchedulePageFragment : Fragment() {
                             else -> throw IllegalStateException("Неизвестный тип повторения: ${lesson.repeatType}")
                         }
 
-                setOnClickListener { context.toast(lesson.name) }
+                if (showWeeksAndDates) setOnClickListener {
+                    with(Intent(context, LessonEditorActivity::class.java)) {
+                        putExtra(LessonEditorActivity.SEMESTER_ID, semester!!.id)
+                        putExtra(LessonEditorActivity.LESSON_ID, lesson.id)
+                        startActivity(this)
+                    }
+                }
+                else setOnClickListener { context.toast(lesson.name) }
 
                 llCardsParent.addView(this)
             }

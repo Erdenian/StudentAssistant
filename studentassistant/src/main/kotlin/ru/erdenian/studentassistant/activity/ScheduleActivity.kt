@@ -147,7 +147,7 @@ class ScheduleActivity : AppCompatActivity(),
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.content_schedule_get_schedule_from_server -> toast(R.string.activity_schedule_get_schedule_from_server_button)
+            R.id.content_schedule_get_schedule_from_server -> toast(R.string.content_schedule_get_schedule_from_server_button)
             R.id.content_schedule_add_schedule -> {
                 val lessons = ImmutableSortedSet.of(
                         Lesson("Конструирование ПО", "Лабораторная работа",
