@@ -11,9 +11,8 @@ import com.google.common.base.Joiner
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.extensions.getAny
-import ru.erdenian.studentassistant.extensions.putAny
 import ru.erdenian.studentassistant.schedule.Lesson
+import ru.erdenian.studentassistant.schedule.ScheduleManager
 import ru.erdenian.studentassistant.schedule.Semester
 
 class SchedulePageFragment : Fragment() {
@@ -22,7 +21,7 @@ class SchedulePageFragment : Fragment() {
 
         private const val TIME_FORMAT = "HH:mm"
 
-        private const val PAGE_SEMESTER = "page_semester"
+        private const val PAGE_SEMESTER_ID = "page_semester_id"
         private const val PAGE_DATE = "page_date"
         private const val PAGE_WEEKDAY = "page_weekday"
         private const val SHOW_WEEKS_AND_DATES = "show_weeks_and_dates"
@@ -31,7 +30,7 @@ class SchedulePageFragment : Fragment() {
             val schedulePageFragment = SchedulePageFragment()
             val arguments = Bundle()
             with(arguments) {
-                putAny(PAGE_SEMESTER, semester)
+                putLong(PAGE_SEMESTER_ID, semester.id)
                 putString(PAGE_DATE, date.toString())
                 putBoolean(SHOW_WEEKS_AND_DATES, false)
             }
@@ -43,7 +42,7 @@ class SchedulePageFragment : Fragment() {
             val schedulePageFragment = SchedulePageFragment()
             val arguments = Bundle()
             with(arguments) {
-                putAny(PAGE_SEMESTER, semester)
+                putLong(PAGE_SEMESTER_ID, semester.id)
                 arguments.putInt(PAGE_WEEKDAY, weekday)
                 putBoolean(SHOW_WEEKS_AND_DATES, true)
             }
@@ -52,7 +51,7 @@ class SchedulePageFragment : Fragment() {
         }
     }
 
-    private val semester: Semester by lazy { arguments.getAny(PAGE_SEMESTER) as Semester }
+    private val semester: Semester? by lazy { ScheduleManager[arguments.getLong(PAGE_SEMESTER_ID)] }
     private val day: LocalDate by lazy { LocalDate(arguments.getString(PAGE_DATE)) }
     private val weekday: Int by lazy { arguments.getInt(PAGE_WEEKDAY, -1) }
     private val showWeeksAndDates: Boolean by lazy { arguments.getBoolean(SHOW_WEEKS_AND_DATES) }
@@ -60,7 +59,8 @@ class SchedulePageFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) = super.onCreate(savedInstanceState)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val lessons = if (showWeeksAndDates) semester.getLessons(weekday) else semester.getLessons(day)
+        val lessons = (if (showWeeksAndDates) semester?.getLessons(weekday) else semester?.getLessons(day)) ?:
+                return inflater.inflate(R.layout.fragment_free_day, container, false)
 
         if (lessons.isEmpty()) {
             return inflater.inflate(R.layout.fragment_free_day, container, false)
