@@ -16,12 +16,6 @@ object FileUtils {
     val scheduleFile: File by lazy { File(filesDirPath + JSON_FOLDER_PATH + SCHEDULE_FILE_PATH) }
 
     fun initialize(context: Context) {
-        try {
-            filesDirPath
-        } catch (upae: UninitializedPropertyAccessException) {
-            filesDirPath = context.filesDir.absolutePath
-            return
-        }
-        throw UnsupportedOperationException("Объект уже инициализирован")
+        filesDirPath = context.filesDir.absolutePath
     }
 }
