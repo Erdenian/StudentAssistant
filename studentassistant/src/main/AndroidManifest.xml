@@ -28,7 +28,8 @@
 
         <activity
             android:name=".activity.SemesterEditorActivity"
-            android:label="@string/title_activity_semester_editor"/>
+            android:label="@string/title_activity_semester_editor"
+            android:windowSoftInputMode="stateVisible"/>
 
     </application>
 
