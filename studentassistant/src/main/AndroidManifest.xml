@@ -31,6 +31,11 @@
             android:label="@string/title_activity_semester_editor"
             android:windowSoftInputMode="stateVisible"/>
 
+        <activity
+            android:name=".activity.LessonEditorActivity"
+            android:label="@string/title_activity_lesson_editor"
+            android:theme="@style/AppTheme"/>
+
     </application>
 
 </manifest>

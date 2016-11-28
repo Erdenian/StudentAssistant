@@ -25,6 +25,7 @@ class SemesterEditorActivity : AppCompatActivity(),
         TextWatcher {
 
     companion object {
+
         const val SEMESTER_ID = "semester_id"
 
         private const val FIRST_DAY = "first_day"
@@ -57,7 +58,7 @@ class SemesterEditorActivity : AppCompatActivity(),
         firstDay = semester?.firstDay
         lastDay = semester?.lastDay
 
-        if (semester?.name != null) content_semester_editor_semester_name_edit_text.setText(semester!!.name)
+        if (semester != null) content_semester_editor_semester_name_edit_text.setText(semester!!.name)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -72,11 +73,11 @@ class SemesterEditorActivity : AppCompatActivity(),
 
         if (firstDayString != "null") {
             firstDay = LocalDate.parse(firstDayString)
-            content_semester_editor_first_day.text = firstDay?.toString() ?: getString(R.string.activity_semester_editor_first_day)
+            content_semester_editor_first_day.text = firstDay?.toString() ?: getString(R.string.content_semester_editor_first_day)
         }
         if (lastDayString != "null") {
             lastDay = LocalDate.parse(lastDayString)
-            content_semester_editor_last_day.text = lastDay?.toString() ?: getString(R.string.activity_semester_editor_last_day)
+            content_semester_editor_last_day.text = lastDay?.toString() ?: getString(R.string.content_semester_editor_last_day)
         }
 
         super.onRestoreInstanceState(savedInstanceState)
