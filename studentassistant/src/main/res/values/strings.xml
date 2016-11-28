@@ -32,6 +32,7 @@
     <string name="nav_help">Помощь</string>
 
     <string name="menu_schedule_calendar">Календарь</string>
+    <string name="menu_schedule_add_schedule">Добавить расписание</string>
     <string name="menu_schedule_edit_schedule">Редактировать расписание</string>
 
     <string name="menu_lessons_editor_edit_semester">Редактировать семестр</string>

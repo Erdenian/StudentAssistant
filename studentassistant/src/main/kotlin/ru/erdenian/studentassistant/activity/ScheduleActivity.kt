@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
@@ -105,6 +106,7 @@ class ScheduleActivity : AppCompatActivity(),
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_schedule, menu)
         menu.findItem(R.id.menu_schedule_calendar).isVisible = !ScheduleManager.semesters.isEmpty()
+        menu.findItem(R.id.menu_schedule_edit_schedule).isVisible = !ScheduleManager.semesters.isEmpty()
         menu.setColor(getCompatColor(R.color.action_bar_icons_color))
         return true
     }
@@ -126,7 +128,11 @@ class ScheduleActivity : AppCompatActivity(),
         when (item.itemId) {
             R.id.menu_schedule_calendar -> showDatePicker(this, selectedSemester!!.firstDay, selectedSemester!!.lastDay,
                     pagerAdapter!!.getDate(view_pager.currentItem))
-            R.id.menu_schedule_edit_schedule -> startActivity<SemestersEditorActivity>()
+            R.id.menu_schedule_add_schedule -> startActivity<SemesterEditorActivity>()
+            R.id.menu_schedule_edit_schedule -> with(Intent(this, LessonsEditorActivity::class.java)) {
+                putExtra(LessonsEditorActivity.SEMESTER_ID, selectedSemester!!.id)
+                startActivity(this)
+            }
             else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
         }
         return super.onOptionsItemSelected(item)
