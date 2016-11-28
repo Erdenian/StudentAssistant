@@ -3,15 +3,14 @@
     <string name="app_name">Student Assistant</string>
 
     <string name="title_activity_schedule">Расписание</string>
-    <string name="title_activity_semesters_editor">Семестры</string>
-    <string name="title_activity_lessons_editor">Редактирование семестра</string>
-    <string name="title_activity_semester_editor">Редактирование семестра</string>
+    <string name="title_activity_lessons_editor">Редактирование расписания</string>
+    <string name="title_activity_semester_editor">Редактирование расписания</string>
 
     <string name="activity_schedule_get_schedule_from_server_button">Загрузить расписание с сервера</string>
     <string name="activity_schedule_add_schedule_button">Добавить расписание</string>
     <string name="activity_schedule_free_day_textview">Выходной</string>
 
-    <string name="activity_semesters_editor_delete_semester">Удалить семестр</string>
+    <string name="activity_semesters_editor_delete_semester">Удалить расписание</string>
 
     <string-array name="activity_lessons_editor_edit_types">
         <item>По дням недели</item>
@@ -35,8 +34,8 @@
     <string name="menu_schedule_add_schedule">Добавить расписание</string>
     <string name="menu_schedule_edit_schedule">Редактировать расписание</string>
 
-    <string name="menu_lessons_editor_edit_semester">Редактировать семестр</string>
-    <string name="menu_lessons_editor_delete_semester">Удалить семестр</string>
+    <string name="menu_lessons_editor_edit_semester">Редактировать расписание</string>
+    <string name="menu_lessons_editor_delete_semester">Удалить расписание</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
