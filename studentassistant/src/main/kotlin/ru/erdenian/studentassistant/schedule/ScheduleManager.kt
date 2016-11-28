@@ -40,12 +40,11 @@ object ScheduleManager {
             }
             return field
         }
-        set(value) {
-            //Todo: код, создающий патчи
-
+        private set(value) {
             field = value
 
             currentSemesterIndex = null
+            selectedSemesterIndex = null
 
             // Запись в файл
             try {
@@ -58,8 +57,7 @@ object ScheduleManager {
                 e.printStackTrace()
             }
 
-            // Поиск нового индекса выбранного семестра
-            selectedSemesterIndex = currentSemesterIndex
+            isInitialized = true
 
             onScheduleUpdateListener?.onScheduleUpdate()
         }
@@ -85,6 +83,10 @@ object ScheduleManager {
         get() {
             if (field == null) field = currentSemesterIndex
             return field
+        }
+        set(value) {
+            if ((value !in semesters.indices) && (value != null)) throw IllegalArgumentException("Неверный индекс: $value")
+            field = value
         }
 
     private var onScheduleUpdateListener: OnScheduleUpdateListener? = null
@@ -126,17 +128,29 @@ object ScheduleManager {
         }
 
     fun removeSemester(i: Int) {
+        //Todo: код, создающий патчи
+
         if (i !in semesters.indices) throw IllegalArgumentException("Неверный индекс: $i")
         semesters = ImmutableSortedSet.copyOf(semesters.filterIndexed { position, semester -> position != i })
     }
 
     fun removeSemester(id: Long) {
+        //Todo: код, создающий патчи
+
         removeSemester(getSemesterIndex(id) ?: throw IllegalArgumentException("Неверный id: $id"))
     }
 
     fun addSemester(semester: Semester) {
+        //Todo: код, создающий патчи
+
         val index = getSemesterIndex(semester.id)
-        if (index == null) semesters = semesters.addToNewSet(semester)
-        else semesters = semesters.replaceToNewSet(get(index), semester)
+        if (index == null) {
+            semesters = semesters.addToNewSet(semester)
+            selectedSemesterIndex = getSemesterIndex(semester.id)
+        } else {
+            val i = selectedSemesterIndex
+            semesters = semesters.replaceToNewSet(get(index), semester)
+            selectedSemesterIndex = i
+        }
     }
 }

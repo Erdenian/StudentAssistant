@@ -26,7 +26,10 @@ import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.initializeDrawerAndNavigationView
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.extensions.showDatePicker
-import ru.erdenian.studentassistant.schedule.*
+import ru.erdenian.studentassistant.schedule.Lesson
+import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener
+import ru.erdenian.studentassistant.schedule.ScheduleManager
+import ru.erdenian.studentassistant.schedule.Semester
 
 class ScheduleActivity : AppCompatActivity(),
         AdapterView.OnItemSelectedListener,
@@ -157,11 +160,8 @@ class ScheduleActivity : AppCompatActivity(),
                                 LocalTime(18, 10), LocalTime(19, 40),
                                 Lesson.RepeatType.BY_WEEKDAY, 5, ImmutableList.of(false, true), null, System.nanoTime()))
 
-                val semesters = ImmutableSortedSet.of(
-                        Semester("Семестр 5", LocalDate(2016, 9, 1), LocalDate(2016, 12, 31),
-                                lessons, ImmutableSortedSet.of<Homework>(), System.nanoTime()))
-
-                ScheduleManager.semesters = semesters
+                ScheduleManager.addSemester(Semester("Семестр 5", LocalDate(2016, 9, 1), LocalDate(2016, 12, 31),
+                        lessons))
             }
             else -> throw IllegalArgumentException("Неизвестный id: ${v.id}")
         }
