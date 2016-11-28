@@ -76,6 +76,7 @@ class ScheduleActivity : AppCompatActivity(),
         if ((pagerAdapter != null) && (selectedSemester!!.id == ScheduleManager.selectedSemester?.id)) {
             savedPage = view_pager.currentItem
         }
+        selectedSemester = ScheduleManager.selectedSemester
 
         if (ScheduleManager.semesters.size > 1) {
             val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters, ScheduleManager.semestersNames)

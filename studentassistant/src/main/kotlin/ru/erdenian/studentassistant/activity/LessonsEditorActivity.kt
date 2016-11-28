@@ -17,11 +17,9 @@ import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.adapter.SchedulePagerAdapter
 import ru.erdenian.studentassistant.extensions.getCompatColor
-import ru.erdenian.studentassistant.extensions.putExtra
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener
 import ru.erdenian.studentassistant.schedule.ScheduleManager
-import ru.erdenian.studentassistant.schedule.Semester
 
 class LessonsEditorActivity : AppCompatActivity(),
         View.OnClickListener,
@@ -32,7 +30,7 @@ class LessonsEditorActivity : AppCompatActivity(),
         const val SEMESTER_ID = "semester_id"
     }
 
-    private lateinit var semester: Semester
+    private val semesterId: Long by lazy { intent.getLongExtra(SEMESTER_ID, -1L) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +60,11 @@ class LessonsEditorActivity : AppCompatActivity(),
     }
 
     override fun onScheduleUpdate() {
-        semester = ScheduleManager[intent.getLongExtra(SEMESTER_ID, -1L)]!!
+        val semester = ScheduleManager[semesterId]
+        if (semester == null) {
+            finish()
+            return
+        }
 
         view_pager.adapter = SchedulePagerAdapter(supportFragmentManager, semester, true)
 
@@ -88,12 +90,12 @@ class LessonsEditorActivity : AppCompatActivity(),
             android.R.id.home -> finish()
             R.id.menu_lessons_editor_edit_semester -> {
                 with(Intent(this, SemesterEditorActivity::class.java)) {
-                    putExtra(SemesterEditorActivity.SEMESTER, semester)
+                    putExtra(SemesterEditorActivity.SEMESTER_ID, semesterId)
                     startActivity(this)
                 }
             }
             R.id.menu_lessons_editor_delete_semester -> {
-                ScheduleManager.removeSemester(semester.id)
+                ScheduleManager.removeSemester(semesterId)
                 finish()
             }
             else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")

@@ -12,7 +12,6 @@ import kotlinx.android.synthetic.main.content_semester_editor.view.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.extensions.getAnyExtra
 import ru.erdenian.studentassistant.extensions.showDatePicker
 import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener
 import ru.erdenian.studentassistant.schedule.ScheduleManager
@@ -25,12 +24,12 @@ class SemesterEditorActivity : AppCompatActivity(),
         OnScheduleUpdateListener {
 
     companion object {
-        val SEMESTER = "semester"
+        val SEMESTER_ID = "semester_id"
         private val FIRST_DAY_TAG = "first_day_tag"
         private val LAST_DAY_TAG = "last_day_tag"
     }
 
-    private val semester: Semester? by lazy { intent.getAnyExtra(SEMESTER) as Semester? }
+    private val semester: Semester? by lazy { ScheduleManager[intent.getLongExtra(SEMESTER_ID, -1)] }
 
     private lateinit var semestersNames: List<String>
 
