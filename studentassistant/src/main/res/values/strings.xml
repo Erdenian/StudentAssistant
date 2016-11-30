@@ -50,12 +50,22 @@
     <string name="menu_editor_save">Сохранить</string>
 
 
+    <string name="content_homework_editor_choose_subject">Выберите предмет</string>
+    <string name="content_homework_editor_description">Описание</string>
+
+    <string name="menu_homework_editor_delete_homework">Удалить задание</string>
+
+
+    <string name="card_homework_before">До</string>
+
+
     <string name="nav_schedule">Расписание</string>
     <string name="nav_homework">Домашнее задание</string>
     <string name="nav_alarm">Будильник</string>
     <string name="nav_tools">Инструменты</string>
     <string name="nav_settings">Настройки</string>
     <string name="nav_help">Помощь</string>
+
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
