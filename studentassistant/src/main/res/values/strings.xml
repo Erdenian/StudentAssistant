@@ -2,30 +2,62 @@
 
     <string name="app_name">Student Assistant</string>
 
-    <string name="title_activity_schedule">Расписание</string>
-    <string name="title_activity_semesters_editor">Семестры</string>
-    <string name="title_activity_lessons_editor">Редактирование семестра</string>
-    <string name="title_activity_semester_editor">Редактирование семестра</string>
 
-    <string name="activity_schedule_get_schedule_from_server_button">Загрузить расписание с сервера</string>
-    <string name="activity_schedule_add_schedule_button">Добавить расписание</string>
+    <string name="title_activity_schedule">Расписание</string>
+
+    <string name="content_schedule_get_schedule_from_server_button">Загрузить расписание с сервера</string>
+    <string name="content_schedule_add_schedule_button">Добавить расписание</string>
+
     <string name="activity_schedule_free_day_textview">Выходной</string>
 
-    <string name="activity_semesters_editor_delete_semester">Удалить семестр</string>
+    <string name="menu_schedule_calendar">Календарь</string>
+    <string name="menu_schedule_add_schedule">Добавить расписание</string>
+    <string name="menu_schedule_edit_schedule">Редактировать расписание</string>
 
-    <string-array name="activity_lessons_editor_edit_types">
+
+    <string name="title_activity_lessons_editor">Редактирование расписания</string>
+
+    <string name="menu_lessons_editor_edit_semester">Редактировать расписание</string>
+    <string name="menu_lessons_editor_delete_semester">Удалить расписание</string>
+
+
+    <string name="title_activity_semester_editor">Редактирование расписания</string>
+    <string name="title_activity_semester_editor_new_semester">Добавление расписания</string>
+
+    <string name="content_semester_editor_semester_name">Название</string>
+    <string name="content_semester_editor_first_day">Первый день</string>
+    <string name="content_semester_editor_last_day">Последний день</string>
+
+    <string name="activity_semester_editor_error_empty_name">Имя не может быть пустым</string>
+    <string name="activity_semester_editor_error_name_not_avaliable">Такое имя уже занято</string>
+
+
+    <string name="title_activity_lesson_editor">Редактирование пары</string>
+    <string name="title_activity_lesson_editor_new_lesson">Добавление пары</string>
+
+    <string name="content_lesson_editor_subject_name">Название предмета</string>
+    <string name="content_lesson_editor_lesson_type">Тип пары</string>
+    <string name="content_lesson_editor_teachers">Преподаватели</string>
+    <string name="content_lesson_editor_classrooms">Аудитории</string>
+    <string name="content_lesson_editor_repeat_type">Когда повторять</string>
+
+
+    <string-array name="lesson_repeat_types">
         <item>По дням недели</item>
         <item>По датам</item>
     </string-array>
 
-    <string name="activity_semester_editor_semester_name">Название</string>
-    <string name="activity_semester_editor_first_day">Первый день</string>
-    <string name="activity_semester_editor_last_day">Последний день</string>
-    <string name="activity_semester_editor_save">Сохранить</string>
+    <string name="menu_editor_save">Сохранить</string>
 
-    <string name="activity_homeworks_editor_choose_subject">Выберите предмет</string>
-    <string name="activity_homeworks_editor_description">Описание</string>
-    <string name="activity_homeworks_editor_save">Сохранить</string>
+
+    <string name="content_homework_editor_choose_subject">Выберите предмет</string>
+    <string name="content_homework_editor_description">Описание</string>
+
+    <string name="menu_homework_editor_delete_homework">Удалить задание</string>
+
+
+    <string name="card_homework_before">До</string>
+
 
     <string name="nav_schedule">Расписание</string>
     <string name="nav_homework">Домашнее задание</string>
@@ -34,15 +66,6 @@
     <string name="nav_settings">Настройки</string>
     <string name="nav_help">Помощь</string>
 
-    <string name="menu_schedule_calendar">Календарь</string>
-    <string name="menu_schedule_edit_schedule">Редактировать расписание</string>
-
-    <string name="menu_lessons_editor_edit_semester">Редактировать семестр</string>
-    <string name="menu_lessons_editor_delete_semester">Удалить семестр</string>
-
-    <string name="card_homework_before">До</string>
-
-    <string name="menu_homework_editor_delete_homework">Удалить задание</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

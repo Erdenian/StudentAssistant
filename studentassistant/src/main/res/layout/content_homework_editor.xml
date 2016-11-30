@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:prompt="@string/activity_homeworks_editor_choose"
+        android:prompt="@string/content_homework_editor_choose_subject"
         android:spinnerMode="dialog"
         android:textColor="@color/colorPrimaryText"
         android:textSize="@dimen/card_secondary_text_size"/>
@@ -23,7 +23,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="top"
-        android:hint="@string/activity_homeworks_editor_description"
+        android:hint="@string/content_homework_editor_description"
         android:inputType="textMultiLine"
         android:textColor="@color/colorPrimaryText"
         android:textSize="@dimen/card_secondary_text_size"/>

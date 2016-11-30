@@ -8,17 +8,12 @@ import com.google.gson.reflect.TypeToken
 import org.joda.time.LocalDate
 import ru.erdenian.gsonguavadeserializers.ImmutableListDeserializer
 import ru.erdenian.gsonguavadeserializers.ImmutableSortedSetDeserializer
+import ru.erdenian.studentassistant.extensions.addToNewSet
+import ru.erdenian.studentassistant.extensions.replaceToNewSet
 import ru.erdenian.studentassistant.ulils.FileUtils
 import java.io.*
 import java.util.*
 
-/**
- * Todo: описание класса.
- *
- * @author Ilya Solovyev
- * @version 0.0.0
- * @since 0.0.0
- */
 object ScheduleManager {
 
     private var isInitialized = false
@@ -45,13 +40,11 @@ object ScheduleManager {
             }
             return field
         }
-        set(value) {
-            //Todo: код, создающий патчи
-
-            val semestersOld = semesters
+        private set(value) {
             field = value
 
             currentSemesterIndex = null
+            selectedSemesterIndex = null
 
             // Запись в файл
             try {
@@ -64,16 +57,7 @@ object ScheduleManager {
                 e.printStackTrace()
             }
 
-            // Поиск нового индекса выбранного семестра
-            selectedSemesterIndex = currentSemesterIndex
-
-            val selectedSemesterIndexLocal = selectedSemesterIndex
-            if ((selectedSemesterIndexLocal != null) && semestersOld.isNotEmpty()) {
-                val previousSelectedSemesterId = semestersOld.asList()[selectedSemesterIndexLocal].id
-                for ((i, semester) in semesters.withIndex())
-                    if (semester.id == previousSelectedSemesterId)
-                        selectedSemesterIndex = i
-            }
+            isInitialized = true
 
             onScheduleUpdateListener?.onScheduleUpdate()
         }
@@ -101,7 +85,7 @@ object ScheduleManager {
             return field
         }
         set(value) {
-            if (value !in semesters.indices) throw IllegalArgumentException("Неверный индекс: $value")
+            if ((value !in semesters.indices) && (value != null)) throw IllegalArgumentException("Неверный индекс: $value")
             field = value
         }
 
@@ -110,8 +94,11 @@ object ScheduleManager {
         onScheduleUpdateListener = value
     }
 
-    fun getSemester(id: Long) = semesters.asList()[getSemesterIndex(id) ?:
-            throw IllegalArgumentException("Неверный id: $id")]
+    operator fun get(i: Int): Semester = semesters.asList()[i]
+
+    operator fun get(id: Long): Semester? {
+        return semesters.asList()[getSemesterIndex(id) ?: return null]
+    }
 
     fun getSemesterIndex(id: Long): Int? {
         for ((i, semester) in semesters.withIndex())
@@ -119,30 +106,51 @@ object ScheduleManager {
         return null
     }
 
-    fun getSemestersNames(): List<String> {
-        val names = ArrayList<String>()
-        for ((name) in semesters) {
-            names.add(name)
+    val semestersNames: List<String>
+        get() {
+            val names = ArrayList<String>()
+            for ((name) in semesters) {
+                names.add(name)
+            }
+            return names
         }
-        return names
-    }
 
-    fun getCurrentSemester(): Semester? {
-        val currentSemesterIndexLocal = currentSemesterIndex
-        return if (currentSemesterIndexLocal != null) semesters.asList()[currentSemesterIndexLocal] else null
-    }
+    val currentSemester: Semester?
+        get() {
+            val currentSemesterIndexLocal = currentSemesterIndex
+            return if (currentSemesterIndexLocal != null) semesters.asList()[currentSemesterIndexLocal] else null
+        }
 
-    fun getSelectedSemester(): Semester? {
-        val selectedSemesterIndexLocal = selectedSemesterIndex
-        return if (selectedSemesterIndexLocal != null) semesters.asList()[selectedSemesterIndexLocal] else null
-    }
+    val selectedSemester: Semester?
+        get() {
+            val selectedSemesterIndexLocal = selectedSemesterIndex
+            return if (selectedSemesterIndexLocal != null) semesters.asList()[selectedSemesterIndexLocal] else null
+        }
 
     fun removeSemester(i: Int) {
+        //Todo: код, создающий патчи
+
         if (i !in semesters.indices) throw IllegalArgumentException("Неверный индекс: $i")
         semesters = ImmutableSortedSet.copyOf(semesters.filterIndexed { position, semester -> position != i })
     }
 
     fun removeSemester(id: Long) {
+        //Todo: код, создающий патчи
+
         removeSemester(getSemesterIndex(id) ?: throw IllegalArgumentException("Неверный id: $id"))
+    }
+
+    fun addSemester(semester: Semester) {
+        //Todo: код, создающий патчи
+
+        val index = getSemesterIndex(semester.id)
+        if (index == null) {
+            semesters = semesters.addToNewSet(semester)
+            selectedSemesterIndex = getSemesterIndex(semester.id)
+        } else {
+            val i = selectedSemesterIndex
+            semesters = semesters.replaceToNewSet(get(index), semester)
+            selectedSemesterIndex = i
+        }
     }
 }

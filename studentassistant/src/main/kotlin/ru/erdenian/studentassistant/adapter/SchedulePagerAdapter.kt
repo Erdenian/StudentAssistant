@@ -8,14 +8,8 @@ import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.fragment.SchedulePageFragment
 import ru.erdenian.studentassistant.schedule.Semester
 
-/**
- * Todo: описание класса.
- *
- * @author Ilya Solovyev
- * @version 0.0.0
- * @since 0.0.0
- */
-class SchedulePagerAdapter(fm: FragmentManager, private val semester: Semester) : FragmentStatePagerAdapter(fm) {
+class SchedulePagerAdapter(fm: FragmentManager, private val semester: Semester, val showWeeksAndDates: Boolean) :
+        FragmentStatePagerAdapter(fm) {
 
     companion object {
         private const val TITLE_FORMAT = "EEEE, dd MMMM"
@@ -23,6 +17,8 @@ class SchedulePagerAdapter(fm: FragmentManager, private val semester: Semester) 
     }
 
     override fun getPageTitle(position: Int): CharSequence {
+        if (showWeeksAndDates) return LocalDate().withDayOfWeek(position + 1).dayOfWeek().asText
+
         val day = semester.firstDay.plusDays(position)
         val title = StringBuffer()
         if (day.year == LocalDate.now().year) {
@@ -35,18 +31,21 @@ class SchedulePagerAdapter(fm: FragmentManager, private val semester: Semester) 
     }
 
     override fun getItem(position: Int): Fragment {
-        return SchedulePageFragment.newInstance(semester.id, semester.firstDay.plusDays(position))
+        return if (showWeeksAndDates) SchedulePageFragment.newInstance(semester, position + 1)
+        else SchedulePageFragment.newInstance(semester, getDate(position))
     }
 
     override fun getCount(): Int {
-        return semester.length
+        return if (showWeeksAndDates) 7 else semester.length
     }
 
     fun getPosition(date: LocalDate): Int {
+        if (showWeeksAndDates) throw UnsupportedOperationException("showWeeksAndDates = $showWeeksAndDates")
         return Days.daysBetween(semester.firstDay, date).days
     }
 
     fun getDate(position: Int): LocalDate {
+        if (showWeeksAndDates) throw UnsupportedOperationException("showWeeksAndDates = $showWeeksAndDates")
         return semester.firstDay.plusDays(position)
     }
 }
