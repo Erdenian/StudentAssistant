@@ -40,7 +40,7 @@
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="@dimen/card_primary_text_size"/>
 
-            <include layout="@layout/empty_space"/>
+            <include layout="@layout/empty_space_horizontal"/>
 
             <TextView
                 android:id="@+id/card_schedule_classrooms"
