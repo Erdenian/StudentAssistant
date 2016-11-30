@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
@@ -25,15 +26,11 @@ import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.initializeDrawerAndNavigationView
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.extensions.showDatePicker
-import ru.erdenian.studentassistant.schedule.*
+import ru.erdenian.studentassistant.schedule.Lesson
+import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener
+import ru.erdenian.studentassistant.schedule.ScheduleManager
+import ru.erdenian.studentassistant.schedule.Semester
 
-/**
- * Todo: описание класса.
- *
- * @author Ilya Solovyev
- * @version 0.0.0
- * @since 0.0.0
- */
 class ScheduleActivity : AppCompatActivity(),
         AdapterView.OnItemSelectedListener,
         CalendarDatePickerDialogFragment.OnDateSetListener,
@@ -80,14 +77,13 @@ class ScheduleActivity : AppCompatActivity(),
 
         invalidateOptionsMenu()
 
-        if ((pagerAdapter != null) &&
-                (selectedSemester!!.id == ScheduleManager.getSelectedSemester()!!.id)) {
+        if ((pagerAdapter != null) && (selectedSemester!!.id == ScheduleManager.selectedSemester?.id)) {
             savedPage = view_pager.currentItem
         }
-        selectedSemester = ScheduleManager.getSelectedSemester()
+        selectedSemester = ScheduleManager.selectedSemester
 
         if (ScheduleManager.semesters.size > 1) {
-            val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters, ScheduleManager.getSemestersNames())
+            val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters, ScheduleManager.semestersNames)
             adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters)
             toolbar_with_spinner_spinner.adapter = adapter
             toolbar_with_spinner_spinner.setSelection(ScheduleManager.selectedSemesterIndex!!)
@@ -113,13 +109,16 @@ class ScheduleActivity : AppCompatActivity(),
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_schedule, menu)
         menu.findItem(R.id.menu_schedule_calendar).isVisible = !ScheduleManager.semesters.isEmpty()
+        menu.findItem(R.id.menu_schedule_edit_schedule).isVisible = !ScheduleManager.semesters.isEmpty()
         menu.setColor(getCompatColor(R.color.action_bar_icons_color))
         return true
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         ScheduleManager.selectedSemesterIndex = position
-        pagerAdapter = SchedulePagerAdapter(supportFragmentManager, selectedSemester!!)
+        selectedSemester = ScheduleManager.selectedSemester
+
+        pagerAdapter = SchedulePagerAdapter(supportFragmentManager, selectedSemester!!, false)
         view_pager.adapter = pagerAdapter
         view_pager.setCurrentItem(if (savedPage != -1) savedPage else pagerAdapter!!.getPosition(LocalDate.now()), false)
         savedPage = -1
@@ -132,7 +131,11 @@ class ScheduleActivity : AppCompatActivity(),
         when (item.itemId) {
             R.id.menu_schedule_calendar -> showDatePicker(this, selectedSemester!!.firstDay, selectedSemester!!.lastDay,
                     pagerAdapter!!.getDate(view_pager.currentItem))
-            R.id.menu_schedule_edit_schedule -> startActivity<SemestersEditorActivity>()
+            R.id.menu_schedule_add_schedule -> startActivity<SemesterEditorActivity>()
+            R.id.menu_schedule_edit_schedule -> with(Intent(this, LessonsEditorActivity::class.java)) {
+                putExtra(LessonsEditorActivity.SEMESTER_ID, selectedSemester!!.id)
+                startActivity(this)
+            }
             else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
         }
         return super.onOptionsItemSelected(item)
@@ -144,7 +147,7 @@ class ScheduleActivity : AppCompatActivity(),
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.content_schedule_get_schedule_from_server -> toast(R.string.activity_schedule_get_schedule_from_server_button)
+            R.id.content_schedule_get_schedule_from_server -> toast(R.string.content_schedule_get_schedule_from_server_button)
             R.id.content_schedule_add_schedule -> {
                 val lessons = ImmutableSortedSet.of(
                         Lesson("Конструирование ПО", "Лабораторная работа",
@@ -157,11 +160,8 @@ class ScheduleActivity : AppCompatActivity(),
                                 LocalTime(18, 10), LocalTime(19, 40),
                                 Lesson.RepeatType.BY_WEEKDAY, 5, ImmutableList.of(false, true), null, System.nanoTime()))
 
-                val semesters = ImmutableSortedSet.of(
-                        Semester("Семестр 5", LocalDate(2016, 9, 1), LocalDate(2016, 12, 31),
-                                lessons, ImmutableSortedSet.of<Homework>(), System.nanoTime()))
-
-                ScheduleManager.semesters = semesters
+                ScheduleManager.addSemester(Semester("Семестр 5", LocalDate(2016, 9, 1), LocalDate(2016, 12, 31),
+                        lessons))
             }
             else -> throw IllegalArgumentException("Неизвестный id: ${v.id}")
         }

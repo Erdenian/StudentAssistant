@@ -2,23 +2,17 @@ package ru.erdenian.studentassistant.schedule
 
 import android.util.Log
 import com.google.common.collect.ComparisonChain
+import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableSortedSet
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 
-/**
- * Класс пары. Является неизменяемым.
- *
- * @author Ilya Solovyev
- * @version 0.0.0
- * @since 0.0.0
- */
 data class Lesson(val name: String, val type: String?,
                   val teachers: ImmutableSortedSet<String>, val classrooms: ImmutableSortedSet<String>,
                   val startTime: LocalTime, val endTime: LocalTime,
                   val repeatType: Lesson.RepeatType,
-                  private val weekday: Int? = null, private val weeks: List<Boolean>? = null,
-                  private val dates: ImmutableSortedSet<LocalDate>? = null,
+                  private var weekday_: Int? = null, private var weeks_: ImmutableList<Boolean>? = null,
+                  private var dates_: ImmutableSortedSet<LocalDate>? = null,
                   val id: Long = System.nanoTime()) : Comparable<Lesson> {
 
     enum class RepeatType {
@@ -26,28 +20,34 @@ data class Lesson(val name: String, val type: String?,
         BY_DATE
     }
 
-    val weekday_ = if (repeatType == RepeatType.BY_WEEKDAY) {
-        if (weekday !in 1..7)
-            throw IllegalArgumentException("Некорректный номер недели: $weekday")
-        weekday
+    val weekday = if (repeatType == RepeatType.BY_WEEKDAY) {
+        if (weekday_ !in 1..7)
+            throw IllegalArgumentException("Некорректный номер недели: $weekday_")
+        val tmp = weekday_
+        weekday_ = null
+        tmp
     } else null
 
-    val weeks_ = if (repeatType == RepeatType.BY_WEEKDAY) {
-        if (weeks!!.isEmpty())
+    val weeks = if (repeatType == RepeatType.BY_WEEKDAY) {
+        if (weeks_!!.isEmpty())
             throw IllegalArgumentException("Массив с номерами недель пуст")
-        weeks
+        val tmp = weeks_
+        weeks_ = null
+        tmp
     } else null
 
-    val dates_ = if (repeatType == RepeatType.BY_DATE) {
-        if (dates!!.isEmpty())
+    val dates = if (repeatType == RepeatType.BY_DATE) {
+        if (dates_!!.isEmpty())
             throw IllegalArgumentException("Массив с датами пуст")
-        dates
+        val tmp = dates_
+        dates_ = null
+        tmp
     } else null
 
     fun repeatsOnDay(day: LocalDate, weekNumber: Int): Boolean {
         when (repeatType) {
-            Lesson.RepeatType.BY_WEEKDAY -> return (weeks_!![weekNumber % weeks_.size]) && (day.dayOfWeek == weekday_)
-            Lesson.RepeatType.BY_DATE -> return day in dates_!!
+            Lesson.RepeatType.BY_WEEKDAY -> return (weeks!![weekNumber % weeks.size]) && (day.dayOfWeek == weekday)
+            Lesson.RepeatType.BY_DATE -> return day in dates!!
             else -> Log.wtf(this.javaClass.name,
                     "В repeatType хранится неизвестное значение: $repeatType")
         }
@@ -55,7 +55,7 @@ data class Lesson(val name: String, val type: String?,
     }
 
     fun repeatsOnWeekday(weekday: Int): Boolean {
-        return (repeatType == RepeatType.BY_WEEKDAY) && (weekday == this.weekday_)
+        return (repeatType == RepeatType.BY_WEEKDAY) && (weekday == this.weekday)
     }
 
     fun repeatsOnDate(): Boolean {
