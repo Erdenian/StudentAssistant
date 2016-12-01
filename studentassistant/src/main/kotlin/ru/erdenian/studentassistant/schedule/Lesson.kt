@@ -23,25 +23,30 @@ data class Lesson(val name: String, val type: String?,
     val weekday = if (repeatType == RepeatType.BY_WEEKDAY) {
         if (weekday_ !in 1..7)
             throw IllegalArgumentException("Некорректный номер недели: $weekday_")
-        val tmp = weekday_
+
+        val value = weekday_
         weekday_ = null
-        tmp
+        value
     } else null
 
     val weeks = if (repeatType == RepeatType.BY_WEEKDAY) {
         if (weeks_!!.isEmpty())
             throw IllegalArgumentException("Массив с номерами недель пуст")
-        val tmp = weeks_
+        else if (!weeks_!!.contains(true))
+            throw IllegalArgumentException("Массив с номерами недель заполнен некорректно")
+
+        val value = weeks_
         weeks_ = null
-        tmp
+        value
     } else null
 
     val dates = if (repeatType == RepeatType.BY_DATE) {
         if (dates_!!.isEmpty())
             throw IllegalArgumentException("Массив с датами пуст")
-        val tmp = dates_
+
+        val value = dates_
         dates_ = null
-        tmp
+        value
     } else null
 
     fun repeatsOnDay(day: LocalDate, weekNumber: Int): Boolean {
