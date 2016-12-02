@@ -158,7 +158,9 @@ object ScheduleManager {
         //Todo: код, создающий патчи
 
         val semester = get(semesterId) ?: throw IllegalArgumentException("Неверный id: $semesterId")
-        val newSemester = semester.copy(lessons = semester.lessons.addToNewSet(lesson))
+        val oldLesson = semester.getLesson(lesson.id)
+        val newSemester: Semester = if (oldLesson == null) semester.copy(lessons = semester.lessons.addToNewSet(lesson))
+        else semester.copy(lessons = semester.lessons.replaceToNewSet(oldLesson, lesson))
 
         semesters = semesters.replaceToNewSet(semester, newSemester)
     }
