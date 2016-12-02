@@ -162,7 +162,8 @@ class LessonEditorActivity : AppCompatActivity(),
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_editor, menu)
+        menuInflater.inflate(R.menu.menu_lesson_editor, menu)
+        menu.findItem(R.id.menu_lesson_editor_delete_lesson).isVisible = (lesson != null)
         menu.setColor(getCompatColor(R.color.action_bar_icons_color))
         return true
     }
@@ -170,7 +171,7 @@ class LessonEditorActivity : AppCompatActivity(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> finish()
-            R.id.menu_editor_save -> {
+            R.id.menu_lesson_editor_save -> {
                 val name = if (content_lesson_editor_subject_name_edit_text.text.trim().isNotEmpty()) {
                     content_lesson_editor_subject_name_edit_text.text.trim().toString()
                 } else {
@@ -242,6 +243,10 @@ class LessonEditorActivity : AppCompatActivity(),
                                 Lesson.RepeatType.BY_WEEKDAY, weekday, ImmutableList.copyOf(weeks.toList()), null)
 
                 ScheduleManager.addLesson(semester.id, newLesson)
+                finish()
+            }
+            R.id.menu_lesson_editor_delete_lesson -> {
+                ScheduleManager.removeLesson(semester.id, lesson!!.id)
                 finish()
             }
             else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")

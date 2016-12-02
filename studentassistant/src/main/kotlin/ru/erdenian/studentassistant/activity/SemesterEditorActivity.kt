@@ -88,7 +88,7 @@ class SemesterEditorActivity : AppCompatActivity(),
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_editor, menu)
+        menuInflater.inflate(R.menu.menu_semester_editor, menu)
         menu.setColor(getCompatColor(R.color.action_bar_icons_color))
         return true
     }
@@ -96,7 +96,7 @@ class SemesterEditorActivity : AppCompatActivity(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> finish()
-            R.id.menu_editor_save -> {
+            R.id.menu_semester_editor_save -> {
                 val name = if (content_semester_editor_semester_name_edit_text.text.trim().isNotEmpty()) {
                     content_semester_editor_semester_name_edit_text.text.trim().toString()
                 } else {

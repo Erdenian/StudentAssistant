@@ -36,6 +36,8 @@
     <string name="activity_semester_editor_incorrect_last_day">Введите последний день</string>
     <string name="activity_semester_editor_incorrect_dates">Даты первого и последнего дня введены некорректно</string>
 
+    <string name="menu_semester_editor_save">Сохранить</string>
+
 
     <string name="title_activity_lesson_editor">Редактирование пары</string>
     <string name="title_activity_lesson_editor_new_lesson">Добавление пары</string>
@@ -61,6 +63,9 @@
     <string name="activity_lesson_editor_incorrect_time_message">Время начала и конца введено некорректно</string>
     <string name="activity_lesson_editor_no_weeks_checked_message">Отметьте хотя бы одну неделю</string>
 
+    <string name="menu_lesson_editor_save">Сохранить</string>
+    <string name="menu_lesson_editor_delete_lesson">Удалить пару</string>
+
 
     <string name="schedule_page_fragment_weeks">Недели:</string>
     <string name="schedule_page_fragment_out_of">из</string>
@@ -69,8 +74,6 @@
         <item>По дням недели</item>
         <item>По датам</item>
     </string-array>
-
-    <string name="menu_editor_save">Сохранить</string>
 
 
     <string name="content_homework_editor_choose_subject">Выберите предмет</string>

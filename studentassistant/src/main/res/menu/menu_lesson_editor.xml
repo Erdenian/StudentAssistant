@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_lesson_editor_save"
+        android:icon="@drawable/check"
+        android:title="@string/menu_lesson_editor_save"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/menu_lesson_editor_delete_lesson"
+        android:title="@string/menu_lesson_editor_delete_lesson"
+        app:showAsAction="never"/>
+
+</menu>
