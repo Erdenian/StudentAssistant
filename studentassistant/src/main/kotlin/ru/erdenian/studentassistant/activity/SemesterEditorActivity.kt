@@ -49,38 +49,42 @@ class SemesterEditorActivity : AppCompatActivity(),
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        if (semester == null) supportActionBar!!.title = getString(R.string.title_activity_semester_editor_new_semester)
-
         content_semester_editor_semester_name_edit_text.addTextChangedListener(this)
         content_semester_editor_first_day.setOnClickListener(this)
         content_semester_editor_last_day.setOnClickListener(this)
 
-        firstDay = semester?.firstDay
-        lastDay = semester?.lastDay
+        if (savedInstanceState == null) {
+            with(semester) {
+                if (this == null) {
+                    supportActionBar!!.title = getString(R.string.title_activity_semester_editor_new_semester)
+                } else {
+                    content_semester_editor_semester_name_edit_text.setText(name)
 
-        if (semester != null) content_semester_editor_semester_name_edit_text.setText(semester!!.name)
+                    this@SemesterEditorActivity.firstDay = firstDay
+                    content_semester_editor_first_day.text = firstDay.toString()
+                    this@SemesterEditorActivity.lastDay = lastDay
+                    content_semester_editor_last_day.text = lastDay.toString()
+                }
+            }
+        } else {
+            val firstDayString = savedInstanceState.getString(FIRST_DAY)
+            if (firstDayString != "null") {
+                firstDay = LocalDate.parse(firstDayString)
+                content_semester_editor_first_day.text = firstDay.toString()
+            }
+
+            val lastDayString = savedInstanceState.getString(LAST_DAY)
+            if (lastDayString != "null") {
+                lastDay = LocalDate.parse(lastDayString)
+                content_semester_editor_last_day.text = lastDay.toString()
+            }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString(FIRST_DAY, firstDay.toString())
         outState.putString(LAST_DAY, lastDay.toString())
         super.onSaveInstanceState(outState)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        val firstDayString = savedInstanceState.getString(FIRST_DAY)
-        val lastDayString = savedInstanceState.getString(LAST_DAY)
-
-        if (firstDayString != "null") {
-            firstDay = LocalDate.parse(firstDayString)
-            content_semester_editor_first_day.text = firstDay?.toString() ?: getString(R.string.content_semester_editor_first_day)
-        }
-        if (lastDayString != "null") {
-            lastDay = LocalDate.parse(lastDayString)
-            content_semester_editor_last_day.text = lastDay?.toString() ?: getString(R.string.content_semester_editor_last_day)
-        }
-
-        super.onRestoreInstanceState(savedInstanceState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
