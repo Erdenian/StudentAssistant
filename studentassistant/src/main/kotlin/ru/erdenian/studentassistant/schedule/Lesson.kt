@@ -8,7 +8,7 @@ import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 
 data class Lesson(val name: String, val type: String?,
-                  val teachers: ImmutableSortedSet<String>, val classrooms: ImmutableSortedSet<String>,
+                  private val teachers_: ImmutableSortedSet<String>?, private val classrooms_: ImmutableSortedSet<String>?,
                   val startTime: LocalTime, val endTime: LocalTime,
                   val repeatType: Lesson.RepeatType,
                   private var weekday_: Int? = null, private var weeks_: ImmutableList<Boolean>? = null,
@@ -19,6 +19,12 @@ data class Lesson(val name: String, val type: String?,
         BY_WEEKDAY,
         BY_DATE
     }
+
+    val teachers = if ((teachers_ != null) && (teachers_.isEmpty())) null
+    else teachers_
+
+    val classrooms = if ((classrooms_ != null) && (classrooms_.isEmpty())) null
+    else classrooms_
 
     val weekday = if (repeatType == RepeatType.BY_WEEKDAY) {
         if (weekday_ !in 1..7)

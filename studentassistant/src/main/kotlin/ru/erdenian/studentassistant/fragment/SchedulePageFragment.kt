@@ -76,10 +76,12 @@ class SchedulePageFragment : Fragment() {
                 (findViewById(R.id.card_schedule_start_time) as TextView).text = lesson.startTime.toString(TIME_FORMAT)
                 (findViewById(R.id.card_schedule_end_time) as TextView).text = lesson.endTime.toString(TIME_FORMAT)
 
-                if (lesson.classrooms.size > 0) {
-                    (findViewById(R.id.card_schedule_classrooms) as TextView).text = Joiner.on(", ").join(lesson.classrooms)
-                } else {
-                    findViewById(R.id.card_schedule_classrooms_icon).visibility = View.GONE
+                lesson.classrooms?.let {
+                    if (it.size > 0) {
+                        (findViewById(R.id.card_schedule_classrooms) as TextView).text = Joiner.on(", ").join(lesson.classrooms)
+                    } else {
+                        findViewById(R.id.card_schedule_classrooms_icon).visibility = View.GONE
+                    }
                 }
 
                 with(findViewById(R.id.card_schedule_type) as TextView) {
@@ -90,10 +92,12 @@ class SchedulePageFragment : Fragment() {
                 (findViewById(R.id.card_schedule_name) as TextView).text = lesson.name
 
                 with(findViewById(R.id.card_schedule_teachers_parent) as LinearLayout) {
-                    for (teacherName in lesson.teachers) {
-                        val teacher = inflater.inflate(R.layout.textview_teacher, this, false)
-                        (teacher.findViewById(R.id.textview_teacher) as TextView).text = teacherName
-                        addView(teacher)
+                    lesson.teachers?.let {
+                        for (teacherName in it) {
+                            val teacher = inflater.inflate(R.layout.textview_teacher, this, false)
+                            (teacher.findViewById(R.id.textview_teacher) as TextView).text = teacherName
+                            addView(teacher)
+                        }
                     }
                 }
 
