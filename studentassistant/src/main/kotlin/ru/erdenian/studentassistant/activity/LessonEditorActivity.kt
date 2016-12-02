@@ -117,13 +117,17 @@ class LessonEditorActivity : AppCompatActivity(),
             weeks = ImmutableList.copyOf(savedInstanceState.getBooleanArray(WEEKS).toList())
         }
 
-        for ((i, w) in weeks.withIndex()) {
-            val checkbox = layoutInflater.inflate(R.layout.content_lesson_editor_week_checkbox,
+        weeks.forEach {
+            layoutInflater.inflate(R.layout.content_lesson_editor_week_checkbox,
                     content_lesson_editor_weeks_parent)
+        }
+        if (weeks.size <= 1) content_lesson_editor_remove_week.isEnabled = false
+
+        for ((i, w) in weeks.withIndex()) {
+            val checkbox = content_lesson_editor_weeks_parent.getChildAt(i)
             (checkbox.findViewById(R.id.content_lesson_editor_week_checkbox) as CheckBox).isChecked = w
             (checkbox.findViewById(R.id.content_lesson_editor_week_number) as TextView).text = (i + 1).toString()
         }
-        if (weeks.size <= 1) content_lesson_editor_remove_week.isEnabled = false
     }
 
     override fun onStart() {
