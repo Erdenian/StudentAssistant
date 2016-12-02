@@ -105,7 +105,13 @@ class SchedulePageFragment : Fragment() {
                         .layoutParams as LinearLayout.LayoutParams).height = 0
                 else (findViewById(R.id.card_schedule_repeats_data) as TextView).text =
                         when (lesson.repeatType) {
-                            Lesson.RepeatType.BY_WEEKDAY -> Joiner.on(", ").join(lesson.weeks)
+                            Lesson.RepeatType.BY_WEEKDAY -> {
+                                val weeks = mutableListOf<Int>()
+                                for ((i, w) in lesson.weeks!!.withIndex())
+                                    if (w) weeks.add(i + 1)
+                                getString(R.string.schedule_page_fragment_weeks) + " " + Joiner.on(", ").join(weeks) + " " +
+                                        getString(R.string.schedule_page_fragment_out_of) + " " + lesson.weeks.size
+                            }
                             Lesson.RepeatType.BY_DATE -> Joiner.on(", ").join(lesson.dates)
                             else -> throw IllegalStateException("Неизвестный тип повторения: ${lesson.repeatType}")
                         }

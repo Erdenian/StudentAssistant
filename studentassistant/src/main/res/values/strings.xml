@@ -57,6 +57,9 @@
     <string name="activity_lesson_editor_no_weeks_checked_message">Отметьте хотя бы одну неделю</string>
 
 
+    <string name="schedule_page_fragment_weeks">Недели:</string>
+    <string name="schedule_page_fragment_out_of">из</string>
+
     <string-array name="lesson_repeat_types">
         <item>По дням недели</item>
         <item>По датам</item>
