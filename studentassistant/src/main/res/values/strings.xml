@@ -40,6 +40,21 @@
     <string name="content_lesson_editor_teachers">Преподаватели</string>
     <string name="content_lesson_editor_classrooms">Аудитории</string>
     <string name="content_lesson_editor_repeat_type">Когда повторять</string>
+    <string name="content_lesson_editor_start_time">Время начала</string>
+    <string name="content_lesson_editor_end_time">Время окончания</string>
+    <string name="content_lesson_editor_monday">ПН</string>
+    <string name="content_lesson_editor_tuesday">ВТ</string>
+    <string name="content_lesson_editor_wednesday">СР</string>
+    <string name="content_lesson_editor_thursday">ЧТ</string>
+    <string name="content_lesson_editor_friday">ПТ</string>
+    <string name="content_lesson_editor_saturday">СБ</string>
+    <string name="content_lesson_editor_sunday">ВС</string>
+
+    <string name="activity_lesson_editor_incorrect_subject_name_message">Введите название предмета</string>
+    <string name="activity_lesson_editor_incorrect_start_time_message">Введите время начала</string>
+    <string name="activity_lesson_editor_incorrect_end_time_message">Введите время окончания</string>
+    <string name="activity_lesson_editor_incorrect_time_message">Время начала и конца введено некорректно</string>
+    <string name="activity_lesson_editor_no_weeks_checked_message">Отметьте хотя бы одну неделю</string>
 
 
     <string-array name="lesson_repeat_types">
