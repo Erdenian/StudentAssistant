@@ -37,14 +37,15 @@ class LessonsEditorActivity : AppCompatActivity(),
 
         setSupportActionBar(toolbar_with_spinner)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setDisplayShowTitleEnabled(false)
-
+        //supportActionBar!!.setDisplayShowTitleEnabled(false)
 
         val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters,
                 resources.getStringArray(R.array.lesson_repeat_types))
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters)
         toolbar_with_spinner_spinner.adapter = adapter
         toolbar_with_spinner_spinner.onItemSelectedListener = this
+
+        toolbar_with_spinner_spinner.visibility = View.GONE
 
         view_pager_pager_tab_strip.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
         view_pager_pager_tab_strip.setTabIndicatorColorResource(R.color.colorPrimary)
