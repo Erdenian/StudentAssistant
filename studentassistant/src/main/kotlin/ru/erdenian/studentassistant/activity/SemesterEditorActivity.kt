@@ -93,14 +93,31 @@ class SemesterEditorActivity : AppCompatActivity(),
         when (item.itemId) {
             android.R.id.home -> finish()
             R.id.menu_editor_save -> {
-                if (content_semester_editor_semester_name_edit_text.text.isEmpty()) {
-                    toast(R.string.activity_semester_editor_error_empty_name)
-                } else if (!content_semester_editor_semester_name.isErrorEnabled && (firstDay != null) && (lastDay != null)) {
-                    val name = content_semester_editor_semester_name_edit_text.text.toString()
-                    ScheduleManager.addSemester(semester?.copy(name = name, firstDay = firstDay!!, lastDay = lastDay!!) ?:
-                            Semester(name, firstDay!!, lastDay!!))
-                    finish()
+                val name = if (content_semester_editor_semester_name_edit_text.text.isNotEmpty()) {
+                    content_semester_editor_semester_name_edit_text.text.toString()
+                } else {
+                    toast(R.string.activity_semester_editor_incorrect_name_message)
+                    return super.onOptionsItemSelected(item)
                 }
+
+                if (firstDay == null) {
+                    toast(R.string.activity_semester_editor_incorrect_first_day)
+                    return super.onOptionsItemSelected(item)
+                }
+
+                if (lastDay == null) {
+                    toast(R.string.activity_semester_editor_incorrect_last_day)
+                    return super.onOptionsItemSelected(item)
+                }
+
+                if (!firstDay!!.isBefore(lastDay!!)) {
+                    toast(R.string.activity_semester_editor_incorrect_dates)
+                    return super.onOptionsItemSelected(item)
+                }
+
+                ScheduleManager.addSemester(semester?.copy(name, firstDay!!, lastDay!!) ?:
+                        Semester(name, firstDay!!, lastDay!!))
+                finish()
             }
             else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
         }
@@ -124,10 +141,8 @@ class SemesterEditorActivity : AppCompatActivity(),
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.content_semester_editor_first_day -> showDatePicker(this,
-                    lastDay = lastDay?.minusDays(1), preselected = firstDay, tag = FIRST_DAY_TAG)
-            R.id.content_semester_editor_last_day -> showDatePicker(this,
-                    firstDay = firstDay?.plusDays(1), preselected = lastDay, tag = LAST_DAY_TAG)
+            R.id.content_semester_editor_first_day -> showDatePicker(this, preselected = firstDay, tag = FIRST_DAY_TAG)
+            R.id.content_semester_editor_last_day -> showDatePicker(this, preselected = lastDay, tag = LAST_DAY_TAG)
             else -> throw IllegalArgumentException("Неизвестный id: ${v.id}")
         }
     }

@@ -31,6 +31,11 @@
     <string name="activity_semester_editor_error_empty_name">Имя не может быть пустым</string>
     <string name="activity_semester_editor_error_name_not_avaliable">Такое имя уже занято</string>
 
+    <string name="activity_semester_editor_incorrect_name_message">Введите название</string>
+    <string name="activity_semester_editor_incorrect_first_day">Введите первый день</string>
+    <string name="activity_semester_editor_incorrect_last_day">Введите последний день</string>
+    <string name="activity_semester_editor_incorrect_dates">Даты первого и последнего дня введены некорректно</string>
+
 
     <string name="title_activity_lesson_editor">Редактирование пары</string>
     <string name="title_activity_lesson_editor_new_lesson">Добавление пары</string>
