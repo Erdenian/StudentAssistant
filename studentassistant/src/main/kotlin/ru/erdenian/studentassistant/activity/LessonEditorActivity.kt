@@ -100,15 +100,15 @@ class LessonEditorActivity : AppCompatActivity(),
                 }
             }
         } else {
-            val firstDayString = savedInstanceState.getString(START_TIME)
-            if (firstDayString != "null") {
-                startTime = LocalTime.parse(firstDayString)
+            val startTimeString = savedInstanceState.getString(START_TIME)
+            if (startTimeString != "null") {
+                startTime = LocalTime.parse(startTimeString)
                 content_lesson_editor_start_time.text = startTime.toString()
             }
 
-            val lastDayString = savedInstanceState.getString(END_TIME, null)
-            if (lastDayString != "null") {
-                endTime = LocalTime.parse(lastDayString)
+            val endTimeString = savedInstanceState.getString(END_TIME, null)
+            if (endTimeString != "null") {
+                endTime = LocalTime.parse(endTimeString)
                 content_lesson_editor_end_time.text = endTime.toString()
             }
 
