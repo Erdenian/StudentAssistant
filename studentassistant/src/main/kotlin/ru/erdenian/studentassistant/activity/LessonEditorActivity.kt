@@ -81,8 +81,8 @@ class LessonEditorActivity : AppCompatActivity(),
                 } else {
                     content_lesson_editor_subject_name_edit_text.setText(name)
                     type?.let { content_lesson_editor_lesson_type_edit_text.setText(it) }
-                    content_lesson_editor_teachers_edit_text.setText(Joiner.on(", ").join(teachers))
-                    content_lesson_editor_classrooms_edit_text.setText(Joiner.on(", ").join(classrooms))
+                    teachers?.let { content_lesson_editor_teachers_edit_text.setText(Joiner.on(", ").join(it)) }
+                    classrooms?.let { content_lesson_editor_classrooms_edit_text.setText(Joiner.on(", ").join(classrooms)) }
 
                     this@LessonEditorActivity.startTime = startTime
                     content_lesson_editor_start_time.text = startTime.toString(TIME_FORMAT)
