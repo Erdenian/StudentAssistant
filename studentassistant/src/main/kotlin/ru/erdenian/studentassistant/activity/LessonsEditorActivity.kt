@@ -66,7 +66,9 @@ class LessonsEditorActivity : AppCompatActivity(),
             return
         }
 
+        val page = view_pager.currentItem
         view_pager.adapter = SchedulePagerAdapter(supportFragmentManager, semester, true)
+        view_pager.currentItem = page
 
         // TODO: 13.11.2016 добавить заполнение списка пар по датам
     }
