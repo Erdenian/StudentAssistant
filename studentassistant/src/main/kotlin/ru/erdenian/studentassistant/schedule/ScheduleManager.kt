@@ -153,4 +153,13 @@ object ScheduleManager {
             selectedSemesterIndex = i
         }
     }
+
+    fun addLesson(semesterId: Long, lesson: Lesson) {
+        //Todo: код, создающий патчи
+
+        val semester = get(semesterId) ?: throw IllegalArgumentException("Неверный id: $semesterId")
+        val newSemester = semester.copy(lessons = semester.lessons.addToNewSet(lesson))
+
+        semesters = semesters.replaceToNewSet(semester, newSemester)
+    }
 }
