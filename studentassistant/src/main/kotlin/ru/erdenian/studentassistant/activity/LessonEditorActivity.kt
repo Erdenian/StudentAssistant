@@ -171,29 +171,41 @@ class LessonEditorActivity : AppCompatActivity(),
         when (item.itemId) {
             android.R.id.home -> finish()
             R.id.menu_editor_save -> {
-                val name = if (content_lesson_editor_subject_name_edit_text.text.isNotEmpty()) {
-                    content_lesson_editor_subject_name_edit_text.text.toString()
+                val name = if (content_lesson_editor_subject_name_edit_text.text.trim().isNotEmpty()) {
+                    content_lesson_editor_subject_name_edit_text.text.trim().toString()
                 } else {
                     toast(R.string.activity_lesson_editor_incorrect_subject_name_message)
                     return super.onOptionsItemSelected(item)
                 }
 
-                val type = if (content_lesson_editor_lesson_type_edit_text.text.isNotEmpty())
-                    content_lesson_editor_lesson_type_edit_text.text.toString()
+                val type = if (content_lesson_editor_lesson_type_edit_text.text.trim().isNotEmpty())
+                    content_lesson_editor_lesson_type_edit_text.text.trim().toString()
                 else null
 
                 val teachers = if (content_lesson_editor_teachers_edit_text.text.isNotEmpty()) {
                     val list = content_lesson_editor_teachers_edit_text.text.toString().split(",").toMutableList()
-                    for ((i, l) in list.withIndex())
+                    val list1 = mutableListOf<String>()
+                    for ((i, l) in list.withIndex()) {
                         list[i] = l.trim()
-                    ImmutableSortedSet.copyOf(list)
+                        if (list[i].isNotEmpty()) {
+                            list1.add(list[i])
+                        }
+                    }
+                    if (list1.isNotEmpty()) ImmutableSortedSet.copyOf(list1)
+                    else null
                 } else null
 
                 val classrooms = if (content_lesson_editor_classrooms_edit_text.text.isNotEmpty()) {
                     val list = content_lesson_editor_classrooms_edit_text.text.toString().split(",").toMutableList()
-                    for ((i, l) in list.withIndex())
+                    val list1 = mutableListOf<String>()
+                    for ((i, l) in list.withIndex()) {
                         list[i] = l.trim()
-                    ImmutableSortedSet.copyOf(list)
+                        if (list[i].isNotEmpty()) {
+                            list1.add(list[i])
+                        }
+                    }
+                    if (list1.isNotEmpty()) ImmutableSortedSet.copyOf(list1)
+                    else null
                 } else null
 
                 if (startTime == null) {
