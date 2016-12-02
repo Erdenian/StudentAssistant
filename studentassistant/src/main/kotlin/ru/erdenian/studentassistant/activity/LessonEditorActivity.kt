@@ -103,13 +103,13 @@ class LessonEditorActivity : AppCompatActivity(),
             val startTimeString = savedInstanceState.getString(START_TIME)
             if (startTimeString != "null") {
                 startTime = LocalTime.parse(startTimeString)
-                content_lesson_editor_start_time.text = startTime.toString()
+                content_lesson_editor_start_time.text = startTime!!.toString(TIME_FORMAT)
             }
 
             val endTimeString = savedInstanceState.getString(END_TIME, null)
             if (endTimeString != "null") {
                 endTime = LocalTime.parse(endTimeString)
-                content_lesson_editor_end_time.text = endTime.toString()
+                content_lesson_editor_end_time.text = endTime!!.toString(TIME_FORMAT)
             }
 
             content_lesson_editor_weekdays.setPosition(savedInstanceState.getInt(WEEKDAY), false)
