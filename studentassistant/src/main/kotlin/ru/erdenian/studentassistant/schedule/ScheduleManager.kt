@@ -164,4 +164,14 @@ object ScheduleManager {
 
         semesters = semesters.replaceToNewSet(semester, newSemester)
     }
+
+    fun removeLesson(semesterId: Long, lessonId: Long) {
+        //Todo: код, создающий патчи
+
+        val semester = get(semesterId) ?: throw IllegalArgumentException("Неверный id семестра: $semesterId")
+        val newLessons = ImmutableSortedSet.copyOf(semester.lessons.filter { it.id != lessonId })
+        val newSemester = semester.copy(lessons = newLessons)
+
+        semesters = semesters.replaceToNewSet(semester, newSemester)
+    }
 }
