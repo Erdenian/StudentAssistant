@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimaryText"
-                android:textSize="@dimen/card_secondary_text_size"/>
+                android:textSize="@dimen/card_primary_text_size"/>
 
             <ImageView
                 android:id="@+id/card_schedule_classrooms_icon"
@@ -91,10 +91,10 @@
 
         <LinearLayout
             android:id="@+id/card_schedule_repeats"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            tools:ignore="UseCompoundDrawables"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:ignore="UseCompoundDrawables">
 
             <ImageView
                 android:layout_width="wrap_content"
