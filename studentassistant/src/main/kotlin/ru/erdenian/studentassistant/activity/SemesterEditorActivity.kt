@@ -97,8 +97,8 @@ class SemesterEditorActivity : AppCompatActivity(),
         when (item.itemId) {
             android.R.id.home -> finish()
             R.id.menu_editor_save -> {
-                val name = if (content_semester_editor_semester_name_edit_text.text.isNotEmpty()) {
-                    content_semester_editor_semester_name_edit_text.text.toString()
+                val name = if (content_semester_editor_semester_name_edit_text.text.trim().isNotEmpty()) {
+                    content_semester_editor_semester_name_edit_text.text.trim().toString()
                 } else {
                     toast(R.string.activity_semester_editor_incorrect_name_message)
                     return super.onOptionsItemSelected(item)
