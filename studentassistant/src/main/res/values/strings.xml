@@ -50,6 +50,9 @@
     <string name="menu_editor_save">Сохранить</string>
 
 
+    <string name="menu_lesson_information_edit">Редактировать</string>
+
+
     <string name="content_homework_editor_choose_subject">Выберите предмет</string>
     <string name="content_homework_editor_description">Описание</string>
 
@@ -69,6 +72,5 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="menu_lesson_information_edit">Редактировать</string>
 
 </resources>

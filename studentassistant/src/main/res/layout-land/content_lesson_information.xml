@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <FrameLayout
+        android:layout_width="250dp"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/card_lesson_information_main_info"/>
+
+    </FrameLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/lesson_information_homework_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="15dp"
+            android:orientation="vertical">
+
+            <include layout="@layout/card_lesson_information_homework"/>
+
+            <include layout="@layout/card_lesson_information_homework"/>
+
+            <include layout="@layout/card_lesson_information_homework"/>
+
+            <include layout="@layout/card_lesson_information_homework"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
