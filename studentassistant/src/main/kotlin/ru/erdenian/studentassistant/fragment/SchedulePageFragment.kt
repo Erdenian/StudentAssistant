@@ -76,17 +76,15 @@ class SchedulePageFragment : Fragment() {
                 (findViewById(R.id.card_schedule_start_time) as TextView).text = lesson.startTime.toString(TIME_FORMAT)
                 (findViewById(R.id.card_schedule_end_time) as TextView).text = lesson.endTime.toString(TIME_FORMAT)
 
-                lesson.classrooms?.let {
-                    if (it.size > 0) {
-                        (findViewById(R.id.card_schedule_classrooms) as TextView).text = Joiner.on(", ").join(lesson.classrooms)
-                    } else {
-                        findViewById(R.id.card_schedule_classrooms_icon).visibility = View.GONE
-                    }
+                if (lesson.classrooms != null) {
+                    (findViewById(R.id.card_schedule_classrooms) as TextView).text = Joiner.on(", ").join(lesson.classrooms)
+                } else {
+                    findViewById(R.id.card_schedule_classrooms_icon).visibility = View.GONE
                 }
 
                 with(findViewById(R.id.card_schedule_type) as TextView) {
                     if (lesson.type != null) text = lesson.type
-                    else height = 0
+                    else visibility = View.GONE
                 }
 
                 (findViewById(R.id.card_schedule_name) as TextView).text = lesson.name
@@ -101,20 +99,22 @@ class SchedulePageFragment : Fragment() {
                     }
                 }
 
-                if (!showWeeksAndDates) ((findViewById(R.id.card_schedule_repeats) as LinearLayout)
-                        .layoutParams as LinearLayout.LayoutParams).height = 0
-                else (findViewById(R.id.card_schedule_repeats_data) as TextView).text =
-                        when (lesson.repeatType) {
-                            Lesson.RepeatType.BY_WEEKDAY -> {
-                                val weeks = mutableListOf<Int>()
-                                for ((i, w) in lesson.weeks!!.withIndex())
-                                    if (w) weeks.add(i + 1)
-                                getString(R.string.schedule_page_fragment_weeks) + " " + Joiner.on(", ").join(weeks) + " " +
-                                        getString(R.string.schedule_page_fragment_out_of) + " " + lesson.weeks.size
+                if (!showWeeksAndDates) {
+                    (findViewById(R.id.card_schedule_repeats) as LinearLayout).visibility = View.GONE
+                } else {
+                    (findViewById(R.id.card_schedule_repeats_data) as TextView).text =
+                            when (lesson.repeatType) {
+                                Lesson.RepeatType.BY_WEEKDAY -> {
+                                    val weeks = mutableListOf<Int>()
+                                    for ((i, w) in lesson.weeks!!.withIndex())
+                                        if (w) weeks.add(i + 1)
+                                    getString(R.string.schedule_page_fragment_weeks) + " " + Joiner.on(", ").join(weeks) + " " +
+                                            getString(R.string.schedule_page_fragment_out_of) + " " + lesson.weeks.size
+                                }
+                                Lesson.RepeatType.BY_DATE -> Joiner.on(", ").join(lesson.dates)
+                                else -> throw IllegalStateException("Неизвестный тип повторения: ${lesson.repeatType}")
                             }
-                            Lesson.RepeatType.BY_DATE -> Joiner.on(", ").join(lesson.dates)
-                            else -> throw IllegalStateException("Неизвестный тип повторения: ${lesson.repeatType}")
-                        }
+                }
 
                 if (showWeeksAndDates) setOnClickListener {
                     with(Intent(context, LessonEditorActivity::class.java)) {
