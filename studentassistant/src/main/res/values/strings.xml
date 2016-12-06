@@ -43,7 +43,7 @@
 
 
     <string-array name="lesson_repeat_types">
-        <item>По дням недели</item>
+        <item name="dada">По дням недели</item>
         <item>По датам</item>
     </string-array>
 
@@ -54,6 +54,17 @@
     <string name="content_homework_editor_description">Описание</string>
 
     <string name="menu_homework_editor_delete_homework">Удалить задание</string>
+
+
+    <string name="content_alarm_editor_name">Название будильника</string>
+
+    <string name="sunday">ВС</string>
+    <string name="monday">ПН</string>
+    <string name="tuesday">ВТ</string>
+    <string name="wednesday">СР</string>
+    <string name="thursday">ЧТ</string>
+    <string name="friday">ПТ</string>
+    <string name="saturday">СБ</string>
 
 
     <string name="card_homework_before">До</string>

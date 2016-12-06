@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ScheduleCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/card_margin_inside"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/card_primary_text_size"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/card_margin_inside"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/card_alarm_time"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="@dimen/card_alarm_text_size_time"/>
+
+            <android.support.v4.widget.Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <ToggleButton
+                android:id="@+id/card_alarm_toggle_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/card_alarm_buttons_day_of_week">
+
+            <ToggleButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:textOn="@string/monday"
+                android:textOff="@string/monday"
+                android:background="@drawable/oval_button"/>
+
+            <ToggleButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:textOn="@string/tuesday"
+                android:textOff="@string/tuesday"
+                android:background="@drawable/oval_button"/>
+
+            <ToggleButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:textOn="@string/wednesday"
+                android:textOff="@string/wednesday"
+                android:background="@drawable/oval_button"/>
+
+            <ToggleButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:textOn="@string/thursday"
+                android:textOff="@string/thursday"
+                android:background="@drawable/oval_button"/>
+
+            <ToggleButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:textOn="@string/friday"
+                android:textOff="@string/friday"
+                android:background="@drawable/oval_button"/>
+
+            <ToggleButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:textOn="@string/saturday"
+                android:textOff="@string/saturday"
+                android:background="@drawable/oval_button"/>
+
+            <ToggleButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:textOn="@string/sunday"
+                android:textOff="@string/sunday"
+                android:background="@drawable/oval_button"/>
+        </RadioGroup>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
