@@ -10,7 +10,7 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        FileUtils.initialize(this)
+        FileUtils.initialize(applicationContext)
 
         startActivity<ScheduleActivity>()
         finish()
