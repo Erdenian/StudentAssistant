@@ -15,7 +15,7 @@
 
         <include layout="@layout/toolbar"/>
 
-        <include layout="@layout/content_alarm_editor"/>
+        <include layout="@layout/content_sound_profiles"/>
 
     </LinearLayout>
 

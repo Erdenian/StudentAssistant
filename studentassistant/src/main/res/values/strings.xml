@@ -58,6 +58,10 @@
 
     <string name="content_alarm_editor_name">Название будильника</string>
 
+    <string name="card_sound_profile_volume">Громкость</string>
+    <string name="card_sound_profile_vibration">Вибрация</string>
+    <string name="content_sound_profile_editor_name">Вибрация</string>
+
     <string name="sunday">ВС</string>
     <string name="monday">ПН</string>
     <string name="tuesday">ВТ</string>
