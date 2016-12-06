@@ -13,7 +13,7 @@ data class Semester(val name: String, val firstDay: LocalDate, val lastDay: Loca
     val length = Days.daysBetween(firstDay, lastDay).days + 1
 
     fun getLesson(id: Long): Lesson? {
-        return lessons.asList()[getLessonIndex(id) ?: return null]
+        return lessons.firstOrNull { it.id == id }
     }
 
     fun getLessonIndex(id: Long): Int? {
