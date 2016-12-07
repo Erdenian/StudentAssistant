@@ -28,6 +28,19 @@
         android:textColor="@color/colorPrimaryText"
         android:textSize="@dimen/card_secondary_text_size"/>
 
+    <Button
+        android:text="@string/content_homework_editor_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/content_homework_editor_date"/>
+
+    <include layout="empty_space_vertical"/>
+
+    <Button
+        android:text="@string/content_homework_editor_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/content_homework_editor_save"/>
 
 
 </LinearLayout>
