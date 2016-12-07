@@ -62,7 +62,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/lesson_information_kind"
+            android:id="@+id/lesson_information_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Практика"

@@ -9,10 +9,11 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.common.base.Joiner
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.startActivity
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.activity.LessonEditorActivity
+import ru.erdenian.studentassistant.activity.LessonInformationActivity
 import ru.erdenian.studentassistant.schedule.Lesson
 import ru.erdenian.studentassistant.schedule.ScheduleManager
 import ru.erdenian.studentassistant.schedule.Semester
@@ -113,7 +114,11 @@ class SchedulePageFragment : Fragment() {
                         startActivity(this)
                     }
                 }
-                else setOnClickListener { context.toast(lesson.name) }
+                else setOnClickListener {
+                    context.startActivity<LessonInformationActivity>(
+                            LessonInformationActivity.SEMESTER_ID to semester!!.id,
+                            LessonInformationActivity.LESSON_ID to lesson.id)
+                }
 
                 llCardsParent.addView(this)
             }
