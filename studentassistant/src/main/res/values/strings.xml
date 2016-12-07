@@ -50,6 +50,8 @@
     <string name="menu_editor_save">Сохранить</string>
 
 
+    <string name="title_activity_lesson_information">LessonInformationActivity</string>
+
     <string name="menu_lesson_information_edit">Редактировать</string>
 
 
