@@ -33,10 +33,11 @@ class HomeworkEditorActivity : AppCompatActivity(),
     companion object {
         const val SEMESTER_ID = "semester_id"
         const val HOMEWORK_ID = "homework_id"
+
     }
 
     private val semester: Semester by lazy { ScheduleManager[intent.getLongExtra(SEMESTER_ID, -1)]!! }
-    private var lessons: ImmutableSortedSet<Lesson> = semester.lessons
+    private val lessons: ImmutableSortedSet<Lesson> = semester.lessons
     //вернуть
     //private var homework: Homework? by lazy { semester.homeworks.get(intent.getLongExtra(HOMEWORK_ID, -1)) }
     //
@@ -45,6 +46,8 @@ class HomeworkEditorActivity : AppCompatActivity(),
     private var deadlineDay: LocalDate = LocalDate(0, 0, 0)
     private var deadlineTime: LocalTime = LocalTime(0, 0)
     private var flag: Boolean = false;
+    private var description = ""
+    private var array = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +58,6 @@ class HomeworkEditorActivity : AppCompatActivity(),
 
         content_homeworks_editor_description.text = homework?.description as Editable? ?: R.string.content_homework_editor_description as Editable?
 
-        val array = mutableListOf<String>()
 
         for (lesson in lessons) {
             if (!array.contains(lesson.name)) {
@@ -63,7 +65,7 @@ class HomeworkEditorActivity : AppCompatActivity(),
             }
         }
 
-        val adapter = ArrayAdapter<String>(this, -1, array)
+        var adapter = ArrayAdapter<String>(this, -1, array)
         content_homeworks_editor_subject.adapter = adapter
         content_homeworks_editor_subject.onItemSelectedListener = this
 
@@ -73,15 +75,19 @@ class HomeworkEditorActivity : AppCompatActivity(),
         when (v.id) {
             R.id.content_homework_editor_date -> {
                 var data = LocalDate.now()
-                showDatePicker(this, data, semester!!.lastDay)
 
+                if (flag) {
+                    showDatePicker(this, data, semester!!.lastDay, deadlineDay)
+                } else {
+                    showDatePicker(this, data, semester!!.lastDay)
+                }
             }
             R.id.content_homework_editor_save -> {
                 if (subjectName.isNullOrEmpty()) {
                     toast(R.string.content_homework_editor_activity_null_subject)
                     return
                 }
-                var description = if (content_homeworks_editor_description.text.trim().isNullOrEmpty()) {
+                description = if (content_homeworks_editor_description.text.trim().isNullOrEmpty()) {
                     toast(R.string.content_homework_editor_activity_null_description)
                     return
                 } else {
@@ -120,11 +126,39 @@ class HomeworkEditorActivity : AppCompatActivity(),
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
+
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         subjectName = (view as Spinner).getChildAt(position) as String
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
+
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+
+        outState.putString(HomeworkEditorActivity.HOMEWORK_ID, "homework_id")
+        outState.putString(HomeworkEditorActivity.SEMESTER_ID, "semester_id")
+        outState.putString(subjectName, "subject_name")
+        outState.putString(description, "description")
+        outState.putString(deadlineDay.toString(), "deadline_day")
+        outState.putString(deadlineTime.toString(), "deadline_time")
+        outState.putBoolean("flag", flag)
+        outState.putStringArray("array", array as Array<String>)
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        subjectName = savedInstanceState.getString("subject_name")
+        deadlineDay = LocalDate.parse(savedInstanceState.get("deadline_day") as String) as LocalDate
+        deadlineTime = LocalTime.parse(savedInstanceState.get("deadline_time") as String) as LocalTime
+        flag = savedInstanceState.getBoolean("flag")
+        description = savedInstanceState.getString("description")
+        array = savedInstanceState.getStringArray("array") as MutableList<String>
 
     }
 }
