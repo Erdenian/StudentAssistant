@@ -41,6 +41,7 @@
     <string name="content_lesson_editor_classrooms">Аудитории</string>
     <string name="content_lesson_editor_repeat_type">Когда повторять</string>
 
+    <string name="title_activity_homework">Домашнее задание</string>
 
     <string-array name="lesson_repeat_types">
         <item>По дням недели</item>
