@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/homeworks_background_card_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="10dp"
+    android:layout_marginRight="5dp"
+    android:layout_weight="1"
+    app:cardBackgroundColor="@color/lesson_info_homework_background"
+    app:cardCornerRadius="@dimen/card_view_lesson_information_radius">
+
+    <TextView
+        android:id="@+id/lesson_info_no_homework_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Заданий нет"
+        android:textAlignment="center"
+        android:textColor="@color/action_bar_icons_color"
+        android:textSize="36sp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/lesson_information_homework_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/card_lesson_information_homework"/>
+
+            <include layout="@layout/card_lesson_information_homework"/>
+
+            <include layout="@layout/card_lesson_information_homework"/>
+
+            <include layout="@layout/card_lesson_information_homework"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</android.support.design.widget.CoordinatorLayout>

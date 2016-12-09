@@ -21,8 +21,8 @@
                 android:id="@+id/card_lesson_information_deadline_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/divider_margin_top_bottom"
-                android:layout_marginTop="@dimen/divider_margin_top_bottom"
+                android:layout_marginBottom="@dimen/divider_margin"
+                android:layout_marginTop="@dimen/divider_margin"
                 android:layout_weight="1"
                 android:text="Срок сдачи: "
                 android:textSize="18sp"/>
@@ -31,14 +31,14 @@
                 android:id="@+id/card_lesson_information_deadline_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/divider_margin_top_bottom"
-                android:layout_marginTop="@dimen/divider_margin_top_bottom"
+                android:layout_marginBottom="@dimen/divider_margin"
+                android:layout_marginTop="@dimen/divider_margin"
                 android:layout_weight="1"
                 android:text="24.12.2016"
                 android:textSize="18sp"/>
         </LinearLayout>
 
-        <include layout="@layout/divider"/>
+        <include layout="@layout/divider_horizontal"/>
 
         <TextView
             android:id="@+id/card_lesson_information_homework_info"
