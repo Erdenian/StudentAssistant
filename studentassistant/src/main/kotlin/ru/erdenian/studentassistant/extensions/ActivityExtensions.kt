@@ -39,6 +39,7 @@ fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
 
     when (this) {
         is ScheduleActivity -> navigation_view.setCheckedItem(R.id.nav_schedule)
+        is HomeWorkActivity -> navigation_view.setCheckedItem(R.id.nav_homework)
         else -> Log.wtf(this.javaClass.name, "Неизвестное Activity: ${this.javaClass.name}")
     }
 }
