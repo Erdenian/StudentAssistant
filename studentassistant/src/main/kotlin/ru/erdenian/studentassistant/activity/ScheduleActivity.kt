@@ -154,11 +154,11 @@ class ScheduleActivity : AppCompatActivity(),
                                 ImmutableSortedSet.of("Федоров Алексей Роальдович", "Федоров Петр Алексеевич"),
                                 ImmutableSortedSet.of("4212а"),
                                 LocalTime(14, 20), LocalTime(15, 50),
-                                Lesson.RepeatType.BY_WEEKDAY, 5, ImmutableList.of(false, true), null, System.nanoTime()),
+                                Lesson.RepeatType.BY_WEEKDAY, 15, ImmutableList.of(false, true), null, System.nanoTime()),
                         Lesson("Конструирование ПО", "Лабораторная работа",
                                 ImmutableSortedSet.of("Федоров Алексей Роальдович"), ImmutableSortedSet.of("4212а"),
                                 LocalTime(18, 10), LocalTime(19, 40),
-                                Lesson.RepeatType.BY_WEEKDAY, 5, ImmutableList.of(false, true), null, System.nanoTime()))
+                                Lesson.RepeatType.BY_WEEKDAY, 15, ImmutableList.of(false, true), null, System.nanoTime()))
 
                 ScheduleManager.addSemester(Semester("Семестр 5", LocalDate(2016, 9, 1), LocalDate(2016, 12, 31),
                         lessons))
