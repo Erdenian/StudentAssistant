@@ -19,7 +19,7 @@
             android:textColor="@color/colorPrimaryText"
             android:textSize="@dimen/card_primary_text_size"/>
 
-        <include layout="@layout/divider"/>
+        <include layout="@layout/divider_horizontal"/>
 
         <TextView
             android:id="@+id/card_homework_description"
