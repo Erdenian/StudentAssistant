@@ -57,6 +57,7 @@
 
 
     <string name="content_alarm_editor_name">Название будильника</string>
+    <string name="content_alarm_editor_time">Выберите время</string>
 
     <string name="card_sound_profile_volume">Громкость</string>
     <string name="card_sound_profile_vibration">Вибрация</string>

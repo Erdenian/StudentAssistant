@@ -40,6 +40,12 @@
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/content_alarm_editor_button_time"
+            android:text="@string/content_alarm_editor_time"/>
+
         <RadioGroup
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
