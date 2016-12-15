@@ -43,7 +43,7 @@
 
 
     <string-array name="lesson_repeat_types">
-        <item name="dada">По дням недели</item>
+        <item>По дням недели</item>
         <item>По датам</item>
     </string-array>
 
