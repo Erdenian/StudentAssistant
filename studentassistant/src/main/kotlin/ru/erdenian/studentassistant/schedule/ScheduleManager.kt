@@ -16,6 +16,39 @@ import java.util.*
 
 object ScheduleManager {
 
+    /*
+    fun getSemester(id: Long): Semester? = Database.getSemester(id)
+
+    fun getLessons(semesterId: Long): ImmutableSortedSet<Lesson> = Database.getLessons(semesterId);
+
+    fun getLesson(semesterId: Long, lessonId: Long): Lesson? = Database.getLesson(semesterId, lessonId)
+
+    fun getSubject(semesterId: Long, subjectId: Long): String? =
+
+
+    object Database {
+
+        var isInitialized = false
+
+        lateinit var semesters: MutableMap<Long, Semester>
+
+        lateinit var lessons: MutableMap<Long, MutableMap<Long, Lesson>>
+
+
+        fun getSemester(id: Long): Semester? = semesters[id]
+
+        fun getLessons(semesterId: Long): ImmutableSortedSet<Lesson> {
+            val result = lessons[semesterId]
+            if (result != null) return ImmutableSortedSet.copyOf(result.values)
+            else return ImmutableSortedSet.of()
+        }
+
+        fun getLesson(semesterId: Long, lessonId: Long): Lesson? = lessons[semesterId]!!.get(lessonId)
+    }
+    */
+
+
+
     private var isInitialized = false
     var semesters: ImmutableSortedSet<Semester> = ImmutableSortedSet.of()
         get(): ImmutableSortedSet<Semester> {
@@ -157,21 +190,25 @@ object ScheduleManager {
     fun addLesson(semesterId: Long, lesson: Lesson) {
         //Todo: код, создающий патчи
 
+        /*
         val semester = get(semesterId) ?: throw IllegalArgumentException("Неверный id: $semesterId")
         val oldLesson = semester.getLesson(lesson.id)
         val newSemester: Semester = if (oldLesson == null) semester.copy(lessons = semester.lessons.addToNewSet(lesson))
         else semester.copy(lessons = semester.lessons.replaceToNewSet(oldLesson, lesson))
 
         semesters = semesters.replaceToNewSet(semester, newSemester)
+        */
     }
 
     fun removeLesson(semesterId: Long, lessonId: Long) {
         //Todo: код, создающий патчи
 
+        /*
         val semester = get(semesterId) ?: throw IllegalArgumentException("Неверный id семестра: $semesterId")
         val newLessons = ImmutableSortedSet.copyOf(semester.lessons.filter { it.id != lessonId })
         val newSemester = semester.copy(lessons = newLessons)
 
         semesters = semesters.replaceToNewSet(semester, newSemester)
+        */
     }
 }

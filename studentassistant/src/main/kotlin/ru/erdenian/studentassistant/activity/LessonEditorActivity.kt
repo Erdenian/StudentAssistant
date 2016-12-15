@@ -41,7 +41,7 @@ class LessonEditorActivity : AppCompatActivity(),
     }
 
     private val semester: Semester by lazy { ScheduleManager[intent.getLongExtra(SEMESTER_ID, -1)]!! }
-    private val lesson: Lesson? by lazy { semester.getLesson(intent.getLongExtra(LESSON_ID, -1)) }
+    private val lesson: Lesson? by lazy { /*semester.getLesson(intent.getLongExtra(LESSON_ID, -1))*/ null }
 
     private var startTime: LocalTime? = null
     private var endTime: LocalTime? = null
@@ -79,7 +79,7 @@ class LessonEditorActivity : AppCompatActivity(),
                 if (this == null) {
                     supportActionBar!!.title = getString(R.string.title_activity_lesson_editor_new_lesson)
                 } else {
-                    content_lesson_editor_subject_name_edit_text.setText(name)
+                    content_lesson_editor_subject_name_edit_text.setText(subjectName)
                     type?.let { content_lesson_editor_lesson_type_edit_text.setText(it) }
                     teachers?.let { content_lesson_editor_teachers_edit_text.setText(Joiner.on(", ").join(it)) }
                     classrooms?.let { content_lesson_editor_classrooms_edit_text.setText(Joiner.on(", ").join(classrooms)) }
@@ -89,6 +89,7 @@ class LessonEditorActivity : AppCompatActivity(),
                     this@LessonEditorActivity.endTime = endTime
                     content_lesson_editor_end_time.text = endTime.toString(TIME_FORMAT)
 
+                    /*
                     when (repeatType) {
                         Lesson.RepeatType.BY_WEEKDAY -> {
                             content_lesson_editor_weekdays.setPosition(weekday!! - 1, false)
@@ -96,7 +97,7 @@ class LessonEditorActivity : AppCompatActivity(),
                         }
                         Lesson.RepeatType.BY_DATE -> TODO()
                         else -> throw IllegalStateException("Неизвестный тип повторения: ${repeatType}")
-                    }
+                    }*/
                 }
             }
         } else {
@@ -237,12 +238,12 @@ class LessonEditorActivity : AppCompatActivity(),
                     return super.onOptionsItemSelected(item)
                 }
 
-                val newLesson = lesson?.copy(name, type, teachers, classrooms, startTime!!, endTime!!,
+                /*val newLesson = lesson?.copy(name, type, teachers, classrooms, startTime!!, endTime!!,
                         Lesson.RepeatType.BY_WEEKDAY, weekday, ImmutableList.copyOf(weeks.toList()), null) ?:
                         Lesson(name, type, teachers, classrooms, startTime!!, endTime!!,
                                 Lesson.RepeatType.BY_WEEKDAY, weekday, ImmutableList.copyOf(weeks.toList()), null)
 
-                ScheduleManager.addLesson(semester.id, newLesson)
+                ScheduleManager.addLesson(semester.id, newLesson)*/
                 finish()
             }
             R.id.menu_lesson_editor_delete_lesson -> {
