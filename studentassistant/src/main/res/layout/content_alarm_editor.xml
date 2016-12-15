@@ -1,93 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="8dp">
+    android:layout_margin="8dp"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="8dp">
+        android:layout_margin="8dp"
+        android:orientation="horizontal">
 
-        <EditText
-            android:layout_weight="1"
-            android:layout_width="0dp"
+        <Button
+            android:id="@+id/content_alarm_editor_button_time"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/content_alarm_editor_name"
-            android:textSize="@dimen/card_secondary_text_size"/>
+            android:text="@string/content_alarm_editor_time"/>
+
+        <include layout="@layout/empty_space_horizontal"/>
 
         <ToggleButton
+            android:id="@+id/content_alarm_editor_toggle_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"/>
 
     </LinearLayout>
 
+
     <RadioGroup
+        android:id="@+id/activity_alarm_editor_buttons_day_of_week"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="center_horizontal"
-        android:id="@+id/activity_alarm_editor_buttons_day_of_week">
+        android:orientation="horizontal">
 
         <ToggleButton
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:textOn="@string/monday"
+            android:layout_margin="@dimen/margin_in_alarm_button_group"
+            android:background="@drawable/oval_button"
             android:textOff="@string/monday"
-            android:layout_margin="4dp"
-            android:background="@drawable/oval_button"/>
+            android:textOn="@string/monday"/>
 
         <ToggleButton
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:textOn="@string/tuesday"
+            android:layout_margin="@dimen/margin_in_alarm_button_group"
+            android:background="@drawable/oval_button"
             android:textOff="@string/tuesday"
-            android:layout_margin="4dp"
-            android:background="@drawable/oval_button"/>
+            android:textOn="@string/tuesday"/>
 
         <ToggleButton
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:textOn="@string/wednesday"
+            android:layout_margin="@dimen/margin_in_alarm_button_group"
+            android:background="@drawable/oval_button"
             android:textOff="@string/wednesday"
-            android:layout_margin="4dp"
-            android:background="@drawable/oval_button"/>
+            android:textOn="@string/wednesday"/>
 
         <ToggleButton
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:textOn="@string/thursday"
+            android:layout_margin="@dimen/margin_in_alarm_button_group"
+            android:background="@drawable/oval_button"
             android:textOff="@string/thursday"
-            android:layout_margin="4dp"
-            android:background="@drawable/oval_button"/>
+            android:textOn="@string/thursday"/>
 
         <ToggleButton
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:textOn="@string/friday"
+            android:layout_margin="@dimen/margin_in_alarm_button_group"
+            android:background="@drawable/oval_button"
             android:textOff="@string/friday"
-            android:layout_margin="4dp"
-            android:background="@drawable/oval_button"/>
+            android:textOn="@string/friday"/>
 
         <ToggleButton
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:textOn="@string/saturday"
+            android:layout_margin="@dimen/margin_in_alarm_button_group"
+            android:background="@drawable/oval_button"
             android:textOff="@string/saturday"
-            android:layout_margin="4dp"
-            android:background="@drawable/oval_button"/>
+            android:textOn="@string/saturday"/>
 
         <ToggleButton
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:textOn="@string/sunday"
+            android:layout_margin="@dimen/margin_in_alarm_button_group"
+            android:background="@drawable/oval_button"
             android:textOff="@string/sunday"
-            android:layout_margin="4dp"
-            android:background="@drawable/oval_button"/>
+            android:textOn="@string/sunday"/>
     </RadioGroup>
 
 </LinearLayout>
