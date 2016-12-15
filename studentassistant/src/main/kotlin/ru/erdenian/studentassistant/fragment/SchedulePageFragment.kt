@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.common.base.Joiner
+import com.google.common.collect.ImmutableSortedSet
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
@@ -61,8 +62,9 @@ class SchedulePageFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) = super.onCreate(savedInstanceState)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val lessons = (if (showWeeksAndDates) semester?.getLessons(weekday) else semester?.getLessons(day)) ?:
-                return inflater.inflate(R.layout.fragment_free_day, container, false)
+        /*val lessons = (if (showWeeksAndDates) semester?.getLessons(weekday) else semester?.getLessons(day)) ?:
+                return inflater.inflate(R.layout.fragment_free_day, container, false)*/
+        val lessons = ImmutableSortedSet.of<Lesson>()
 
         if (lessons.isEmpty()) {
             return inflater.inflate(R.layout.fragment_free_day, container, false)
@@ -87,7 +89,7 @@ class SchedulePageFragment : Fragment() {
                     else visibility = View.GONE
                 }
 
-                (findViewById(R.id.card_schedule_name) as TextView).text = lesson.name
+                (findViewById(R.id.card_schedule_name) as TextView).text = lesson.subjectName
 
                 with(findViewById(R.id.card_schedule_teachers_parent) as LinearLayout) {
                     lesson.teachers?.let {
@@ -103,7 +105,7 @@ class SchedulePageFragment : Fragment() {
                     (findViewById(R.id.card_schedule_repeats) as LinearLayout).visibility = View.GONE
                 } else {
                     (findViewById(R.id.card_schedule_repeats_data) as TextView).text =
-                            when (lesson.repeatType) {
+                            /*when (lesson.repeatType) {
                                 Lesson.RepeatType.BY_WEEKDAY -> {
                                     val weeks = mutableListOf<Int>()
                                     for ((i, w) in lesson.weeks!!.withIndex())
@@ -113,7 +115,7 @@ class SchedulePageFragment : Fragment() {
                                 }
                                 Lesson.RepeatType.BY_DATE -> Joiner.on(", ").join(lesson.dates)
                                 else -> throw IllegalStateException("Неизвестный тип повторения: ${lesson.repeatType}")
-                            }
+                            }*/ "hui"
                 }
 
                 if (showWeeksAndDates) setOnClickListener {
@@ -123,7 +125,7 @@ class SchedulePageFragment : Fragment() {
                         startActivity(this)
                     }
                 }
-                else setOnClickListener { context.toast(lesson.name) }
+                else setOnClickListener { context.toast(lesson.subjectName) }
 
                 llCardsParent.addView(this)
             }

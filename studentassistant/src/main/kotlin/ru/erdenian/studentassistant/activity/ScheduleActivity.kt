@@ -10,8 +10,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment
-import com.google.common.collect.ImmutableList
-import com.google.common.collect.ImmutableSortedSet
 import kotlinx.android.synthetic.main.activity_schedule.*
 import kotlinx.android.synthetic.main.content_schedule.*
 import kotlinx.android.synthetic.main.toolbar_with_spinner.*
@@ -19,14 +17,12 @@ import kotlinx.android.synthetic.main.view_pager.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
-import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.adapter.SchedulePagerAdapter
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.initializeDrawerAndNavigationView
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.extensions.showDatePicker
-import ru.erdenian.studentassistant.schedule.Lesson
 import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener
 import ru.erdenian.studentassistant.schedule.ScheduleManager
 import ru.erdenian.studentassistant.schedule.Semester
@@ -148,21 +144,7 @@ class ScheduleActivity : AppCompatActivity(),
     override fun onClick(v: View) {
         when (v.id) {
             R.id.content_schedule_get_schedule_from_server -> toast(R.string.content_schedule_get_schedule_from_server_button)
-            R.id.content_schedule_add_schedule -> {
-                val lessons = ImmutableSortedSet.of(
-                        Lesson("Конструирование ПО", "Лабораторная работа",
-                                ImmutableSortedSet.of("Федоров Алексей Роальдович", "Федоров Петр Алексеевич"),
-                                ImmutableSortedSet.of("4212а"),
-                                LocalTime(14, 20), LocalTime(15, 50),
-                                Lesson.RepeatType.BY_WEEKDAY, 5, ImmutableList.of(false, true), null, System.nanoTime()),
-                        Lesson("Конструирование ПО", "Лабораторная работа",
-                                ImmutableSortedSet.of("Федоров Алексей Роальдович"), ImmutableSortedSet.of("4212а"),
-                                LocalTime(18, 10), LocalTime(19, 40),
-                                Lesson.RepeatType.BY_WEEKDAY, 5, ImmutableList.of(false, true), null, System.nanoTime()))
-
-                ScheduleManager.addSemester(Semester("Семестр 5", LocalDate(2016, 9, 1), LocalDate(2016, 12, 31),
-                        lessons))
-            }
+            R.id.content_schedule_add_schedule -> toast(R.string.content_schedule_add_schedule_button)
             else -> throw IllegalArgumentException("Неизвестный id: ${v.id}")
         }
     }
