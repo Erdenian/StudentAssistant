@@ -6,7 +6,7 @@ import org.joda.time.LocalTime
 
 data class Lesson(val subjectName: String, val type: String, val teachers: ImmutableSortedSet<String>,
                   val classrooms: ImmutableSortedSet<String>, val startTime: LocalTime, val endTime: LocalTime,
-                  val lessonRepeat: LessonRepeat, val id: Long = System.nanoTime()) : Comparable<Lesson> {
+                  val lessonRepeat: LessonRepeat, val id: Long = -1) : Comparable<Lesson> {
 
     init {
         if (subjectName.isBlank()) throw IllegalArgumentException("Отсутствует название предмета")
@@ -16,5 +16,6 @@ data class Lesson(val subjectName: String, val type: String, val teachers: Immut
     override fun compareTo(other: Lesson) = ComparisonChain.start()
             .compare(startTime, other.startTime)
             .compare(endTime, other.endTime)
+            .compare(id, other.id)
             .result()
 }
