@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant;
+package ru.erdenian.studentassistant.schedule;
 
 import com.google.common.collect.ImmutableSortedSet;
 
@@ -7,9 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-
-import ru.erdenian.studentassistant.schedule.Lesson;
-import ru.erdenian.studentassistant.schedule.LessonRepeat;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

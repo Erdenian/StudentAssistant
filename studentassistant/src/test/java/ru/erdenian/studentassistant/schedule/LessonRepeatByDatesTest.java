@@ -1,12 +1,10 @@
-package ru.erdenian.studentassistant;
+package ru.erdenian.studentassistant.schedule;
 
 import com.google.common.collect.ImmutableSortedSet;
 
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
-
-import ru.erdenian.studentassistant.schedule.LessonRepeat;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
