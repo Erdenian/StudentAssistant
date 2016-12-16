@@ -60,7 +60,7 @@ class LessonsEditorActivity : AppCompatActivity(),
     }
 
     override fun onScheduleUpdate() {
-        val semester = ScheduleManager[semesterId]
+        val semester = ScheduleManager.getSemester(semesterId)
         if (semester == null) {
             finish()
             return

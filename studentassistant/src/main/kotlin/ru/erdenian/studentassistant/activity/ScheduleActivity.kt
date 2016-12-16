@@ -35,10 +35,12 @@ class ScheduleActivity : AppCompatActivity(),
 
     companion object {
         private const val CURRENT_PAGE = "current_page"
+        private const val SELECTED_SEMESTER_ID = "selected_semester_id"
     }
 
     private var savedPage = -1
     private var selectedSemester: Semester? = null
+    private var selectedSemesterId: Long = -1
 
     private var pagerAdapter: SchedulePagerAdapter? = null
 
@@ -73,16 +75,34 @@ class ScheduleActivity : AppCompatActivity(),
 
         invalidateOptionsMenu()
 
-        if ((pagerAdapter != null) && (selectedSemester!!.id == ScheduleManager.selectedSemester?.id)) {
+        /*if ((pagerAdapter != null) && (selectedSemester!!.id == ScheduleManager.selectedSemester?.id)) {
             savedPage = view_pager.currentItem
         }
-        selectedSemester = ScheduleManager.selectedSemester
+        selectedSemester = ScheduleManager.selectedSemester*/
 
         if (ScheduleManager.semesters.size > 1) {
             val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters, ScheduleManager.semestersNames)
             adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters)
             toolbar_with_spinner_spinner.adapter = adapter
-            toolbar_with_spinner_spinner.setSelection(ScheduleManager.selectedSemesterIndex!!)
+
+
+            var selectedSemesterIndex: Int = 0
+            if (ScheduleManager.semesters.isNotEmpty()) {
+                selectedSemester = ScheduleManager.semesters.last()
+                selectedSemesterIndex = ScheduleManager.semesters.size - 1
+
+                val today = LocalDate.now()
+                for ((i, semester) in ScheduleManager.semesters.withIndex()) {
+                    if (!today.isBefore(semester.firstDay) && !today.isAfter(semester.lastDay)) {
+                        selectedSemester = semester
+                        selectedSemesterIndex = i
+                        break
+                    }
+                }
+            }
+
+
+            toolbar_with_spinner_spinner.setSelection(selectedSemesterIndex)
         } else if (ScheduleManager.semesters.size == 1) {
             supportActionBar!!.title = selectedSemester!!.name
             onItemSelected(null, null, 0, 0)
@@ -94,11 +114,13 @@ class ScheduleActivity : AppCompatActivity(),
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putInt(CURRENT_PAGE, view_pager.currentItem)
+        outState.putLong(SELECTED_SEMESTER_ID, selectedSemesterId)
         super.onSaveInstanceState(outState)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         savedPage = savedInstanceState.getInt(CURRENT_PAGE, -1)
+        selectedSemesterId = savedInstanceState.getLong(SELECTED_SEMESTER_ID, -1)
         super.onRestoreInstanceState(savedInstanceState)
     }
 
@@ -111,8 +133,7 @@ class ScheduleActivity : AppCompatActivity(),
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        ScheduleManager.selectedSemesterIndex = position
-        selectedSemester = ScheduleManager.selectedSemester
+        selectedSemester = ScheduleManager.semesters.asList()[position]
 
         pagerAdapter = SchedulePagerAdapter(supportFragmentManager, selectedSemester!!, false)
         view_pager.adapter = pagerAdapter
