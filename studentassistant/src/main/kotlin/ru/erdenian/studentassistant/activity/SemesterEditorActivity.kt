@@ -35,7 +35,7 @@ class SemesterEditorActivity : AppCompatActivity(),
         private const val LAST_DAY_TAG = "last_day_tag"
     }
 
-    private val semester: Semester? by lazy { ScheduleManager[intent.getLongExtra(SEMESTER_ID, -1)] }
+    private val semester: Semester? by lazy { ScheduleManager.getSemester(intent.getLongExtra(SEMESTER_ID, -1)) }
 
     private val semestersNames: List<String> by lazy { ScheduleManager.semestersNames.filter { it != semester?.name } }
 
@@ -119,8 +119,11 @@ class SemesterEditorActivity : AppCompatActivity(),
                     return super.onOptionsItemSelected(item)
                 }
 
-                ScheduleManager.addSemester(semester?.copy(name, firstDay!!, lastDay!!) ?:
-                        Semester(name, firstDay!!, lastDay!!))
+                if (semester == null)
+                    ScheduleManager.addSemester(Semester(name, firstDay!!, lastDay!!))
+                else
+                    ScheduleManager.updateSemester(semester!!.copy(name, firstDay!!, lastDay!!))
+
                 finish()
             }
             else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")

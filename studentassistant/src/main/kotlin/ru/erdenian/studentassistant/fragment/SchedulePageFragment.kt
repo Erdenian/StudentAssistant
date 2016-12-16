@@ -9,12 +9,10 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.common.base.Joiner
-import com.google.common.collect.ImmutableSortedSet
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.activity.LessonEditorActivity
-import ru.erdenian.studentassistant.schedule.Lesson
 import ru.erdenian.studentassistant.schedule.ScheduleManager
 import ru.erdenian.studentassistant.schedule.Semester
 
@@ -54,7 +52,7 @@ class SchedulePageFragment : Fragment() {
         }
     }
 
-    private val semester: Semester? by lazy { ScheduleManager[arguments.getLong(PAGE_SEMESTER_ID)] }
+    private val semester: Semester? by lazy { ScheduleManager.getSemester(arguments.getLong(PAGE_SEMESTER_ID)) }
     private val day: LocalDate by lazy { LocalDate(arguments.getString(PAGE_DATE)) }
     private val weekday: Int by lazy { arguments.getInt(PAGE_WEEKDAY, -1) }
     private val showWeeksAndDates: Boolean by lazy { arguments.getBoolean(SHOW_WEEKS_AND_DATES) }
@@ -62,9 +60,8 @@ class SchedulePageFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) = super.onCreate(savedInstanceState)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        /*val lessons = (if (showWeeksAndDates) semester?.getLessons(weekday) else semester?.getLessons(day)) ?:
-                return inflater.inflate(R.layout.fragment_free_day, container, false)*/
-        val lessons = ImmutableSortedSet.of<Lesson>()
+        val lessons = (if (showWeeksAndDates) ScheduleManager.getLessons(semester!!.id, weekday) else
+            ScheduleManager.getLessons(semester!!.id, day))
 
         if (lessons.isEmpty()) {
             return inflater.inflate(R.layout.fragment_free_day, container, false)
@@ -78,26 +75,24 @@ class SchedulePageFragment : Fragment() {
                 (findViewById(R.id.card_schedule_start_time) as TextView).text = lesson.startTime.toString(TIME_FORMAT)
                 (findViewById(R.id.card_schedule_end_time) as TextView).text = lesson.endTime.toString(TIME_FORMAT)
 
-                if (lesson.classrooms != null) {
+                if (lesson.classrooms.isNotEmpty()) {
                     (findViewById(R.id.card_schedule_classrooms) as TextView).text = Joiner.on(", ").join(lesson.classrooms)
                 } else {
                     findViewById(R.id.card_schedule_classrooms_icon).visibility = View.GONE
                 }
 
                 with(findViewById(R.id.card_schedule_type) as TextView) {
-                    if (lesson.type != null) text = lesson.type
+                    if (lesson.type.isNotBlank()) text = lesson.type
                     else visibility = View.GONE
                 }
 
                 (findViewById(R.id.card_schedule_name) as TextView).text = lesson.subjectName
 
                 with(findViewById(R.id.card_schedule_teachers_parent) as LinearLayout) {
-                    lesson.teachers?.let {
-                        for (teacherName in it) {
-                            val teacher = inflater.inflate(R.layout.textview_teacher, this, false)
-                            (teacher.findViewById(R.id.textview_teacher) as TextView).text = teacherName
-                            addView(teacher)
-                        }
+                    lesson.teachers.forEach {
+                        val teacher = inflater.inflate(R.layout.textview_teacher, this, false)
+                        (teacher.findViewById(R.id.textview_teacher) as TextView).text = it
+                        addView(teacher)
                     }
                 }
 
