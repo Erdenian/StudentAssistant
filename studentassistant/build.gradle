@@ -43,4 +43,5 @@ dependencies {
     compile 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.4.0'
     compile project(path: ':gsonguavadeserializers')
     compile 'com.code-troopers.betterpickers:library:3.0.1'
+    compile 'com.github.ceryle:SegmentedButton:v1.1.9'
 }
