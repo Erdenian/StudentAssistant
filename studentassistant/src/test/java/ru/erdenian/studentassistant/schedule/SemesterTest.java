@@ -25,7 +25,7 @@ public class SemesterTest {
         name = "5 семестр";
         firstDay = new LocalDate(2016, 9, 1);
         lastDay = new LocalDate(2016, 12, 10);
-        id = System.nanoTime();
+        id = 2;
         semester = new Semester(name, firstDay, lastDay, id);
     }
 
@@ -48,7 +48,7 @@ public class SemesterTest {
         String name = "5 семестр";
         LocalDate firstDay = new LocalDate(2016, 9, 1);
         LocalDate lastDay = new LocalDate(2016, 12, 10);
-        long id = System.nanoTime();
+        long id = 2;
         Semester semesterTest = new Semester(name, firstDay, lastDay, id);
         assertEquals("Сравнение с таким же объектом провалилось. Семестры не равны.", 0, semester.compareTo(semesterTest));
         //assertEquals("Семестры  не одинаковы.\nТест не пройден.",1,semester.compareTo(semesterTest));
@@ -61,7 +61,7 @@ public class SemesterTest {
         String tempName = "6 семестр";
         LocalDate tempFirstDay = new LocalDate(2016, 10, 1);
         LocalDate tempLastDay = new LocalDate(2016, 12, 10);
-        long tempId = System.nanoTime();
+        long tempId = 3;
         Semester semesterTest = new Semester(tempName, tempFirstDay, tempLastDay, tempId);
         assertEquals("Сравнение с отличным объектом провалилось. Семестры равны.", -1, semester.compareTo(semesterTest));
         //assertEquals("Семестры  одинаковы.\nТест не пройден.",0,semester.compareTo(semesterTest));
