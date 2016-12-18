@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.toast
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.extensions.asSingleLine
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.extensions.showTimePicker
@@ -172,18 +173,20 @@ class LessonEditorActivity : AppCompatActivity(),
         when (item.itemId) {
             android.R.id.home -> finish()
             R.id.menu_lesson_editor_save -> {
-                val name = if (content_lesson_editor_subject_name_edit_text.text.trim().isNotEmpty()) {
-                    content_lesson_editor_subject_name_edit_text.text.trim().toString()
+                val name = if (content_lesson_editor_subject_name_edit_text.text.trim().isNotBlank()) {
+                    content_lesson_editor_subject_name_edit_text.text.toString().asSingleLine.trim()
                 } else {
                     toast(R.string.activity_lesson_editor_incorrect_subject_name_message)
                     return super.onOptionsItemSelected(item)
                 }
 
-                val type = content_lesson_editor_lesson_type_edit_text.text.toString().trim()
+                val type = content_lesson_editor_lesson_type_edit_text.text.toString().asSingleLine.trim()
 
-                val teachers = content_lesson_editor_teachers_edit_text.text.split(",").map(String::trim).filter(String::isNotBlank)
+                val teachers = content_lesson_editor_teachers_edit_text.text.toString().
+                        asSingleLine.split(",").map(String::trim).filter(String::isNotBlank)
 
-                val classrooms = content_lesson_editor_classrooms_edit_text.text.split(",").map(String::trim).filter(String::isNotBlank)
+                val classrooms = content_lesson_editor_classrooms_edit_text.text.toString().
+                        asSingleLine.split(",").map(String::trim).filter(String::isNotBlank)
 
                 if (startTime == null) {
                     toast(R.string.activity_lesson_editor_incorrect_start_time_message)
