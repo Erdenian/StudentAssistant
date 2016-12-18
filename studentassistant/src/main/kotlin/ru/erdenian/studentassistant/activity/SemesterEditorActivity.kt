@@ -98,8 +98,13 @@ class SemesterEditorActivity : AppCompatActivity(),
         when (item.itemId) {
             android.R.id.home -> finish()
             R.id.menu_semester_editor_save -> {
+                if (content_semester_editor_semester_name.isErrorEnabled) {
+                    toast(content_semester_editor_semester_name.error.toString())
+                    return super.onOptionsItemSelected(item)
+                }
+
                 val name = if (content_semester_editor_semester_name_edit_text.text.trim().isNotEmpty()) {
-                    content_semester_editor_semester_name_edit_text.text.toString().asSingleLine.trim()
+                    content_semester_editor_semester_name_edit_text.text.toString().trim().asSingleLine
                 } else {
                     toast(R.string.activity_semester_editor_incorrect_name_message)
                     return super.onOptionsItemSelected(item)
@@ -142,7 +147,8 @@ class SemesterEditorActivity : AppCompatActivity(),
         with(content_semester_editor_semester_name) {
             isErrorEnabled = true
 
-            if (semestersNames.contains(s.toString())) error = getString(R.string.activity_semester_editor_error_name_not_avaliable)
+            if (semestersNames.contains(s.toString().trim().asSingleLine))
+                error = getString(R.string.activity_semester_editor_error_name_not_avaliable)
             else isErrorEnabled = false
         }
     }
