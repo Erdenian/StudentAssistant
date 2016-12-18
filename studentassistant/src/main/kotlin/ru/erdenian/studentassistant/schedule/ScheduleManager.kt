@@ -88,6 +88,13 @@ object ScheduleManager {
             else throw IllegalArgumentException("Семестра с id $value нет")
         }
 
+    val selectedSemesterIndex: Int?
+        get() {
+            val index = semesters.indexOfFirst { it.id == selectedSemesterId }
+            if (index >= 0) return index
+            else return null
+        }
+
     val selectedSemester: Semester?
         get() = getSemester(selectedSemesterId!!)
 
@@ -345,6 +352,7 @@ object ScheduleManager {
         }
 
         semestersCache.remove(id)
+        if (selectedSemesterId == id) selectedSemesterId = null
     }
 
     fun addLesson(semesterId: Long, lesson: Lesson): Long {
@@ -395,7 +403,8 @@ object ScheduleManager {
             }
         }
 
-        if (semesterId == selectedSemesterId) lessonsCache!!.put(lessonId, lesson)
+        if (semesterId == selectedSemesterId)
+            lessonsCache!!.put(lessonId, lesson.copy(id = lessonId))
 
         return lessonId
     }

@@ -41,9 +41,7 @@ class LessonEditorActivity : AppCompatActivity(),
     }
 
     private val semesterId: Long by lazy { intent.getLongExtra(SEMESTER_ID, -1) }
-    private val lesson: Lesson? by lazy {
-        ScheduleManager.getLesson(semesterId, intent.getLongExtra(LESSON_ID, -1))
-    }
+    private val lesson: Lesson? by lazy { ScheduleManager.getLesson(semesterId, intent.getLongExtra(LESSON_ID, -1)) }
 
     private var startTime: LocalTime? = null
     private var endTime: LocalTime? = null
@@ -73,7 +71,6 @@ class LessonEditorActivity : AppCompatActivity(),
                 content_lesson_editor_remove_week.isEnabled = true
             }
         }
-
 
         var weeks = listOf(true)
         if (savedInstanceState == null) {
