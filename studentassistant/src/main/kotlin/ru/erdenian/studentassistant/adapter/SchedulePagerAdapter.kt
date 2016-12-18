@@ -31,8 +31,8 @@ class SchedulePagerAdapter(fm: FragmentManager, private val semester: Semester, 
     }
 
     override fun getItem(position: Int): Fragment {
-        return if (showWeeksAndDates) SchedulePageFragment.newInstance(semester, position + 1)
-        else SchedulePageFragment.newInstance(semester, getDate(position))
+        return if (showWeeksAndDates) SchedulePageFragment.newInstance(semester.id, position + 1)
+        else SchedulePageFragment.newInstance(semester.id, getDate(position))
     }
 
     override fun getCount(): Int {
