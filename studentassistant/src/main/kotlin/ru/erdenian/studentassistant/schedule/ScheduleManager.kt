@@ -130,6 +130,14 @@ object ScheduleManager {
                 do {
                     val lessonId = it.getLong(idColumnIndex)
 
+                    val teachersTmp = it.getString(teachersColumnIndex)?.
+                            split(ScheduleDBHelper.ARRAY_ITEMS_SEPARATOR)?.filter(String::isNotBlank)
+                    val classroomsTmp = it.getString(classroomsColumnIndex)?.
+                            split(ScheduleDBHelper.ARRAY_ITEMS_SEPARATOR)?.filter(String::isNotBlank)
+
+                    val teachers = if (teachersTmp != null) ImmutableSortedSet.copyOf(teachersTmp) else ImmutableSortedSet.of()
+                    val classrooms = if (classroomsTmp != null) ImmutableSortedSet.copyOf(classroomsTmp) else ImmutableSortedSet.of()
+
                     val lessonRepeat = when (it.getInt(repeatTypeColumnIndex)) {
                         ScheduleDBHelper.TableLessons.COLUMN_LESSON_REPEAT_TYPE_BY_WEEKDAY -> {
                             db.query(ScheduleDBHelper.Tables.TABLE_BY_WEEKDAY_PREFIX + semesterId,
@@ -145,7 +153,8 @@ object ScheduleManager {
 
                                 it.moveToFirst()
 
-                                val weeks = it.getString(weeksColumnIndex).split(", ").map(String::toBoolean)
+                                val weeks = it.getString(weeksColumnIndex).
+                                        split(ScheduleDBHelper.ARRAY_ITEMS_SEPARATOR).map(String::toBoolean)
 
                                 LessonRepeat.ByWeekday(it.getInt(weekdayColumnIndex), weeks)
                             }
@@ -172,9 +181,8 @@ object ScheduleManager {
                         else -> throw IllegalStateException("Неизвестный тип повторений: ${it.getInt(repeatTypeColumnIndex)}")
                     }
 
-                    lessons.add(Lesson(it.getString(subjectNameColumnIndex), it.getString(typeColumnIndex),
-                            ImmutableSortedSet.copyOf(it.getString(teachersColumnIndex).split(", ")),
-                            ImmutableSortedSet.copyOf(it.getString(classroomsColumnIndex).split(", ")),
+                    lessons.add(Lesson(it.getString(subjectNameColumnIndex), it.getString(typeColumnIndex) ?: "",
+                            teachers, classrooms,
                             timeFormatter.parseLocalTime(it.getString(startTimeColumnIndex)),
                             timeFormatter.parseLocalTime(it.getString(endTimeColumnIndex)),
                             lessonRepeat, lessonId))
@@ -234,6 +242,13 @@ object ScheduleManager {
                 val endTimeColumnIndex = it.getColumnIndexOrThrow(ScheduleDBHelper.TableLessons.COLUMN_LESSON_END_TIME)
                 val repeatTypeColumnIndex = it.getColumnIndexOrThrow(ScheduleDBHelper.TableLessons.COLUMN_LESSON_REPEAT_TYPE)
 
+                val teachersTmp = it.getString(teachersColumnIndex)?.
+                        split(ScheduleDBHelper.ARRAY_ITEMS_SEPARATOR)?.filter(String::isNotBlank)
+                val classroomsTmp = it.getString(classroomsColumnIndex)?.
+                        split(ScheduleDBHelper.ARRAY_ITEMS_SEPARATOR)?.filter(String::isNotBlank)
+
+                val teachers = if (teachersTmp != null) ImmutableSortedSet.copyOf(teachersTmp) else ImmutableSortedSet.of()
+                val classrooms = if (classroomsTmp != null) ImmutableSortedSet.copyOf(classroomsTmp) else ImmutableSortedSet.of()
 
                 val lessonRepeat = when (it.getInt(repeatTypeColumnIndex)) {
                     ScheduleDBHelper.TableLessons.COLUMN_LESSON_REPEAT_TYPE_BY_WEEKDAY -> {
@@ -248,7 +263,7 @@ object ScheduleManager {
                             val weeksColumnIndex =
                                     it.getColumnIndexOrThrow(ScheduleDBHelper.TableByWeekday.COLUMN_BY_WEEKDAY_WEEKS)
 
-                            val weeks = it.getString(weeksColumnIndex).split(", ").map(String::toBoolean)
+                            val weeks = it.getString(weeksColumnIndex).split(ScheduleDBHelper.ARRAY_ITEMS_SEPARATOR).map(String::toBoolean)
 
                             LessonRepeat.ByWeekday(it.getInt(weekdayColumnIndex), weeks)
                         }
@@ -274,9 +289,8 @@ object ScheduleManager {
                     else -> throw IllegalStateException("Неизвестный тип повторений: ${it.getInt(repeatTypeColumnIndex)}")
                 }
 
-                lesson = Lesson(it.getString(subjectNameColumnIndex), it.getString(typeColumnIndex),
-                        ImmutableSortedSet.copyOf(it.getString(teachersColumnIndex).split(", ")),
-                        ImmutableSortedSet.copyOf(it.getString(classroomsColumnIndex).split(", ")),
+                lesson = Lesson(it.getString(subjectNameColumnIndex), it.getString(typeColumnIndex) ?: "",
+                        teachers, classrooms,
                         timeFormatter.parseLocalTime(it.getString(startTimeColumnIndex)),
                         timeFormatter.parseLocalTime(it.getString(endTimeColumnIndex)),
                         lessonRepeat, lessonId)
@@ -360,12 +374,14 @@ object ScheduleManager {
 
         val cv = ContentValues()
         val timeFormatter = DateTimeFormat.forPattern(ScheduleDBHelper.TIME_PATTERN)
-        val joiner = Joiner.on(", ")
+        val joiner = Joiner.on(ScheduleDBHelper.ARRAY_ITEMS_SEPARATOR)
 
         cv.put(ScheduleDBHelper.TableLessons.COLUMN_LESSON_SUBJECT_NAME, lesson.subjectName)
-        cv.put(ScheduleDBHelper.TableLessons.COLUMN_LESSON_TYPE, lesson.type)
-        cv.put(ScheduleDBHelper.TableLessons.COLUMN_LESSON_TEACHERS, joiner.join(lesson.teachers))
-        cv.put(ScheduleDBHelper.TableLessons.COLUMN_LESSON_CLASSROOMS, joiner.join(lesson.classrooms))
+        cv.put(ScheduleDBHelper.TableLessons.COLUMN_LESSON_TYPE, if (lesson.type.isNotBlank()) lesson.type else null)
+        cv.put(ScheduleDBHelper.TableLessons.COLUMN_LESSON_TEACHERS,
+                if (lesson.teachers.isNotEmpty()) joiner.join(lesson.teachers) else null)
+        cv.put(ScheduleDBHelper.TableLessons.COLUMN_LESSON_CLASSROOMS,
+                if (lesson.classrooms.isNotEmpty()) joiner.join(lesson.classrooms) else null)
         cv.put(ScheduleDBHelper.TableLessons.COLUMN_LESSON_START_TIME, timeFormatter.print(lesson.startTime))
         cv.put(ScheduleDBHelper.TableLessons.COLUMN_LESSON_END_TIME, timeFormatter.print(lesson.endTime))
 
@@ -414,12 +430,14 @@ object ScheduleManager {
 
         val cv = ContentValues()
         val timeFormatter = DateTimeFormat.forPattern(ScheduleDBHelper.TIME_PATTERN)
-        val joiner = Joiner.on(", ")
+        val joiner = Joiner.on(ScheduleDBHelper.ARRAY_ITEMS_SEPARATOR)
 
         cv.put(ScheduleDBHelper.TableLessons.COLUMN_LESSON_SUBJECT_NAME, lesson.subjectName)
-        cv.put(ScheduleDBHelper.TableLessons.COLUMN_LESSON_TYPE, lesson.type)
-        cv.put(ScheduleDBHelper.TableLessons.COLUMN_LESSON_TEACHERS, joiner.join(lesson.teachers))
-        cv.put(ScheduleDBHelper.TableLessons.COLUMN_LESSON_CLASSROOMS, joiner.join(lesson.classrooms))
+        cv.put(ScheduleDBHelper.TableLessons.COLUMN_LESSON_TYPE, if (lesson.type.isNotBlank()) lesson.type else null)
+        cv.put(ScheduleDBHelper.TableLessons.COLUMN_LESSON_TEACHERS,
+                if (lesson.teachers.isNotEmpty()) joiner.join(lesson.teachers) else null)
+        cv.put(ScheduleDBHelper.TableLessons.COLUMN_LESSON_CLASSROOMS,
+                if (lesson.classrooms.isNotEmpty()) joiner.join(lesson.classrooms) else null)
         cv.put(ScheduleDBHelper.TableLessons.COLUMN_LESSON_START_TIME, timeFormatter.print(lesson.startTime))
         cv.put(ScheduleDBHelper.TableLessons.COLUMN_LESSON_END_TIME, timeFormatter.print(lesson.endTime))
 
@@ -430,14 +448,14 @@ object ScheduleManager {
         })
 
         scheduleDBHelper.writableDatabase.use {
-            val lessonId = it.update(ScheduleDBHelper.Tables.TABLE_LESSONS_PREFIX + semesterId, cv,
+            it.update(ScheduleDBHelper.Tables.TABLE_LESSONS_PREFIX + semesterId, cv,
                     "${ScheduleDBHelper.TableLessons.COLUMN_LESSON_ID} = ${lesson.id}", null)
 
             cv.clear()
 
             when (lesson.lessonRepeat) {
                 is LessonRepeat.ByWeekday -> {
-                    cv.put(ScheduleDBHelper.TableByWeekday.COLUMN_BY_WEEKDAY_LESSON_ID, lessonId)
+                    cv.put(ScheduleDBHelper.TableByWeekday.COLUMN_BY_WEEKDAY_LESSON_ID, lesson.id)
                     cv.put(ScheduleDBHelper.TableByWeekday.COLUMN_BY_WEEKDAY_WEEKDAY, lesson.lessonRepeat.weekday)
                     cv.put(ScheduleDBHelper.TableByWeekday.COLUMN_BY_WEEKDAY_WEEKS, joiner.join(lesson.lessonRepeat.weeks))
 
@@ -447,7 +465,7 @@ object ScheduleManager {
                 is LessonRepeat.ByDates -> {
                     val dateFormatter = DateTimeFormat.forPattern(ScheduleDBHelper.DATE_PATTERN)
                     for (date in lesson.lessonRepeat.dates) {
-                        cv.put(ScheduleDBHelper.TableByDates.COLUMN_BY_DATES_LESSON_ID, lessonId)
+                        cv.put(ScheduleDBHelper.TableByDates.COLUMN_BY_DATES_LESSON_ID, lesson.id)
                         cv.put(ScheduleDBHelper.TableByDates.COLUMN_BY_DATES_DATE, dateFormatter.print(date))
 
                         it.update(ScheduleDBHelper.Tables.TABLE_BY_DATES_PREFIX + semesterId, cv,
@@ -486,6 +504,7 @@ object ScheduleManager {
 
             const val DATE_PATTERN = "yyyy.MM.dd"
             const val TIME_PATTERN = "HH:mm"
+            const val ARRAY_ITEMS_SEPARATOR = ", "
         }
 
         object Tables {

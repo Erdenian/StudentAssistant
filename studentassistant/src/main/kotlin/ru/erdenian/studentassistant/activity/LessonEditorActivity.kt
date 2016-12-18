@@ -181,9 +181,9 @@ class LessonEditorActivity : AppCompatActivity(),
 
                 val type = content_lesson_editor_lesson_type_edit_text.text.toString().trim()
 
-                val teachers = content_lesson_editor_teachers_edit_text.text.split(",").map(String::trim)
+                val teachers = content_lesson_editor_teachers_edit_text.text.split(",").map(String::trim).filter(String::isNotBlank)
 
-                val classrooms = content_lesson_editor_classrooms_edit_text.text.split(",").map(String::trim)
+                val classrooms = content_lesson_editor_classrooms_edit_text.text.split(",").map(String::trim).filter(String::isNotBlank)
 
                 if (startTime == null) {
                     toast(R.string.activity_lesson_editor_incorrect_start_time_message)
