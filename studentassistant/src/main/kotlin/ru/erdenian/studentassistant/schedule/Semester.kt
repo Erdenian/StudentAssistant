@@ -14,6 +14,8 @@ data class Semester(val name: String, val firstDay: LocalDate, val lastDay: Loca
         if (!firstDay.isBefore(lastDay)) throw IllegalArgumentException("Неверно заданы даты: $firstDay - $lastDay")
     }
 
+    fun getWeekNumber(day: LocalDate) = Days.daysBetween(firstDay.minusDays(firstDay.dayOfWeek - 1), day).days / 7
+
     override fun compareTo(other: Semester) = ComparisonChain.start()
             .compare(lastDay, other.lastDay)
             .compare(firstDay, other.firstDay)
