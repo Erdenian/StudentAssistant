@@ -331,8 +331,6 @@ object ScheduleManager {
     fun updateSemester(semester: Semester) {
         //Todo: код, создающий патчи
 
-        val oldSemesterId = getSemester(semester.id)!!.id
-
         val cv = ContentValues()
         val dateFormatter = DateTimeFormat.forPattern(ScheduleDBHelper.DATE_PATTERN)
 
@@ -343,11 +341,6 @@ object ScheduleManager {
         scheduleDBHelper.writableDatabase.use {
             it.update(ScheduleDBHelper.Tables.TABLE_SEMESTERS, cv,
                     "${ScheduleDBHelper.TableSemesters.COLUMN_SEMESTER_ID} = ${semester.id}", null)
-
-            it.execSQL(ScheduleDBHelper.Queries.renameTableLessons(oldSemesterId, semester.id))
-            it.execSQL(ScheduleDBHelper.Queries.renameTableByWeekday(oldSemesterId, semester.id))
-            it.execSQL(ScheduleDBHelper.Queries.renameTableByDates(oldSemesterId, semester.id))
-            it.execSQL(ScheduleDBHelper.Queries.renameTableHomeworks(oldSemesterId, semester.id))
         }
 
         semestersCache.put(semester.id, semester)
@@ -601,19 +594,19 @@ object ScheduleManager {
                 """.trimMargin()
 
             fun renameTableLessons(oldSemesterId: Long, newSemesterId: Long) =
-                    "ALTER TABLE ${Tables.TABLE_LESSONS_PREFIX + oldSemesterId}" +
+                    "ALTER TABLE ${Tables.TABLE_LESSONS_PREFIX + oldSemesterId} " +
                             "RENAME TO ${Tables.TABLE_LESSONS_PREFIX + newSemesterId};"
 
             fun renameTableByWeekday(oldSemesterId: Long, newSemesterId: Long) =
-                    "ALTER TABLE ${Tables.TABLE_BY_WEEKDAY_PREFIX + oldSemesterId}" +
+                    "ALTER TABLE ${Tables.TABLE_BY_WEEKDAY_PREFIX + oldSemesterId} " +
                             "RENAME TO ${Tables.TABLE_BY_WEEKDAY_PREFIX + newSemesterId};"
 
             fun renameTableByDates(oldSemesterId: Long, newSemesterId: Long) =
-                    "ALTER TABLE ${Tables.TABLE_BY_DATES_PREFIX + oldSemesterId}" +
+                    "ALTER TABLE ${Tables.TABLE_BY_DATES_PREFIX + oldSemesterId} " +
                             "RENAME TO ${Tables.TABLE_BY_DATES_PREFIX + newSemesterId};"
 
             fun renameTableHomeworks(oldSemesterId: Long, newSemesterId: Long) =
-                    "ALTER TABLE ${Tables.TABLE_HOMEWORKS_PREFIX + oldSemesterId}" +
+                    "ALTER TABLE ${Tables.TABLE_HOMEWORKS_PREFIX + oldSemesterId} " +
                             "RENAME TO ${Tables.TABLE_HOMEWORKS_PREFIX + newSemesterId};"
 
             fun deleteTableLessons(semesterId: Long) = "DROP TABLE IF EXISTS ${Tables.TABLE_LESSONS_PREFIX + semesterId};"
