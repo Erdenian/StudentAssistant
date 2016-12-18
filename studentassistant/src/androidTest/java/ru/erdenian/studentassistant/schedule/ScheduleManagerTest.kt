@@ -125,8 +125,8 @@ class ScheduleManagerTest {
                 ImmutableSortedSet.of("classroom3", "classroom4"), LocalTime(10, 40), LocalTime(12, 10),
                 LessonRepeat.ByDates(ImmutableSortedSet.of(LocalDate(2016, 9, 1), LocalDate(2016, 12, 31))))
 
-        ScheduleManager.addLesson(semesterId, lesson1)
-        ScheduleManager.addLesson(semesterId, lesson2)
+        val lessonId1 = ScheduleManager.addLesson(semesterId, lesson1)
+        val lessonId2 = ScheduleManager.addLesson(semesterId, lesson2)
 
         val lessons = ScheduleManager.getLessons(semesterId)
 
@@ -134,7 +134,7 @@ class ScheduleManagerTest {
                 (lessons.asList()[1].lessonRepeat as LessonRepeat.ByDates).dates)
 
         assertEquals((lesson2.lessonRepeat as LessonRepeat.ByDates).dates,
-                (ScheduleManager.getLesson(semesterId, lessons.asList()[1].id)!!.lessonRepeat as LessonRepeat.ByDates).dates)
+                (ScheduleManager.getLesson(semesterId, lessonId2)!!.lessonRepeat as LessonRepeat.ByDates).dates)
         //assertEquals(lesson1, lessons.asList().get(0).copy(id = lesson1.id))
         //assertEquals(lesson2, lessons.asList().get(1).copy(id = lesson2.id))
 

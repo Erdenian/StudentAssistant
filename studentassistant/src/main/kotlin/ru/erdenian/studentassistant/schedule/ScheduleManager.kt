@@ -6,9 +6,9 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.google.common.base.Joiner
 import com.google.common.collect.ImmutableSortedSet
-import org.joda.time.Days
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
+import java.util.*
 
 
 object ScheduleManager {
@@ -19,85 +19,87 @@ object ScheduleManager {
         scheduleDBHelper = ScheduleDBHelper(context)
     }
 
-    private var onScheduleUpdateListener: OnScheduleUpdateListener? = null
-    fun setOnScheduleUpdateListener(value: OnScheduleUpdateListener?) {
-        onScheduleUpdateListener = value
-    }
+    private val semestersCache: MutableMap<Long, Semester> by lazy {
+        val semesters = TreeMap<Long, Semester>()
 
-    /*var selectedSemesterId1: Long? = null
-        get() {
-            if (field == null) {
-                if (semesters.isNotEmpty()) {
-                    field = semesters.last().id
-
-                    val today = LocalDate.now()
-                    for ((name, firstDay, lastDay, id) in semesters) {
-                        if (!today.isBefore(firstDay) && !today.isAfter(lastDay)) {
-                            field = id
-                            break
-                        }
-                    }
-                }
-            }
-            return field
-        }
-        set(value) {
-            for ((name, firstDay, lastDay, id) in semesters)
-                if (value == id) {
-                    field = value
-                    return
-                }
-            throw IllegalArgumentException("Семестра с id $value нет")
-        }*/
-
-    //val selectedSemester1: Semester? = getSemester(selectedSemesterId1!!)
-
-    val semesters: ImmutableSortedSet<Semester>
-        get() {
-            val semesters = sortedSetOf<Semester>()
-
-            scheduleDBHelper.readableDatabase.query(ScheduleDBHelper.Tables.TABLE_SEMESTERS, null,
-                    null, null, null, null, ScheduleDBHelper.TableSemesters.COLUMN_SEMESTER_FIRST_DAY).use {
-
-                if (it.moveToFirst()) {
-                    val idColumnIndex = it.getColumnIndexOrThrow(ScheduleDBHelper.TableSemesters.COLUMN_SEMESTER_ID)
-                    val nameColumnIndex = it.getColumnIndexOrThrow(ScheduleDBHelper.TableSemesters.COLUMN_SEMESTER_NAME)
-                    val firstDayColumnIndex = it.getColumnIndexOrThrow(ScheduleDBHelper.TableSemesters.COLUMN_SEMESTER_FIRST_DAY)
-                    val lastDayColumnIndex = it.getColumnIndexOrThrow(ScheduleDBHelper.TableSemesters.COLUMN_SEMESTER_LAST_DAY)
-
-                    val dateFormatter = DateTimeFormat.forPattern(ScheduleDBHelper.DATE_PATTERN)
-
-                    do {
-                        semesters.add(Semester(it.getString(nameColumnIndex), dateFormatter.parseLocalDate(it.getString(firstDayColumnIndex)),
-                                dateFormatter.parseLocalDate(it.getString(lastDayColumnIndex)), it.getLong(idColumnIndex)))
-                    } while (it.moveToNext())
-                }
-            }
-
-            return ImmutableSortedSet.copyOf(semesters)
-        }
-
-    fun getSemester(id: Long): Semester? {
         scheduleDBHelper.readableDatabase.query(ScheduleDBHelper.Tables.TABLE_SEMESTERS, null,
-                "${ScheduleDBHelper.TableSemesters.COLUMN_SEMESTER_ID} = $id", null, null, null, null).use {
+                null, null, null, null, ScheduleDBHelper.TableSemesters.COLUMN_SEMESTER_FIRST_DAY).use {
 
             if (it.moveToFirst()) {
+                val idColumnIndex = it.getColumnIndexOrThrow(ScheduleDBHelper.TableSemesters.COLUMN_SEMESTER_ID)
                 val nameColumnIndex = it.getColumnIndexOrThrow(ScheduleDBHelper.TableSemesters.COLUMN_SEMESTER_NAME)
                 val firstDayColumnIndex = it.getColumnIndexOrThrow(ScheduleDBHelper.TableSemesters.COLUMN_SEMESTER_FIRST_DAY)
                 val lastDayColumnIndex = it.getColumnIndexOrThrow(ScheduleDBHelper.TableSemesters.COLUMN_SEMESTER_LAST_DAY)
 
                 val dateFormatter = DateTimeFormat.forPattern(ScheduleDBHelper.DATE_PATTERN)
 
-                return Semester(it.getString(nameColumnIndex), dateFormatter.parseLocalDate(it.getString(firstDayColumnIndex)),
-                        dateFormatter.parseLocalDate(it.getString(lastDayColumnIndex)), id)
-            } else return null
+                do {
+                    val id = it.getLong(idColumnIndex)
+                    semesters.put(id, Semester(it.getString(nameColumnIndex),
+                            dateFormatter.parseLocalDate(it.getString(firstDayColumnIndex)),
+                            dateFormatter.parseLocalDate(it.getString(lastDayColumnIndex)), id))
+                } while (it.moveToNext())
+            }
         }
+        semesters
     }
+
+    private var lessonsCache: MutableMap<Long, Lesson>? = null
+        get() {
+            if (field == null) {
+                val selectedSemesterId = selectedSemesterId
+                if (semestersCache.isNotEmpty() && (selectedSemesterId != null)) {
+                    field = LinkedHashMap(readLessonsFromDb(selectedSemesterId).associateBy({ it.id }, { it }))
+                }
+            }
+            return field
+        }
+
+    private var onScheduleUpdateListener: OnScheduleUpdateListener? = null
+    fun setOnScheduleUpdateListener(value: OnScheduleUpdateListener?) {
+        onScheduleUpdateListener = value
+    }
+
+    var selectedSemesterId: Long? = null
+        get() {
+            if ((field == null) && (semesters.isNotEmpty())) {
+                field = semesters.last().id
+
+                val today = LocalDate.now()
+                for ((name, firstDay, lastDay, id) in semesters) {
+                    if (!today.isBefore(firstDay) && !today.isAfter(lastDay)) {
+                        field = id
+                        break
+                    }
+                }
+            }
+            return field
+        }
+        set(value) {
+            if (value != null) {
+                for ((name, firstDay, lastDay, id) in semesters)
+                    if (value == id) {
+                        field = value
+                    }
+            } else {
+                field = value
+            }
+            if (field == value) lessonsCache = null
+            else throw IllegalArgumentException("Семестра с id $value нет")
+        }
+
+    val selectedSemester: Semester?
+        get() = getSemester(selectedSemesterId!!)
+
+    val semesters: ImmutableSortedSet<Semester>
+        get() = ImmutableSortedSet.copyOf(semestersCache.values)
+
+    fun getSemester(id: Long): Semester? = semestersCache[id]
 
     val semestersNames: List<String>
         get() = semesters.map { it.name }
 
-    fun getLessons(semesterId: Long): ImmutableSortedSet<Lesson> {
+    private fun readLessonsFromDb(semesterId: Long): ImmutableSortedSet<Lesson> {
         val lessons = sortedSetOf<Lesson>()
 
         val dateFormatter = DateTimeFormat.forPattern(ScheduleDBHelper.DATE_PATTERN)
@@ -136,7 +138,7 @@ object ScheduleManager {
 
                                 it.moveToFirst()
 
-                                val weeks = it.getString(weeksColumnIndex).split(", ").map { it.toBoolean() }
+                                val weeks = it.getString(weeksColumnIndex).split(", ").map(String::toBoolean)
 
                                 LessonRepeat.ByWeekday(it.getInt(weekdayColumnIndex), weeks)
                             }
@@ -179,20 +181,33 @@ object ScheduleManager {
         return ImmutableSortedSet.copyOf(lessons)
     }
 
-    fun getLessons(semesterId: Long, day: LocalDate): ImmutableSortedSet<Lesson> {
-        val semester = getSemester(semesterId)
-        val weekNumber = Days.daysBetween(semester!!.firstDay.minusDays(semester.firstDay.dayOfWeek - 1), day).days / 7
+    fun getLessons(semesterId: Long): ImmutableSortedSet<Lesson> {
+        val lessonsCache = lessonsCache
 
-        return ImmutableSortedSet.copyOf(getLessons(semesterId).filter { it.lessonRepeat.repeatsOnDay(day, weekNumber) })
+        if ((semesterId == selectedSemesterId) && (lessonsCache != null)) {
+            return ImmutableSortedSet.copyOf(lessonsCache.map { it.value })
+        } else {
+            return readLessonsFromDb(semesterId)
+        }
     }
 
-    fun getLessons(semesterId: Long, weekday: Int): ImmutableSortedSet<Lesson> {
-        return ImmutableSortedSet.copyOf(getLessons(semesterId).filter {
-            (it.lessonRepeat is LessonRepeat.ByWeekday) && it.lessonRepeat.repeatsOnWeekday(weekday)
-        })
-    }
+    fun getLessons(semesterId: Long, day: LocalDate): ImmutableSortedSet<Lesson> =
+            ImmutableSortedSet.copyOf(getLessons(semesterId).filter {
+                it.lessonRepeat.repeatsOnDay(day, getSemester(semesterId)!!.getWeekNumber(day))
+            })
+
+    fun getLessons(semesterId: Long, weekday: Int): ImmutableSortedSet<Lesson> =
+            ImmutableSortedSet.copyOf(getLessons(semesterId).filter {
+                (it.lessonRepeat is LessonRepeat.ByWeekday) && it.lessonRepeat.repeatsOnWeekday(weekday)
+            })
 
     fun getLesson(semesterId: Long, lessonId: Long): Lesson? {
+        val lessonsCache = lessonsCache
+
+        if ((semesterId == selectedSemesterId) && (lessonsCache != null)) {
+            return lessonsCache[lessonId]
+        }
+
         var lesson: Lesson? = null
 
         val dateFormatter = DateTimeFormat.forPattern(ScheduleDBHelper.DATE_PATTERN)
@@ -226,7 +241,7 @@ object ScheduleManager {
                             val weeksColumnIndex =
                                     it.getColumnIndexOrThrow(ScheduleDBHelper.TableByWeekday.COLUMN_BY_WEEKDAY_WEEKS)
 
-                            val weeks = it.getString(weeksColumnIndex).split(", ").map { it.toBoolean() }
+                            val weeks = it.getString(weeksColumnIndex).split(", ").map(String::toBoolean)
 
                             LessonRepeat.ByWeekday(it.getInt(weekdayColumnIndex), weeks)
                         }
@@ -287,6 +302,8 @@ object ScheduleManager {
             it.execSQL(ScheduleDBHelper.Queries.createTableHomeworks(semesterId))
         }
 
+        semestersCache.put(semesterId, semester.copy(id = semesterId))
+
         return semesterId
     }
 
@@ -311,6 +328,8 @@ object ScheduleManager {
             it.execSQL(ScheduleDBHelper.Queries.renameTableByDates(oldSemesterId, semester.id))
             it.execSQL(ScheduleDBHelper.Queries.renameTableHomeworks(oldSemesterId, semester.id))
         }
+
+        semestersCache.put(semester.id, semester)
     }
 
     fun removeSemester(id: Long) {
@@ -324,6 +343,8 @@ object ScheduleManager {
             it.execSQL(ScheduleDBHelper.Queries.deleteTableByDates(id))
             it.execSQL(ScheduleDBHelper.Queries.deleteTableHomeworks(id))
         }
+
+        semestersCache.remove(id)
     }
 
     fun addLesson(semesterId: Long, lesson: Lesson): Long {
@@ -373,6 +394,8 @@ object ScheduleManager {
                 else -> throw IllegalArgumentException("Неизвестный тип повторений: ${lesson.lessonRepeat}")
             }
         }
+
+        if (semesterId == selectedSemesterId) lessonsCache!!.put(lessonId, lesson)
 
         return lessonId
     }
@@ -425,6 +448,8 @@ object ScheduleManager {
                 else -> throw IllegalArgumentException("Неизвестный тип повторений: ${lesson.lessonRepeat}")
             }
         }
+
+        if (semesterId == selectedSemesterId) lessonsCache!!.put(lesson.id, lesson)
     }
 
     fun removeLesson(semesterId: Long, lessonId: Long) {
@@ -440,6 +465,8 @@ object ScheduleManager {
             it.delete(ScheduleDBHelper.Tables.TABLE_BY_DATES_PREFIX + semesterId,
                     "${ScheduleDBHelper.TableByDates.COLUMN_BY_DATES_LESSON_ID} = $lessonId", null)
         }
+
+        if (semesterId == selectedSemesterId) lessonsCache!!.remove(lessonId)
     }
 
     class ScheduleDBHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
