@@ -114,6 +114,7 @@ class ScheduleActivity : AppCompatActivity(),
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         selectedSemesterId = ScheduleManager.semesters.asList()[position].id
+        ScheduleManager.selectedSemesterId = selectedSemesterId
 
         pagerAdapter = SchedulePagerAdapter(supportFragmentManager, ScheduleManager.selectedSemester!!, false)
         view_pager.adapter = pagerAdapter
