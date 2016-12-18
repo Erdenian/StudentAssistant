@@ -89,6 +89,7 @@ class ScheduleActivity : AppCompatActivity(),
         } else {
             supportActionBar!!.setTitle(R.string.title_activity_schedule)
             pagerAdapter = null
+            view_pager.adapter = pagerAdapter
         }
     }
 
