@@ -9,10 +9,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.common.base.Joiner
 import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.activity.LessonEditorActivity
+import ru.erdenian.studentassistant.activity.LessonInformationActivity
 import ru.erdenian.studentassistant.schedule.LessonRepeat
 import ru.erdenian.studentassistant.schedule.ScheduleManager
 
@@ -112,7 +112,7 @@ class SchedulePageFragment : Fragment() {
                                             getString(R.string.schedule_page_fragment_out_of) + " " + lessonRepeat.weeks.size
                                 }
                                 is LessonRepeat.ByDates -> Joiner.on(", ").join(lessonRepeat.dates)
-                                else -> throw IllegalStateException("Неизвестный тип повторения: ${lessonRepeat}")
+                                else -> throw IllegalStateException("Неизвестный тип повторения: $lessonRepeat")
                             }
                 }
 
@@ -122,7 +122,11 @@ class SchedulePageFragment : Fragment() {
                             LessonEditorActivity.LESSON_ID to id
                     )
                 }
-                else setOnClickListener { context.toast(subjectName) }
+                else setOnClickListener {
+                    context.startActivity<LessonInformationActivity>(
+                            LessonInformationActivity.SEMESTER_ID to semesterId,
+                            LessonInformationActivity.LESSON_ID to id)
+                }
 
                 llCardsParent.addView(this)
             }
