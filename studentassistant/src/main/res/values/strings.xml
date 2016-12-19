@@ -76,6 +76,13 @@
     </string-array>
 
 
+    <string name="title_activity_lesson_information">Информация о паре</string>
+
+    <string name="activity_lesson_information_no_homeworks">Нет заданий</string>
+
+    <string name="menu_lesson_information_edit">Редактировать</string>
+
+
     <string name="content_homework_editor_choose_subject">Выберите предмет</string>
     <string name="content_homework_editor_description">Описание</string>
 
