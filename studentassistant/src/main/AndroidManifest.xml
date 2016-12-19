@@ -8,15 +8,39 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".activity.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".activity.ScheduleActivity"
+            android:label="@string/title_activity_schedule"/>
+
+        <activity
+            android:name=".activity.LessonsEditorActivity"
+            android:label="@string/title_activity_lessons_editor"/>
+
+        <activity
+            android:name=".activity.SemesterEditorActivity"
+            android:label="@string/title_activity_semester_editor"
+            android:windowSoftInputMode="stateVisible"/>
+
+        <activity
+            android:name=".activity.LessonEditorActivity"
+            android:label="@string/title_activity_lesson_editor"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".activity.LessonInformationActivity"
+            android:label="@string/title_activity_lesson_information"
+            android:theme="@style/AppTheme"/>
+
     </application>
 
 </manifest>

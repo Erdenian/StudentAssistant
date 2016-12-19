@@ -1,6 +1,10 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme.Parent" parent="Theme.AppCompat.Light.NoActionBar"/>
+
+    <style name="AppTheme.Base" parent="AppTheme.Parent"/>
+
+    <style name="AppTheme" parent="AppTheme.Base">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -8,6 +12,28 @@
 
     <style name="SplashTheme" parent="AppTheme">
         <item name="android:windowBackground">@drawable/splash</item>
+    </style>
+
+    <style name="Toolbar">
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+    </style>
+
+    <style name="ScheduleCard.Base">
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <style name="ScheduleCard" parent="ScheduleCard.Base">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginBottom">@dimen/card_margin_bottom</item>
+        <item name="android:layout_marginLeft">@dimen/card_margin_horizontal</item>
+        <item name="android:layout_marginRight">@dimen/card_margin_horizontal</item>
+        <item name="android:layout_marginTop">@dimen/card_margin_top</item>
+    </style>
+
+    <style name="DatePicker" parent="BetterPickersRadialTimePickerDialog.PrimaryColor">
+        <item name="bpBodyUnselectedTextColor">@color/colorPrimaryText</item>
+        <item name="bpDisabledDayTextColor">@color/colorSecondaryText</item>
     </style>
 
 </resources>

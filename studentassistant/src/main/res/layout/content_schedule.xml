@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/content_schedule_add_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_vertical_margin">
+
+        <Button
+            android:id="@+id/content_schedule_get_schedule_from_server"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/content_schedule_get_schedule_from_server_button"/>
+
+        <Button
+            android:id="@+id/content_schedule_add_schedule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/content_schedule_add_schedule_button"/>
+
+    </LinearLayout>
+
+    <include layout="@layout/view_pager"/>
+
+</FrameLayout>
