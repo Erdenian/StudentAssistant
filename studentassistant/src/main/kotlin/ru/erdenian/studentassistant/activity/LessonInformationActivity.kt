@@ -4,17 +4,13 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.TextView
 import kotlinx.android.synthetic.main.card_lesson_information_main_info.*
-import kotlinx.android.synthetic.main.content_lesson_information.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.setColor
-import ru.erdenian.studentassistant.schedule.Lesson
 import ru.erdenian.studentassistant.schedule.ScheduleManager
-import ru.erdenian.studentassistant.schedule.Semester
 
 class LessonInformationActivity : AppCompatActivity() {
 
@@ -23,8 +19,18 @@ class LessonInformationActivity : AppCompatActivity() {
         const val LESSON_ID = "lesson_id"
     }
 
-    private val semester: Semester by lazy { ScheduleManager[intent.getLongExtra(SEMESTER_ID, -1)]!! }
-    private val lesson: Lesson by lazy { semester.getLesson(intent.getLongExtra(LESSON_ID, -1))!! }
+    private val semesterId: Long by lazy { intent.getLongExtra(SEMESTER_ID, -1)!! }
+    private val lessonId: Long by lazy { intent.getLongExtra(LESSON_ID, -1)!! }
+
+    override fun onStart() {
+        super.onStart()
+        with(ScheduleManager.getLesson(semesterId, lessonId)!!) {
+            information_lesson_name_text.text = subjectName
+            lesson_information_start_time_text.text = startTime.toString("HH:mm")
+            lesson_information_end_time_text.text = endTime.toString("HH:mm")
+            lesson_information_type.text = type
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,14 +39,14 @@ class LessonInformationActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        with(lesson) {
-            information_lesson_name_text.text = name
+        /*with(lesson) {
+            information_lesson_name_text.text = subjectName
             lesson_information_start_time_text.text = startTime.toString("HH:mm")
             lesson_information_end_time_text.text = endTime.toString("HH:mm")
             lesson_information_type.text = type
-        }
+        }*///удалить на хуй
 
-        for (homework in semester.homeworks) {
+        /*for (homework in semester.homeworks) {
             with(layoutInflater.inflate(R.layout.card_lesson_information_homework, lesson_information_homework_layout, true)) {
                 (findViewById(R.id.card_lesson_information_homework_info) as TextView).text = homework.description
                 (findViewById(R.id.card_lesson_information_deadline_date) as TextView).text = homework.deadlineDay.toString()
@@ -51,7 +57,7 @@ class LessonInformationActivity : AppCompatActivity() {
                 //      LessonInformationActivity.LESSON_ID to lesson.id) не удалять
                 //}
             }
-        }
+        }*/
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -73,8 +79,8 @@ class LessonInformationActivity : AppCompatActivity() {
             android.R.id.home -> finish()
             R.id.menu_lesson_information_edit_button -> {
                 startActivity<LessonEditorActivity>(
-                        LessonEditorActivity.SEMESTER_ID to semester!!.id,
-                        LessonEditorActivity.LESSON_ID to lesson.id)
+                        LessonEditorActivity.SEMESTER_ID to semesterId,
+                        LessonEditorActivity.LESSON_ID to lessonId)
             }
             else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
         }
