@@ -9,7 +9,6 @@
     <string name="content_schedule_add_schedule_button">Добавить расписание</string>
 
     <string name="activity_schedule_free_day_textview">Выходной</string>
-    <string name="activity_lesson_information_no_homework_textview">Заданий нет</string>
 
     <string name="menu_schedule_calendar">Календарь</string>
     <string name="menu_schedule_add_schedule">Добавить расписание</string>
@@ -78,6 +77,8 @@
 
 
     <string name="title_activity_lesson_information">Информация о паре</string>
+
+    <string name="activity_lesson_information_no_homeworks">Нет заданий</string>
 
     <string name="menu_lesson_information_edit">Редактировать</string>
 
