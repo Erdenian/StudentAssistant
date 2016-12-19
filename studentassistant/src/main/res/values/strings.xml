@@ -32,6 +32,13 @@
     <string name="activity_semester_editor_error_empty_name">Имя не может быть пустым</string>
     <string name="activity_semester_editor_error_name_not_avaliable">Такое имя уже занято</string>
 
+    <string name="activity_semester_editor_incorrect_name_message">Введите название</string>
+    <string name="activity_semester_editor_incorrect_first_day">Введите первый день</string>
+    <string name="activity_semester_editor_incorrect_last_day">Введите последний день</string>
+    <string name="activity_semester_editor_incorrect_dates">Даты первого и последнего дня введены некорректно</string>
+
+    <string name="menu_semester_editor_save">Сохранить</string>
+
 
     <string name="title_activity_lesson_editor">Редактирование пары</string>
     <string name="title_activity_lesson_editor_new_lesson">Добавление пары</string>
@@ -41,14 +48,33 @@
     <string name="content_lesson_editor_teachers">Преподаватели</string>
     <string name="content_lesson_editor_classrooms">Аудитории</string>
     <string name="content_lesson_editor_repeat_type">Когда повторять</string>
+    <string name="content_lesson_editor_start_time">Время начала</string>
+    <string name="content_lesson_editor_end_time">Время окончания</string>
+    <string name="content_lesson_editor_monday">ПН</string>
+    <string name="content_lesson_editor_tuesday">ВТ</string>
+    <string name="content_lesson_editor_wednesday">СР</string>
+    <string name="content_lesson_editor_thursday">ЧТ</string>
+    <string name="content_lesson_editor_friday">ПТ</string>
+    <string name="content_lesson_editor_saturday">СБ</string>
+    <string name="content_lesson_editor_sunday">ВС</string>
 
+    <string name="activity_lesson_editor_incorrect_subject_name_message">Введите название предмета</string>
+    <string name="activity_lesson_editor_incorrect_start_time_message">Введите время начала</string>
+    <string name="activity_lesson_editor_incorrect_end_time_message">Введите время окончания</string>
+    <string name="activity_lesson_editor_incorrect_time_message">Время начала и конца введено некорректно</string>
+    <string name="activity_lesson_editor_no_weeks_checked_message">Отметьте хотя бы одну неделю</string>
+
+    <string name="menu_lesson_editor_save">Сохранить</string>
+    <string name="menu_lesson_editor_delete_lesson">Удалить пару</string>
+
+
+    <string name="schedule_page_fragment_weeks">Недели:</string>
+    <string name="schedule_page_fragment_out_of">из</string>
 
     <string-array name="lesson_repeat_types">
         <item>По дням недели</item>
         <item>По датам</item>
     </string-array>
-
-    <string name="menu_editor_save">Сохранить</string>
 
 
     <string name="title_activity_lesson_information">Информация о паре</string>
