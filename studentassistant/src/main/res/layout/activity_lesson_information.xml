@@ -18,11 +18,11 @@
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/lesson_information_add_homework_button"
+        android:id="@+id/activity_lesson_information_add_homework"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/fab_margin"
         android:clickable="true"
         app:srcCompat="@drawable/ic_menu_plus"/>
 

@@ -112,7 +112,7 @@ class SchedulePageFragment : Fragment() {
                                             getString(R.string.schedule_page_fragment_out_of) + " " + lessonRepeat.weeks.size
                                 }
                                 is LessonRepeat.ByDates -> Joiner.on(", ").join(lessonRepeat.dates)
-                                else -> throw IllegalStateException("Неизвестный тип повторения: ${lessonRepeat}")
+                                else -> throw IllegalStateException("Неизвестный тип повторения: $lessonRepeat")
                             }
                 }
 
