@@ -101,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:tint="@color/colorSecondaryText"
-                app:srcCompat="@drawable/ic_menu_map_marker"
+                app:srcCompat="@drawable/calendar_range"
                 tools:ignore="ContentDescription"/>
 
             <TextView
