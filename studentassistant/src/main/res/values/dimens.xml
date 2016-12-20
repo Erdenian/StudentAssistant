@@ -14,6 +14,8 @@
     <dimen name="card_primary_text_size">20sp</dimen>
     <dimen name="card_secondary_text_size">16sp</dimen>
 
+    <dimen name="divider_margin">4dp</dimen>
+
     <dimen name="card_alarm_text_size_time">40sp</dimen>
     <dimen name="margin_in_alarm_button_group">4dp</dimen>
 
