@@ -10,8 +10,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment
-import com.google.common.collect.ImmutableList
-import com.google.common.collect.ImmutableSortedSet
 import kotlinx.android.synthetic.main.activity_schedule.*
 import kotlinx.android.synthetic.main.content_schedule.*
 import kotlinx.android.synthetic.main.toolbar_with_spinner.*
@@ -19,17 +17,14 @@ import kotlinx.android.synthetic.main.view_pager.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
-import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.adapter.SchedulePagerAdapter
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.initializeDrawerAndNavigationView
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.extensions.showDatePicker
-import ru.erdenian.studentassistant.schedule.Lesson
 import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener
 import ru.erdenian.studentassistant.schedule.ScheduleManager
-import ru.erdenian.studentassistant.schedule.Semester
 
 class ScheduleActivity : AppCompatActivity(),
         AdapterView.OnItemSelectedListener,
@@ -39,10 +34,11 @@ class ScheduleActivity : AppCompatActivity(),
 
     companion object {
         private const val CURRENT_PAGE = "current_page"
+        private const val SELECTED_SEMESTER_ID = "selected_semester_id"
     }
 
     private var savedPage = -1
-    private var selectedSemester: Semester? = null
+    private var selectedSemesterId = -1L
 
     private var pagerAdapter: SchedulePagerAdapter? = null
 
@@ -77,10 +73,10 @@ class ScheduleActivity : AppCompatActivity(),
 
         invalidateOptionsMenu()
 
-        if ((pagerAdapter != null) && (selectedSemester!!.id == ScheduleManager.selectedSemester?.id)) {
+        if ((pagerAdapter != null) && (selectedSemesterId == ScheduleManager.selectedSemesterId)) {
             savedPage = view_pager.currentItem
         }
-        selectedSemester = ScheduleManager.selectedSemester
+        selectedSemesterId = ScheduleManager.selectedSemesterId ?: -1
 
         if (ScheduleManager.semesters.size > 1) {
             val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters, ScheduleManager.semestersNames)
@@ -88,21 +84,24 @@ class ScheduleActivity : AppCompatActivity(),
             toolbar_with_spinner_spinner.adapter = adapter
             toolbar_with_spinner_spinner.setSelection(ScheduleManager.selectedSemesterIndex!!)
         } else if (ScheduleManager.semesters.size == 1) {
-            supportActionBar!!.title = selectedSemester!!.name
+            supportActionBar!!.title = ScheduleManager.selectedSemester!!.name
             onItemSelected(null, null, 0, 0)
         } else {
             supportActionBar!!.setTitle(R.string.title_activity_schedule)
             pagerAdapter = null
+            view_pager.adapter = pagerAdapter
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putInt(CURRENT_PAGE, view_pager.currentItem)
+        outState.putLong(SELECTED_SEMESTER_ID, selectedSemesterId)
         super.onSaveInstanceState(outState)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         savedPage = savedInstanceState.getInt(CURRENT_PAGE, -1)
+        selectedSemesterId = savedInstanceState.getLong(SELECTED_SEMESTER_ID, -1)
         super.onRestoreInstanceState(savedInstanceState)
     }
 
@@ -115,10 +114,10 @@ class ScheduleActivity : AppCompatActivity(),
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        ScheduleManager.selectedSemesterIndex = position
-        selectedSemester = ScheduleManager.selectedSemester
+        selectedSemesterId = ScheduleManager.semesters.asList()[position].id
+        ScheduleManager.selectedSemesterId = selectedSemesterId
 
-        pagerAdapter = SchedulePagerAdapter(supportFragmentManager, selectedSemester!!, false)
+        pagerAdapter = SchedulePagerAdapter(supportFragmentManager, ScheduleManager.selectedSemester!!, false)
         view_pager.adapter = pagerAdapter
         view_pager.setCurrentItem(if (savedPage != -1) savedPage else pagerAdapter!!.getPosition(LocalDate.now()), false)
         savedPage = -1
@@ -129,11 +128,11 @@ class ScheduleActivity : AppCompatActivity(),
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_schedule_calendar -> showDatePicker(this, selectedSemester!!.firstDay, selectedSemester!!.lastDay,
-                    pagerAdapter!!.getDate(view_pager.currentItem))
+            R.id.menu_schedule_calendar -> showDatePicker(this, ScheduleManager.selectedSemester!!.firstDay,
+                    ScheduleManager.selectedSemester!!.lastDay, pagerAdapter!!.getDate(view_pager.currentItem))
             R.id.menu_schedule_add_schedule -> startActivity<SemesterEditorActivity>()
             R.id.menu_schedule_edit_schedule -> with(Intent(this, LessonsEditorActivity::class.java)) {
-                putExtra(LessonsEditorActivity.SEMESTER_ID, selectedSemester!!.id)
+                putExtra(LessonsEditorActivity.SEMESTER_ID, ScheduleManager.selectedSemesterId)
                 startActivity(this)
             }
             else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
@@ -148,21 +147,7 @@ class ScheduleActivity : AppCompatActivity(),
     override fun onClick(v: View) {
         when (v.id) {
             R.id.content_schedule_get_schedule_from_server -> toast(R.string.content_schedule_get_schedule_from_server_button)
-            R.id.content_schedule_add_schedule -> {
-                val lessons = ImmutableSortedSet.of(
-                        Lesson("Конструирование ПО", "Лабораторная работа",
-                                ImmutableSortedSet.of("Федоров Алексей Роальдович", "Федоров Петр Алексеевич"),
-                                ImmutableSortedSet.of("4212а"),
-                                LocalTime(14, 20), LocalTime(15, 50),
-                                Lesson.RepeatType.BY_WEEKDAY, 5, ImmutableList.of(false, true), null, System.nanoTime()),
-                        Lesson("Конструирование ПО", "Лабораторная работа",
-                                ImmutableSortedSet.of("Федоров Алексей Роальдович"), ImmutableSortedSet.of("4212а"),
-                                LocalTime(18, 10), LocalTime(19, 40),
-                                Lesson.RepeatType.BY_WEEKDAY, 5, ImmutableList.of(false, true), null, System.nanoTime()))
-
-                ScheduleManager.addSemester(Semester("Семестр 5", LocalDate(2016, 9, 1), LocalDate(2016, 12, 31),
-                        lessons))
-            }
+            R.id.content_schedule_add_schedule -> startActivity<SemesterEditorActivity>()
             else -> throw IllegalArgumentException("Неизвестный id: ${v.id}")
         }
     }

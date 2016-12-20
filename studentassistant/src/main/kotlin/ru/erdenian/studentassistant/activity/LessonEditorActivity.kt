@@ -15,12 +15,13 @@ import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.toast
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.extensions.asSingleLine
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.extensions.showTimePicker
 import ru.erdenian.studentassistant.schedule.Lesson
+import ru.erdenian.studentassistant.schedule.LessonRepeat
 import ru.erdenian.studentassistant.schedule.ScheduleManager
-import ru.erdenian.studentassistant.schedule.Semester
 
 class LessonEditorActivity : AppCompatActivity(),
         RadialTimePickerDialogFragment.OnTimeSetListener {
@@ -40,8 +41,8 @@ class LessonEditorActivity : AppCompatActivity(),
         private const val TIME_FORMAT = "HH:mm"
     }
 
-    private val semester: Semester by lazy { ScheduleManager[intent.getLongExtra(SEMESTER_ID, -1)]!! }
-    private val lesson: Lesson? by lazy { semester.getLesson(intent.getLongExtra(LESSON_ID, -1)) }
+    private val semesterId: Long by lazy { intent.getLongExtra(SEMESTER_ID, -1) }
+    private val lesson: Lesson? by lazy { ScheduleManager.getLesson(semesterId, intent.getLongExtra(LESSON_ID, -1)) }
 
     private var startTime: LocalTime? = null
     private var endTime: LocalTime? = null
@@ -72,30 +73,30 @@ class LessonEditorActivity : AppCompatActivity(),
             }
         }
 
-
-        var weeks = ImmutableList.of(true)
+        var weeks = listOf(true)
         if (savedInstanceState == null) {
             with(lesson) {
                 if (this == null) {
                     supportActionBar!!.title = getString(R.string.title_activity_lesson_editor_new_lesson)
                 } else {
-                    content_lesson_editor_subject_name_edit_text.setText(name)
-                    type?.let { content_lesson_editor_lesson_type_edit_text.setText(it) }
-                    teachers?.let { content_lesson_editor_teachers_edit_text.setText(Joiner.on(", ").join(it)) }
-                    classrooms?.let { content_lesson_editor_classrooms_edit_text.setText(Joiner.on(", ").join(classrooms)) }
+                    content_lesson_editor_subject_name_edit_text.setText(subjectName)
+                    content_lesson_editor_lesson_type_edit_text.setText(type)
+                    content_lesson_editor_teachers_edit_text.setText(Joiner.on(", ").join(teachers))
+                    content_lesson_editor_classrooms_edit_text.setText(Joiner.on(", ").join(classrooms))
 
                     this@LessonEditorActivity.startTime = startTime
                     content_lesson_editor_start_time.text = startTime.toString(TIME_FORMAT)
                     this@LessonEditorActivity.endTime = endTime
                     content_lesson_editor_end_time.text = endTime.toString(TIME_FORMAT)
 
-                    when (repeatType) {
-                        Lesson.RepeatType.BY_WEEKDAY -> {
-                            content_lesson_editor_weekdays.setPosition(weekday!! - 1, false)
-                            weeks = this.weeks!!
+
+                    when (lessonRepeat) {
+                        is LessonRepeat.ByWeekday -> {
+                            content_lesson_editor_weekdays.setPosition(lessonRepeat.weekday - 1, false)
+                            weeks = lessonRepeat.weeks
                         }
-                        Lesson.RepeatType.BY_DATE -> TODO()
-                        else -> throw IllegalStateException("Неизвестный тип повторения: ${repeatType}")
+                        is LessonRepeat.ByDates -> TODO()
+                        else -> throw IllegalStateException("Неизвестный тип повторения: $lessonRepeat")
                     }
                 }
             }
@@ -172,42 +173,20 @@ class LessonEditorActivity : AppCompatActivity(),
         when (item.itemId) {
             android.R.id.home -> finish()
             R.id.menu_lesson_editor_save -> {
-                val name = if (content_lesson_editor_subject_name_edit_text.text.trim().isNotEmpty()) {
-                    content_lesson_editor_subject_name_edit_text.text.trim().toString()
+                val name = if (content_lesson_editor_subject_name_edit_text.text.trim().isNotBlank()) {
+                    content_lesson_editor_subject_name_edit_text.text.toString().asSingleLine.trim()
                 } else {
                     toast(R.string.activity_lesson_editor_incorrect_subject_name_message)
                     return super.onOptionsItemSelected(item)
                 }
 
-                val type = if (content_lesson_editor_lesson_type_edit_text.text.trim().isNotEmpty())
-                    content_lesson_editor_lesson_type_edit_text.text.trim().toString()
-                else null
+                val type = content_lesson_editor_lesson_type_edit_text.text.toString().asSingleLine.trim()
 
-                val teachers = if (content_lesson_editor_teachers_edit_text.text.isNotEmpty()) {
-                    val list = content_lesson_editor_teachers_edit_text.text.toString().split(",").toMutableList()
-                    val list1 = mutableListOf<String>()
-                    for ((i, l) in list.withIndex()) {
-                        list[i] = l.trim()
-                        if (list[i].isNotEmpty()) {
-                            list1.add(list[i])
-                        }
-                    }
-                    if (list1.isNotEmpty()) ImmutableSortedSet.copyOf(list1)
-                    else null
-                } else null
+                val teachers = content_lesson_editor_teachers_edit_text.text.toString().
+                        asSingleLine.split(",").map(String::trim).filter(String::isNotBlank)
 
-                val classrooms = if (content_lesson_editor_classrooms_edit_text.text.isNotEmpty()) {
-                    val list = content_lesson_editor_classrooms_edit_text.text.toString().split(",").toMutableList()
-                    val list1 = mutableListOf<String>()
-                    for ((i, l) in list.withIndex()) {
-                        list[i] = l.trim()
-                        if (list[i].isNotEmpty()) {
-                            list1.add(list[i])
-                        }
-                    }
-                    if (list1.isNotEmpty()) ImmutableSortedSet.copyOf(list1)
-                    else null
-                } else null
+                val classrooms = content_lesson_editor_classrooms_edit_text.text.toString().
+                        asSingleLine.split(",").map(String::trim).filter(String::isNotBlank)
 
                 if (startTime == null) {
                     toast(R.string.activity_lesson_editor_incorrect_start_time_message)
@@ -237,16 +216,19 @@ class LessonEditorActivity : AppCompatActivity(),
                     return super.onOptionsItemSelected(item)
                 }
 
-                val newLesson = lesson?.copy(name, type, teachers, classrooms, startTime!!, endTime!!,
-                        Lesson.RepeatType.BY_WEEKDAY, weekday, ImmutableList.copyOf(weeks.toList()), null) ?:
-                        Lesson(name, type, teachers, classrooms, startTime!!, endTime!!,
-                                Lesson.RepeatType.BY_WEEKDAY, weekday, ImmutableList.copyOf(weeks.toList()), null)
-
-                ScheduleManager.addLesson(semester.id, newLesson)
+                if (lesson == null) {
+                    ScheduleManager.addLesson(semesterId, Lesson(name, type, ImmutableSortedSet.copyOf(teachers),
+                            ImmutableSortedSet.copyOf(classrooms), startTime!!, endTime!!,
+                            LessonRepeat.ByWeekday(weekday, ImmutableList.copyOf(weeks.toList()))))
+                } else {
+                    ScheduleManager.updateLesson(semesterId, lesson!!.copy(name, type, ImmutableSortedSet.copyOf(teachers),
+                            ImmutableSortedSet.copyOf(classrooms), startTime!!, endTime!!,
+                            LessonRepeat.ByWeekday(weekday, ImmutableList.copyOf(weeks.toList()))))
+                }
                 finish()
             }
             R.id.menu_lesson_editor_delete_lesson -> {
-                ScheduleManager.removeLesson(semester.id, lesson!!.id)
+                ScheduleManager.removeLesson(semesterId, lesson!!.id)
                 finish()
             }
             else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")

@@ -36,6 +36,11 @@
             android:label="@string/title_activity_lesson_editor"
             android:theme="@style/AppTheme"/>
 
+        <activity
+            android:name=".activity.LessonInformationActivity"
+            android:label="@string/title_activity_lesson_information"
+            android:theme="@style/AppTheme"/>
+
     </application>
 
 </manifest>
