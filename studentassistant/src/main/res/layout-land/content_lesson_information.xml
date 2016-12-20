@@ -96,7 +96,7 @@
             android:layout_height="match_parent">
 
             <LinearLayout
-                android:id="@+id/lesson_information_homeworks_parent"
+                android:id="@+id/content_lesson_information_homeworks_parent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"/>
