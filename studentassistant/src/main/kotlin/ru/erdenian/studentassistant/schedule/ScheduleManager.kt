@@ -95,8 +95,10 @@ object ScheduleManager {
             } else {
                 field = value
             }
-            if (field == value) lessonsCache = null
-            else throw IllegalArgumentException("Семестра с id $value нет")
+            if (field == value) {
+                lessonsCache = null
+                homeworksCache = null
+            } else throw IllegalArgumentException("Семестра с id $value нет")
         }
 
     val selectedSemesterIndex: Int?
@@ -606,6 +608,23 @@ object ScheduleManager {
             ImmutableSortedSet.copyOf(getHomeworks(semesterId).filter {
                 (it.subjectName == getLesson(semesterId, lessonId)!!.subjectName) && (it.deadline == date)
             })
+
+    fun getActualHomeworks(semesterId: Long): ImmutableSortedSet<Homework> {
+        val today = LocalDate.now()
+        return ImmutableSortedSet.copyOf(getHomeworks(semesterId).filter { !it.deadline.isBefore(today) })
+    }
+
+    fun getActualHomeworks(semesterId: Long, lessonId: Long): ImmutableSortedSet<Homework> {
+        val today = LocalDate.now()
+        return ImmutableSortedSet.copyOf(getHomeworks(semesterId).filter {
+            (it.subjectName == getLesson(semesterId, lessonId)!!.subjectName) && !it.deadline.isBefore(today)
+        })
+    }
+
+    fun getPastHomeworks(semesterId: Long): ImmutableSortedSet<Homework> {
+        val today = LocalDate.now()
+        return ImmutableSortedSet.copyOf(getHomeworks(semesterId).filter { it.deadline.isBefore(today) })
+    }
 
     fun getHomework(semesterId: Long, homeworkId: Long): Homework? {
         val homeworksCache = homeworksCache

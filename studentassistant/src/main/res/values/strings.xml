@@ -97,11 +97,14 @@
     <string name="menu_homework_editor_delete_homework">Удалить задание</string>
 
 
+    <string name="title_activity_homeworks">Домашние задания</string>
+
+
     <string name="card_homework_before">До</string>
 
 
     <string name="nav_schedule">Расписание</string>
-    <string name="nav_homework">Домашнее задание</string>
+    <string name="nav_homeworks">Домашние задания</string>
     <string name="nav_alarm">Будильник</string>
     <string name="nav_tools">Инструменты</string>
     <string name="nav_settings">Настройки</string>
