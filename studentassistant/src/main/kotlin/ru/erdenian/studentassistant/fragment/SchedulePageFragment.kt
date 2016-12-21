@@ -125,7 +125,8 @@ class SchedulePageFragment : Fragment() {
                 else setOnClickListener {
                     context.startActivity<LessonInformationActivity>(
                             LessonInformationActivity.SEMESTER_ID to semesterId,
-                            LessonInformationActivity.LESSON_ID to id)
+                            LessonInformationActivity.LESSON_ID to id,
+                            LessonInformationActivity.DATE to day.toString())
                 }
 
                 llCardsParent.addView(this)

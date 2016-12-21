@@ -55,6 +55,17 @@ object ScheduleManager {
             return field
         }
 
+    private var homeworksCache: MutableMap<Long, Homework>? = null
+        get() {
+            if (field == null) {
+                val selectedSemesterId = selectedSemesterId
+                if (semestersCache.isNotEmpty() && (selectedSemesterId != null)) {
+                    field = LinkedHashMap(readHomeworksFromDb(selectedSemesterId).associateBy({ it.id }, { it }))
+                }
+            }
+            return field
+        }
+
     private var onScheduleUpdateListener: OnScheduleUpdateListener? = null
     fun setOnScheduleUpdateListener(value: OnScheduleUpdateListener?) {
         onScheduleUpdateListener = value
@@ -106,6 +117,9 @@ object ScheduleManager {
     val semestersNames: List<String>
         get() = semesters.map { it.name }
 
+    fun getSubjects(semesterId: Long): ImmutableSortedSet<String> =
+            ImmutableSortedSet.copyOf(getLessons(semesterId).map { it.subjectName })
+
     private fun readLessonsFromDb(semesterId: Long): ImmutableSortedSet<Lesson> {
         val lessons = sortedSetOf<Lesson>()
 
@@ -114,8 +128,7 @@ object ScheduleManager {
 
         val db = scheduleDBHelper.readableDatabase
 
-        db.query(ScheduleDBHelper.Tables.TABLE_LESSONS_PREFIX + semesterId, null,
-                null, null, null, null, null).use {
+        db.query(ScheduleDBHelper.Tables.TABLE_LESSONS_PREFIX + semesterId, null, null, null, null, null, null).use {
 
             if (it.moveToFirst()) {
                 val idColumnIndex = it.getColumnIndexOrThrow(ScheduleDBHelper.TableLessons.COLUMN_LESSON_ID)
@@ -135,8 +148,11 @@ object ScheduleManager {
                     val classroomsTmp = it.getString(classroomsColumnIndex)?.
                             split(ScheduleDBHelper.ARRAY_ITEMS_SEPARATOR)?.filter(String::isNotBlank)
 
-                    val teachers = if (teachersTmp != null) ImmutableSortedSet.copyOf(teachersTmp) else ImmutableSortedSet.of()
-                    val classrooms = if (classroomsTmp != null) ImmutableSortedSet.copyOf(classroomsTmp) else ImmutableSortedSet.of()
+                    val teachers = if (teachersTmp != null) ImmutableSortedSet.copyOf(teachersTmp)
+                    else ImmutableSortedSet.of()
+
+                    val classrooms = if (classroomsTmp != null) ImmutableSortedSet.copyOf(classroomsTmp)
+                    else ImmutableSortedSet.of()
 
                     val lessonRepeat = when (it.getInt(repeatTypeColumnIndex)) {
                         ScheduleDBHelper.TableLessons.COLUMN_LESSON_REPEAT_TYPE_BY_WEEKDAY -> {
@@ -194,6 +210,29 @@ object ScheduleManager {
         db.close()
 
         return ImmutableSortedSet.copyOf(lessons)
+    }
+
+    private fun readHomeworksFromDb(semesterId: Long): ImmutableSortedSet<Homework> {
+        val homeworks = sortedSetOf<Homework>()
+
+        val dateFormatter = DateTimeFormat.forPattern(ScheduleDBHelper.DATE_PATTERN)
+
+        scheduleDBHelper.readableDatabase.use {
+            it.query(ScheduleDBHelper.Tables.TABLE_HOMEWORKS_PREFIX + semesterId, null, null, null, null, null, null).use {
+
+                val subjectNameColumnIndex = it.getColumnIndexOrThrow(ScheduleDBHelper.TableHomeworks.COLUMN_HOMEWORK_SUBJECT_NAME)
+                val descriptionColumnIndex = it.getColumnIndexOrThrow(ScheduleDBHelper.TableHomeworks.COLUMN_HOMEWORK_DESCRIPTION)
+                val deadlineColumnIndex = it.getColumnIndexOrThrow(ScheduleDBHelper.TableHomeworks.COLUMN_HOMEWORK_DEADLINE)
+                val idColumnIndex = it.getColumnIndexOrThrow(ScheduleDBHelper.TableHomeworks.COLUMN_HOMEWORK_ID)
+
+                if (it.moveToFirst())
+                    do {
+                        homeworks += Homework(it.getString(subjectNameColumnIndex), it.getString(descriptionColumnIndex),
+                                dateFormatter.parseLocalDate(it.getString(deadlineColumnIndex)), it.getLong(idColumnIndex))
+                    } while (it.moveToNext())
+            }
+        }
+        return ImmutableSortedSet.copyOf(homeworks)
     }
 
     fun getLessons(semesterId: Long): ImmutableSortedSet<Lesson> {
@@ -263,7 +302,8 @@ object ScheduleManager {
                             val weeksColumnIndex =
                                     it.getColumnIndexOrThrow(ScheduleDBHelper.TableByWeekday.COLUMN_BY_WEEKDAY_WEEKS)
 
-                            val weeks = it.getString(weeksColumnIndex).split(ScheduleDBHelper.ARRAY_ITEMS_SEPARATOR).map(String::toBoolean)
+                            val weeks = it.getString(weeksColumnIndex).
+                                    split(ScheduleDBHelper.ARRAY_ITEMS_SEPARATOR).map(String::toBoolean)
 
                             LessonRepeat.ByWeekday(it.getInt(weekdayColumnIndex), weeks)
                         }
@@ -412,14 +452,15 @@ object ScheduleManager {
             }
         }
 
-        if (semesterId == selectedSemesterId)
-            lessonsCache!!.put(lessonId, lesson.copy(id = lessonId))
+        if (semesterId == selectedSemesterId) lessonsCache!!.put(lessonId, lesson.copy(id = lessonId))
 
         return lessonId
     }
 
     fun updateLesson(semesterId: Long, lesson: Lesson) {
         //Todo: код, создающий патчи
+
+        val oldLesson = getLesson(semesterId, lesson.id)!!
 
         val cv = ContentValues()
         val timeFormatter = DateTimeFormat.forPattern(ScheduleDBHelper.TIME_PATTERN)
@@ -470,10 +511,17 @@ object ScheduleManager {
         }
 
         if (semesterId == selectedSemesterId) lessonsCache!!.put(lesson.id, lesson)
+
+        if (getLessons(semesterId).filter { it.subjectName == oldLesson.subjectName }.isEmpty())
+            getHomeworks(semesterId).filter { it.subjectName == oldLesson.subjectName }.forEach {
+                updateHomework(semesterId, it.copy(subjectName = lesson.subjectName))
+            }
     }
 
     fun removeLesson(semesterId: Long, lessonId: Long) {
         //Todo: код, создающий патчи
+
+        val lesson = getLesson(semesterId, lessonId)!!
 
         scheduleDBHelper.writableDatabase.use {
             it.delete(ScheduleDBHelper.Tables.TABLE_LESSONS_PREFIX + semesterId,
@@ -487,6 +535,106 @@ object ScheduleManager {
         }
 
         if (semesterId == selectedSemesterId) lessonsCache!!.remove(lessonId)
+
+        if (getLessons(semesterId).filter { it.subjectName == lesson.subjectName }.isEmpty())
+            getHomeworks(semesterId).filter { it.subjectName == lesson.subjectName }.forEach {
+                removeHomework(semesterId, it.id)
+            }
+    }
+
+    fun addHomework(semesterId: Long, homework: Homework): Long {
+        //Todo: код, создающий патчи
+
+        val cv = ContentValues()
+        val dateFormatter = DateTimeFormat.forPattern(ScheduleDBHelper.DATE_PATTERN)
+
+        cv.put(ScheduleDBHelper.TableHomeworks.COLUMN_HOMEWORK_SUBJECT_NAME, homework.subjectName)
+        cv.put(ScheduleDBHelper.TableHomeworks.COLUMN_HOMEWORK_DESCRIPTION, homework.description)
+        cv.put(ScheduleDBHelper.TableHomeworks.COLUMN_HOMEWORK_DEADLINE, dateFormatter.print(homework.deadline))
+
+        var homeworkId = homework.id
+
+        scheduleDBHelper.writableDatabase.use {
+            homeworkId = it.insert(ScheduleDBHelper.Tables.TABLE_HOMEWORKS_PREFIX + semesterId, null, cv)
+        }
+
+        if (semesterId == selectedSemesterId) homeworksCache!!.put(homeworkId, homework.copy(id = homeworkId))
+
+        return homeworkId
+    }
+
+    fun updateHomework(semesterId: Long, homework: Homework) {
+        //Todo: код, создающий патчи
+
+        val cv = ContentValues()
+        val dateFormatter = DateTimeFormat.forPattern(ScheduleDBHelper.DATE_PATTERN)
+
+        cv.put(ScheduleDBHelper.TableHomeworks.COLUMN_HOMEWORK_SUBJECT_NAME, homework.subjectName)
+        cv.put(ScheduleDBHelper.TableHomeworks.COLUMN_HOMEWORK_DESCRIPTION, homework.description)
+        cv.put(ScheduleDBHelper.TableHomeworks.COLUMN_HOMEWORK_DEADLINE, dateFormatter.print(homework.deadline))
+
+        scheduleDBHelper.writableDatabase.use {
+            it.update(ScheduleDBHelper.Tables.TABLE_HOMEWORKS_PREFIX + semesterId, cv,
+                    "${ScheduleDBHelper.TableHomeworks.COLUMN_HOMEWORK_ID} = ${homework.id}", null)
+        }
+
+        if (semesterId == selectedSemesterId) homeworksCache!!.put(homework.id, homework)
+    }
+
+    fun removeHomework(semesterId: Long, homeworkId: Long) {
+        //Todo: код, создающий патчи
+
+        scheduleDBHelper.writableDatabase.use {
+            it.delete(ScheduleDBHelper.Tables.TABLE_HOMEWORKS_PREFIX + semesterId,
+                    "${ScheduleDBHelper.TableHomeworks.COLUMN_HOMEWORK_ID} = $homeworkId", null)
+        }
+
+        if (semesterId == selectedSemesterId) homeworksCache!!.remove(homeworkId)
+    }
+
+    fun getHomeworks(semesterId: Long): ImmutableSortedSet<Homework> {
+        val homeworksCache = homeworksCache
+
+        if ((semesterId == selectedSemesterId) && (homeworksCache != null)) {
+            return ImmutableSortedSet.copyOf(homeworksCache.map { it.value })
+        } else {
+            return readHomeworksFromDb(semesterId)
+        }
+    }
+
+    fun getHomeworks(semesterId: Long, lessonId: Long, date: LocalDate): ImmutableSortedSet<Homework> =
+            ImmutableSortedSet.copyOf(getHomeworks(semesterId).filter {
+                (it.subjectName == getLesson(semesterId, lessonId)!!.subjectName) && (it.deadline == date)
+            })
+
+    fun getHomework(semesterId: Long, homeworkId: Long): Homework? {
+        val homeworksCache = homeworksCache
+
+        if ((semesterId == selectedSemesterId) && (homeworksCache != null)) {
+            return homeworksCache[homeworkId]
+        }
+
+        var homework: Homework? = null
+
+        val dateFormatter = DateTimeFormat.forPattern(ScheduleDBHelper.DATE_PATTERN)
+
+        scheduleDBHelper.readableDatabase.use {
+            it.query(ScheduleDBHelper.Tables.TABLE_HOMEWORKS_PREFIX + semesterId, null,
+                    "${ScheduleDBHelper.TableHomeworks.COLUMN_HOMEWORK_ID} = $homeworkId", null, null, null, null).use {
+
+                if (it.moveToFirst()) {
+                    val subjectNameColumnIndex = it.getColumnIndexOrThrow(
+                            ScheduleDBHelper.TableHomeworks.COLUMN_HOMEWORK_SUBJECT_NAME)
+                    val descriptionColumnIndex = it.getColumnIndexOrThrow(
+                            ScheduleDBHelper.TableHomeworks.COLUMN_HOMEWORK_DESCRIPTION)
+                    val deadlineColumnIndex = it.getColumnIndexOrThrow(ScheduleDBHelper.TableHomeworks.COLUMN_HOMEWORK_DEADLINE)
+
+                    homework = Homework(it.getString(subjectNameColumnIndex), it.getString(descriptionColumnIndex),
+                            dateFormatter.parseLocalDate(it.getString(deadlineColumnIndex)), homeworkId)
+                }
+            }
+        }
+        return homework
     }
 
     class ScheduleDBHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
@@ -542,10 +690,10 @@ object ScheduleManager {
         }
 
         object TableHomeworks {
-            const val COLUMN_HOMEWORKS_ID = "_id"
-            const val COLUMN_HOMEWORKS_SUBJECT_NAME = "subject_name"
-            const val COLUMN_HOMEWORKS_DESCRIPTION = "description"
-            const val COLUMN_HOMEWORKS_DEADLINE = "deadline"
+            const val COLUMN_HOMEWORK_ID = "_id"
+            const val COLUMN_HOMEWORK_SUBJECT_NAME = "subject_name"
+            const val COLUMN_HOMEWORK_DESCRIPTION = "description"
+            const val COLUMN_HOMEWORK_DEADLINE = "deadline"
         }
 
         object Queries {
@@ -587,10 +735,10 @@ object ScheduleManager {
 
             fun createTableHomeworks(semesterId: Long) = """
                 |CREATE TABLE ${Tables.TABLE_HOMEWORKS_PREFIX + semesterId} (
-                |                 ${TableHomeworks.COLUMN_HOMEWORKS_ID}             INTEGER PRIMARY KEY AUTOINCREMENT,
-                |                 ${TableHomeworks.COLUMN_HOMEWORKS_SUBJECT_NAME}   TEXT NOT NULL,
-                |                 ${TableHomeworks.COLUMN_HOMEWORKS_DESCRIPTION}    TEXT NOT NULL,
-                |                 ${TableHomeworks.COLUMN_HOMEWORKS_DEADLINE}       TEXT NOT NULL);
+                |                 ${TableHomeworks.COLUMN_HOMEWORK_ID}             INTEGER PRIMARY KEY AUTOINCREMENT,
+                |                 ${TableHomeworks.COLUMN_HOMEWORK_SUBJECT_NAME}   TEXT NOT NULL,
+                |                 ${TableHomeworks.COLUMN_HOMEWORK_DESCRIPTION}    TEXT NOT NULL,
+                |                 ${TableHomeworks.COLUMN_HOMEWORK_DEADLINE}       TEXT NOT NULL);
                 """.trimMargin()
 
             fun renameTableLessons(oldSemesterId: Long, newSemesterId: Long) =
