@@ -25,8 +25,14 @@ fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
     navigation_view.setCheckedItem(R.id.nav_schedule)
     navigation_view.setNavigationItemSelectedListener {
         when (it.itemId) {
-            R.id.nav_schedule -> if (this !is ScheduleActivity) startActivity<ScheduleActivity>()
-            R.id.nav_homework -> if (this !is HomeworksActivity) startActivity<HomeworksActivity>()
+            R.id.nav_schedule -> if (this !is ScheduleActivity) {
+                startActivity<ScheduleActivity>()
+                finish()
+            }
+            R.id.nav_homework -> if (this !is HomeworksActivity) {
+                startActivity<HomeworksActivity>()
+                finish()
+            }
             R.id.nav_alarm -> toast(R.string.nav_alarm)
             R.id.nav_settings -> toast(R.string.nav_settings)
             R.id.nav_help -> toast(R.string.nav_help)
