@@ -39,11 +39,11 @@
     <string name="menu_semester_editor_save">Сохранить</string>
 
 
-    <string name="title_activity_lesson_editor">Редактирование пары</string>
-    <string name="title_activity_lesson_editor_new_lesson">Добавление пары</string>
+    <string name="title_activity_lesson_editor">Редактирование занятия</string>
+    <string name="title_activity_lesson_editor_new_lesson">Добавление занятия</string>
 
-    <string name="content_lesson_editor_subject_name">Название предмета</string>
-    <string name="content_lesson_editor_lesson_type">Тип пары</string>
+    <string name="content_lesson_editor_subject_name">Название занятия</string>
+    <string name="content_lesson_editor_lesson_type">Тип занятия</string>
     <string name="content_lesson_editor_teachers">Преподаватели</string>
     <string name="content_lesson_editor_classrooms">Аудитории</string>
     <string name="content_lesson_editor_repeat_type">Когда повторять</string>
@@ -57,14 +57,14 @@
     <string name="content_lesson_editor_saturday">СБ</string>
     <string name="content_lesson_editor_sunday">ВС</string>
 
-    <string name="activity_lesson_editor_incorrect_subject_name_message">Введите название предмета</string>
+    <string name="activity_lesson_editor_incorrect_subject_name_message">Введите название занятия</string>
     <string name="activity_lesson_editor_incorrect_start_time_message">Введите время начала</string>
     <string name="activity_lesson_editor_incorrect_end_time_message">Введите время окончания</string>
     <string name="activity_lesson_editor_incorrect_time_message">Время начала и конца введено некорректно</string>
     <string name="activity_lesson_editor_no_weeks_checked_message">Отметьте хотя бы одну неделю</string>
 
     <string name="menu_lesson_editor_save">Сохранить</string>
-    <string name="menu_lesson_editor_delete_lesson">Удалить пару</string>
+    <string name="menu_lesson_editor_delete_lesson">Удалить занятие</string>
 
 
     <string name="schedule_page_fragment_weeks">Недели:</string>
@@ -76,7 +76,7 @@
     </string-array>
 
 
-    <string name="title_activity_lesson_information">Информация о паре</string>
+    <string name="title_activity_lesson_information">Информация о занятии</string>
 
     <string name="activity_lesson_information_no_homeworks">Нет заданий</string>
 
@@ -85,11 +85,11 @@
 
     <string name="title_activity_homework_editor">Редактирование домашнего задания</string>
 
-    <string name="content_homework_editor_choose_subject">Выберите предмет</string>
+    <string name="content_homework_editor_choose_subject">Выберите занятие</string>
     <string name="content_homework_editor_description">Описание</string>
     <string name="content_homework_editor_date">Выберите дату сдачи</string>
 
-    <string name="content_homework_editor_activity_null_subject">Выберите предмет</string>
+    <string name="content_homework_editor_activity_null_subject">Выберите занятие</string>
     <string name="content_homework_editor_activity_null_description">Введите описание домашнего задания</string>
     <string name="content_homework_editor_activity_null_deadline">Выберите дату</string>
 
