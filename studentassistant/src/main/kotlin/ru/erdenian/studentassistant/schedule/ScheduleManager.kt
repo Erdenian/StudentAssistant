@@ -460,6 +460,8 @@ object ScheduleManager {
     fun updateLesson(semesterId: Long, lesson: Lesson) {
         //Todo: код, создающий патчи
 
+        val oldLesson = getLesson(semesterId, lesson.id)!!
+
         val cv = ContentValues()
         val timeFormatter = DateTimeFormat.forPattern(ScheduleDBHelper.TIME_PATTERN)
         val joiner = Joiner.on(ScheduleDBHelper.ARRAY_ITEMS_SEPARATOR)
@@ -509,6 +511,11 @@ object ScheduleManager {
         }
 
         if (semesterId == selectedSemesterId) lessonsCache!!.put(lesson.id, lesson)
+
+        if (getLessons(semesterId).filter { it.subjectName == oldLesson.subjectName }.isEmpty())
+            getHomeworks(semesterId).filter { it.subjectName == oldLesson.subjectName }.forEach {
+                updateHomework(semesterId, it.copy(subjectName = lesson.subjectName))
+            }
     }
 
     fun removeLesson(semesterId: Long, lessonId: Long) {
