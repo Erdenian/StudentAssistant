@@ -104,7 +104,7 @@
 
 
     <string name="nav_schedule">Расписание</string>
-    <string name="nav_homework">Домашнее задание</string>
+    <string name="nav_homeworks">Домашние задания</string>
     <string name="nav_alarm">Будильник</string>
     <string name="nav_tools">Инструменты</string>
     <string name="nav_settings">Настройки</string>
