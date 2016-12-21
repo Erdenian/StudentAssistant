@@ -514,6 +514,8 @@ object ScheduleManager {
     fun removeLesson(semesterId: Long, lessonId: Long) {
         //Todo: код, создающий патчи
 
+        val lesson = getLesson(semesterId, lessonId)!!
+
         scheduleDBHelper.writableDatabase.use {
             it.delete(ScheduleDBHelper.Tables.TABLE_LESSONS_PREFIX + semesterId,
                     "${ScheduleDBHelper.TableLessons.COLUMN_LESSON_ID} = $lessonId", null)
@@ -526,6 +528,11 @@ object ScheduleManager {
         }
 
         if (semesterId == selectedSemesterId) lessonsCache!!.remove(lessonId)
+
+        if (getLessons(semesterId).filter { it.subjectName == lesson.subjectName }.isEmpty())
+            getHomeworks(semesterId).filter { it.subjectName == lesson.subjectName }.forEach {
+                removeHomework(semesterId, it.id)
+            }
     }
 
     fun addHomework(semesterId: Long, homework: Homework): Long {
