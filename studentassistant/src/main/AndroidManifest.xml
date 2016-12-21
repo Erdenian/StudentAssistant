@@ -28,8 +28,7 @@
 
         <activity
             android:name=".activity.SemesterEditorActivity"
-            android:label="@string/title_activity_semester_editor"
-            android:windowSoftInputMode="stateVisible"/>
+            android:label="@string/title_activity_semester_editor"/>
 
         <activity
             android:name=".activity.LessonEditorActivity"
@@ -38,8 +37,12 @@
 
         <activity
             android:name=".activity.LessonInformationActivity"
-            android:label="@string/title_activity_lesson_information"
-            android:theme="@style/AppTheme"/>
+            android:label="@string/title_activity_lesson_information"/>
+
+        <activity
+            android:name=".activity.HomeworkEditorActivity"
+            android:label="@string/title_activity_homework_editor"
+            android:windowSoftInputMode="adjustResize"/>
 
     </application>
 

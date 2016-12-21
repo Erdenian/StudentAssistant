@@ -29,6 +29,7 @@
             android:textSize="@dimen/card_secondary_text_size"/>
 
         <include layout="@layout/empy_space_vertical"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,7 +50,7 @@
                 tools:ignore="HardcodedText"/>
 
             <TextView
-                android:id="@+id/card_homework_deadline_time"
+                android:id="@+id/card_homework_deadline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
