@@ -83,17 +83,28 @@
     <string name="menu_lesson_information_edit">Редактировать</string>
 
 
+    <string name="title_activity_homework_editor">Редактирование домашнего задания</string>
+
     <string name="content_homework_editor_choose_subject">Выберите предмет</string>
     <string name="content_homework_editor_description">Описание</string>
+    <string name="content_homework_editor_date">Выберите дату сдачи</string>
 
+    <string name="content_homework_editor_activity_null_subject">Выберите предмет</string>
+    <string name="content_homework_editor_activity_null_description">Введите описание домашнего задания</string>
+    <string name="content_homework_editor_activity_null_deadline">Выберите дату</string>
+
+    <string name="menu_homework_editor_save">Сохранить</string>
     <string name="menu_homework_editor_delete_homework">Удалить задание</string>
+
+
+    <string name="title_activity_homeworks">Домашние задания</string>
 
 
     <string name="card_homework_before">До</string>
 
 
     <string name="nav_schedule">Расписание</string>
-    <string name="nav_homework">Домашнее задание</string>
+    <string name="nav_homeworks">Домашние задания</string>
     <string name="nav_alarm">Будильник</string>
     <string name="nav_tools">Инструменты</string>
     <string name="nav_settings">Настройки</string>

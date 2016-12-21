@@ -7,8 +7,10 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import kotlinx.android.synthetic.main.navigation_view.*
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.activity.HomeworksActivity
 import ru.erdenian.studentassistant.activity.ScheduleActivity
 
 fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
@@ -23,8 +25,14 @@ fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
     navigation_view.setCheckedItem(R.id.nav_schedule)
     navigation_view.setNavigationItemSelectedListener {
         when (it.itemId) {
-            R.id.nav_schedule -> toast(R.string.nav_schedule)
-            R.id.nav_homework -> toast(R.string.nav_homework)
+            R.id.nav_schedule -> if (this !is ScheduleActivity) {
+                startActivity<ScheduleActivity>()
+                finish()
+            }
+            R.id.nav_homework -> if (this !is HomeworksActivity) {
+                startActivity<HomeworksActivity>()
+                finish()
+            }
             R.id.nav_alarm -> toast(R.string.nav_alarm)
             R.id.nav_settings -> toast(R.string.nav_settings)
             R.id.nav_help -> toast(R.string.nav_help)
@@ -37,6 +45,7 @@ fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
 
     when (this) {
         is ScheduleActivity -> navigation_view.setCheckedItem(R.id.nav_schedule)
+        is HomeworksActivity -> navigation_view.setCheckedItem(R.id.nav_homework)
         else -> Log.wtf(this.javaClass.name, "Неизвестное Activity: ${this.javaClass.name}")
     }
 }
