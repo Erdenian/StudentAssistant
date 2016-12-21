@@ -20,13 +20,11 @@
 
         <activity
             android:name=".activity.ScheduleActivity"
-            android:label="@string/title_activity_schedule"
-            android:noHistory="true"/>
+            android:label="@string/title_activity_schedule"/>
 
         <activity
             android:name=".activity.HomeworksActivity"
-            android:label="@string/title_activity_homeworks"
-            android:noHistory="true"/>
+            android:label="@string/title_activity_homeworks"/>
 
         <activity
             android:name=".activity.LessonsEditorActivity"
