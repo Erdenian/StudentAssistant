@@ -12,6 +12,7 @@ import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.activity.HomeworksActivity
 import ru.erdenian.studentassistant.activity.ScheduleActivity
+import ru.erdenian.studentassistant.schedule.ScheduleManager
 
 fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
     val drawerLayout = findViewById(R.id.drawer_layout) as DrawerLayout
@@ -23,13 +24,17 @@ fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
     toggle.syncState()
 
     navigation_view.setCheckedItem(R.id.nav_schedule)
+
+    navigation_view.menu.findItem(R.id.nav_homeworks).isEnabled = ScheduleManager.hasLessons
+    navigation_view.menu.findItem(R.id.nav_alarm).isEnabled = ScheduleManager.hasLessons
+
     navigation_view.setNavigationItemSelectedListener {
         when (it.itemId) {
             R.id.nav_schedule -> if (this !is ScheduleActivity) {
                 startActivity<ScheduleActivity>()
                 finish()
             }
-            R.id.nav_homework -> if (this !is HomeworksActivity) {
+            R.id.nav_homeworks -> if (this !is HomeworksActivity) {
                 startActivity<HomeworksActivity>()
                 finish()
             }
@@ -45,7 +50,7 @@ fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
 
     when (this) {
         is ScheduleActivity -> navigation_view.setCheckedItem(R.id.nav_schedule)
-        is HomeworksActivity -> navigation_view.setCheckedItem(R.id.nav_homework)
+        is HomeworksActivity -> navigation_view.setCheckedItem(R.id.nav_homeworks)
         else -> Log.wtf(this.javaClass.name, "Неизвестное Activity: ${this.javaClass.name}")
     }
 }
