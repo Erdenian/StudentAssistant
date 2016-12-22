@@ -122,6 +122,12 @@ object ScheduleManager {
     fun getSubjects(semesterId: Long): ImmutableSortedSet<String> =
             ImmutableSortedSet.copyOf(getLessons(semesterId).map { it.subjectName })
 
+    val hasLessons: Boolean
+        get() {
+            semesters.forEach { if (getLessons(it.id).isNotEmpty()) return true }
+            return false
+        }
+
     private fun readLessonsFromDb(semesterId: Long): ImmutableSortedSet<Lesson> {
         val lessons = sortedSetOf<Lesson>()
 
