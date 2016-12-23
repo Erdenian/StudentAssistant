@@ -6,20 +6,29 @@
     android:layout_margin="8dp"
     android:orientation="vertical">
 
-
-    <Button
-        android:id="@+id/content_alarm_editor_button_time"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/content_alarm_editor_time"/>
+        android:orientation="horizontal">
 
-    <include layout="@layout/empty_space_horizontal"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/content_alarm_editor_time"/>
+
+        <Button
+            android:id="@+id/content_alarm_editor_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
 
     <ToggleButton
-        android:id="@+id/content_alarm_editor_toggle_button"
+        android:id="@+id/content_alarm_editor_on_off"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"/>
-
+        android:layout_gravity="center_vertical"
+        android:textOff="Выкл"
+        android:textOn="Вкл"/>
 
 </LinearLayout>

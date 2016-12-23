@@ -23,7 +23,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/content_alarm_editor_button_time"
+                android:id="@+id/card_alarm_editor_button_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/content_alarm_editor_time"/>
@@ -35,6 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"/>
+
         </LinearLayout>
 
     </LinearLayout>
