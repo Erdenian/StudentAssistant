@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <Spinner
-        android:id="@+id/content_homeworks_editor_subject"
+        android:id="@+id/content_homework_editor_subject_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -28,6 +28,11 @@
         android:textColor="@color/colorPrimaryText"
         android:textSize="@dimen/card_secondary_text_size"/>
 
+    <Button
+        android:text="@string/content_homework_editor_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/content_homework_editor_deadline"/>
 
 
 </LinearLayout>

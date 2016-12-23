@@ -9,9 +9,9 @@
             android:title="@string/nav_schedule"/>
 
         <item
-            android:id="@+id/nav_homework"
+            android:id="@+id/nav_homeworks"
             android:icon="@drawable/ic_menu_book_open_variant"
-            android:title="@string/nav_homework"/>
+            android:title="@string/nav_homeworks"/>
 
         <item
             android:id="@+id/nav_alarm"
