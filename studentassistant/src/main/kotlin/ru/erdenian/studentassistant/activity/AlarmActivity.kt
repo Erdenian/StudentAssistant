@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.activity
 
+import android.media.Ringtone
 import android.media.RingtoneManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -10,11 +11,13 @@ import ru.erdenian.studentassistant.R
 
 class AlarmActivity : AppCompatActivity() {
 
+    lateinit var ringtone: Ringtone
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_alarm)
 
-        val ringtone = RingtoneManager.getRingtone(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM))
+        ringtone = RingtoneManager.getRingtone(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM))
 
         ringtone.play()
 
@@ -27,6 +30,12 @@ class AlarmActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
                 WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+    }
+
+    override fun onUserLeaveHint() {
+        ringtone.stop()
+        finish()
+        super.onUserLeaveHint()
     }
 
     override fun onBackPressed() {

@@ -64,6 +64,11 @@
             android:label="@string/title_activity_alarm"
             android:noHistory="true"/>
 
+        <activity
+            android:name=".activity.AlarmEditorActivity"
+            android:label="@string/title_activity_alarm_editor"
+            android:theme="@style/AppTheme"/>
+
     </application>
 
 </manifest>
