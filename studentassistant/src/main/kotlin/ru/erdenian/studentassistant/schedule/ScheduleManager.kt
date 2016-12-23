@@ -128,7 +128,7 @@ object ScheduleManager {
             return false
         }
 
-    private fun readLessonsFromDb(semesterId: Long): ImmutableSortedSet<Lesson> {
+    @Synchronized private fun readLessonsFromDb(semesterId: Long): ImmutableSortedSet<Lesson> {
         val lessons = sortedSetOf<Lesson>()
 
         val dateFormatter = DateTimeFormat.forPattern(ScheduleDBHelper.DATE_PATTERN)

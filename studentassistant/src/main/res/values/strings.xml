@@ -100,6 +100,11 @@
     <string name="title_activity_homeworks">Домашние задания</string>
 
 
+    <string name="title_activity_alarm">AlarmActivity</string>
+
+    <string name="content_alarm_turn_off">Выключить</string>
+
+
     <string name="card_homework_before">До</string>
 
 
