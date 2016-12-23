@@ -39,7 +39,7 @@
     <string name="menu_semester_editor_save">Сохранить</string>
 
 
-    <string name="title_activity_lesson_editor">Редактирование занятия</string>
+    <string name="title_activity_lesson_editor">Данные занятия</string>
     <string name="title_activity_lesson_editor_new_lesson">Добавление занятия</string>
 
     <string name="content_lesson_editor_subject_name">Название занятия</string>
@@ -76,14 +76,14 @@
     </string-array>
 
 
-    <string name="title_activity_lesson_information">Информация о занятии</string>
+    <string name="title_activity_lesson_information">Данные занятия</string>
 
     <string name="activity_lesson_information_no_homeworks">Нет заданий</string>
 
     <string name="menu_lesson_information_edit">Редактировать</string>
 
 
-    <string name="title_activity_homework_editor">Редактирование домашнего задания</string>
+    <string name="title_activity_homework_editor">Редактор задания</string>
 
     <string name="content_homework_editor_choose_subject">Выберите занятие</string>
     <string name="content_homework_editor_description">Описание</string>
@@ -108,7 +108,7 @@
     <string name="title_activity_alarm_editor">Будильник</string>
 
     <string name="content_alarm_editor_name">Название будильника</string>
-    <string name="content_alarm_editor_time">Время до пары:</string>
+    <string name="content_alarm_editor_time">Время до первой пары:</string>
 
     <string name="sunday">ВС</string>
     <string name="monday">ПН</string>
