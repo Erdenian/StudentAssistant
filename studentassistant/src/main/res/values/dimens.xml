@@ -16,6 +16,11 @@
 
     <dimen name="divider_margin">4dp</dimen>
 
+    <dimen name="card_alarm_text_size_time">40sp</dimen>
+    <dimen name="margin_in_alarm_button_group">4dp</dimen>
+
+    <dimen name="divider_margin_top_bottom">4dp</dimen>
+
     <dimen name="fab_margin">16dp</dimen>
 
 </resources>

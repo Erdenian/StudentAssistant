@@ -100,6 +100,18 @@
     <string name="title_activity_homeworks">Домашние задания</string>
 
 
+    <string name="content_alarm_editor_name">Название будильника</string>
+    <string name="content_alarm_editor_time">Введите время</string>
+
+    <string name="sunday">ВС</string>
+    <string name="monday">ПН</string>
+    <string name="tuesday">ВТ</string>
+    <string name="wednesday">СР</string>
+    <string name="thursday">ЧТ</string>
+    <string name="friday">ПТ</string>
+    <string name="saturday">СБ</string>
+
+
     <string name="card_homework_before">До</string>
 
 
