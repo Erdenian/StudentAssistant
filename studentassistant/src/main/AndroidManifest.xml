@@ -66,8 +66,11 @@
 
         <activity
             android:name=".activity.AlarmEditorActivity"
-            android:label="@string/title_activity_alarm_editor"
-            android:theme="@style/AppTheme"/>
+            android:label="@string/title_activity_alarm_editor"/>
+
+        <activity
+            android:name=".activity.HelpActivity"
+            android:label="@string/title_activity_help"/>
 
     </application>
 
