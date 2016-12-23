@@ -15,13 +15,13 @@
     <string name="menu_schedule_edit_schedule">Редактировать расписание</string>
 
 
-    <string name="title_activity_lessons_editor">Редактирование расписания</string>
+    <string name="title_activity_lessons_editor">Редактор расписания</string>
 
-    <string name="menu_lessons_editor_edit_semester">Редактировать расписание</string>
+    <string name="menu_lessons_editor_edit_semester">Изменить данные расписания</string>
     <string name="menu_lessons_editor_delete_semester">Удалить расписание</string>
 
 
-    <string name="title_activity_semester_editor">Редактирование расписания</string>
+    <string name="title_activity_semester_editor">Данные расписания</string>
     <string name="title_activity_semester_editor_new_semester">Добавление расписания</string>
 
     <string name="content_semester_editor_semester_name">Название</string>
