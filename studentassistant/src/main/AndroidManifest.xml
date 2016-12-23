@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="ru.erdenian.studentassistant">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -23,6 +25,10 @@
             android:label="@string/title_activity_schedule"/>
 
         <activity
+            android:name=".activity.HomeworksActivity"
+            android:label="@string/title_activity_homeworks"/>
+
+        <activity
             android:name=".activity.LessonsEditorActivity"
             android:label="@string/title_activity_lessons_editor"/>
 
@@ -32,8 +38,7 @@
 
         <activity
             android:name=".activity.LessonEditorActivity"
-            android:label="@string/title_activity_lesson_editor"
-            android:theme="@style/AppTheme"/>
+            android:label="@string/title_activity_lesson_editor"/>
 
         <activity
             android:name=".activity.LessonInformationActivity"
@@ -43,6 +48,29 @@
             android:name=".activity.HomeworkEditorActivity"
             android:label="@string/title_activity_homework_editor"
             android:windowSoftInputMode="adjustResize"/>
+
+        <service android:name=".service.ScheduleService"/>
+
+        <receiver
+            android:name=".reciever.BootReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".activity.AlarmActivity"
+            android:label="@string/title_activity_alarm"
+            android:noHistory="true"/>
+
+        <activity
+            android:name=".activity.AlarmEditorActivity"
+            android:label="@string/title_activity_alarm_editor"/>
+
+        <activity
+            android:name=".activity.HelpActivity"
+            android:label="@string/title_activity_help"/>
 
     </application>
 

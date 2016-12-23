@@ -91,6 +91,8 @@ class ScheduleActivity : AppCompatActivity(),
             pagerAdapter = null
             view_pager.adapter = pagerAdapter
         }
+
+        initializeDrawerAndNavigationView(toolbar_with_spinner)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
