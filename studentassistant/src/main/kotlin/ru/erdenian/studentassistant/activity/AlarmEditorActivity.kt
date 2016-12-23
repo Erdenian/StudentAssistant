@@ -35,7 +35,9 @@ class AlarmEditorActivity : AppCompatActivity() {
                     RadialTimePickerDialogFragment.OnTimeSetListener {
                         radialTimePickerDialogFragment, hourOfDay, minute ->
                         sp.edit().putString("time", LocalTime(hourOfDay, minute).toString()).apply()
-                    })
+                        content_alarm_editor_time.text = LocalTime(hourOfDay, minute).toString("HH:mm")
+                        startService<ScheduleService>()
+                    }, LocalTime(1, 0))
         }
 
         content_alarm_editor_on_off.setOnCheckedChangeListener {
