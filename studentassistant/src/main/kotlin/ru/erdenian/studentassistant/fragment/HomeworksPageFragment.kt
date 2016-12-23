@@ -54,7 +54,7 @@ class HomeworksPageFragment : Fragment() {
             with(inflater.inflate(R.layout.card_homework, llCardsParent, false)) {
                 (findViewById(R.id.card_homework_subject_name) as TextView).text = subjectName
                 (findViewById(R.id.card_homework_description) as TextView).text = description
-                (findViewById(R.id.card_homework_deadline) as TextView).text = deadline.toString()
+                (findViewById(R.id.card_homework_deadline) as TextView).text = deadline.toString("dd.MM.yyyy")
 
                 setOnClickListener {
                     context.startActivity<HomeworkEditorActivity>(
