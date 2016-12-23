@@ -33,7 +33,7 @@ class ScheduleService : IntentService("ScheduleService") {
 
         val time = PreferenceManager.getDefaultSharedPreferences(this).getString("time", "01:00:00.000")
 
-        if (time.isNotBlank()) {
+        if (alarmTime != null) {
             alarmTime = alarmTime!!.minusHours(LocalTime(time).hourOfDay).minusMinutes(LocalTime(time).minuteOfHour)
 
             if (LocalTime.now().isBefore(alarmTime!!)) {
@@ -42,9 +42,9 @@ class ScheduleService : IntentService("ScheduleService") {
                             alarmTime!!.toDateTimeToday().millis, pendingIntent)
                 else alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime!!.toDateTimeToday().millis, pendingIntent)
             }
+        } else alarmManager.cancel(pendingIntent)
 
-            if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean("on", false))
-                alarmManager.cancel(pendingIntent)
-        }
+        if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean("on", false))
+            alarmManager.cancel(pendingIntent)
     }
 }
