@@ -63,7 +63,7 @@ class LessonInformationActivity : AppCompatActivity() {
 
             (card.findViewById(R.id.card_homework_subject_name) as TextView).text = it.subjectName
             (card.findViewById(R.id.card_homework_description) as TextView).text = it.description
-            (card.findViewById(R.id.card_homework_deadline) as TextView).text = it.deadline.toString()
+            (card.findViewById(R.id.card_homework_deadline) as TextView).text = it.deadline.toString("dd.MM.yyyy")
 
             val homeworkId = it.id
 
