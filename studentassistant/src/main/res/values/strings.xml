@@ -100,8 +100,15 @@
     <string name="title_activity_homeworks">Домашние задания</string>
 
 
+    <string name="title_activity_alarm">Будильник</string>
+
+    <string name="content_alarm_turn_off">Выключить</string>
+
+
+    <string name="title_activity_alarm_editor">Будильник</string>
+
     <string name="content_alarm_editor_name">Название будильника</string>
-    <string name="content_alarm_editor_time">Введите время</string>
+    <string name="content_alarm_editor_time">Время до пары:</string>
 
     <string name="sunday">ВС</string>
     <string name="monday">ПН</string>
