@@ -12,6 +12,7 @@ import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableSortedSet
 import kotlinx.android.synthetic.main.content_lesson_editor.*
 import kotlinx.android.synthetic.main.toolbar.*
+import org.jetbrains.anko.startService
 import org.jetbrains.anko.toast
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.R
@@ -22,6 +23,7 @@ import ru.erdenian.studentassistant.extensions.showTimePicker
 import ru.erdenian.studentassistant.schedule.Lesson
 import ru.erdenian.studentassistant.schedule.LessonRepeat
 import ru.erdenian.studentassistant.schedule.ScheduleManager
+import ru.erdenian.studentassistant.service.ScheduleService
 
 class LessonEditorActivity : AppCompatActivity(),
         RadialTimePickerDialogFragment.OnTimeSetListener {
@@ -225,10 +227,14 @@ class LessonEditorActivity : AppCompatActivity(),
                             ImmutableSortedSet.copyOf(classrooms), startTime!!, endTime!!,
                             LessonRepeat.ByWeekday(weekday, ImmutableList.copyOf(weeks.toList()))))
                 }
+
+                startService<ScheduleService>()
                 finish()
             }
             R.id.menu_lesson_editor_delete_lesson -> {
                 ScheduleManager.removeLesson(semesterId, lesson!!.id)
+
+                startService<ScheduleService>()
                 finish()
             }
             else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
