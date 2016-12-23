@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    android:orientation="vertical">
+
+
+    <Button
+        android:id="@+id/content_alarm_editor_button_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/content_alarm_editor_time"/>
+
+    <include layout="@layout/empty_space_horizontal"/>
+
+    <ToggleButton
+        android:id="@+id/content_alarm_editor_toggle_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"/>
+
+
+</LinearLayout>
