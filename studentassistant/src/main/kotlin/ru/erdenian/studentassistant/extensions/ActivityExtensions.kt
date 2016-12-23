@@ -11,6 +11,7 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.activity.AlarmEditorActivity
+import ru.erdenian.studentassistant.activity.HelpActivity
 import ru.erdenian.studentassistant.activity.HomeworksActivity
 import ru.erdenian.studentassistant.activity.ScheduleActivity
 import ru.erdenian.studentassistant.schedule.ScheduleManager
@@ -44,7 +45,7 @@ fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
                 finish()
             }
             R.id.nav_settings -> toast(R.string.nav_settings)
-            R.id.nav_help -> toast(R.string.nav_help)
+            R.id.nav_help -> startActivity<HelpActivity>()
             else -> throw IllegalArgumentException("Неизвестный id: ${it.itemId}")
         }
 
