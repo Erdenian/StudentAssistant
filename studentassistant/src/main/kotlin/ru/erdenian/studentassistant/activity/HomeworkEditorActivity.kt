@@ -51,7 +51,7 @@ class HomeworkEditorActivity : AppCompatActivity(),
 
         homework?.let {
             content_homeworks_editor_description.setText(it.description)
-            content_homework_editor_deadline.text = it.deadline.toString()
+            content_homework_editor_deadline.text = it.deadline.toString("dd.MM.yyyy")
         }
 
         content_homework_editor_deadline.setOnClickListener {
