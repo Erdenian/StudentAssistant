@@ -1,8 +1,6 @@
 package ru.erdenian.studentassistant.activity
 
-import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
@@ -13,6 +11,7 @@ import kotlinx.android.synthetic.main.activity_lessons_editor.*
 import kotlinx.android.synthetic.main.scroll_view.*
 import kotlinx.android.synthetic.main.toolbar_with_spinner.*
 import kotlinx.android.synthetic.main.view_pager.*
+import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.adapter.SchedulePagerAdapter
 import ru.erdenian.studentassistant.extensions.getCompatColor
@@ -25,11 +24,9 @@ class LessonsEditorActivity : AppCompatActivity(),
         AdapterView.OnItemSelectedListener,
         OnScheduleUpdateListener {
 
-    companion object {
-        const val SEMESTER_ID = "semester_id"
+    private val semesterId: Long by lazy {
+        intent.getLongExtra(SEMESTER_ID, -1L).takeIf { it != -1L } ?: throw IllegalStateException("Не передан id семестра")
     }
-
-    private val semesterId: Long by lazy { intent.getLongExtra(SEMESTER_ID, -1L) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +44,7 @@ class LessonsEditorActivity : AppCompatActivity(),
 
         toolbar_with_spinner_spinner.visibility = View.GONE
 
-        view_pager_pager_tab_strip.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+        view_pager_pager_tab_strip.setTextColor(getCompatColor(R.color.colorPrimary))
         view_pager_pager_tab_strip.setTabIndicatorColorResource(R.color.colorPrimary)
 
         activity_lessons_editor_add_lesson.setOnClickListener(this)
@@ -55,22 +52,22 @@ class LessonsEditorActivity : AppCompatActivity(),
 
     override fun onStart() {
         super.onStart()
-        ScheduleManager.setOnScheduleUpdateListener(this)
+        ScheduleManager.addOnScheduleUpdateListener(this)
         onScheduleUpdate()
     }
 
     override fun onScheduleUpdate() {
         val semester = ScheduleManager.getSemester(semesterId)
-        if (semester == null) {
+
+        if (semester != null) {
+            val page = view_pager.currentItem
+            view_pager.adapter = SchedulePagerAdapter(supportFragmentManager, semester, true)
+            view_pager.currentItem = page
+
+            // TODO: 13.11.2016 добавить заполнение списка пар по датам
+        } else {
             finish()
-            return
         }
-
-        val page = view_pager.currentItem
-        view_pager.adapter = SchedulePagerAdapter(supportFragmentManager, semester, true)
-        view_pager.currentItem = page
-
-        // TODO: 13.11.2016 добавить заполнение списка пар по датам
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -84,18 +81,12 @@ class LessonsEditorActivity : AppCompatActivity(),
         scroll_view.visibility = if (i == 1) View.VISIBLE else View.GONE
     }
 
-    override fun onNothingSelected(parent: AdapterView<*>) {
-    }
+    override fun onNothingSelected(parent: AdapterView<*>) = Unit
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> finish()
-            R.id.menu_lessons_editor_edit_semester -> {
-                with(Intent(this, SemesterEditorActivity::class.java)) {
-                    putExtra(SemesterEditorActivity.SEMESTER_ID, semesterId)
-                    startActivity(this)
-                }
-            }
+            R.id.menu_lessons_editor_edit_semester -> startActivity<SemesterEditorActivity>(SEMESTER_ID to semesterId)
             R.id.menu_lessons_editor_delete_semester -> {
                 ScheduleManager.removeSemester(semesterId)
                 finish()
@@ -107,12 +98,7 @@ class LessonsEditorActivity : AppCompatActivity(),
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.activity_lessons_editor_add_lesson -> {
-                with(Intent(this, LessonEditorActivity::class.java)) {
-                    putExtra(LessonEditorActivity.SEMESTER_ID, semesterId)
-                    startActivity(this)
-                }
-            }
+            R.id.activity_lessons_editor_add_lesson -> startActivity<LessonEditorActivity>(SEMESTER_ID to semesterId)
             else -> throw IllegalArgumentException("Неизвестный id: ${v.id}")
         }
     }

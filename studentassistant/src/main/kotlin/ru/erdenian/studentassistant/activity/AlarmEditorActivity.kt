@@ -33,7 +33,7 @@ class AlarmEditorActivity : AppCompatActivity() {
         content_alarm_editor_time.setOnClickListener {
             showTimePicker(
                     RadialTimePickerDialogFragment.OnTimeSetListener {
-                        radialTimePickerDialogFragment, hourOfDay, minute ->
+                        _, hourOfDay, minute ->
                         sp.edit().putString("time", LocalTime(hourOfDay, minute).toString()).apply()
                         content_alarm_editor_time.text = LocalTime(hourOfDay, minute).toString("HH:mm")
                         startService<ScheduleService>()
@@ -41,7 +41,7 @@ class AlarmEditorActivity : AppCompatActivity() {
         }
 
         content_alarm_editor_on_off.setOnCheckedChangeListener {
-            buttonView, isChecked ->
+            _, isChecked ->
             sp.edit().putBoolean("on", isChecked).apply()
             startService<ScheduleService>()
         }

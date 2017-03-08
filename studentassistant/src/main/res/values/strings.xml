@@ -62,6 +62,15 @@
     <string name="activity_lesson_editor_incorrect_end_time_message">Введите время окончания</string>
     <string name="activity_lesson_editor_incorrect_time_message">Время начала и конца введено некорректно</string>
     <string name="activity_lesson_editor_no_weeks_checked_message">Отметьте хотя бы одну неделю</string>
+    <string name="activity_lesson_editor_alert_rename_lessons_title">Изменить занятия?</string>
+    <string name="activity_lesson_editor_alert_rename_lessons_message">Предмет был изменен. Изменить его у остальных занятий?</string>
+    <string name="activity_lesson_editor_alert_rename_lessons_yes">Да</string>
+    <string name="activity_lesson_editor_alert_rename_lessons_no">Нет</string>
+    <string name="activity_lesson_editor_alert_rename_lessons_cancel">Отмена</string>
+    <string name="activity_lesson_editor_alert_delete_homeworks_title">Задания будут удалены</string>
+    <string name="activity_lesson_editor_alert_delete_homeworks_message">Для данного предмета есть домашние задания, они будут удалены вместе с ним</string>
+    <string name="activity_lesson_editor_alert_delete_homeworks_yes">Да</string>
+    <string name="activity_lesson_editor_alert_delete_homeworks_cancel">Отмена</string>
 
     <string name="menu_lesson_editor_save">Сохранить</string>
     <string name="menu_lesson_editor_delete_lesson">Удалить занятие</string>

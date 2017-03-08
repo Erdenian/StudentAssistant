@@ -3,10 +3,13 @@ package ru.erdenian.studentassistant.adapter
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
+import android.util.Log
+import android.view.ViewGroup
 import org.joda.time.Days
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.fragment.SchedulePageFragment
 import ru.erdenian.studentassistant.schedule.Semester
+
 
 class SchedulePagerAdapter(fm: FragmentManager, private val semester: Semester, val showWeeksAndDates: Boolean) :
         FragmentStatePagerAdapter(fm) {
@@ -37,6 +40,14 @@ class SchedulePagerAdapter(fm: FragmentManager, private val semester: Semester, 
 
     override fun getCount(): Int {
         return if (showWeeksAndDates) 7 else semester.length
+    }
+
+    override fun finishUpdate(container: ViewGroup?) {
+        try {
+            super.finishUpdate(container)
+        } catch (npe: NullPointerException) {
+            Log.w(javaClass.toString(), "NPE: Bug workaround")
+        }
     }
 
     fun getPosition(date: LocalDate): Int {
