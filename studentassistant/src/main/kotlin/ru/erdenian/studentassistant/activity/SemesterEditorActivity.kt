@@ -25,18 +25,16 @@ class SemesterEditorActivity : AppCompatActivity(),
         CalendarDatePickerDialogFragment.OnDateSetListener,
         TextWatcher {
 
-    companion object {
+    private companion object {
 
-        const val SEMESTER_ID = "semester_id"
+        const val FIRST_DAY = "first_day"
+        const val LAST_DAY = "last_day"
 
-        private const val FIRST_DAY = "first_day"
-        private const val LAST_DAY = "last_day"
-
-        private const val FIRST_DAY_TAG = "first_day_tag"
-        private const val LAST_DAY_TAG = "last_day_tag"
+        const val FIRST_DAY_TAG = "first_day_tag"
+        const val LAST_DAY_TAG = "last_day_tag"
     }
 
-    private val semester: Semester? by lazy { ScheduleManager.getSemester(intent.getLongExtra(SEMESTER_ID, -1)) }
+    private val semester: Semester? by lazy { ScheduleManager.getSemester(intent.getLongExtra(SEMESTER_ID, -1L)) }
 
     private val semestersNames: List<String> by lazy { ScheduleManager.semestersNames.filter { it != semester?.name } }
 
@@ -137,13 +135,11 @@ class SemesterEditorActivity : AppCompatActivity(),
         return super.onOptionsItemSelected(item)
     }
 
-    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-    }
+    override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
 
-    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-    }
+    override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = Unit
 
-    override fun afterTextChanged(s: Editable?) {
+    override fun afterTextChanged(s: Editable) {
         with(content_semester_editor_semester_name) {
             isErrorEnabled = true
 

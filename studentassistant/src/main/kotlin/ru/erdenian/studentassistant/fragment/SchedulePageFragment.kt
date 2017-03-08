@@ -11,8 +11,10 @@ import com.google.common.base.Joiner
 import org.jetbrains.anko.startActivity
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.activity.LESSON_ID
 import ru.erdenian.studentassistant.activity.LessonEditorActivity
 import ru.erdenian.studentassistant.activity.LessonInformationActivity
+import ru.erdenian.studentassistant.activity.SEMESTER_ID
 import ru.erdenian.studentassistant.schedule.LessonRepeat
 import ru.erdenian.studentassistant.schedule.ScheduleManager
 
@@ -118,15 +120,14 @@ class SchedulePageFragment : Fragment() {
 
                 if (showWeeksAndDates) setOnClickListener {
                     context.startActivity<LessonEditorActivity>(
-                            LessonEditorActivity.SEMESTER_ID to semesterId,
-                            LessonEditorActivity.LESSON_ID to id
+                            context.SEMESTER_ID to semesterId,
+                            context.LESSON_ID to id
                     )
                 }
                 else setOnClickListener {
                     context.startActivity<LessonInformationActivity>(
-                            LessonInformationActivity.SEMESTER_ID to semesterId,
-                            LessonInformationActivity.LESSON_ID to id,
-                            LessonInformationActivity.DATE to day.toString())
+                            context.SEMESTER_ID to semesterId,
+                            context.LESSON_ID to id)
                 }
 
                 llCardsParent.addView(this)

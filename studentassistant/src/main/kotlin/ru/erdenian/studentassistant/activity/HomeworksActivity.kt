@@ -32,13 +32,13 @@ class HomeworksActivity : AppCompatActivity(),
         view_pager_pager_tab_strip.setTabIndicatorColorResource(R.color.colorPrimary)
 
         activity_homeworks_add_homework.setOnClickListener {
-            startActivity<HomeworkEditorActivity>(HomeworkEditorActivity.SEMESTER_ID to ScheduleManager.selectedSemesterId!!)
+            startActivity<HomeworkEditorActivity>(SEMESTER_ID to ScheduleManager.selectedSemesterId!!)
         }
     }
 
     override fun onStart() {
         super.onStart()
-        ScheduleManager.setOnScheduleUpdateListener(this)
+        ScheduleManager.addOnScheduleUpdateListener(this)
         onScheduleUpdate()
     }
 
@@ -50,7 +50,7 @@ class HomeworksActivity : AppCompatActivity(),
             val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters, ScheduleManager.semestersNames)
             adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters)
             toolbar_with_spinner_spinner.adapter = adapter
-            toolbar_with_spinner_spinner.setSelection(ScheduleManager.selectedSemesterIndex!!)
+            toolbar_with_spinner_spinner.setSelection(ScheduleManager.selectedSemesterIndex)
         } else if (ScheduleManager.semesters.size == 1) {
             supportActionBar!!.title = ScheduleManager.selectedSemester!!.name
             onItemSelected(null, null, 0, 0)
@@ -67,6 +67,5 @@ class HomeworksActivity : AppCompatActivity(),
         view_pager.currentItem = 0
     }
 
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-    }
+    override fun onNothingSelected(parent: AdapterView<*>) = Unit
 }

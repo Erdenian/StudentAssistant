@@ -12,6 +12,7 @@ import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableSortedSet
 import kotlinx.android.synthetic.main.content_lesson_editor.*
 import kotlinx.android.synthetic.main.toolbar.*
+import org.jetbrains.anko.alert
 import org.jetbrains.anko.startService
 import org.jetbrains.anko.toast
 import org.joda.time.LocalTime
@@ -29,8 +30,6 @@ class LessonEditorActivity : AppCompatActivity(),
         RadialTimePickerDialogFragment.OnTimeSetListener {
 
     companion object {
-        const val SEMESTER_ID = "semester_id"
-        const val LESSON_ID = "lesson_id"
 
         private const val START_TIME = "start_time"
         private const val END_TIME = "end_time"
@@ -43,8 +42,10 @@ class LessonEditorActivity : AppCompatActivity(),
         private const val TIME_FORMAT = "HH:mm"
     }
 
-    private val semesterId: Long by lazy { intent.getLongExtra(SEMESTER_ID, -1) }
-    private val lesson: Lesson? by lazy { ScheduleManager.getLesson(semesterId, intent.getLongExtra(LESSON_ID, -1)) }
+    private val semesterId: Long by lazy {
+        intent.getLongExtra(SEMESTER_ID, -1L).takeIf { it != -1L } ?: throw IllegalStateException("Не передан id семестра")
+    }
+    private val lesson: Lesson? by lazy { ScheduleManager.getLesson(semesterId, intent.getLongExtra(LESSON_ID, -1L)) }
 
     private var startTime: LocalTime? = null
     private var endTime: LocalTime? = null
@@ -175,7 +176,7 @@ class LessonEditorActivity : AppCompatActivity(),
         when (item.itemId) {
             android.R.id.home -> finish()
             R.id.menu_lesson_editor_save -> {
-                val name = if (content_lesson_editor_subject_name_edit_text.text.trim().isNotBlank()) {
+                val subjectName = if (content_lesson_editor_subject_name_edit_text.text.trim().isNotBlank()) {
                     content_lesson_editor_subject_name_edit_text.text.toString().asSingleLine.trim()
                 } else {
                     toast(R.string.activity_lesson_editor_incorrect_subject_name_message)
@@ -218,24 +219,53 @@ class LessonEditorActivity : AppCompatActivity(),
                     return super.onOptionsItemSelected(item)
                 }
 
-                if (lesson == null) {
-                    ScheduleManager.addLesson(semesterId, Lesson(name, type, ImmutableSortedSet.copyOf(teachers),
-                            ImmutableSortedSet.copyOf(classrooms), startTime!!, endTime!!,
-                            LessonRepeat.ByWeekday(weekday, ImmutableList.copyOf(weeks.toList()))))
-                } else {
-                    ScheduleManager.updateLesson(semesterId, lesson!!.copy(name, type, ImmutableSortedSet.copyOf(teachers),
-                            ImmutableSortedSet.copyOf(classrooms), startTime!!, endTime!!,
-                            LessonRepeat.ByWeekday(weekday, ImmutableList.copyOf(weeks.toList()))))
+                fun saveChanges() {
+                    if (lesson == null) {
+                        ScheduleManager.addLesson(semesterId, Lesson(subjectName, type, ImmutableSortedSet.copyOf(teachers),
+                                ImmutableSortedSet.copyOf(classrooms), startTime!!, endTime!!,
+                                LessonRepeat.ByWeekday(weekday, ImmutableList.copyOf(weeks.toList()))))
+                    } else {
+                        ScheduleManager.updateLesson(semesterId, lesson!!.copy(subjectName, type, ImmutableSortedSet.copyOf(teachers),
+                                ImmutableSortedSet.copyOf(classrooms), startTime!!, endTime!!,
+                                LessonRepeat.ByWeekday(weekday, ImmutableList.copyOf(weeks.toList()))))
+                    }
+
+                    startService<ScheduleService>()
+                    finish()
                 }
 
-                startService<ScheduleService>()
-                finish()
+                if ((lesson != null) && (subjectName != lesson!!.subjectName) &&
+                        (ScheduleManager.getLessons(semesterId, lesson!!.subjectName).size > 1)) {
+
+                    alert(R.string.activity_lesson_editor_alert_rename_lessons_message,
+                            R.string.activity_lesson_editor_alert_rename_lessons_title) {
+                        positiveButton(R.string.activity_lesson_editor_alert_rename_lessons_yes) {
+                            saveChanges()
+                            ScheduleManager.updateLessons(semesterId, lesson!!.subjectName, subjectName)
+                        }
+                        negativeButton(R.string.activity_lesson_editor_alert_rename_lessons_no) { saveChanges() }
+                        neutralButton(R.string.activity_lesson_editor_alert_rename_lessons_no)
+                    }.show()
+                } else saveChanges()
             }
             R.id.menu_lesson_editor_delete_lesson -> {
-                ScheduleManager.removeLesson(semesterId, lesson!!.id)
+                fun remove() {
+                    ScheduleManager.removeLesson(semesterId, lesson!!.id)
 
-                startService<ScheduleService>()
-                finish()
+                    startService<ScheduleService>()
+                    finish()
+                }
+
+                if ((lesson != null) && ScheduleManager.getHomeworks(semesterId, lesson!!.subjectName).isNotEmpty()
+                        && (ScheduleManager.getLessons(semesterId, lesson!!.subjectName).size == 1)) {
+
+                    alert(R.string.activity_lesson_editor_alert_delete_homeworks_message,
+                            R.string.activity_lesson_editor_alert_delete_homeworks_title) {
+                        positiveButton(R.string.activity_lesson_editor_alert_delete_homeworks_yes) { remove() }
+                        neutralButton(R.string.activity_lesson_editor_alert_delete_homeworks_cancel)
+                    }.show()
+                } else remove()
+
             }
             else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
         }

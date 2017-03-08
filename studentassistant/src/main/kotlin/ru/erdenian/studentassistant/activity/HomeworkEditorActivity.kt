@@ -23,15 +23,14 @@ import ru.erdenian.studentassistant.schedule.Semester
 class HomeworkEditorActivity : AppCompatActivity(),
         CalendarDatePickerDialogFragment.OnDateSetListener {
 
-    companion object {
-        const val SEMESTER_ID = "semester_id"
-        const val LESSON_ID = "lesson_id"
-        const val HOMEWORK_ID = "homework_id"
+    private companion object {
+
+        const val DEADLINE = "deadline"
     }
 
-    private val semester: Semester by lazy { ScheduleManager.getSemester(intent.getLongExtra(SEMESTER_ID, -1))!! }
-    private val lesson: Lesson? by lazy { ScheduleManager.getLesson(semester.id, intent.getLongExtra(LESSON_ID, -1)) }
-    private val homework: Homework? by lazy { ScheduleManager.getHomework(semester.id, intent.getLongExtra(HOMEWORK_ID, -1)) }
+    private val semester: Semester by lazy { ScheduleManager.getSemester(intent.getLongExtra(SEMESTER_ID, -1L))!! }
+    private val lesson: Lesson? by lazy { ScheduleManager.getLesson(semester.id, intent.getLongExtra(LESSON_ID, -1L)) }
+    private val homework: Homework? by lazy { ScheduleManager.getHomework(semester.id, intent.getLongExtra(HOMEWORK_ID, -1L)) }
 
     val subjects: ImmutableSortedSet<String> by lazy { ScheduleManager.getSubjects(semester.id) }
 
@@ -50,6 +49,7 @@ class HomeworkEditorActivity : AppCompatActivity(),
         lesson?.let { content_homework_editor_subject_name.setSelection(subjects.indexOfFirst { it == lesson!!.subjectName }) }
 
         homework?.let {
+            content_homework_editor_subject_name.setSelection(subjects.indexOfFirst { subject -> subject == it.subjectName })
             content_homeworks_editor_description.setText(it.description)
             content_homework_editor_deadline.text = it.deadline.toString("dd.MM.yyyy")
         }
@@ -60,13 +60,13 @@ class HomeworkEditorActivity : AppCompatActivity(),
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putString(deadline.toString(), "deadline_day")
+        outState.putString(deadline.toString(), DEADLINE)
         super.onSaveInstanceState(outState)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        deadline = LocalDate.parse(savedInstanceState.get("deadline_day") as String) as LocalDate
+        deadline = LocalDate.parse(savedInstanceState.get(DEADLINE) as String) as LocalDate
 
     }
 
@@ -81,7 +81,7 @@ class HomeworkEditorActivity : AppCompatActivity(),
         when (item.itemId) {
             android.R.id.home -> finish()
             R.id.menu_lesson_editor_save -> {
-                val subjectName = content_homework_editor_subject_name.selectedItem as String
+                val subjectName = content_homework_editor_subject_name.selectedItem.toString()
 
                 val description = if (content_homeworks_editor_description.text.isNotBlank()) {
                     content_homeworks_editor_description.text.trim().toString()

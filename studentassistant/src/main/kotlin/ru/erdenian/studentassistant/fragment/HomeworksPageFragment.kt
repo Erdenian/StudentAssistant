@@ -9,7 +9,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.activity.HOMEWORK_ID
 import ru.erdenian.studentassistant.activity.HomeworkEditorActivity
+import ru.erdenian.studentassistant.activity.SEMESTER_ID
 import ru.erdenian.studentassistant.schedule.ScheduleManager
 
 class HomeworksPageFragment : Fragment() {
@@ -58,8 +60,8 @@ class HomeworksPageFragment : Fragment() {
 
                 setOnClickListener {
                     context.startActivity<HomeworkEditorActivity>(
-                            HomeworkEditorActivity.SEMESTER_ID to semesterId,
-                            HomeworkEditorActivity.HOMEWORK_ID to id
+                            context.SEMESTER_ID to semesterId,
+                            context.HOMEWORK_ID to id
                     )
                 }
 
