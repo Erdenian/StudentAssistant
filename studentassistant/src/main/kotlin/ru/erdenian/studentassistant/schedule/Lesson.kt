@@ -6,7 +6,7 @@ import org.joda.time.LocalTime
 
 data class Lesson(val subjectName: String, val type: String, val teachers: ImmutableSortedSet<String>,
                   val classrooms: ImmutableSortedSet<String>, val startTime: LocalTime, val endTime: LocalTime,
-                  val lessonRepeat: LessonRepeat, val id: Long = -1) : Comparable<Lesson> {
+                  val lessonRepeat: LessonRepeat, val id: Long = generateId()) : Comparable<Lesson> {
 
     init {
         if (subjectName.isBlank()) throw IllegalArgumentException("Отсутствует название предмета")

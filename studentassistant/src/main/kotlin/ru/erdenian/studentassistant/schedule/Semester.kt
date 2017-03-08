@@ -5,7 +5,7 @@ import org.joda.time.Days
 import org.joda.time.LocalDate
 
 data class Semester(val name: String, val firstDay: LocalDate, val lastDay: LocalDate,
-                    val id: Long = -1) : Comparable<Semester> {
+                    val id: Long = generateId()) : Comparable<Semester> {
 
     val length: Int by lazy { Days.daysBetween(firstDay, lastDay).days + 1 }
 
