@@ -244,7 +244,7 @@ class LessonEditorActivity : AppCompatActivity(),
                             ScheduleManager.updateLessons(semesterId, lesson!!.subjectName, subjectName)
                         }
                         negativeButton(R.string.activity_lesson_editor_alert_rename_lessons_no) { saveChanges() }
-                        neutralButton(R.string.activity_lesson_editor_alert_rename_lessons_no)
+                        neutralButton(R.string.activity_lesson_editor_alert_rename_lessons_cancel)
                     }.show()
                 } else saveChanges()
             }
