@@ -8,14 +8,14 @@ data class Lesson(val subjectName: String, val type: String, val teachers: Immut
                   val classrooms: ImmutableSortedSet<String>, val startTime: LocalTime, val endTime: LocalTime,
                   val lessonRepeat: LessonRepeat, val id: Long = generateId()) : Comparable<Lesson> {
 
-    init {
-        if (subjectName.isBlank()) throw IllegalArgumentException("Отсутствует название предмета")
-        if (!startTime.isBefore(endTime)) throw IllegalArgumentException("Неверно заданы даты: $startTime - $endTime")
-    }
+  init {
+    if (subjectName.isBlank()) throw IllegalArgumentException("Отсутствует название предмета")
+    if (!startTime.isBefore(endTime)) throw IllegalArgumentException("Неверно заданы даты: $startTime - $endTime")
+  }
 
-    override fun compareTo(other: Lesson) = ComparisonChain.start()
-            .compare(startTime, other.startTime)
-            .compare(endTime, other.endTime)
-            .compare(id, other.id)
-            .result()
+  override fun compareTo(other: Lesson) = ComparisonChain.start()
+          .compare(startTime, other.startTime)
+          .compare(endTime, other.endTime)
+          .compare(id, other.id)
+          .result()
 }
