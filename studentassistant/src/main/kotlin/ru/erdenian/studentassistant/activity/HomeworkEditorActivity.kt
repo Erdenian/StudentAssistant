@@ -54,6 +54,7 @@ class HomeworkEditorActivity : AppCompatActivity(),
       content_homework_editor_deadline.text = it.deadline.toString("dd.MM.yyyy")
     }
 
+    deadline = homework?.deadline
     content_homework_editor_deadline.setOnClickListener {
       showDatePicker(this, LocalDate.now(), semester.lastDay, deadline)
     }
