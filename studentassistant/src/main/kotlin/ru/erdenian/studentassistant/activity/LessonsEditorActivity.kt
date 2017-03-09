@@ -20,9 +20,9 @@ import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener
 import ru.erdenian.studentassistant.schedule.ScheduleManager
 
 class LessonsEditorActivity : AppCompatActivity(),
-        View.OnClickListener,
-        AdapterView.OnItemSelectedListener,
-        OnScheduleUpdateListener {
+    View.OnClickListener,
+    AdapterView.OnItemSelectedListener,
+    OnScheduleUpdateListener {
 
   private val semesterId: Long by lazy {
     intent.getLongExtra(SEMESTER_ID, -1L).takeIf { it != -1L } ?: throw IllegalStateException("Не передан id семестра")
@@ -37,7 +37,7 @@ class LessonsEditorActivity : AppCompatActivity(),
     //supportActionBar!!.setDisplayShowTitleEnabled(false)
 
     val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters,
-            resources.getStringArray(R.array.lesson_repeat_types))
+        resources.getStringArray(R.array.lesson_repeat_types))
     adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters)
     toolbar_with_spinner_spinner.adapter = adapter
     toolbar_with_spinner_spinner.onItemSelectedListener = this

@@ -51,7 +51,7 @@ class ScheduleService : IntentService("ScheduleService") {
     if (LocalTime.now().isBefore(alarmTime!!)) {
       if (Build.VERSION.SDK_INT >= 19)
         alarmManager.setExact(AlarmManager.RTC_WAKEUP,
-                alarmTime!!.toDateTimeToday().millis, pendingIntent)
+            alarmTime!!.toDateTimeToday().millis, pendingIntent)
       else alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime!!.toDateTimeToday().millis, pendingIntent)
     }
   }

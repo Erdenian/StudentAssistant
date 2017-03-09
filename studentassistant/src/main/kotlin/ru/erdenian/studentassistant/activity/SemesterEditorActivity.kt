@@ -21,9 +21,9 @@ import ru.erdenian.studentassistant.schedule.ScheduleManager
 import ru.erdenian.studentassistant.schedule.Semester
 
 class SemesterEditorActivity : AppCompatActivity(),
-        View.OnClickListener,
-        CalendarDatePickerDialogFragment.OnDateSetListener,
-        TextWatcher {
+    View.OnClickListener,
+    CalendarDatePickerDialogFragment.OnDateSetListener,
+    TextWatcher {
 
   private companion object {
 

@@ -60,8 +60,8 @@ class HomeworksPageFragment : Fragment() {
 
         setOnClickListener {
           context.startActivity<HomeworkEditorActivity>(
-                  context.SEMESTER_ID to semesterId,
-                  context.HOMEWORK_ID to id
+              context.SEMESTER_ID to semesterId,
+              context.HOMEWORK_ID to id
           )
         }
 

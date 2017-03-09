@@ -27,7 +27,7 @@ import ru.erdenian.studentassistant.schedule.ScheduleManager
 import ru.erdenian.studentassistant.service.ScheduleService
 
 class LessonEditorActivity : AppCompatActivity(),
-        RadialTimePickerDialogFragment.OnTimeSetListener {
+    RadialTimePickerDialogFragment.OnTimeSetListener {
 
   companion object {
 
@@ -123,7 +123,7 @@ class LessonEditorActivity : AppCompatActivity(),
 
     weeks.forEach {
       layoutInflater.inflate(R.layout.content_lesson_editor_week_checkbox,
-              content_lesson_editor_weeks_parent)
+          content_lesson_editor_weeks_parent)
     }
     if (weeks.size <= 1) content_lesson_editor_remove_week.isEnabled = false
 
@@ -146,7 +146,7 @@ class LessonEditorActivity : AppCompatActivity(),
     val weeks = BooleanArray(content_lesson_editor_weeks_parent.childCount)
     for (i in 0 until content_lesson_editor_weeks_parent.childCount) {
       weeks[i] = (content_lesson_editor_weeks_parent.getChildAt(i)
-              .findViewById(R.id.content_lesson_editor_week_checkbox) as CheckBox).isChecked
+          .findViewById(R.id.content_lesson_editor_week_checkbox) as CheckBox).isChecked
     }
     outState.putBooleanArray(WEEKS, weeks)
 
@@ -186,10 +186,10 @@ class LessonEditorActivity : AppCompatActivity(),
         val type = content_lesson_editor_lesson_type_edit_text.text.toString().asSingleLine.trim()
 
         val teachers = content_lesson_editor_teachers_edit_text.text.toString().
-                asSingleLine.split(",").map(String::trim).filter(String::isNotBlank)
+            asSingleLine.split(",").map(String::trim).filter(String::isNotBlank)
 
         val classrooms = content_lesson_editor_classrooms_edit_text.text.toString().
-                asSingleLine.split(",").map(String::trim).filter(String::isNotBlank)
+            asSingleLine.split(",").map(String::trim).filter(String::isNotBlank)
 
         if (startTime == null) {
           toast(R.string.activity_lesson_editor_incorrect_start_time_message)
@@ -211,7 +211,7 @@ class LessonEditorActivity : AppCompatActivity(),
         val weeks = BooleanArray(content_lesson_editor_weeks_parent.childCount)
         for (i in 0 until content_lesson_editor_weeks_parent.childCount) {
           weeks[i] = (content_lesson_editor_weeks_parent.getChildAt(i)
-                  .findViewById(R.id.content_lesson_editor_week_checkbox) as CheckBox).isChecked
+              .findViewById(R.id.content_lesson_editor_week_checkbox) as CheckBox).isChecked
         }
 
         if (!weeks.contains(true)) {
@@ -222,12 +222,12 @@ class LessonEditorActivity : AppCompatActivity(),
         fun saveChanges() {
           if (lesson == null) {
             ScheduleManager.addLesson(semesterId, Lesson(subjectName, type, ImmutableSortedSet.copyOf(teachers),
-                    ImmutableSortedSet.copyOf(classrooms), startTime!!, endTime!!,
-                    LessonRepeat.ByWeekday(weekday, ImmutableList.copyOf(weeks.toList()))))
+                ImmutableSortedSet.copyOf(classrooms), startTime!!, endTime!!,
+                LessonRepeat.ByWeekday(weekday, ImmutableList.copyOf(weeks.toList()))))
           } else {
             ScheduleManager.updateLesson(semesterId, lesson!!.copy(subjectName, type, ImmutableSortedSet.copyOf(teachers),
-                    ImmutableSortedSet.copyOf(classrooms), startTime!!, endTime!!,
-                    LessonRepeat.ByWeekday(weekday, ImmutableList.copyOf(weeks.toList()))))
+                ImmutableSortedSet.copyOf(classrooms), startTime!!, endTime!!,
+                LessonRepeat.ByWeekday(weekday, ImmutableList.copyOf(weeks.toList()))))
           }
 
           startService<ScheduleService>()
@@ -235,10 +235,10 @@ class LessonEditorActivity : AppCompatActivity(),
         }
 
         if ((lesson != null) && (subjectName != lesson!!.subjectName) &&
-                (ScheduleManager.getLessons(semesterId, lesson!!.subjectName).size > 1)) {
+            (ScheduleManager.getLessons(semesterId, lesson!!.subjectName).size > 1)) {
 
           alert(R.string.activity_lesson_editor_alert_rename_lessons_message,
-                  R.string.activity_lesson_editor_alert_rename_lessons_title) {
+              R.string.activity_lesson_editor_alert_rename_lessons_title) {
             positiveButton(R.string.activity_lesson_editor_alert_rename_lessons_yes) {
               saveChanges()
               ScheduleManager.updateLessons(semesterId, lesson!!.subjectName, subjectName)
@@ -257,10 +257,10 @@ class LessonEditorActivity : AppCompatActivity(),
         }
 
         if ((lesson != null) && ScheduleManager.getHomeworks(semesterId, lesson!!.subjectName).isNotEmpty()
-                && (ScheduleManager.getLessons(semesterId, lesson!!.subjectName).size == 1)) {
+            && (ScheduleManager.getLessons(semesterId, lesson!!.subjectName).size == 1)) {
 
           alert(R.string.activity_lesson_editor_alert_delete_homeworks_message,
-                  R.string.activity_lesson_editor_alert_delete_homeworks_title) {
+              R.string.activity_lesson_editor_alert_delete_homeworks_title) {
             positiveButton(R.string.activity_lesson_editor_alert_delete_homeworks_yes) { remove() }
             neutralButton(R.string.activity_lesson_editor_alert_delete_homeworks_cancel)
           }.show()

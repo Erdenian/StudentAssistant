@@ -21,7 +21,7 @@ import ru.erdenian.studentassistant.schedule.ScheduleManager
 import ru.erdenian.studentassistant.schedule.Semester
 
 class HomeworkEditorActivity : AppCompatActivity(),
-        CalendarDatePickerDialogFragment.OnDateSetListener {
+    CalendarDatePickerDialogFragment.OnDateSetListener {
 
   private companion object {
 
@@ -44,7 +44,7 @@ class HomeworkEditorActivity : AppCompatActivity(),
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
     content_homework_editor_subject_name.adapter =
-            ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, subjects.toTypedArray())
+        ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, subjects.toTypedArray())
 
     lesson?.let { content_homework_editor_subject_name.setSelection(subjects.indexOfFirst { it == lesson!!.subjectName }) }
 

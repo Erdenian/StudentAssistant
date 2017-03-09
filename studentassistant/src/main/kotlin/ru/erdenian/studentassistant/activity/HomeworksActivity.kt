@@ -17,7 +17,7 @@ import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener
 import ru.erdenian.studentassistant.schedule.ScheduleManager
 
 class HomeworksActivity : AppCompatActivity(),
-        OnScheduleUpdateListener, AdapterView.OnItemSelectedListener {
+    OnScheduleUpdateListener, AdapterView.OnItemSelectedListener {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
