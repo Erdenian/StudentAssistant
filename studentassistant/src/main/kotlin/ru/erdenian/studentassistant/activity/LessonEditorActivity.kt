@@ -134,10 +134,6 @@ class LessonEditorActivity : AppCompatActivity(),
     }
   }
 
-  override fun onStart() {
-    super.onStart()
-  }
-
   override fun onSaveInstanceState(outState: Bundle) {
     outState.putString(START_TIME, startTime.toString())
     outState.putString(END_TIME, endTime.toString())
