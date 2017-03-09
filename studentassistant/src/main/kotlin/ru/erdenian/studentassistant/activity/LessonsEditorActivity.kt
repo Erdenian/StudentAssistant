@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.activity_lessons_editor.*
 import kotlinx.android.synthetic.main.scroll_view.*
 import kotlinx.android.synthetic.main.toolbar_with_spinner.*
 import kotlinx.android.synthetic.main.view_pager.*
+import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.adapter.SchedulePagerAdapter
@@ -88,8 +89,15 @@ class LessonsEditorActivity : AppCompatActivity(),
       android.R.id.home -> finish()
       R.id.menu_lessons_editor_edit_semester -> startActivity<SemesterEditorActivity>(SEMESTER_ID to semesterId)
       R.id.menu_lessons_editor_delete_semester -> {
-        ScheduleManager.removeSemester(semesterId)
-        finish()
+        fun remove() {
+          ScheduleManager.removeSemester(semesterId)
+          finish()
+        }
+
+        alert(R.string.activity_lessons_editor_alert_delete_message) {
+          positiveButton(R.string.activity_lessons_editor_alert_delete_yes) { remove() }
+          negativeButton(R.string.activity_lessons_editor_alert_delete_no)
+        }.show()
       }
       else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
     }

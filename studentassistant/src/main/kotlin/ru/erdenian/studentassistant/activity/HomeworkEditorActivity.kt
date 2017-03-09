@@ -9,6 +9,7 @@ import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialo
 import com.google.common.collect.ImmutableSortedSet
 import kotlinx.android.synthetic.main.content_homework_editor.*
 import kotlinx.android.synthetic.main.toolbar.*
+import org.jetbrains.anko.alert
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
@@ -102,8 +103,15 @@ class HomeworkEditorActivity : AppCompatActivity(),
         finish()
       }
       R.id.menu_homework_editor_delete_homework -> {
-        ScheduleManager.removeHomework(semester.id, homework!!.id)
-        finish()
+        fun remove() {
+          ScheduleManager.removeHomework(semester.id, homework!!.id)
+          finish()
+        }
+
+        alert(R.string.activity_homework_editor_alert_delete_message) {
+          positiveButton(R.string.activity_homework_editor_alert_delete_yes) { remove() }
+          negativeButton(R.string.activity_homework_editor_alert_delete_no)
+        }.show()
       }
       else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
     }

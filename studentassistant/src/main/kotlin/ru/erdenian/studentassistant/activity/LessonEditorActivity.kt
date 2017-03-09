@@ -264,7 +264,13 @@ class LessonEditorActivity : AppCompatActivity(),
             positiveButton(R.string.activity_lesson_editor_alert_delete_homeworks_yes) { remove() }
             neutralButton(R.string.activity_lesson_editor_alert_delete_homeworks_cancel)
           }.show()
-        } else remove()
+        } else {
+
+          alert(R.string.activity_lesson_editor_alert_delete_message) {
+            positiveButton(R.string.activity_lesson_editor_alert_delete_yes) { remove() }
+            negativeButton(R.string.activity_lesson_editor_alert_delete_no)
+          }.show()
+        }
 
       }
       else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
