@@ -106,7 +106,11 @@ class LessonsEditorActivity : AppCompatActivity(),
 
   override fun onClick(v: View) {
     when (v.id) {
-      R.id.activity_lessons_editor_add_lesson -> startActivity<LessonEditorActivity>(SEMESTER_ID to semesterId)
+      R.id.activity_lessons_editor_add_lesson ->
+        startActivity<LessonEditorActivity>(
+            SEMESTER_ID to semesterId,
+            WEEKDAY to view_pager.currentItem + 1
+        )
       else -> throw IllegalArgumentException("Неизвестный id: ${v.id}")
     }
   }

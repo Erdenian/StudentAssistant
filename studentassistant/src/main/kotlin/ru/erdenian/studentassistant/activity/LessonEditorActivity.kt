@@ -46,6 +46,9 @@ class LessonEditorActivity : AppCompatActivity(),
     intent.getLongExtra(SEMESTER_ID, -1L).takeIf { it != -1L } ?: throw IllegalStateException("Не передан id семестра")
   }
   private val lesson: Lesson? by lazy { ScheduleManager.getLesson(semesterId, intent.getLongExtra(LESSON_ID, -1L)) }
+  private val weekday: Int by lazy {
+    intent.getIntExtra(WEEKDAY, -1).takeIf { it != -1 } ?: (lesson!!.lessonRepeat as? LessonRepeat.ByWeekday)?.weekday ?: 1
+  }
 
   private var startTime: LocalTime? = null
   private var endTime: LocalTime? = null
@@ -81,6 +84,7 @@ class LessonEditorActivity : AppCompatActivity(),
       with(lesson) {
         if (this == null) {
           supportActionBar!!.title = getString(R.string.title_activity_lesson_editor_new_lesson)
+          content_lesson_editor_weekdays.setPosition(weekday - 1, false)
         } else {
           content_lesson_editor_subject_name_edit_text.setText(subjectName)
           content_lesson_editor_lesson_type_edit_text.setText(type)
