@@ -10,14 +10,14 @@ import ru.erdenian.studentassistant.R
 
 class HelpActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_help)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_help)
 
-        setSupportActionBar(toolbar)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+    setSupportActionBar(toolbar)
+    supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        content_help_help.text = Html.fromHtml("""
+    content_help_help.text = Html.fromHtml("""
 <div>
 <h1><strong>Student Assistant | Документация</strong></h1>
 <h1>Работа с расписаниями</h1>
@@ -113,13 +113,13 @@ class HelpActivity : AppCompatActivity() {
 <p>Чтобы выключить будильник, нажатием нижней кнопки приведите будильник в неактивное состояние.
 </p>
         """.trimMargin())
-    }
+  }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> finish()
-            else -> throw IllegalArgumentException("Несзвестный id: ${item.itemId}")
-        }
-        return super.onOptionsItemSelected(item)
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when (item.itemId) {
+      android.R.id.home -> finish()
+      else -> throw IllegalArgumentException("Несзвестный id: ${item.itemId}")
     }
+    return super.onOptionsItemSelected(item)
+  }
 }

@@ -15,35 +15,35 @@ import ru.erdenian.studentassistant.service.ScheduleService
 
 class AlarmEditorActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_alarm_editor)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_alarm_editor)
 
-        setSupportActionBar(toolbar)
-        initializeDrawerAndNavigationView(toolbar)
+    setSupportActionBar(toolbar)
+    initializeDrawerAndNavigationView(toolbar)
 
-        val sp = PreferenceManager.getDefaultSharedPreferences(this)
-        val timeString = sp.getString("time", "01:00:00.000")
-        sp.edit().putString("time", timeString).apply()
+    val sp = PreferenceManager.getDefaultSharedPreferences(this)
+    val timeString = sp.getString("time", "01:00:00.000")
+    sp.edit().putString("time", timeString).apply()
 
-        if (timeString.isNotBlank()) content_alarm_editor_time.text = LocalTime(timeString).toString("HH:mm")
+    if (timeString.isNotBlank()) content_alarm_editor_time.text = LocalTime(timeString).toString("HH:mm")
 
-        content_alarm_editor_on_off.isChecked = sp.getBoolean("on", false)
+    content_alarm_editor_on_off.isChecked = sp.getBoolean("on", false)
 
-        content_alarm_editor_time.setOnClickListener {
-            showTimePicker(
-                    RadialTimePickerDialogFragment.OnTimeSetListener {
-                        radialTimePickerDialogFragment, hourOfDay, minute ->
-                        sp.edit().putString("time", LocalTime(hourOfDay, minute).toString()).apply()
-                        content_alarm_editor_time.text = LocalTime(hourOfDay, minute).toString("HH:mm")
-                        startService<ScheduleService>()
-                    }, LocalTime(1, 0))
-        }
-
-        content_alarm_editor_on_off.setOnCheckedChangeListener {
-            buttonView, isChecked ->
-            sp.edit().putBoolean("on", isChecked).apply()
+    content_alarm_editor_time.setOnClickListener {
+      showTimePicker(
+          RadialTimePickerDialogFragment.OnTimeSetListener {
+            _, hourOfDay, minute ->
+            sp.edit().putString("time", LocalTime(hourOfDay, minute).toString()).apply()
+            content_alarm_editor_time.text = LocalTime(hourOfDay, minute).toString("HH:mm")
             startService<ScheduleService>()
-        }
+          }, LocalTime(1, 0))
     }
+
+    content_alarm_editor_on_off.setOnCheckedChangeListener {
+      _, isChecked ->
+      sp.edit().putBoolean("on", isChecked).apply()
+      startService<ScheduleService>()
+    }
+  }
 }
