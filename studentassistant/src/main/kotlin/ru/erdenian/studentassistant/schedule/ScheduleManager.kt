@@ -85,12 +85,15 @@ object ScheduleManager {
   var selectedSemesterId: Long? = null
     get() = if ((field == null) && (semesters.isNotEmpty())) {
       val today = LocalDate.now()
-      semesters.find { !today.isBefore(it.firstDay) && !today.isAfter(it.lastDay) }?.id ?: semesters.lastOrNull()?.id
+      field = semesters.find { !today.isBefore(it.firstDay) && !today.isAfter(it.lastDay) }?.id ?: semesters.lastOrNull()?.id
+      field
     } else field
     set(value) {
-      field = if (value != null) getSemester(value)!!.id else null
-      lessonsCache = null
-      homeworksCache = null
+      if (field != value) {
+        field = if (value != null) getSemester(value)!!.id else null
+        lessonsCache = null
+        homeworksCache = null
+      }
     }
 
   val selectedSemesterIndex get() = semesters.indexOfFirst { it.id == selectedSemesterId }.takeIf { it >= 0 }!!
