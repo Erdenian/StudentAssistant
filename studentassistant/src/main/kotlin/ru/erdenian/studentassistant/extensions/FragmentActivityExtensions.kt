@@ -13,10 +13,10 @@ fun FragmentActivity.showDatePicker(onDateSetListener: CalendarDatePickerDialogF
                                     firstDay: LocalDate? = null, lastDay: LocalDate? = null,
                                     preselected: LocalDate? = LocalDate.now(), tag: String = "date_picker") {
   var dialog = CalendarDatePickerDialogFragment()
-          .setFirstDayOfWeek(Calendar.MONDAY)
-          .setThemeCustom(R.style.DatePicker)
-          .setDateRange(firstDay?.toCalendarDay(), lastDay?.toCalendarDay())
-          .setOnDateSetListener(onDateSetListener)
+      .setFirstDayOfWeek(Calendar.MONDAY)
+      .setThemeCustom(R.style.DatePicker)
+      .setDateRange(firstDay?.toCalendarDay(), lastDay?.toCalendarDay())
+      .setOnDateSetListener(onDateSetListener)
 
   if (preselected != null)
     dialog = dialog.setPreselectedDate(preselected.year, preselected.monthOfYear - 1, preselected.dayOfMonth)
@@ -27,7 +27,7 @@ fun FragmentActivity.showDatePicker(onDateSetListener: CalendarDatePickerDialogF
 fun FragmentActivity.showTimePicker(onTimeSetListener: RadialTimePickerDialogFragment.OnTimeSetListener,
                                     startTime: LocalTime? = null, tag: String = "time_picker") {
   val timepicker = RadialTimePickerDialogFragment()
-          .setOnTimeSetListener(onTimeSetListener)
+      .setOnTimeSetListener(onTimeSetListener)
 
   startTime?.let { timepicker.setStartTime(startTime.hourOfDay, startTime.minuteOfHour) }
 

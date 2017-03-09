@@ -104,30 +104,30 @@ class SchedulePageFragment : Fragment() {
           (findViewById(R.id.card_schedule_repeats) as LinearLayout).visibility = View.GONE
         } else {
           (findViewById(R.id.card_schedule_repeats_data) as TextView).text =
-                  when (lessonRepeat) {
-                    is LessonRepeat.ByWeekday -> {
-                      val weeks = mutableListOf<Int>()
-                      for ((i, w) in lessonRepeat.weeks.withIndex())
-                        if (w) weeks.add(i + 1)
+              when (lessonRepeat) {
+                is LessonRepeat.ByWeekday -> {
+                  val weeks = mutableListOf<Int>()
+                  for ((i, w) in lessonRepeat.weeks.withIndex())
+                    if (w) weeks.add(i + 1)
 
-                      getString(R.string.schedule_page_fragment_weeks) + " " + Joiner.on(", ").join(weeks) + " " +
-                              getString(R.string.schedule_page_fragment_out_of) + " " + lessonRepeat.weeks.size
-                    }
-                    is LessonRepeat.ByDates -> Joiner.on(", ").join(lessonRepeat.dates)
-                    else -> throw IllegalStateException("Неизвестный тип повторения: $lessonRepeat")
-                  }
+                  getString(R.string.schedule_page_fragment_weeks) + " " + Joiner.on(", ").join(weeks) + " " +
+                      getString(R.string.schedule_page_fragment_out_of) + " " + lessonRepeat.weeks.size
+                }
+                is LessonRepeat.ByDates -> Joiner.on(", ").join(lessonRepeat.dates)
+                else -> throw IllegalStateException("Неизвестный тип повторения: $lessonRepeat")
+              }
         }
 
         if (showWeeksAndDates) setOnClickListener {
           context.startActivity<LessonEditorActivity>(
-                  context.SEMESTER_ID to semesterId,
-                  context.LESSON_ID to id
+              context.SEMESTER_ID to semesterId,
+              context.LESSON_ID to id
           )
         }
         else setOnClickListener {
           context.startActivity<LessonInformationActivity>(
-                  context.SEMESTER_ID to semesterId,
-                  context.LESSON_ID to id)
+              context.SEMESTER_ID to semesterId,
+              context.LESSON_ID to id)
         }
 
         llCardsParent.addView(this)

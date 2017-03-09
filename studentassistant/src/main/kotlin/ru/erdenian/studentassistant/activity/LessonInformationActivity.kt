@@ -64,8 +64,8 @@ class LessonInformationActivity : AppCompatActivity(), OnScheduleUpdateListener 
 
         card.setOnClickListener {
           startActivity<HomeworkEditorActivity>(
-                  SEMESTER_ID to semesterId,
-                  LESSON_ID to lessonId,
+              SEMESTER_ID to semesterId,
+              LESSON_ID to lessonId,
               HOMEWORK_ID to homeworkId
           )
         }
@@ -74,8 +74,8 @@ class LessonInformationActivity : AppCompatActivity(), OnScheduleUpdateListener 
       }
 
       content_lesson_information_no_homeworks.visibility =
-              if (content_lesson_information_homeworks_parent.childCount > 0) View.GONE
-              else View.VISIBLE
+          if (content_lesson_information_homeworks_parent.childCount > 0) View.GONE
+          else View.VISIBLE
     } else {
       finish()
     }
