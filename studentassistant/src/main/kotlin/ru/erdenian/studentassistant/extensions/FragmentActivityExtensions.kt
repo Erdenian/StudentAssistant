@@ -12,24 +12,24 @@ import java.util.*
 fun FragmentActivity.showDatePicker(onDateSetListener: CalendarDatePickerDialogFragment.OnDateSetListener,
                                     firstDay: LocalDate? = null, lastDay: LocalDate? = null,
                                     preselected: LocalDate? = LocalDate.now(), tag: String = "date_picker") {
-    var dialog = CalendarDatePickerDialogFragment()
-            .setFirstDayOfWeek(Calendar.MONDAY)
-            .setThemeCustom(R.style.DatePicker)
-            .setDateRange(firstDay?.toCalendarDay(), lastDay?.toCalendarDay())
-            .setOnDateSetListener(onDateSetListener)
+  var dialog = CalendarDatePickerDialogFragment()
+      .setFirstDayOfWeek(Calendar.MONDAY)
+      .setThemeCustom(R.style.DatePicker)
+      .setDateRange(firstDay?.toCalendarDay(), lastDay?.toCalendarDay())
+      .setOnDateSetListener(onDateSetListener)
 
-    if (preselected != null)
-        dialog = dialog.setPreselectedDate(preselected.year, preselected.monthOfYear - 1, preselected.dayOfMonth)
+  if (preselected != null)
+    dialog = dialog.setPreselectedDate(preselected.year, preselected.monthOfYear - 1, preselected.dayOfMonth)
 
-    dialog.show(supportFragmentManager, tag)
+  dialog.show(supportFragmentManager, tag)
 }
 
 fun FragmentActivity.showTimePicker(onTimeSetListener: RadialTimePickerDialogFragment.OnTimeSetListener,
                                     startTime: LocalTime? = null, tag: String = "time_picker") {
-    val timepicker = RadialTimePickerDialogFragment()
-            .setOnTimeSetListener(onTimeSetListener)
+  val timepicker = RadialTimePickerDialogFragment()
+      .setOnTimeSetListener(onTimeSetListener)
 
-    startTime?.let { timepicker.setStartTime(startTime.hourOfDay, startTime.minuteOfHour) }
+  startTime?.let { timepicker.setStartTime(startTime.hourOfDay, startTime.minuteOfHour) }
 
-    timepicker.show(supportFragmentManager, tag)
+  timepicker.show(supportFragmentManager, tag)
 }
