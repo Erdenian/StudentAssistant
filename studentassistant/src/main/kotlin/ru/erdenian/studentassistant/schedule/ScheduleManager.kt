@@ -122,20 +122,17 @@ object ScheduleManager {
   //region Получение пар
 
   fun getLesson(semesterId: Long, lessonId: Long): Lesson? =
-      if ((semesterId == selectedSemesterId) && (lessonsCache != null)) lessonsCache!![lessonId]
+      if (semesterId == selectedSemesterId) lessonsCache!![lessonId]
       else dbHelper.getLesson(semesterId, lessonId)
 
-  fun getLessons(semesterId: Long, predicate: (Lesson) -> Boolean = { true }): ImmutableSortedSet<Lesson> {
-    val lessonsCache = lessonsCache
-
-    return if ((semesterId == selectedSemesterId) && (lessonsCache != null)) {
-      ImmutableSortedSet.copyOf(lessonsCache.filter { predicate(it.value) }.map { it.value })
-    } else {
-      val lessons = sortedSetOf<Lesson>()
-      dbHelper.getLessons(semesterId) { if (predicate(it)) lessons += it }
-      ImmutableSortedSet.copyOf(lessons)
-    }
-  }
+  fun getLessons(semesterId: Long, predicate: (Lesson) -> Boolean = { true }): ImmutableSortedSet<Lesson> =
+      if (semesterId == selectedSemesterId) {
+        ImmutableSortedSet.copyOf(lessonsCache!!.filter { predicate(it.value) }.map { it.value })
+      } else {
+        val lessons = sortedSetOf<Lesson>()
+        dbHelper.getLessons(semesterId) { if (predicate(it)) lessons += it }
+        ImmutableSortedSet.copyOf(lessons)
+      }
 
   fun getLessons(semesterId: Long, day: LocalDate): ImmutableSortedSet<Lesson> =
       getLessons(semesterId) { it.lessonRepeat.repeatsOnDay(day, getSemester(semesterId)!!.getWeekNumber(day)) }
@@ -152,32 +149,26 @@ object ScheduleManager {
   //region Получение домашних заданий
 
   fun getHomework(semesterId: Long, homeworkId: Long): Homework? =
-      if ((semesterId == selectedSemesterId) && (homeworksCache != null)) homeworksCache!![homeworkId]
+      if (semesterId == selectedSemesterId) homeworksCache!![homeworkId]
       else dbHelper.getHomework(semesterId, homeworkId)
 
-  fun getHomeworks(semesterId: Long, predicate: (Homework) -> Boolean = { true }): ImmutableSortedSet<Homework> {
-    val homeworksCache = homeworksCache
+  fun getHomeworks(semesterId: Long, predicate: (Homework) -> Boolean = { true }): ImmutableSortedSet<Homework> =
+      if (semesterId == selectedSemesterId) {
+        ImmutableSortedSet.copyOf(homeworksCache!!.filter { predicate(it.value) }.map { it.value })
+      } else {
+        val homeworks = sortedSetOf<Homework>()
+        dbHelper.getHomeworks(semesterId) { if (predicate(it)) homeworks += it }
+        ImmutableSortedSet.copyOf(homeworks)
+      }
 
-    return if ((semesterId == selectedSemesterId) && (homeworksCache != null)) {
-      ImmutableSortedSet.copyOf(homeworksCache.filter { predicate(it.value) }.map { it.value })
-    } else {
-      val homeworks = sortedSetOf<Homework>()
-      dbHelper.getHomeworks(semesterId) { if (predicate(it)) homeworks += it }
-      ImmutableSortedSet.copyOf(homeworks)
-    }
-  }
-
-  fun getHomeworks(semesterId: Long, subjectName: String): ImmutableSortedSet<Homework> {
-    val homeworksCache = homeworksCache
-
-    return if ((semesterId == selectedSemesterId) && (homeworksCache != null)) {
-      ImmutableSortedSet.copyOf(homeworksCache.filter { it.value.subjectName == subjectName }.map { it.value })
-    } else {
-      val homeworks = sortedSetOf<Homework>()
-      dbHelper.getHomeworks(semesterId, subjectName) { homeworks += it }
-      ImmutableSortedSet.copyOf(homeworks)
-    }
-  }
+  fun getHomeworks(semesterId: Long, subjectName: String): ImmutableSortedSet<Homework> =
+      if (semesterId == selectedSemesterId) {
+        ImmutableSortedSet.copyOf(homeworksCache!!.filter { it.value.subjectName == subjectName }.map { it.value })
+      } else {
+        val homeworks = sortedSetOf<Homework>()
+        dbHelper.getHomeworks(semesterId, subjectName) { homeworks += it }
+        ImmutableSortedSet.copyOf(homeworks)
+      }
 
   fun getActualHomeworks(semesterId: Long): ImmutableSortedSet<Homework> {
     val today = LocalDate.now()
@@ -206,6 +197,8 @@ object ScheduleManager {
 
     dbHelper.insertSemester(semester)
     semestersCache.put(semester.id, semester)
+
+    selectedSemesterId = semester.id
 
     runScheduleUpdateListeners()
   }
@@ -262,13 +255,16 @@ object ScheduleManager {
     //Todo: код, создающий патчи
 
     dbHelper.updateLessons(semesterId, oldSubjectName, newSubjectName)
-    lessonsCache?.forEach { id, lesson ->
-      if (lesson.subjectName == oldSubjectName)
-        lessonsCache?.put(id, lesson.copy(subjectName = newSubjectName))
-    }
-    homeworksCache?.forEach { id, homework ->
-      if (homework.subjectName == oldSubjectName)
-        homeworksCache?.put(id, homework.copy(subjectName = newSubjectName))
+
+    if (semesterId == selectedSemesterId) {
+      lessonsCache!!.forEach { (id, lesson) ->
+        if (lesson.subjectName == oldSubjectName)
+          lessonsCache!!.put(id, lesson.copy(subjectName = newSubjectName))
+      }
+      homeworksCache!!.forEach { (id, homework) ->
+        if (homework.subjectName == oldSubjectName)
+          homeworksCache!!.put(id, homework.copy(subjectName = newSubjectName))
+      }
     }
 
     runScheduleUpdateListeners()
@@ -315,9 +311,10 @@ object ScheduleManager {
     //Todo: код, создающий патчи
 
     dbHelper.updateHomeworks(semesterId, oldSubjectName, newSubjectName)
-    homeworksCache?.forEach { id, homework ->
+
+    if (semesterId == selectedSemesterId) homeworksCache!!.forEach { (id, homework) ->
       if (homework.subjectName == oldSubjectName)
-        homeworksCache?.put(id, homework.copy(subjectName = newSubjectName))
+        homeworksCache!!.put(id, homework.copy(subjectName = newSubjectName))
     }
 
     runScheduleUpdateListeners()
@@ -336,7 +333,9 @@ object ScheduleManager {
     //Todo: код, создающий патчи
 
     dbHelper.deleteHomeworks(semesterId, subjectName)
-    homeworksCache = homeworksCache?.filter { it.value.subjectName != subjectName }?.toMutableMap()
+
+    if (semesterId == selectedSemesterId)
+      homeworksCache = homeworksCache!!.filter { it.value.subjectName != subjectName }.toMutableMap()
 
     runScheduleUpdateListeners()
   }
@@ -813,7 +812,6 @@ object ScheduleManager {
           "${Tables.Homeworks.SEMESTER_ID} = ? AND ${Tables.Homeworks.ID} = ?",
           arrayOf(semesterId.toString(), homework.id.toString()))
       if (updatedRows == 0) throw IllegalArgumentException("Задания $homework нет в БД")
-
     }
 
     fun updateHomeworks(semesterId: Long, oldSubjectName: String, newSubjectName: String) = writableDatabase.use {
