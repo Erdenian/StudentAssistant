@@ -11,34 +11,34 @@ import ru.erdenian.studentassistant.R
 
 class AlarmActivity : AppCompatActivity() {
 
-    lateinit var ringtone: Ringtone
+  lateinit var ringtone: Ringtone
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_alarm)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_alarm)
 
-        ringtone = RingtoneManager.getRingtone(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM))
+    ringtone = RingtoneManager.getRingtone(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM))
 
-        ringtone.play()
+    ringtone.play()
 
-        content_alarm_turn_off.setOnClickListener {
-            ringtone.stop()
-            finish()
-        }
-
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
-                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
-                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
-                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+    content_alarm_turn_off.setOnClickListener {
+      ringtone.stop()
+      finish()
     }
 
-    override fun onUserLeaveHint() {
-        ringtone.stop()
-        finish()
-        super.onUserLeaveHint()
-    }
+    window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
+        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+  }
 
-    override fun onBackPressed() {
-        return
-    }
+  override fun onUserLeaveHint() {
+    ringtone.stop()
+    finish()
+    super.onUserLeaveHint()
+  }
+
+  override fun onBackPressed() {
+    return
+  }
 }

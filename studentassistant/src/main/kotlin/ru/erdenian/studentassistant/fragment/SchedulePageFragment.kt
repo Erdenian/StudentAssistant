@@ -20,120 +20,120 @@ import ru.erdenian.studentassistant.schedule.ScheduleManager
 
 class SchedulePageFragment : Fragment() {
 
-    companion object {
+  companion object {
 
-        private const val TIME_FORMAT = "HH:mm"
+    private const val TIME_FORMAT = "HH:mm"
 
-        private const val PAGE_SEMESTER_ID = "page_semester_id"
-        private const val PAGE_DATE = "page_date"
-        private const val PAGE_WEEKDAY = "page_weekday"
-        private const val SHOW_WEEKS_AND_DATES = "show_weeks_and_dates"
+    private const val PAGE_SEMESTER_ID = "page_semester_id"
+    private const val PAGE_DATE = "page_date"
+    private const val PAGE_WEEKDAY = "page_weekday"
+    private const val SHOW_WEEKS_AND_DATES = "show_weeks_and_dates"
 
-        fun newInstance(semesterId: Long, date: LocalDate): SchedulePageFragment {
-            val schedulePageFragment = SchedulePageFragment()
-            val arguments = Bundle()
-            with(arguments) {
-                putLong(PAGE_SEMESTER_ID, semesterId)
-                putString(PAGE_DATE, date.toString())
-                putBoolean(SHOW_WEEKS_AND_DATES, false)
-            }
-            schedulePageFragment.arguments = arguments
-            return schedulePageFragment
-        }
-
-        fun newInstance(semesterId: Long, weekday: Int): SchedulePageFragment {
-            val schedulePageFragment = SchedulePageFragment()
-            val arguments = Bundle()
-            with(arguments) {
-                putLong(PAGE_SEMESTER_ID, semesterId)
-                arguments.putInt(PAGE_WEEKDAY, weekday)
-                putBoolean(SHOW_WEEKS_AND_DATES, true)
-            }
-            schedulePageFragment.arguments = arguments
-            return schedulePageFragment
-        }
+    fun newInstance(semesterId: Long, date: LocalDate): SchedulePageFragment {
+      val schedulePageFragment = SchedulePageFragment()
+      val arguments = Bundle()
+      with(arguments) {
+        putLong(PAGE_SEMESTER_ID, semesterId)
+        putString(PAGE_DATE, date.toString())
+        putBoolean(SHOW_WEEKS_AND_DATES, false)
+      }
+      schedulePageFragment.arguments = arguments
+      return schedulePageFragment
     }
 
-    private val semesterId: Long by lazy { arguments.getLong(PAGE_SEMESTER_ID, -1L) }
-    private val showWeeksAndDates: Boolean by lazy { arguments.getBoolean(SHOW_WEEKS_AND_DATES) }
-    private val day: LocalDate by lazy { LocalDate(arguments.getString(PAGE_DATE)) }
-    private val weekday: Int by lazy { arguments.getInt(PAGE_WEEKDAY, -1) }
+    fun newInstance(semesterId: Long, weekday: Int): SchedulePageFragment {
+      val schedulePageFragment = SchedulePageFragment()
+      val arguments = Bundle()
+      with(arguments) {
+        putLong(PAGE_SEMESTER_ID, semesterId)
+        arguments.putInt(PAGE_WEEKDAY, weekday)
+        putBoolean(SHOW_WEEKS_AND_DATES, true)
+      }
+      schedulePageFragment.arguments = arguments
+      return schedulePageFragment
+    }
+  }
 
-    override fun onCreate(savedInstanceState: Bundle?) = super.onCreate(savedInstanceState)
+  private val semesterId: Long by lazy { arguments.getLong(PAGE_SEMESTER_ID, -1L) }
+  private val showWeeksAndDates: Boolean by lazy { arguments.getBoolean(SHOW_WEEKS_AND_DATES) }
+  private val day: LocalDate by lazy { LocalDate(arguments.getString(PAGE_DATE)) }
+  private val weekday: Int by lazy { arguments.getInt(PAGE_WEEKDAY, -1) }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val lessons = if (showWeeksAndDates)
-            ScheduleManager.getLessons(semesterId, weekday)
-        else
-            ScheduleManager.getLessons(semesterId, day)
+  override fun onCreate(savedInstanceState: Bundle?) = super.onCreate(savedInstanceState)
 
-        if (lessons.isEmpty()) {
-            return inflater.inflate(R.layout.fragment_free_day, container, false)
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    val lessons = if (showWeeksAndDates)
+      ScheduleManager.getLessons(semesterId, weekday)
+    else
+      ScheduleManager.getLessons(semesterId, day)
+
+    if (lessons.isEmpty()) {
+      return inflater.inflate(R.layout.fragment_free_day, container, false)
+    }
+
+    val view = inflater.inflate(R.layout.scroll_view, container, false)
+    val llCardsParent = view.findViewById(R.id.scroll_view_items_parent) as LinearLayout
+
+    for ((subjectName, type, teachers, classrooms, startTime, endTime, lessonRepeat, id) in lessons) {
+      with(inflater.inflate(R.layout.card_schedule, llCardsParent, false)) {
+        (findViewById(R.id.card_schedule_start_time) as TextView).text = startTime.toString(TIME_FORMAT)
+        (findViewById(R.id.card_schedule_end_time) as TextView).text = endTime.toString(TIME_FORMAT)
+
+        if (classrooms.isNotEmpty()) {
+          (findViewById(R.id.card_schedule_classrooms) as TextView).text = Joiner.on(", ").join(classrooms)
+        } else {
+          findViewById(R.id.card_schedule_classrooms_icon).visibility = View.GONE
         }
 
-        val view = inflater.inflate(R.layout.scroll_view, container, false)
-        val llCardsParent = view.findViewById(R.id.scroll_view_items_parent) as LinearLayout
+        with(findViewById(R.id.card_schedule_type) as TextView) {
+          if (type.isNotBlank()) text = type
+          else visibility = View.GONE
+        }
 
-        for ((subjectName, type, teachers, classrooms, startTime, endTime, lessonRepeat, id) in lessons) {
-            with(inflater.inflate(R.layout.card_schedule, llCardsParent, false)) {
-                (findViewById(R.id.card_schedule_start_time) as TextView).text = startTime.toString(TIME_FORMAT)
-                (findViewById(R.id.card_schedule_end_time) as TextView).text = endTime.toString(TIME_FORMAT)
+        (findViewById(R.id.card_schedule_name) as TextView).text = subjectName
 
-                if (classrooms.isNotEmpty()) {
-                    (findViewById(R.id.card_schedule_classrooms) as TextView).text = Joiner.on(", ").join(classrooms)
-                } else {
-                    findViewById(R.id.card_schedule_classrooms_icon).visibility = View.GONE
-                }
+        with(findViewById(R.id.card_schedule_teachers_parent) as LinearLayout) {
+          teachers.forEach {
+            val teacher = inflater.inflate(R.layout.textview_teacher, this, false)
+            (teacher.findViewById(R.id.textview_teacher) as TextView).text = it
+            addView(teacher)
+          }
+        }
 
-                with(findViewById(R.id.card_schedule_type) as TextView) {
-                    if (type.isNotBlank()) text = type
-                    else visibility = View.GONE
-                }
+        if (!showWeeksAndDates) {
+          (findViewById(R.id.card_schedule_repeats) as LinearLayout).visibility = View.GONE
+        } else {
+          (findViewById(R.id.card_schedule_repeats_data) as TextView).text =
+                  when (lessonRepeat) {
+                    is LessonRepeat.ByWeekday -> {
+                      val weeks = mutableListOf<Int>()
+                      for ((i, w) in lessonRepeat.weeks.withIndex())
+                        if (w) weeks.add(i + 1)
 
-                (findViewById(R.id.card_schedule_name) as TextView).text = subjectName
-
-                with(findViewById(R.id.card_schedule_teachers_parent) as LinearLayout) {
-                    teachers.forEach {
-                        val teacher = inflater.inflate(R.layout.textview_teacher, this, false)
-                        (teacher.findViewById(R.id.textview_teacher) as TextView).text = it
-                        addView(teacher)
+                      getString(R.string.schedule_page_fragment_weeks) + " " + Joiner.on(", ").join(weeks) + " " +
+                              getString(R.string.schedule_page_fragment_out_of) + " " + lessonRepeat.weeks.size
                     }
-                }
-
-                if (!showWeeksAndDates) {
-                    (findViewById(R.id.card_schedule_repeats) as LinearLayout).visibility = View.GONE
-                } else {
-                    (findViewById(R.id.card_schedule_repeats_data) as TextView).text =
-                            when (lessonRepeat) {
-                                is LessonRepeat.ByWeekday -> {
-                                    val weeks = mutableListOf<Int>()
-                                    for ((i, w) in lessonRepeat.weeks.withIndex())
-                                        if (w) weeks.add(i + 1)
-
-                                    getString(R.string.schedule_page_fragment_weeks) + " " + Joiner.on(", ").join(weeks) + " " +
-                                            getString(R.string.schedule_page_fragment_out_of) + " " + lessonRepeat.weeks.size
-                                }
-                                is LessonRepeat.ByDates -> Joiner.on(", ").join(lessonRepeat.dates)
-                                else -> throw IllegalStateException("Неизвестный тип повторения: $lessonRepeat")
-                            }
-                }
-
-                if (showWeeksAndDates) setOnClickListener {
-                    context.startActivity<LessonEditorActivity>(
-                            context.SEMESTER_ID to semesterId,
-                            context.LESSON_ID to id
-                    )
-                }
-                else setOnClickListener {
-                    context.startActivity<LessonInformationActivity>(
-                            context.SEMESTER_ID to semesterId,
-                            context.LESSON_ID to id)
-                }
-
-                llCardsParent.addView(this)
-            }
+                    is LessonRepeat.ByDates -> Joiner.on(", ").join(lessonRepeat.dates)
+                    else -> throw IllegalStateException("Неизвестный тип повторения: $lessonRepeat")
+                  }
         }
 
-        return view
+        if (showWeeksAndDates) setOnClickListener {
+          context.startActivity<LessonEditorActivity>(
+                  context.SEMESTER_ID to semesterId,
+                  context.LESSON_ID to id
+          )
+        }
+        else setOnClickListener {
+          context.startActivity<LessonInformationActivity>(
+                  context.SEMESTER_ID to semesterId,
+                  context.LESSON_ID to id)
+        }
+
+        llCardsParent.addView(this)
+      }
     }
+
+    return view
+  }
 }

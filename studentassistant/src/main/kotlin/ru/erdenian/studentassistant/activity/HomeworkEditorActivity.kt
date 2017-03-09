@@ -23,94 +23,94 @@ import ru.erdenian.studentassistant.schedule.Semester
 class HomeworkEditorActivity : AppCompatActivity(),
         CalendarDatePickerDialogFragment.OnDateSetListener {
 
-    private companion object {
+  private companion object {
 
-        const val DEADLINE = "deadline"
+    const val DEADLINE = "deadline"
+  }
+
+  private val semester: Semester by lazy { ScheduleManager.getSemester(intent.getLongExtra(SEMESTER_ID, -1L))!! }
+  private val lesson: Lesson? by lazy { ScheduleManager.getLesson(semester.id, intent.getLongExtra(LESSON_ID, -1L)) }
+  private val homework: Homework? by lazy { ScheduleManager.getHomework(semester.id, intent.getLongExtra(HOMEWORK_ID, -1L)) }
+
+  val subjects: ImmutableSortedSet<String> by lazy { ScheduleManager.getSubjects(semester.id) }
+
+  private var deadline: LocalDate? = null
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_homework_editor)
+
+    setSupportActionBar(toolbar)
+    supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+    content_homework_editor_subject_name.adapter =
+            ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, subjects.toTypedArray())
+
+    lesson?.let { content_homework_editor_subject_name.setSelection(subjects.indexOfFirst { it == lesson!!.subjectName }) }
+
+    homework?.let {
+      content_homework_editor_subject_name.setSelection(subjects.indexOfFirst { subject -> subject == it.subjectName })
+      content_homeworks_editor_description.setText(it.description)
+      content_homework_editor_deadline.text = it.deadline.toString("dd.MM.yyyy")
     }
 
-    private val semester: Semester by lazy { ScheduleManager.getSemester(intent.getLongExtra(SEMESTER_ID, -1L))!! }
-    private val lesson: Lesson? by lazy { ScheduleManager.getLesson(semester.id, intent.getLongExtra(LESSON_ID, -1L)) }
-    private val homework: Homework? by lazy { ScheduleManager.getHomework(semester.id, intent.getLongExtra(HOMEWORK_ID, -1L)) }
+    content_homework_editor_deadline.setOnClickListener {
+      showDatePicker(this, LocalDate.now(), semester.lastDay, deadline)
+    }
+  }
 
-    val subjects: ImmutableSortedSet<String> by lazy { ScheduleManager.getSubjects(semester.id) }
+  override fun onSaveInstanceState(outState: Bundle) {
+    outState.putString(deadline.toString(), DEADLINE)
+    super.onSaveInstanceState(outState)
+  }
 
-    private var deadline: LocalDate? = null
+  override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+    super.onRestoreInstanceState(savedInstanceState)
+    deadline = LocalDate.parse(savedInstanceState.get(DEADLINE) as String) as LocalDate
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_homework_editor)
+  }
 
-        setSupportActionBar(toolbar)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+  override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    menuInflater.inflate(R.menu.menu_homework_editor, menu)
+    menu.findItem(R.id.menu_homework_editor_delete_homework).isVisible = (homework != null)
+    menu.setColor(getCompatColor(R.color.action_bar_icons_color))
+    return super.onCreateOptionsMenu(menu)
+  }
 
-        content_homework_editor_subject_name.adapter =
-                ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, subjects.toTypedArray())
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when (item.itemId) {
+      android.R.id.home -> finish()
+      R.id.menu_lesson_editor_save -> {
+        val subjectName = content_homework_editor_subject_name.selectedItem.toString()
 
-        lesson?.let { content_homework_editor_subject_name.setSelection(subjects.indexOfFirst { it == lesson!!.subjectName }) }
-
-        homework?.let {
-            content_homework_editor_subject_name.setSelection(subjects.indexOfFirst { subject -> subject == it.subjectName })
-            content_homeworks_editor_description.setText(it.description)
-            content_homework_editor_deadline.text = it.deadline.toString("dd.MM.yyyy")
+        val description = if (content_homeworks_editor_description.text.isNotBlank()) {
+          content_homeworks_editor_description.text.trim().toString()
+        } else {
+          toast(R.string.content_homework_editor_activity_null_description)
+          return super.onOptionsItemSelected(item)
         }
 
-        content_homework_editor_deadline.setOnClickListener {
-            showDatePicker(this, LocalDate.now(), semester.lastDay, deadline)
+        if (deadline == null) {
+          toast(R.string.content_homework_editor_activity_null_deadline)
+          return super.onOptionsItemSelected(item)
         }
+
+        if (homework == null) ScheduleManager.addHomework(semester.id, Homework(subjectName, description, deadline!!))
+        else ScheduleManager.updateHomework(semester.id, homework!!.copy(subjectName, description, deadline!!))
+
+        finish()
+      }
+      R.id.menu_homework_editor_delete_homework -> {
+        ScheduleManager.removeHomework(semester.id, homework!!.id)
+        finish()
+      }
+      else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
     }
+    return super.onOptionsItemSelected(item)
+  }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putString(deadline.toString(), DEADLINE)
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        deadline = LocalDate.parse(savedInstanceState.get(DEADLINE) as String) as LocalDate
-
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_homework_editor, menu)
-        menu.findItem(R.id.menu_homework_editor_delete_homework).isVisible = (homework != null)
-        menu.setColor(getCompatColor(R.color.action_bar_icons_color))
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> finish()
-            R.id.menu_lesson_editor_save -> {
-                val subjectName = content_homework_editor_subject_name.selectedItem.toString()
-
-                val description = if (content_homeworks_editor_description.text.isNotBlank()) {
-                    content_homeworks_editor_description.text.trim().toString()
-                } else {
-                    toast(R.string.content_homework_editor_activity_null_description)
-                    return super.onOptionsItemSelected(item)
-                }
-
-                if (deadline == null) {
-                    toast(R.string.content_homework_editor_activity_null_deadline)
-                    return super.onOptionsItemSelected(item)
-                }
-
-                if (homework == null) ScheduleManager.addHomework(semester.id, Homework(subjectName, description, deadline!!))
-                else ScheduleManager.updateHomework(semester.id, homework!!.copy(subjectName, description, deadline!!))
-
-                finish()
-            }
-            R.id.menu_homework_editor_delete_homework -> {
-                ScheduleManager.removeHomework(semester.id, homework!!.id)
-                finish()
-            }
-            else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onDateSet(dialog: CalendarDatePickerDialogFragment?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-        deadline = LocalDate(year, monthOfYear + 1, dayOfMonth)
-        content_homework_editor_deadline.text = deadline!!.toString("dd.MM.yyyy")
-    }
+  override fun onDateSet(dialog: CalendarDatePickerDialogFragment?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
+    deadline = LocalDate(year, monthOfYear + 1, dayOfMonth)
+    content_homework_editor_deadline.text = deadline!!.toString("dd.MM.yyyy")
+  }
 }
