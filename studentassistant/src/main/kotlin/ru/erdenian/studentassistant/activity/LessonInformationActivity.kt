@@ -60,11 +60,13 @@ class LessonInformationActivity : AppCompatActivity(), OnScheduleUpdateListener 
         (card.findViewById(R.id.card_homework_description) as TextView).text = it.description
         (card.findViewById(R.id.card_homework_deadline) as TextView).text = it.deadline.toString("dd.MM.yyyy")
 
+        val homeworkId = it.id
+
         card.setOnClickListener {
           startActivity<HomeworkEditorActivity>(
                   SEMESTER_ID to semesterId,
                   LESSON_ID to lessonId,
-                  HOMEWORK_ID to it.id
+              HOMEWORK_ID to homeworkId
           )
         }
 
