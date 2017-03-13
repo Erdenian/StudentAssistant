@@ -1,1 +1,1 @@
-include ':studentassistant', ':gsonguavadeserializers'
+include ':studentassistant'

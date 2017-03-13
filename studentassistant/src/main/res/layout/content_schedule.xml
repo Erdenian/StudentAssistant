@@ -18,7 +18,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/content_schedule_get_schedule_from_server_button"/>
+            android:text="@string/content_schedule_get_schedule_from_server_button"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/content_schedule_add_schedule"

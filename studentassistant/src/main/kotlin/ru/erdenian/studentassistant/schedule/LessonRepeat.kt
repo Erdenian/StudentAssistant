@@ -6,29 +6,29 @@ import org.joda.time.LocalDate
 
 sealed class LessonRepeat {
 
-    abstract fun repeatsOnDay(day: LocalDate, weekNumber: Int): Boolean
+  abstract fun repeatsOnDay(day: LocalDate, weekNumber: Int): Boolean
 
-    class ByWeekday(val weekday: Int, val weeks: List<Boolean>) : LessonRepeat() {
+  class ByWeekday(val weekday: Int, val weeks: List<Boolean>) : LessonRepeat() {
 
-        init {
-            if (weekday !in DateTimeConstants.MONDAY..DateTimeConstants.SUNDAY)
-                throw IllegalArgumentException("Неверный день недели: $weekday")
-            if (weeks.isEmpty()) throw IllegalArgumentException("Массив недель пуст")
-        }
-
-        override fun repeatsOnDay(day: LocalDate, weekNumber: Int) = (weeks[weekNumber % weeks.size]) && (day.dayOfWeek == weekday)
-
-        fun repeatsOnWeekday(weekday: Int) = (weekday == this.weekday)
+    init {
+      if (weekday !in DateTimeConstants.MONDAY..DateTimeConstants.SUNDAY)
+        throw IllegalArgumentException("Неверный день недели: $weekday")
+      if (weeks.isEmpty()) throw IllegalArgumentException("Массив недель пуст")
     }
 
-    class ByDates(val dates: ImmutableSortedSet<LocalDate>) : LessonRepeat() {
+    override fun repeatsOnDay(day: LocalDate, weekNumber: Int) = (weeks[weekNumber % weeks.size]) && (day.dayOfWeek == weekday)
 
-        init {
-            if (dates.isEmpty()) throw IllegalArgumentException("Массив дат пуст")
-        }
+    fun repeatsOnWeekday(weekday: Int) = (weekday == this.weekday)
+  }
 
-        override fun repeatsOnDay(day: LocalDate, weekNumber: Int) = day in dates
+  class ByDates(val dates: ImmutableSortedSet<LocalDate>) : LessonRepeat() {
 
-        fun repeatsOnDate(date: LocalDate) = repeatsOnDay(date, -1)
+    init {
+      if (dates.isEmpty()) throw IllegalArgumentException("Массив дат пуст")
     }
+
+    override fun repeatsOnDay(day: LocalDate, weekNumber: Int) = day in dates
+
+    fun repeatsOnDate(date: LocalDate) = repeatsOnDay(date, -1)
+  }
 }
