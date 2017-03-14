@@ -2,21 +2,21 @@ package ru.erdenian.studentassistant.fragment
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
-import com.google.common.base.Joiner
+import android.view.*
+import android.widget.AdapterView
+import android.widget.ListView
+import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.startService
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.activity.COPY
 import ru.erdenian.studentassistant.activity.LESSON_ID
 import ru.erdenian.studentassistant.activity.LessonEditorActivity
-import ru.erdenian.studentassistant.activity.LessonInformationActivity
 import ru.erdenian.studentassistant.activity.SEMESTER_ID
-import ru.erdenian.studentassistant.schedule.LessonRepeat
+import ru.erdenian.studentassistant.adapter.ScheduleListAdapter
 import ru.erdenian.studentassistant.schedule.ScheduleManager
+import ru.erdenian.studentassistant.service.ScheduleService
 
 class SchedulePageFragment : Fragment() {
 
@@ -71,69 +71,54 @@ class SchedulePageFragment : Fragment() {
       return inflater.inflate(R.layout.fragment_free_day, container, false)
     }
 
-    val view = inflater.inflate(R.layout.scroll_view, container, false)
-    val llCardsParent = view.findViewById(R.id.scroll_view_items_parent) as LinearLayout
-
-    for ((subjectName, type, teachers, classrooms, startTime, endTime, lessonRepeat, id) in lessons) {
-      with(inflater.inflate(R.layout.card_schedule, llCardsParent, false)) {
-        (findViewById(R.id.card_schedule_start_time) as TextView).text = startTime.toString(TIME_FORMAT)
-        (findViewById(R.id.card_schedule_end_time) as TextView).text = endTime.toString(TIME_FORMAT)
-
-        if (classrooms.isNotEmpty()) {
-          (findViewById(R.id.card_schedule_classrooms) as TextView).text = Joiner.on(", ").join(classrooms)
-        } else {
-          findViewById(R.id.card_schedule_classrooms_icon).visibility = View.GONE
-        }
-
-        with(findViewById(R.id.card_schedule_type) as TextView) {
-          if (type.isNotBlank()) text = type
-          else visibility = View.GONE
-        }
-
-        (findViewById(R.id.card_schedule_name) as TextView).text = subjectName
-
-        with(findViewById(R.id.card_schedule_teachers_parent) as LinearLayout) {
-          teachers.forEach {
-            val teacher = inflater.inflate(R.layout.textview_teacher, this, false)
-            (teacher.findViewById(R.id.textview_teacher) as TextView).text = it
-            addView(teacher)
-          }
-        }
-
-        if (!showWeeksAndDates) {
-          (findViewById(R.id.card_schedule_repeats) as LinearLayout).visibility = View.GONE
-        } else {
-          (findViewById(R.id.card_schedule_repeats_data) as TextView).text =
-              when (lessonRepeat) {
-                is LessonRepeat.ByWeekday -> {
-                  val weeks = mutableListOf<Int>()
-                  for ((i, w) in lessonRepeat.weeks.withIndex())
-                    if (w) weeks.add(i + 1)
-
-                  getString(R.string.schedule_page_fragment_weeks) + " " + Joiner.on(", ").join(weeks) + " " +
-                      getString(R.string.schedule_page_fragment_out_of) + " " + lessonRepeat.weeks.size
-                }
-                is LessonRepeat.ByDates -> Joiner.on(", ").join(lessonRepeat.dates)
-                else -> throw IllegalStateException("Неизвестный тип повторения: $lessonRepeat")
-              }
-        }
-
-        if (showWeeksAndDates) setOnClickListener {
-          context.startActivity<LessonEditorActivity>(
-              context.SEMESTER_ID to semesterId,
-              context.LESSON_ID to id
-          )
-        }
-        else setOnClickListener {
-          context.startActivity<LessonInformationActivity>(
-              context.SEMESTER_ID to semesterId,
-              context.LESSON_ID to id)
-        }
-
-        llCardsParent.addView(this)
-      }
-    }
+    val view = inflater.inflate(R.layout.list_view, container, false) as ListView
+    view.adapter = ScheduleListAdapter(context, semesterId, showWeeksAndDates, lessons)
+    if (showWeeksAndDates) registerForContextMenu(view)
 
     return view
+  }
+
+  override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+    super.onCreateContextMenu(menu, v, menuInfo)
+    activity.menuInflater.inflate(R.menu.context_menu_schedule_page_fragment, menu)
+
+    val info = menuInfo as AdapterView.AdapterContextMenuInfo
+    menu.setHeaderTitle(ScheduleManager.getLesson(semesterId, info.id)!!.subjectName)
+  }
+
+  override fun onContextItemSelected(item: MenuItem): Boolean {
+    val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
+    val lesson = ScheduleManager.getLesson(semesterId, info.id)!!
+    when (item.itemId) {
+      R.id.context_menu_schedule_page_fragment_copy -> context.startActivity<LessonEditorActivity>(
+          context.SEMESTER_ID to semesterId,
+          context.LESSON_ID to lesson.id,
+          context.COPY to true
+      )
+      R.id.context_menu_schedule_page_fragment_delete -> {
+        fun remove() {
+          ScheduleManager.removeLesson(semesterId, lesson.id)
+          context.startService<ScheduleService>()
+        }
+
+        if (ScheduleManager.getHomeworks(semesterId, lesson.subjectName).isNotEmpty()
+            && (ScheduleManager.getLessons(semesterId, lesson.subjectName).size == 1)) {
+
+          context.alert(R.string.activity_lesson_editor_alert_delete_homeworks_message,
+              R.string.activity_lesson_editor_alert_delete_homeworks_title) {
+            positiveButton(R.string.activity_lesson_editor_alert_delete_homeworks_yes) { remove() }
+            neutralButton(R.string.activity_lesson_editor_alert_delete_homeworks_cancel)
+          }.show()
+        } else {
+
+          context.alert(R.string.activity_lesson_editor_alert_delete_message) {
+            positiveButton(R.string.activity_lesson_editor_alert_delete_yes) { remove() }
+            negativeButton(R.string.activity_lesson_editor_alert_delete_no)
+          }.show()
+        }
+      }
+      else -> return super.onContextItemSelected(item)
+    }
+    return true
   }
 }
