@@ -46,6 +46,7 @@ class LessonEditorActivity : AppCompatActivity(),
     intent.getLongExtra(SEMESTER_ID, -1L).takeIf { it != -1L } ?: throw IllegalStateException("Не передан id семестра")
   }
   private val lesson: Lesson? by lazy { ScheduleManager.getLesson(semesterId, intent.getLongExtra(LESSON_ID, -1L)) }
+  private val copy: Boolean by lazy { intent.getBooleanExtra(COPY, false) }
   private val weekday: Int by lazy {
     intent.getIntExtra(WEEKDAY, -1).takeIf { it != -1 } ?: (lesson!!.lessonRepeat as? LessonRepeat.ByWeekday)?.weekday ?: 1
   }
@@ -220,7 +221,7 @@ class LessonEditorActivity : AppCompatActivity(),
         }
 
         fun saveChanges() {
-          if (lesson == null) {
+          if ((lesson == null) || copy) {
             ScheduleManager.addLesson(semesterId, Lesson(subjectName, type, ImmutableSortedSet.copyOf(teachers),
                 ImmutableSortedSet.copyOf(classrooms), startTime!!, endTime!!,
                 LessonRepeat.ByWeekday(weekday, ImmutableList.copyOf(weeks.toList()))))
@@ -256,7 +257,7 @@ class LessonEditorActivity : AppCompatActivity(),
           finish()
         }
 
-        if ((lesson != null) && ScheduleManager.getHomeworks(semesterId, lesson!!.subjectName).isNotEmpty()
+        if (ScheduleManager.getHomeworks(semesterId, lesson!!.subjectName).isNotEmpty()
             && (ScheduleManager.getLessons(semesterId, lesson!!.subjectName).size == 1)) {
 
           alert(R.string.activity_lesson_editor_alert_delete_homeworks_message,
@@ -271,7 +272,6 @@ class LessonEditorActivity : AppCompatActivity(),
             negativeButton(R.string.activity_lesson_editor_alert_delete_no)
           }.show()
         }
-
       }
       else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
     }
