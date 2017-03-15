@@ -236,7 +236,7 @@ class LessonEditorActivity : AppCompatActivity(),
         }
 
         if ((lesson != null) && (subjectName != lesson!!.subjectName) &&
-            (ScheduleManager.getLessons(semesterId, lesson!!.subjectName).size > 1)) {
+            (ScheduleManager.getLessons(semesterId, lesson!!.subjectName).size > (if (copy) 0 else 1))) {
 
           alert(R.string.activity_lesson_editor_alert_rename_lessons_message,
               R.string.activity_lesson_editor_alert_rename_lessons_title) {
