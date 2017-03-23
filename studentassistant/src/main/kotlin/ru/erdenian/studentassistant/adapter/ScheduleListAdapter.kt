@@ -51,6 +51,7 @@ class ScheduleListAdapter(context: Context, val semesterId: Long, val showWeeksA
       (findViewById(R.id.card_schedule_name) as TextView).text = subjectName
 
       with(findViewById(R.id.card_schedule_teachers_parent) as LinearLayout) {
+        removeAllViews()
         teachers.forEach {
           val teacher = inflater.inflate(R.layout.textview_teacher, this, false)
           (teacher.findViewById(R.id.textview_teacher) as TextView).text = it
