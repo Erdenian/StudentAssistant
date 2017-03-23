@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputEditText
+            <AutoCompleteTextView
                 android:id="@+id/content_lesson_editor_subject_name_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
 
                 <requestFocus/>
 
-            </android.support.design.widget.TextInputEditText>
+            </AutoCompleteTextView>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputEditText
+            <AutoCompleteTextView
                 android:id="@+id/content_lesson_editor_lesson_type_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputEditText
+            <MultiAutoCompleteTextView
                 android:id="@+id/content_lesson_editor_teachers_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputEditText
+            <MultiAutoCompleteTextView
                 android:id="@+id/content_lesson_editor_classrooms_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -7,7 +7,6 @@ import android.widget.AdapterView
 import android.widget.ListView
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.startService
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.activity.COPY
@@ -16,7 +15,6 @@ import ru.erdenian.studentassistant.activity.LessonEditorActivity
 import ru.erdenian.studentassistant.activity.SEMESTER_ID
 import ru.erdenian.studentassistant.adapter.ScheduleListAdapter
 import ru.erdenian.studentassistant.schedule.ScheduleManager
-import ru.erdenian.studentassistant.service.ScheduleService
 
 class SchedulePageFragment : Fragment() {
 
@@ -98,7 +96,7 @@ class SchedulePageFragment : Fragment() {
       R.id.context_menu_schedule_page_fragment_delete -> {
         fun remove() {
           ScheduleManager.removeLesson(semesterId, lesson.id)
-          context.startService<ScheduleService>()
+          //context.startService<ScheduleService>()
         }
 
         if (ScheduleManager.getHomeworks(semesterId, lesson.subjectName).isNotEmpty()
