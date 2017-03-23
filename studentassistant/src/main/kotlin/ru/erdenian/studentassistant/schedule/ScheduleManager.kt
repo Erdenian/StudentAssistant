@@ -562,7 +562,7 @@ object ScheduleManager {
 
     //region Запросы к БД
 
-    fun <T> getSemesters(block: (Semester) -> T) = readableDatabase.use {
+    fun getSemesters(block: (Semester) -> Unit) = readableDatabase.use {
       it.query(Tables.SEMESTERS, null, null, null, null, null, Tables.Semesters.FIRST_DAY).use {
         if (it.moveToFirst()) {
           val indexes = it.semesterColumnsIndexes
@@ -572,7 +572,7 @@ object ScheduleManager {
       }
     }
 
-    fun <T> getLessons(semesterId: Long, block: (Lesson) -> T) = readableDatabase.use {
+    fun getLessons(semesterId: Long, block: (Lesson) -> Unit) = readableDatabase.use {
       it.rawQuery(Queries.getLessons, arrayOf(semesterId.toString())).use {
         if (it.moveToFirst()) {
           val indexes = it.lessonColumnsIndexes
@@ -596,7 +596,7 @@ object ScheduleManager {
         Tables.Homeworks.DEADLINE
     )
 
-    fun <T> getHomeworks(semesterId: Long, block: (Homework) -> T) = readableDatabase.use {
+    fun getHomeworks(semesterId: Long, block: (Homework) -> Unit) = readableDatabase.use {
       it.query(Tables.HOMEWORKS, homeworksColumns, "${Tables.Homeworks.SEMESTER_ID} = ?",
           arrayOf(semesterId.toString()), null, null, Tables.Homeworks.DEADLINE).use {
         if (it.moveToFirst()) {
@@ -607,7 +607,7 @@ object ScheduleManager {
       }
     }
 
-    fun <T> getHomeworks(semesterId: Long, subjectName: String, block: (Homework) -> T) = readableDatabase.use {
+    fun getHomeworks(semesterId: Long, subjectName: String, block: (Homework) -> Unit) = readableDatabase.use {
       it.query(Tables.HOMEWORKS, homeworksColumns, "${Tables.Homeworks.SEMESTER_ID} = ? AND ${Tables.Homeworks.SUBJECT_NAME} = ?",
           arrayOf(semesterId.toString(), subjectName), null, null, Tables.Homeworks.DEADLINE).use {
         if (it.moveToFirst()) {
