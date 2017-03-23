@@ -301,6 +301,8 @@ class LessonEditorActivity : AppCompatActivity(),
       START_TIME_TAG -> {
         startTime = newTime
         content_lesson_editor_start_time.text = newTime.toString(TIME_FORMAT)
+        endTime = startTime!! + ScheduleManager.getLessonLength(semesterId)
+        content_lesson_editor_end_time.text = endTime?.toString(TIME_FORMAT)
       }
       END_TIME_TAG -> {
         endTime = newTime
