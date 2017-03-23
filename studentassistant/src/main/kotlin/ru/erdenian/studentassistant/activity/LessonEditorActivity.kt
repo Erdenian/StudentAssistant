@@ -145,7 +145,7 @@ class LessonEditorActivity : AppCompatActivity(),
         android.R.layout.simple_dropdown_item_1line, ScheduleManager.getSubjects(semesterId).asList()))
 
     content_lesson_editor_lesson_type_edit_text.setAdapter(ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line,
-        ScheduleManager.getTypes(semesterId).asList() + resources.getStringArray(R.array.lesson_types)))
+        ImmutableSortedSet.copyOf(ScheduleManager.getTypes(semesterId) + resources.getStringArray(R.array.lesson_types)).asList()))
 
     content_lesson_editor_teachers_edit_text.setAdapter(ArrayAdapter(this,
         android.R.layout.simple_dropdown_item_1line, ScheduleManager.getTeachers(semesterId).asList()))
