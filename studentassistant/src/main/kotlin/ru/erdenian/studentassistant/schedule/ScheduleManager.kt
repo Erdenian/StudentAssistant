@@ -114,6 +114,21 @@ object ScheduleManager {
   fun getSubjects(semesterId: Long): ImmutableSortedSet<String> =
       ImmutableSortedSet.copyOf(getLessons(semesterId).map { it.subjectName })
 
+  fun getTypes(semesterId: Long): ImmutableSortedSet<String> =
+      ImmutableSortedSet.copyOf(getLessons(semesterId).map { it.type })
+
+  fun getTeachers(semesterId: Long): ImmutableSortedSet<String> {
+    val teachers = sortedSetOf<String>()
+    getLessons(semesterId).forEach { teachers.addAll(it.teachers) }
+    return ImmutableSortedSet.copyOf(teachers)
+  }
+
+  fun getClassrooms(semesterId: Long): ImmutableSortedSet<String> {
+    val classrooms = sortedSetOf<String>()
+    getLessons(semesterId).forEach { classrooms.addAll(it.classrooms) }
+    return ImmutableSortedSet.copyOf(classrooms)
+  }
+
   val hasLessons: Boolean get() {
     semesters.forEach { if (getLessons(it.id).isNotEmpty()) return true }
     return false

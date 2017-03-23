@@ -159,4 +159,14 @@
     <string name="context_menu_schedule_page_fragment_copy">Копировать</string>
     <string name="context_menu_schedule_page_fragment_delete">Удалить</string>
 
+    <string-array name="lesson_types">
+        <item>Семинар</item>
+        <item>Лекция</item>
+        <item>Лабораторная работа</item>
+        <item>Практика</item>
+        <item>Консультация</item>
+        <item>Экзамен</item>
+        <item>Самостоятельная работа</item>
+    </string-array>
+
 </resources>

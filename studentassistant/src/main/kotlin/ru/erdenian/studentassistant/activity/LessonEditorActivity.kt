@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ArrayAdapter
 import android.widget.CheckBox
+import android.widget.MultiAutoCompleteTextView
 import android.widget.TextView
 import com.codetroopers.betterpickers.radialtimepicker.RadialTimePickerDialogFragment
 import com.google.common.base.Joiner
@@ -25,6 +27,7 @@ import ru.erdenian.studentassistant.schedule.Lesson
 import ru.erdenian.studentassistant.schedule.LessonRepeat
 import ru.erdenian.studentassistant.schedule.ScheduleManager
 import ru.erdenian.studentassistant.service.ScheduleService
+
 
 class LessonEditorActivity : AppCompatActivity(),
     RadialTimePickerDialogFragment.OnTimeSetListener {
@@ -137,6 +140,20 @@ class LessonEditorActivity : AppCompatActivity(),
       (checkbox.findViewById(R.id.content_lesson_editor_week_checkbox) as CheckBox).isChecked = w
       (checkbox.findViewById(R.id.content_lesson_editor_week_number) as TextView).text = (i + 1).toString()
     }
+
+    content_lesson_editor_subject_name_edit_text.setAdapter(ArrayAdapter(this,
+        android.R.layout.simple_dropdown_item_1line, ScheduleManager.getSubjects(semesterId).asList()))
+
+    content_lesson_editor_lesson_type_edit_text.setAdapter(ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line,
+        ScheduleManager.getTypes(semesterId).asList() + resources.getStringArray(R.array.lesson_types)))
+
+    content_lesson_editor_teachers_edit_text.setAdapter(ArrayAdapter(this,
+        android.R.layout.simple_dropdown_item_1line, ScheduleManager.getTeachers(semesterId).asList()))
+    content_lesson_editor_teachers_edit_text.setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
+
+    content_lesson_editor_classrooms_edit_text.setAdapter(ArrayAdapter(this,
+        android.R.layout.simple_dropdown_item_1line, ScheduleManager.getClassrooms(semesterId).asList()))
+    content_lesson_editor_classrooms_edit_text.setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
   }
 
   override fun onSaveInstanceState(outState: Bundle) {
