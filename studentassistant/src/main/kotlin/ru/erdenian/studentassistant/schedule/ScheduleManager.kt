@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import com.google.common.base.Joiner
 import com.google.common.collect.ImmutableSortedSet
 import org.joda.time.LocalDate
+import org.joda.time.Period
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
 import java.lang.ref.WeakReference
@@ -127,6 +128,18 @@ object ScheduleManager {
     val classrooms = sortedSetOf<String>()
     getLessons(semesterId).forEach { classrooms.addAll(it.classrooms) }
     return ImmutableSortedSet.copyOf(classrooms)
+  }
+
+  fun getLessonLength(semesterId: Long): Period {
+    var max: Period? = null
+    var maxCount = -1
+    getLessons(semesterId).groupBy { Period(it.startTime, it.endTime) }.forEach { period, lessons ->
+      if (lessons.size > maxCount) {
+        maxCount = lessons.size
+        max = period
+      }
+    }
+    return max ?: Period(1, 30, 0, 0)
   }
 
   val hasLessons: Boolean get() {
