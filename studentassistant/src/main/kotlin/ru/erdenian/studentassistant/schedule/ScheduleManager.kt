@@ -440,7 +440,7 @@ object ScheduleManager {
 
     private object Queries {
 
-      const val createTableSemesters = """
+      const val CREATE_TABLE_SEMESTERS = """
                 CREATE TABLE ${Tables.SEMESTERS}(
                     ${Tables.Semesters.ID}          INTEGER PRIMARY KEY,
                     ${Tables.Semesters.NAME}        TEXT NOT NULL,
@@ -448,7 +448,7 @@ object ScheduleManager {
                     ${Tables.Semesters.LAST_DAY}    TEXT NOT NULL);
                 """
 
-      const val createTableLessons = """
+      const val CREATE_TABLE_LESSONS = """
                 CREATE TABLE ${Tables.LESSONS}(
                     ${Tables.Lessons.ID}            INTEGER PRIMARY KEY,
                     ${Tables.Lessons.SUBJECT_NAME}  TEXT NOT NULL,
@@ -463,7 +463,7 @@ object ScheduleManager {
                                                     ON DELETE CASCADE);
                 """
 
-      const val createTableByWeekday = """
+      const val CREATE_TABLE_BY_WEEKDAY = """
                 CREATE TABLE ${Tables.BY_WEEKDAY}(
                     ${Tables.ByWeekday.LESSON_ID}   INTEGER PRIMARY KEY
                                                     REFERENCES ${Tables.LESSONS}(${Tables.Lessons.ID})
@@ -472,7 +472,7 @@ object ScheduleManager {
                     ${Tables.ByWeekday.WEEKS}       TEXT NOT NULL);
                 """
 
-      const val createTableByDates = """
+      const val CREATE_TABLE_BY_DATES = """
                 CREATE TABLE ${Tables.BY_DATES}(
                     ${Tables.ByDates.LESSON_ID} INTEGER PRIMARY KEY
                                                 REFERENCES ${Tables.LESSONS}(${Tables.Lessons.ID})
@@ -480,7 +480,7 @@ object ScheduleManager {
                     ${Tables.ByDates.DATES}     TEXT NOT NULL);
                 """
 
-      const val createTableHomeworks = """
+      const val CREATE_TABLE_HOMEWORKS = """
                 CREATE TABLE ${Tables.HOMEWORKS}(
                     ${Tables.Homeworks.ID}              INTEGER PRIMARY KEY,
                     ${Tables.Homeworks.SUBJECT_NAME}    TEXT NOT NULL,
@@ -491,7 +491,7 @@ object ScheduleManager {
                                                         ON DELETE CASCADE);
                 """
 
-      const val getLessons = """
+      const val GET_LESSONS = """
                 SELECT ${Tables.LESSONS}.${Tables.Lessons.ID},
                        ${Tables.LESSONS}.${Tables.Lessons.SUBJECT_NAME},
                        ${Tables.LESSONS}.${Tables.Lessons.TYPE},
@@ -513,7 +513,7 @@ object ScheduleManager {
                 WHERE ${Tables.LESSONS}.${Tables.Lessons.SEMESTER_ID} = ?;
                 """
 
-      const val getLesson = """
+      const val GET_LESSON = """
                 SELECT ${Tables.LESSONS}.${Tables.Lessons.ID},
                        ${Tables.LESSONS}.${Tables.Lessons.SUBJECT_NAME},
                        ${Tables.LESSONS}.${Tables.Lessons.TYPE},
@@ -536,12 +536,12 @@ object ScheduleManager {
                       ${Tables.LESSONS}.${Tables.Lessons.ID} = ?;
                 """
 
-      const val replaceByWeekday = """
+      const val REPLACE_BY_WEEKDAY = """
                 REPLACE INTO ${Tables.BY_WEEKDAY}(${Tables.ByWeekday.LESSON_ID}, ${Tables.ByWeekday.WEEKDAY},
                                                   ${Tables.ByWeekday.WEEKS}) VALUES(?, ?, ?);
                 """
 
-      const val replaceByDates = """
+      const val REPLACE_BY_DATES = """
                 REPLACE INTO ${Tables.BY_DATES}(${Tables.ByDates.LESSON_ID}, ${Tables.ByDates.DATES}) VALUES(?, ?);
                 """
     }
@@ -555,11 +555,11 @@ object ScheduleManager {
       db.beginTransaction()
 
       try {
-        db.execSQL(Queries.createTableSemesters)
-        db.execSQL(Queries.createTableLessons)
-        db.execSQL(Queries.createTableByWeekday)
-        db.execSQL(Queries.createTableByDates)
-        db.execSQL(Queries.createTableHomeworks)
+        db.execSQL(Queries.CREATE_TABLE_SEMESTERS)
+        db.execSQL(Queries.CREATE_TABLE_LESSONS)
+        db.execSQL(Queries.CREATE_TABLE_BY_WEEKDAY)
+        db.execSQL(Queries.CREATE_TABLE_BY_DATES)
+        db.execSQL(Queries.CREATE_TABLE_HOMEWORKS)
 
         db.setTransactionSuccessful()
       } finally {
@@ -586,7 +586,7 @@ object ScheduleManager {
     }
 
     fun getLessons(semesterId: Long, block: (Lesson) -> Unit) = readableDatabase.use {
-      it.rawQuery(Queries.getLessons, arrayOf(semesterId.toString())).use {
+      it.rawQuery(Queries.GET_LESSONS, arrayOf(semesterId.toString())).use {
         if (it.moveToFirst()) {
           val indexes = it.lessonColumnsIndexes
           do block(it.createLesson(indexes))
@@ -596,7 +596,7 @@ object ScheduleManager {
     }
 
     fun getLesson(semesterId: Long, lessonId: Long) = readableDatabase.use {
-      it.rawQuery(Queries.getLesson, arrayOf(semesterId.toString(), lessonId.toString())).use {
+      it.rawQuery(Queries.GET_LESSON, arrayOf(semesterId.toString(), lessonId.toString())).use {
         if (it.moveToFirst()) it.createLesson(it.lessonColumnsIndexes)
         else null
       }
@@ -805,8 +805,8 @@ object ScheduleManager {
         if (updatedRows == 0) throw IllegalArgumentException("Пары $lesson нет в БД")
 
         when (lesson.lessonRepeat) {
-          is LessonRepeat.ByWeekday -> it.execSQL(Queries.replaceByWeekday, toBindArgs(lesson.lessonRepeat))
-          is LessonRepeat.ByDates -> it.execSQL(Queries.replaceByDates, toBindArgs(lesson.lessonRepeat))
+          is LessonRepeat.ByWeekday -> it.execSQL(Queries.REPLACE_BY_WEEKDAY, toBindArgs(lesson.lessonRepeat))
+          is LessonRepeat.ByDates -> it.execSQL(Queries.REPLACE_BY_DATES, toBindArgs(lesson.lessonRepeat))
           else -> throw IllegalArgumentException("Неизвестный тип повторений: ${lesson.lessonRepeat}")
         }
 
