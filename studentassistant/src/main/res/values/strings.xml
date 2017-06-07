@@ -98,6 +98,9 @@
     <string name="menu_lesson_information_edit">Редактировать</string>
 
 
+    <string name="title_activity_login">Авторизация</string>
+
+
     <string name="title_activity_homework_editor">Редактор задания</string>
 
     <string name="content_homework_editor_choose_subject">Выберите занятие</string>

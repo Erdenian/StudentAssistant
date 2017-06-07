@@ -63,6 +63,11 @@ class ScheduleActivity : AppCompatActivity(),
     onScheduleUpdate()
   }
 
+  override fun onResume() {
+    super.onResume()
+    initializeDrawerAndNavigationView(toolbar_with_spinner)
+  }
+
   override fun onScheduleUpdate() {
     supportActionBar!!.setDisplayShowTitleEnabled(ScheduleManager.semesters.size <= 1)
     toolbar_with_spinner_spinner.visibility = if (ScheduleManager.semesters.size > 1) View.VISIBLE else View.GONE
