@@ -3,6 +3,7 @@
           package="ru.erdenian.studentassistant">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -44,6 +45,14 @@
         <activity
             android:name=".activity.LessonInformationActivity"
             android:label="@string/title_activity_lesson_information"/>
+
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label="@string/title_activity_login"/>
+
+        <activity
+            android:name=".activity.UserDetailsActivity"
+            android:label="Профиль"/>
 
         <activity
             android:name=".activity.HomeworkEditorActivity"

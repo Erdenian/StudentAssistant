@@ -6,14 +6,14 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.util.Log
+import android.widget.Button
+import android.widget.TextView
 import kotlinx.android.synthetic.main.navigation_view.*
+import org.jetbrains.anko.defaultSharedPreferences
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.activity.AlarmEditorActivity
-import ru.erdenian.studentassistant.activity.HelpActivity
-import ru.erdenian.studentassistant.activity.HomeworksActivity
-import ru.erdenian.studentassistant.activity.ScheduleActivity
+import ru.erdenian.studentassistant.activity.*
 import ru.erdenian.studentassistant.schedule.ScheduleManager
 
 fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
@@ -24,6 +24,33 @@ fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
       R.string.navigation_drawer_open, R.string.navigation_drawer_close)
   drawerLayout.addDrawerListener(toggle)
   toggle.syncState()
+
+  navigation_view.getHeaderView(0).let {
+    it.findViewById(R.id.navigation_view_header_sign_in).setOnClickListener {
+      startActivity<LoginActivity>()
+    }
+    (it.findViewById(R.id.navigation_view_header_name) as TextView).text = ""
+    (it.findViewById(R.id.navigation_view_header_group) as TextView).text = ""
+    (it.findViewById(R.id.navigation_view_header_sign_in) as Button).text = "Войти"
+
+    val i = it
+
+    defaultSharedPreferences.apply {
+      val login = getString("login", null)
+      val password = getString("password", null)
+
+      login?.let {
+        (i.findViewById(R.id.navigation_view_header_name) as TextView).text = login
+        (i.findViewById(R.id.navigation_view_header_group) as TextView).text = ""
+        (i.findViewById(R.id.navigation_view_header_sign_in) as Button).text = "Профиль"
+
+        (i.findViewById(R.id.navigation_view_header_sign_in) as Button).setOnClickListener {
+          startActivity<UserDetailsActivity>()
+        }
+      }
+    }
+  }
+
 
   navigation_view.setCheckedItem(R.id.nav_schedule)
 
