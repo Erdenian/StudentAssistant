@@ -26,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
 
       override fun afterTextChanged(s: Editable?) {
         if (!s.isNullOrBlank())
-          nettyQuery(",:checklogin:${s!!.trim()}") {
+          nettyQuery(";::checklogin::${s!!.trim()}") {
             runOnUiThread {
               if (it.toBoolean()) {
                 content_login_login.isErrorEnabled = true
@@ -46,12 +46,12 @@ class LoginActivity : AppCompatActivity() {
       val login = content_login_login_edit_text.text.trim().toString()
       val password = content_login_password_edit_text.text.toString()
 
-      nettyQuery(",:checkuser:$login,$password") {
+      nettyQuery(";::checkuser::$login;$password") {
         if (it.toBoolean()) {
           defaultSharedPreferences.edit().apply {
             putString("login", login)
             putString("password", password)
-          }.apply()
+          }.commit()
           finish()
         } else {
           toast("Неверный логин или пароль")
@@ -65,11 +65,11 @@ class LoginActivity : AppCompatActivity() {
       } else if (content_login_password_edit_text.text.isNullOrBlank()) {
         toast("Введите пароль")
       } else {
-        nettyQuery(",:registration:${content_login_login_edit_text.text},${content_login_password_edit_text.text}") {
+        nettyQuery(";::registration::${content_login_login_edit_text.text};${content_login_password_edit_text.text}") {
           defaultSharedPreferences.edit().apply {
             putString("login", content_login_login_edit_text.text.trim().toString())
             putString("password", content_login_password_edit_text.text.toString())
-          }.apply()
+          }.commit()
         }
         finish()
       }

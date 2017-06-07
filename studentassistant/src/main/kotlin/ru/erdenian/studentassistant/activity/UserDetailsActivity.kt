@@ -25,19 +25,19 @@ class UserDetailsActivity : AppCompatActivity() {
       content_user_details_faculty_edit_text.setText(it.getString("faculty", ""))
       content_user_details_group_edit_text.setText(it.getString("group", ""))
 
-      nettyQuery("${it.getString("login", null)},${it.getString("password", null)}:getuniversities:") {
+      nettyQuery("${it.getString("login", null)};${it.getString("password", null)}::getuniversities::") {
         val universities = it.split(",")
         runOnUiThread {
           content_user_details_university_edit_text.setAdapter(ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, universities))
         }
       }
-      nettyQuery("${it.getString("login", null)},${it.getString("password", null)}:getfaculties:1") {
+      nettyQuery("${it.getString("login", null)};${it.getString("password", null)}::getfaculties::1") {
         val faculties = it.split(",")
         runOnUiThread {
           content_user_details_faculty_edit_text.setAdapter(ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, faculties))
         }
       }
-      nettyQuery("${it.getString("login", null)},${it.getString("password", null)}:getgroups:1") {
+      nettyQuery("${it.getString("login", null)};${it.getString("password", null)}::getgroups::1") {
         val groups = it.split(",")
         runOnUiThread {
           content_user_details_group_edit_text.setAdapter(ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, groups))
@@ -51,6 +51,9 @@ class UserDetailsActivity : AppCompatActivity() {
         putString("faculty", content_user_details_faculty_edit_text.text.toString())
         putString("group", content_user_details_group_edit_text.text.toString())
       }.apply()
+      defaultSharedPreferences.let {
+        nettyQuery("${it.getString("login", null)};${it.getString("password", null)}::changegroup::${content_user_details_group_edit_text.text}")
+      }
       finish()
     }
 

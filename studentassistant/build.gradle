@@ -55,4 +55,5 @@ dependencies {
     compile 'com.github.ceryle:SegmentedButton:v1.2.2'
     compile group: 'io.netty', name: 'netty-all', version: '4.1.9.Final'
     compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.6.0'
 }

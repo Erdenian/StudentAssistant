@@ -9,10 +9,12 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_schedule.*
 import kotlinx.android.synthetic.main.content_schedule.*
 import kotlinx.android.synthetic.main.toolbar_with_spinner.*
 import kotlinx.android.synthetic.main.view_pager.*
+import org.jetbrains.anko.defaultSharedPreferences
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
@@ -22,6 +24,7 @@ import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.initializeDrawerAndNavigationView
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.extensions.showDatePicker
+import ru.erdenian.studentassistant.netty.nettyQuery
 import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener
 import ru.erdenian.studentassistant.schedule.ScheduleManager
 
@@ -143,6 +146,17 @@ class ScheduleActivity : AppCompatActivity(),
       R.id.menu_schedule_add_schedule -> startActivity<SemesterEditorActivity>()
       R.id.menu_schedule_edit_schedule ->
         startActivity<LessonsEditorActivity>(SEMESTER_ID to ScheduleManager.selectedSemesterId!!)
+      R.id.menu_schedule_sync_schedule -> {
+        val semester = ScheduleManager.getSemester(ScheduleManager.semesterToSyncId)
+        val semesterJson = Gson().toJson(semester)
+        val lessons = ScheduleManager.getLessons(ScheduleManager.semesterToSyncId)
+        val lessonsJson = Gson().toJson(lessons)
+        defaultSharedPreferences.let {
+          nettyQuery("${it.getString("login", null)};${it.getString("password", null)}::getschedule::") {
+            TODO()
+          }
+        }
+      }
       else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
     }
     return super.onOptionsItemSelected(item)

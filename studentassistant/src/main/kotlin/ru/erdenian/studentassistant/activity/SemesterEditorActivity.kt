@@ -123,10 +123,13 @@ class SemesterEditorActivity : AppCompatActivity(),
           return super.onOptionsItemSelected(item)
         }
 
-        if (semester == null)
-          ScheduleManager.addSemester(Semester(name, firstDay!!, lastDay!!))
-        else
+        if (semester == null) {
+          val semester1 = Semester(name, firstDay!!, lastDay!!)
+          ScheduleManager.addSemester(semester1)
+        } else {
           ScheduleManager.updateSemester(semester!!.copy(name, firstDay!!, lastDay!!))
+          val semester1 = ScheduleManager.getSemester(semester!!.id)
+        }
 
         finish()
       }
