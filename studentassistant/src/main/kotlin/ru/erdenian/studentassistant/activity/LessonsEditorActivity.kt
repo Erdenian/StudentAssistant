@@ -74,6 +74,7 @@ class LessonsEditorActivity : AppCompatActivity(),
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     menuInflater.inflate(R.menu.menu_lessons_editor, menu)
     menu.setColor(getCompatColor(R.color.action_bar_icons_color))
+    menu.findItem(R.id.menu_lessons_editor_delete_semester).isVisible = (semesterId != ScheduleManager.semesterToSyncId)
     return true
   }
 

@@ -5,21 +5,31 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.fatboyindustrial.gsonjodatime.Converters
 import com.google.common.base.Joiner
 import com.google.common.collect.ImmutableSortedSet
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import org.jetbrains.anko.defaultSharedPreferences
 import org.joda.time.LocalDate
 import org.joda.time.Period
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
+import ru.erdenian.studentassistant.netty.nettyQuery
 import java.lang.ref.WeakReference
 
 
 object ScheduleManager {
 
+  var semesterToSyncId: Long = -1
+  lateinit var context: Context
+
   private lateinit var dbHelper: ScheduleDBHelper
 
   fun initialize(context: Context) {
     dbHelper = ScheduleDBHelper(context)
+    this.context = context
+    semesterToSyncId = context.defaultSharedPreferences.getLong("semester_to_sync_id", -1)
   }
 
 
@@ -231,6 +241,18 @@ object ScheduleManager {
 
     selectedSemesterId = semester.id
 
+    if ((semester.id == semesterToSyncId) || !hasLessons) {
+      if (!hasLessons) {
+        semesterToSyncId = semester.id
+        context.defaultSharedPreferences.edit().apply {
+          putLong("semester_to_sync_id", semesterToSyncId)
+        }.apply()
+      }
+      context.defaultSharedPreferences.let {
+        nettyQuery("${it.getString("login", null)};${it.getString("password", null)}::addsemester::${Converters.registerAll(GsonBuilder()).create().toJson(semester)}")
+      }
+    }
+
     runScheduleUpdateListeners()
   }
 
@@ -239,6 +261,12 @@ object ScheduleManager {
 
     dbHelper.updateSemester(semester)
     semestersCache.put(semester.id, semester)
+
+    if (semester.id == semesterToSyncId) {
+      context.defaultSharedPreferences.let {
+        nettyQuery("${it.getString("login", null)};${it.getString("password", null)}::updatesemester::${Converters.registerAll(GsonBuilder()).create().toJson(semester)}")
+      }
+    }
 
     runScheduleUpdateListeners()
   }
@@ -265,6 +293,12 @@ object ScheduleManager {
     dbHelper.insertLesson(semesterId, lesson)
     if (semesterId == selectedSemesterId) lessonsCache!!.put(lesson.id, lesson)
 
+    if (semesterId == semesterToSyncId) {
+      context.defaultSharedPreferences.let {
+        nettyQuery("${it.getString("login", null)};${it.getString("password", null)}::addlesson::$semesterId;${Converters.registerAll(GsonBuilder()).create().toJson(lesson)}")
+      }
+    }
+
     runScheduleUpdateListeners()
   }
 
@@ -278,6 +312,12 @@ object ScheduleManager {
 
     if (getLessons(semesterId, oldSubjectName).isEmpty())
       updateHomeworks(semesterId, oldSubjectName, lesson.subjectName)
+
+    if (semesterId == semesterToSyncId) {
+      context.defaultSharedPreferences.let {
+        nettyQuery("${it.getString("login", null)};${it.getString("password", null)}::updatelesson::$semesterId;${Converters.registerAll(GsonBuilder()).create().toJson(lesson)}")
+      }
+    }
 
     runScheduleUpdateListeners()
   }
@@ -298,6 +338,17 @@ object ScheduleManager {
       }
     }
 
+    if (semesterId == semesterToSyncId) {
+      context.defaultSharedPreferences.let {
+        val semester = ScheduleManager.getSemester(ScheduleManager.semesterToSyncId)
+        val semesterJson = Gson().toJson(semester)
+        val lessons = ScheduleManager.getLessons(ScheduleManager.semesterToSyncId)
+        val lessonsJson = Gson().toJson(lessons)
+
+        nettyQuery("${it.getString("login", null)};${it.getString("password", null)}::updateschedule::$semesterJson;$lessonsJson")
+      }
+    }
+
     runScheduleUpdateListeners()
   }
 
@@ -311,6 +362,12 @@ object ScheduleManager {
 
     if (getLessons(semesterId, subjectName).isEmpty())
       removeHomeworks(semesterId, subjectName)
+
+    if (semesterId == semesterToSyncId) {
+      context.defaultSharedPreferences.let {
+        nettyQuery("${it.getString("login", null)};${it.getString("password", null)}::removelesson::$lessonId")
+      }
+    }
 
     runScheduleUpdateListeners()
   }

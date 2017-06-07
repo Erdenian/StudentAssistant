@@ -19,4 +19,9 @@
         android:title="@string/menu_schedule_edit_schedule"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/menu_schedule_sync_schedule"
+        android:title="@string/menu_schedule_sync_schedule"
+        app:showAsAction="never"/>
+
 </menu>
