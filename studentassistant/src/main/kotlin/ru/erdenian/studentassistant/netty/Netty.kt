@@ -31,7 +31,7 @@ fun nettyQuery(query: String, onResponse: (String) -> Unit = {}) {
     }
   }
 
-  val host = "192.168.1.2"
+  val host = "studentassistant.ru"
   val port = 1333
   val workerGroup = NioEventLoopGroup()
 

@@ -52,7 +52,7 @@ class UserDetailsActivity : AppCompatActivity() {
         putString("group", content_user_details_group_edit_text.text.toString())
       }.apply()
       defaultSharedPreferences.let {
-        nettyQuery("${it.getString("login", null)};${it.getString("password", null)}::changegroup::${content_user_details_group_edit_text.text}")
+        nettyQuery("${it.getString("login", null)};${it.getString("password", null)}::changegroup::${content_user_details_university_edit_text.text};${content_user_details_faculty_edit_text.text};${content_user_details_group_edit_text.text}")
       }
       finish()
     }

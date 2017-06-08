@@ -72,33 +72,35 @@ class ScheduleActivity : AppCompatActivity(),
   }
 
   override fun onScheduleUpdate() {
-    supportActionBar!!.setDisplayShowTitleEnabled(ScheduleManager.semesters.size <= 1)
-    toolbar_with_spinner_spinner.visibility = if (ScheduleManager.semesters.size > 1) View.VISIBLE else View.GONE
+    runOnUiThread {
+      supportActionBar!!.setDisplayShowTitleEnabled(ScheduleManager.semesters.size <= 1)
+      toolbar_with_spinner_spinner.visibility = if (ScheduleManager.semesters.size > 1) View.VISIBLE else View.GONE
 
-    view_pager.visibility = if (ScheduleManager.semesters.isNotEmpty()) View.VISIBLE else View.GONE
-    content_schedule_add_buttons.visibility = if (ScheduleManager.semesters.isEmpty()) View.VISIBLE else View.GONE
+      view_pager.visibility = if (ScheduleManager.semesters.isNotEmpty()) View.VISIBLE else View.GONE
+      content_schedule_add_buttons.visibility = if (ScheduleManager.semesters.isEmpty()) View.VISIBLE else View.GONE
 
-    if ((pagerAdapter != null) && (selectedSemesterId == ScheduleManager.selectedSemesterId)) {
-      savedPage = view_pager.currentItem
+      if ((pagerAdapter != null) && (selectedSemesterId == ScheduleManager.selectedSemesterId)) {
+        savedPage = view_pager.currentItem
+      }
+      selectedSemesterId = ScheduleManager.selectedSemesterId ?: -1
+
+      if (ScheduleManager.semesters.size > 1) {
+        val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters, ScheduleManager.semestersNames)
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters)
+        toolbar_with_spinner_spinner.adapter = adapter
+        toolbar_with_spinner_spinner.setSelection(ScheduleManager.selectedSemesterIndex)
+      } else if (ScheduleManager.semesters.size == 1) {
+        supportActionBar!!.title = ScheduleManager.selectedSemester!!.name
+        onItemSelected(null, null, 0, -1L)
+      } else {
+        supportActionBar!!.setTitle(R.string.title_activity_schedule)
+        pagerAdapter = null
+        view_pager.adapter = pagerAdapter
+      }
+
+      invalidateOptionsMenu()
+      initializeDrawerAndNavigationView(toolbar_with_spinner)
     }
-    selectedSemesterId = ScheduleManager.selectedSemesterId ?: -1
-
-    if (ScheduleManager.semesters.size > 1) {
-      val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters, ScheduleManager.semestersNames)
-      adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters)
-      toolbar_with_spinner_spinner.adapter = adapter
-      toolbar_with_spinner_spinner.setSelection(ScheduleManager.selectedSemesterIndex)
-    } else if (ScheduleManager.semesters.size == 1) {
-      supportActionBar!!.title = ScheduleManager.selectedSemester!!.name
-      onItemSelected(null, null, 0, -1L)
-    } else {
-      supportActionBar!!.setTitle(R.string.title_activity_schedule)
-      pagerAdapter = null
-      view_pager.adapter = pagerAdapter
-    }
-
-    invalidateOptionsMenu()
-    initializeDrawerAndNavigationView(toolbar_with_spinner)
   }
 
   override fun onSaveInstanceState(outState: Bundle) {
