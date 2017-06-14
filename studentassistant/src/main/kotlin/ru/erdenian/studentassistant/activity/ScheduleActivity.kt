@@ -9,7 +9,11 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment
+import com.fatboyindustrial.gsonjodatime.Converters
+import com.google.common.collect.ImmutableList
+import com.google.common.collect.ImmutableSortedSet
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_schedule.*
 import kotlinx.android.synthetic.main.content_schedule.*
 import kotlinx.android.synthetic.main.toolbar_with_spinner.*
@@ -24,9 +28,8 @@ import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.initializeDrawerAndNavigationView
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.extensions.showDatePicker
-import ru.erdenian.studentassistant.netty.nettyQuery
-import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener
-import ru.erdenian.studentassistant.schedule.ScheduleManager
+import ru.erdenian.studentassistant.netty.*
+import ru.erdenian.studentassistant.schedule.*
 
 class ScheduleActivity : AppCompatActivity(),
     AdapterView.OnItemSelectedListener,
@@ -149,13 +152,32 @@ class ScheduleActivity : AppCompatActivity(),
       R.id.menu_schedule_edit_schedule ->
         startActivity<LessonsEditorActivity>(SEMESTER_ID to ScheduleManager.selectedSemesterId!!)
       R.id.menu_schedule_sync_schedule -> {
-        val semester = ScheduleManager.getSemester(ScheduleManager.semesterToSyncId)
-        val semesterJson = Gson().toJson(semester)
-        val lessons = ScheduleManager.getLessons(ScheduleManager.semesterToSyncId)
-        val lessonsJson = Gson().toJson(lessons)
-        defaultSharedPreferences.let {
-          nettyQuery("${it.getString("login", null)};${it.getString("password", null)}::getschedule::") {
-            TODO()
+        defaultSharedPreferences.apply {
+          val login = getString("login", "null")
+          val password = getString("password", "null")
+
+          nettyQuery("$login;$password::getuser::") {
+            val user = Gson().fromJson(it, User::class.java)
+
+            nettyQuery("$login;$password::getschedule::${user.groupId}") {
+              val args = it.split(';')
+              val semesterJson = args[0]
+
+              val gson = Converters.registerAll(GsonBuilder())
+                  .registerTypeAdapter(ImmutableSortedSet::class.java, ImmutableSortedSetDeserializer())
+                  .registerTypeAdapter(ImmutableList::class.java, ImmutableListDeserializer())
+                  .registerTypeAdapter(LessonRepeat::class.java, LessonRepeatDeserializer())
+                  .create()
+
+              val semester = gson.fromJson(semesterJson, Semester::class.java)
+              val semester1 = Semester(semester.name, semester.firstDay, semester.lastDay, semester.id)
+              ScheduleManager.removeSemester(semester1.id)
+              ScheduleManager.addSemester(semester1)
+
+              for (i in 1..(args.size - 1)) {
+                ScheduleManager.addLesson(semester.id, gson.fromJson(args[i], Lesson::class.java))
+              }
+            }
           }
         }
       }

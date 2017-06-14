@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.defaultSharedPreferences
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.netty.nettyQuery
+import ru.erdenian.studentassistant.schedule.ScheduleManager
 
 
 class UserDetailsActivity : AppCompatActivity() {
@@ -62,6 +63,7 @@ class UserDetailsActivity : AppCompatActivity() {
         remove("login")
         remove("password")
       }.apply()
+      ScheduleManager.removeSemester(ScheduleManager.semesterToSyncId)
       finish()
     }
   }

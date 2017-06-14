@@ -241,13 +241,14 @@ object ScheduleManager {
 
     selectedSemesterId = semester.id
 
-    if ((semester.id == semesterToSyncId) || !hasLessons) {
-      if (!hasLessons) {
-        semesterToSyncId = semester.id
-        context.defaultSharedPreferences.edit().apply {
-          putLong("semester_to_sync_id", semesterToSyncId)
-        }.apply()
-      }
+    if (context.defaultSharedPreferences.getString("login", "").isNotEmpty() && (ScheduleManager.semesterToSyncId < 0)) {
+      ScheduleManager.semesterToSyncId = semester.id
+      ScheduleManager.context.defaultSharedPreferences.edit().apply {
+        putLong("semester_to_sync_id", ScheduleManager.semesterToSyncId)
+      }.apply()
+    }
+
+    if (semester.id == semesterToSyncId) {
       context.defaultSharedPreferences.let {
         nettyQuery("${it.getString("login", null)};${it.getString("password", null)}::addsemester::${Converters.registerAll(GsonBuilder()).create().toJson(semester)}")
       }

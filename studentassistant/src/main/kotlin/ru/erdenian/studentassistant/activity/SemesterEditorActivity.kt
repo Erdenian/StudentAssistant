@@ -10,6 +10,7 @@ import android.view.View
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment
 import kotlinx.android.synthetic.main.content_semester_editor.*
 import kotlinx.android.synthetic.main.toolbar.*
+import org.jetbrains.anko.defaultSharedPreferences
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
