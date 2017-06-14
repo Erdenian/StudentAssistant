@@ -67,27 +67,26 @@ class LoginActivity : AppCompatActivity() {
             val user = Gson().fromJson(it, User::class.java)
 
             nettyQuery("$login;$password::getschedule::${user.groupId}") {
-              val args = it.split(';')
-              val semesterJson = args[0]
+              if (it != "null") {
+                val args = it.split(';')
+                val semesterJson = args[0]
 
-              Log.d("tag", "1")
-              val gson = Converters.registerAll(GsonBuilder())
-                  .registerTypeAdapter(ImmutableSortedSet::class.java, ImmutableSortedSetDeserializer())
-                  .registerTypeAdapter(ImmutableList::class.java, ImmutableListDeserializer())
-                  .registerTypeAdapter(LessonRepeat::class.java, LessonRepeatDeserializer())
-                  .create()
+                val gson = Converters.registerAll(GsonBuilder())
+                    .registerTypeAdapter(ImmutableSortedSet::class.java, ImmutableSortedSetDeserializer())
+                    .registerTypeAdapter(ImmutableList::class.java, ImmutableListDeserializer())
+                    .registerTypeAdapter(LessonRepeat::class.java, LessonRepeatDeserializer())
+                    .create()
 
-              Log.d("tag", "2")
-              val semester = gson.fromJson(semesterJson, Semester::class.java)
-              val semester1 = Semester(semester.name, semester.firstDay, semester.lastDay, semester.id)
-              Log.d("tag", "3")
-              ScheduleManager.removeSemester(semester1.id)
-              Log.d("tag", "4")
-              ScheduleManager.addSemester(semester1)
-              Log.d("tag", "5")
+                val semester = gson.fromJson(semesterJson, Semester::class.java)
+                val semester1 = Semester(semester.name, semester.firstDay, semester.lastDay, semester.id)
+                ScheduleManager.removeSemester(semester1.id)
+                ScheduleManager.addSemester(semester1)
 
-              for (i in 1..(args.size - 1)) {
-                ScheduleManager.addLesson(semester.id, gson.fromJson(args[i], Lesson::class.java))
+                for (i in 1..(args.size - 1)) {
+                  ScheduleManager.addLesson(semester.id, gson.fromJson(args[i], Lesson::class.java))
+                }
+
+                ScheduleManager.semesterToSyncId = semester1.id
               }
             }
 
