@@ -105,13 +105,13 @@ class SchedulePageFragment : Fragment() {
           context.alert(R.string.activity_lesson_editor_alert_delete_homeworks_message,
               R.string.activity_lesson_editor_alert_delete_homeworks_title) {
             positiveButton(R.string.activity_lesson_editor_alert_delete_homeworks_yes) { remove() }
-            neutralButton(R.string.activity_lesson_editor_alert_delete_homeworks_cancel)
+            negativeButton(R.string.activity_lesson_editor_alert_delete_homeworks_cancel) {}
           }.show()
         } else {
 
           context.alert(R.string.activity_lesson_editor_alert_delete_message) {
             positiveButton(R.string.activity_lesson_editor_alert_delete_yes) { remove() }
-            negativeButton(R.string.activity_lesson_editor_alert_delete_no)
+            negativeButton(R.string.activity_lesson_editor_alert_delete_no) {}
           }.show()
         }
       }

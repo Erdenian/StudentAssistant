@@ -110,7 +110,7 @@ class HomeworkEditorActivity : AppCompatActivity(),
 
         alert(R.string.activity_homework_editor_alert_delete_message) {
           positiveButton(R.string.activity_homework_editor_alert_delete_yes) { remove() }
-          negativeButton(R.string.activity_homework_editor_alert_delete_no)
+          negativeButton(R.string.activity_homework_editor_alert_delete_no) {}
         }.show()
       }
       else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
