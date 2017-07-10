@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ArrayAdapter
-import android.widget.CheckBox
-import android.widget.MultiAutoCompleteTextView
-import android.widget.TextView
+import android.view.View
+import android.widget.*
 import com.codetroopers.betterpickers.radialtimepicker.RadialTimePickerDialogFragment
 import com.google.common.base.Joiner
 import com.google.common.collect.ImmutableList
@@ -129,6 +127,13 @@ class LessonEditorActivity : AppCompatActivity(),
       weeks = ImmutableList.copyOf(savedInstanceState.getBooleanArray(WEEKS).toList())
     }
 
+    when (weeks) {
+      listOf(true) -> content_lesson_editor_weeks_variants.setSelection(0)
+      listOf(true, false) -> content_lesson_editor_weeks_variants.setSelection(1)
+      listOf(false, true) -> content_lesson_editor_weeks_variants.setSelection(2)
+      else -> content_lesson_editor_weeks_variants.setSelection(3)
+    }
+
     weeks.forEach {
       layoutInflater.inflate(R.layout.content_lesson_editor_week_checkbox,
           content_lesson_editor_weeks_parent)
@@ -139,6 +144,33 @@ class LessonEditorActivity : AppCompatActivity(),
       val checkbox = content_lesson_editor_weeks_parent.getChildAt(i)
       (checkbox.findViewById(R.id.content_lesson_editor_week_checkbox) as CheckBox).isChecked = w
       (checkbox.findViewById(R.id.content_lesson_editor_week_number) as TextView).text = (i + 1).toString()
+    }
+
+    content_lesson_editor_weeks_variants.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
+      override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        when (position) {
+          0 -> listOf(true)
+          1 -> listOf(true, false)
+          2 -> listOf(false, true)
+          else -> null
+        }?.let {
+          content_lesson_editor_weeks_parent.removeAllViews()
+          it.forEach {
+            layoutInflater.inflate(R.layout.content_lesson_editor_week_checkbox,
+                content_lesson_editor_weeks_parent)
+          }
+          if (it.size <= 1) content_lesson_editor_remove_week.isEnabled = false
+
+          for ((i, w) in it.withIndex()) {
+            val checkbox = content_lesson_editor_weeks_parent.getChildAt(i)
+            (checkbox.findViewById(R.id.content_lesson_editor_week_checkbox) as CheckBox).isChecked = w
+            (checkbox.findViewById(R.id.content_lesson_editor_week_number) as TextView).text = (i + 1).toString()
+          }
+        }
+      }
+
+      override fun onNothingSelected(parent: AdapterView<*>?) = Unit
     }
 
     content_lesson_editor_subject_name_edit_text.setAdapter(ArrayAdapter(this,
@@ -262,7 +294,7 @@ class LessonEditorActivity : AppCompatActivity(),
               ScheduleManager.updateLessons(semesterId, lesson!!.subjectName, subjectName)
             }
             negativeButton(R.string.activity_lesson_editor_alert_rename_lessons_no) { saveChanges() }
-            neutralButton(R.string.activity_lesson_editor_alert_rename_lessons_cancel)
+            //neutralButton(R.string.activity_lesson_editor_alert_rename_lessons_cancel)
           }.show()
         } else saveChanges()
       }
@@ -280,13 +312,13 @@ class LessonEditorActivity : AppCompatActivity(),
           alert(R.string.activity_lesson_editor_alert_delete_homeworks_message,
               R.string.activity_lesson_editor_alert_delete_homeworks_title) {
             positiveButton(R.string.activity_lesson_editor_alert_delete_homeworks_yes) { remove() }
-            neutralButton(R.string.activity_lesson_editor_alert_delete_homeworks_cancel)
+            negativeButton(R.string.activity_lesson_editor_alert_delete_homeworks_cancel) {}
           }.show()
         } else {
 
           alert(R.string.activity_lesson_editor_alert_delete_message) {
             positiveButton(R.string.activity_lesson_editor_alert_delete_yes) { remove() }
-            negativeButton(R.string.activity_lesson_editor_alert_delete_no)
+            negativeButton(R.string.activity_lesson_editor_alert_delete_no) {}
           }.show()
         }
       }
