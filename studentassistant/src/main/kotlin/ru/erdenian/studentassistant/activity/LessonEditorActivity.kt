@@ -149,21 +149,20 @@ class LessonEditorActivity : AppCompatActivity(),
     content_lesson_editor_weeks_variants.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
       override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        var weeks1: List<Boolean>? = null
         when (position) {
-          0 -> weeks1 = listOf(true)
-          1 -> weeks1 = listOf(true, false)
-          2 -> weeks1 = listOf(false, true)
-        }
-        if (weeks1 != null) {
+          0 -> listOf(true)
+          1 -> listOf(true, false)
+          2 -> listOf(false, true)
+          else -> null
+        }?.let {
           content_lesson_editor_weeks_parent.removeAllViews()
-          weeks1.forEach {
+          it.forEach {
             layoutInflater.inflate(R.layout.content_lesson_editor_week_checkbox,
                 content_lesson_editor_weeks_parent)
           }
-          if (weeks1.size <= 1) content_lesson_editor_remove_week.isEnabled = false
+          if (it.size <= 1) content_lesson_editor_remove_week.isEnabled = false
 
-          for ((i, w) in weeks1.withIndex()) {
+          for ((i, w) in it.withIndex()) {
             val checkbox = content_lesson_editor_weeks_parent.getChildAt(i)
             (checkbox.findViewById(R.id.content_lesson_editor_week_checkbox) as CheckBox).isChecked = w
             (checkbox.findViewById(R.id.content_lesson_editor_week_number) as TextView).text = (i + 1).toString()
