@@ -46,7 +46,7 @@ class LessonEditorActivity : AppCompatActivity(),
   private val semesterId: Long by lazy {
     intent.getLongExtra(SEMESTER_ID, -1L).takeIf { it != -1L } ?: throw IllegalStateException("Не передан id семестра")
   }
-  private val lesson: Lesson? by lazy { ScheduleManager.getLesson(semesterId, intent.getLongExtra(LESSON_ID, -1L)) }
+  private val lesson: Lesson? by lazy { ScheduleManager.getLessonOrNull(semesterId, intent.getLongExtra(LESSON_ID, -1L)) }
   private val copy: Boolean by lazy { intent.getBooleanExtra(COPY, false) }
   private val weekday: Int by lazy {
     intent.getIntExtra(WEEKDAY, -1).takeIf { it != -1 } ?: (lesson!!.lessonRepeat as? LessonRepeat.ByWeekday)?.weekday ?: 1

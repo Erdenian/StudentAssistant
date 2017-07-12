@@ -29,9 +29,9 @@ class HomeworkEditorActivity : AppCompatActivity(),
     const val DEADLINE = "deadline"
   }
 
-  private val semester: Semester by lazy { ScheduleManager.getSemester(intent.getLongExtra(SEMESTER_ID, -1L))!! }
-  private val lesson: Lesson? by lazy { ScheduleManager.getLesson(semester.id, intent.getLongExtra(LESSON_ID, -1L)) }
-  private val homework: Homework? by lazy { ScheduleManager.getHomework(semester.id, intent.getLongExtra(HOMEWORK_ID, -1L)) }
+  private val semester: Semester by lazy { ScheduleManager.getSemester(intent.getLongExtra(SEMESTER_ID, -1L)) }
+  private val lesson: Lesson? by lazy { ScheduleManager.getLessonOrNull(semester.id, intent.getLongExtra(LESSON_ID, -1L)) }
+  private val homework: Homework? by lazy { ScheduleManager.getHomeworkOrNull(semester.id, intent.getLongExtra(HOMEWORK_ID, -1L)) }
 
   val subjects: ImmutableSortedSet<String> by lazy { ScheduleManager.getSubjects(semester.id) }
 
@@ -68,7 +68,7 @@ class HomeworkEditorActivity : AppCompatActivity(),
 
   override fun onRestoreInstanceState(savedInstanceState: Bundle) {
     super.onRestoreInstanceState(savedInstanceState)
-    deadline = LocalDate.parse(savedInstanceState.get(DEADLINE) as String) as LocalDate
+    deadline = LocalDate.parse(savedInstanceState.get(DEADLINE) as String)
 
   }
 

@@ -58,7 +58,7 @@ class LessonsEditorActivity : AppCompatActivity(),
   }
 
   override fun onScheduleUpdate() {
-    val semester = ScheduleManager.getSemester(semesterId)
+    val semester = ScheduleManager.getSemesterOrNull(semesterId)
 
     if (semester != null) {
       val page = view_pager.currentItem
