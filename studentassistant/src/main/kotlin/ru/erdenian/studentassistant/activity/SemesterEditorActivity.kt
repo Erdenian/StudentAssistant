@@ -34,7 +34,7 @@ class SemesterEditorActivity : AppCompatActivity(),
     const val LAST_DAY_TAG = "last_day_tag"
   }
 
-  private val semester: Semester? by lazy { ScheduleManager.getSemester(intent.getLongExtra(SEMESTER_ID, -1L)) }
+  private val semester: Semester? by lazy { ScheduleManager.getSemesterOrNull(intent.getLongExtra(SEMESTER_ID, -1L)) }
 
   private val semestersNames: List<String> by lazy { ScheduleManager.semestersNames.filter { it != semester?.name } }
 
