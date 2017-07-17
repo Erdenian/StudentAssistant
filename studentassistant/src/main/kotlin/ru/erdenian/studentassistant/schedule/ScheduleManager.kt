@@ -90,8 +90,9 @@ object ScheduleManager {
       }
     }
 
-  val selectedSemesterIndex get() = semesters.indexOfFirst { it.id == selectedSemesterId }.takeIf { it >= 0 } ?:
-      throw IllegalStateException("Неверное значение выбранного семестра")
+  val selectedSemesterIndex get() = semesters.indexOfFirst {
+    it.id == selectedSemesterId ?: throw IllegalStateException("Не выбран семестр")
+  }.takeIf { it >= 0 } ?: throw IllegalStateException("Неверное значение выбранного семестра")
 
   val selectedSemester get() = getSemester(selectedSemesterId ?: throw IllegalStateException("Семестр не выбран"))
 
