@@ -5,7 +5,6 @@ import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import kotlinx.android.synthetic.main.navigation_view.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
@@ -27,8 +26,9 @@ fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
 
   navigation_view.setCheckedItem(R.id.nav_schedule)
 
-  navigation_view.menu.findItem(R.id.nav_homeworks).isEnabled = ScheduleManager.hasLessons
-  navigation_view.menu.findItem(R.id.nav_alarm).isEnabled = ScheduleManager.hasLessons
+  val hasLessons = ScheduleManager.hasLessons
+  navigation_view.menu.findItem(R.id.nav_homeworks).isEnabled = hasLessons
+  navigation_view.menu.findItem(R.id.nav_alarm).isEnabled = hasLessons
 
   navigation_view.setNavigationItemSelectedListener {
     when (it.itemId) {
@@ -57,6 +57,6 @@ fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
     is ScheduleActivity -> navigation_view.setCheckedItem(R.id.nav_schedule)
     is HomeworksActivity -> navigation_view.setCheckedItem(R.id.nav_homeworks)
     is AlarmEditorActivity -> navigation_view.setCheckedItem(R.id.nav_alarm)
-    else -> Log.wtf(this.javaClass.name, "Неизвестное Activity: ${this.javaClass.name}")
+    else -> throw IllegalStateException("Неизвестное Activity: ${this.javaClass.name}")
   }
 }
