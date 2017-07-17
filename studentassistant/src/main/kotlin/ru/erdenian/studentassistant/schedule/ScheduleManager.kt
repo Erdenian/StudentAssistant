@@ -20,7 +20,7 @@ object ScheduleManager {
   private lateinit var dbHelper: ScheduleDBHelper
 
   fun initialize(context: Context) {
-    dbHelper = ScheduleDBHelper(context)
+    dbHelper = ScheduleDBHelper(context.applicationContext)
   }
 
 
