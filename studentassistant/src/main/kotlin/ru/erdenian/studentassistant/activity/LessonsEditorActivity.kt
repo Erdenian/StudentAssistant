@@ -37,13 +37,11 @@ class LessonsEditorActivity : AppCompatActivity(),
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     //supportActionBar!!.setDisplayShowTitleEnabled(false)
 
-    val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters,
-        resources.getStringArray(R.array.lesson_repeat_types))
+    val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters, resources.getStringArray(R.array.lesson_repeat_types))
     adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters)
     toolbar_with_spinner_spinner.adapter = adapter
     toolbar_with_spinner_spinner.onItemSelectedListener = this
-
-    toolbar_with_spinner_spinner.visibility = View.GONE
+    toolbar_with_spinner_spinner.visibility = View.GONE // TODO: Выбор отображения по датам
 
     view_pager_pager_tab_strip.setTextColor(getCompatColor(R.color.colorPrimary))
     view_pager_pager_tab_strip.setTabIndicatorColorResource(R.color.colorPrimary)
@@ -58,17 +56,13 @@ class LessonsEditorActivity : AppCompatActivity(),
   }
 
   override fun onScheduleUpdate() {
-    val semester = ScheduleManager.getSemesterOrNull(semesterId)
-
-    if (semester != null) {
+    ScheduleManager.getSemesterOrNull(semesterId)?.let {
       val page = view_pager.currentItem
-      view_pager.adapter = SchedulePagerAdapter(supportFragmentManager, semester, true)
+      view_pager.adapter = SchedulePagerAdapter(supportFragmentManager, it, true)
       view_pager.currentItem = page
 
       // TODO: 13.11.2016 добавить заполнение списка пар по датам
-    } else {
-      finish()
-    }
+    } ?: finish()
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -78,8 +72,17 @@ class LessonsEditorActivity : AppCompatActivity(),
   }
 
   override fun onItemSelected(adapterView: AdapterView<*>, view: View?, i: Int, l: Long) {
-    view_pager.visibility = if (i == 0) View.VISIBLE else View.GONE
-    scroll_view.visibility = if (i == 1) View.VISIBLE else View.GONE
+    when (i) {
+      0 -> {
+        view_pager.visibility = View.VISIBLE
+        scroll_view.visibility = View.GONE
+      }
+      1 -> {
+        view_pager.visibility = View.GONE
+        scroll_view.visibility = View.VISIBLE
+      }
+      else -> throw IllegalArgumentException("Неизвестная позиция: $i")
+    }
   }
 
   override fun onNothingSelected(parent: AdapterView<*>) = Unit
