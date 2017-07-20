@@ -1,4 +1,5 @@
 package ru.erdenian.studentassistant.extensions
 
-val String.asSingleLine: String
-  get() = replace(System.getProperty("line.separator"), " ")
+private val lineSeparator = System.getProperty("line.separator")
+
+val String.asSingleLine get() = replace(lineSeparator, " ")
