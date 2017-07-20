@@ -29,7 +29,7 @@ fun FragmentActivity.showTimePicker(onTimeSetListener: RadialTimePickerDialogFra
   val timepicker = RadialTimePickerDialogFragment()
       .setOnTimeSetListener(onTimeSetListener)
 
-  startTime?.let { timepicker.setStartTime(startTime.hourOfDay, startTime.minuteOfHour) }
+  startTime?.run { timepicker.setStartTime(hourOfDay, minuteOfHour) }
 
   timepicker.show(supportFragmentManager, tag)
 }
