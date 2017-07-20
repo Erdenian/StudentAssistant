@@ -1,0 +1,14 @@
+<resources>
+    <string name="weeks_selector_weeks_variants_title">Повторять</string>
+
+    <string-array name="weeks_selector_weeks_variants">
+        <item>Каждую неделю</item>
+        <item>По нечетным</item>
+        <item>По четным</item>
+        <item>По первым числителям</item>
+        <item>По первым знаменателям</item>
+        <item>По вторым числителям</item>
+        <item>По вторым знаменателям</item>
+        <item>Свое</item>
+    </string-array>
+</resources>
