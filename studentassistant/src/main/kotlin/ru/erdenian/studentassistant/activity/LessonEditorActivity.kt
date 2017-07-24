@@ -80,7 +80,7 @@ class LessonEditorActivity : AppCompatActivity(),
         when (lessonRepeat) {
           is LessonRepeat.ByWeekday -> {
             content_lesson_editor_weekdays.setPosition(lessonRepeat.weekday - 1, false)
-            content_lesson_editor_weeks_selector.weeks = lessonRepeat.weeks
+            content_lesson_editor_weeks_selector.weeks = lessonRepeat.weeks.toBooleanArray()
           }
           is LessonRepeat.ByDates -> TODO()
           else -> throw IllegalStateException("Неизвестный тип повторения: $lessonRepeat")
@@ -104,7 +104,7 @@ class LessonEditorActivity : AppCompatActivity(),
 
       content_lesson_editor_weekdays.setPosition(savedInstanceState.getInt(WEEKDAY), false)
 
-      content_lesson_editor_weeks_selector.weeks = savedInstanceState.getBooleanArray(WEEKS).toList()
+      content_lesson_editor_weeks_selector.weeks = savedInstanceState.getBooleanArray(WEEKS)
     }
 
     content_lesson_editor_subject_name_edit_text.setAdapter(ArrayAdapter(this,
@@ -126,14 +126,14 @@ class LessonEditorActivity : AppCompatActivity(),
     outState.putString(START_TIME, startTime.toString())
     outState.putString(END_TIME, endTime.toString())
     outState.putInt(WEEKDAY, content_lesson_editor_weekdays.position)
-    outState.putBooleanArray(WEEKS, content_lesson_editor_weeks_selector.weeks.toBooleanArray())
+    outState.putBooleanArray(WEEKS, content_lesson_editor_weeks_selector.weeks)
 
     super.onSaveInstanceState(outState)
   }
 
   override fun onRestoreInstanceState(savedInstanceState: Bundle) {
     super.onRestoreInstanceState(savedInstanceState)
-    content_lesson_editor_weeks_selector.weeks = savedInstanceState.getBooleanArray(WEEKS).asList()
+    content_lesson_editor_weeks_selector.weeks = savedInstanceState.getBooleanArray(WEEKS)
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -190,11 +190,11 @@ class LessonEditorActivity : AppCompatActivity(),
           if ((lesson == null) || copy) {
             ScheduleManager.addLesson(semesterId, Lesson(subjectName, type, ImmutableSortedSet.copyOf(teachers),
                 ImmutableSortedSet.copyOf(classrooms), startTime!!, endTime!!,
-                LessonRepeat.ByWeekday(weekday, weeks)))
+                LessonRepeat.ByWeekday(weekday, weeks.toList())))
           } else {
             ScheduleManager.updateLesson(semesterId, lesson!!.copy(subjectName, type, ImmutableSortedSet.copyOf(teachers),
                 ImmutableSortedSet.copyOf(classrooms), startTime!!, endTime!!,
-                LessonRepeat.ByWeekday(weekday, weeks)))
+                LessonRepeat.ByWeekday(weekday, weeks.toList())))
           }
 
           startService<ScheduleService>()
