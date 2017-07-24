@@ -2,6 +2,7 @@ package ru.erdenian.studentassistant.extensions
 
 import android.support.v4.app.FragmentActivity
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment
+import com.codetroopers.betterpickers.calendardatepicker.MonthAdapter
 import com.codetroopers.betterpickers.radialtimepicker.RadialTimePickerDialogFragment
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
@@ -24,6 +25,9 @@ import java.util.*
 fun FragmentActivity.showDatePicker(onDateSetListener: CalendarDatePickerDialogFragment.OnDateSetListener,
                                     firstDay: LocalDate? = null, lastDay: LocalDate? = null,
                                     preselectedDate: LocalDate? = LocalDate.now(), tag: String = "date_picker") {
+
+  fun LocalDate.toCalendarDay() = MonthAdapter.CalendarDay(year, monthOfYear - 1, dayOfMonth)
+
   CalendarDatePickerDialogFragment().apply {
     firstDayOfWeek = Calendar.MONDAY
     setThemeCustom(R.style.DatePicker)
