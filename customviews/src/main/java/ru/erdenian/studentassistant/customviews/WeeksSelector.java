@@ -15,11 +15,24 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class WeeksSelector extends LinearLayout implements
-        AdapterView.OnItemSelectedListener,
-        View.OnClickListener {
+/**
+ * View для выбора недель для повторения пары.
+ * <p>
+ * Состоит из спиннера с предустановленными вариантами и чекбоксов для самостоятельного выбора недель,
+ * если ни один из предустановленных вариантов не подходит.
+ *
+ * @author Ilya Solovyev
+ * @version 1.0.0
+ * @see Spinner
+ * @see CheckBoxWithText
+ * @since 0.2.6
+ */
+public class WeeksSelector extends LinearLayout {
 
-    private final List<List<Boolean>> weeksVariantsArray = new ArrayList<List<Boolean>>() {{
+    /**
+     * Список предустановленных вариантов.
+     */
+    private static final List<List<Boolean>> weeksVariantsArray = new ArrayList<List<Boolean>>() {{
         add(Collections.singletonList(true));
         add(Arrays.asList(true, false));
         add(Arrays.asList(false, true));
@@ -28,11 +41,19 @@ public class WeeksSelector extends LinearLayout implements
         add(Arrays.asList(false, false, true, false));
         add(Arrays.asList(false, false, false, true));
     }};
-    private final int weeksVariantsArraySize = weeksVariantsArray.size();
 
+    /**
+     * Размер списка предустановленных вариантов.
+     */
+    private static final int weeksVariantsArraySize = weeksVariantsArray.size();
+
+    //region Ссылки на элементы интерфейса.
     private Spinner weeksVariants;
     private ImageButton removeWeek, addWeek;
     private LinearLayout weeksParent;
+    //endregion
+
+    //region Конструкторы
 
     public WeeksSelector(@NonNull Context context) {
         super(context);
@@ -63,11 +84,43 @@ public class WeeksSelector extends LinearLayout implements
         weeksParent.removeAllViews();
         setWeeks(weeksVariantsArray.get(0));
 
-        weeksVariants.setOnItemSelectedListener(this);
-        removeWeek.setOnClickListener(this);
-        addWeek.setOnClickListener(this);
+        weeksVariants.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position < weeksVariantsArraySize)
+                    setWeeks(weeksVariantsArray.get(position));
+                else if (position > weeksVariantsArraySize)
+                    throw new IllegalArgumentException("Неизвестный вариант выбора: $position");
+
+                setCustomEnabled(position == weeksVariantsArraySize);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
+        removeWeek.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeCheckbox();
+            }
+        });
+        addWeek.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addCheckbox(false);
+            }
+        });
     }
 
+    //endregion
+
+    /**
+     * Возврацает список недель на текущий момент.
+     * <p>
+     * Список недель - список boolean значений, где i-е значение показывает была ли выбрана i-я неделя.
+     *
+     * @return список недель
+     */
     public List<Boolean> getWeeks() {
         List<Boolean> weeks = new ArrayList<>();
         int childCount = weeksParent.getChildCount();
@@ -78,6 +131,13 @@ public class WeeksSelector extends LinearLayout implements
         return weeks;
     }
 
+    /**
+     * Устанавливает элементы интерфейса в соответствии с переданным списком недель.
+     * <p>
+     * Список недель - список boolean значений, где i-е значение показывает была ли выбрана i-я неделя.
+     *
+     * @param weeks список недель
+     */
     public void setWeeks(List<Boolean> weeks) {
         int selection = weeksVariantsArraySize; // Индекс варианта выбора "Свое" = индекс последнего элемента + 1
         for (int i = 0; i < weeksVariantsArraySize; i++) {
@@ -88,9 +148,10 @@ public class WeeksSelector extends LinearLayout implements
             }
         }
 
+        AdapterView.OnItemSelectedListener listener = weeksVariants.getOnItemSelectedListener();
         weeksVariants.setOnItemSelectedListener(null);
         weeksVariants.setSelection(selection, true); // При использовании setSelection(int) вызывается обработчик. Хз почему.
-        weeksVariants.setOnItemSelectedListener(this);
+        weeksVariants.setOnItemSelectedListener(listener);
 
         int size = weeks.size();
         int childCount = weeksParent.getChildCount();
@@ -110,6 +171,11 @@ public class WeeksSelector extends LinearLayout implements
         setCustomEnabled(selection == weeksVariantsArray.size());
     }
 
+    /**
+     * Активирует или деактивирует элементы интерфейса, предназначенные для выбора недель вручную.
+     *
+     * @param enabled true для активации, false для деактивации
+     */
     private void setCustomEnabled(boolean enabled) {
         int childCount = weeksParent.getChildCount();
 
@@ -119,11 +185,19 @@ public class WeeksSelector extends LinearLayout implements
             weeksParent.getChildAt(i).setEnabled(enabled);
     }
 
+    /**
+     * Удаляет последний (самый правый) чекбокс из списка.
+     */
     private void removeCheckbox() {
         weeksParent.removeViewAt(weeksParent.getChildCount() - 1);
         removeWeek.setEnabled(weeksParent.getChildCount() > 1);
     }
 
+    /**
+     * Добавляет еще один чекбокс в конец списка.
+     *
+     * @param isChecked начальное состояние чекбокса
+     */
     private void addCheckbox(boolean isChecked) {
         CheckBoxWithText cwt = new CheckBoxWithText(getContext());
         cwt.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
@@ -131,23 +205,5 @@ public class WeeksSelector extends LinearLayout implements
         cwt.setChecked(isChecked);
         cwt.setText(Integer.toString(weeksParent.getChildCount()));
         removeWeek.setEnabled(true);
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (position < weeksVariantsArraySize) setWeeks(weeksVariantsArray.get(position));
-        else if (position > weeksVariantsArraySize) throw new IllegalArgumentException("Неизвестный вариант выбора: $position");
-
-        setCustomEnabled(position == weeksVariantsArraySize);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) { }
-
-    @Override
-    public void onClick(View v) {
-        if (v == removeWeek) removeCheckbox();
-        else if (v == addWeek) addCheckbox(false);
-        else throw new IllegalArgumentException("Неизвестный view: " + v.toString());
     }
 }
