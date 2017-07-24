@@ -151,8 +151,8 @@ class SemesterEditorActivity : AppCompatActivity(),
 
   override fun onClick(v: View) {
     when (v.id) {
-      R.id.content_semester_editor_first_day -> showDatePicker(this, preselected = firstDay, tag = FIRST_DAY_TAG)
-      R.id.content_semester_editor_last_day -> showDatePicker(this, preselected = lastDay, tag = LAST_DAY_TAG)
+      R.id.content_semester_editor_first_day -> showDatePicker(this, preselectedDate = firstDay, tag = FIRST_DAY_TAG)
+      R.id.content_semester_editor_last_day -> showDatePicker(this, preselectedDate = lastDay, tag = LAST_DAY_TAG)
       else -> throw IllegalArgumentException("Неизвестный id: ${v.id}")
     }
   }
