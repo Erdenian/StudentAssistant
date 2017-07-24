@@ -28,21 +28,42 @@ public class CheckBoxWithText extends LinearLayout {
 
     //region Конструкторы
 
+    /**
+     * {@link LinearLayout#LinearLayout(Context)}
+     *
+     * @since 0.2.6
+     */
     public CheckBoxWithText(@NonNull Context context) {
         super(context);
         init(context, null, 0);
     }
 
+    /**
+     * {@link LinearLayout#LinearLayout(Context, AttributeSet)}
+     *
+     * @since 0.2.6
+     */
     public CheckBoxWithText(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs, 0);
     }
 
+    /**
+     * {@link LinearLayout#LinearLayout(Context, AttributeSet, int)}
+     *
+     * @since 0.2.6
+     */
     public CheckBoxWithText(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs, defStyleAttr);
     }
 
+    /**
+     * Инициализация объекта.
+     *
+     * @see LinearLayout#LinearLayout(Context, AttributeSet, int)
+     * @since 0.2.6
+     */
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
         inflate(context, R.layout.checkbox_with_text, this);
         checkBox = (CheckBox) findViewById(R.id.checkbox_with_text_checkbox);
@@ -61,6 +82,9 @@ public class CheckBoxWithText extends LinearLayout {
 
     //endregion
 
+    /**
+     * @since 0.2.6
+     */
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
@@ -70,6 +94,8 @@ public class CheckBoxWithText extends LinearLayout {
 
     /**
      * Оборачивает {@link CheckBox#setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener)}
+     *
+     * @since 0.2.6
      */
     public void setOnCheckedChangeListener(@Nullable CompoundButton.OnCheckedChangeListener listener) {
         checkBox.setOnCheckedChangeListener(listener);
@@ -77,6 +103,8 @@ public class CheckBoxWithText extends LinearLayout {
 
     /**
      * Оборачивает {@link CheckBox#isChecked()}
+     *
+     * @since 0.2.6
      */
     public boolean isChecked() {
         return checkBox.isChecked();
@@ -84,6 +112,8 @@ public class CheckBoxWithText extends LinearLayout {
 
     /**
      * Оборачивает {@link CheckBox#setChecked(boolean)}
+     *
+     * @since 0.2.6
      */
     public void setChecked(boolean checked) {
         checkBox.setChecked(checked);
@@ -91,6 +121,8 @@ public class CheckBoxWithText extends LinearLayout {
 
     /**
      * Оборачивает {@link TextView#getText()}
+     *
+     * @since 0.2.6
      */
     public CharSequence getText() {
         return textView.getText();
@@ -98,6 +130,8 @@ public class CheckBoxWithText extends LinearLayout {
 
     /**
      * Оборачивает {@link TextView#setText(CharSequence)}
+     *
+     * @since 0.2.6
      */
     public void setText(@Nullable CharSequence text) {
         textView.setText(text);
