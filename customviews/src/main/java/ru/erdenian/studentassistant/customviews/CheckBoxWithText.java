@@ -10,10 +10,23 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+/**
+ * Чекбокс с текстом под ним.
+ *
+ * @author Ilya Solovyev
+ * @version 1.0.0
+ * @see CheckBox
+ * @see TextView
+ * @since 0.2.6
+ */
 public class CheckBoxWithText extends LinearLayout {
 
+    //region Ссылки на элементы интерфейса.
     private CheckBox checkBox;
     private TextView textView;
+    //endregion
+
+    //region Конструкторы
 
     public CheckBoxWithText(@NonNull Context context) {
         super(context);
@@ -46,28 +59,46 @@ public class CheckBoxWithText extends LinearLayout {
         }
     }
 
+    //endregion
+
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
         checkBox.setEnabled(enabled);
+        textView.setEnabled(enabled);
     }
 
+    /**
+     * Оборачивает {@link CheckBox#setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener)}
+     */
     public void setOnCheckedChangeListener(@Nullable CompoundButton.OnCheckedChangeListener listener) {
         checkBox.setOnCheckedChangeListener(listener);
     }
 
+    /**
+     * Оборачивает {@link CheckBox#isChecked()}
+     */
     public boolean isChecked() {
         return checkBox.isChecked();
     }
 
+    /**
+     * Оборачивает {@link CheckBox#setChecked(boolean)}
+     */
     public void setChecked(boolean checked) {
         checkBox.setChecked(checked);
     }
 
+    /**
+     * Оборачивает {@link TextView#getText()}
+     */
     public CharSequence getText() {
         return textView.getText();
     }
 
+    /**
+     * Оборачивает {@link TextView#setText(CharSequence)}
+     */
     public void setText(@Nullable CharSequence text) {
         textView.setText(text);
     }
