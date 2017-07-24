@@ -16,10 +16,7 @@ import org.jetbrains.anko.startService
 import org.jetbrains.anko.toast
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.extensions.asSingleLine
-import ru.erdenian.studentassistant.extensions.getCompatColor
-import ru.erdenian.studentassistant.extensions.setColor
-import ru.erdenian.studentassistant.extensions.showTimePicker
+import ru.erdenian.studentassistant.extensions.*
 import ru.erdenian.studentassistant.schedule.Lesson
 import ru.erdenian.studentassistant.schedule.LessonRepeat
 import ru.erdenian.studentassistant.schedule.ScheduleManager
@@ -83,8 +80,7 @@ class LessonEditorActivity : AppCompatActivity(),
             content_lesson_editor_weeks_selector.weeks = lessonRepeat.weeks.toBooleanArray()
           }
           is LessonRepeat.ByDates -> TODO()
-          else -> throw IllegalStateException("Неизвестный тип повторения: $lessonRepeat")
-        }
+        }.exhaustive
       } ?: run {
         supportActionBar!!.title = getString(R.string.title_activity_lesson_editor_new_lesson)
         content_lesson_editor_weekdays.setPosition(weekday - 1, false)
