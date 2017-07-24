@@ -8,7 +8,7 @@ import org.joda.time.LocalDate
  *
  * @author Ilya Solovyev
  * @since 0.0.0
- * @property subjectName название предмета, по которому задано занание
+ * @property subjectName название предмета, по которому задано задание
  * @property description описание задания
  * @property deadline срок сдачи
  * @property id уникальный id задания
