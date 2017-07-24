@@ -23,7 +23,6 @@ object ScheduleManager {
     dbHelper = ScheduleDBHelper(context.applicationContext)
   }
 
-
   //region Кэш
 
   private val semestersCache: MutableMap<Long, Semester> by lazy {
@@ -53,6 +52,10 @@ object ScheduleManager {
   //endregion
 
   //region Слушатели
+
+  interface OnScheduleUpdateListener {
+    fun onScheduleUpdate()
+  }
 
   private var onScheduleUpdateListeners = mutableListOf<WeakReference<OnScheduleUpdateListener>>()
 

@@ -22,14 +22,13 @@ import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.initializeDrawerAndNavigationView
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.extensions.showDatePicker
-import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener
 import ru.erdenian.studentassistant.schedule.ScheduleManager
 
 class ScheduleActivity : AppCompatActivity(),
     AdapterView.OnItemSelectedListener,
     CalendarDatePickerDialogFragment.OnDateSetListener,
     View.OnClickListener,
-    OnScheduleUpdateListener {
+    ScheduleManager.OnScheduleUpdateListener {
 
   companion object {
     private const val CURRENT_PAGE = "current_page"
