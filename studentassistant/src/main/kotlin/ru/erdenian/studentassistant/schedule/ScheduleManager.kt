@@ -50,8 +50,7 @@ object ScheduleManager {
       return field
     }
 
-//endregion
-
+  //endregion
 
   //region Слушатели
 
@@ -72,7 +71,6 @@ object ScheduleManager {
   }
 
   //endregion
-
 
   //region Выбранный семестр
 
@@ -97,7 +95,6 @@ object ScheduleManager {
   val selectedSemester get() = getSemester(selectedSemesterId ?: throw IllegalStateException("Семестр не выбран"))
 
   //endregion
-
 
   //region Получение семестров
 
@@ -138,7 +135,6 @@ object ScheduleManager {
 
   //endregion
 
-
   //region Получение пар
 
   fun getLesson(semesterId: Long, lessonId: Long) =
@@ -163,7 +159,6 @@ object ScheduleManager {
       getLessons(semesterId) { it.subjectName == subjectName }
 
   //endregion
-
 
   //region Получение домашних заданий
 
@@ -195,7 +190,6 @@ object ScheduleManager {
       getHomeworks(semesterId) { it.deadline.isBefore(LocalDate.now()) }
 
   //endregion
-
 
   //region Редактирование семестра
 
@@ -231,7 +225,6 @@ object ScheduleManager {
   }
 
   //endregion
-
 
   //region Редактирование пар
 
@@ -295,7 +288,6 @@ object ScheduleManager {
 
   //endregion
 
-
   //region Редактирование заданий
 
   fun addHomework(semesterId: Long, homework: Homework, notifyListeners: Boolean = true) {
@@ -355,20 +347,19 @@ object ScheduleManager {
 
   //endregion
 
-
   class ScheduleDBHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
 
-    private companion object {
-      const val DB_NAME = "schedule.db"
-      const val DB_VERSION = 1
+    companion object {
+      private const val DB_NAME = "schedule.db"
+      private const val DB_VERSION = 1
 
-      const val DATE_PATTERN = "yyyy.MM.dd"
-      const val TIME_PATTERN = "HH:mm"
-      const val ARRAY_ITEMS_SEPARATOR = ","
+      private const val DATE_PATTERN = "yyyy.MM.dd"
+      private const val TIME_PATTERN = "HH:mm"
+      private const val ARRAY_ITEMS_SEPARATOR = ","
 
-      val dateFormatter: DateTimeFormatter = DateTimeFormat.forPattern(DATE_PATTERN)
-      val timeFormatter: DateTimeFormatter = DateTimeFormat.forPattern(TIME_PATTERN)
-      val joiner: Joiner = Joiner.on(ARRAY_ITEMS_SEPARATOR)
+      private val dateFormatter: DateTimeFormatter = DateTimeFormat.forPattern(DATE_PATTERN)
+      private val timeFormatter: DateTimeFormatter = DateTimeFormat.forPattern(TIME_PATTERN)
+      private val joiner: Joiner = Joiner.on(ARRAY_ITEMS_SEPARATOR)
     }
 
     private object Tables {
@@ -423,109 +414,109 @@ object ScheduleManager {
     private object Queries {
 
       const val CREATE_TABLE_SEMESTERS = """
-                CREATE TABLE ${Tables.SEMESTERS}(
-                    ${Tables.Semesters.ID}          INTEGER PRIMARY KEY,
-                    ${Tables.Semesters.NAME}        TEXT NOT NULL,
-                    ${Tables.Semesters.FIRST_DAY}   TEXT NOT NULL,
-                    ${Tables.Semesters.LAST_DAY}    TEXT NOT NULL);
-                """
+        CREATE TABLE ${Tables.SEMESTERS}(
+        ${Tables.Semesters.ID}        INTEGER PRIMARY KEY,
+        ${Tables.Semesters.NAME}      TEXT NOT NULL,
+        ${Tables.Semesters.FIRST_DAY} TEXT NOT NULL,
+        ${Tables.Semesters.LAST_DAY}  TEXT NOT NULL);
+      """
 
       const val CREATE_TABLE_LESSONS = """
-                CREATE TABLE ${Tables.LESSONS}(
-                    ${Tables.Lessons.ID}            INTEGER PRIMARY KEY,
-                    ${Tables.Lessons.SUBJECT_NAME}  TEXT NOT NULL,
-                    ${Tables.Lessons.TYPE}          TEXT,
-                    ${Tables.Lessons.TEACHERS}      TEXT,
-                    ${Tables.Lessons.CLASSROOMS}    TEXT,
-                    ${Tables.Lessons.START_TIME}    TEXT NOT NULL,
-                    ${Tables.Lessons.END_TIME}      TEXT NOT NULL,
-                    ${Tables.Lessons.REPEAT_TYPE}   INTEGER NOT NULL,
-                    ${Tables.Lessons.SEMESTER_ID}   INTEGER NOT NULL
-                                                    REFERENCES ${Tables.SEMESTERS}(${Tables.Semesters.ID})
-                                                    ON DELETE CASCADE);
-                """
+        CREATE TABLE ${Tables.LESSONS}(
+          ${Tables.Lessons.ID}            INTEGER PRIMARY KEY,
+          ${Tables.Lessons.SUBJECT_NAME}  TEXT NOT NULL,
+          ${Tables.Lessons.TYPE}          TEXT,
+          ${Tables.Lessons.TEACHERS}      TEXT,
+          ${Tables.Lessons.CLASSROOMS}    TEXT,
+          ${Tables.Lessons.START_TIME}    TEXT NOT NULL,
+          ${Tables.Lessons.END_TIME}      TEXT NOT NULL,
+          ${Tables.Lessons.REPEAT_TYPE}   INTEGER NOT NULL,
+          ${Tables.Lessons.SEMESTER_ID}   INTEGER NOT NULL
+                                          REFERENCES ${Tables.SEMESTERS}(${Tables.Semesters.ID})
+                                          ON DELETE CASCADE);
+      """
 
       const val CREATE_TABLE_BY_WEEKDAY = """
-                CREATE TABLE ${Tables.BY_WEEKDAY}(
-                    ${Tables.ByWeekday.LESSON_ID}   INTEGER PRIMARY KEY
-                                                    REFERENCES ${Tables.LESSONS}(${Tables.Lessons.ID})
-                                                    ON DELETE CASCADE,
-                    ${Tables.ByWeekday.WEEKDAY}     INTEGER NOT NULL,
-                    ${Tables.ByWeekday.WEEKS}       TEXT NOT NULL);
-                """
+        CREATE TABLE ${Tables.BY_WEEKDAY}(
+          ${Tables.ByWeekday.LESSON_ID} INTEGER PRIMARY KEY
+                                        REFERENCES ${Tables.LESSONS}(${Tables.Lessons.ID})
+                                        ON DELETE CASCADE,
+          ${Tables.ByWeekday.WEEKDAY}   INTEGER NOT NULL,
+          ${Tables.ByWeekday.WEEKS}     TEXT NOT NULL);
+      """
 
       const val CREATE_TABLE_BY_DATES = """
-                CREATE TABLE ${Tables.BY_DATES}(
-                    ${Tables.ByDates.LESSON_ID} INTEGER PRIMARY KEY
-                                                REFERENCES ${Tables.LESSONS}(${Tables.Lessons.ID})
-                                                ON DELETE CASCADE,
-                    ${Tables.ByDates.DATES}     TEXT NOT NULL);
-                """
+        CREATE TABLE ${Tables.BY_DATES}(
+          ${Tables.ByDates.LESSON_ID} INTEGER PRIMARY KEY
+                                      REFERENCES ${Tables.LESSONS}(${Tables.Lessons.ID})
+                                      ON DELETE CASCADE,
+          ${Tables.ByDates.DATES}     TEXT NOT NULL);
+      """
 
       const val CREATE_TABLE_HOMEWORKS = """
-                CREATE TABLE ${Tables.HOMEWORKS}(
-                    ${Tables.Homeworks.ID}              INTEGER PRIMARY KEY,
-                    ${Tables.Homeworks.SUBJECT_NAME}    TEXT NOT NULL,
-                    ${Tables.Homeworks.DESCRIPTION}     TEXT NOT NULL,
-                    ${Tables.Homeworks.DEADLINE}        TEXT NOT NULL,
-                    ${Tables.Homeworks.SEMESTER_ID}     INTEGER NOT NULL
-                                                        REFERENCES ${Tables.SEMESTERS}(${Tables.Semesters.ID})
-                                                        ON DELETE CASCADE);
-                """
+        CREATE TABLE ${Tables.HOMEWORKS}(
+          ${Tables.Homeworks.ID}            INTEGER PRIMARY KEY,
+          ${Tables.Homeworks.SUBJECT_NAME}  TEXT NOT NULL,
+          ${Tables.Homeworks.DESCRIPTION}   TEXT NOT NULL,
+          ${Tables.Homeworks.DEADLINE}      TEXT NOT NULL,
+          ${Tables.Homeworks.SEMESTER_ID}   INTEGER NOT NULL
+                                            REFERENCES ${Tables.SEMESTERS}(${Tables.Semesters.ID})
+                                            ON DELETE CASCADE);
+      """
 
       const val GET_LESSONS = """
-                SELECT ${Tables.LESSONS}.${Tables.Lessons.ID},
-                       ${Tables.LESSONS}.${Tables.Lessons.SUBJECT_NAME},
-                       ${Tables.LESSONS}.${Tables.Lessons.TYPE},
-                       ${Tables.LESSONS}.${Tables.Lessons.TEACHERS},
-                       ${Tables.LESSONS}.${Tables.Lessons.CLASSROOMS},
-                       ${Tables.LESSONS}.${Tables.Lessons.START_TIME},
-                       ${Tables.LESSONS}.${Tables.Lessons.END_TIME},
-                       ${Tables.LESSONS}.${Tables.Lessons.REPEAT_TYPE},
-                       ${Tables.BY_WEEKDAY}.${Tables.ByWeekday.WEEKDAY},
-                       ${Tables.BY_WEEKDAY}.${Tables.ByWeekday.WEEKS},
-                       ${Tables.BY_DATES}.${Tables.ByDates.DATES}
-                FROM ${Tables.LESSONS}
-                LEFT OUTER JOIN ${Tables.BY_WEEKDAY} ON
-                                ${Tables.LESSONS}.${Tables.Lessons.ID} =
-                                ${Tables.BY_WEEKDAY}.${Tables.ByWeekday.LESSON_ID}
-                LEFT OUTER JOIN ${Tables.BY_DATES} ON
-                                ${Tables.LESSONS}.${Tables.Lessons.ID} =
-                                ${Tables.BY_DATES}.${Tables.ByDates.LESSON_ID}
-                WHERE ${Tables.LESSONS}.${Tables.Lessons.SEMESTER_ID} = ?;
-                """
+        SELECT ${Tables.LESSONS}.${Tables.Lessons.ID},
+               ${Tables.LESSONS}.${Tables.Lessons.SUBJECT_NAME},
+               ${Tables.LESSONS}.${Tables.Lessons.TYPE},
+               ${Tables.LESSONS}.${Tables.Lessons.TEACHERS},
+               ${Tables.LESSONS}.${Tables.Lessons.CLASSROOMS},
+               ${Tables.LESSONS}.${Tables.Lessons.START_TIME},
+               ${Tables.LESSONS}.${Tables.Lessons.END_TIME},
+               ${Tables.LESSONS}.${Tables.Lessons.REPEAT_TYPE},
+               ${Tables.BY_WEEKDAY}.${Tables.ByWeekday.WEEKDAY},
+               ${Tables.BY_WEEKDAY}.${Tables.ByWeekday.WEEKS},
+               ${Tables.BY_DATES}.${Tables.ByDates.DATES}
+        FROM ${Tables.LESSONS}
+        LEFT OUTER JOIN ${Tables.BY_WEEKDAY} ON
+                        ${Tables.LESSONS}.${Tables.Lessons.ID} =
+                        ${Tables.BY_WEEKDAY}.${Tables.ByWeekday.LESSON_ID}
+        LEFT OUTER JOIN ${Tables.BY_DATES} ON
+                        ${Tables.LESSONS}.${Tables.Lessons.ID} =
+                        ${Tables.BY_DATES}.${Tables.ByDates.LESSON_ID}
+        WHERE ${Tables.LESSONS}.${Tables.Lessons.SEMESTER_ID} = ?;
+      """
 
       const val GET_LESSON = """
-                SELECT ${Tables.LESSONS}.${Tables.Lessons.ID},
-                       ${Tables.LESSONS}.${Tables.Lessons.SUBJECT_NAME},
-                       ${Tables.LESSONS}.${Tables.Lessons.TYPE},
-                       ${Tables.LESSONS}.${Tables.Lessons.TEACHERS},
-                       ${Tables.LESSONS}.${Tables.Lessons.CLASSROOMS},
-                       ${Tables.LESSONS}.${Tables.Lessons.START_TIME},
-                       ${Tables.LESSONS}.${Tables.Lessons.END_TIME},
-                       ${Tables.LESSONS}.${Tables.Lessons.REPEAT_TYPE},
-                       ${Tables.BY_WEEKDAY}.${Tables.ByWeekday.WEEKDAY},
-                       ${Tables.BY_WEEKDAY}.${Tables.ByWeekday.WEEKS},
-                       ${Tables.BY_DATES}.${Tables.ByDates.DATES}
-                FROM ${Tables.LESSONS}
-                LEFT OUTER JOIN ${Tables.BY_WEEKDAY} ON
-                                ${Tables.LESSONS}.${Tables.Lessons.ID} =
-                                ${Tables.BY_WEEKDAY}.${Tables.ByWeekday.LESSON_ID}
-                LEFT OUTER JOIN ${Tables.BY_DATES} ON
-                                ${Tables.LESSONS}.${Tables.Lessons.ID} =
-                                ${Tables.BY_DATES}.${Tables.ByDates.LESSON_ID}
-                WHERE ${Tables.LESSONS}.${Tables.Lessons.SEMESTER_ID} = ? AND
-                      ${Tables.LESSONS}.${Tables.Lessons.ID} = ?;
-                """
+        SELECT ${Tables.LESSONS}.${Tables.Lessons.ID},
+               ${Tables.LESSONS}.${Tables.Lessons.SUBJECT_NAME},
+               ${Tables.LESSONS}.${Tables.Lessons.TYPE},
+               ${Tables.LESSONS}.${Tables.Lessons.TEACHERS},
+               ${Tables.LESSONS}.${Tables.Lessons.CLASSROOMS},
+               ${Tables.LESSONS}.${Tables.Lessons.START_TIME},
+               ${Tables.LESSONS}.${Tables.Lessons.END_TIME},
+               ${Tables.LESSONS}.${Tables.Lessons.REPEAT_TYPE},
+               ${Tables.BY_WEEKDAY}.${Tables.ByWeekday.WEEKDAY},
+               ${Tables.BY_WEEKDAY}.${Tables.ByWeekday.WEEKS},
+               ${Tables.BY_DATES}.${Tables.ByDates.DATES}
+        FROM ${Tables.LESSONS}
+        LEFT OUTER JOIN ${Tables.BY_WEEKDAY} ON
+                        ${Tables.LESSONS}.${Tables.Lessons.ID} =
+                        ${Tables.BY_WEEKDAY}.${Tables.ByWeekday.LESSON_ID}
+        LEFT OUTER JOIN ${Tables.BY_DATES} ON
+                        ${Tables.LESSONS}.${Tables.Lessons.ID} =
+                        ${Tables.BY_DATES}.${Tables.ByDates.LESSON_ID}
+        WHERE ${Tables.LESSONS}.${Tables.Lessons.SEMESTER_ID} = ? AND
+              ${Tables.LESSONS}.${Tables.Lessons.ID} = ?;
+      """
 
       const val REPLACE_BY_WEEKDAY = """
-                REPLACE INTO ${Tables.BY_WEEKDAY}(${Tables.ByWeekday.LESSON_ID}, ${Tables.ByWeekday.WEEKDAY},
-                                                  ${Tables.ByWeekday.WEEKS}) VALUES(?, ?, ?);
-                """
+        REPLACE INTO ${Tables.BY_WEEKDAY}(${Tables.ByWeekday.LESSON_ID}, ${Tables.ByWeekday.WEEKDAY},
+                                          ${Tables.ByWeekday.WEEKS}) VALUES(?, ?, ?);
+      """
 
       const val REPLACE_BY_DATES = """
-                REPLACE INTO ${Tables.BY_DATES}(${Tables.ByDates.LESSON_ID}, ${Tables.ByDates.DATES}) VALUES(?, ?);
-                """
+        REPLACE INTO ${Tables.BY_DATES}(${Tables.ByDates.LESSON_ID}, ${Tables.ByDates.DATES}) VALUES(?, ?);
+      """
     }
 
     override fun onOpen(db: SQLiteDatabase) {
@@ -536,17 +527,13 @@ object ScheduleManager {
     override fun onCreate(db: SQLiteDatabase) {
       db.beginTransaction()
 
-      try {
-        db.execSQL(Queries.CREATE_TABLE_SEMESTERS)
-        db.execSQL(Queries.CREATE_TABLE_LESSONS)
-        db.execSQL(Queries.CREATE_TABLE_BY_WEEKDAY)
-        db.execSQL(Queries.CREATE_TABLE_BY_DATES)
-        db.execSQL(Queries.CREATE_TABLE_HOMEWORKS)
+      db.execSQL(Queries.CREATE_TABLE_SEMESTERS)
+      db.execSQL(Queries.CREATE_TABLE_LESSONS)
+      db.execSQL(Queries.CREATE_TABLE_BY_WEEKDAY)
+      db.execSQL(Queries.CREATE_TABLE_BY_DATES)
+      db.execSQL(Queries.CREATE_TABLE_HOMEWORKS)
 
-        db.setTransactionSuccessful()
-      } finally {
-        db.endTransaction()
-      }
+      db.setTransactionSuccessful()
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) =
@@ -623,7 +610,6 @@ object ScheduleManager {
 
     //endregion
 
-
     //region Создатели объектов из курсора
 
     private fun Cursor.createSemester(indexes: SemesterColumnsIndexes): Semester {
@@ -677,7 +663,6 @@ object ScheduleManager {
 
     //endregion
 
-
     //region Получение индексов
 
     private val Cursor.semesterColumnsIndexes: SemesterColumnsIndexes get() = SemesterColumnsIndexes(
@@ -710,7 +695,6 @@ object ScheduleManager {
 
     //endregion
 
-
     //region Контейнеры для индексов
 
     private data class SemesterColumnsIndexes(val name: Int, val firstDay: Int, val lastDay: Int, val id: Int)
@@ -726,7 +710,6 @@ object ScheduleManager {
     //endregion
 
     //endregion
-
 
     //region Запись в БД
 
@@ -759,7 +742,6 @@ object ScheduleManager {
     }
 
     //endregion
-
 
     //region Изменение
 
@@ -838,7 +820,6 @@ object ScheduleManager {
 
     //endregion
 
-
     //region Удаление
 
     fun deleteSemester(id: Long) = writableDatabase.use {
@@ -861,7 +842,6 @@ object ScheduleManager {
     }
 
     //endregion
-
 
     //region Преобразования в ContentValues
 
