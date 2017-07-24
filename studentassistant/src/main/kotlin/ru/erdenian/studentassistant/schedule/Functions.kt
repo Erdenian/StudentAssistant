@@ -5,7 +5,6 @@ package ru.erdenian.studentassistant.schedule
  *
  * @return id
  * @author Ilya Solovyev
- * @version 2
  * @since 0.2.0
  */
 fun generateId() = System.currentTimeMillis()
