@@ -11,6 +11,7 @@ import org.joda.time.LocalDate
 import org.joda.time.Period
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
+import ru.erdenian.studentassistant.extensions.exhaustive
 import ru.erdenian.studentassistant.extensions.toImmutableSortedSet
 import java.lang.ref.WeakReference
 
@@ -731,8 +732,7 @@ object ScheduleManager {
         when (lesson.lessonRepeat) {
           is LessonRepeat.ByWeekday -> it.insertOrThrow(Tables.BY_WEEKDAY, null, lesson.lessonRepeat.toContentValues(lesson.id))
           is LessonRepeat.ByDates -> it.insertOrThrow(Tables.BY_DATES, null, lesson.lessonRepeat.toContentValues(lesson.id))
-          else -> throw IllegalArgumentException("Неизвестный тип повторений: ${lesson.lessonRepeat}")
-        }
+        }.exhaustive
 
         it.setTransactionSuccessful()
       } finally {
@@ -774,8 +774,7 @@ object ScheduleManager {
         when (lesson.lessonRepeat) {
           is LessonRepeat.ByWeekday -> it.execSQL(Queries.REPLACE_BY_WEEKDAY, toBindArgs(lesson.lessonRepeat))
           is LessonRepeat.ByDates -> it.execSQL(Queries.REPLACE_BY_DATES, toBindArgs(lesson.lessonRepeat))
-          else -> throw IllegalArgumentException("Неизвестный тип повторений: ${lesson.lessonRepeat}")
-        }
+        }.exhaustive
 
         it.setTransactionSuccessful()
       } finally {
@@ -878,7 +877,6 @@ object ScheduleManager {
       cv.put(Tables.Lessons.REPEAT_TYPE, when (lessonRepeat) {
         is LessonRepeat.ByWeekday -> Tables.Lessons.REPEAT_TYPE_BY_WEEKDAY
         is LessonRepeat.ByDates -> Tables.Lessons.REPEAT_TYPE_BY_DATES
-        else -> throw IllegalArgumentException("Неизвестный тип повторений: $lessonRepeat")
       })
 
       cv.put(Tables.Lessons.SEMESTER_ID, semesterId)

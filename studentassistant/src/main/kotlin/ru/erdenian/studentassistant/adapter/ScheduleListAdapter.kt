@@ -71,7 +71,6 @@ class ScheduleListAdapter(context: Context, val semesterId: Long, val showWeeksA
                 joiner.join(lessonRepeat.weeks.mapIndexedNotNull { index, b -> if (b) index + 1 else null }) + " " +
                 context.getString(R.string.schedule_page_fragment_out_of) + " " + lessonRepeat.weeks.size
             is LessonRepeat.ByDates -> joiner.join(lessonRepeat.dates)
-            else -> throw IllegalStateException("Неизвестный тип повторения: $lessonRepeat")
           }
           isLongClickable = true
           setOnClickListener {
