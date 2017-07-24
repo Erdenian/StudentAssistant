@@ -13,11 +13,11 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.adapter.HomeworksPagerAdapter
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.initializeDrawerAndNavigationView
-import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener
 import ru.erdenian.studentassistant.schedule.ScheduleManager
 
 class HomeworksActivity : AppCompatActivity(),
-    OnScheduleUpdateListener, AdapterView.OnItemSelectedListener {
+    ScheduleManager.OnScheduleUpdateListener,
+    AdapterView.OnItemSelectedListener {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

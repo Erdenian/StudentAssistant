@@ -13,10 +13,10 @@ import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.setColor
-import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener
 import ru.erdenian.studentassistant.schedule.ScheduleManager
 
-class LessonInformationActivity : AppCompatActivity(), OnScheduleUpdateListener {
+class LessonInformationActivity : AppCompatActivity(),
+    ScheduleManager.OnScheduleUpdateListener {
 
   private val semesterId: Long by lazy {
     intent.getLongExtra(SEMESTER_ID, -1L).takeIf { it != -1L } ?: throw IllegalStateException("Не передан id семестра")
