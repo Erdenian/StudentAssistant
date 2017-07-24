@@ -144,19 +144,19 @@ class LessonEditorActivity : AppCompatActivity(),
       android.R.id.home -> finish()
       R.id.menu_lesson_editor_save -> {
         val subjectName = if (content_lesson_editor_subject_name_edit_text.text.trim().isNotBlank()) {
-          content_lesson_editor_subject_name_edit_text.text.toString().asSingleLine.trim()
+          content_lesson_editor_subject_name_edit_text.text.toString().toSingleLine().trim()
         } else {
           toast(R.string.activity_lesson_editor_incorrect_subject_name_message)
           return super.onOptionsItemSelected(item)
         }
 
-        val type = content_lesson_editor_lesson_type_edit_text.text.toString().asSingleLine.trim()
+        val type = content_lesson_editor_lesson_type_edit_text.text.toString().toSingleLine().trim()
 
         val teachers = content_lesson_editor_teachers_edit_text.text.toString().
-            asSingleLine.split(",").map(String::trim).filter(String::isNotBlank)
+            toSingleLine().split(",").map(String::trim).filter(String::isNotBlank)
 
         val classrooms = content_lesson_editor_classrooms_edit_text.text.toString().
-            asSingleLine.split(",").map(String::trim).filter(String::isNotBlank)
+            toSingleLine().split(",").map(String::trim).filter(String::isNotBlank)
 
         if (startTime == null) {
           toast(R.string.activity_lesson_editor_incorrect_start_time_message)

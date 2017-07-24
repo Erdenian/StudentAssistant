@@ -13,10 +13,10 @@ import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.extensions.asSingleLine
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.extensions.showDatePicker
+import ru.erdenian.studentassistant.extensions.toSingleLine
 import ru.erdenian.studentassistant.schedule.ScheduleManager
 import ru.erdenian.studentassistant.schedule.Semester
 
@@ -102,7 +102,7 @@ class SemesterEditorActivity : AppCompatActivity(),
         }
 
         val name = if (content_semester_editor_semester_name_edit_text.text.trim().isNotEmpty()) {
-          content_semester_editor_semester_name_edit_text.text.toString().trim().asSingleLine
+          content_semester_editor_semester_name_edit_text.text.toString().trim().toSingleLine()
         } else {
           toast(R.string.activity_semester_editor_incorrect_name_message)
           return super.onOptionsItemSelected(item)
@@ -143,7 +143,7 @@ class SemesterEditorActivity : AppCompatActivity(),
     with(content_semester_editor_semester_name) {
       isErrorEnabled = true
 
-      if (semestersNames.contains(s.toString().trim().asSingleLine))
+      if (semestersNames.contains(s.toString().trim().toSingleLine()))
         error = getString(R.string.activity_semester_editor_error_name_not_avaliable)
       else isErrorEnabled = false
     }

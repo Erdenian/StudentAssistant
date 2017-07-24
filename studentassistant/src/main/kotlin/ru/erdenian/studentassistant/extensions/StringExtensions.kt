@@ -2,4 +2,12 @@ package ru.erdenian.studentassistant.extensions
 
 private val lineSeparator = System.getProperty("line.separator")
 
-val String.asSingleLine get() = replace(lineSeparator, " ")
+/**
+ * Преобразует многострочный текст в единственную строку.
+ *
+ * @author Ilya Solovyev
+ * @since 0.2.6
+ * @receiver текст
+ * @return тот же текст, но в одну строку
+ */
+fun String.toSingleLine() = replace(lineSeparator, " ")
