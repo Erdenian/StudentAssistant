@@ -531,13 +531,17 @@ object ScheduleManager {
     override fun onCreate(db: SQLiteDatabase) {
       db.beginTransaction()
 
-      db.execSQL(Queries.CREATE_TABLE_SEMESTERS)
-      db.execSQL(Queries.CREATE_TABLE_LESSONS)
-      db.execSQL(Queries.CREATE_TABLE_BY_WEEKDAY)
-      db.execSQL(Queries.CREATE_TABLE_BY_DATES)
-      db.execSQL(Queries.CREATE_TABLE_HOMEWORKS)
+      try {
+        db.execSQL(Queries.CREATE_TABLE_SEMESTERS)
+        db.execSQL(Queries.CREATE_TABLE_LESSONS)
+        db.execSQL(Queries.CREATE_TABLE_BY_WEEKDAY)
+        db.execSQL(Queries.CREATE_TABLE_BY_DATES)
+        db.execSQL(Queries.CREATE_TABLE_HOMEWORKS)
 
-      db.setTransactionSuccessful()
+        db.setTransactionSuccessful()
+      } finally {
+        db.endTransaction()
+      }
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) =
