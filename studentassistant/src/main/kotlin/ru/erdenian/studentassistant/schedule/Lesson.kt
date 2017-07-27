@@ -17,13 +17,14 @@ import org.joda.time.LocalTime
  * @param endTime время конца
  * @param lessonRepeat когда повторяется пара
  * @param id уникальный id пары
- * @throws IllegalArgumentException если [startTime] >= [endTime]
+ * @throws IllegalArgumentException если [subjectName] пусто или [startTime] >= [endTime]
  */
 data class Lesson(val subjectName: String, val type: String, val teachers: ImmutableSortedSet<String>,
                   val classrooms: ImmutableSortedSet<String>, val startTime: LocalTime, val endTime: LocalTime,
                   val lessonRepeat: LessonRepeat, val id: Long = generateId()) : Comparable<Lesson> {
 
   init {
+    if (subjectName.isBlank()) throw IllegalArgumentException("Отсутствует название предмета")
     if (startTime >= endTime) throw IllegalArgumentException("Неверно заданы даты: $startTime - $endTime")
   }
 
