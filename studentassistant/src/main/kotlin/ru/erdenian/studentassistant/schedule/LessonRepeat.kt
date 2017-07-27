@@ -18,7 +18,7 @@ sealed class LessonRepeat {
    * @author Ilya Solovyev
    * @since 0.0.0
    * @param day день
-   * @param weekNumber номер недели, содержащей этот день
+   * @param weekNumber номер недели, содержащей этот день (начинается с 0)
    * @return true, если пара повторяется в заданный день, в противном случае false
    */
   abstract fun repeatsOnDay(day: LocalDate, weekNumber: Int): Boolean
