@@ -15,23 +15,61 @@ import ru.erdenian.studentassistant.extensions.exhaustive
 import ru.erdenian.studentassistant.extensions.toImmutableSortedSet
 import java.lang.ref.WeakReference
 
-
+/**
+ * Синглтон для работы с сохраненным расписанием.
+ *
+ * Содержит методы для чтения и изменения расписания.
+ *
+ * @author Ilya Solovyev
+ * @since 0.0.0
+ */
 object ScheduleManager {
 
+  /**
+   * Экземпляр соединения с базой данных.
+   *
+   * @author Ilya Solovyev
+   * @since 0.0.0
+   */
   private lateinit var dbHelper: ScheduleDBHelper
 
+  /**
+   * Инициализация объекта.
+   *
+   * @author Ilya Solovyev
+   * @since 0.0.0
+   */
   fun initialize(context: Context) {
     dbHelper = ScheduleDBHelper(context.applicationContext)
   }
 
   //region Кэш
 
+  /**
+   * Кэш семестров.
+   *
+   * Заполняется сам при первом обращении к нему. Держит в себе все семетры в расписании.
+   *
+   * @author Ilya Solovyev
+   * @since 0.0.0
+   */
   private val semestersCache: MutableMap<Long, Semester> by lazy {
     mutableMapOf<Long, Semester>().apply {
       dbHelper.getSemesters { put(it.id, it) }
     }
   }
 
+  /**
+   * Кэш пар.
+   *
+   * Содержит в себе список пар [выбранного семестра][selectedSemesterId], либо null, если нет ни одного семестра.
+   * Если равен null, и есть выбранный семестр, то при очередном обращении заполняется сам.
+   * Присваивать можно только null для очистки кэша.
+   *
+   * @author Ilya Solovyev
+   * @since 0.0.0
+   * @throws IllegalArgumentException если присваемое значение не null
+   */
   private var lessonsCache: MutableMap<Long, Lesson>? = null
     get() {
       if ((field == null) && (semestersCache.isNotEmpty()))
@@ -40,7 +78,22 @@ object ScheduleManager {
         }
       return field
     }
+    set(value) {
+      if (value != null) throw IllegalArgumentException("Допускается только сброс кэша присвоением ему null")
+      field = value
+    }
 
+  /**
+   * Кэш домашних заданий.
+   *
+   * Содержит в себе список домашних заданий [выбранного семестра][selectedSemesterId], либо null, если нет ни одного семестра.
+   * Если равен null, и есть выбранный семестр, то при очередном обращении заполняется сам.
+   * Присваивать можно только null для очистки кэша.
+   *
+   * @author Ilya Solovyev
+   * @since 0.1.0
+   * @throws IllegalArgumentException если присваемое значение не null
+   */
   private var homeworksCache: MutableMap<Long, Homework>? = null
     get() {
       if ((field == null) && (semestersCache.isNotEmpty()))
@@ -49,12 +102,29 @@ object ScheduleManager {
         }
       return field
     }
+    set(value) {
+      if (value != null) throw IllegalArgumentException("Допускается только сброс кэша присвоением ему null")
+      field = value
+    }
 
   //endregion
 
-  //region Слушатели
+  //region Обработчики
 
+  /**
+   * Интерфейс для оповещения об изменении расписания.
+   *
+   * @author Ilya Solovyev
+   * @since 0.0.0
+   */
   interface OnScheduleUpdateListener {
+
+    /**
+     * Вызывается после изменения расписания.
+     *
+     * @author Ilya Solovyev
+     * @since 0.0.0
+     */
     fun onScheduleUpdate()
   }
 
@@ -78,60 +148,160 @@ object ScheduleManager {
 
   //region Выбранный семестр
 
+  /**
+   * Id выбранного семестра.
+   *
+   * Содержит в семе id выбранного семестра, либо null, если список семестров пуст.
+   * Если равен null, и есть хотя бы один семестр, сам выбирает семестр и сохраняет в себе его id.
+   *
+   * @author Ilya Solovyev
+   * @since 0.0.0
+   */
   var selectedSemesterId: Long? = null
-    get() = if ((field == null) && (semesters.isNotEmpty())) {
-      val today = LocalDate.now()
-      field = semesters.find { !today.isBefore(it.firstDay) && !today.isAfter(it.lastDay) }?.id ?: semesters.lastOrNull()?.id
-      field
-    } else field
+    get() {
+      if ((field == null) && (semesters.isNotEmpty())) {
+        val today = LocalDate.now()
+        field = semesters.find { (it.firstDay <= today) && (today <= it.lastDay) }?.id ?: semesters.lastOrNull()?.id
+      }
+      return field
+    }
     set(value) {
       if (field != value) {
-        field = if (value != null) getSemester(value).id else null
+        field = value?.let { getSemester(it).id }
         lessonsCache = null
         homeworksCache = null
       }
     }
 
-  val selectedSemesterIndex get() = semesters.indexOfFirst {
-    it.id == selectedSemesterId ?: throw IllegalStateException("Не выбран семестр")
-  }.takeIf { it >= 0 } ?: throw IllegalStateException("Неверное значение выбранного семестра")
+  /**
+   * Индекс выбранного семестра.
+   *
+   * Позиция семестра в отсортированном списке всех семестров.
+   *
+   * @author Ilya Solovyev
+   * @since 0.0.0
+   * @throws IllegalStateException если [selectedSemesterId] равен null или в нем записан несуществующий id
+   */
+  val selectedSemesterIndex: Int
+    get() {
+      val selectedSemesterId = selectedSemesterId ?: throw IllegalStateException("Не выбран семестр")
+      return semesters.indexOfFirst { it.id == selectedSemesterId }.takeIf { it >= 0 } ?:
+          throw IllegalStateException("Неверное значение выбранного семестра")
+    }
 
+  /**
+   * Выбранный семестр.
+   *
+   * @author Ilya Solovyev
+   * @since 0.0.0
+   * @throws IllegalStateException если [selectedSemesterId] равен null
+   */
   val selectedSemester get() = getSemester(selectedSemesterId ?: throw IllegalStateException("Семестр не выбран"))
 
   //endregion
 
   //region Получение семестров
 
+  /**
+   * Список всех семестров в расписании.
+   *
+   * @author Ilya Solovyev
+   * @since 0.0.0
+   */
   val semesters get() = semestersCache.values.toImmutableSortedSet()
 
+  /**
+   * Позволяет получить семестр по его id.
+   *
+   * @author Ilya Solovyev
+   * @since 0.0.0
+   * @param id id семестра
+   * @return семестр с заданным id
+   * @throws IllegalArgumentException если семестра с таким id нет
+   */
   fun getSemester(id: Long) = getSemesterOrNull(id) ?: throw IllegalArgumentException("Нет семестра с таким id")
 
+  /**
+   * Позволяет получить семестр по его id.
+   *
+   * @author Ilya Solovyev
+   * @since 0.0.0
+   * @param id id семестра
+   * @return семестр с заданным id, либо null, если такого семестра нет
+   */
   fun getSemesterOrNull(id: Long) = semestersCache[id]
 
-  val semestersNames get() = semesters.map { it.name }
+  /**
+   * Список имен всех семестров.
+   *
+   * @author Ilya Solovyev
+   * @since 0.0.0
+   * @see Semester.name
+   */
+  val semestersNames get() = semestersCache.map { (_, semester) -> semester.name }.toImmutableSortedSet()
 
+  /**
+   * Список всех предметов заданного семестра.
+   *
+   * @author Ilya Solovyev
+   * @since 0.1.0
+   * @param semesterId id семестра
+   * @return список всех предметов в этом семестре
+   */
   fun getSubjects(semesterId: Long) = getLessons(semesterId).map { it.subjectName }.toImmutableSortedSet()
 
+  /**
+   * Список всех типов пар в заданном семестре.
+   *
+   * @author Ilya Solovyev
+   * @since 0.2.5
+   * @param semesterId id семестра
+   * @return список из всех типов пар в этом семестре
+   */
   fun getTypes(semesterId: Long) = getLessons(semesterId).map { it.type }.toImmutableSortedSet()
 
+  /**
+   * Список всех преподавателей заданного семестра.
+   *
+   * @author Ilya Solovyev
+   * @since 0.2.5
+   * @param semesterId id семестра
+   * @return список всех преподавателей, ведущих пары в этом семестре
+   */
   fun getTeachers(semesterId: Long) =
       sortedSetOf<String>().apply { getLessons(semesterId).forEach { addAll(it.teachers) } }.toImmutableSortedSet()
 
+  /**
+   * Список всех аудиторий заданного семестра.
+   *
+   * @author Ilya Solovyev
+   * @since 0.2.5
+   * @param semesterId id семестра
+   * @return список всех аудиторий, в которых проходят пары в этом семестре
+   */
   fun getClassrooms(semesterId: Long) =
       sortedSetOf<String>().apply { getLessons(semesterId).forEach { addAll(it.classrooms) } }.toImmutableSortedSet()
 
-  fun getLessonLength(semesterId: Long): Period {
-    var max: Period? = null
-    var maxCount = -1
-    getLessons(semesterId).groupBy { Period(it.startTime, it.endTime) }.forEach { (period, lessons) ->
-      if (lessons.size > maxCount) {
-        maxCount = lessons.size
-        max = period
-      }
-    }
-    return max ?: Period(1, 30, 0, 0)
-  }
+  /**
+   * Самая частая длительность пары в заданном семестре, либо длительность по умолчанию (1 час 30 минут).
+   *
+   * @author Ilya Solovyev
+   * @since 0.2.6
+   * @param semesterId id семестра
+   * @return самую частую продолжительность пары в этом семестре, либо продолжительность по умолчанию, если он пуст)
+   */
+  fun getLessonLength(semesterId: Long) =
+      getLessons(semesterId).groupBy { Period(it.startTime, it.endTime) }.maxBy { (_, lessons) -> lessons.size }?.key ?:
+          Period(1, 30, 0, 0)
 
+  /**
+   * Имеется ли в расписании хотя бы одна пара.
+   *
+   * Если хотя бы один семестр содержит хотя бы одну пару, вернет true, false в противном случае.
+   *
+   * @author Ilya Solovyev
+   * @since 0.2.0
+   */
   val hasLessons: Boolean get() {
     semesters.forEach { if (getLessons(it.id).isNotEmpty()) return true }
     return false
@@ -141,24 +311,81 @@ object ScheduleManager {
 
   //region Получение пар
 
+  /**
+   * Позволяет получить пару по id.
+   *
+   * @author Ilya Solovyev
+   * @since 0.0.0
+   * @param semesterId id семестра, содержащего пару
+   * @param lessonId id пары
+   * @return пару из заданного семестра с заданным id
+   * @throws IllegalArgumentException если пара не найдена
+   */
   fun getLesson(semesterId: Long, lessonId: Long) =
       getLessonOrNull(semesterId, lessonId) ?: throw IllegalArgumentException("Пара не найдена")
 
+  /**
+   * Позволяет получить пару по id.
+   *
+   * @author Ilya Solovyev
+   * @since 0.2.6
+   * @param semesterId id семестра, содержащего пару
+   * @param lessonId id пары
+   * @return пару из заданного семестра с заданным id, либо null, если пара не найдена
+   */
   fun getLessonOrNull(semesterId: Long, lessonId: Long) =
       if (semesterId == selectedSemesterId) lessonsCache!![lessonId]
       else dbHelper.getLesson(semesterId, lessonId)
 
+  /**
+   * Позволяет получить список пар из определенного семестра, удовлетворяющих условию отбора.
+   *
+   * @author Ilya Solovyev
+   * @since 0.2.0
+   * @param semesterId id семестра
+   * @param predicate условие отбора (по умолчанию { true })
+   * @return коллекцию пар из семестра с id [semesterId], удовлетворяющих [predicate]
+   */
   fun getLessons(semesterId: Long, predicate: (Lesson) -> Boolean = { true }) =
       (if (semesterId == selectedSemesterId) lessonsCache!!.filter { predicate(it.value) }.map { it.value }
       else sortedSetOf<Lesson>().apply { dbHelper.getLessons(semesterId) { if (predicate(it)) add(it) } })
           .toImmutableSortedSet()
 
-  fun getLessons(semesterId: Long, day: LocalDate) =
-      getLessons(semesterId) { it.lessonRepeat.repeatsOnDay(day, getSemester(semesterId).getWeekNumber(day)) }
+  /**
+   * Позволяет получить список пар из определенного семетра, которые будут в определенный день.
+   *
+   * @author Ilya Solovyev
+   * @since 0.0.0
+   * @param semesterId id семестра
+   * @param day день
+   * @return список пар из семестра с id [semesterId], которые будут в [этот день][day]
+   */
+  fun getLessons(semesterId: Long, day: LocalDate): ImmutableSortedSet<Lesson> {
+    val weekNumber = getSemester(semesterId).getWeekNumber(day)
+    return getLessons(semesterId) { it.lessonRepeat.repeatsOnDay(day, weekNumber) }
+  }
 
+  /**
+   * Позволяет получить список пар из определенного семетра, которые повторяются в определенный день недели.
+   *
+   * @author Ilya Solovyev
+   * @since 0.0.0
+   * @param semesterId id семестра
+   * @param weekday день недели (понедельник - 1, воскресенье - 7)
+   * @return список пар из семестра с id [semesterId], которые повторяются в [этот день недели][weekday]
+   */
   fun getLessons(semesterId: Long, weekday: Int) =
       getLessons(semesterId) { (it.lessonRepeat is LessonRepeat.ByWeekday) && it.lessonRepeat.repeatsOnWeekday(weekday) }
 
+  /**
+   * Позволяет получить список пар определенного предмета из определенного семетра.
+   *
+   * @author Ilya Solovyev
+   * @since 0.2.0
+   * @param semesterId id семестра
+   * @param subjectName название предмета
+   * @return список пар предмета [subjectName] из семестра с id [semesterId]
+   */
   fun getLessons(semesterId: Long, subjectName: String) =
       getLessons(semesterId) { it.subjectName == subjectName }
 
@@ -166,32 +393,99 @@ object ScheduleManager {
 
   //region Получение домашних заданий
 
+  /**
+   * Возвращает домашнее задание по его id и id семестра.
+   *
+   * @author Ilya Solovyev
+   * @since 0.1.0
+   * @param semesterId id семестра, содержащего домашнее задание
+   * @param homeworkId id домашнего задания
+   * @return домашнее задание из заданного семестра с заданным id
+   * @throws IllegalArgumentException если задание не найдено
+   */
   fun getHomework(semesterId: Long, homeworkId: Long) =
       getHomeworkOrNull(semesterId, homeworkId) ?: throw IllegalArgumentException("Задание не найдено")
 
+  /**
+   * Возвращает домашнее задание по его id и id семестра.
+   *
+   * @author Ilya Solovyev
+   * @since 0.2.6
+   * @param semesterId id семестра, содержащего домашнее задание
+   * @param homeworkId id домашнего задания
+   * @return домашнее задание из заданного семестра с заданным id, либо null, если задание не найдено
+   */
   fun getHomeworkOrNull(semesterId: Long, homeworkId: Long) =
       if (semesterId == selectedSemesterId) homeworksCache!![homeworkId]
       else dbHelper.getHomework(semesterId, homeworkId)
 
+  /**
+   * Позволяет получить список домашних заданий из определенного семестра, удовлетворяющих условию отбора.
+   *
+   * @author Ilya Solovyev
+   * @since 0.2.0
+   * @param semesterId id семестра
+   * @param predicate условие отбора (по умолчанию { true })
+   * @return коллекцию заданий из семестра с id [semesterId], удовлетворяющих [predicate]
+   */
   fun getHomeworks(semesterId: Long, predicate: (Homework) -> Boolean = { true }): ImmutableSortedSet<Homework> =
       (if (semesterId == selectedSemesterId) homeworksCache!!.filter { predicate(it.value) }.map { it.value }
       else sortedSetOf<Homework>().apply { dbHelper.getHomeworks(semesterId) { if (predicate(it)) add(it) } })
           .toImmutableSortedSet()
 
+  /**
+   * Позволяет получить список домашних заданий по определенному предмету из определенного семетра.
+   *
+   * @author Ilya Solovyev
+   * @since 0.2.0
+   * @param semesterId id семестра
+   * @param subjectName название предмета
+   * @return список заданий по предмету [subjectName] из семестра с id [semesterId]
+   */
   fun getHomeworks(semesterId: Long, subjectName: String): ImmutableSortedSet<Homework> =
       (if (semesterId == selectedSemesterId) homeworksCache!!.filter { it.value.subjectName == subjectName }.map { it.value }
       else sortedSetOf<Homework>().apply { dbHelper.getHomeworks(semesterId, subjectName) { add(it) } })
           .toImmutableSortedSet()
 
-  fun getActualHomeworks(semesterId: Long) = getHomeworks(semesterId) { !it.deadline.isBefore(LocalDate.now()) }
+  /**
+   * Позволяет получить список еще не сданных домашних заданий.
+   *
+   * @author Ilya Solovyev
+   * @since 0.1.0
+   * @param semesterId id семестра
+   * @return список еще не сданных заданий из семестра с id [semesterId]
+   */
+  fun getActualHomeworks(semesterId: Long): ImmutableSortedSet<Homework> {
+    val today = LocalDate.now()
+    return getHomeworks(semesterId) { it.deadline >= today }
+  }
 
-  fun getActualHomeworks(semesterId: Long, lessonId: Long) =
-      getHomeworks(semesterId) {
-        (it.subjectName == getLesson(semesterId, lessonId).subjectName) && !it.deadline.isBefore(LocalDate.now())
-      }
+  /**
+   * Позволяет получить список еще не сданных домашних заданий по определенному предмету.
+   *
+   * @author Ilya Solovyev
+   * @since 0.2.6
+   * @param semesterId id семестра
+   * @param subjectName название предмета
+   * @return список еще не сданных заданий по предмету [subjectName] из семестра с id [semesterId]
+   */
+  fun getActualHomeworks(semesterId: Long, subjectName: String): ImmutableSortedSet<Homework> {
+    val today = LocalDate.now()
+    return getHomeworks(semesterId) { (it.subjectName == subjectName) && (it.deadline >= today) }
+  }
 
-  fun getPastHomeworks(semesterId: Long) =
-      getHomeworks(semesterId) { it.deadline.isBefore(LocalDate.now()) }
+  /**
+   * Позволяет получить список сданных домашних заданий.
+   *
+   * @author Ilya Solovyev
+   * @since 0.1.0
+   * @param semesterId id семестра
+   * @return список сданных заданий из семестра с id [semesterId]
+   */
+  fun getPastHomeworks(semesterId: Long): ImmutableSortedSet<Homework> {
+    val today = LocalDate.now()
+    return getHomeworks(semesterId) { it.deadline < today }
+  }
 
   //endregion
 
