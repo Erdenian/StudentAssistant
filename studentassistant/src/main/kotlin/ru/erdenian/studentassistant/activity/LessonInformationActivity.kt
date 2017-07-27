@@ -53,7 +53,7 @@ class LessonInformationActivity : AppCompatActivity(),
 
       content_lesson_information_homeworks_parent.removeAllViews()
 
-      ScheduleManager.getActualHomeworks(semesterId, lessonId).forEach {
+      ScheduleManager.getActualHomeworks(semesterId, lesson.subjectName).forEach {
         val card = layoutInflater.inflate(R.layout.card_homework, content_lesson_information_homeworks_parent, false)
 
         (card.findViewById(R.id.card_homework_subject_name) as TextView).text = it.subjectName
