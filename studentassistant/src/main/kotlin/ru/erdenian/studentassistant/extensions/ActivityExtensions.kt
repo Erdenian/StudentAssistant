@@ -13,7 +13,7 @@ import ru.erdenian.studentassistant.activity.AlarmEditorActivity
 import ru.erdenian.studentassistant.activity.HelpActivity
 import ru.erdenian.studentassistant.activity.HomeworksActivity
 import ru.erdenian.studentassistant.activity.ScheduleActivity
-import ru.erdenian.studentassistant.schedule.ScheduleManager
+import ru.erdenian.studentassistant.localdata.ScheduleManager
 
 /**
  * Инициализирует Navigation Drawer.

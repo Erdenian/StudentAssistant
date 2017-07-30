@@ -12,7 +12,7 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.activity.HOMEWORK_ID
 import ru.erdenian.studentassistant.activity.HomeworkEditorActivity
 import ru.erdenian.studentassistant.activity.SEMESTER_ID
-import ru.erdenian.studentassistant.schedule.ScheduleManager
+import ru.erdenian.studentassistant.localdata.ScheduleManager
 
 class HomeworksPageFragment : Fragment() {
 

@@ -13,7 +13,7 @@ import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.setColor
-import ru.erdenian.studentassistant.schedule.ScheduleManager
+import ru.erdenian.studentassistant.localdata.ScheduleManager
 
 class LessonInformationActivity : AppCompatActivity(),
     ScheduleManager.OnScheduleUpdateListener {

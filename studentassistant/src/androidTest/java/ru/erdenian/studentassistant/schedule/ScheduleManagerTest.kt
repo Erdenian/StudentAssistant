@@ -7,6 +7,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import ru.erdenian.studentassistant.extensions.clearApplicationData
+import ru.erdenian.studentassistant.localdata.ScheduleManager
 
 
 class ScheduleManagerTest {

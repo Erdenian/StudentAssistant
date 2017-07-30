@@ -10,7 +10,7 @@ import android.preference.PreferenceManager
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.activity.AlarmActivity
-import ru.erdenian.studentassistant.schedule.ScheduleManager
+import ru.erdenian.studentassistant.localdata.ScheduleManager
 
 class ScheduleService : IntentService("ScheduleService") {
 
