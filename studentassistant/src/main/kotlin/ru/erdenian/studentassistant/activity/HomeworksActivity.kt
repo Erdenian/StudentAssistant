@@ -13,7 +13,7 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.adapter.HomeworksPagerAdapter
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.initializeDrawerAndNavigationView
-import ru.erdenian.studentassistant.schedule.ScheduleManager
+import ru.erdenian.studentassistant.localdata.ScheduleManager
 
 class HomeworksActivity : AppCompatActivity(),
     ScheduleManager.OnScheduleUpdateListener,

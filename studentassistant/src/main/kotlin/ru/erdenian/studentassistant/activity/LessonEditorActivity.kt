@@ -17,9 +17,9 @@ import org.jetbrains.anko.toast
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.*
+import ru.erdenian.studentassistant.localdata.ScheduleManager
 import ru.erdenian.studentassistant.schedule.Lesson
 import ru.erdenian.studentassistant.schedule.LessonRepeat
-import ru.erdenian.studentassistant.schedule.ScheduleManager
 import ru.erdenian.studentassistant.service.ScheduleService
 
 class LessonEditorActivity : AppCompatActivity(),

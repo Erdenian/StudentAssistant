@@ -14,7 +14,7 @@ import ru.erdenian.studentassistant.activity.LESSON_ID
 import ru.erdenian.studentassistant.activity.LessonEditorActivity
 import ru.erdenian.studentassistant.activity.SEMESTER_ID
 import ru.erdenian.studentassistant.adapter.ScheduleListAdapter
-import ru.erdenian.studentassistant.schedule.ScheduleManager
+import ru.erdenian.studentassistant.localdata.ScheduleManager
 
 class SchedulePageFragment : Fragment() {
 

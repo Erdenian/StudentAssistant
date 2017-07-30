@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.schedule
+package ru.erdenian.studentassistant.localdata
 
 import android.content.ContentValues
 import android.content.Context
@@ -13,6 +13,10 @@ import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
 import ru.erdenian.studentassistant.extensions.exhaustive
 import ru.erdenian.studentassistant.extensions.toImmutableSortedSet
+import ru.erdenian.studentassistant.schedule.Homework
+import ru.erdenian.studentassistant.schedule.Lesson
+import ru.erdenian.studentassistant.schedule.LessonRepeat
+import ru.erdenian.studentassistant.schedule.Semester
 import java.lang.ref.WeakReference
 
 /**

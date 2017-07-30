@@ -16,9 +16,9 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.extensions.showDatePicker
+import ru.erdenian.studentassistant.localdata.ScheduleManager
 import ru.erdenian.studentassistant.schedule.Homework
 import ru.erdenian.studentassistant.schedule.Lesson
-import ru.erdenian.studentassistant.schedule.ScheduleManager
 import ru.erdenian.studentassistant.schedule.Semester
 
 class HomeworkEditorActivity : AppCompatActivity(),
