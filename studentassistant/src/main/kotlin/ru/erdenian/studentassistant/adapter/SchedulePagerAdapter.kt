@@ -10,7 +10,6 @@ import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.fragment.SchedulePageFragment
 import ru.erdenian.studentassistant.schedule.Semester
 
-
 class SchedulePagerAdapter(fm: FragmentManager, private val semester: Semester, val showWeeksAndDates: Boolean) :
     FragmentStatePagerAdapter(fm) {
 
@@ -18,22 +17,14 @@ class SchedulePagerAdapter(fm: FragmentManager, private val semester: Semester, 
     private const val TITLE_FORMAT = "EEEE, dd MMMM"
     private const val TITLE_FORMAT_FULL = "EEEE, dd MMMM yyyy"
 
-    private val weekdays = arrayOf(
-        LocalDate().withDayOfWeek(1).dayOfWeek().asText,
-        LocalDate().withDayOfWeek(2).dayOfWeek().asText,
-        LocalDate().withDayOfWeek(3).dayOfWeek().asText,
-        LocalDate().withDayOfWeek(4).dayOfWeek().asText,
-        LocalDate().withDayOfWeek(5).dayOfWeek().asText,
-        LocalDate().withDayOfWeek(6).dayOfWeek().asText,
-        LocalDate().withDayOfWeek(7).dayOfWeek().asText
-    )
+    private val weekdays = Array<String>(7) { LocalDate().withDayOfWeek(it).dayOfWeek().asText }
   }
 
   override fun getPageTitle(position: Int): CharSequence =
       if (showWeeksAndDates) weekdays[position]
-      else semester.firstDay.plusDays(position).let {
-        if (it.year == LocalDate.now().year) it.toString(TITLE_FORMAT)
-        else it.toString(TITLE_FORMAT_FULL)
+      else semester.firstDay.plusDays(position).run {
+        if (year == LocalDate.now().year) toString(TITLE_FORMAT)
+        else toString(TITLE_FORMAT_FULL)
       }
 
   override fun getItem(position: Int): Fragment =
