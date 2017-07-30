@@ -1,1 +1,1 @@
-include ':studentassistant', ':customviews'
+include ':studentassistant', ':schedule', ':customviews'

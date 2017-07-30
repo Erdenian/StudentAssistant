@@ -375,7 +375,7 @@ object ScheduleManager {
    * @return список пар из семестра с id [semesterId], которые повторяются в [этот день недели][weekday]
    */
   fun getLessons(semesterId: Long, weekday: Int) =
-      getLessons(semesterId) { (it.lessonRepeat is LessonRepeat.ByWeekday) && it.lessonRepeat.repeatsOnWeekday(weekday) }
+      getLessons(semesterId) { (it.lessonRepeat as? LessonRepeat.ByWeekday)?.repeatsOnWeekday(weekday) ?: false }
 
   /**
    * Позволяет получить список пар определенного предмета из определенного семетра.
@@ -1027,9 +1027,10 @@ object ScheduleManager {
       try {
         it.insertOrThrow(Tables.LESSONS, null, lesson.toContentValues(semesterId))
 
-        when (lesson.lessonRepeat) {
-          is LessonRepeat.ByWeekday -> it.insertOrThrow(Tables.BY_WEEKDAY, null, lesson.lessonRepeat.toContentValues(lesson.id))
-          is LessonRepeat.ByDates -> it.insertOrThrow(Tables.BY_DATES, null, lesson.lessonRepeat.toContentValues(lesson.id))
+        val lessonRepeat = lesson.lessonRepeat
+        when (lessonRepeat) {
+          is LessonRepeat.ByWeekday -> it.insertOrThrow(Tables.BY_WEEKDAY, null, lessonRepeat.toContentValues(lesson.id))
+          is LessonRepeat.ByDates -> it.insertOrThrow(Tables.BY_DATES, null, lessonRepeat.toContentValues(lesson.id))
         }.exhaustive
 
         it.setTransactionSuccessful()
@@ -1069,9 +1070,10 @@ object ScheduleManager {
             arrayOf(semesterId.toString(), lesson.id.toString()))
         if (updatedRows == 0) throw IllegalArgumentException("Пары $lesson нет в БД")
 
-        when (lesson.lessonRepeat) {
-          is LessonRepeat.ByWeekday -> it.execSQL(Queries.REPLACE_BY_WEEKDAY, toBindArgs(lesson.lessonRepeat))
-          is LessonRepeat.ByDates -> it.execSQL(Queries.REPLACE_BY_DATES, toBindArgs(lesson.lessonRepeat))
+        val lessonRepeat = lesson.lessonRepeat
+        when (lessonRepeat) {
+          is LessonRepeat.ByWeekday -> it.execSQL(Queries.REPLACE_BY_WEEKDAY, toBindArgs(lessonRepeat))
+          is LessonRepeat.ByDates -> it.execSQL(Queries.REPLACE_BY_DATES, toBindArgs(lessonRepeat))
         }.exhaustive
 
         it.setTransactionSuccessful()

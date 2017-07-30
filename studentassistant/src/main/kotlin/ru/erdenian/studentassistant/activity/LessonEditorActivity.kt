@@ -74,13 +74,15 @@ class LessonEditorActivity : AppCompatActivity(),
         this@LessonEditorActivity.endTime = endTime
         content_lesson_editor_end_time.text = endTime.toString(TIME_FORMAT)
 
-        when (lessonRepeat) {
-          is LessonRepeat.ByWeekday -> {
-            content_lesson_editor_weekdays.setPosition(lessonRepeat.weekday - 1, false)
-            content_lesson_editor_weeks_selector.weeks = lessonRepeat.weeks.toBooleanArray()
-          }
-          is LessonRepeat.ByDates -> TODO()
-        }.exhaustive
+        lessonRepeat.apply {
+          when (this) {
+            is LessonRepeat.ByWeekday -> {
+              content_lesson_editor_weekdays.setPosition(weekday - 1, false)
+              content_lesson_editor_weeks_selector.weeks = weeks.toBooleanArray()
+            }
+            is LessonRepeat.ByDates -> TODO()
+          }.exhaustive
+        }
       } ?: run {
         supportActionBar!!.title = getString(R.string.title_activity_lesson_editor_new_lesson)
         content_lesson_editor_weekdays.setPosition(weekday - 1, false)
