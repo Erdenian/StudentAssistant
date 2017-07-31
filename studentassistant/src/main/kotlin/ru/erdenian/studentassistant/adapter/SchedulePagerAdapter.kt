@@ -17,7 +17,7 @@ class SchedulePagerAdapter(fm: FragmentManager, private val semester: Semester, 
     private const val TITLE_FORMAT = "EEEE, dd MMMM"
     private const val TITLE_FORMAT_FULL = "EEEE, dd MMMM yyyy"
 
-    private val weekdays = Array<String>(7) { LocalDate().withDayOfWeek(it).dayOfWeek().asText }
+    private val weekdays = Array<String>(7) { LocalDate().withDayOfWeek(it + 1).dayOfWeek().asText }
   }
 
   override fun getPageTitle(position: Int): CharSequence =
