@@ -52,7 +52,16 @@
                 android:id="@+id/weeks_selector_weeks_parent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"/>
+                android:orientation="horizontal">
+
+                <ru.erdenian.studentassistant.customviews.CheckBoxWithText
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:checked="true"
+                    app:text="1"/>
+
+            </LinearLayout>
 
         </HorizontalScrollView>
 
