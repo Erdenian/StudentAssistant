@@ -139,6 +139,9 @@ public class WeeksSelector extends LinearLayout {
      * Возврацает список недель на текущий момент.
      * <p>
      * Список недель - список boolean значений, где i-е значение показывает была ли выбрана i-я неделя.
+     * <p>
+     * Если список недель состоит из нескольких повторяющихся последовательностей, то вернет только одну из них.
+     * Например, в случае списка { true, false, true, true, false, true } вернет { true, false, true }.
      *
      * @return список недель
      * @since 0.2.6
@@ -146,10 +149,22 @@ public class WeeksSelector extends LinearLayout {
     @NonNull
     public boolean[] getWeeks() {
         boolean[] weeks = new boolean[visibleCheckboxesCount];
-        for (int i = 0; i < visibleCheckboxesCount; i++) {
-            CheckBoxWithText cwt = (CheckBoxWithText) weeksParent.getChildAt(i);
-            weeks[i] = cwt.isChecked();
+        for (int i = 0; i < visibleCheckboxesCount; i++)
+            weeks[i] = ((CheckBoxWithText) weeksParent.getChildAt(i)).isChecked();
+
+        cycleLengthLoop:
+        for (int cycleLength = 1; cycleLength <= weeks.length / 2; cycleLength++) {
+            if (weeks.length % cycleLength != 0) continue;
+
+            for (int offset = cycleLength; offset < weeks.length; offset += cycleLength)
+                for (int position = 0; position < cycleLength; position++)
+                    if (weeks[position] != weeks[offset + position])
+                        continue cycleLengthLoop;
+
+            weeks = Arrays.copyOfRange(weeks, 0, cycleLength);
+            break;
         }
+
         return weeks;
     }
 
