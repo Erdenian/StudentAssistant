@@ -28,6 +28,8 @@ public class WeeksSelector extends LinearLayout {
 
     /**
      * Массив предустановленных вариантов.
+     *
+     * @since 0.2.6
      */
     private static final boolean[][] weeksVariantsArray = new boolean[][]{
             {true},
@@ -44,6 +46,13 @@ public class WeeksSelector extends LinearLayout {
     private ImageButton removeWeek, addWeek;
     private LinearLayout weeksParent;
     //endregion
+
+    /**
+     * Количество видимых чекбоксов.
+     *
+     * @since 0.2.6
+     */
+    private int visibleCheckboxesCount = 1;
 
     //region Конструкторы
 
@@ -94,7 +103,6 @@ public class WeeksSelector extends LinearLayout {
         if (weeksVariants.getAdapter().getCount() != weeksVariantsArray.length + 1)
             throw new IllegalStateException("Несоответствие вариантов выбора и количества предустановок");
 
-        weeksParent.removeAllViews();
         setWeeks(weeksVariantsArray[0]);
 
         weeksVariants.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -133,12 +141,12 @@ public class WeeksSelector extends LinearLayout {
      * Список недель - список boolean значений, где i-е значение показывает была ли выбрана i-я неделя.
      *
      * @return список недель
+     * @since 0.2.6
      */
     @NonNull
     public boolean[] getWeeks() {
-        int childCount = weeksParent.getChildCount();
-        boolean[] weeks = new boolean[childCount];
-        for (int i = 0; i < childCount; i++) {
+        boolean[] weeks = new boolean[visibleCheckboxesCount];
+        for (int i = 0; i < visibleCheckboxesCount; i++) {
             CheckBoxWithText cwt = (CheckBoxWithText) weeksParent.getChildAt(i);
             weeks[i] = cwt.isChecked();
         }
@@ -151,6 +159,7 @@ public class WeeksSelector extends LinearLayout {
      * Список недель - список boolean значений, где i-е значение показывает была ли выбрана i-я неделя.
      *
      * @param weeks список недель
+     * @since 0.2.6
      */
     public void setWeeks(@NonNull boolean[] weeks) {
         int selection = weeksVariantsArray.length; // Индекс варианта выбора "Свое" = индекс последнего элемента + 1
@@ -167,20 +176,13 @@ public class WeeksSelector extends LinearLayout {
         weeksVariants.setSelection(selection, true); // При использовании setSelection(int) вызывается обработчик. Хз почему.
         weeksVariants.setOnItemSelectedListener(listener);
 
-        int childCount = weeksParent.getChildCount();
+        for (; visibleCheckboxesCount > weeks.length; visibleCheckboxesCount--)
+            weeksParent.getChildAt(visibleCheckboxesCount - 1).setVisibility(GONE);
 
-        if (childCount > weeks.length) {
-            weeksParent.removeViews(weeks.length, childCount - weeks.length);
-            childCount = weeksParent.getChildCount();
-        }
+        for (int i = 0; i < visibleCheckboxesCount; i++) ((CheckBoxWithText) weeksParent.getChildAt(i)).setChecked(weeks[i]);
+        for (int i = visibleCheckboxesCount; i < weeks.length; i++) addCheckbox(weeks[i]);
 
-        for (int i = 0; i < childCount; i++) {
-            CheckBoxWithText cwt = (CheckBoxWithText) weeksParent.getChildAt(i);
-            cwt.setChecked(weeks[i]);
-            cwt.setText(Integer.toString(i + 1));
-        }
-        for (int i = childCount; i < weeks.length; i++) addCheckbox(weeks[i]);
-
+        visibleCheckboxesCount = weeks.length;
         setCustomEnabled(selection == weeksVariantsArray.length);
     }
 
@@ -188,6 +190,7 @@ public class WeeksSelector extends LinearLayout {
      * Активирует или деактивирует элементы интерфейса, предназначенные для выбора недель вручную.
      *
      * @param enabled true для активации, false для деактивации
+     * @since 0.2.6
      */
     private void setCustomEnabled(boolean enabled) {
         int childCount = weeksParent.getChildCount();
@@ -199,24 +202,37 @@ public class WeeksSelector extends LinearLayout {
     }
 
     /**
-     * Удаляет последний (самый правый) чекбокс из списка.
+     * Скрывает последний (самый правый) видимый чекбокс.
+     *
+     * @since 0.2.6
      */
     private void removeCheckbox() {
-        weeksParent.removeViewAt(weeksParent.getChildCount() - 1);
-        removeWeek.setEnabled(weeksParent.getChildCount() > 1);
+        weeksParent.getChildAt(--visibleCheckboxesCount).setVisibility(GONE);
+        removeWeek.setEnabled(visibleCheckboxesCount > 1);
     }
 
     /**
      * Добавляет еще один чекбокс в конец списка.
+     * <p>
+     * Если есть созданные и скрытые чекбоксы, то делает видимым одного из них. Если их больше не осталось, то создает новый.
      *
      * @param isChecked начальное состояние чекбокса
+     * @since 0.2.6
      */
     private void addCheckbox(boolean isChecked) {
-        CheckBoxWithText cwt = new CheckBoxWithText(getContext());
-        cwt.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        weeksParent.addView(cwt);
+        CheckBoxWithText cwt;
+        if (visibleCheckboxesCount < weeksParent.getChildCount()) {
+            cwt = (CheckBoxWithText) weeksParent.getChildAt(visibleCheckboxesCount);
+            cwt.setVisibility(VISIBLE);
+        } else {
+            cwt = new CheckBoxWithText(getContext());
+            cwt.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            weeksParent.addView(cwt);
+            cwt.setText(Integer.toString(weeksParent.getChildCount()));
+        }
+
         cwt.setChecked(isChecked);
-        cwt.setText(Integer.toString(weeksParent.getChildCount()));
         removeWeek.setEnabled(true);
+        visibleCheckboxesCount++;
     }
 }
