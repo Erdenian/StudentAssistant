@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * View для выбора недель для повторения пары.
@@ -53,6 +54,67 @@ public class WeeksSelector extends LinearLayout {
      * @since 0.2.6
      */
     private int visibleCheckboxesCount = 1;
+
+    /**
+     * Возвращает номер выбранного варианта из предустановок.
+     *
+     * @param weeks список недель
+     * @return номер выбранного варианта
+     * @since 0.2.6
+     */
+    public static int getWeeksVariantIndex(@NonNull boolean[] weeks) {
+        int selection = weeksVariantsArray.length; // Индекс варианта выбора "Свое" = индекс последнего элемента + 1
+        for (int i = 0; i < weeksVariantsArray.length; i++) {
+            boolean[] variant = weeksVariantsArray[i];
+            if (Arrays.equals(weeks, variant)) {
+                selection = i;
+                break;
+            }
+        }
+        return selection;
+    }
+
+    /**
+     * Возвращает номер выбранного варианта из предустановок.
+     *
+     * @param weeks список недель
+     * @return номер выбранного варианта
+     * @since 0.2.6
+     */
+    public static int getWeeksVariantIndex(@NonNull List<Boolean> weeks) {
+        int selection = weeksVariantsArray.length; // Индекс варианта выбора "Свое" = индекс последнего элемента + 1
+        for (int i = 0; i < weeksVariantsArray.length; i++) {
+            boolean[] variant = weeksVariantsArray[i];
+            if (isEquals(weeks, variant)) {
+                selection = i;
+                break;
+            }
+        }
+        return selection;
+    }
+
+    /**
+     * Проверяет на идентичность список и массив.
+     *
+     * @param list  список
+     * @param array массив
+     * @return true, если они одинаковые, false в противном случае
+     * @since 0.2.6
+     */
+    private static boolean isEquals(List<Boolean> list, boolean[] array) {
+        if ((list == null) && (array == null)) return true;
+        if (list == null || array == null) return false;
+
+        int length = list.size();
+        if (array.length != length)
+            return false;
+
+        for (int i = 0; i < length; i++)
+            if (list.get(i) != array[i])
+                return false;
+
+        return true;
+    }
 
     //region Конструкторы
 
@@ -161,7 +223,7 @@ public class WeeksSelector extends LinearLayout {
                     if (weeks[position] != weeks[offset + position])
                         continue cycleLengthLoop;
 
-            weeks = Arrays.copyOfRange(weeks, 0, cycleLength);
+            weeks = Arrays.copyOf(weeks, cycleLength);
             break;
         }
 
@@ -177,14 +239,7 @@ public class WeeksSelector extends LinearLayout {
      * @since 0.2.6
      */
     public void setWeeks(@NonNull boolean[] weeks) {
-        int selection = weeksVariantsArray.length; // Индекс варианта выбора "Свое" = индекс последнего элемента + 1
-        for (int i = 0; i < weeksVariantsArray.length; i++) {
-            boolean[] variant = weeksVariantsArray[i];
-            if (Arrays.equals(weeks, variant)) {
-                selection = i;
-                break;
-            }
-        }
+        int selection = getWeeksVariantIndex(weeks);
 
         AdapterView.OnItemSelectedListener listener = weeksVariants.getOnItemSelectedListener();
         weeksVariants.setOnItemSelectedListener(null);

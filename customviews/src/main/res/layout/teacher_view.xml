@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="bottom"
     android:orientation="horizontal"
     tools:ignore="UseCompoundDrawables">
 
@@ -17,10 +18,11 @@
         tools:ignore="ContentDescription"/>
 
     <TextView
-        android:id="@+id/textview_teacher"
+        android:id="@+id/teacher_view_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorSecondaryText"
-        android:textSize="@dimen/card_secondary_text_size"/>
+        android:textSize="@dimen/card_secondary_text_size"
+        tools:text="Кожухов Игорь Борисович"/>
 
 </LinearLayout>
