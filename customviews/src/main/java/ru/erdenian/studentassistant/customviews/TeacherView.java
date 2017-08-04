@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -62,6 +63,10 @@ public class TeacherView extends LinearLayout {
      * @since 0.2.6
      */
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
+        setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        setOrientation(HORIZONTAL);
+        setGravity(Gravity.BOTTOM);
+
         inflate(context, R.layout.teacher_view, this);
         name = (TextView) findViewById(R.id.teacher_view_name);
 

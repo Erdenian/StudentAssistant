@@ -155,6 +155,9 @@ public class WeeksSelector extends LinearLayout {
      * @since 0.2.6
      */
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
+        setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        setOrientation(VERTICAL);
+
         inflate(context, R.layout.weeks_selector, this);
 
         weeksVariants = (Spinner) findViewById(R.id.weeks_selector_weeks_variants);

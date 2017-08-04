@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -65,7 +66,12 @@ public class CheckBoxWithText extends LinearLayout {
      * @since 0.2.6
      */
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
+        setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        setOrientation(VERTICAL);
+        setGravity(Gravity.CENTER_HORIZONTAL);
+
         inflate(context, R.layout.checkbox_with_text, this);
+
         checkBox = (CheckBox) findViewById(R.id.checkbox_with_text_checkbox);
         textView = (TextView) findViewById(R.id.checkbox_with_text_text);
 
