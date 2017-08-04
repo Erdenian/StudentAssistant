@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -45,6 +46,7 @@ public class WeeksSelector extends LinearLayout {
     //region Ссылки на элементы интерфейса.
     private Spinner weeksVariants;
     private ImageButton removeWeek, addWeek;
+    private HorizontalScrollView scrollView;
     private LinearLayout weeksParent;
     //endregion
 
@@ -163,6 +165,7 @@ public class WeeksSelector extends LinearLayout {
         weeksVariants = (Spinner) findViewById(R.id.weeks_selector_weeks_variants);
         removeWeek = (ImageButton) findViewById(R.id.weeks_selector_remove_week);
         addWeek = (ImageButton) findViewById(R.id.weeks_selector_add_week);
+        scrollView = (HorizontalScrollView) findViewById(R.id.weeks_selector_scroll_view);
         weeksParent = (LinearLayout) findViewById(R.id.weeks_selector_weeks_parent);
 
         if (weeksVariants.getAdapter().getCount() != weeksVariantsArray.length + 1)
@@ -194,6 +197,12 @@ public class WeeksSelector extends LinearLayout {
             @Override
             public void onClick(View v) {
                 addCheckbox(false);
+                scrollView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        scrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
+                    }
+                });
             }
         });
     }
