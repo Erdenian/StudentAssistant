@@ -157,7 +157,7 @@ public class LessonCard extends CardView {
 
             for (int i = currentTeachersCount; i < teachersCount; i++) {
                 TeacherView tv = new TeacherView(context);
-                tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+                tv.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
                 tv.setName(teachersList.get(i));
                 teachersParent.addView(tv);
             }

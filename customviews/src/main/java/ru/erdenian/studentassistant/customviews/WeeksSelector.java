@@ -157,7 +157,6 @@ public class WeeksSelector extends LinearLayout {
      * @since 0.2.6
      */
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
-        setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         setOrientation(VERTICAL);
 
         inflate(context, R.layout.weeks_selector, this);
@@ -308,7 +307,7 @@ public class WeeksSelector extends LinearLayout {
             cwt.setVisibility(VISIBLE);
         } else {
             cwt = new CheckBoxWithText(getContext());
-            cwt.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            cwt.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
             weeksParent.addView(cwt);
             cwt.setText(Integer.toString(weeksParent.getChildCount()));
         }
