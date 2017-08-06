@@ -66,7 +66,6 @@ public class CheckBoxWithText extends LinearLayout {
      * @since 0.2.6
      */
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
-        setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER_HORIZONTAL);
 
