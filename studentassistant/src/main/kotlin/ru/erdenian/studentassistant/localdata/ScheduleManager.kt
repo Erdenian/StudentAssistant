@@ -242,7 +242,7 @@ object ScheduleManager {
    * @since 0.0.0
    * @see Semester.name
    */
-  val semestersNames get() = semestersCache.map { (_, semester) -> semester.name }.toImmutableSortedSet()
+  val semestersNames get() = semestersCache.map { (_, semester) -> semester.name }
 
   /**
    * Список всех предметов заданного семестра.
