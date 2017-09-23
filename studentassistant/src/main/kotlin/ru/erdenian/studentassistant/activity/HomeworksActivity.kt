@@ -46,17 +46,21 @@ class HomeworksActivity : AppCompatActivity(),
     supportActionBar!!.setDisplayShowTitleEnabled(ScheduleManager.semesters.size <= 1)
     toolbar_with_spinner_spinner.visibility = if (ScheduleManager.semesters.size > 1) View.VISIBLE else View.GONE
 
-    if (ScheduleManager.semesters.size > 1) {
-      val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters, ScheduleManager.semestersNames.asList())
-      adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters)
-      toolbar_with_spinner_spinner.adapter = adapter
-      toolbar_with_spinner_spinner.setSelection(ScheduleManager.selectedSemesterIndex)
-    } else if (ScheduleManager.semesters.size == 1) {
-      supportActionBar!!.title = ScheduleManager.selectedSemester!!.name
-      onItemSelected(null, null, 0, 0)
-    } else {
-      supportActionBar!!.setTitle(R.string.title_activity_schedule)
-      view_pager.adapter = null
+    when {
+      ScheduleManager.semesters.size > 1 -> {
+        val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters, ScheduleManager.semestersNames)
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters)
+        toolbar_with_spinner_spinner.adapter = adapter
+        toolbar_with_spinner_spinner.setSelection(ScheduleManager.selectedSemesterIndex)
+      }
+      ScheduleManager.semesters.size == 1 -> {
+        supportActionBar!!.title = ScheduleManager.selectedSemester.name
+        onItemSelected(null, null, 0, 0)
+      }
+      else -> {
+        supportActionBar!!.setTitle(R.string.title_activity_schedule)
+        view_pager.adapter = null
+      }
     }
   }
 
