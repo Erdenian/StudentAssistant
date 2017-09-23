@@ -83,7 +83,8 @@ object ScheduleManager {
       return field
     }
     set(value) {
-      if (value != null) throw IllegalArgumentException("Допускается только сброс кэша присвоением ему null")
+      // Todo: разобаться
+      //if (value != null) throw IllegalArgumentException("Допускается только сброс кэша присвоением ему null")
       field = value
     }
 
@@ -107,7 +108,8 @@ object ScheduleManager {
       return field
     }
     set(value) {
-      if (value != null) throw IllegalArgumentException("Допускается только сброс кэша присвоением ему null")
+      // Todo: разобаться
+      //if (value != null) throw IllegalArgumentException("Допускается только сброс кэша присвоением ему null")
       field = value
     }
 
