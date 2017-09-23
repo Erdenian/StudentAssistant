@@ -162,11 +162,11 @@ class SemesterEditorActivity : AppCompatActivity(),
     when (dialog.tag) {
       FIRST_DAY_TAG -> {
         firstDay = newDate
-        content_semester_editor_first_day.text = firstDay!!.toString()
+        content_semester_editor_first_day.text = firstDay!!.toString("dd.MM.yyyy")
       }
       LAST_DAY_TAG -> {
         lastDay = newDate
-        content_semester_editor_last_day.text = lastDay!!.toString()
+        content_semester_editor_last_day.text = lastDay!!.toString("dd.MM.yyyy")
       }
       else -> throw IllegalArgumentException("Неизвестный тэг: ${dialog.tag}")
     }
