@@ -64,6 +64,12 @@
             <pair source="c" header="h" />
           </extensions>
         </Objective-C-extensions>
+        <codeStyleSettings language="JAVA">
+          <option name="KEEP_SIMPLE_BLOCKS_IN_ONE_LINE" value="true" />
+          <option name="KEEP_SIMPLE_METHODS_IN_ONE_LINE" value="true" />
+          <option name="KEEP_SIMPLE_LAMBDAS_IN_ONE_LINE" value="true" />
+          <option name="KEEP_SIMPLE_CLASSES_IN_ONE_LINE" value="true" />
+        </codeStyleSettings>
         <codeStyleSettings language="XML">
           <option name="FORCE_REARRANGE_MODE" value="1" />
           <indentOptions>

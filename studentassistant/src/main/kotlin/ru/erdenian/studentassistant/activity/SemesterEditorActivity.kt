@@ -13,11 +13,11 @@ import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.extensions.asSingleLine
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.extensions.showDatePicker
-import ru.erdenian.studentassistant.schedule.ScheduleManager
+import ru.erdenian.studentassistant.extensions.toSingleLine
+import ru.erdenian.studentassistant.localdata.ScheduleManager
 import ru.erdenian.studentassistant.schedule.Semester
 
 class SemesterEditorActivity : AppCompatActivity(),
@@ -34,7 +34,7 @@ class SemesterEditorActivity : AppCompatActivity(),
     const val LAST_DAY_TAG = "last_day_tag"
   }
 
-  private val semester: Semester? by lazy { ScheduleManager.getSemester(intent.getLongExtra(SEMESTER_ID, -1L)) }
+  private val semester: Semester? by lazy { ScheduleManager.getSemesterOrNull(intent.getLongExtra(SEMESTER_ID, -1L)) }
 
   private val semestersNames: List<String> by lazy { ScheduleManager.semestersNames.filter { it != semester?.name } }
 
@@ -102,7 +102,7 @@ class SemesterEditorActivity : AppCompatActivity(),
         }
 
         val name = if (content_semester_editor_semester_name_edit_text.text.trim().isNotEmpty()) {
-          content_semester_editor_semester_name_edit_text.text.toString().trim().asSingleLine
+          content_semester_editor_semester_name_edit_text.text.toString().trim().toSingleLine()
         } else {
           toast(R.string.activity_semester_editor_incorrect_name_message)
           return super.onOptionsItemSelected(item)
@@ -143,7 +143,7 @@ class SemesterEditorActivity : AppCompatActivity(),
     with(content_semester_editor_semester_name) {
       isErrorEnabled = true
 
-      if (semestersNames.contains(s.toString().trim().asSingleLine))
+      if (semestersNames.contains(s.toString().trim().toSingleLine()))
         error = getString(R.string.activity_semester_editor_error_name_not_avaliable)
       else isErrorEnabled = false
     }
@@ -151,8 +151,8 @@ class SemesterEditorActivity : AppCompatActivity(),
 
   override fun onClick(v: View) {
     when (v.id) {
-      R.id.content_semester_editor_first_day -> showDatePicker(this, preselected = firstDay, tag = FIRST_DAY_TAG)
-      R.id.content_semester_editor_last_day -> showDatePicker(this, preselected = lastDay, tag = LAST_DAY_TAG)
+      R.id.content_semester_editor_first_day -> showDatePicker(this, preselectedDate = firstDay, tag = FIRST_DAY_TAG)
+      R.id.content_semester_editor_last_day -> showDatePicker(this, preselectedDate = lastDay, tag = LAST_DAY_TAG)
       else -> throw IllegalArgumentException("Неизвестный id: ${v.id}")
     }
   }
@@ -162,11 +162,11 @@ class SemesterEditorActivity : AppCompatActivity(),
     when (dialog.tag) {
       FIRST_DAY_TAG -> {
         firstDay = newDate
-        content_semester_editor_first_day.text = firstDay!!.toString()
+        content_semester_editor_first_day.text = firstDay!!.toString("dd.MM.yyyy")
       }
       LAST_DAY_TAG -> {
         lastDay = newDate
-        content_semester_editor_last_day.text = lastDay!!.toString()
+        content_semester_editor_last_day.text = lastDay!!.toString("dd.MM.yyyy")
       }
       else -> throw IllegalArgumentException("Неизвестный тэг: ${dialog.tag}")
     }

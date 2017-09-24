@@ -4,11 +4,10 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.MultiAutoCompleteTextView
 import com.codetroopers.betterpickers.radialtimepicker.RadialTimePickerDialogFragment
 import com.google.common.base.Joiner
-import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableSortedSet
 import kotlinx.android.synthetic.main.content_lesson_editor.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -17,15 +16,11 @@ import org.jetbrains.anko.startService
 import org.jetbrains.anko.toast
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.extensions.asSingleLine
-import ru.erdenian.studentassistant.extensions.getCompatColor
-import ru.erdenian.studentassistant.extensions.setColor
-import ru.erdenian.studentassistant.extensions.showTimePicker
+import ru.erdenian.studentassistant.extensions.*
+import ru.erdenian.studentassistant.localdata.ScheduleManager
 import ru.erdenian.studentassistant.schedule.Lesson
 import ru.erdenian.studentassistant.schedule.LessonRepeat
-import ru.erdenian.studentassistant.schedule.ScheduleManager
 import ru.erdenian.studentassistant.service.ScheduleService
-
 
 class LessonEditorActivity : AppCompatActivity(),
     RadialTimePickerDialogFragment.OnTimeSetListener {
@@ -41,12 +36,14 @@ class LessonEditorActivity : AppCompatActivity(),
     private const val END_TIME_TAG = "last_day_tag"
 
     private const val TIME_FORMAT = "HH:mm"
+
+    private val joiner = Joiner.on(", ")
   }
 
   private val semesterId: Long by lazy {
     intent.getLongExtra(SEMESTER_ID, -1L).takeIf { it != -1L } ?: throw IllegalStateException("Не передан id семестра")
   }
-  private val lesson: Lesson? by lazy { ScheduleManager.getLesson(semesterId, intent.getLongExtra(LESSON_ID, -1L)) }
+  private val lesson: Lesson? by lazy { ScheduleManager.getLessonOrNull(semesterId, intent.getLongExtra(LESSON_ID, -1L)) }
   private val copy: Boolean by lazy { intent.getBooleanExtra(COPY, false) }
   private val weekday: Int by lazy {
     intent.getIntExtra(WEEKDAY, -1).takeIf { it != -1 } ?: (lesson!!.lessonRepeat as? LessonRepeat.ByWeekday)?.weekday ?: 1
@@ -65,49 +62,30 @@ class LessonEditorActivity : AppCompatActivity(),
     content_lesson_editor_start_time.setOnClickListener { showTimePicker(this, startTime, START_TIME_TAG) }
     content_lesson_editor_end_time.setOnClickListener { showTimePicker(this, endTime, END_TIME_TAG) }
 
-    content_lesson_editor_remove_week.setOnClickListener {
-      with(content_lesson_editor_weeks_parent) {
-        removeViewAt(childCount - 1)
-        if (childCount <= 1) content_lesson_editor_remove_week.isEnabled = false
-      }
-    }
-
-    content_lesson_editor_add_week.setOnClickListener {
-      with(content_lesson_editor_weeks_parent) {
-        val checkbox = layoutInflater.inflate(R.layout.content_lesson_editor_week_checkbox, this, false)
-        (checkbox.findViewById(R.id.content_lesson_editor_week_number) as TextView).text = (childCount + 1).toString()
-        addView(checkbox)
-        content_lesson_editor_remove_week.isEnabled = true
-      }
-    }
-
-    var weeks = listOf(true)
     if (savedInstanceState == null) {
-      with(lesson) {
-        if (this == null) {
-          supportActionBar!!.title = getString(R.string.title_activity_lesson_editor_new_lesson)
-          content_lesson_editor_weekdays.setPosition(weekday - 1, false)
-        } else {
-          content_lesson_editor_subject_name_edit_text.setText(subjectName)
-          content_lesson_editor_lesson_type_edit_text.setText(type)
-          content_lesson_editor_teachers_edit_text.setText(Joiner.on(", ").join(teachers))
-          content_lesson_editor_classrooms_edit_text.setText(Joiner.on(", ").join(classrooms))
+      lesson?.apply {
+        content_lesson_editor_subject_name_edit_text.setText(subjectName)
+        content_lesson_editor_lesson_type_edit_text.setText(type)
+        content_lesson_editor_teachers_edit_text.setText(joiner.join(teachers))
+        content_lesson_editor_classrooms_edit_text.setText(joiner.join(classrooms))
 
-          this@LessonEditorActivity.startTime = startTime
-          content_lesson_editor_start_time.text = startTime.toString(TIME_FORMAT)
-          this@LessonEditorActivity.endTime = endTime
-          content_lesson_editor_end_time.text = endTime.toString(TIME_FORMAT)
+        this@LessonEditorActivity.startTime = startTime
+        content_lesson_editor_start_time.text = startTime.toString(TIME_FORMAT)
+        this@LessonEditorActivity.endTime = endTime
+        content_lesson_editor_end_time.text = endTime.toString(TIME_FORMAT)
 
-
-          when (lessonRepeat) {
+        lessonRepeat.apply {
+          when (this) {
             is LessonRepeat.ByWeekday -> {
-              content_lesson_editor_weekdays.setPosition(lessonRepeat.weekday - 1, false)
-              weeks = lessonRepeat.weeks
+              content_lesson_editor_weekdays.setPosition(weekday - 1, false)
+              content_lesson_editor_weeks_selector.weeks = weeks.toBooleanArray()
             }
             is LessonRepeat.ByDates -> TODO()
-            else -> throw IllegalStateException("Неизвестный тип повторения: $lessonRepeat")
-          }
+          }.exhaustive
         }
+      } ?: run {
+        supportActionBar!!.title = getString(R.string.title_activity_lesson_editor_new_lesson)
+        content_lesson_editor_weekdays.setPosition(weekday - 1, false)
       }
     } else {
       val startTimeString = savedInstanceState.getString(START_TIME)
@@ -124,60 +102,14 @@ class LessonEditorActivity : AppCompatActivity(),
 
       content_lesson_editor_weekdays.setPosition(savedInstanceState.getInt(WEEKDAY), false)
 
-      weeks = ImmutableList.copyOf(savedInstanceState.getBooleanArray(WEEKS).toList())
-    }
-
-    when (weeks) {
-      listOf(true) -> content_lesson_editor_weeks_variants.setSelection(0)
-      listOf(true, false) -> content_lesson_editor_weeks_variants.setSelection(1)
-      listOf(false, true) -> content_lesson_editor_weeks_variants.setSelection(2)
-      else -> content_lesson_editor_weeks_variants.setSelection(3)
-    }
-
-    weeks.forEach {
-      layoutInflater.inflate(R.layout.content_lesson_editor_week_checkbox,
-          content_lesson_editor_weeks_parent)
-    }
-    if (weeks.size <= 1) content_lesson_editor_remove_week.isEnabled = false
-
-    for ((i, w) in weeks.withIndex()) {
-      val checkbox = content_lesson_editor_weeks_parent.getChildAt(i)
-      (checkbox.findViewById(R.id.content_lesson_editor_week_checkbox) as CheckBox).isChecked = w
-      (checkbox.findViewById(R.id.content_lesson_editor_week_number) as TextView).text = (i + 1).toString()
-    }
-
-    content_lesson_editor_weeks_variants.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-
-      override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        when (position) {
-          0 -> listOf(true)
-          1 -> listOf(true, false)
-          2 -> listOf(false, true)
-          else -> null
-        }?.let {
-          content_lesson_editor_weeks_parent.removeAllViews()
-          it.forEach {
-            layoutInflater.inflate(R.layout.content_lesson_editor_week_checkbox,
-                content_lesson_editor_weeks_parent)
-          }
-          if (it.size <= 1) content_lesson_editor_remove_week.isEnabled = false
-
-          for ((i, w) in it.withIndex()) {
-            val checkbox = content_lesson_editor_weeks_parent.getChildAt(i)
-            (checkbox.findViewById(R.id.content_lesson_editor_week_checkbox) as CheckBox).isChecked = w
-            (checkbox.findViewById(R.id.content_lesson_editor_week_number) as TextView).text = (i + 1).toString()
-          }
-        }
-      }
-
-      override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+      content_lesson_editor_weeks_selector.weeks = savedInstanceState.getBooleanArray(WEEKS)
     }
 
     content_lesson_editor_subject_name_edit_text.setAdapter(ArrayAdapter(this,
         android.R.layout.simple_dropdown_item_1line, ScheduleManager.getSubjects(semesterId).asList()))
 
     content_lesson_editor_lesson_type_edit_text.setAdapter(ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line,
-        ImmutableSortedSet.copyOf(ScheduleManager.getTypes(semesterId) + resources.getStringArray(R.array.lesson_types)).asList()))
+        (ScheduleManager.getTypes(semesterId) + resources.getStringArray(R.array.lesson_types)).sorted()))
 
     content_lesson_editor_teachers_edit_text.setAdapter(ArrayAdapter(this,
         android.R.layout.simple_dropdown_item_1line, ScheduleManager.getTeachers(semesterId).asList()))
@@ -192,27 +124,14 @@ class LessonEditorActivity : AppCompatActivity(),
     outState.putString(START_TIME, startTime.toString())
     outState.putString(END_TIME, endTime.toString())
     outState.putInt(WEEKDAY, content_lesson_editor_weekdays.position)
-
-    val weeks = BooleanArray(content_lesson_editor_weeks_parent.childCount)
-    for (i in 0 until content_lesson_editor_weeks_parent.childCount) {
-      weeks[i] = (content_lesson_editor_weeks_parent.getChildAt(i)
-          .findViewById(R.id.content_lesson_editor_week_checkbox) as CheckBox).isChecked
-    }
-    outState.putBooleanArray(WEEKS, weeks)
+    outState.putBooleanArray(WEEKS, content_lesson_editor_weeks_selector.weeks)
 
     super.onSaveInstanceState(outState)
   }
 
   override fun onRestoreInstanceState(savedInstanceState: Bundle) {
     super.onRestoreInstanceState(savedInstanceState)
-
-    val weeks = savedInstanceState.getBooleanArray(WEEKS)
-    for ((i, w) in weeks.withIndex()) {
-      val checkbox = content_lesson_editor_weeks_parent.getChildAt(i)
-      (checkbox.findViewById(R.id.content_lesson_editor_week_checkbox) as CheckBox).isChecked = w
-      (checkbox.findViewById(R.id.content_lesson_editor_week_number) as TextView).text = (i + 1).toString()
-    }
-    if (weeks.size <= 1) content_lesson_editor_remove_week.isEnabled = false
+    content_lesson_editor_weeks_selector.weeks = savedInstanceState.getBooleanArray(WEEKS)
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -227,19 +146,19 @@ class LessonEditorActivity : AppCompatActivity(),
       android.R.id.home -> finish()
       R.id.menu_lesson_editor_save -> {
         val subjectName = if (content_lesson_editor_subject_name_edit_text.text.trim().isNotBlank()) {
-          content_lesson_editor_subject_name_edit_text.text.toString().asSingleLine.trim()
+          content_lesson_editor_subject_name_edit_text.text.toString().toSingleLine().trim()
         } else {
           toast(R.string.activity_lesson_editor_incorrect_subject_name_message)
           return super.onOptionsItemSelected(item)
         }
 
-        val type = content_lesson_editor_lesson_type_edit_text.text.toString().asSingleLine.trim()
+        val type = content_lesson_editor_lesson_type_edit_text.text.toString().toSingleLine().trim()
 
         val teachers = content_lesson_editor_teachers_edit_text.text.toString().
-            asSingleLine.split(",").map(String::trim).filter(String::isNotBlank)
+            toSingleLine().split(",").map(String::trim).filter(String::isNotBlank)
 
         val classrooms = content_lesson_editor_classrooms_edit_text.text.toString().
-            asSingleLine.split(",").map(String::trim).filter(String::isNotBlank)
+            toSingleLine().split(",").map(String::trim).filter(String::isNotBlank)
 
         if (startTime == null) {
           toast(R.string.activity_lesson_editor_incorrect_start_time_message)
@@ -258,11 +177,7 @@ class LessonEditorActivity : AppCompatActivity(),
 
         val weekday = content_lesson_editor_weekdays.position + 1
 
-        val weeks = BooleanArray(content_lesson_editor_weeks_parent.childCount)
-        for (i in 0 until content_lesson_editor_weeks_parent.childCount) {
-          weeks[i] = (content_lesson_editor_weeks_parent.getChildAt(i)
-              .findViewById(R.id.content_lesson_editor_week_checkbox) as CheckBox).isChecked
-        }
+        val weeks = content_lesson_editor_weeks_selector.weeks
 
         if (!weeks.contains(true)) {
           toast(R.string.activity_lesson_editor_no_weeks_checked_message)
@@ -273,11 +188,11 @@ class LessonEditorActivity : AppCompatActivity(),
           if ((lesson == null) || copy) {
             ScheduleManager.addLesson(semesterId, Lesson(subjectName, type, ImmutableSortedSet.copyOf(teachers),
                 ImmutableSortedSet.copyOf(classrooms), startTime!!, endTime!!,
-                LessonRepeat.ByWeekday(weekday, ImmutableList.copyOf(weeks.toList()))))
+                LessonRepeat.ByWeekday(weekday, weeks.toList())))
           } else {
             ScheduleManager.updateLesson(semesterId, lesson!!.copy(subjectName, type, ImmutableSortedSet.copyOf(teachers),
                 ImmutableSortedSet.copyOf(classrooms), startTime!!, endTime!!,
-                LessonRepeat.ByWeekday(weekday, ImmutableList.copyOf(weeks.toList()))))
+                LessonRepeat.ByWeekday(weekday, weeks.toList())))
           }
 
           startService<ScheduleService>()

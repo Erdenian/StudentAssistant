@@ -13,11 +13,11 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.adapter.HomeworksPagerAdapter
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.initializeDrawerAndNavigationView
-import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener
-import ru.erdenian.studentassistant.schedule.ScheduleManager
+import ru.erdenian.studentassistant.localdata.ScheduleManager
 
 class HomeworksActivity : AppCompatActivity(),
-    OnScheduleUpdateListener, AdapterView.OnItemSelectedListener {
+    ScheduleManager.OnScheduleUpdateListener,
+    AdapterView.OnItemSelectedListener {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -46,17 +46,21 @@ class HomeworksActivity : AppCompatActivity(),
     supportActionBar!!.setDisplayShowTitleEnabled(ScheduleManager.semesters.size <= 1)
     toolbar_with_spinner_spinner.visibility = if (ScheduleManager.semesters.size > 1) View.VISIBLE else View.GONE
 
-    if (ScheduleManager.semesters.size > 1) {
-      val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters, ScheduleManager.semestersNames)
-      adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters)
-      toolbar_with_spinner_spinner.adapter = adapter
-      toolbar_with_spinner_spinner.setSelection(ScheduleManager.selectedSemesterIndex)
-    } else if (ScheduleManager.semesters.size == 1) {
-      supportActionBar!!.title = ScheduleManager.selectedSemester!!.name
-      onItemSelected(null, null, 0, 0)
-    } else {
-      supportActionBar!!.setTitle(R.string.title_activity_schedule)
-      view_pager.adapter = null
+    when {
+      ScheduleManager.semesters.size > 1 -> {
+        val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters, ScheduleManager.semestersNames)
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters)
+        toolbar_with_spinner_spinner.adapter = adapter
+        toolbar_with_spinner_spinner.setSelection(ScheduleManager.selectedSemesterIndex)
+      }
+      ScheduleManager.semesters.size == 1 -> {
+        supportActionBar!!.title = ScheduleManager.selectedSemester.name
+        onItemSelected(null, null, 0, 0)
+      }
+      else -> {
+        supportActionBar!!.setTitle(R.string.title_activity_schedule)
+        view_pager.adapter = null
+      }
     }
   }
 

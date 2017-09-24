@@ -59,7 +59,6 @@
     <string name="content_lesson_editor_friday">ПТ</string>
     <string name="content_lesson_editor_saturday">СБ</string>
     <string name="content_lesson_editor_sunday">ВС</string>
-    <string name="content_lesson_editor_weeks_variants_title">Повторять</string>
 
     <string name="activity_lesson_editor_incorrect_subject_name_message">Введите название занятия</string>
     <string name="activity_lesson_editor_incorrect_start_time_message">Введите время начала</string>
@@ -168,13 +167,6 @@
         <item>Консультация</item>
         <item>Экзамен</item>
         <item>Самостоятельная работа</item>
-    </string-array>
-
-    <string-array name="weeks_variants">
-        <item>Каждую неделю</item>
-        <item>По нечетным</item>
-        <item>По четным</item>
-        <item>Свое</item>
     </string-array>
 
 </resources>
