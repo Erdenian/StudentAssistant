@@ -13,10 +13,10 @@ import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.setColor
-import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener
-import ru.erdenian.studentassistant.schedule.ScheduleManager
+import ru.erdenian.studentassistant.localdata.ScheduleManager
 
-class LessonInformationActivity : AppCompatActivity(), OnScheduleUpdateListener {
+class LessonInformationActivity : AppCompatActivity(),
+    ScheduleManager.OnScheduleUpdateListener {
 
   private val semesterId: Long by lazy {
     intent.getLongExtra(SEMESTER_ID, -1L).takeIf { it != -1L } ?: throw IllegalStateException("Не передан id семестра")
@@ -53,7 +53,7 @@ class LessonInformationActivity : AppCompatActivity(), OnScheduleUpdateListener 
 
       content_lesson_information_homeworks_parent.removeAllViews()
 
-      ScheduleManager.getActualHomeworks(semesterId, lessonId).forEach {
+      ScheduleManager.getActualHomeworks(semesterId, lesson.subjectName).forEach {
         val card = layoutInflater.inflate(R.layout.card_homework, content_lesson_information_homeworks_parent, false)
 
         (card.findViewById(R.id.card_homework_subject_name) as TextView).text = it.subjectName

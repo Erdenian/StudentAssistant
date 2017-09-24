@@ -22,18 +22,17 @@ import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.initializeDrawerAndNavigationView
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.extensions.showDatePicker
-import ru.erdenian.studentassistant.schedule.OnScheduleUpdateListener
-import ru.erdenian.studentassistant.schedule.ScheduleManager
+import ru.erdenian.studentassistant.localdata.ScheduleManager
 
 class ScheduleActivity : AppCompatActivity(),
     AdapterView.OnItemSelectedListener,
     CalendarDatePickerDialogFragment.OnDateSetListener,
     View.OnClickListener,
-    OnScheduleUpdateListener {
+    ScheduleManager.OnScheduleUpdateListener {
 
-  private companion object {
-    const val CURRENT_PAGE = "current_page"
-    const val SELECTED_SEMESTER_ID = "selected_semester_id"
+  companion object {
+    private const val CURRENT_PAGE = "current_page"
+    private const val SELECTED_SEMESTER_ID = "selected_semester_id"
   }
 
   private var savedPage: Int? = null
@@ -64,29 +63,43 @@ class ScheduleActivity : AppCompatActivity(),
   }
 
   override fun onScheduleUpdate() {
-    supportActionBar!!.setDisplayShowTitleEnabled(ScheduleManager.semesters.size <= 1)
-    toolbar_with_spinner_spinner.visibility = if (ScheduleManager.semesters.size > 1) View.VISIBLE else View.GONE
+    if (ScheduleManager.semesters.size <= 1) {
+      supportActionBar!!.setDisplayShowTitleEnabled(true)
+      toolbar_with_spinner_spinner.visibility = View.GONE
+    } else {
+      supportActionBar!!.setDisplayShowTitleEnabled(false)
+      toolbar_with_spinner_spinner.visibility = View.VISIBLE
+    }
 
-    view_pager.visibility = if (ScheduleManager.semesters.isNotEmpty()) View.VISIBLE else View.GONE
-    content_schedule_add_buttons.visibility = if (ScheduleManager.semesters.isEmpty()) View.VISIBLE else View.GONE
+    if (ScheduleManager.semesters.isNotEmpty()) {
+      view_pager.visibility = View.VISIBLE
+      content_schedule_add_buttons.visibility = View.GONE
+    } else {
+      view_pager.visibility = View.GONE
+      content_schedule_add_buttons.visibility = View.VISIBLE
+    }
 
     if ((pagerAdapter != null) && (selectedSemesterId == ScheduleManager.selectedSemesterId)) {
       savedPage = view_pager.currentItem
     }
-    selectedSemesterId = ScheduleManager.selectedSemesterId ?: -1
+    selectedSemesterId = ScheduleManager.selectedSemesterId
 
-    if (ScheduleManager.semesters.size > 1) {
-      val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters, ScheduleManager.semestersNames)
-      adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters)
-      toolbar_with_spinner_spinner.adapter = adapter
-      toolbar_with_spinner_spinner.setSelection(ScheduleManager.selectedSemesterIndex)
-    } else if (ScheduleManager.semesters.size == 1) {
-      supportActionBar!!.title = ScheduleManager.selectedSemester!!.name
-      onItemSelected(null, null, 0, -1L)
-    } else {
-      supportActionBar!!.setTitle(R.string.title_activity_schedule)
-      pagerAdapter = null
-      view_pager.adapter = pagerAdapter
+    when {
+      ScheduleManager.semesters.size > 1 -> {
+        val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters, ScheduleManager.semestersNames)
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters)
+        toolbar_with_spinner_spinner.adapter = adapter
+        toolbar_with_spinner_spinner.setSelection(ScheduleManager.selectedSemesterIndex)
+      }
+      ScheduleManager.semesters.size == 1 -> {
+        supportActionBar!!.title = ScheduleManager.selectedSemester.name
+        onItemSelected(null, null, 0, -1L)
+      }
+      else -> {
+        supportActionBar!!.setTitle(R.string.title_activity_schedule)
+        pagerAdapter = null
+        view_pager.adapter = pagerAdapter
+      }
     }
 
     invalidateOptionsMenu()
@@ -102,6 +115,7 @@ class ScheduleActivity : AppCompatActivity(),
   override fun onRestoreInstanceState(savedInstanceState: Bundle) {
     savedPage = savedInstanceState.getInt(CURRENT_PAGE, -1).takeIf { it != -1 }
     selectedSemesterId = savedInstanceState.getLong(SELECTED_SEMESTER_ID, -1L).takeIf { it != -1L }
+    ScheduleManager.selectedSemesterId = selectedSemesterId
     super.onRestoreInstanceState(savedInstanceState)
   }
 
@@ -120,9 +134,9 @@ class ScheduleActivity : AppCompatActivity(),
     selectedSemesterId = ScheduleManager.semesters.asList()[position].id
     ScheduleManager.selectedSemesterId = selectedSemesterId
 
-    pagerAdapter = SchedulePagerAdapter(supportFragmentManager, ScheduleManager.selectedSemester!!, false)
+    pagerAdapter = SchedulePagerAdapter(supportFragmentManager, ScheduleManager.selectedSemester, false)
     view_pager.adapter = pagerAdapter
-    view_pager.setCurrentItem(if (savedPage != null) savedPage!! else pagerAdapter!!.getPosition(LocalDate.now()), false)
+    view_pager.setCurrentItem(savedPage ?: pagerAdapter!!.getPosition(LocalDate.now()), false)
     savedPage = null
   }
 
@@ -130,10 +144,8 @@ class ScheduleActivity : AppCompatActivity(),
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
-      R.id.menu_schedule_calendar -> {
-        val selectedSemester = ScheduleManager.selectedSemester!!
-        showDatePicker(this, selectedSemester.firstDay, selectedSemester.lastDay,
-            pagerAdapter!!.getDate(view_pager.currentItem))
+      R.id.menu_schedule_calendar -> ScheduleManager.selectedSemester.let {
+        showDatePicker(this, it.firstDay, it.lastDay, pagerAdapter!!.getDate(view_pager.currentItem))
       }
       R.id.menu_schedule_add_schedule -> startActivity<SemesterEditorActivity>()
       R.id.menu_schedule_edit_schedule ->
@@ -156,10 +168,7 @@ class ScheduleActivity : AppCompatActivity(),
   }
 
   override fun onBackPressed() {
-    if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-      drawer_layout.closeDrawer(GravityCompat.START)
-    } else {
-      super.onBackPressed()
-    }
+    if (drawer_layout.isDrawerOpen(GravityCompat.START)) drawer_layout.closeDrawer(GravityCompat.START)
+    else super.onBackPressed()
   }
 }

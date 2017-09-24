@@ -173,63 +173,10 @@
 
                 </co.ceryle.segmentedbutton.SegmentedButtonGroup>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/content_lesson_editor_weeks_variants_title"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
-
-                    <Spinner
-                        android:id="@+id/content_lesson_editor_weeks_variants"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:entries="@array/weeks_variants"
-                        android:padding="8dp"/>
-
-                </LinearLayout>
-
-                <LinearLayout
+                <ru.erdenian.studentassistant.customviews.WeeksSelector
+                    android:id="@+id/content_lesson_editor_weeks_selector"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <ImageButton
-                        android:id="@+id/content_lesson_editor_remove_week"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        app:srcCompat="@drawable/minus"
-                        tools:ignore="ContentDescription"/>
-
-                    <HorizontalScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <LinearLayout
-                            android:id="@+id/content_lesson_editor_weeks_parent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"/>
-
-                    </HorizontalScrollView>
-
-                    <ImageButton
-                        android:id="@+id/content_lesson_editor_add_week"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        app:srcCompat="@drawable/ic_menu_plus"
-                        tools:ignore="ContentDescription"/>
-
-                </LinearLayout>
+                    android:layout_height="wrap_content"/>
 
             </LinearLayout>
 
