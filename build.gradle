@@ -1,6 +1,6 @@
-ext.kotlin_version = '1.1.50'
-ext.buildTools_version = '26.0.1'
-ext.supportLibraries_version = '25.4.0'
+ext.kotlin_version = '1.1.51'
+ext.buildTools_version = '26.0.2'
+ext.supportLibraries_version = '26.1.0'
 
 buildscript {
     repositories { jcenter() }
