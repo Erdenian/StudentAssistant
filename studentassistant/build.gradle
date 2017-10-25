@@ -35,8 +35,9 @@ android {
     }
 
     applicationVariants.all { variant ->
-        variant.outputs.each {
-            it.outputFile = new File(it.outputFile.parent, it.outputFile.name.replace('.apk', "-${variant.versionName}.apk"))
+        variant.outputs.all {
+            outputFileName = outputFileName.replace('.apk', "-${variant.versionName}.apk")
+            //it.outputFile = new File(it.outputFile.parent, it.outputFile.name.replace('.apk', "-${variant.versionName}.apk"))
         }
     }
 
