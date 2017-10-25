@@ -36,8 +36,6 @@ class HomeworksPageFragment : Fragment() {
   private val semesterId: Long by lazy { arguments.getLong(PAGE_SEMESTER_ID, -1L) }
   private val page: Int by lazy { arguments.getInt(PAGE, -1) }
 
-  override fun onCreate(savedInstanceState: Bundle?) = super.onCreate(savedInstanceState)
-
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
     val homeworks = when (page) {
       0 -> ScheduleManager.getActualHomeworks(semesterId)
@@ -50,13 +48,13 @@ class HomeworksPageFragment : Fragment() {
     }
 
     val view = inflater.inflate(R.layout.scroll_view, container, false)
-    val llCardsParent = view.findViewById(R.id.scroll_view_items_parent) as LinearLayout
+    val llCardsParent = view.findViewById<LinearLayout>(R.id.scroll_view_items_parent)
 
     for ((subjectName, description, deadline, id) in homeworks) {
       with(inflater.inflate(R.layout.card_homework, llCardsParent, false)) {
-        (findViewById(R.id.card_homework_subject_name) as TextView).text = subjectName
-        (findViewById(R.id.card_homework_description) as TextView).text = description
-        (findViewById(R.id.card_homework_deadline) as TextView).text = deadline.toString("dd.MM.yyyy")
+        (findViewById<TextView>(R.id.card_homework_subject_name)).text = subjectName
+        (findViewById<TextView>(R.id.card_homework_description)).text = description
+        (findViewById<TextView>(R.id.card_homework_deadline)).text = deadline.toString("dd.MM.yyyy")
 
         setOnClickListener {
           context.startActivity<HomeworkEditorActivity>(
