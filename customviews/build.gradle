@@ -1,20 +1,21 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion buildTools_version
+    compileSdkVersion Integer.parseInt(compile_sdk_version)
+    buildToolsVersion build_tools_version
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 26
         versionCode 1
-        versionName "1.0"
+        versionName '1.0'
+
+        minSdkVersion 14
+        targetSdkVersion Integer.parseInt(target_sdk_version)
 
         vectorDrawables.useSupportLibrary = true
-
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -29,8 +30,8 @@ dependencies {
     })
     testCompile 'junit:junit:4.12'
 
-    compile "com.android.support:appcompat-v7:$supportLibraries_version"
-    compile "com.android.support:cardview-v7:$supportLibraries_version"
+    compile "com.android.support:appcompat-v7:$support_libraries_version"
+    compile "com.android.support:cardview-v7:$support_libraries_version"
 
     compile project(':schedule')
 
