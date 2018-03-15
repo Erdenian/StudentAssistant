@@ -33,8 +33,8 @@ class HomeworksPageFragment : Fragment() {
     }
   }
 
-  private val semesterId: Long by lazy { arguments.getLong(PAGE_SEMESTER_ID, -1L) }
-  private val page: Int by lazy { arguments.getInt(PAGE, -1) }
+  private val semesterId: Long by lazy { arguments!!.getLong(PAGE_SEMESTER_ID, -1L) }
+  private val page: Int by lazy { arguments!!.getInt(PAGE, -1) }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
     val homeworks = when (page) {
