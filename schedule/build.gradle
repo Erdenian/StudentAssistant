@@ -3,10 +3,10 @@ apply plugin: 'kotlin'
 sourceSets { main.java.srcDirs += 'src/main/kotlin' }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    compile 'joda-time:joda-time:2.9.9'
-    compile 'com.google.guava:guava:24.0-android'
+    implementation 'joda-time:joda-time:2.9.9'
+    implementation 'com.google.guava:guava:24.0-android'
 }
 
 sourceCompatibility = '1.7'
