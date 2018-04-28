@@ -15,7 +15,6 @@ android {
         minSdkVersion 16
         targetSdkVersion Integer.parseInt(target_sdk_version)
 
-        vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -34,21 +33,23 @@ android {
 
     // Разрешение конфликта зависимостей, возникшего при обновлении Guava до версии 22.0-android
     configurations.all {
-        resolutionStrategy.force 'com.google.code.findbugs:jsr305:2.0.1'
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:3.0.1'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     sourceSets { main.java.srcDirs += 'src/main/kotlin' }
-
-    return void
 }
 
 dependencies {
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testImplementation 'junit:junit:4.12'
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     implementation "com.android.support:appcompat-v7:$support_libraries_version"
     implementation "com.android.support:design:$support_libraries_version"
@@ -59,7 +60,7 @@ dependencies {
 
     implementation 'org.jetbrains.anko:anko-common:0.10.4'
     implementation 'joda-time:joda-time:2.9.9'
-    implementation 'com.google.guava:guava:24.1-android'
+    implementation 'com.google.guava:guava:25.0-android'
 
     implementation 'com.code-troopers.betterpickers:library:3.1.0'
     implementation 'com.github.ceryle:SegmentedButton:v1.2.2'
