@@ -10,7 +10,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment
 import kotlinx.android.synthetic.main.activity_schedule.*
-import kotlinx.android.synthetic.main.content_schedule.*
 import kotlinx.android.synthetic.main.toolbar_with_spinner.*
 import kotlinx.android.synthetic.main.view_pager.*
 import org.jetbrains.anko.startActivity
@@ -27,18 +26,22 @@ import ru.erdenian.studentassistant.localdata.ScheduleManager
 class ScheduleActivity : AppCompatActivity(),
     AdapterView.OnItemSelectedListener,
     CalendarDatePickerDialogFragment.OnDateSetListener,
-    View.OnClickListener,
     ScheduleManager.OnScheduleUpdateListener {
 
   companion object {
     private const val CURRENT_PAGE = "current_page"
     private const val SELECTED_SEMESTER_ID = "selected_semester_id"
+
+    private const val BUTTONS_INDEX = 0
+    private const val SCHEDULE_INDEX = 1
   }
 
   private var savedPage: Int? = null
   private var selectedSemesterId: Long? = null
 
   private var pagerAdapter: SchedulePagerAdapter? = null
+
+  private val actionBar by lazy { supportActionBar ?: throw IllegalStateException("supportActionBar == null") }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -49,8 +52,12 @@ class ScheduleActivity : AppCompatActivity(),
 
     toolbar_with_spinner_spinner.onItemSelectedListener = this
 
-    content_schedule_get_schedule_from_server.setOnClickListener(this)
-    content_schedule_add_schedule.setOnClickListener(this)
+    content_schedule_get_schedule_from_server.setOnClickListener {
+      toast(R.string.content_schedule_get_schedule_from_server_button)
+    }
+    content_schedule_add_schedule.setOnClickListener {
+      startActivity<SemesterEditorActivity>()
+    }
 
     view_pager_pager_tab_strip.setTextColor(getCompatColor(R.color.colorPrimary))
     view_pager_pager_tab_strip.setTabIndicatorColorResource(R.color.colorPrimary)
@@ -64,19 +71,17 @@ class ScheduleActivity : AppCompatActivity(),
 
   override fun onScheduleUpdate() {
     if (ScheduleManager.semesters.size <= 1) {
-      supportActionBar!!.setDisplayShowTitleEnabled(true)
+      actionBar.setDisplayShowTitleEnabled(true)
       toolbar_with_spinner_spinner.visibility = View.GONE
     } else {
-      supportActionBar!!.setDisplayShowTitleEnabled(false)
+      actionBar.setDisplayShowTitleEnabled(false)
       toolbar_with_spinner_spinner.visibility = View.VISIBLE
     }
 
     if (ScheduleManager.semesters.isNotEmpty()) {
-      view_pager.visibility = View.VISIBLE
-      content_schedule_add_buttons.visibility = View.GONE
+      schedule_flipper.displayedChild = SCHEDULE_INDEX
     } else {
-      view_pager.visibility = View.GONE
-      content_schedule_add_buttons.visibility = View.VISIBLE
+      schedule_flipper.displayedChild = BUTTONS_INDEX
     }
 
     if ((pagerAdapter != null) && (selectedSemesterId == ScheduleManager.selectedSemesterId)) {
@@ -92,13 +97,13 @@ class ScheduleActivity : AppCompatActivity(),
         toolbar_with_spinner_spinner.setSelection(ScheduleManager.selectedSemesterIndex)
       }
       ScheduleManager.semesters.size == 1 -> {
-        supportActionBar!!.title = ScheduleManager.selectedSemester.name
+        actionBar.title = ScheduleManager.selectedSemester.name
         onItemSelected(null, null, 0, -1L)
       }
       else -> {
-        supportActionBar!!.setTitle(R.string.title_activity_schedule)
+        actionBar.setTitle(R.string.title_activity_schedule)
         pagerAdapter = null
-        view_pager.adapter = pagerAdapter
+        view_pager.adapter = null
       }
     }
 
@@ -145,25 +150,19 @@ class ScheduleActivity : AppCompatActivity(),
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       R.id.menu_schedule_calendar -> ScheduleManager.selectedSemester.let {
-        showDatePicker(this, it.firstDay, it.lastDay, pagerAdapter!!.getDate(view_pager.currentItem))
+        showDatePicker(this, it.firstDay, it.lastDay, pagerAdapter?.getDate(view_pager.currentItem))
       }
       R.id.menu_schedule_add_schedule -> startActivity<SemesterEditorActivity>()
       R.id.menu_schedule_edit_schedule ->
-        startActivity<LessonsEditorActivity>(SEMESTER_ID to ScheduleManager.selectedSemesterId!!)
+        startActivity<LessonsEditorActivity>(SEMESTER_ID to ScheduleManager.selectedSemesterId)
       else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
     }
     return super.onOptionsItemSelected(item)
   }
 
   override fun onDateSet(dialog: CalendarDatePickerDialogFragment, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-    view_pager.currentItem = pagerAdapter!!.getPosition(LocalDate(year, monthOfYear + 1, dayOfMonth))
-  }
-
-  override fun onClick(v: View) {
-    when (v.id) {
-      R.id.content_schedule_get_schedule_from_server -> toast(R.string.content_schedule_get_schedule_from_server_button)
-      R.id.content_schedule_add_schedule -> startActivity<SemesterEditorActivity>()
-      else -> throw IllegalArgumentException("Неизвестный id: ${v.id}")
+    pagerAdapter?.run {
+      view_pager.currentItem = getPosition(LocalDate(year, monthOfYear + 1, dayOfMonth))
     }
   }
 
