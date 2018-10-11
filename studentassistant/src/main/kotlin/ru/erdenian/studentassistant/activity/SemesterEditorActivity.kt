@@ -101,7 +101,7 @@ class SemesterEditorActivity : AppCompatActivity(),
           return super.onOptionsItemSelected(item)
         }
 
-        val name = if (content_semester_editor_semester_name_edit_text.text.trim().isNotEmpty()) {
+        val name = if (!content_semester_editor_semester_name_edit_text.text?.trim().isNullOrEmpty()) {
           content_semester_editor_semester_name_edit_text.text.toString().trim().toSingleLine()
         } else {
           toast(R.string.activity_semester_editor_incorrect_name_message)
