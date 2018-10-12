@@ -8,7 +8,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.activity_lessons_editor.*
-import kotlinx.android.synthetic.main.scroll_view.*
 import kotlinx.android.synthetic.main.toolbar_with_spinner.*
 import kotlinx.android.synthetic.main.view_pager.*
 import org.jetbrains.anko.alert
@@ -20,8 +19,6 @@ import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.localdata.ScheduleManager
 
 class LessonsEditorActivity : AppCompatActivity(),
-    View.OnClickListener,
-    AdapterView.OnItemSelectedListener,
     ScheduleManager.OnScheduleUpdateListener {
 
   private val semesterId: Long by lazy {
@@ -34,18 +31,28 @@ class LessonsEditorActivity : AppCompatActivity(),
 
     setSupportActionBar(toolbar_with_spinner)
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-    //supportActionBar!!.setDisplayShowTitleEnabled(false)
+    supportActionBar!!.setDisplayShowTitleEnabled(false)
 
     val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters, resources.getStringArray(R.array.lesson_repeat_types))
     adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters)
     toolbar_with_spinner_spinner.adapter = adapter
-    toolbar_with_spinner_spinner.onItemSelectedListener = this
-    toolbar_with_spinner_spinner.visibility = View.GONE // TODO: Выбор отображения по датам
+    toolbar_with_spinner_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+      override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+
+      override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+        activity_lessons_editor_flipper.displayedChild = position
+      }
+    }
 
     view_pager_pager_tab_strip.setTextColor(getCompatColor(R.color.colorPrimary))
     view_pager_pager_tab_strip.setTabIndicatorColorResource(R.color.colorPrimary)
 
-    activity_lessons_editor_add_lesson.setOnClickListener(this)
+    activity_lessons_editor_add_lesson.setOnClickListener {
+      startActivity<LessonEditorActivity>(
+          SEMESTER_ID to semesterId,
+          WEEKDAY to view_pager.currentItem + 1
+      )
+    }
   }
 
   override fun onStart() {
@@ -70,22 +77,6 @@ class LessonsEditorActivity : AppCompatActivity(),
     return true
   }
 
-  override fun onItemSelected(adapterView: AdapterView<*>, view: View?, i: Int, l: Long) {
-    when (i) {
-      0 -> {
-        view_pager.visibility = View.VISIBLE
-        scroll_view.visibility = View.GONE
-      }
-      1 -> {
-        view_pager.visibility = View.GONE
-        scroll_view.visibility = View.VISIBLE
-      }
-      else -> throw IllegalArgumentException("Неизвестная позиция: $i")
-    }
-  }
-
-  override fun onNothingSelected(parent: AdapterView<*>) = Unit
-
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       android.R.id.home -> finish()
@@ -104,16 +95,5 @@ class LessonsEditorActivity : AppCompatActivity(),
       else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
     }
     return super.onOptionsItemSelected(item)
-  }
-
-  override fun onClick(v: View) {
-    when (v.id) {
-      R.id.activity_lessons_editor_add_lesson ->
-        startActivity<LessonEditorActivity>(
-            SEMESTER_ID to semesterId,
-            WEEKDAY to view_pager.currentItem + 1
-        )
-      else -> throw IllegalArgumentException("Неизвестный id: ${v.id}")
-    }
   }
 }
