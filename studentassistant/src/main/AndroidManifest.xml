@@ -35,7 +35,8 @@
 
         <activity
             android:name=".activity.LessonsEditorActivity"
-            android:label="@string/title_activity_lessons_editor" />
+            android:label="@string/title_activity_lessons_editor"
+            android:theme="@style/AppTheme" />
 
         <activity
             android:name=".activity.SemesterEditorActivity"
@@ -44,15 +45,18 @@
 
         <activity
             android:name=".activity.LessonEditorActivity"
-            android:label="@string/title_activity_lesson_editor" />
+            android:label="@string/title_activity_lesson_editor"
+            android:theme="@style/AppTheme" />
 
         <activity
             android:name=".activity.LessonInformationActivity"
-            android:label="@string/title_activity_lesson_information" />
+            android:label="@string/title_activity_lesson_information"
+            android:theme="@style/AppTheme" />
 
         <activity
             android:name=".activity.HomeworkEditorActivity"
             android:label="@string/title_activity_homework_editor"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize" />
 
         <service android:name=".service.ScheduleService" />
@@ -68,7 +72,8 @@
         <activity
             android:name=".activity.AlarmActivity"
             android:label="@string/title_activity_alarm"
-            android:noHistory="true" />
+            android:noHistory="true"
+            android:theme="@style/AppTheme" />
 
         <activity
             android:name=".activity.AlarmEditorActivity"
@@ -77,7 +82,8 @@
 
         <activity
             android:name=".activity.HelpActivity"
-            android:label="@string/title_activity_help" />
+            android:label="@string/title_activity_help"
+            android:theme="@style/AppTheme" />
 
     </application>
 
