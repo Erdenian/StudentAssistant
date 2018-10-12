@@ -16,6 +16,8 @@ android {
         targetSdkVersion Integer.parseInt(target_sdk_version)
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -58,7 +60,7 @@ dependencies {
     implementation project(':schedule')
     implementation project(':customviews')
 
-    implementation 'org.jetbrains.anko:anko-common:0.10.4'
+    implementation 'org.jetbrains.anko:anko-common:0.10.5'
     implementation 'joda-time:joda-time:2.9.9'
     implementation 'com.google.guava:guava:25.0-android'
 

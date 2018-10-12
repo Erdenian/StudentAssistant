@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    tools:context=".activity.LessonsEditorActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/toolbar_with_spinner"/>
+        <include layout="@layout/toolbar_with_spinner" />
 
-        <include layout="@layout/content_lessons_editor"/>
+        <ViewFlipper
+            android:id="@+id/activity_lessons_editor_flipper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include layout="@layout/view_pager" />
+
+            <include layout="@layout/scroll_view" />
+
+        </ViewFlipper>
 
     </LinearLayout>
 
@@ -23,6 +32,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_menu_plus"/>
+        app:srcCompat="@drawable/ic_menu_plus" />
 
 </android.support.design.widget.CoordinatorLayout>
