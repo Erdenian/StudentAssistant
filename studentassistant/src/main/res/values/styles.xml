@@ -1,22 +1,24 @@
 <resources>
 
-    <style name="AppTheme.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.Parent" parent="Theme.AppCompat.Light.NoActionBar" />
-
-    <style name="AppTheme.Base" parent="AppTheme.Parent" />
-
-    <style name="AppTheme" parent="AppTheme.Base">
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="SplashTheme" parent="AppTheme">
+    <style name="AppTheme.NoActionBar.TranslucentNavigation" parent="AppTheme.NoActionBar" />
+
+    <style name="AppTheme.NoActionBar.TransparentStatusBar" parent="AppTheme.NoActionBar" />
+
+    <style name="ScheduleActivityTheme" parent="AppTheme.NoActionBar" />
+
+    <style name="SplashTheme" parent="AppTheme.NoActionBar.TranslucentNavigation">
         <item name="android:windowBackground">@drawable/splash</item>
     </style>
 

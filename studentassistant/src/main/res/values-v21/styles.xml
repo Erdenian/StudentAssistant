@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme.Base" parent="AppTheme.Parent">
+    <style name="AppTheme.NoActionBar.TransparentStatusBar" parent="AppTheme.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="ScheduleActivityTheme" parent="AppTheme.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="ScheduleCard.Base">
