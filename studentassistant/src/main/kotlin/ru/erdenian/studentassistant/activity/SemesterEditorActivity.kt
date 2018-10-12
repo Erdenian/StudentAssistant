@@ -6,10 +6,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment
-import kotlinx.android.synthetic.main.content_semester_editor.*
-import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.activity_semester_editor.*
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
@@ -21,9 +19,7 @@ import ru.erdenian.studentassistant.localdata.ScheduleManager
 import ru.erdenian.studentassistant.schedule.Semester
 
 class SemesterEditorActivity : AppCompatActivity(),
-    View.OnClickListener,
-    CalendarDatePickerDialogFragment.OnDateSetListener,
-    TextWatcher {
+    CalendarDatePickerDialogFragment.OnDateSetListener {
 
   private companion object {
 
@@ -45,44 +41,51 @@ class SemesterEditorActivity : AppCompatActivity(),
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_semester_editor)
 
-    setSupportActionBar(toolbar)
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-    content_semester_editor_semester_name_edit_text.addTextChangedListener(this)
-    content_semester_editor_first_day.setOnClickListener(this)
-    content_semester_editor_last_day.setOnClickListener(this)
+    content_semester_editor_semester_name_edit_text.addTextChangedListener(object : TextWatcher {
+      override fun afterTextChanged(s: Editable?) = Unit
+      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
 
-    if (savedInstanceState == null) {
-      with(semester) {
-        if (this == null) {
-          supportActionBar!!.title = getString(R.string.title_activity_semester_editor_new_semester)
-        } else {
-          content_semester_editor_semester_name_edit_text.setText(name)
+      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        with(content_semester_editor_semester_name) {
+          isErrorEnabled = true
 
-          this@SemesterEditorActivity.firstDay = firstDay
-          content_semester_editor_first_day.text = firstDay.toString()
-          this@SemesterEditorActivity.lastDay = lastDay
-          content_semester_editor_last_day.text = lastDay.toString()
+          if (semestersNames.contains(s.toString().trim().toSingleLine()))
+            error = getString(R.string.activity_semester_editor_error_name_not_avaliable)
+          else isErrorEnabled = false
         }
       }
+    })
+    content_semester_editor_first_day.setOnClickListener { showDatePicker(this, preselectedDate = firstDay, tag = FIRST_DAY_TAG) }
+    content_semester_editor_last_day.setOnClickListener { showDatePicker(this, preselectedDate = lastDay, tag = LAST_DAY_TAG) }
+
+    if (savedInstanceState == null) {
+      semester?.also { s ->
+        content_semester_editor_semester_name_edit_text.setText(s.name)
+
+        firstDay = s.firstDay
+        content_semester_editor_first_day.text = s.firstDay.toString()
+        lastDay = s.lastDay
+        content_semester_editor_last_day.text = s.lastDay.toString()
+      } ?: run {
+        supportActionBar!!.title = getString(R.string.title_activity_semester_editor_new_semester)
+      }
     } else {
-      val firstDayString = savedInstanceState.getString(FIRST_DAY)
-      if (firstDayString != "null") {
-        firstDay = LocalDate.parse(firstDayString)
+      savedInstanceState.getString(FIRST_DAY)?.let { s ->
+        firstDay = LocalDate.parse(s)
         content_semester_editor_first_day.text = firstDay.toString()
       }
-
-      val lastDayString = savedInstanceState.getString(LAST_DAY)
-      if (lastDayString != "null") {
-        lastDay = LocalDate.parse(lastDayString)
+      savedInstanceState.getString(LAST_DAY)?.let { s ->
+        lastDay = LocalDate.parse(s)
         content_semester_editor_last_day.text = lastDay.toString()
       }
     }
   }
 
   override fun onSaveInstanceState(outState: Bundle) {
-    outState.putString(FIRST_DAY, firstDay.toString())
-    outState.putString(LAST_DAY, lastDay.toString())
+    outState.putString(FIRST_DAY, firstDay?.toString())
+    outState.putString(LAST_DAY, lastDay?.toString())
     super.onSaveInstanceState(outState)
   }
 
@@ -108,25 +111,26 @@ class SemesterEditorActivity : AppCompatActivity(),
           return super.onOptionsItemSelected(item)
         }
 
-        if (firstDay == null) {
+        val first = firstDay ?: run {
           toast(R.string.activity_semester_editor_incorrect_first_day)
           return super.onOptionsItemSelected(item)
         }
 
-        if (lastDay == null) {
+        val last = lastDay ?: run {
           toast(R.string.activity_semester_editor_incorrect_last_day)
           return super.onOptionsItemSelected(item)
         }
 
-        if (!firstDay!!.isBefore(lastDay!!)) {
+        if (last < first) {
           toast(R.string.activity_semester_editor_incorrect_dates)
           return super.onOptionsItemSelected(item)
         }
 
-        if (semester == null)
-          ScheduleManager.addSemester(Semester(name, firstDay!!, lastDay!!))
-        else
-          ScheduleManager.updateSemester(semester!!.copy(name, firstDay!!, lastDay!!))
+        semester?.let { s ->
+          ScheduleManager.updateSemester(s.copy(name, first, last))
+        } ?: run {
+          ScheduleManager.addSemester(Semester(name, first, last))
+        }
 
         finish()
       }
@@ -135,38 +139,16 @@ class SemesterEditorActivity : AppCompatActivity(),
     return super.onOptionsItemSelected(item)
   }
 
-  override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
-
-  override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = Unit
-
-  override fun afterTextChanged(s: Editable) {
-    with(content_semester_editor_semester_name) {
-      isErrorEnabled = true
-
-      if (semestersNames.contains(s.toString().trim().toSingleLine()))
-        error = getString(R.string.activity_semester_editor_error_name_not_avaliable)
-      else isErrorEnabled = false
-    }
-  }
-
-  override fun onClick(v: View) {
-    when (v.id) {
-      R.id.content_semester_editor_first_day -> showDatePicker(this, preselectedDate = firstDay, tag = FIRST_DAY_TAG)
-      R.id.content_semester_editor_last_day -> showDatePicker(this, preselectedDate = lastDay, tag = LAST_DAY_TAG)
-      else -> throw IllegalArgumentException("Неизвестный id: ${v.id}")
-    }
-  }
-
   override fun onDateSet(dialog: CalendarDatePickerDialogFragment, year: Int, monthOfYear: Int, dayOfMonth: Int) {
     val newDate = LocalDate(year, monthOfYear + 1, dayOfMonth)
     when (dialog.tag) {
       FIRST_DAY_TAG -> {
         firstDay = newDate
-        content_semester_editor_first_day.text = firstDay!!.toString("dd.MM.yyyy")
+        content_semester_editor_first_day.text = newDate.toString("dd.MM.yyyy")
       }
       LAST_DAY_TAG -> {
         lastDay = newDate
-        content_semester_editor_last_day.text = lastDay!!.toString("dd.MM.yyyy")
+        content_semester_editor_last_day.text = newDate.toString("dd.MM.yyyy")
       }
       else -> throw IllegalArgumentException("Неизвестный тэг: ${dialog.tag}")
     }
