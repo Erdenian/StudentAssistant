@@ -128,6 +128,8 @@
 
     <string name="content_alarm_editor_name">Название будильника</string>
     <string name="content_alarm_editor_time">Время до первой пары:</string>
+    <string name="content_alarm_editor_enabled">Включен</string>
+    <string name="content_alarm_editor_disabled">Выключен</string>
 
     <string name="sunday">ВС</string>
     <string name="monday">ПН</string>
