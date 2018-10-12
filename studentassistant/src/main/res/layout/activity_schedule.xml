@@ -4,18 +4,13 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".activity.ScheduleActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/statusBarHeight"
-            android:background="@color/colorPrimaryDark"
-            android:elevation="4dp" />
 
         <include layout="@layout/toolbar_with_spinner" />
 
