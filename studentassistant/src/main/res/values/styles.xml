@@ -16,8 +16,6 @@
 
     <style name="AppTheme.NoActionBar.TransparentStatusBar" parent="AppTheme.NoActionBar" />
 
-    <style name="ScheduleActivityTheme" parent="AppTheme.NoActionBar" />
-
     <style name="SplashTheme" parent="AppTheme.NoActionBar.TranslucentNavigation">
         <item name="android:windowBackground">@drawable/splash</item>
     </style>

@@ -5,8 +5,4 @@
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
-    <style name="ScheduleActivityTheme" parent="AppTheme.NoActionBar">
-        <item name="android:windowTranslucentNavigation">true</item>
-    </style>
-
 </resources>
