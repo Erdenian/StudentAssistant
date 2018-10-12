@@ -4,8 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.Html
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.content_help.*
-import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.activity_help.*
 import ru.erdenian.studentassistant.R
 
 class HelpActivity : AppCompatActivity() {
@@ -14,7 +13,6 @@ class HelpActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_help)
 
-    setSupportActionBar(toolbar)
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
     content_help_help.text = Html.fromHtml("""
@@ -118,7 +116,7 @@ class HelpActivity : AppCompatActivity() {
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       android.R.id.home -> finish()
-      else -> throw IllegalArgumentException("Несзвестный id: ${item.itemId}")
+      else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
     }
     return super.onOptionsItemSelected(item)
   }
