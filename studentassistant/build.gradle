@@ -12,12 +12,10 @@ android {
         versionCode gitVersionCode
         versionName gitVersionName
 
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion Integer.parseInt(target_sdk_version)
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {

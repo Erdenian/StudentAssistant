@@ -1,5 +1,7 @@
 <resources>
 
+    <!-- Activity themes -->
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -12,29 +14,29 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.NoActionBar.TranslucentNavigation" parent="AppTheme.NoActionBar" />
+    <style name="AppTheme.NoActionBar.TransparentStatusBar" parent="AppTheme.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
 
-    <style name="AppTheme.NoActionBar.TransparentStatusBar" parent="AppTheme.NoActionBar" />
-
-    <style name="SplashTheme" parent="AppTheme.NoActionBar.TranslucentNavigation">
+    <style name="SplashTheme" parent="AppTheme.NoActionBar">
+        <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowBackground">@drawable/splash</item>
     </style>
+
+    <!-- Styles -->
 
     <style name="Toolbar">
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
         <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
 
-    <style name="ScheduleCardBase">
-        <item name="android:foreground">?android:attr/selectableItemBackground</item>
-    </style>
-
-    <style name="ScheduleCard" parent="ScheduleCardBase">
+    <style name="ScheduleCard">
         <item name="android:layout_gravity">center</item>
         <item name="android:layout_marginBottom">@dimen/card_margin_bottom</item>
-        <item name="android:layout_marginLeft">@dimen/card_margin_horizontal</item>
-        <item name="android:layout_marginRight">@dimen/card_margin_horizontal</item>
+        <item name="android:layout_marginStart">@dimen/card_margin_horizontal</item>
+        <item name="android:layout_marginEnd">@dimen/card_margin_horizontal</item>
         <item name="android:layout_marginTop">@dimen/card_margin_top</item>
+        <item name="android:foreground">?android:attr/selectableItemBackgroundBorderless</item>
     </style>
 
     <style name="DatePicker" parent="BetterPickersRadialTimePickerDialog.PrimaryColor">
