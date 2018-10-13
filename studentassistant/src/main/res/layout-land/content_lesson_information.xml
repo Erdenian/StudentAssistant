@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,8 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:orientation="vertical">
 
@@ -29,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/action_bar_icons_color"
-                android:textSize="23sp"/>
+                android:textSize="23sp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -42,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/action_bar_icons_color"
-                    android:textSize="20sp"/>
+                    android:textSize="20sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -51,7 +50,7 @@
                     android:text=" - "
                     android:textColor="@color/action_bar_icons_color"
                     android:textSize="20sp"
-                    tools:ignore="HardcodedText"/>
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/content_lesson_information_end_time"
@@ -59,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/action_bar_icons_color"
-                    android:textSize="20sp"/>
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
@@ -68,28 +67,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/action_bar_icons_color"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
 
-    <include layout="@layout/divider_vertical"/>
+    <include layout="@layout/divider_vertical" />
 
     <FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/homeworks_background_card_view"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginBottom="10dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
         android:layout_weight="1">
 
         <include
             android:id="@+id/content_lesson_information_no_homeworks"
-            layout="@layout/fragment_no_homeworks"/>
+            layout="@layout/fragment_no_homeworks" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -99,7 +95,7 @@
                 android:id="@+id/content_lesson_information_homeworks_parent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"/>
+                android:orientation="vertical" />
 
         </ScrollView>
 
