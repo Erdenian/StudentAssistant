@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_semester_editor.*
+import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
@@ -37,6 +38,7 @@ class SemesterEditorActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_semester_editor)
 
+    setSupportActionBar(toolbar)
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
     content_semester_editor_semester_name_edit_text.addTextChangedListener(object : TextWatcher {
@@ -103,33 +105,36 @@ class SemesterEditorActivity : AppCompatActivity() {
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
-      android.R.id.home -> finish()
+      android.R.id.home -> {
+        finish()
+        return true
+      }
       R.id.menu_semester_editor_save -> {
         if (content_semester_editor_semester_name.isErrorEnabled) {
           toast(content_semester_editor_semester_name.error.toString())
-          return super.onOptionsItemSelected(item)
+          return true
         }
 
         val name = if (!content_semester_editor_semester_name_edit_text.text?.trim().isNullOrEmpty()) {
           content_semester_editor_semester_name_edit_text.text.toString().trim().toSingleLine()
         } else {
           toast(R.string.activity_semester_editor_incorrect_name_message)
-          return super.onOptionsItemSelected(item)
+          return true
         }
 
         val first = firstDay ?: run {
           toast(R.string.activity_semester_editor_incorrect_first_day)
-          return super.onOptionsItemSelected(item)
+          return true
         }
 
         val last = lastDay ?: run {
           toast(R.string.activity_semester_editor_incorrect_last_day)
-          return super.onOptionsItemSelected(item)
+          return true
         }
 
         if (last < first) {
           toast(R.string.activity_semester_editor_incorrect_dates)
-          return super.onOptionsItemSelected(item)
+          return true
         }
 
         semester?.let { s ->
@@ -139,8 +144,8 @@ class SemesterEditorActivity : AppCompatActivity() {
         }
 
         finish()
+        return true
       }
-      else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
     }
     return super.onOptionsItemSelected(item)
   }

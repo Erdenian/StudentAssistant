@@ -3,52 +3,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="8dp"
-    tools:context=".activity.SemesterEditorActivity">
+    android:orientation="vertical">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/content_semester_editor_semester_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/content_semester_editor_semester_name_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/content_semester_editor_semester_name"
-            android:imeOptions="flagNoExtractUi"
-            android:inputType="text"
-            android:maxLines="1">
-
-            <requestFocus />
-
-        </android.support.design.widget.TextInputEditText>
-
-    </android.support.design.widget.TextInputLayout>
+    <include layout="@layout/toolbar" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp"
+        tools:context=".activity.SemesterEditorActivity">
 
-        <Button
-            android:id="@+id/content_semester_editor_first_day"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/content_semester_editor_semester_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/content_semester_editor_semester_name_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/content_semester_editor_semester_name"
+                android:imeOptions="flagNoExtractUi"
+                android:inputType="text"
+                android:maxLines="1">
+
+                <requestFocus />
+
+            </android.support.design.widget.TextInputEditText>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/content_semester_editor_first_day" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" - "
-            tools:ignore="HardcodedText" />
+            <Button
+                android:id="@+id/content_semester_editor_first_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/content_semester_editor_first_day" />
 
-        <Button
-            android:id="@+id/content_semester_editor_last_day"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/content_semester_editor_last_day" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" - "
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/content_semester_editor_last_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/content_semester_editor_last_day" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

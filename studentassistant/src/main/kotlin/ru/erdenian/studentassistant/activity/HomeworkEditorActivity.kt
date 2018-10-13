@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.widget.ArrayAdapter
 import com.google.common.collect.ImmutableSortedSet
 import kotlinx.android.synthetic.main.activity_homework_editor.*
-import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
@@ -39,7 +38,6 @@ class HomeworkEditorActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_homework_editor)
 
-    setSupportActionBar(toolbar)
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
     content_homework_editor_subject_name.adapter = ArrayAdapter<String>(
