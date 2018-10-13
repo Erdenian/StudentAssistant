@@ -132,9 +132,13 @@
                         android:id="@+id/content_lesson_editor_weekdays"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        app:sb_textColor_onSelection="@android:color/white"
-                        app:sbg_selectorColor="@android:color/darker_gray">
+                        app:sbg_position="0"
+                        app:sbg_radius="10dp"
+                        app:sbg_selectorColor="@android:color/darker_gray"
+                        app:sbg_selectorTextColor="@android:color/white"
+                        app:sbg_shadow="true"
+                        app:sbg_shadowElevation="2dp"
+                        app:sbg_shadowMargin="4dp">
 
                         <co.ceryle.segmentedbutton.SegmentedButton
                             android:layout_width="wrap_content"

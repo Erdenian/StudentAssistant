@@ -3,10 +3,10 @@ apply plugin: 'kotlin'
 sourceSets { main.java.srcDirs += 'src/main/kotlin' }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
 
-    implementation 'joda-time:joda-time:2.9.9'
-    implementation 'com.google.guava:guava:25.0-android'
+    implementation 'joda-time:joda-time:2.10'
+    implementation 'com.google.guava:guava:26.0-android'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
