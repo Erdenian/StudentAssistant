@@ -7,7 +7,7 @@ import android.view.MenuItem
 import android.widget.ArrayAdapter
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment
 import com.google.common.collect.ImmutableSortedSet
-import kotlinx.android.synthetic.main.content_homework_editor.*
+import kotlinx.android.synthetic.main.activity_homework_editor.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.toast
@@ -33,7 +33,7 @@ class HomeworkEditorActivity : AppCompatActivity(),
   private val lesson: Lesson? by lazy { ScheduleManager.getLessonOrNull(semester.id, intent.getLongExtra(LESSON_ID, -1L)) }
   private val homework: Homework? by lazy { ScheduleManager.getHomeworkOrNull(semester.id, intent.getLongExtra(HOMEWORK_ID, -1L)) }
 
-  val subjects: ImmutableSortedSet<String> by lazy { ScheduleManager.getSubjects(semester.id) }
+  private val subjects: ImmutableSortedSet<String> by lazy { ScheduleManager.getSubjects(semester.id) }
 
   private var deadline: LocalDate? = null
 
@@ -44,10 +44,13 @@ class HomeworkEditorActivity : AppCompatActivity(),
     setSupportActionBar(toolbar)
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-    content_homework_editor_subject_name.adapter =
-        ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, subjects.toTypedArray())
+    content_homework_editor_subject_name.adapter = ArrayAdapter<String>(
+        this,
+        android.R.layout.simple_spinner_item,
+        subjects.toTypedArray()
+    )
 
-    lesson?.let { content_homework_editor_subject_name.setSelection(subjects.indexOfFirst { it == lesson!!.subjectName }) }
+    lesson?.let { _ -> content_homework_editor_subject_name.setSelection(subjects.indexOfFirst { it == lesson!!.subjectName }) }
 
     homework?.let {
       content_homework_editor_subject_name.setSelection(subjects.indexOfFirst { subject -> subject == it.subjectName })
@@ -56,7 +59,7 @@ class HomeworkEditorActivity : AppCompatActivity(),
     }
 
     deadline = homework?.deadline
-    content_homework_editor_deadline.setOnClickListener {
+    content_homework_editor_deadline.setOnClickListener { _ ->
       showDatePicker(this, LocalDate.now(), semester.lastDay, deadline)
     }
   }
@@ -69,7 +72,6 @@ class HomeworkEditorActivity : AppCompatActivity(),
   override fun onRestoreInstanceState(savedInstanceState: Bundle) {
     super.onRestoreInstanceState(savedInstanceState)
     deadline = LocalDate.parse(savedInstanceState.get(DEADLINE) as String)
-
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -81,7 +83,10 @@ class HomeworkEditorActivity : AppCompatActivity(),
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
-      android.R.id.home -> finish()
+      android.R.id.home -> {
+        finish()
+        return true
+      }
       R.id.menu_lesson_editor_save -> {
         val subjectName = content_homework_editor_subject_name.selectedItem.toString()
 
@@ -92,15 +97,19 @@ class HomeworkEditorActivity : AppCompatActivity(),
           return super.onOptionsItemSelected(item)
         }
 
-        if (deadline == null) {
+        val deadline = deadline ?: run {
           toast(R.string.content_homework_editor_activity_null_deadline)
           return super.onOptionsItemSelected(item)
         }
 
-        if (homework == null) ScheduleManager.addHomework(semester.id, Homework(subjectName, description, deadline!!))
-        else ScheduleManager.updateHomework(semester.id, homework!!.copy(subjectName, description, deadline!!))
+        homework?.let { homework ->
+          ScheduleManager.updateHomework(semester.id, homework.copy(subjectName, description, deadline))
+        } ?: run {
+          ScheduleManager.addHomework(semester.id, Homework(subjectName, description, deadline))
+        }
 
         finish()
+        return true
       }
       R.id.menu_homework_editor_delete_homework -> {
         fun remove() {
@@ -112,14 +121,15 @@ class HomeworkEditorActivity : AppCompatActivity(),
           positiveButton(R.string.activity_homework_editor_alert_delete_yes) { remove() }
           negativeButton(R.string.activity_homework_editor_alert_delete_no) {}
         }.show()
+        return true
       }
-      else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
     }
     return super.onOptionsItemSelected(item)
   }
 
   override fun onDateSet(dialog: CalendarDatePickerDialogFragment?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-    deadline = LocalDate(year, monthOfYear + 1, dayOfMonth)
-    content_homework_editor_deadline.text = deadline!!.toString("dd.MM.yyyy")
+    val date = LocalDate(year, monthOfYear + 1, dayOfMonth)
+    deadline = date
+    content_homework_editor_deadline.text = date.toString("dd.MM.yyyy")
   }
 }
