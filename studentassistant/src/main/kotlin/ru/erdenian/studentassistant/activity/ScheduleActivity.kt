@@ -46,7 +46,6 @@ class ScheduleActivity : AppCompatActivity(),
     setContentView(R.layout.activity_schedule)
 
     setSupportActionBar(toolbar_with_spinner)
-    initializeDrawerAndNavigationView(toolbar_with_spinner)
 
     toolbar_with_spinner_spinner.onItemSelectedListener = this
 
@@ -68,18 +67,9 @@ class ScheduleActivity : AppCompatActivity(),
   }
 
   override fun onScheduleUpdate() {
-    if (ScheduleManager.semesters.size <= 1) {
-      actionBar.setDisplayShowTitleEnabled(true)
-      toolbar_with_spinner_spinner.visibility = View.GONE
-    } else {
-      actionBar.setDisplayShowTitleEnabled(false)
-      toolbar_with_spinner_spinner.visibility = View.VISIBLE
-    }
-
-    if (ScheduleManager.semesters.isNotEmpty()) {
-      schedule_flipper.displayedChild = SCHEDULE_INDEX
-    } else {
-      schedule_flipper.displayedChild = BUTTONS_INDEX
+    schedule_flipper.displayedChild = when (ScheduleManager.semesters.isNotEmpty()) {
+      true -> SCHEDULE_INDEX
+      false -> BUTTONS_INDEX
     }
 
     if ((pagerAdapter != null) && (selectedSemesterId == ScheduleManager.selectedSemesterId)) {
@@ -88,18 +78,32 @@ class ScheduleActivity : AppCompatActivity(),
     selectedSemesterId = ScheduleManager.selectedSemesterId
 
     when {
-      ScheduleManager.semesters.size > 1 -> {
+      (ScheduleManager.semesters.size > 1) -> {
+        actionBar.setDisplayShowTitleEnabled(false)
+        actionBar.title = null
+
         val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters, ScheduleManager.semestersNames)
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters)
         toolbar_with_spinner_spinner.adapter = adapter
         toolbar_with_spinner_spinner.setSelection(ScheduleManager.selectedSemesterIndex)
+        toolbar_with_spinner_spinner.visibility = View.VISIBLE
       }
-      ScheduleManager.semesters.size == 1 -> {
+      (ScheduleManager.semesters.size == 1) -> {
         actionBar.title = ScheduleManager.selectedSemester.name
+        actionBar.setDisplayShowTitleEnabled(true)
+
+        toolbar_with_spinner_spinner.visibility = View.GONE
+        toolbar_with_spinner_spinner.adapter = null
+
         onItemSelected(null, null, 0, -1L)
       }
       else -> {
         actionBar.setTitle(R.string.title_activity_schedule)
+        actionBar.setDisplayShowTitleEnabled(true)
+
+        toolbar_with_spinner_spinner.visibility = View.GONE
+        toolbar_with_spinner_spinner.adapter = null
+
         pagerAdapter = null
         view_pager.adapter = null
       }
