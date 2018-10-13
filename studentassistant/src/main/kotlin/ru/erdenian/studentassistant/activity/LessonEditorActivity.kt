@@ -7,10 +7,8 @@ import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.MultiAutoCompleteTextView
 import com.codetroopers.betterpickers.radialtimepicker.RadialTimePickerDialogFragment
-import com.google.common.base.Joiner
 import com.google.common.collect.ImmutableSortedSet
-import kotlinx.android.synthetic.main.content_lesson_editor.*
-import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.activity_lesson_editor.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.startService
 import org.jetbrains.anko.toast
@@ -36,8 +34,6 @@ class LessonEditorActivity : AppCompatActivity(),
     private const val END_TIME_TAG = "last_day_tag"
 
     private const val TIME_FORMAT = "HH:mm"
-
-    private val joiner = Joiner.on(", ")
   }
 
   private val semesterId: Long by lazy {
@@ -56,7 +52,6 @@ class LessonEditorActivity : AppCompatActivity(),
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_lesson_editor)
 
-    setSupportActionBar(toolbar)
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
     content_lesson_editor_start_time.setOnClickListener { showTimePicker(this, startTime, START_TIME_TAG) }
@@ -66,8 +61,8 @@ class LessonEditorActivity : AppCompatActivity(),
       lesson?.apply {
         content_lesson_editor_subject_name_edit_text.setText(subjectName)
         content_lesson_editor_lesson_type_edit_text.setText(type)
-        content_lesson_editor_teachers_edit_text.setText(joiner.join(teachers))
-        content_lesson_editor_classrooms_edit_text.setText(joiner.join(classrooms))
+        content_lesson_editor_teachers_edit_text.setText(teachers.joinToString())
+        content_lesson_editor_classrooms_edit_text.setText(classrooms.joinToString())
 
         this@LessonEditorActivity.startTime = startTime
         content_lesson_editor_start_time.text = startTime.toString(TIME_FORMAT)
@@ -88,50 +83,53 @@ class LessonEditorActivity : AppCompatActivity(),
         content_lesson_editor_weekdays.setPosition(weekday - 1, false)
       }
     } else {
-      val startTimeString = savedInstanceState.getString(START_TIME)
-      if (startTimeString != "null") {
-        startTime = LocalTime.parse(startTimeString)
-        content_lesson_editor_start_time.text = startTime!!.toString(TIME_FORMAT)
+      savedInstanceState.getString(START_TIME)?.let { s ->
+        val time = LocalTime.parse(s)
+        startTime = time
+        content_lesson_editor_start_time.text = time.toString(TIME_FORMAT)
       }
 
-      val endTimeString = savedInstanceState.getString(END_TIME, null)
-      if (endTimeString != "null") {
-        endTime = LocalTime.parse(endTimeString)
-        content_lesson_editor_end_time.text = endTime!!.toString(TIME_FORMAT)
+      savedInstanceState.getString(END_TIME)?.let { s ->
+        val time = LocalTime.parse(s)
+        endTime = time
+        content_lesson_editor_end_time.text = time.toString(TIME_FORMAT)
       }
 
       content_lesson_editor_weekdays.setPosition(savedInstanceState.getInt(WEEKDAY), false)
 
-      content_lesson_editor_weeks_selector.weeks = savedInstanceState.getBooleanArray(WEEKS)
+      content_lesson_editor_weeks_selector.weeks = savedInstanceState.getBooleanArray(WEEKS)!!
     }
 
-    content_lesson_editor_subject_name_edit_text.setAdapter(ArrayAdapter(this,
-        android.R.layout.simple_dropdown_item_1line, ScheduleManager.getSubjects(semesterId).asList()))
+    content_lesson_editor_subject_name_edit_text.setAdapter(
+        ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, ScheduleManager.getSubjects(semesterId).asList())
+    )
 
-    content_lesson_editor_lesson_type_edit_text.setAdapter(ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line,
-        (ScheduleManager.getTypes(semesterId) + resources.getStringArray(R.array.lesson_types)).sorted()))
+    content_lesson_editor_lesson_type_edit_text.setAdapter(
+        ArrayAdapter(
+            this,
+            android.R.layout.simple_dropdown_item_1line,
+            (ScheduleManager.getTypes(semesterId) + resources.getStringArray(R.array.lesson_types)).sorted()
+        )
+    )
 
-    content_lesson_editor_teachers_edit_text.setAdapter(ArrayAdapter(this,
-        android.R.layout.simple_dropdown_item_1line, ScheduleManager.getTeachers(semesterId).asList()))
+    content_lesson_editor_teachers_edit_text.setAdapter(
+        ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, ScheduleManager.getTeachers(semesterId).asList())
+    )
     content_lesson_editor_teachers_edit_text.setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
 
-    content_lesson_editor_classrooms_edit_text.setAdapter(ArrayAdapter(this,
-        android.R.layout.simple_dropdown_item_1line, ScheduleManager.getClassrooms(semesterId).asList()))
+    content_lesson_editor_classrooms_edit_text.setAdapter(
+        ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, ScheduleManager.getClassrooms(semesterId).asList())
+    )
     content_lesson_editor_classrooms_edit_text.setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
   }
 
   override fun onSaveInstanceState(outState: Bundle) {
-    outState.putString(START_TIME, startTime.toString())
-    outState.putString(END_TIME, endTime.toString())
+    outState.putString(START_TIME, startTime?.toString())
+    outState.putString(END_TIME, endTime?.toString())
     outState.putInt(WEEKDAY, content_lesson_editor_weekdays.position)
     outState.putBooleanArray(WEEKS, content_lesson_editor_weeks_selector.weeks)
 
     super.onSaveInstanceState(outState)
-  }
-
-  override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-    super.onRestoreInstanceState(savedInstanceState)
-    content_lesson_editor_weeks_selector.weeks = savedInstanceState.getBooleanArray(WEEKS)
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -143,55 +141,55 @@ class LessonEditorActivity : AppCompatActivity(),
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
-      android.R.id.home -> finish()
+      android.R.id.home -> {
+        finish()
+        return true
+      }
       R.id.menu_lesson_editor_save -> {
         val subjectName = if (content_lesson_editor_subject_name_edit_text.text.trim().isNotBlank()) {
           content_lesson_editor_subject_name_edit_text.text.toString().toSingleLine().trim()
         } else {
           toast(R.string.activity_lesson_editor_incorrect_subject_name_message)
-          return super.onOptionsItemSelected(item)
+          return true
         }
 
         val type = content_lesson_editor_lesson_type_edit_text.text.toString().toSingleLine().trim()
 
-        val teachers = content_lesson_editor_teachers_edit_text.text.toString().
-            toSingleLine().split(",").map(String::trim).filter(String::isNotBlank)
+        val teachers = content_lesson_editor_teachers_edit_text.text
+            .toString().toSingleLine().split(',').asSequence()
+            .map(String::trim).filter(String::isNotBlank).toList()
 
-        val classrooms = content_lesson_editor_classrooms_edit_text.text.toString().
-            toSingleLine().split(",").map(String::trim).filter(String::isNotBlank)
+        val classrooms = content_lesson_editor_classrooms_edit_text.text
+            .toString().toSingleLine().split(',').asSequence()
+            .map(String::trim).filter(String::isNotBlank).toList()
 
-        if (startTime == null) {
+        val start = startTime ?: run {
           toast(R.string.activity_lesson_editor_incorrect_start_time_message)
-          return super.onOptionsItemSelected(item)
+          return true
         }
 
-        if (endTime == null) {
+        val end = endTime ?: run {
           toast(R.string.activity_lesson_editor_incorrect_end_time_message)
-          return super.onOptionsItemSelected(item)
-        }
-
-        if (!startTime!!.isBefore(endTime)) {
-          toast(R.string.activity_lesson_editor_incorrect_time_message)
-          return super.onOptionsItemSelected(item)
+          return true
         }
 
         val weekday = content_lesson_editor_weekdays.position + 1
 
-        val weeks = content_lesson_editor_weeks_selector.weeks
-
-        if (!weeks.contains(true)) {
-          toast(R.string.activity_lesson_editor_no_weeks_checked_message)
-          return super.onOptionsItemSelected(item)
+        val weeks = content_lesson_editor_weeks_selector.weeks.apply {
+          if (!contains(true)) {
+            toast(R.string.activity_lesson_editor_no_weeks_checked_message)
+            return true
+          }
         }
 
         fun saveChanges() {
           if ((lesson == null) || copy) {
             ScheduleManager.addLesson(semesterId, Lesson(subjectName, type, ImmutableSortedSet.copyOf(teachers),
-                ImmutableSortedSet.copyOf(classrooms), startTime!!, endTime!!,
+                ImmutableSortedSet.copyOf(classrooms), start, end,
                 LessonRepeat.ByWeekday(weekday, weeks.toList())))
           } else {
             ScheduleManager.updateLesson(semesterId, lesson!!.copy(subjectName, type, ImmutableSortedSet.copyOf(teachers),
-                ImmutableSortedSet.copyOf(classrooms), startTime!!, endTime!!,
+                ImmutableSortedSet.copyOf(classrooms), start, end,
                 LessonRepeat.ByWeekday(weekday, weeks.toList())))
           }
 
@@ -199,19 +197,22 @@ class LessonEditorActivity : AppCompatActivity(),
           finish()
         }
 
-        if ((lesson != null) && (subjectName != lesson!!.subjectName) &&
-            (ScheduleManager.getLessons(semesterId, lesson!!.subjectName).size > (if (copy) 0 else 1))) {
+        val localLesson = lesson
+        if ((localLesson != null) && (subjectName != localLesson.subjectName) &&
+            (ScheduleManager.getLessons(semesterId, localLesson.subjectName).size > (if (copy) 0 else 1))) {
 
           alert(R.string.activity_lesson_editor_alert_rename_lessons_message,
               R.string.activity_lesson_editor_alert_rename_lessons_title) {
             positiveButton(R.string.activity_lesson_editor_alert_rename_lessons_yes) {
               saveChanges()
-              ScheduleManager.updateLessons(semesterId, lesson!!.subjectName, subjectName)
+              ScheduleManager.updateLessons(semesterId, localLesson.subjectName, subjectName)
             }
             negativeButton(R.string.activity_lesson_editor_alert_rename_lessons_no) { saveChanges() }
             //neutralButton(R.string.activity_lesson_editor_alert_rename_lessons_cancel)
           }.show()
         } else saveChanges()
+
+        return true
       }
       R.id.menu_lesson_editor_delete_lesson -> {
         fun remove() {
@@ -221,25 +222,25 @@ class LessonEditorActivity : AppCompatActivity(),
           finish()
         }
 
-        if (ScheduleManager.getHomeworks(semesterId, lesson!!.subjectName).isNotEmpty()
-            && (ScheduleManager.getLessons(semesterId, lesson!!.subjectName).size == 1)) {
-
-          alert(R.string.activity_lesson_editor_alert_delete_homeworks_message,
-              R.string.activity_lesson_editor_alert_delete_homeworks_title) {
-            positiveButton(R.string.activity_lesson_editor_alert_delete_homeworks_yes) { remove() }
-            negativeButton(R.string.activity_lesson_editor_alert_delete_homeworks_cancel) {}
-          }.show()
-        } else {
-
-          alert(R.string.activity_lesson_editor_alert_delete_message) {
-            positiveButton(R.string.activity_lesson_editor_alert_delete_yes) { remove() }
-            negativeButton(R.string.activity_lesson_editor_alert_delete_no) {}
-          }.show()
+        lesson?.let { localLesson ->
+          if (ScheduleManager.getHomeworks(semesterId, localLesson.subjectName).isNotEmpty()
+              && (ScheduleManager.getLessons(semesterId, localLesson.subjectName).size == 1)) {
+            alert(R.string.activity_lesson_editor_alert_delete_homeworks_message,
+                R.string.activity_lesson_editor_alert_delete_homeworks_title) {
+              positiveButton(R.string.activity_lesson_editor_alert_delete_homeworks_yes) { remove() }
+              negativeButton(R.string.activity_lesson_editor_alert_delete_homeworks_cancel) {}
+            }.show()
+          } else {
+            alert(R.string.activity_lesson_editor_alert_delete_message) {
+              positiveButton(R.string.activity_lesson_editor_alert_delete_yes) { remove() }
+              negativeButton(R.string.activity_lesson_editor_alert_delete_no) {}
+            }.show()
+          }
         }
+        return true
       }
       else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
     }
-    return super.onOptionsItemSelected(item)
   }
 
   override fun onTimeSet(dialog: RadialTimePickerDialogFragment, hourOfDay: Int, minute: Int) {
@@ -248,7 +249,7 @@ class LessonEditorActivity : AppCompatActivity(),
       START_TIME_TAG -> {
         startTime = newTime
         content_lesson_editor_start_time.text = newTime.toString(TIME_FORMAT)
-        endTime = startTime!! + ScheduleManager.getLessonLength(semesterId)
+        endTime = newTime + ScheduleManager.getLessonLength(semesterId)
         content_lesson_editor_end_time.text = endTime?.toString(TIME_FORMAT)
       }
       END_TIME_TAG -> {
