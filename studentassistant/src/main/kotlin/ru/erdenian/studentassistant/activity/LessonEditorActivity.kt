@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.MultiAutoCompleteTextView
 import com.google.common.collect.ImmutableSortedSet
 import kotlinx.android.synthetic.main.activity_lesson_editor.*
+import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.startService
 import org.jetbrains.anko.toast
@@ -50,6 +51,7 @@ class LessonEditorActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_lesson_editor)
 
+    setSupportActionBar(toolbar)
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
     content_lesson_editor_start_time.setOnClickListener { _ ->
