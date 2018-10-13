@@ -28,7 +28,7 @@ fun Context.showDatePicker(preselectedDate: LocalDate? = null,
         onDateSet.invoke(LocalDate(year, month + 1, dayOfMonth))
       },
       preselected.year,
-      preselected.monthOfYear,
+      preselected.monthOfYear - 1,
       preselected.dayOfMonth
   ).apply {
     minDate?.let { datePicker.minDate = it.toDate().time }
