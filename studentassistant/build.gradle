@@ -65,5 +65,5 @@ dependencies {
     implementation 'com.google.guava:guava:25.0-android'
 
     implementation 'com.code-troopers.betterpickers:library:3.1.0'
-    implementation 'com.github.ceryle:SegmentedButton:v1.2.2'
+    implementation 'com.github.ceryle:SegmentedButton:v2.0.2'
 }
