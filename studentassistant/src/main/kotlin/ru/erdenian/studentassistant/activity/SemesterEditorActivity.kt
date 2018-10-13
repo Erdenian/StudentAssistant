@@ -6,7 +6,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
-import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment
 import kotlinx.android.synthetic.main.activity_semester_editor.*
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
@@ -18,16 +17,13 @@ import ru.erdenian.studentassistant.extensions.toSingleLine
 import ru.erdenian.studentassistant.localdata.ScheduleManager
 import ru.erdenian.studentassistant.schedule.Semester
 
-class SemesterEditorActivity : AppCompatActivity(),
-    CalendarDatePickerDialogFragment.OnDateSetListener {
+
+class SemesterEditorActivity : AppCompatActivity() {
 
   private companion object {
 
     const val FIRST_DAY = "first_day"
     const val LAST_DAY = "last_day"
-
-    const val FIRST_DAY_TAG = "first_day_tag"
-    const val LAST_DAY_TAG = "last_day_tag"
   }
 
   private val semester: Semester? by lazy { ScheduleManager.getSemesterOrNull(intent.getLongExtra(SEMESTER_ID, -1L)) }
@@ -57,8 +53,18 @@ class SemesterEditorActivity : AppCompatActivity(),
         }
       }
     })
-    content_semester_editor_first_day.setOnClickListener { showDatePicker(this, preselectedDate = firstDay, tag = FIRST_DAY_TAG) }
-    content_semester_editor_last_day.setOnClickListener { showDatePicker(this, preselectedDate = lastDay, tag = LAST_DAY_TAG) }
+    content_semester_editor_first_day.setOnClickListener { _ ->
+      showDatePicker { newDate ->
+        firstDay = newDate
+        content_semester_editor_first_day.text = newDate.toString("dd.MM.yyyy")
+      }
+    }
+    content_semester_editor_last_day.setOnClickListener { _ ->
+      showDatePicker { newDate ->
+        lastDay = newDate
+        content_semester_editor_last_day.text = newDate.toString("dd.MM.yyyy")
+      }
+    }
 
     if (savedInstanceState == null) {
       semester?.also { s ->
@@ -137,20 +143,5 @@ class SemesterEditorActivity : AppCompatActivity(),
       else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
     }
     return super.onOptionsItemSelected(item)
-  }
-
-  override fun onDateSet(dialog: CalendarDatePickerDialogFragment, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-    val newDate = LocalDate(year, monthOfYear + 1, dayOfMonth)
-    when (dialog.tag) {
-      FIRST_DAY_TAG -> {
-        firstDay = newDate
-        content_semester_editor_first_day.text = newDate.toString("dd.MM.yyyy")
-      }
-      LAST_DAY_TAG -> {
-        lastDay = newDate
-        content_semester_editor_last_day.text = newDate.toString("dd.MM.yyyy")
-      }
-      else -> throw IllegalArgumentException("Неизвестный тэг: ${dialog.tag}")
-    }
   }
 }

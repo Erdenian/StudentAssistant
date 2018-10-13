@@ -8,7 +8,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment
 import kotlinx.android.synthetic.main.activity_schedule.*
 import kotlinx.android.synthetic.main.toolbar_with_spinner.*
 import kotlinx.android.synthetic.main.view_pager.*
@@ -25,7 +24,6 @@ import ru.erdenian.studentassistant.localdata.ScheduleManager
 
 class ScheduleActivity : AppCompatActivity(),
     AdapterView.OnItemSelectedListener,
-    CalendarDatePickerDialogFragment.OnDateSetListener,
     ScheduleManager.OnScheduleUpdateListener {
 
   companion object {
@@ -150,20 +148,17 @@ class ScheduleActivity : AppCompatActivity(),
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       R.id.menu_schedule_calendar -> ScheduleManager.selectedSemester.let {
-        showDatePicker(this, it.firstDay, it.lastDay, pagerAdapter?.getDate(view_pager.currentItem))
+        showDatePicker(pagerAdapter?.getDate(view_pager.currentItem), it.firstDay, it.lastDay) { newDate ->
+          pagerAdapter?.run { view_pager.currentItem = getPosition(newDate) }
+        }
       }
       R.id.menu_schedule_add_schedule -> startActivity<SemesterEditorActivity>()
-      R.id.menu_schedule_edit_schedule ->
-        startActivity<LessonsEditorActivity>(SEMESTER_ID to ScheduleManager.selectedSemesterId)
+      R.id.menu_schedule_edit_schedule -> startActivity<LessonsEditorActivity>(
+          SEMESTER_ID to ScheduleManager.selectedSemesterId
+      )
       else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
     }
     return super.onOptionsItemSelected(item)
-  }
-
-  override fun onDateSet(dialog: CalendarDatePickerDialogFragment, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-    pagerAdapter?.run {
-      view_pager.currentItem = getPosition(LocalDate(year, monthOfYear + 1, dayOfMonth))
-    }
   }
 
   override fun onBackPressed() {

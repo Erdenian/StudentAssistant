@@ -3,7 +3,6 @@ package ru.erdenian.studentassistant.activity
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
-import com.codetroopers.betterpickers.radialtimepicker.RadialTimePickerDialogFragment
 import kotlinx.android.synthetic.main.activity_alarm_editor.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.startService
@@ -33,13 +32,12 @@ class AlarmEditorActivity : AppCompatActivity() {
 
     content_alarm_editor_on_off.isChecked = sp.getBoolean("on", false)
 
-    content_alarm_editor_time.setOnClickListener {
-      showTimePicker(
-          RadialTimePickerDialogFragment.OnTimeSetListener { _, hourOfDay, minute ->
-            sp.edit().putString("time", LocalTime(hourOfDay, minute).toString()).apply()
-            content_alarm_editor_time.text = LocalTime(hourOfDay, minute).toString("HH:mm")
-            startService<ScheduleService>()
-          }, LocalTime(1, 0))
+    content_alarm_editor_time.setOnClickListener { _ ->
+      showTimePicker(LocalTime(1, 0)) { newTime ->
+        sp.edit().putString("time", newTime.toString()).apply()
+        content_alarm_editor_time.text = newTime.toString("HH:mm")
+        startService<ScheduleService>()
+      }
     }
 
     content_alarm_editor_on_off.setOnCheckedChangeListener { _, isChecked ->
