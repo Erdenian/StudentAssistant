@@ -39,9 +39,4 @@
         <item name="android:foreground">?android:attr/selectableItemBackgroundBorderless</item>
     </style>
 
-    <style name="DatePicker" parent="BetterPickersRadialTimePickerDialog.PrimaryColor">
-        <item name="bpBodyUnselectedTextColor">@color/colorPrimaryText</item>
-        <item name="bpDisabledDayTextColor">@color/colorSecondaryText</item>
-    </style>
-
 </resources>

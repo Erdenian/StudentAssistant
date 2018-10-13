@@ -6,7 +6,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.MultiAutoCompleteTextView
-import com.codetroopers.betterpickers.radialtimepicker.RadialTimePickerDialogFragment
 import com.google.common.collect.ImmutableSortedSet
 import kotlinx.android.synthetic.main.activity_lesson_editor.*
 import org.jetbrains.anko.alert
@@ -20,8 +19,7 @@ import ru.erdenian.studentassistant.schedule.Lesson
 import ru.erdenian.studentassistant.schedule.LessonRepeat
 import ru.erdenian.studentassistant.service.ScheduleService
 
-class LessonEditorActivity : AppCompatActivity(),
-    RadialTimePickerDialogFragment.OnTimeSetListener {
+class LessonEditorActivity : AppCompatActivity() {
 
   companion object {
 
@@ -54,8 +52,20 @@ class LessonEditorActivity : AppCompatActivity(),
 
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-    content_lesson_editor_start_time.setOnClickListener { showTimePicker(this, startTime, START_TIME_TAG) }
-    content_lesson_editor_end_time.setOnClickListener { showTimePicker(this, endTime, END_TIME_TAG) }
+    content_lesson_editor_start_time.setOnClickListener { _ ->
+      showTimePicker(startTime) { newTime ->
+        startTime = newTime
+        content_lesson_editor_start_time.text = newTime.toString(TIME_FORMAT)
+        endTime = newTime + ScheduleManager.getLessonLength(semesterId)
+        content_lesson_editor_end_time.text = endTime?.toString(TIME_FORMAT)
+      }
+    }
+    content_lesson_editor_end_time.setOnClickListener { _ ->
+      showTimePicker(endTime) { newTime ->
+        endTime = newTime
+        content_lesson_editor_end_time.text = newTime.toString(TIME_FORMAT)
+      }
+    }
 
     if (savedInstanceState == null) {
       lesson?.apply {
@@ -240,23 +250,6 @@ class LessonEditorActivity : AppCompatActivity(),
         return true
       }
       else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
-    }
-  }
-
-  override fun onTimeSet(dialog: RadialTimePickerDialogFragment, hourOfDay: Int, minute: Int) {
-    val newTime = LocalTime(hourOfDay, minute)
-    when (dialog.tag) {
-      START_TIME_TAG -> {
-        startTime = newTime
-        content_lesson_editor_start_time.text = newTime.toString(TIME_FORMAT)
-        endTime = newTime + ScheduleManager.getLessonLength(semesterId)
-        content_lesson_editor_end_time.text = endTime?.toString(TIME_FORMAT)
-      }
-      END_TIME_TAG -> {
-        endTime = newTime
-        content_lesson_editor_end_time.text = newTime.toString(TIME_FORMAT)
-      }
-      else -> IllegalArgumentException("Неизвестный тег: ${dialog.tag}")
     }
   }
 }

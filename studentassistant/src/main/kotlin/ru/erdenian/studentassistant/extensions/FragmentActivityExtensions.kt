@@ -1,55 +1,58 @@
 package ru.erdenian.studentassistant.extensions
 
-import android.support.v4.app.FragmentActivity
-import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment
-import com.codetroopers.betterpickers.calendardatepicker.MonthAdapter
-import com.codetroopers.betterpickers.radialtimepicker.RadialTimePickerDialogFragment
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.content.Context
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
-import ru.erdenian.studentassistant.R
-import java.util.*
 
 /**
  * Отображает date picker.
  *
- * Выбор даты будет возможен в заданном промежутке дат ([firstDay] - [lastDay]).
+ * Выбор даты будет возможен в заданном промежутке дат ([minDate] - [maxDate]).
  *
  * @author Ilya Solovyev
- * @param onDateSetListener обработчик результата выбора
- * @param firstDay первый день промежутка (если null, используется 1 января 1900)
- * @param lastDay последний день промежутка (если null, используется 31 декабря 2100)
  * @param preselectedDate изначально выбранный день (если null, используется текущая дата)
- * @param tag тэг, который будет передан в [onDateSetListener]
+ * @param minDate первый день промежутка (если null, используется 1 января 1900)
+ * @param maxDate последний день промежутка (если null, используется 31 декабря 2100)
+ * @param onDateSet обработчик результата выбора
  * @since 0.0.0
  */
-fun FragmentActivity.showDatePicker(onDateSetListener: CalendarDatePickerDialogFragment.OnDateSetListener,
-                                    firstDay: LocalDate? = null, lastDay: LocalDate? = null,
-                                    preselectedDate: LocalDate? = LocalDate.now(), tag: String = "date_picker") {
+fun Context.showDatePicker(preselectedDate: LocalDate? = null,
+                           minDate: LocalDate? = null, maxDate: LocalDate? = null,
+                           onDateSet: (LocalDate) -> Unit) {
+  val preselected = preselectedDate ?: LocalDate.now()
 
-  fun LocalDate.toCalendarDay() = MonthAdapter.CalendarDay(year, monthOfYear - 1, dayOfMonth)
-
-  CalendarDatePickerDialogFragment().apply {
-    firstDayOfWeek = Calendar.MONDAY
-    setThemeCustom(R.style.DatePicker)
-    setDateRange(firstDay?.toCalendarDay(), lastDay?.toCalendarDay())
-    setOnDateSetListener(onDateSetListener)
-    preselectedDate?.run { setPreselectedDate(year, monthOfYear - 1, dayOfMonth) }
-  }.show(supportFragmentManager, tag)
+  DatePickerDialog(this,
+      DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+        onDateSet.invoke(LocalDate(year, month + 1, dayOfMonth))
+      },
+      preselected.year,
+      preselected.monthOfYear,
+      preselected.dayOfMonth
+  ).apply {
+    minDate?.let { datePicker.minDate = it.toDate().time }
+    maxDate?.let { datePicker.maxDate = it.toDate().time }
+  }.show()
 }
 
 /**
  * Отображает time picker.
  *
  * @author Ilya Solovyev
- * @param onTimeSetListener обработчик результата выбора
  * @param preselectedTime изначально выбранное время (если null, используется текущее время)
- * @param tag тэг, который будет передан в [onTimeSetListener]
+ * @param onTimeSet обработчик результата выбора
  * @since 0.0.0
  */
-fun FragmentActivity.showTimePicker(onTimeSetListener: RadialTimePickerDialogFragment.OnTimeSetListener,
-                                    preselectedTime: LocalTime? = null, tag: String = "time_picker") {
-  RadialTimePickerDialogFragment().apply {
-    setOnTimeSetListener(onTimeSetListener)
-    preselectedTime?.run { setStartTime(hourOfDay, minuteOfHour) }
-  }.show(supportFragmentManager, tag)
+fun Context.showTimePicker(preselectedTime: LocalTime? = null, onTimeSet: (LocalTime) -> Unit) {
+  val preselected = preselectedTime ?: LocalTime.now()
+
+  TimePickerDialog(this,
+      TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+        onTimeSet.invoke(LocalTime(hourOfDay, minute))
+      },
+      preselected.hourOfDay,
+      preselected.minuteOfHour,
+      true
+  ).show()
 }

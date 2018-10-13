@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
-import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment
 import com.google.common.collect.ImmutableSortedSet
 import kotlinx.android.synthetic.main.activity_homework_editor.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -21,8 +20,7 @@ import ru.erdenian.studentassistant.schedule.Homework
 import ru.erdenian.studentassistant.schedule.Lesson
 import ru.erdenian.studentassistant.schedule.Semester
 
-class HomeworkEditorActivity : AppCompatActivity(),
-    CalendarDatePickerDialogFragment.OnDateSetListener {
+class HomeworkEditorActivity : AppCompatActivity() {
 
   private companion object {
 
@@ -60,7 +58,10 @@ class HomeworkEditorActivity : AppCompatActivity(),
 
     deadline = homework?.deadline
     content_homework_editor_deadline.setOnClickListener { _ ->
-      showDatePicker(this, LocalDate.now(), semester.lastDay, deadline)
+      showDatePicker(deadline, LocalDate.now(), semester.lastDay) { newDate ->
+        deadline = newDate
+        content_homework_editor_deadline.text = newDate.toString("dd.MM.yyyy")
+      }
     }
   }
 
@@ -125,11 +126,5 @@ class HomeworkEditorActivity : AppCompatActivity(),
       }
     }
     return super.onOptionsItemSelected(item)
-  }
-
-  override fun onDateSet(dialog: CalendarDatePickerDialogFragment?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-    val date = LocalDate(year, monthOfYear + 1, dayOfMonth)
-    deadline = date
-    content_homework_editor_deadline.text = date.toString("dd.MM.yyyy")
   }
 }
