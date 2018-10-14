@@ -2,12 +2,13 @@ package ru.erdenian.studentassistant.customviews;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Иконка и имя преподавателя.
@@ -67,7 +68,7 @@ public class TeacherView extends LinearLayout {
         setGravity(Gravity.BOTTOM);
 
         inflate(context, R.layout.teacher_view, this);
-        name = (TextView) findViewById(R.id.teacher_view_name);
+        name = findViewById(R.id.teacher_view_name);
 
         if (attrs != null) {
             TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.TeacherView, 0, 0);

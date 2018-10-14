@@ -1,10 +1,6 @@
 package ru.erdenian.studentassistant.customviews;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.view.ContextThemeWrapper;
-import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -20,6 +16,10 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.cardview.widget.CardView;
 import ru.erdenian.studentassistant.schedule.Lesson;
 import ru.erdenian.studentassistant.schedule.LessonRepeat;
 
@@ -93,16 +93,16 @@ public class LessonCard extends CardView {
             weeksVariants = Arrays.copyOf(weeksVariants, weeksVariants.length - 1);
         }
 
-        startTime = (TextView) findViewById(R.id.lesson_card_start_time);
-        endTime = (TextView) findViewById(R.id.lesson_card_end_time);
-        classrooms = (TextView) findViewById(R.id.lesson_card_classrooms);
-        type = (TextView) findViewById(R.id.lesson_card_type);
-        subjectName = (TextView) findViewById(R.id.lesson_card_subject_name);
-        repeatsString = (TextView) findViewById(R.id.lesson_card_repeats_string);
+        startTime = findViewById(R.id.lesson_card_start_time);
+        endTime = findViewById(R.id.lesson_card_end_time);
+        classrooms = findViewById(R.id.lesson_card_classrooms);
+        type = findViewById(R.id.lesson_card_type);
+        subjectName = findViewById(R.id.lesson_card_subject_name);
+        repeatsString = findViewById(R.id.lesson_card_repeats_string);
 
-        classroomsParent = (LinearLayout) findViewById(R.id.lesson_card_classrooms_parent);
-        teachersParent = (LinearLayout) findViewById(R.id.lesson_card_teachers_parent);
-        repeatsParent = (LinearLayout) findViewById(R.id.lesson_card_repeats_parent);
+        classroomsParent = findViewById(R.id.lesson_card_classrooms_parent);
+        teachersParent = findViewById(R.id.lesson_card_teachers_parent);
+        repeatsParent = findViewById(R.id.lesson_card_repeats_parent);
     }
 
     //endregion

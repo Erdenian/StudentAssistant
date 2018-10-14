@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/ScheduleCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -24,8 +24,8 @@
                 android:layout_marginBottom="@dimen/divider_margin"
                 android:layout_marginTop="@dimen/divider_margin"
                 android:layout_weight="1"
-                android:text="Срок сдачи: "
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                tools:text="Срок сдачи: " />
 
             <TextView
                 android:id="@+id/card_lesson_information_deadline_date"
@@ -34,18 +34,18 @@
                 android:layout_marginBottom="@dimen/divider_margin"
                 android:layout_marginTop="@dimen/divider_margin"
                 android:layout_weight="1"
-                android:text="24.12.2016"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                tools:text="24.12.2016" />
         </LinearLayout>
 
-        <include layout="@layout/divider_horizontal"/>
+        <include layout="@layout/divider_horizontal" />
 
         <TextView
             android:id="@+id/card_lesson_information_homework_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Закупить штанов с подворотами и присесть на турничек."/>
+            tools:text="Закупить штанов с подворотами и присесть на турничек." />
 
     </LinearLayout>
 
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>
