@@ -23,7 +23,7 @@ import ru.erdenian.studentassistant.localdata.ScheduleManager
  * @author Ilya Solovyev
  */
 fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
-  val drawerLayout = findViewById(R.id.drawer_layout) as DrawerLayout
+  val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
 
   ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close).apply {
     drawerLayout.addDrawerListener(this)
