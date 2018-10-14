@@ -1,11 +1,11 @@
 package ru.erdenian.studentassistant.activity
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.MultiAutoCompleteTextView
+import androidx.appcompat.app.AppCompatActivity
 import com.google.common.collect.ImmutableSortedSet
 import kotlinx.android.synthetic.main.activity_lesson_editor.*
 import kotlinx.android.synthetic.main.toolbar.*

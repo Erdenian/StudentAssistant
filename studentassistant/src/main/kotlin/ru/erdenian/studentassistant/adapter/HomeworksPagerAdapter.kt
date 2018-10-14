@@ -1,8 +1,8 @@
 package ru.erdenian.studentassistant.adapter
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
 import ru.erdenian.studentassistant.fragment.HomeworksPageFragment
 
 class HomeworksPagerAdapter(fm: FragmentManager, private val semesterId: Long) : FragmentStatePagerAdapter(fm) {

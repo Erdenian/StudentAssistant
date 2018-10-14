@@ -3,7 +3,7 @@ package ru.erdenian.studentassistant.extensions
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 import java.io.File
