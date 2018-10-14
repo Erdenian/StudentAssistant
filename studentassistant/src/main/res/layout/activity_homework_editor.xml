@@ -1,19 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:layout_marginEnd="2dp"
+    android:layout_marginStart="2dp"
+    android:orientation="vertical"
+    tools:context=".activity.HomeworkEditorActivity">
 
-    <LinearLayout
+    <Spinner
+        android:id="@+id/content_homework_editor_subject_name"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:prompt="@string/content_homework_editor_choose_subject"
+        android:spinnerMode="dialog"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="@dimen/card_secondary_text_size" />
 
-        <include layout="@layout/toolbar"/>
+    <EditText
+        android:id="@+id/content_homeworks_editor_description"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="top"
+        android:hint="@string/content_homework_editor_description"
+        android:inputType="textMultiLine"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="@dimen/card_secondary_text_size"
+        tools:ignore="Autofill" />
 
-        <include layout="@layout/content_homework_editor"/>
+    <Button
+        android:id="@+id/content_homework_editor_deadline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/content_homework_editor_date" />
 
-    </LinearLayout>
-
-</android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

@@ -1,35 +1,33 @@
 package ru.erdenian.studentassistant.activity
 
-import android.media.Ringtone
 import android.media.RingtoneManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
-import kotlinx.android.synthetic.main.content_alarm.*
+import kotlinx.android.synthetic.main.activity_alarm.*
 import ru.erdenian.studentassistant.R
-
 
 class AlarmActivity : AppCompatActivity() {
 
-  lateinit var ringtone: Ringtone
+  private val ringtone by lazy { RingtoneManager.getRingtone(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)) }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_alarm)
-
-    ringtone = RingtoneManager.getRingtone(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM))
-
-    ringtone.play()
 
     content_alarm_turn_off.setOnClickListener {
       ringtone.stop()
       finish()
     }
 
-    window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
-        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
-        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
-        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+    window.addFlags(
+        WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
+            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+            WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+    )
+
+    ringtone.play()
   }
 
   override fun onUserLeaveHint() {
@@ -38,7 +36,5 @@ class AlarmActivity : AppCompatActivity() {
     super.onUserLeaveHint()
   }
 
-  override fun onBackPressed() {
-    return
-  }
+  override fun onBackPressed() = Unit
 }

@@ -8,9 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment
 import kotlinx.android.synthetic.main.activity_schedule.*
-import kotlinx.android.synthetic.main.content_schedule.*
 import kotlinx.android.synthetic.main.toolbar_with_spinner.*
 import kotlinx.android.synthetic.main.view_pager.*
 import org.jetbrains.anko.startActivity
@@ -26,13 +24,14 @@ import ru.erdenian.studentassistant.localdata.ScheduleManager
 
 class ScheduleActivity : AppCompatActivity(),
     AdapterView.OnItemSelectedListener,
-    CalendarDatePickerDialogFragment.OnDateSetListener,
-    View.OnClickListener,
     ScheduleManager.OnScheduleUpdateListener {
 
   companion object {
     private const val CURRENT_PAGE = "current_page"
     private const val SELECTED_SEMESTER_ID = "selected_semester_id"
+
+    private const val BUTTONS_INDEX = 0
+    private const val SCHEDULE_INDEX = 1
   }
 
   private var savedPage: Int? = null
@@ -40,17 +39,22 @@ class ScheduleActivity : AppCompatActivity(),
 
   private var pagerAdapter: SchedulePagerAdapter? = null
 
+  private val actionBar by lazy { supportActionBar ?: throw IllegalStateException("supportActionBar == null") }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_schedule)
 
     setSupportActionBar(toolbar_with_spinner)
-    initializeDrawerAndNavigationView(toolbar_with_spinner)
 
     toolbar_with_spinner_spinner.onItemSelectedListener = this
 
-    content_schedule_get_schedule_from_server.setOnClickListener(this)
-    content_schedule_add_schedule.setOnClickListener(this)
+    content_schedule_get_schedule_from_server.setOnClickListener {
+      toast(R.string.content_schedule_get_schedule_from_server_button)
+    }
+    content_schedule_add_schedule.setOnClickListener {
+      startActivity<SemesterEditorActivity>()
+    }
 
     view_pager_pager_tab_strip.setTextColor(getCompatColor(R.color.colorPrimary))
     view_pager_pager_tab_strip.setTabIndicatorColorResource(R.color.colorPrimary)
@@ -63,20 +67,9 @@ class ScheduleActivity : AppCompatActivity(),
   }
 
   override fun onScheduleUpdate() {
-    if (ScheduleManager.semesters.size <= 1) {
-      supportActionBar!!.setDisplayShowTitleEnabled(true)
-      toolbar_with_spinner_spinner.visibility = View.GONE
-    } else {
-      supportActionBar!!.setDisplayShowTitleEnabled(false)
-      toolbar_with_spinner_spinner.visibility = View.VISIBLE
-    }
-
-    if (ScheduleManager.semesters.isNotEmpty()) {
-      view_pager.visibility = View.VISIBLE
-      content_schedule_add_buttons.visibility = View.GONE
-    } else {
-      view_pager.visibility = View.GONE
-      content_schedule_add_buttons.visibility = View.VISIBLE
+    schedule_flipper.displayedChild = when (ScheduleManager.semesters.isNotEmpty()) {
+      true -> SCHEDULE_INDEX
+      false -> BUTTONS_INDEX
     }
 
     if ((pagerAdapter != null) && (selectedSemesterId == ScheduleManager.selectedSemesterId)) {
@@ -85,20 +78,34 @@ class ScheduleActivity : AppCompatActivity(),
     selectedSemesterId = ScheduleManager.selectedSemesterId
 
     when {
-      ScheduleManager.semesters.size > 1 -> {
+      (ScheduleManager.semesters.size > 1) -> {
+        actionBar.setDisplayShowTitleEnabled(false)
+        actionBar.title = null
+
         val adapter = ArrayAdapter(this, R.layout.spinner_item_semesters, ScheduleManager.semestersNames)
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_semesters)
         toolbar_with_spinner_spinner.adapter = adapter
         toolbar_with_spinner_spinner.setSelection(ScheduleManager.selectedSemesterIndex)
+        toolbar_with_spinner_spinner.visibility = View.VISIBLE
       }
-      ScheduleManager.semesters.size == 1 -> {
-        supportActionBar!!.title = ScheduleManager.selectedSemester.name
+      (ScheduleManager.semesters.size == 1) -> {
+        actionBar.title = ScheduleManager.selectedSemester.name
+        actionBar.setDisplayShowTitleEnabled(true)
+
+        toolbar_with_spinner_spinner.visibility = View.GONE
+        toolbar_with_spinner_spinner.adapter = null
+
         onItemSelected(null, null, 0, -1L)
       }
       else -> {
-        supportActionBar!!.setTitle(R.string.title_activity_schedule)
+        actionBar.setTitle(R.string.title_activity_schedule)
+        actionBar.setDisplayShowTitleEnabled(true)
+
+        toolbar_with_spinner_spinner.visibility = View.GONE
+        toolbar_with_spinner_spinner.adapter = null
+
         pagerAdapter = null
-        view_pager.adapter = pagerAdapter
+        view_pager.adapter = null
       }
     }
 
@@ -145,26 +152,17 @@ class ScheduleActivity : AppCompatActivity(),
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       R.id.menu_schedule_calendar -> ScheduleManager.selectedSemester.let {
-        showDatePicker(this, it.firstDay, it.lastDay, pagerAdapter!!.getDate(view_pager.currentItem))
+        showDatePicker(pagerAdapter?.getDate(view_pager.currentItem), it.firstDay, it.lastDay) { newDate ->
+          pagerAdapter?.run { view_pager.currentItem = getPosition(newDate) }
+        }
       }
       R.id.menu_schedule_add_schedule -> startActivity<SemesterEditorActivity>()
-      R.id.menu_schedule_edit_schedule ->
-        startActivity<LessonsEditorActivity>(SEMESTER_ID to ScheduleManager.selectedSemesterId!!)
+      R.id.menu_schedule_edit_schedule -> startActivity<LessonsEditorActivity>(
+          SEMESTER_ID to ScheduleManager.selectedSemesterId
+      )
       else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
     }
     return super.onOptionsItemSelected(item)
-  }
-
-  override fun onDateSet(dialog: CalendarDatePickerDialogFragment, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-    view_pager.currentItem = pagerAdapter!!.getPosition(LocalDate(year, monthOfYear + 1, dayOfMonth))
-  }
-
-  override fun onClick(v: View) {
-    when (v.id) {
-      R.id.content_schedule_get_schedule_from_server -> toast(R.string.content_schedule_get_schedule_from_server_button)
-      R.id.content_schedule_add_schedule -> startActivity<SemesterEditorActivity>()
-      else -> throw IllegalArgumentException("Неизвестный id: ${v.id}")
-    }
   }
 
   override fun onBackPressed() {
