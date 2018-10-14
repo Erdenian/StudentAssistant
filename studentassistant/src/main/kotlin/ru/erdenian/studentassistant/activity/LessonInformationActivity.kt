@@ -1,11 +1,11 @@
 package ru.erdenian.studentassistant.activity
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_lesson_information.*
 import kotlinx.android.synthetic.main.content_lesson_information.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -45,40 +45,37 @@ class LessonInformationActivity : AppCompatActivity(),
 
   override fun onScheduleUpdate() {
     val lesson = ScheduleManager.getLesson(semesterId, lessonId)
-    if (lesson != null) {
-      content_lesson_information_subject_name.text = lesson.subjectName
-      content_lesson_information_start_time.text = lesson.startTime.toString("HH:mm")
-      content_lesson_information_end_time.text = lesson.endTime.toString("HH:mm")
-      content_lesson_information_type.text = lesson.type
 
-      content_lesson_information_homeworks_parent.removeAllViews()
+    content_lesson_information_subject_name.text = lesson.subjectName
+    content_lesson_information_start_time.text = lesson.startTime.toString("HH:mm")
+    content_lesson_information_end_time.text = lesson.endTime.toString("HH:mm")
+    content_lesson_information_type.text = lesson.type
 
-      ScheduleManager.getActualHomeworks(semesterId, lesson.subjectName).forEach {
-        val card = layoutInflater.inflate(R.layout.card_homework, content_lesson_information_homeworks_parent, false)
+    content_lesson_information_homeworks_parent.removeAllViews()
 
-        card.findViewById<TextView>(R.id.card_homework_subject_name).text = it.subjectName
-        card.findViewById<TextView>(R.id.card_homework_description).text = it.description
-        card.findViewById<TextView>(R.id.card_homework_deadline).text = it.deadline.toString("dd.MM.yyyy")
+    ScheduleManager.getActualHomeworks(semesterId, lesson.subjectName).forEach {
+      val card = layoutInflater.inflate(R.layout.card_homework, content_lesson_information_homeworks_parent, false)
 
-        val homeworkId = it.id
+      card.findViewById<TextView>(R.id.card_homework_subject_name).text = it.subjectName
+      card.findViewById<TextView>(R.id.card_homework_description).text = it.description
+      card.findViewById<TextView>(R.id.card_homework_deadline).text = it.deadline.toString("dd.MM.yyyy")
 
-        card.setOnClickListener {
-          startActivity<HomeworkEditorActivity>(
-              SEMESTER_ID to semesterId,
-              LESSON_ID to lessonId,
-              HOMEWORK_ID to homeworkId
-          )
-        }
+      val homeworkId = it.id
 
-        content_lesson_information_homeworks_parent.addView(card)
+      card.setOnClickListener { _ ->
+        startActivity<HomeworkEditorActivity>(
+            SEMESTER_ID to semesterId,
+            LESSON_ID to lessonId,
+            HOMEWORK_ID to homeworkId
+        )
       }
 
-      content_lesson_information_no_homeworks.visibility =
-          if (content_lesson_information_homeworks_parent.childCount > 0) View.GONE
-          else View.VISIBLE
-    } else {
-      finish()
+      content_lesson_information_homeworks_parent.addView(card)
     }
+
+    content_lesson_information_no_homeworks.visibility =
+        if (content_lesson_information_homeworks_parent.childCount > 0) View.GONE
+        else View.VISIBLE
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {

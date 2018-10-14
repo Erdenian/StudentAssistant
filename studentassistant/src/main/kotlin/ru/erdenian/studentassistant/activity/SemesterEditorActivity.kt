@@ -1,11 +1,11 @@
 package ru.erdenian.studentassistant.activity
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_semester_editor.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.toast

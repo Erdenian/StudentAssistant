@@ -1,7 +1,7 @@
 package ru.erdenian.studentassistant.activity
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startService
 import ru.erdenian.studentassistant.localdata.ScheduleManager

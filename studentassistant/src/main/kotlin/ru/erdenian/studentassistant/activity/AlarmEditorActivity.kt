@@ -2,7 +2,7 @@ package ru.erdenian.studentassistant.activity
 
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_alarm_editor.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.startService

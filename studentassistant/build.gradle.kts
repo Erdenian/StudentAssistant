@@ -52,7 +52,6 @@ android {
 
 dependencies {
   val kotlin_version: String by project
-  val support_libraries_version: String by project
 
   androidTestImplementation("com.android.support.test.espresso:espresso-core:3.0.2") {
     exclude("com.android.support", "support-annotations")
@@ -60,9 +59,9 @@ dependencies {
 
   implementation(kotlin("stdlib-jdk8", kotlin_version))
 
-  implementation("com.android.support:appcompat-v7:$support_libraries_version")
-  implementation("com.android.support:design:$support_libraries_version")
-  implementation("com.android.support:cardview-v7:$support_libraries_version")
+  implementation("androidx.appcompat:appcompat:1.0.0")
+  implementation("com.google.android.material:material:1.0.0")
+  implementation("androidx.cardview:cardview:1.0.0")
 
   implementation(project(":schedule"))
   implementation(project(":customviews"))

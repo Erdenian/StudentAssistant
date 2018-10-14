@@ -42,11 +42,8 @@ android {
 }
 
 dependencies {
-  val kotlin_version: String by project
-  val support_libraries_version: String by project
-
-  implementation("com.android.support:appcompat-v7:$support_libraries_version")
-  implementation("com.android.support:cardview-v7:$support_libraries_version")
+  implementation("androidx.appcompat:appcompat:1.0.0")
+  implementation("androidx.cardview:cardview:1.0.0")
 
   implementation(project(":schedule"))
 

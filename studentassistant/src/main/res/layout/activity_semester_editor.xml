@@ -14,12 +14,12 @@
         android:padding="8dp"
         tools:context=".activity.SemesterEditorActivity">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/content_semester_editor_semester_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/content_semester_editor_semester_name_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -30,9 +30,9 @@
 
                 <requestFocus />
 
-            </android.support.design.widget.TextInputEditText>
+            </com.google.android.material.textfield.TextInputEditText>
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
