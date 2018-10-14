@@ -1,10 +1,10 @@
 package ru.erdenian.studentassistant.fragment
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ListView
+import androidx.fragment.app.Fragment
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivity
 import org.joda.time.LocalDate

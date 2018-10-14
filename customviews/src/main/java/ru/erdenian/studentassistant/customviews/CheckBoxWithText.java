@@ -2,14 +2,15 @@ package ru.erdenian.studentassistant.customviews;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Чекбокс с текстом под ним.
@@ -71,8 +72,8 @@ public class CheckBoxWithText extends LinearLayout {
 
         inflate(context, R.layout.checkbox_with_text, this);
 
-        checkBox = (CheckBox) findViewById(R.id.checkbox_with_text_checkbox);
-        textView = (TextView) findViewById(R.id.checkbox_with_text_text);
+        checkBox = findViewById(R.id.checkbox_with_text_checkbox);
+        textView = findViewById(R.id.checkbox_with_text_text);
 
         if (attrs != null) {
             TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.CheckBoxWithText, 0, 0);

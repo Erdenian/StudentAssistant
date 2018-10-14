@@ -1,8 +1,6 @@
 package ru.erdenian.studentassistant.customviews;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,6 +11,9 @@ import android.widget.Spinner;
 
 import java.util.Arrays;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * View для выбора недель для повторения пары.
@@ -161,11 +162,11 @@ public class WeeksSelector extends LinearLayout {
 
         inflate(context, R.layout.weeks_selector, this);
 
-        weeksVariants = (Spinner) findViewById(R.id.weeks_selector_weeks_variants);
-        removeWeek = (ImageButton) findViewById(R.id.weeks_selector_remove_week);
-        addWeek = (ImageButton) findViewById(R.id.weeks_selector_add_week);
-        scrollView = (HorizontalScrollView) findViewById(R.id.weeks_selector_scroll_view);
-        weeksParent = (LinearLayout) findViewById(R.id.weeks_selector_weeks_parent);
+        weeksVariants = findViewById(R.id.weeks_selector_weeks_variants);
+        removeWeek = findViewById(R.id.weeks_selector_remove_week);
+        addWeek = findViewById(R.id.weeks_selector_add_week);
+        scrollView = findViewById(R.id.weeks_selector_scroll_view);
+        weeksParent = findViewById(R.id.weeks_selector_weeks_parent);
 
         if (weeksVariants.getAdapter().getCount() != weeksVariantsArray.length + 1)
             throw new IllegalStateException("Несоответствие вариантов выбора и количества предустановок");

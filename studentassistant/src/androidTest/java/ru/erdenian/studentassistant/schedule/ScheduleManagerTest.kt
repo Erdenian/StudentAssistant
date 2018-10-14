@@ -1,6 +1,6 @@
 package ru.erdenian.studentassistant.schedule
 
-import android.support.test.InstrumentationRegistry
+import androidx.test.InstrumentationRegistry
 import org.joda.time.LocalDate
 import org.junit.After
 import org.junit.Assert.assertEquals
