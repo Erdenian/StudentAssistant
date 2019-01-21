@@ -20,9 +20,11 @@ sourceSets {
 
 dependencies {
   val kotlin_version: String by project
+  val joda_time_version: String by project
+  val guava_version: String by project
 
   implementation(kotlin("stdlib-jdk8", kotlin_version))
 
-  implementation("joda-time:joda-time:2.10")
-  implementation("com.google.guava:guava:26.0-android")
+  implementation("joda-time:joda-time:$joda_time_version")
+  implementation("com.google.guava:guava:$guava_version")
 }

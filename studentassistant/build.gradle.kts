@@ -52,23 +52,25 @@ android {
 
 dependencies {
   val kotlin_version: String by project
+  val joda_time_version: String by project
+  val guava_version: String by project
 
-  androidTestImplementation("com.android.support.test.espresso:espresso-core:3.0.2") {
+  androidTestImplementation("com.android.support.test.espresso:espresso-core:3.1.1") {
     exclude("com.android.support", "support-annotations")
   }
 
   implementation(kotlin("stdlib-jdk8", kotlin_version))
 
-  implementation("androidx.appcompat:appcompat:1.0.0")
+  implementation("androidx.appcompat:appcompat:1.0.2")
   implementation("com.google.android.material:material:1.0.0")
   implementation("androidx.cardview:cardview:1.0.0")
 
   implementation(project(":schedule"))
   implementation(project(":customviews"))
 
-  implementation("org.jetbrains.anko:anko-common:0.10.5")
-  implementation("joda-time:joda-time:2.10")
-  implementation("com.google.guava:guava:26.0-android")
+  implementation("org.jetbrains.anko:anko-common:0.10.8")
+  implementation("joda-time:joda-time:$joda_time_version")
+  implementation("com.google.guava:guava:$guava_version")
 
   implementation("com.github.ceryle:SegmentedButton:v1.2.2")
 }
@@ -79,7 +81,7 @@ fun isMainBranch(): Boolean {
     commandLine("git", "rev-parse", "--abbrev-ref", "HEAD")
     standardOutput = out
   }
-  return out.toString() == "master"
+  return out.toString().trim() == "master"
 }
 
 fun gitVersionName(): String {
@@ -88,7 +90,8 @@ fun gitVersionName(): String {
     commandLine("git", "describe", "--tags")
     standardOutput = out
   }
-  return out.toString().trim()
+  val version = out.toString().trim()
+  return if (!isMainBranch()) version else version.takeWhile { it != '-' }
 }
 
 fun gitVersionCode(): Int {
