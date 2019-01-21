@@ -75,13 +75,13 @@ dependencies {
   implementation("com.github.ceryle:SegmentedButton:v1.2.2")
 }
 
-fun isMainBranch(): Boolean {
+fun isMainBranch(mainBranchName: String = "master"): Boolean {
   val out = ByteArrayOutputStream()
   exec {
     commandLine("git", "rev-parse", "--abbrev-ref", "HEAD")
     standardOutput = out
   }
-  return out.toString().trim() == "master"
+  return out.toString().trim() == mainBranchName
 }
 
 fun gitVersionName(): String {
