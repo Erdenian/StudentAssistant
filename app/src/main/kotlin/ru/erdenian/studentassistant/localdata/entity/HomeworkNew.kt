@@ -2,6 +2,7 @@ package ru.erdenian.studentassistant.localdata.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.google.common.collect.ComparisonChain
 import org.joda.time.LocalDate
@@ -18,7 +19,25 @@ import ru.erdenian.studentassistant.schedule.generateId
  * @property id уникальный id задания
  * @throws IllegalArgumentException если [subjectName] или [description] пусты
  */
-@Entity(tableName = "homeworks")
+@Entity(
+    tableName = "homeworks",
+    foreignKeys = [
+        ForeignKey(
+            entity = SemesterNew::class,
+            parentColumns = ["_id"],
+            childColumns = ["semester_id"],
+            onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = LessonNew::class,
+            parentColumns = ["subject_name"],
+            childColumns = ["subject_name"],
+            onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.CASCADE
+        )
+    ]
+)
 data class HomeworkNew(
 
     @ColumnInfo(name = "subject_name")
