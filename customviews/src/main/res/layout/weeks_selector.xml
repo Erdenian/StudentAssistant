@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -14,14 +13,14 @@
             android:layout_height="wrap_content"
             android:text="@string/weeks_selector_weeks_variants_title"
             android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <Spinner
             android:id="@+id/weeks_selector_weeks_variants"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:entries="@array/weeks_selector_weeks_variants"
-            android:padding="8dp"/>
+            android:padding="8dp" />
 
     </LinearLayout>
 
@@ -37,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             app:srcCompat="@drawable/minus"
-            tools:ignore="ContentDescription"/>
+            tools:ignore="ContentDescription" />
 
         <HorizontalScrollView
             android:id="@+id/weeks_selector_scroll_view"
@@ -56,7 +55,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:checked="true"
-                    app:text="1"/>
+                    app:text="1" />
 
             </LinearLayout>
 
@@ -68,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             app:srcCompat="@drawable/ic_menu_plus"
-            tools:ignore="ContentDescription"/>
+            tools:ignore="ContentDescription" />
 
     </LinearLayout>
 
