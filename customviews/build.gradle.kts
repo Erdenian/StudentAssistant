@@ -29,10 +29,10 @@ android {
     }
   }
 
-  /*compileOptions {
-    setSourceCompatibility(JavaVersion.VERSION_1_8)
-    setTargetCompatibility(JavaVersion.VERSION_1_8)
-  }*/
+  compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+  }
 
   sourceSets {
     getByName("main").java.srcDirs("src/main/kotlin")
@@ -42,11 +42,14 @@ android {
 }
 
 dependencies {
-  implementation("androidx.appcompat:appcompat:1.0.0")
+  val joda_time_version: String by project
+  val guava_version: String by project
+
+  implementation("androidx.appcompat:appcompat:1.0.2")
   implementation("androidx.cardview:cardview:1.0.0")
 
   implementation(project(":schedule"))
 
-  implementation("joda-time:joda-time:2.10")
-  implementation("com.google.guava:guava:26.0-android")
+  implementation("joda-time:joda-time:$joda_time_version")
+  implementation("com.google.guava:guava:$guava_version")
 }
