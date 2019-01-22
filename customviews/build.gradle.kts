@@ -29,10 +29,10 @@ android {
     }
   }
 
-  /*compileOptions {
-    setSourceCompatibility(JavaVersion.VERSION_1_8)
-    setTargetCompatibility(JavaVersion.VERSION_1_8)
-  }*/
+  compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+  }
 
   sourceSets {
     getByName("main").java.srcDirs("src/main/kotlin")
