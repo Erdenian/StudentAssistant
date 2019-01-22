@@ -4,6 +4,7 @@ import androidx.room.TypeConverter
 import org.joda.time.Days
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
+import org.joda.time.Period
 import ru.erdenian.studentassistant.extensions.toImmutableSortedSet
 import ru.erdenian.studentassistant.schedule.LessonRepeat
 
@@ -27,6 +28,10 @@ class Converters {
     @TypeConverter
     fun intToLocalTime(value: Int?): LocalTime? =
         if (value == null) null else LocalTime.MIDNIGHT.plusMillis(value)
+
+    @TypeConverter
+    fun intToPeriod(value: Int?): Period? =
+        if (value == null) null else Period.millis(value)
 
     @TypeConverter
     fun stringsToString(value: List<String?>?): String? =
