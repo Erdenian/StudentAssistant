@@ -28,9 +28,11 @@ interface HomeworkDao {
     @Delete
     fun delete(homework: HomeworkNew)
 
+    @Deprecated("Only for debugging")
     @Query("DELETE FROM homeworks")
     fun deleteAll()
 
+    @Deprecated("Only for debugging")
     @Query("DELETE FROM homeworks WHERE semester_id = :semesterId")
     fun deleteAll(semesterId: Long)
 }

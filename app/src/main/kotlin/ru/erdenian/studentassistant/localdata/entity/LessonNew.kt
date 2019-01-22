@@ -2,6 +2,7 @@ package ru.erdenian.studentassistant.localdata.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.google.common.collect.ComparisonChain
 import org.joda.time.LocalTime
@@ -23,7 +24,18 @@ import ru.erdenian.studentassistant.schedule.generateId
  * @param id уникальный id пары
  * @throws IllegalArgumentException если [subjectName] пусто или [startTime] >= [endTime]
  */
-@Entity(tableName = "lessons")
+@Entity(
+    tableName = "lessons",
+    foreignKeys = [
+        ForeignKey(
+            entity = SemesterNew::class,
+            parentColumns = ["_id"],
+            childColumns = ["semester_id"],
+            onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.CASCADE
+        )
+    ]
+)
 data class LessonNew(
 
     @ColumnInfo(name = "subject_name")
