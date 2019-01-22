@@ -59,6 +59,36 @@ public class WeeksSelector extends LinearLayout {
     private int visibleCheckboxesCount = 1;
 
     /**
+     * {@link LinearLayout#LinearLayout(Context)}
+     *
+     * @since 0.2.6
+     */
+    public WeeksSelector(@NonNull Context context) {
+        super(context);
+        init(context, null, 0);
+    }
+
+    /**
+     * {@link LinearLayout#LinearLayout(Context, AttributeSet)}
+     *
+     * @since 0.2.6
+     */
+    public WeeksSelector(@NonNull Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        init(context, attrs, 0);
+    }
+
+    /**
+     * {@link LinearLayout#LinearLayout(Context, AttributeSet, int)}
+     *
+     * @since 0.2.6
+     */
+    public WeeksSelector(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context, attrs, defStyleAttr);
+    }
+
+    /**
      * Возвращает номер выбранного варианта из предустановок.
      *
      * @param weeks список недель
@@ -119,38 +149,6 @@ public class WeeksSelector extends LinearLayout {
         return true;
     }
 
-    //region Конструкторы
-
-    /**
-     * {@link LinearLayout#LinearLayout(Context)}
-     *
-     * @since 0.2.6
-     */
-    public WeeksSelector(@NonNull Context context) {
-        super(context);
-        init(context, null, 0);
-    }
-
-    /**
-     * {@link LinearLayout#LinearLayout(Context, AttributeSet)}
-     *
-     * @since 0.2.6
-     */
-    public WeeksSelector(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-        init(context, attrs, 0);
-    }
-
-    /**
-     * {@link LinearLayout#LinearLayout(Context, AttributeSet, int)}
-     *
-     * @since 0.2.6
-     */
-    public WeeksSelector(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init(context, attrs, defStyleAttr);
-    }
-
     /**
      * Инициализация объекта.
      *
@@ -187,27 +185,12 @@ public class WeeksSelector extends LinearLayout {
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });
-        removeWeek.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removeCheckbox();
-            }
-        });
-        addWeek.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addCheckbox(false);
-                scrollView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        scrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
-                    }
-                });
-            }
+        removeWeek.setOnClickListener(v -> removeCheckbox());
+        addWeek.setOnClickListener(v -> {
+            addCheckbox(false);
+            scrollView.post(() -> scrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT));
         });
     }
-
-    //endregion
 
     /**
      * Возврацает список недель на текущий момент.
@@ -261,7 +244,8 @@ public class WeeksSelector extends LinearLayout {
         for (; visibleCheckboxesCount > weeks.length; visibleCheckboxesCount--)
             weeksParent.getChildAt(visibleCheckboxesCount - 1).setVisibility(GONE);
 
-        for (int i = 0; i < visibleCheckboxesCount; i++) ((CheckBoxWithText) weeksParent.getChildAt(i)).setChecked(weeks[i]);
+        for (int i = 0; i < visibleCheckboxesCount; i++)
+            ((CheckBoxWithText) weeksParent.getChildAt(i)).setChecked(weeks[i]);
         for (int i = visibleCheckboxesCount; i < weeks.length; i++) addCheckbox(weeks[i]);
 
         visibleCheckboxesCount = weeks.length;
