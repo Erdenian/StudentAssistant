@@ -194,7 +194,8 @@ public class LessonCard extends CardView {
                 } else {
                     repeatsString.setVisibility(GONE);
 
-                    if (repeatsParent.getChildCount() > 2) repeatsParent.removeViews(2, repeatsParent.getChildCount() - 2);
+                    if (repeatsParent.getChildCount() > 2)
+                        repeatsParent.removeViews(2, repeatsParent.getChildCount() - 2);
                     for (int i = 0; i < weeks.size(); i++) {
                         CheckBox checkBox = new CheckBox(context);
                         checkBox.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -209,8 +210,10 @@ public class LessonCard extends CardView {
                 LessonRepeat.ByDates byDates = (LessonRepeat.ByDates) lessonRepeat;
                 repeatsString.setVisibility(VISIBLE);
                 repeatsString.setText(joiner.join(byDates.getDates()));
-                if (repeatsParent.getChildCount() > 2) repeatsParent.removeViews(2, repeatsParent.getChildCount() - 2);
-            } else throw new IllegalStateException("Неизвестный тип повторений: " + lessonRepeat.getClass().getName());
+                if (repeatsParent.getChildCount() > 2)
+                    repeatsParent.removeViews(2, repeatsParent.getChildCount() - 2);
+            } else
+                throw new IllegalStateException("Неизвестный тип повторений: " + lessonRepeat.getClass().getName());
         }
     }
 
