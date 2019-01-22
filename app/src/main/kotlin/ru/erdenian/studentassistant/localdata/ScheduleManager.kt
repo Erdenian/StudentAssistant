@@ -147,7 +147,8 @@ object ScheduleManager {
   }
 
   private fun clearOnScheduleUpdateListeners() {
-    onScheduleUpdateListeners = onScheduleUpdateListeners.filter { it.get() != null }.toMutableList()
+    onScheduleUpdateListeners =
+        onScheduleUpdateListeners.filter { it.get() != null }.toMutableList()
   }
 
   //endregion
@@ -167,7 +168,8 @@ object ScheduleManager {
     get() {
       if ((field == null) && (semesters.isNotEmpty())) {
         val today = LocalDate.now()
-        field = semesters.find { (it.firstDay <= today) && (today <= it.lastDay) }?.id ?: semesters.lastOrNull()?.id
+        field = semesters.find { (it.firstDay <= today) && (today <= it.lastDay) }?.id ?:
+            semesters.lastOrNull()?.id
       }
       return field
     }
@@ -190,9 +192,10 @@ object ScheduleManager {
    */
   val selectedSemesterIndex: Int
     get() {
-      val selectedSemesterId = selectedSemesterId ?: throw IllegalStateException("Не выбран семестр")
-      return semesters.indexOfFirst { it.id == selectedSemesterId }.takeIf { it >= 0 } ?:
-          throw IllegalStateException("Неверное значение выбранного семестра")
+      val selectedSemesterId =
+        selectedSemesterId ?: throw IllegalStateException("Не выбран семестр")
+      return semesters.indexOfFirst { it.id == selectedSemesterId }.takeIf { it >= 0 }
+        ?: throw IllegalStateException("Неверное значение выбранного семестра")
     }
 
   /**
@@ -202,7 +205,10 @@ object ScheduleManager {
    * @since 0.0.0
    * @throws IllegalStateException если [selectedSemesterId] равен null
    */
-  val selectedSemester get() = getSemester(selectedSemesterId ?: throw IllegalStateException("Семестр не выбран"))
+  val selectedSemester
+    get() = getSemester(
+      selectedSemesterId ?: throw IllegalStateException("Семестр не выбран")
+    )
 
   //endregion
 
@@ -225,7 +231,8 @@ object ScheduleManager {
    * @return семестр с заданным id
    * @throws IllegalArgumentException если семестра с таким id нет
    */
-  fun getSemester(id: Long) = getSemesterOrNull(id) ?: throw IllegalArgumentException("Нет семестра с таким id")
+  fun getSemester(id: Long) =
+    getSemesterOrNull(id) ?: throw IllegalArgumentException("Нет семестра с таким id")
 
   /**
    * Позволяет получить семестр по его id.
@@ -254,7 +261,8 @@ object ScheduleManager {
    * @param semesterId id семестра
    * @return список всех предметов в этом семестре
    */
-  fun getSubjects(semesterId: Long) = getLessons(semesterId).map { it.subjectName }.toImmutableSortedSet()
+  fun getSubjects(semesterId: Long) =
+    getLessons(semesterId).map { it.subjectName }.toImmutableSortedSet()
 
   /**
    * Список всех типов пар в заданном семестре.
@@ -275,7 +283,7 @@ object ScheduleManager {
    * @return список всех преподавателей, ведущих пары в этом семестре
    */
   fun getTeachers(semesterId: Long) =
-      sortedSetOf<String>().apply { getLessons(semesterId).forEach { addAll(it.teachers) } }.toImmutableSortedSet()
+    sortedSetOf<String>().apply { getLessons(semesterId).forEach { addAll(it.teachers) } }.toImmutableSortedSet()
 
   /**
    * Список всех аудиторий заданного семестра.
@@ -286,7 +294,7 @@ object ScheduleManager {
    * @return список всех аудиторий, в которых проходят пары в этом семестре
    */
   fun getClassrooms(semesterId: Long) =
-      sortedSetOf<String>().apply { getLessons(semesterId).forEach { addAll(it.classrooms) } }.toImmutableSortedSet()
+    sortedSetOf<String>().apply { getLessons(semesterId).forEach { addAll(it.classrooms) } }.toImmutableSortedSet()
 
   /**
    * Самая частая длительность пары в заданном семестре, либо длительность по умолчанию (1 час 30 минут).
@@ -297,8 +305,12 @@ object ScheduleManager {
    * @return самую частую продолжительность пары в этом семестре, либо продолжительность по умолчанию, если он пуст)
    */
   fun getLessonLength(semesterId: Long) =
-      getLessons(semesterId).groupBy { Period(it.startTime, it.endTime) }.maxBy { (_, lessons) -> lessons.size }?.key ?:
-          Period(1, 30, 0, 0)
+    getLessons(semesterId).groupBy {
+      Period(
+        it.startTime,
+        it.endTime
+      )
+    }.maxBy { (_, lessons) -> lessons.size }?.key ?: Period(1, 30, 0, 0)
 
   /**
    * Имеется ли в расписании хотя бы одна пара.
@@ -308,10 +320,11 @@ object ScheduleManager {
    * @author Ilya Solovyev
    * @since 0.2.0
    */
-  val hasLessons: Boolean get() {
-    semesters.forEach { if (getLessons(it.id).isNotEmpty()) return true }
-    return false
-  }
+  val hasLessons: Boolean
+    get() {
+      semesters.forEach { if (getLessons(it.id).isNotEmpty()) return true }
+      return false
+    }
 
   //endregion
 
@@ -328,7 +341,7 @@ object ScheduleManager {
    * @throws IllegalArgumentException если пара не найдена
    */
   fun getLesson(semesterId: Long, lessonId: Long) =
-      getLessonOrNull(semesterId, lessonId) ?: throw IllegalArgumentException("Пара не найдена")
+    getLessonOrNull(semesterId, lessonId) ?: throw IllegalArgumentException("Пара не найдена")
 
   /**
    * Позволяет получить пару по id.
@@ -340,8 +353,8 @@ object ScheduleManager {
    * @return пару из заданного семестра с заданным id, либо null, если пара не найдена
    */
   fun getLessonOrNull(semesterId: Long, lessonId: Long) =
-      if (semesterId == selectedSemesterId) lessonsCache!![lessonId]
-      else dbHelper.getLesson(semesterId, lessonId)
+    if (semesterId == selectedSemesterId) lessonsCache!![lessonId]
+    else dbHelper.getLesson(semesterId, lessonId)
 
   /**
    * Позволяет получить список пар из определенного семестра, удовлетворяющих условию отбора.
@@ -353,9 +366,15 @@ object ScheduleManager {
    * @return коллекцию пар из семестра с id [semesterId], удовлетворяющих [predicate]
    */
   fun getLessons(semesterId: Long, predicate: (Lesson) -> Boolean = { true }) =
-      (if (semesterId == selectedSemesterId) lessonsCache!!.filter { predicate(it.value) }.map { it.value }
-      else sortedSetOf<Lesson>().apply { dbHelper.getLessons(semesterId) { if (predicate(it)) add(it) } })
-          .toImmutableSortedSet()
+    (if (semesterId == selectedSemesterId) lessonsCache!!.filter { predicate(it.value) }.map { it.value }
+    else sortedSetOf<Lesson>().apply {
+      dbHelper.getLessons(semesterId) {
+        if (predicate(it)) add(
+          it
+        )
+      }
+    })
+      .toImmutableSortedSet()
 
   /**
    * Позволяет получить список пар из определенного семетра, которые будут в определенный день.
@@ -381,7 +400,11 @@ object ScheduleManager {
    * @return список пар из семестра с id [semesterId], которые повторяются в [этот день недели][weekday]
    */
   fun getLessons(semesterId: Long, weekday: Int) =
-      getLessons(semesterId) { (it.lessonRepeat as? LessonRepeat.ByWeekday)?.repeatsOnWeekday(weekday) ?: false }
+    getLessons(semesterId) {
+      (it.lessonRepeat as? LessonRepeat.ByWeekday)?.repeatsOnWeekday(
+        weekday
+      ) ?: false
+    }
 
   /**
    * Позволяет получить список пар определенного предмета из определенного семетра.
@@ -393,7 +416,7 @@ object ScheduleManager {
    * @return список пар предмета [subjectName] из семестра с id [semesterId]
    */
   fun getLessons(semesterId: Long, subjectName: String) =
-      getLessons(semesterId) { it.subjectName == subjectName }
+    getLessons(semesterId) { it.subjectName == subjectName }
 
   //endregion
 
@@ -410,7 +433,8 @@ object ScheduleManager {
    * @throws IllegalArgumentException если задание не найдено
    */
   fun getHomework(semesterId: Long, homeworkId: Long) =
-      getHomeworkOrNull(semesterId, homeworkId) ?: throw IllegalArgumentException("Задание не найдено")
+    getHomeworkOrNull(semesterId, homeworkId)
+      ?: throw IllegalArgumentException("Задание не найдено")
 
   /**
    * Возвращает домашнее задание по его id и id семестра.
@@ -422,8 +446,8 @@ object ScheduleManager {
    * @return домашнее задание из заданного семестра с заданным id, либо null, если задание не найдено
    */
   fun getHomeworkOrNull(semesterId: Long, homeworkId: Long) =
-      if (semesterId == selectedSemesterId) homeworksCache!![homeworkId]
-      else dbHelper.getHomework(semesterId, homeworkId)
+    if (semesterId == selectedSemesterId) homeworksCache!![homeworkId]
+    else dbHelper.getHomework(semesterId, homeworkId)
 
   /**
    * Позволяет получить список домашних заданий из определенного семестра, удовлетворяющих условию отбора.
@@ -434,10 +458,19 @@ object ScheduleManager {
    * @param predicate условие отбора (по умолчанию { true })
    * @return коллекцию заданий из семестра с id [semesterId], удовлетворяющих [predicate]
    */
-  fun getHomeworks(semesterId: Long, predicate: (Homework) -> Boolean = { true }): ImmutableSortedSet<Homework> =
-      (if (semesterId == selectedSemesterId) homeworksCache!!.filter { predicate(it.value) }.map { it.value }
-      else sortedSetOf<Homework>().apply { dbHelper.getHomeworks(semesterId) { if (predicate(it)) add(it) } })
-          .toImmutableSortedSet()
+  fun getHomeworks(
+    semesterId: Long,
+    predicate: (Homework) -> Boolean = { true }
+  ): ImmutableSortedSet<Homework> =
+    (if (semesterId == selectedSemesterId) homeworksCache!!.filter { predicate(it.value) }.map { it.value }
+    else sortedSetOf<Homework>().apply {
+      dbHelper.getHomeworks(semesterId) {
+        if (predicate(it)) add(
+          it
+        )
+      }
+    })
+      .toImmutableSortedSet()
 
   /**
    * Позволяет получить список домашних заданий по определенному предмету из определенного семетра.
@@ -449,9 +482,14 @@ object ScheduleManager {
    * @return список заданий по предмету [subjectName] из семестра с id [semesterId]
    */
   fun getHomeworks(semesterId: Long, subjectName: String): ImmutableSortedSet<Homework> =
-      (if (semesterId == selectedSemesterId) homeworksCache!!.filter { it.value.subjectName == subjectName }.map { it.value }
-      else sortedSetOf<Homework>().apply { dbHelper.getHomeworks(semesterId, subjectName) { add(it) } })
-          .toImmutableSortedSet()
+    (if (semesterId == selectedSemesterId) homeworksCache!!.filter { it.value.subjectName == subjectName }.map { it.value }
+    else sortedSetOf<Homework>().apply {
+      dbHelper.getHomeworks(
+        semesterId,
+        subjectName
+      ) { add(it) }
+    })
+      .toImmutableSortedSet()
 
   /**
    * Позволяет получить список еще не сданных домашних заданий.
@@ -555,7 +593,12 @@ object ScheduleManager {
     if (notifyListeners) runScheduleUpdateListeners()
   }
 
-  fun updateLessons(semesterId: Long, oldSubjectName: String, newSubjectName: String, notifyListeners: Boolean = true) {
+  fun updateLessons(
+    semesterId: Long,
+    oldSubjectName: String,
+    newSubjectName: String,
+    notifyListeners: Boolean = true
+  ) {
     //Todo: код, создающий патчи
 
     dbHelper.updateLessons(semesterId, oldSubjectName, newSubjectName)
@@ -563,12 +606,18 @@ object ScheduleManager {
     if (semesterId == selectedSemesterId) {
       lessonsCache!!.apply {
         forEach { (id, lesson) ->
-          if (lesson.subjectName == oldSubjectName) put(id, lesson.copy(subjectName = newSubjectName))
+          if (lesson.subjectName == oldSubjectName) put(
+            id,
+            lesson.copy(subjectName = newSubjectName)
+          )
         }
       }
       homeworksCache!!.apply {
         forEach { (id, homework) ->
-          if (homework.subjectName == oldSubjectName) put(id, homework.copy(subjectName = newSubjectName))
+          if (homework.subjectName == oldSubjectName) put(
+            id,
+            homework.copy(subjectName = newSubjectName)
+          )
         }
       }
     }
@@ -612,7 +661,12 @@ object ScheduleManager {
     if (notifyListeners) runScheduleUpdateListeners()
   }
 
-  fun updateHomeworks(semesterId: Long, oldSubjectName: String, newSubjectName: String, notifyListeners: Boolean = true) {
+  fun updateHomeworks(
+    semesterId: Long,
+    oldSubjectName: String,
+    newSubjectName: String,
+    notifyListeners: Boolean = true
+  ) {
     //Todo: код, создающий патчи
 
     if (getLessons(semesterId) { it.subjectName == newSubjectName }.isEmpty())
@@ -622,7 +676,10 @@ object ScheduleManager {
 
     if (semesterId == selectedSemesterId) homeworksCache!!.apply {
       forEach { (id, homework) ->
-        if (homework.subjectName == oldSubjectName) homeworksCache!!.put(id, homework.copy(subjectName = newSubjectName))
+        if (homework.subjectName == oldSubjectName) homeworksCache!!.put(
+          id,
+          homework.copy(subjectName = newSubjectName)
+        )
       }
     }
 
@@ -644,14 +701,16 @@ object ScheduleManager {
     dbHelper.deleteHomeworks(semesterId, subjectName)
 
     if (semesterId == selectedSemesterId)
-      homeworksCache = homeworksCache!!.filter { it.value.subjectName != subjectName }.toMutableMap()
+      homeworksCache =
+          homeworksCache!!.filter { it.value.subjectName != subjectName }.toMutableMap()
 
     if (notifyListeners) runScheduleUpdateListeners()
   }
 
   //endregion
 
-  class ScheduleDBHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
+  class ScheduleDBHelper(context: Context) :
+    SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
 
     companion object {
       private const val DB_NAME = "schedule.db"
@@ -845,7 +904,7 @@ object ScheduleManager {
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) =
-        throw UnsupportedOperationException("not implemented")
+      throw UnsupportedOperationException("not implemented")
 
 
     //region Чтение из БД
@@ -853,13 +912,14 @@ object ScheduleManager {
     //region Запросы к БД
 
     fun getSemesters(block: (Semester) -> Unit) = readableDatabase.use {
-      it.query(Tables.SEMESTERS, null, null, null, null, null, Tables.Semesters.FIRST_DAY).use {
-        if (it.moveToFirst()) {
-          val indexes = it.semesterColumnsIndexes
-          do block(it.createSemester(indexes))
-          while (it.moveToNext())
+      it.query(Tables.SEMESTERS, null, null, null, null, null, Tables.Semesters.FIRST_DAY)
+        .use {
+          if (it.moveToFirst()) {
+            val indexes = it.semesterColumnsIndexes
+            do block(it.createSemester(indexes))
+            while (it.moveToNext())
+          }
         }
-      }
     }
 
     fun getLessons(semesterId: Long, block: (Lesson) -> Unit) = readableDatabase.use {
@@ -873,22 +933,25 @@ object ScheduleManager {
     }
 
     fun getLesson(semesterId: Long, lessonId: Long) = readableDatabase.use {
-      it.rawQuery(Queries.GET_LESSON, arrayOf(semesterId.toString(), lessonId.toString())).use {
-        if (it.moveToFirst()) it.createLesson(it.lessonColumnsIndexes)
-        else null
-      }
+      it.rawQuery(Queries.GET_LESSON, arrayOf(semesterId.toString(), lessonId.toString()))
+        .use {
+          if (it.moveToFirst()) it.createLesson(it.lessonColumnsIndexes)
+          else null
+        }
     }
 
     private val homeworksColumns = arrayOf(
-        Tables.Homeworks.ID,
-        Tables.Homeworks.SUBJECT_NAME,
-        Tables.Homeworks.DESCRIPTION,
-        Tables.Homeworks.DEADLINE
+      Tables.Homeworks.ID,
+      Tables.Homeworks.SUBJECT_NAME,
+      Tables.Homeworks.DESCRIPTION,
+      Tables.Homeworks.DEADLINE
     )
 
     fun getHomeworks(semesterId: Long, block: (Homework) -> Unit) = readableDatabase.use {
-      it.query(Tables.HOMEWORKS, homeworksColumns, "${Tables.Homeworks.SEMESTER_ID} = ?",
-          arrayOf(semesterId.toString()), null, null, Tables.Homeworks.DEADLINE).use {
+      it.query(
+        Tables.HOMEWORKS, homeworksColumns, "${Tables.Homeworks.SEMESTER_ID} = ?",
+        arrayOf(semesterId.toString()), null, null, Tables.Homeworks.DEADLINE
+      ).use {
         if (it.moveToFirst()) {
           val indexes = it.homeworkColumnsIndexes
           do block(it.createHomework(indexes))
@@ -897,20 +960,35 @@ object ScheduleManager {
       }
     }
 
-    fun getHomeworks(semesterId: Long, subjectName: String, block: (Homework) -> Unit) = readableDatabase.use {
-      it.query(Tables.HOMEWORKS, homeworksColumns, "${Tables.Homeworks.SEMESTER_ID} = ? AND ${Tables.Homeworks.SUBJECT_NAME} = ?",
-          arrayOf(semesterId.toString(), subjectName), null, null, Tables.Homeworks.DEADLINE).use {
-        if (it.moveToFirst()) {
-          val indexes = it.homeworkColumnsIndexes
-          do block(it.createHomework(indexes))
-          while (it.moveToNext())
+    fun getHomeworks(semesterId: Long, subjectName: String, block: (Homework) -> Unit) =
+      readableDatabase.use {
+        it.query(
+          Tables.HOMEWORKS,
+          homeworksColumns,
+          "${Tables.Homeworks.SEMESTER_ID} = ? AND ${Tables.Homeworks.SUBJECT_NAME} = ?",
+          arrayOf(semesterId.toString(), subjectName),
+          null,
+          null,
+          Tables.Homeworks.DEADLINE
+        ).use {
+          if (it.moveToFirst()) {
+            val indexes = it.homeworkColumnsIndexes
+            do block(it.createHomework(indexes))
+            while (it.moveToNext())
+          }
         }
       }
-    }
 
     fun getHomework(semesterId: Long, homeworkId: Long) = readableDatabase.use {
-      it.query(Tables.HOMEWORKS, homeworksColumns, "${Tables.Homeworks.SEMESTER_ID} = ? AND ${Tables.Homeworks.ID} = ?",
-          arrayOf(semesterId.toString(), homeworkId.toString()), null, null, Tables.Homeworks.DEADLINE).use {
+      it.query(
+        Tables.HOMEWORKS,
+        homeworksColumns,
+        "${Tables.Homeworks.SEMESTER_ID} = ? AND ${Tables.Homeworks.ID} = ?",
+        arrayOf(semesterId.toString(), homeworkId.toString()),
+        null,
+        null,
+        Tables.Homeworks.DEADLINE
+      ).use {
         if (it.moveToFirst()) it.createHomework(it.homeworkColumnsIndexes)
         else null
       }
@@ -933,10 +1011,13 @@ object ScheduleManager {
       val subjectName = getString(indexes.subjectName)!!
       val type = getString(indexes.type) ?: ""
 
-      val teachers = ImmutableSortedSet.copyOf(getString(indexes.teachers)?.
-          split(ARRAY_ITEMS_SEPARATOR) ?: ImmutableSortedSet.of())
-      val classrooms = ImmutableSortedSet.copyOf(getString(indexes.classrooms)?.
-          split(ARRAY_ITEMS_SEPARATOR) ?: ImmutableSortedSet.of())
+      val teachers = ImmutableSortedSet.copyOf(
+        getString(indexes.teachers)?.split(ARRAY_ITEMS_SEPARATOR) ?: ImmutableSortedSet.of()
+      )
+      val classrooms = ImmutableSortedSet.copyOf(
+        getString(indexes.classrooms)?.split(ARRAY_ITEMS_SEPARATOR)
+          ?: ImmutableSortedSet.of()
+      )
 
       val startTime = timeFormatter.parseLocalTime(getString(indexes.startTime))
       val endTime = timeFormatter.parseLocalTime(getString(indexes.endTime))
@@ -944,7 +1025,8 @@ object ScheduleManager {
       val lessonRepeat = when (getInt(indexes.repeatType)) {
         Tables.Lessons.REPEAT_TYPE_BY_WEEKDAY -> {
           val weekday = getInt(indexes.weekday)
-          val weeks = getString(indexes.weeks).split(ARRAY_ITEMS_SEPARATOR).map(String::toBoolean)
+          val weeks =
+            getString(indexes.weeks).split(ARRAY_ITEMS_SEPARATOR).map(String::toBoolean)
           LessonRepeat.ByWeekday(weekday, weeks)
         }
         Tables.Lessons.REPEAT_TYPE_BY_DATES -> {
@@ -957,7 +1039,16 @@ object ScheduleManager {
 
       val id = getLong(indexes.id)
 
-      return Lesson(subjectName, type, teachers, classrooms, startTime, endTime, lessonRepeat, id)
+      return Lesson(
+        subjectName,
+        type,
+        teachers,
+        classrooms,
+        startTime,
+        endTime,
+        lessonRepeat,
+        id
+      )
     }
 
     private fun Cursor.createHomework(indexes: HomeworkColumnsIndexes): Homework {
@@ -973,14 +1064,16 @@ object ScheduleManager {
 
     //region Получение индексов
 
-    private val Cursor.semesterColumnsIndexes: SemesterColumnsIndexes get() = SemesterColumnsIndexes(
+    private val Cursor.semesterColumnsIndexes: SemesterColumnsIndexes
+      get() = SemesterColumnsIndexes(
         name = getColumnIndexOrThrow(Tables.Semesters.NAME),
         firstDay = getColumnIndexOrThrow(Tables.Semesters.FIRST_DAY),
         lastDay = getColumnIndexOrThrow(Tables.Semesters.LAST_DAY),
         id = getColumnIndexOrThrow(Tables.Semesters.ID)
-    )
+      )
 
-    private val Cursor.lessonColumnsIndexes: LessonColumnsIndexes get() = LessonColumnsIndexes(
+    private val Cursor.lessonColumnsIndexes: LessonColumnsIndexes
+      get() = LessonColumnsIndexes(
         subjectName = getColumnIndexOrThrow(Tables.Lessons.SUBJECT_NAME),
         type = getColumnIndexOrThrow(Tables.Lessons.TYPE),
         teachers = getColumnIndexOrThrow(Tables.Lessons.TEACHERS),
@@ -992,28 +1085,41 @@ object ScheduleManager {
         weeks = getColumnIndexOrThrow(Tables.ByWeekday.WEEKS),
         dates = getColumnIndex(Tables.ByDates.DATES),
         id = getColumnIndexOrThrow(Tables.Lessons.ID)
-    )
+      )
 
-    private val Cursor.homeworkColumnsIndexes: HomeworkColumnsIndexes get() = HomeworkColumnsIndexes(
+    private val Cursor.homeworkColumnsIndexes: HomeworkColumnsIndexes
+      get() = HomeworkColumnsIndexes(
         subjectName = getColumnIndexOrThrow(Tables.Homeworks.SUBJECT_NAME),
         description = getColumnIndexOrThrow(Tables.Homeworks.DESCRIPTION),
         deadline = getColumnIndexOrThrow(Tables.Homeworks.DEADLINE),
         id = getColumnIndexOrThrow(Tables.Homeworks.ID)
-    )
+      )
 
     //endregion
 
     //region Контейнеры для индексов
 
-    private data class SemesterColumnsIndexes(val name: Int, val firstDay: Int, val lastDay: Int, val id: Int)
+    private data class SemesterColumnsIndexes(
+      val name: Int,
+      val firstDay: Int,
+      val lastDay: Int,
+      val id: Int
+    )
 
-    private data class LessonColumnsIndexes(val subjectName: Int, val type: Int,
-                                            val teachers: Int, val classrooms: Int,
-                                            val startTime: Int, val endTime: Int,
-                                            val repeatType: Int, val weekday: Int, val weeks: Int, val dates: Int,
-                                            val id: Int)
+    private data class LessonColumnsIndexes(
+      val subjectName: Int, val type: Int,
+      val teachers: Int, val classrooms: Int,
+      val startTime: Int, val endTime: Int,
+      val repeatType: Int, val weekday: Int, val weeks: Int, val dates: Int,
+      val id: Int
+    )
 
-    private data class HomeworkColumnsIndexes(val subjectName: Int, val description: Int, val deadline: Int, val id: Int)
+    private data class HomeworkColumnsIndexes(
+      val subjectName: Int,
+      val description: Int,
+      val deadline: Int,
+      val id: Int
+    )
 
     //endregion
 
@@ -1035,8 +1141,16 @@ object ScheduleManager {
 
         val lessonRepeat = lesson.lessonRepeat
         when (lessonRepeat) {
-          is LessonRepeat.ByWeekday -> it.insertOrThrow(Tables.BY_WEEKDAY, null, lessonRepeat.toContentValues(lesson.id))
-          is LessonRepeat.ByDates -> it.insertOrThrow(Tables.BY_DATES, null, lessonRepeat.toContentValues(lesson.id))
+          is LessonRepeat.ByWeekday -> it.insertOrThrow(
+            Tables.BY_WEEKDAY,
+            null,
+            lessonRepeat.toContentValues(lesson.id)
+          )
+          is LessonRepeat.ByDates -> it.insertOrThrow(
+            Tables.BY_DATES,
+            null,
+            lessonRepeat.toContentValues(lesson.id)
+          )
         }.exhaustive
 
         it.setTransactionSuccessful()
@@ -1054,8 +1168,10 @@ object ScheduleManager {
     //region Изменение
 
     fun updateSemester(semester: Semester) = writableDatabase.use {
-      val updatedRows = it.update(Tables.SEMESTERS, semester.contentValues, "${Tables.Semesters.ID} = ?",
-          arrayOf(semester.id.toString()))
+      val updatedRows = it.update(
+        Tables.SEMESTERS, semester.contentValues, "${Tables.Semesters.ID} = ?",
+        arrayOf(semester.id.toString())
+      )
       if (updatedRows == 0) throw IllegalArgumentException("Семестра $semester нет в БД")
 
     }
@@ -1063,23 +1179,35 @@ object ScheduleManager {
     fun updateLesson(semesterId: Long, lesson: Lesson) = writableDatabase.use {
 
       fun toBindArgs(lessonRepeat: LessonRepeat.ByWeekday) =
-          arrayOf(lesson.id.toString(), lessonRepeat.weekday.toString(), joiner.join(lessonRepeat.weeks))
+        arrayOf(
+          lesson.id.toString(),
+          lessonRepeat.weekday.toString(),
+          joiner.join(lessonRepeat.weeks)
+        )
 
       fun toBindArgs(lessonRepeat: LessonRepeat.ByDates) =
-          arrayOf(lesson.id.toString(), joiner.join(lessonRepeat.dates))
+        arrayOf(lesson.id.toString(), joiner.join(lessonRepeat.dates))
 
       it.beginTransaction()
 
       try {
-        val updatedRows = it.update(Tables.LESSONS, lesson.toContentValues(semesterId),
-            "${Tables.Lessons.SEMESTER_ID} = ? AND ${Tables.Lessons.ID} = ?",
-            arrayOf(semesterId.toString(), lesson.id.toString()))
+        val updatedRows = it.update(
+          Tables.LESSONS, lesson.toContentValues(semesterId),
+          "${Tables.Lessons.SEMESTER_ID} = ? AND ${Tables.Lessons.ID} = ?",
+          arrayOf(semesterId.toString(), lesson.id.toString())
+        )
         if (updatedRows == 0) throw IllegalArgumentException("Пары $lesson нет в БД")
 
         val lessonRepeat = lesson.lessonRepeat
         when (lessonRepeat) {
-          is LessonRepeat.ByWeekday -> it.execSQL(Queries.REPLACE_BY_WEEKDAY, toBindArgs(lessonRepeat))
-          is LessonRepeat.ByDates -> it.execSQL(Queries.REPLACE_BY_DATES, toBindArgs(lessonRepeat))
+          is LessonRepeat.ByWeekday -> it.execSQL(
+            Queries.REPLACE_BY_WEEKDAY,
+            toBindArgs(lessonRepeat)
+          )
+          is LessonRepeat.ByDates -> it.execSQL(
+            Queries.REPLACE_BY_DATES,
+            toBindArgs(lessonRepeat)
+          )
         }.exhaustive
 
         it.setTransactionSuccessful()
@@ -1088,43 +1216,59 @@ object ScheduleManager {
       }
     }
 
-    fun updateLessons(semesterId: Long, oldSubjectName: String, newSubjectName: String) = writableDatabase.use {
-      val cv = ContentValues()
-      cv.put(Tables.Lessons.SUBJECT_NAME, newSubjectName)
+    fun updateLessons(semesterId: Long, oldSubjectName: String, newSubjectName: String) =
+      writableDatabase.use {
+        val cv = ContentValues()
+        cv.put(Tables.Lessons.SUBJECT_NAME, newSubjectName)
 
-      it.beginTransaction()
+        it.beginTransaction()
 
-      try {
-        it.update(Tables.LESSONS, cv, "${Tables.Lessons.SEMESTER_ID} = ? AND ${Tables.Lessons.SUBJECT_NAME} = ?",
-            arrayOf(semesterId.toString(), oldSubjectName))
+        try {
+          it.update(
+            Tables.LESSONS,
+            cv,
+            "${Tables.Lessons.SEMESTER_ID} = ? AND ${Tables.Lessons.SUBJECT_NAME} = ?",
+            arrayOf(semesterId.toString(), oldSubjectName)
+          )
 
-        cv.clear()
-        cv.put(Tables.Homeworks.SUBJECT_NAME, newSubjectName)
+          cv.clear()
+          cv.put(Tables.Homeworks.SUBJECT_NAME, newSubjectName)
 
-        it.update(Tables.HOMEWORKS, cv, "${Tables.Homeworks.SEMESTER_ID} = ? AND ${Tables.Homeworks.SUBJECT_NAME} = ?",
-            arrayOf(semesterId.toString(), oldSubjectName))
+          it.update(
+            Tables.HOMEWORKS,
+            cv,
+            "${Tables.Homeworks.SEMESTER_ID} = ? AND ${Tables.Homeworks.SUBJECT_NAME} = ?",
+            arrayOf(semesterId.toString(), oldSubjectName)
+          )
 
-        it.setTransactionSuccessful()
-      } finally {
-        it.endTransaction()
+          it.setTransactionSuccessful()
+        } finally {
+          it.endTransaction()
+        }
       }
-    }
 
     fun updateHomework(semesterId: Long, homework: Homework) = writableDatabase.use {
-      val updatedRows = it.update(Tables.HOMEWORKS, homework.toContentValues(semesterId),
-          "${Tables.Homeworks.SEMESTER_ID} = ? AND ${Tables.Homeworks.ID} = ?",
-          arrayOf(semesterId.toString(), homework.id.toString()))
+      val updatedRows = it.update(
+        Tables.HOMEWORKS, homework.toContentValues(semesterId),
+        "${Tables.Homeworks.SEMESTER_ID} = ? AND ${Tables.Homeworks.ID} = ?",
+        arrayOf(semesterId.toString(), homework.id.toString())
+      )
       if (updatedRows == 0) throw IllegalArgumentException("Задания $homework нет в БД")
     }
 
-    fun updateHomeworks(semesterId: Long, oldSubjectName: String, newSubjectName: String) = writableDatabase.use {
-      val cv = ContentValues()
-      cv.put(Tables.Homeworks.SUBJECT_NAME, newSubjectName)
+    fun updateHomeworks(semesterId: Long, oldSubjectName: String, newSubjectName: String) =
+      writableDatabase.use {
+        val cv = ContentValues()
+        cv.put(Tables.Homeworks.SUBJECT_NAME, newSubjectName)
 
-      it.update(Tables.HOMEWORKS, cv, "${Tables.Homeworks.SEMESTER_ID} = ? AND ${Tables.Homeworks.SUBJECT_NAME} = ?",
-          arrayOf(semesterId.toString(), oldSubjectName))
-      //if (updatedRows == 0) throw IllegalArgumentException("Заданий для $oldSubjectName нет в БД")
-    }
+        it.update(
+          Tables.HOMEWORKS,
+          cv,
+          "${Tables.Homeworks.SEMESTER_ID} = ? AND ${Tables.Homeworks.SUBJECT_NAME} = ?",
+          arrayOf(semesterId.toString(), oldSubjectName)
+        )
+        //if (updatedRows == 0) throw IllegalArgumentException("Заданий для $oldSubjectName нет в БД")
+      }
 
     //endregion
 
@@ -1135,34 +1279,43 @@ object ScheduleManager {
     }
 
     fun deleteLesson(semesterId: Long, lessonId: Long) = writableDatabase.use {
-      it.delete(Tables.LESSONS, "${Tables.Lessons.SEMESTER_ID} = ? AND ${Tables.Lessons.ID} = ?",
-          arrayOf(semesterId.toString(), lessonId.toString()))
+      it.delete(
+        Tables.LESSONS, "${Tables.Lessons.SEMESTER_ID} = ? AND ${Tables.Lessons.ID} = ?",
+        arrayOf(semesterId.toString(), lessonId.toString())
+      )
     }
 
     fun deleteHomework(semesterId: Long, lessonId: Long) = writableDatabase.use {
-      it.delete(Tables.HOMEWORKS, "${Tables.Homeworks.SEMESTER_ID} = ? AND ${Tables.Homeworks.ID} = ?",
-          arrayOf(semesterId.toString(), lessonId.toString()))
+      it.delete(
+        Tables.HOMEWORKS,
+        "${Tables.Homeworks.SEMESTER_ID} = ? AND ${Tables.Homeworks.ID} = ?",
+        arrayOf(semesterId.toString(), lessonId.toString())
+      )
     }
 
     fun deleteHomeworks(semesterId: Long, subjectName: String) = writableDatabase.use {
-      it.delete(Tables.HOMEWORKS, "${Tables.Homeworks.SEMESTER_ID} = ? AND ${Tables.Homeworks.SUBJECT_NAME} = ?",
-          arrayOf(semesterId.toString(), subjectName))
+      it.delete(
+        Tables.HOMEWORKS,
+        "${Tables.Homeworks.SEMESTER_ID} = ? AND ${Tables.Homeworks.SUBJECT_NAME} = ?",
+        arrayOf(semesterId.toString(), subjectName)
+      )
     }
 
     //endregion
 
     //region Преобразования в ContentValues
 
-    private val Semester.contentValues: ContentValues get() {
-      val cv = ContentValues()
+    private val Semester.contentValues: ContentValues
+      get() {
+        val cv = ContentValues()
 
-      cv.put(Tables.Semesters.NAME, name)
-      cv.put(Tables.Semesters.FIRST_DAY, dateFormatter.print(firstDay))
-      cv.put(Tables.Semesters.LAST_DAY, dateFormatter.print(lastDay))
-      cv.put(Tables.Semesters.ID, id)
+        cv.put(Tables.Semesters.NAME, name)
+        cv.put(Tables.Semesters.FIRST_DAY, dateFormatter.print(firstDay))
+        cv.put(Tables.Semesters.LAST_DAY, dateFormatter.print(lastDay))
+        cv.put(Tables.Semesters.ID, id)
 
-      return cv
-    }
+        return cv
+      }
 
     private fun Lesson.toContentValues(semesterId: Long): ContentValues {
       val cv = ContentValues()
@@ -1172,18 +1325,24 @@ object ScheduleManager {
       cv.put(Tables.Lessons.SUBJECT_NAME, subjectName)
       cv.put(Tables.Lessons.TYPE, if (type.isNotBlank()) type else null)
 
-      cv.put(Tables.Lessons.TEACHERS,
-          if (teachers.isNotEmpty()) joiner.join(teachers) else null)
-      cv.put(Tables.Lessons.CLASSROOMS,
-          if (classrooms.isNotEmpty()) joiner.join(classrooms) else null)
+      cv.put(
+        Tables.Lessons.TEACHERS,
+        if (teachers.isNotEmpty()) joiner.join(teachers) else null
+      )
+      cv.put(
+        Tables.Lessons.CLASSROOMS,
+        if (classrooms.isNotEmpty()) joiner.join(classrooms) else null
+      )
 
       cv.put(Tables.Lessons.START_TIME, timeFormatter.print(startTime))
       cv.put(Tables.Lessons.END_TIME, timeFormatter.print(endTime))
 
-      cv.put(Tables.Lessons.REPEAT_TYPE, when (lessonRepeat) {
-        is LessonRepeat.ByWeekday -> Tables.Lessons.REPEAT_TYPE_BY_WEEKDAY
-        is LessonRepeat.ByDates -> Tables.Lessons.REPEAT_TYPE_BY_DATES
-      })
+      cv.put(
+        Tables.Lessons.REPEAT_TYPE, when (lessonRepeat) {
+          is LessonRepeat.ByWeekday -> Tables.Lessons.REPEAT_TYPE_BY_WEEKDAY
+          is LessonRepeat.ByDates -> Tables.Lessons.REPEAT_TYPE_BY_DATES
+        }
+      )
 
       cv.put(Tables.Lessons.SEMESTER_ID, semesterId)
 

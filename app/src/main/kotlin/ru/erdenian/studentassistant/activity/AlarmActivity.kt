@@ -9,32 +9,37 @@ import ru.erdenian.studentassistant.R
 
 class AlarmActivity : AppCompatActivity() {
 
-  private val ringtone by lazy { RingtoneManager.getRingtone(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)) }
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_alarm)
-
-    content_alarm_turn_off.setOnClickListener {
-      ringtone.stop()
-      finish()
+    private val ringtone by lazy {
+        RingtoneManager.getRingtone(
+            this,
+            RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+        )
     }
 
-    window.addFlags(
-        WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
-            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
-            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
-            WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-    )
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_alarm)
 
-    ringtone.play()
-  }
+        content_alarm_turn_off.setOnClickListener {
+            ringtone.stop()
+            finish()
+        }
 
-  override fun onUserLeaveHint() {
-    ringtone.stop()
-    finish()
-    super.onUserLeaveHint()
-  }
+        window.addFlags(
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+                    WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
+                    WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+        )
 
-  override fun onBackPressed() = Unit
+        ringtone.play()
+    }
+
+    override fun onUserLeaveHint() {
+        ringtone.stop()
+        finish()
+        super.onUserLeaveHint()
+    }
+
+    override fun onBackPressed() = Unit
 }

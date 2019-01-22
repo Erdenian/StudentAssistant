@@ -9,13 +9,13 @@ import ru.erdenian.studentassistant.service.ScheduleService
 
 class SplashActivity : AppCompatActivity() {
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    ScheduleManager.initialize(applicationContext)
+        ScheduleManager.initialize(applicationContext)
 
-    startService<ScheduleService>()
-    startActivity<ScheduleActivity>()
-    finish()
-  }
+        startService<ScheduleService>()
+        startActivity<ScheduleActivity>()
+        finish()
+    }
 }
