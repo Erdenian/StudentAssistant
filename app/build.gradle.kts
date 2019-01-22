@@ -7,6 +7,7 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-android-extensions")
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -65,6 +66,8 @@ android {
 }
 
 dependencies {
+    val room_version = "2.1.0-alpha03"
+
     val kotlin_version: String by project
     val joda_time_version: String by project
     val guava_version: String by project
@@ -81,6 +84,10 @@ dependencies {
 
     implementation(project(":schedule"))
     implementation(project(":customviews"))
+
+    implementation("androidx.room:room-runtime:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-coroutines:$room_version")
 
     implementation("org.jetbrains.anko:anko-common:0.10.8")
     implementation("joda-time:joda-time:$joda_time_version")
