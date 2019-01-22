@@ -21,8 +21,8 @@
                 android:id="@+id/card_lesson_information_deadline_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/divider_margin"
                 android:layout_marginTop="@dimen/divider_margin"
+                android:layout_marginBottom="@dimen/divider_margin"
                 android:layout_weight="1"
                 android:textSize="18sp"
                 tools:text="Срок сдачи: " />
@@ -31,8 +31,8 @@
                 android:id="@+id/card_lesson_information_deadline_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/divider_margin"
                 android:layout_marginTop="@dimen/divider_margin"
+                android:layout_marginBottom="@dimen/divider_margin"
                 android:layout_weight="1"
                 android:textSize="18sp"
                 tools:text="24.12.2016" />

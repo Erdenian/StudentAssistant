@@ -16,57 +16,62 @@ import ru.erdenian.studentassistant.localdata.ScheduleManager
 
 class HomeworksPageFragment : Fragment() {
 
-  companion object {
+    companion object {
 
-    private const val PAGE_SEMESTER_ID = "page_semester_id"
-    private const val PAGE = "page"
+        private const val PAGE_SEMESTER_ID = "page_semester_id"
+        private const val PAGE = "page"
 
-    fun newInstance(semesterId: Long, page: Int): HomeworksPageFragment {
-      val homeworksPageFragment = HomeworksPageFragment()
-      val arguments = Bundle()
-      with(arguments) {
-        putLong(PAGE_SEMESTER_ID, semesterId)
-        putInt(PAGE, page)
-      }
-      homeworksPageFragment.arguments = arguments
-      return homeworksPageFragment
-    }
-  }
-
-  private val semesterId: Long by lazy { arguments!!.getLong(PAGE_SEMESTER_ID, -1L) }
-  private val page: Int by lazy { arguments!!.getInt(PAGE, -1) }
-
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-    val homeworks = when (page) {
-      0 -> ScheduleManager.getActualHomeworks(semesterId)
-      1 -> ScheduleManager.getPastHomeworks(semesterId)
-      else -> throw IllegalArgumentException("Неизвестный номер страницы: $page")
+        fun newInstance(semesterId: Long, page: Int): HomeworksPageFragment {
+            val homeworksPageFragment = HomeworksPageFragment()
+            val arguments = Bundle()
+            with(arguments) {
+                putLong(PAGE_SEMESTER_ID, semesterId)
+                putInt(PAGE, page)
+            }
+            homeworksPageFragment.arguments = arguments
+            return homeworksPageFragment
+        }
     }
 
-    if (homeworks.isEmpty()) {
-      return inflater.inflate(R.layout.fragment_no_homeworks, container, false)
-    }
+    private val semesterId: Long by lazy { arguments!!.getLong(PAGE_SEMESTER_ID, -1L) }
+    private val page: Int by lazy { arguments!!.getInt(PAGE, -1) }
 
-    val view = inflater.inflate(R.layout.scroll_view, container, false)
-    val llCardsParent = view.findViewById<LinearLayout>(R.id.scroll_view_items_parent)
-
-    for ((subjectName, description, deadline, id) in homeworks) {
-      with(inflater.inflate(R.layout.card_homework, llCardsParent, false)) {
-        (findViewById<TextView>(R.id.card_homework_subject_name)).text = subjectName
-        (findViewById<TextView>(R.id.card_homework_description)).text = description
-        (findViewById<TextView>(R.id.card_homework_deadline)).text = deadline.toString("dd.MM.yyyy")
-
-        setOnClickListener {
-          context.startActivity<HomeworkEditorActivity>(
-              context.SEMESTER_ID to semesterId,
-              context.HOMEWORK_ID to id
-          )
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val homeworks = when (page) {
+            0 -> ScheduleManager.getActualHomeworks(semesterId)
+            1 -> ScheduleManager.getPastHomeworks(semesterId)
+            else -> throw IllegalArgumentException("Неизвестный номер страницы: $page")
         }
 
-        llCardsParent.addView(this)
-      }
-    }
+        if (homeworks.isEmpty()) {
+            return inflater.inflate(R.layout.fragment_no_homeworks, container, false)
+        }
 
-    return view
-  }
+        val view = inflater.inflate(R.layout.scroll_view, container, false)
+        val llCardsParent = view.findViewById<LinearLayout>(R.id.scroll_view_items_parent)
+
+        for ((subjectName, description, deadline, id) in homeworks) {
+            with(inflater.inflate(R.layout.card_homework, llCardsParent, false)) {
+                (findViewById<TextView>(R.id.card_homework_subject_name)).text = subjectName
+                (findViewById<TextView>(R.id.card_homework_description)).text = description
+                (findViewById<TextView>(R.id.card_homework_deadline)).text =
+                        deadline.toString("dd.MM.yyyy")
+
+                setOnClickListener {
+                    context.startActivity<HomeworkEditorActivity>(
+                        context.SEMESTER_ID to semesterId,
+                        context.HOMEWORK_ID to id
+                    )
+                }
+
+                llCardsParent.addView(this)
+            }
+        }
+
+        return view
+    }
 }
