@@ -1,3 +1,6 @@
+import com.android.build.gradle.api.ApplicationVariant
+import com.android.build.gradle.api.BaseVariantOutput
+import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import java.io.ByteArrayOutputStream
 
 plugins {
@@ -32,10 +35,10 @@ android {
     }
   }
 
-  /*compileOptions {
-    setSourceCompatibility(JavaVersion.VERSION_1_8)
-    setTargetCompatibility(JavaVersion.VERSION_1_8)
-  }*/
+  compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+  }
 
   sourceSets {
     getByName("main").java.srcDirs("src/main/kotlin")
@@ -43,11 +46,19 @@ android {
     getByName("androidTest").java.srcDirs("src/androidTest/kotlin")
   }
 
-  /*applicationVariants.all { variant ->
-    variant.outputs.all {
-      outputFileName = outputFileName.replace('.apk', "-${variant.versionName}.apk")
+  applicationVariants.all(object : Action<ApplicationVariant> {
+    val app_name: String by project
+
+    override fun execute(variant: ApplicationVariant) {
+      variant.outputs.all(object : Action<BaseVariantOutput> {
+        override fun execute(output: BaseVariantOutput) {
+          (output as BaseVariantOutputImpl).apply {
+            outputFileName = outputFileName.replace(project.name, "$app_name-${defaultConfig.versionName}")
+          }
+        }
+      })
     }
-  }*/
+  })
 }
 
 dependencies {
