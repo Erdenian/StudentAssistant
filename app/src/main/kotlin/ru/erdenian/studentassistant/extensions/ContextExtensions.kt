@@ -26,14 +26,21 @@ fun Context.getCompatColor(id: Int) = ContextCompat.getColor(this, id)
  */
 fun Context.clearApplicationData() {
 
-  fun deleteFile(file: File) {
-    if (file.isDirectory) file.list().forEach { deleteFile(File(file, it)) }
-    else file.delete()
-  }
+    fun deleteFile(file: File) {
+        if (file.isDirectory) file.list().forEach { deleteFile(File(file, it)) }
+        else file.delete()
+    }
 
-  val applicationDirectory = File(cacheDir.parent)
-  if (applicationDirectory.exists())
-    applicationDirectory.list().filter { it != "lib" }.forEach { deleteFile(File(applicationDirectory, it)) }
+    val applicationDirectory = File(cacheDir.parent)
+    if (applicationDirectory.exists())
+        applicationDirectory.list().filter { it != "lib" }.forEach {
+            deleteFile(
+                File(
+                    applicationDirectory,
+                    it
+                )
+            )
+        }
 }
 
 /**
@@ -48,22 +55,25 @@ fun Context.clearApplicationData() {
  * @param onDateSet обработчик результата выбора
  * @since 0.0.0
  */
-fun Context.showDatePicker(preselectedDate: LocalDate? = null,
-                           minDate: LocalDate? = null, maxDate: LocalDate? = null,
-                           onDateSet: (LocalDate) -> Unit) {
-  val preselected = preselectedDate ?: LocalDate.now()
+fun Context.showDatePicker(
+    preselectedDate: LocalDate? = null,
+    minDate: LocalDate? = null, maxDate: LocalDate? = null,
+    onDateSet: (LocalDate) -> Unit
+) {
+    val preselected = preselectedDate ?: LocalDate.now()
 
-  DatePickerDialog(this,
-      DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-        onDateSet.invoke(LocalDate(year, month + 1, dayOfMonth))
-      },
-      preselected.year,
-      preselected.monthOfYear - 1,
-      preselected.dayOfMonth
-  ).apply {
-    minDate?.let { datePicker.minDate = it.toDate().time }
-    maxDate?.let { datePicker.maxDate = it.toDate().time }
-  }.show()
+    DatePickerDialog(
+        this,
+        DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+            onDateSet.invoke(LocalDate(year, month + 1, dayOfMonth))
+        },
+        preselected.year,
+        preselected.monthOfYear - 1,
+        preselected.dayOfMonth
+    ).apply {
+        minDate?.let { datePicker.minDate = it.toDate().time }
+        maxDate?.let { datePicker.maxDate = it.toDate().time }
+    }.show()
 }
 
 /**
@@ -75,14 +85,15 @@ fun Context.showDatePicker(preselectedDate: LocalDate? = null,
  * @since 0.0.0
  */
 fun Context.showTimePicker(preselectedTime: LocalTime? = null, onTimeSet: (LocalTime) -> Unit) {
-  val preselected = preselectedTime ?: LocalTime.now()
+    val preselected = preselectedTime ?: LocalTime.now()
 
-  TimePickerDialog(this,
-      TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-        onTimeSet.invoke(LocalTime(hourOfDay, minute))
-      },
-      preselected.hourOfDay,
-      preselected.minuteOfHour,
-      true
-  ).show()
+    TimePickerDialog(
+        this,
+        TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+            onTimeSet.invoke(LocalTime(hourOfDay, minute))
+        },
+        preselected.hourOfDay,
+        preselected.minuteOfHour,
+        true
+    ).show()
 }

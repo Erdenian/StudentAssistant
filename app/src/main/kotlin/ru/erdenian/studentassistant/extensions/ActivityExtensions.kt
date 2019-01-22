@@ -23,45 +23,53 @@ import ru.erdenian.studentassistant.localdata.ScheduleManager
  * @author Ilya Solovyev
  */
 fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
-  val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+    val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
 
-  ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close).apply {
-    drawerLayout.addDrawerListener(this)
-    syncState()
-  }
-
-  ScheduleManager.hasLessons.let {
-    navigation_view.menu.findItem(R.id.nav_homeworks).isEnabled = it
-    navigation_view.menu.findItem(R.id.nav_alarm).isEnabled = it
-  }
-
-  navigation_view.setCheckedItem(when (this) {
-    is ScheduleActivity -> R.id.nav_schedule
-    is HomeworksActivity -> R.id.nav_homeworks
-    is AlarmEditorActivity -> R.id.nav_alarm
-    else -> throw IllegalStateException("Неизвестное Activity: ${this.javaClass.name}")
-  })
-
-  navigation_view.setNavigationItemSelectedListener {
-    when (it.itemId) {
-      R.id.nav_schedule -> if (this !is ScheduleActivity) {
-        startActivity<ScheduleActivity>()
-        finish()
-      }
-      R.id.nav_homeworks -> if (this !is HomeworksActivity) {
-        startActivity<HomeworksActivity>()
-        finish()
-      }
-      R.id.nav_alarm -> if (this !is AlarmEditorActivity) {
-        startActivity<AlarmEditorActivity>()
-        finish()
-      }
-      R.id.nav_settings -> toast(R.string.nav_settings)
-      R.id.nav_help -> startActivity<HelpActivity>()
-      else -> throw IllegalArgumentException("Неизвестный id: ${it.itemId}")
+    ActionBarDrawerToggle(
+        this,
+        drawerLayout,
+        toolbar,
+        R.string.navigation_drawer_open,
+        R.string.navigation_drawer_close
+    ).apply {
+        drawerLayout.addDrawerListener(this)
+        syncState()
     }
 
-    drawerLayout.closeDrawer(GravityCompat.START)
-    true
-  }
+    ScheduleManager.hasLessons.let {
+        navigation_view.menu.findItem(R.id.nav_homeworks).isEnabled = it
+        navigation_view.menu.findItem(R.id.nav_alarm).isEnabled = it
+    }
+
+    navigation_view.setCheckedItem(
+        when (this) {
+            is ScheduleActivity -> R.id.nav_schedule
+            is HomeworksActivity -> R.id.nav_homeworks
+            is AlarmEditorActivity -> R.id.nav_alarm
+            else -> throw IllegalStateException("Неизвестное Activity: ${this.javaClass.name}")
+        }
+    )
+
+    navigation_view.setNavigationItemSelectedListener {
+        when (it.itemId) {
+            R.id.nav_schedule -> if (this !is ScheduleActivity) {
+                startActivity<ScheduleActivity>()
+                finish()
+            }
+            R.id.nav_homeworks -> if (this !is HomeworksActivity) {
+                startActivity<HomeworksActivity>()
+                finish()
+            }
+            R.id.nav_alarm -> if (this !is AlarmEditorActivity) {
+                startActivity<AlarmEditorActivity>()
+                finish()
+            }
+            R.id.nav_settings -> toast(R.string.nav_settings)
+            R.id.nav_help -> startActivity<HelpActivity>()
+            else -> throw IllegalArgumentException("Неизвестный id: ${it.itemId}")
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START)
+        true
+    }
 }
