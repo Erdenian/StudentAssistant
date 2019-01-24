@@ -1,9 +1,6 @@
 package ru.erdenian.studentassistant.localdata.entity
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.google.common.collect.ComparisonChain
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.schedule.LessonRepeat
@@ -34,7 +31,8 @@ import ru.erdenian.studentassistant.schedule.generateId
             onDelete = ForeignKey.CASCADE,
             onUpdate = ForeignKey.CASCADE
         )
-    ]
+    ],
+    indices = [Index("semester_id")]
 )
 data class LessonNew(
 
