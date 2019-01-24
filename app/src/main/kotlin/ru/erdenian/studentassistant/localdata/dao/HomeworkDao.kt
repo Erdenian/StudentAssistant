@@ -16,14 +16,14 @@ interface HomeworkDao {
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND _id = :homeworkId")
     fun get(semesterId: Long, homeworkId: Long): HomeworkNew?
 
-    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName")
+    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName ORDER BY deadline, _id")
     fun get(semesterId: Long, subjectName: String): List<HomeworkNew>
 
-    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline >= :today")
-    fun getActual(semesterId: Long, today: LocalDate = LocalDate.now())
+    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline >= :today ORDER BY deadline, _id")
+    fun getActual(semesterId: Long, today: LocalDate = LocalDate.now()): List<HomeworkNew>
 
-    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline < :today")
-    fun getPast(semesterId: Long, today: LocalDate = LocalDate.now())
+    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline < :today ORDER BY deadline, _id")
+    fun getPast(semesterId: Long, today: LocalDate = LocalDate.now()): List<HomeworkNew>
 
     @Delete
     fun delete(homework: HomeworkNew)
