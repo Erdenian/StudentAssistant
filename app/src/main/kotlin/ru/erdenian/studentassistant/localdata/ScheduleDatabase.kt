@@ -32,7 +32,10 @@ abstract class ScheduleDatabase : RoomDatabase() {
             it.applicationContext,
             ScheduleDatabase::class.java,
             "schedule1.db"
-        ).allowMainThreadQueries().build()
+        )
+            .allowMainThreadQueries()
+            .fallbackToDestructiveMigration()
+            .build()
     })
 
 

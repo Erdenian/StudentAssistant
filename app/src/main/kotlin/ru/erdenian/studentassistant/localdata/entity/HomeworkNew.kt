@@ -25,19 +25,9 @@ import ru.erdenian.studentassistant.schedule.generateId
             childColumns = ["semester_id"],
             onDelete = ForeignKey.CASCADE,
             onUpdate = ForeignKey.CASCADE
-        ),
-        ForeignKey(
-            entity = LessonNew::class,
-            parentColumns = ["subject_name"],
-            childColumns = ["subject_name"],
-            onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE
         )
     ],
-    indices = [
-        Index("subject_name"),
-        Index("semester_id")
-    ]
+    indices = [Index("semester_id")]
 )
 data class HomeworkNew(
 

@@ -25,6 +25,12 @@ interface HomeworkDao {
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline < :today ORDER BY deadline, _id")
     fun getPast(semesterId: Long, today: LocalDate = LocalDate.now()): List<HomeworkNew>
 
+    @Query("SELECT COUNT(_id) FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName")
+    fun getCount(semesterId: Long, subjectName: String): Int
+
+    @Query("UPDATE homeworks SET subject_name = :newName WHERE semester_id = :semesterId AND subject_name = :oldName")
+    fun renameSubject(semesterId: Long, oldName: String, newName: String)
+
     @Delete
     fun delete(homework: HomeworkNew)
 

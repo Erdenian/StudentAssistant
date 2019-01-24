@@ -18,10 +18,10 @@ interface SemesterDao {
     @Query("SELECT name FROM semesters ORDER BY first_day, last_day, name, _id")
     fun getNames(): List<String>
 
-    @Query("SELECT COUNT(*) FROM lessons WHERE semester_id = :semesterId")
+    @Query("SELECT COUNT(_id) FROM lessons WHERE semester_id = :semesterId")
     fun lessonsCount(semesterId: Long): Int
 
-    @Query("SELECT COUNT(*) > 0 FROM lessons WHERE semester_id = :semesterId")
+    @Query("SELECT COUNT(_id) > 0 FROM lessons WHERE semester_id = :semesterId")
     fun hasLessons(semesterId: Long): Boolean
 
     @Delete
