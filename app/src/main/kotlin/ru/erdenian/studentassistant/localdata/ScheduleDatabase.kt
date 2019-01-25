@@ -33,10 +33,9 @@ abstract class ScheduleDatabase : RoomDatabase() {
             ScheduleDatabase::class.java,
             "schedule1.db"
         )
+            // Todo: убрать
             .allowMainThreadQueries()
             .fallbackToDestructiveMigration()
             .build()
     })
-
-
 }
