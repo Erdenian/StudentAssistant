@@ -10,8 +10,11 @@ import ru.erdenian.studentassistant.schedule.LessonRepeat
 
 class Converters {
 
-    private val epoch = LocalDate(1970, 1, 1)
-    private val separator = ";"
+    companion object {
+        const val SEPARATOR = ";"
+
+        private val epoch = LocalDate(1970, 1, 1)
+    }
 
     @TypeConverter
     fun localDateToInt(value: LocalDate?): Int? =
@@ -35,32 +38,32 @@ class Converters {
 
     @TypeConverter
     fun stringsToString(value: List<String?>?): String? =
-        value?.joinToString(separator)
+        value?.joinToString(SEPARATOR)
 
     @TypeConverter
     fun stringToStrings(value: String?): List<String?>? =
-        value?.split(separator)
+        value?.split(SEPARATOR)
 
     @TypeConverter
     fun lessonRepeatToString(value: LessonRepeat?): String? =
         if (value == null) null else when (value) {
             is LessonRepeat.ByWeekday -> value.weekday.toString() +
-                    separator + value.weeks.joinToString(separator)
-            is LessonRepeat.ByDates -> value.dates.joinToString(separator)
+                    SEPARATOR + value.weeks.joinToString(SEPARATOR)
+            is LessonRepeat.ByDates -> value.dates.joinToString(SEPARATOR)
         }
 
     @TypeConverter
     fun stringToLessonRepeat(value: String?): LessonRepeat? =
         if (value == null) null else {
             if (value.contains('.')) LessonRepeat.ByDates(
-                value.split(separator).map {
+                value.split(SEPARATOR).map {
                     LocalDate.parse(
                         it
                     )
                 }.toImmutableSortedSet()
             )
             else {
-                val separated = value.split(separator)
+                val separated = value.split(SEPARATOR)
                 LessonRepeat.ByWeekday(
                     separated[0].toInt(),
                     separated.drop(1).map { it.toBoolean() }
