@@ -1,5 +1,3 @@
-import com.android.build.gradle.api.ApplicationVariant
-import com.android.build.gradle.api.BaseVariantOutput
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import java.io.ByteArrayOutputStream
 
@@ -47,22 +45,18 @@ android {
         getByName("androidTest").java.srcDirs("src/androidTest/kotlin")
     }
 
-    applicationVariants.all(object : Action<ApplicationVariant> {
-        val app_name: String by project
-
-        override fun execute(variant: ApplicationVariant) {
-            variant.outputs.all(object : Action<BaseVariantOutput> {
-                override fun execute(output: BaseVariantOutput) {
-                    (output as BaseVariantOutputImpl).apply {
-                        outputFileName = outputFileName.replace(
-                            project.name,
-                            "$app_name-${defaultConfig.versionName}"
-                        )
-                    }
-                }
-            })
+    val app_name: String by project
+    android.applicationVariants.all {
+        outputs.forEach { output ->
+            output as BaseVariantOutputImpl
+            output.apply {
+                outputFileName = outputFileName.replace(
+                    project.name,
+                    "$app_name-${defaultConfig.versionName}"
+                )
+            }
         }
-    })
+    }
 }
 
 dependencies {
