@@ -5,21 +5,17 @@ plugins {
 android {
     val compile_sdk_version: String by project
     val target_sdk_version: String by project
-    val build_tools_version: String by project
 
     compileSdkVersion(compile_sdk_version.toInt())
-    buildToolsVersion(build_tools_version)
 
     defaultConfig {
         versionCode = 1
         versionName = "1.0"
 
-        minSdkVersion(14)
+        minSdkVersion(21)
         targetSdkVersion(target_sdk_version.toInt())
 
-        testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
-
-        vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -42,13 +38,16 @@ android {
 }
 
 dependencies {
+    val appcompat_version: String by project
+    val cardview_version: String by project
+
     val joda_time_version: String by project
     val guava_version: String by project
 
-    implementation("androidx.appcompat:appcompat:1.0.2")
-    implementation("androidx.cardview:cardview:1.0.0")
-
     implementation(project(":schedule"))
+
+    implementation("androidx.appcompat:appcompat:$appcompat_version")
+    implementation("androidx.cardview:cardview:$cardview_version")
 
     implementation("joda-time:joda-time:$joda_time_version")
     implementation("com.google.guava:guava:$guava_version")
