@@ -1,13 +1,17 @@
 package ru.erdenian.studentassistant.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_semester_editor.*
-import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.activity_semester_editor.content_semester_editor_first_day
+import kotlinx.android.synthetic.main.activity_semester_editor.content_semester_editor_last_day
+import kotlinx.android.synthetic.main.activity_semester_editor.content_semester_editor_semester_name
+import kotlinx.android.synthetic.main.activity_semester_editor.content_semester_editor_semester_name_edit_text
+import kotlinx.android.synthetic.main.toolbar.toolbar
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
@@ -15,41 +19,40 @@ import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.extensions.showDatePicker
 import ru.erdenian.studentassistant.extensions.toSingleLine
-import ru.erdenian.studentassistant.localdata.ScheduleManager
-import ru.erdenian.studentassistant.schedule.Semester
-
+import ru.erdenian.studentassistant.localdata.entity.SemesterNew
 
 class SemesterEditorActivity : AppCompatActivity() {
 
-    private companion object {
+    companion object {
 
-        const val FIRST_DAY = "first_day"
-        const val LAST_DAY = "last_day"
+        const val SEMESTER_INTENT_KEY = "SEMESTER"
+        const val SEMESTERS_NAMES_INTENT_KEY = "SEMESTERS_NAMES"
+
+        private const val FIRST_DAY = "first_day"
+        private const val LAST_DAY = "last_day"
     }
 
-    private val semester: Semester? by lazy {
-        ScheduleManager.getSemesterOrNull(
-            intent.getLongExtra(
-                SEMESTER_ID,
-                -1L
-            )
-        )
-    }
-
-    private val semestersNames: List<String> by lazy { ScheduleManager.semestersNames.filter { it != semester?.name } }
+    private val semester by lazy { intent.getParcelableExtra<SemesterNew?>(SEMESTER_INTENT_KEY) }
 
     private var firstDay: LocalDate? = null
     private var lastDay: LocalDate? = null
 
+    private val actionBar by lazy {
+        supportActionBar ?: throw NullPointerException("supportActionBar == null")
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_semester_editor)
-
         setSupportActionBar(toolbar)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+        actionBar.setDisplayHomeAsUpEnabled(true)
 
         content_semester_editor_semester_name_edit_text.addTextChangedListener(object :
             TextWatcher {
+
+            private val semestersNames = intent.getStringArrayExtra(SEMESTERS_NAMES_INTENT_KEY)
+
             override fun afterTextChanged(s: Editable?) = Unit
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
                 Unit
@@ -58,10 +61,10 @@ class SemesterEditorActivity : AppCompatActivity() {
                 with(content_semester_editor_semester_name) {
                     isErrorEnabled = true
 
-                    if (semestersNames.contains(s.toString().trim().toSingleLine()))
+                    if (semestersNames.contains(s.toString().trim().toSingleLine())) {
                         error =
-                                getString(R.string.activity_semester_editor_error_name_not_avaliable)
-                    else isErrorEnabled = false
+                            getString(R.string.activity_semester_editor_error_name_not_avaliable)
+                    } else isErrorEnabled = false
                 }
             }
         })
@@ -87,8 +90,8 @@ class SemesterEditorActivity : AppCompatActivity() {
                 lastDay = s.lastDay
                 content_semester_editor_last_day.text = s.lastDay.toString()
             } ?: run {
-                supportActionBar!!.title =
-                        getString(R.string.title_activity_semester_editor_new_semester)
+                actionBar.title =
+                    getString(R.string.title_activity_semester_editor_new_semester)
             }
         } else {
             savedInstanceState.getString(FIRST_DAY)?.let { s ->
@@ -150,11 +153,12 @@ class SemesterEditorActivity : AppCompatActivity() {
                     return true
                 }
 
-                semester?.let { s ->
-                    ScheduleManager.updateSemester(s.copy(name, first, last))
-                } ?: run {
-                    ScheduleManager.addSemester(Semester(name, first, last))
-                }
+                setResult(RESULT_OK, Intent().apply {
+                    putExtra(
+                        SEMESTER_INTENT_KEY,
+                        semester?.copy(name, first, last) ?: SemesterNew(name, first, last)
+                    )
+                })
 
                 finish()
                 return true
