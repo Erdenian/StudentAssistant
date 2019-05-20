@@ -1,7 +1,13 @@
 package ru.erdenian.studentassistant.localdata.entity
 
-import androidx.room.*
+import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import com.google.common.collect.ComparisonChain
+import kotlinx.android.parcel.Parcelize
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.schedule.LessonRepeat
 import ru.erdenian.studentassistant.schedule.generateId
@@ -21,6 +27,7 @@ import ru.erdenian.studentassistant.schedule.generateId
  * @param id уникальный id пары
  * @throws IllegalArgumentException если [subjectName] пусто или [startTime] >= [endTime]
  */
+@Parcelize
 @Entity(
     tableName = "lessons",
     foreignKeys = [
@@ -63,7 +70,7 @@ data class LessonNew(
 
     @ColumnInfo(name = "semester_id")
     val semesterId: Long
-) : Comparable<LessonNew> {
+) : Comparable<LessonNew>, Parcelable {
 
     init {
         if (subjectName.isBlank()) throw IllegalArgumentException("Отсутствует название предмета")
