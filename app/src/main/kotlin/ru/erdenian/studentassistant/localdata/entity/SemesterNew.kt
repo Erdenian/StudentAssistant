@@ -1,10 +1,13 @@
 package ru.erdenian.studentassistant.localdata.entity
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.common.collect.ComparisonChain
+import kotlinx.android.parcel.IgnoredOnParcel
+import kotlinx.android.parcel.Parcelize
 import org.joda.time.Days
 import org.joda.time.LocalDate
 import org.joda.time.Weeks
@@ -21,6 +24,7 @@ import ru.erdenian.studentassistant.schedule.generateId
  * @property id уникальный id семестра
  * @throws IllegalArgumentException если [name] пусто или [firstDay] > [lastDay]
  */
+@Parcelize
 @Entity(tableName = "semesters")
 data class SemesterNew(
 
@@ -36,7 +40,7 @@ data class SemesterNew(
     @PrimaryKey
     @ColumnInfo(name = "_id")
     val id: Long = generateId()
-) : Comparable<SemesterNew> {
+) : Comparable<SemesterNew>, Parcelable {
 
     /**
      * Длина семестра в днях.
@@ -44,6 +48,7 @@ data class SemesterNew(
      * @author Ilya Solovyev
      * @since 0.0.0
      */
+    @IgnoredOnParcel
     @Ignore
     val length = Days.daysBetween(firstDay, lastDay).days + 1
 
@@ -53,6 +58,7 @@ data class SemesterNew(
      * @author Ilya Solovyev
      * @since 0.2.6
      */
+    @IgnoredOnParcel
     @Ignore
     private val firstWeekMonday = firstDay.minusDays(firstDay.dayOfWeek - 1)
 
