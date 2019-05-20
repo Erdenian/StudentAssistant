@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.localdata
+package ru.erdenian.studentassistant.repository
 
 import androidx.room.TypeConverter
 import org.joda.time.Days
@@ -48,7 +48,9 @@ class Converters {
     fun lessonRepeatToString(value: LessonRepeat?): String? =
         if (value == null) null else when (value) {
             is LessonRepeat.ByWeekday -> value.weekday.toString() +
-                    SEPARATOR + value.weeks.joinToString(SEPARATOR)
+                    SEPARATOR + value.weeks.joinToString(
+                SEPARATOR
+            )
             is LessonRepeat.ByDates -> value.dates.joinToString(SEPARATOR)
         }
 

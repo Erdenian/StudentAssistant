@@ -19,7 +19,7 @@ import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.extensions.showDatePicker
 import ru.erdenian.studentassistant.extensions.toSingleLine
-import ru.erdenian.studentassistant.localdata.entity.SemesterNew
+import ru.erdenian.studentassistant.repository.entity.SemesterNew
 
 class SemesterEditorActivity : AppCompatActivity() {
 

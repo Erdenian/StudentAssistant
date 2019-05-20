@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.localdata
+package ru.erdenian.studentassistant.repository
 
 open class SingletonHolder<T, A>(creator: (A) -> T) {
 

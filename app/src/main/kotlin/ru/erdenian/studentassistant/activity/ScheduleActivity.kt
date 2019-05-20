@@ -28,7 +28,7 @@ import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.initializeDrawerAndNavigationView
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.extensions.showDatePicker
-import ru.erdenian.studentassistant.localdata.entity.SemesterNew
+import ru.erdenian.studentassistant.repository.entity.SemesterNew
 import ru.erdenian.studentassistant.schedule.Semester
 
 class ScheduleActivity : AppCompatActivity() {
