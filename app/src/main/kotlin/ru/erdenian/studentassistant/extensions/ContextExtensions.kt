@@ -32,15 +32,11 @@ fun Context.clearApplicationData() {
     }
 
     val applicationDirectory = File(cacheDir.parent)
-    if (applicationDirectory.exists())
+    if (applicationDirectory.exists()) {
         applicationDirectory.list().filter { it != "lib" }.forEach {
-            deleteFile(
-                File(
-                    applicationDirectory,
-                    it
-                )
-            )
+            deleteFile(File(applicationDirectory, it))
         }
+    }
 }
 
 /**
