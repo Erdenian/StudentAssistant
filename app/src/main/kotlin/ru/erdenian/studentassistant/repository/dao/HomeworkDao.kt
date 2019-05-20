@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.localdata.dao
+package ru.erdenian.studentassistant.repository.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -7,7 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import org.joda.time.LocalDate
-import ru.erdenian.studentassistant.localdata.entity.HomeworkNew
+import ru.erdenian.studentassistant.repository.entity.HomeworkNew
 
 @Dao
 interface HomeworkDao {

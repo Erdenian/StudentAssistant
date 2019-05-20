@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.localdata.entity.SemesterNew
+import ru.erdenian.studentassistant.repository.entity.SemesterNew
 
 class SemestersAdapter(context: Context, private val semesters: List<SemesterNew>) : BaseAdapter() {
 

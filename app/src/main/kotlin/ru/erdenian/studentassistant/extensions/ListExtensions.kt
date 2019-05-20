@@ -1,7 +1,7 @@
 package ru.erdenian.studentassistant.extensions
 
 import org.joda.time.LocalDate
-import ru.erdenian.studentassistant.localdata.entity.SemesterNew
+import ru.erdenian.studentassistant.repository.entity.SemesterNew
 
 val List<SemesterNew>.defaultSemester: SemesterNew?
     get() {

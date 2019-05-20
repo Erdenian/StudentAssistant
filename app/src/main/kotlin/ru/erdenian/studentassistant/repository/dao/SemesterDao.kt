@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.localdata.dao
+package ru.erdenian.studentassistant.repository.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -6,7 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import ru.erdenian.studentassistant.localdata.entity.SemesterNew
+import ru.erdenian.studentassistant.repository.entity.SemesterNew
 
 @Dao
 interface SemesterDao {
