@@ -1,11 +1,13 @@
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+import org.jetbrains.kotlin.config.KotlinCompilerVersion
+import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
 import java.io.ByteArrayOutputStream
 
 plugins {
     id("com.android.application")
-    id("kotlin-android")
-    id("kotlin-android-extensions")
-    id("org.jetbrains.kotlin.kapt")
+    kotlin("android")
+    kotlin("android.extensions")
+    kotlin("kapt")
 }
 
 android {
@@ -46,7 +48,7 @@ android {
     }
 
     val app_name: String by project
-    android.applicationVariants.all {
+    applicationVariants.all {
         outputs.forEach { output ->
             output as BaseVariantOutputImpl
             output.apply {
@@ -59,10 +61,16 @@ android {
     }
 }
 
-dependencies {
-    val room_version = "2.1.0-alpha03"
+androidExtensions {
+    configure(delegateClosureOf<AndroidExtensionsExtension> {
+        isExperimental = true
+    })
+}
 
-    val kotlin_version: String by project
+dependencies {
+    val room_version = "2.1.0-alpha04"
+    val lifecycle_version = "2.1.0-alpha02"
+
     val joda_time_version: String by project
     val guava_version: String by project
 
@@ -70,7 +78,7 @@ dependencies {
         exclude("com.android.support", "support-annotations")
     }
 
-    implementation(kotlin("stdlib-jdk8", kotlin_version))
+    implementation(kotlin("stdlib-jdk8", KotlinCompilerVersion.VERSION))
 
     implementation("androidx.appcompat:appcompat:1.0.2")
     implementation("com.google.android.material:material:1.0.0")
@@ -82,6 +90,9 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-coroutines:$room_version")
+
+    implementation("androidx.lifecycle:lifecycle-extensions:$lifecycle_version")
+    kapt("androidx.lifecycle:lifecycle-compiler:$lifecycle_version")
 
     implementation("org.jetbrains.anko:anko-common:0.10.8")
     implementation("joda-time:joda-time:$joda_time_version")
