@@ -1,6 +1,11 @@
 package ru.erdenian.studentassistant.localdata.dao
 
-import androidx.room.*
+import androidx.lifecycle.LiveData
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import org.joda.time.Period
 import ru.erdenian.studentassistant.localdata.entity.LessonNew
 
@@ -18,7 +23,7 @@ interface LessonDao {
     fun get(semesterId: Long, lessonId: Long): LessonNew?
 
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId ORDER BY start_time, end_time, _id")
-    fun get(semesterId: Long): List<LessonNew>
+    fun get(semesterId: Long): LiveData<List<LessonNew>>
 
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId AND subject_name = :subjectName ORDER BY start_time, end_time, _id")
     fun get(semesterId: Long, subjectName: String): List<LessonNew>
