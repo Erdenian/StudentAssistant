@@ -6,10 +6,8 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.google.common.collect.ComparisonChain
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.LocalTime
-import ru.erdenian.studentassistant.schedule.LessonRepeat
 import ru.erdenian.studentassistant.schedule.generateId
 
 /**
@@ -62,7 +60,7 @@ data class LessonNew(
     val endTime: LocalTime,
 
     @ColumnInfo(name = "lesson_repeat")
-    val lessonRepeat: LessonRepeat,
+    val lessonRepeat: LessonRepeatNew,
 
     @PrimaryKey
     @ColumnInfo(name = "_id")
@@ -73,22 +71,12 @@ data class LessonNew(
 ) : Comparable<LessonNew>, Parcelable {
 
     init {
-        if (subjectName.isBlank()) throw IllegalArgumentException("Отсутствует название предмета")
-        if (startTime >= endTime) throw IllegalArgumentException("Неверно заданы даты: $startTime - $endTime")
+        require(subjectName.isNotBlank()) { "Отсутствует название предмета" }
+        require(startTime < endTime) { "Неверно заданы даты: $startTime - $endTime" }
     }
 
-    override fun compareTo(other: LessonNew) = ComparisonChain.start()
-        .compare(startTime, other.startTime)
-        .compare(endTime, other.endTime)
-        .compare(id, other.id)
-        .result()
-
-    fun test(other: LessonNew): Int {
-        return compareValuesBy(
-            this,
-            other,
-            compareBy(nullsFirst(), LessonNew::startTime).thenBy(LessonNew::endTime),
-            { it }
-        )
-    }
+    override fun compareTo(other: LessonNew) = compareValuesBy(
+        this, other,
+        LessonNew::startTime, LessonNew::endTime, LessonNew::id
+    )
 }

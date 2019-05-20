@@ -5,7 +5,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.google.common.collect.ComparisonChain
 import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.Days
@@ -63,8 +62,8 @@ data class SemesterNew(
     private val firstWeekMonday = firstDay.minusDays(firstDay.dayOfWeek - 1)
 
     init {
-        if (name.isBlank()) throw IllegalArgumentException("Пустое название")
-        if (firstDay > lastDay) throw IllegalArgumentException("Неверно заданы даты: $firstDay - $lastDay")
+        require(name.isBlank()) { "Пустое название" }
+        require(firstDay > lastDay) { "Неверно заданы даты: $firstDay - $lastDay" }
     }
 
     /**
@@ -80,10 +79,11 @@ data class SemesterNew(
     fun getWeekNumber(day: LocalDate) =
         Weeks.weeksBetween(firstWeekMonday, day).weeks - if (day >= firstWeekMonday) 0 else 1
 
-    override fun compareTo(other: SemesterNew) = ComparisonChain.start()
-        .compare(lastDay, other.lastDay)
-        .compare(firstDay, other.firstDay)
-        .compare(name, other.name)
-        .compare(id, other.id)
-        .result()
+    override fun compareTo(other: SemesterNew) = compareValuesBy(
+        this, other,
+        SemesterNew::lastDay,
+        SemesterNew::firstDay,
+        SemesterNew::name,
+        SemesterNew::id
+    )
 }
