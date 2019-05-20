@@ -29,10 +29,10 @@ class ScheduleRepository(context: Context) {
     // region Semesters
     fun insertSemester(semester: SemesterNew) = semesterDao.insert(semester)
 
-    fun getSemesters() = semesterDao.getAll()
+    val allSemesters = semesterDao.getAll()
     fun getSemester(semesterId: Long) = semesterDao.get(semesterId)
-    fun getNames() = semesterDao.getNames()
-    fun lessonsCount(semesterId: Long) = semesterDao.lessonsCount(semesterId)
+    fun getSemestersNames() = semesterDao.getNames()
+    fun getLessonsCount(semesterId: Long) = semesterDao.lessonsCount(semesterId)
     fun hasLessons(semesterId: Long) = semesterDao.hasLessons(semesterId)
     fun delete(semester: SemesterNew) = semesterDao.delete(semester)
     // endregion
@@ -60,12 +60,14 @@ class ScheduleRepository(context: Context) {
 
     fun getLessons(semester: SemesterNew, day: LocalDate): List<LessonNew> {
         val weekNumber = semester.getWeekNumber(day)
-        return getLessons(semester.id).filter { it.lessonRepeat.repeatsOnDay(day, weekNumber) }
+        return getLessons(semester.id).value?.filter {
+            it.lessonRepeat.repeatsOnDay(day, weekNumber)
+        } ?: emptyList()
     }
 
-    fun getLessons(semesterId: Long, weekday: Int) = getLessons(semesterId).filter {
+    fun getLessons(semesterId: Long, weekday: Int) = getLessons(semesterId).value?.filter {
         (it.lessonRepeat as? LessonRepeat.ByWeekday)?.repeatsOnWeekday(weekday) ?: false
-    }
+    } ?: emptyList()
     // endregion
 
     // region Homework

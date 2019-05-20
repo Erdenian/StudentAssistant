@@ -1,6 +1,11 @@
 package ru.erdenian.studentassistant.localdata.dao
 
-import androidx.room.*
+import androidx.lifecycle.LiveData
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import ru.erdenian.studentassistant.localdata.entity.SemesterNew
 
 @Dao
@@ -10,10 +15,10 @@ interface SemesterDao {
     fun insert(semester: SemesterNew)
 
     @Query("SELECT * FROM semesters ORDER BY first_day, last_day, name, _id")
-    fun getAll(): List<SemesterNew>
+    fun getAll(): LiveData<List<SemesterNew>>
 
     @Query("SELECT * FROM semesters WHERE _id = :semesterId")
-    fun get(semesterId: Long): SemesterNew?
+    suspend fun get(semesterId: Long): SemesterNew?
 
     @Query("SELECT name FROM semesters ORDER BY first_day, last_day, name, _id")
     fun getNames(): List<String>

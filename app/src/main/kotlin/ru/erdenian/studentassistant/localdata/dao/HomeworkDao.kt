@@ -1,6 +1,11 @@
 package ru.erdenian.studentassistant.localdata.dao
 
-import androidx.room.*
+import androidx.lifecycle.LiveData
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.localdata.entity.HomeworkNew
 
@@ -14,10 +19,10 @@ interface HomeworkDao {
     fun get(semesterId: Long, homeworkId: Long): HomeworkNew?
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId ORDER BY deadline, _id")
-    fun get(semesterId: Long): List<HomeworkNew>
+    fun get(semesterId: Long): LiveData<List<HomeworkNew>>
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName ORDER BY deadline, _id")
-    fun get(semesterId: Long, subjectName: String): List<HomeworkNew>
+    suspend fun get(semesterId: Long, subjectName: String): List<HomeworkNew>
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline >= :today ORDER BY deadline, _id")
     fun getActual(semesterId: Long, today: LocalDate = LocalDate.now()): List<HomeworkNew>
