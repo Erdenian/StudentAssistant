@@ -6,7 +6,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.google.common.collect.ComparisonChain
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.schedule.generateId
@@ -56,12 +55,12 @@ data class HomeworkNew(
 ) : Comparable<HomeworkNew>, Parcelable {
 
     init {
-        if (subjectName.isBlank()) throw IllegalArgumentException("Пустое название предмета")
-        if (description.isBlank()) throw IllegalArgumentException("Пустое описание")
+        require(subjectName.isNotBlank()) { "Пустое название предмета" }
+        require(description.isNotBlank()) { "Пустое описание" }
     }
 
-    override fun compareTo(other: HomeworkNew) = ComparisonChain.start()
-        .compare(deadline, other.deadline)
-        .compare(id, other.id)
-        .result()
+    override fun compareTo(other: HomeworkNew) = compareValuesBy(
+        this, other,
+        HomeworkNew::deadline, HomeworkNew::id
+    )
 }
