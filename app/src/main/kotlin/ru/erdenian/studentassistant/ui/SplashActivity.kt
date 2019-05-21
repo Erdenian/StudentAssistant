@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startService
-import ru.erdenian.studentassistant.activity.ScheduleActivity
 import ru.erdenian.studentassistant.service.ScheduleService
+import ru.erdenian.studentassistant.ui.schedule.ScheduleActivity
 
 class SplashActivity : AppCompatActivity() {
 

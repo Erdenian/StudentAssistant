@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.activity
+package ru.erdenian.studentassistant.ui.schedule
 
 import android.os.Bundle
 import android.view.Menu
@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.get
 import kotlinx.android.synthetic.main.activity_schedule.content_schedule_add_schedule
 import kotlinx.android.synthetic.main.activity_schedule.content_schedule_get_schedule_from_server
 import kotlinx.android.synthetic.main.activity_schedule.drawer_layout
@@ -21,9 +22,11 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.activity.LessonsEditorActivity
+import ru.erdenian.studentassistant.activity.SEMESTER_ID
+import ru.erdenian.studentassistant.activity.SemesterEditorActivity
 import ru.erdenian.studentassistant.adapter.SchedulePagerAdapter
 import ru.erdenian.studentassistant.adapter.SemestersAdapter
-import ru.erdenian.studentassistant.extensions.defaultSemester
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.initializeDrawerAndNavigationView
 import ru.erdenian.studentassistant.extensions.setColor
@@ -38,9 +41,7 @@ class ScheduleActivity : AppCompatActivity() {
         private const val SCHEDULE_INDEX = 1
     }
 
-    private val viewModel by lazy {
-        ViewModelProviders.of(this).get(ScheduleViewModel::class.java)
-    }
+    private val viewModel by lazy { ViewModelProviders.of(this).get<ScheduleViewModel>() }
 
     private var selectedSemester: SemesterNew? = null
     private var isSemestersEmpty = false

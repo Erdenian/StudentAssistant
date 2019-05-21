@@ -5,15 +5,15 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import kotlinx.android.synthetic.main.navigation_view.*
+import kotlinx.android.synthetic.main.navigation_view.navigation_view
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.activity.AlarmEditorActivity
 import ru.erdenian.studentassistant.activity.HelpActivity
 import ru.erdenian.studentassistant.activity.HomeworksActivity
-import ru.erdenian.studentassistant.activity.ScheduleActivity
 import ru.erdenian.studentassistant.localdata.ScheduleManager
+import ru.erdenian.studentassistant.ui.schedule.ScheduleActivity
 
 /**
  * Инициализирует Navigation Drawer.
