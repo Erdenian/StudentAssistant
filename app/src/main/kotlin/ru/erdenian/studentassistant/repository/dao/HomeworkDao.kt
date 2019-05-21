@@ -13,10 +13,10 @@ import ru.erdenian.studentassistant.repository.entity.HomeworkNew
 interface HomeworkDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(homework: HomeworkNew)
+    suspend fun insert(homework: HomeworkNew)
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND _id = :homeworkId")
-    fun get(semesterId: Long, homeworkId: Long): HomeworkNew?
+    suspend fun get(semesterId: Long, homeworkId: Long): HomeworkNew?
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId ORDER BY deadline, _id")
     fun get(semesterId: Long): LiveData<List<HomeworkNew>>
@@ -25,42 +25,42 @@ interface HomeworkDao {
     suspend fun get(semesterId: Long, subjectName: String): List<HomeworkNew>
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline >= :today ORDER BY deadline, _id")
-    fun getActual(semesterId: Long, today: LocalDate = LocalDate.now()): List<HomeworkNew>
+    fun getActual(semesterId: Long, today: LocalDate = LocalDate.now()): LiveData<List<HomeworkNew>>
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName AND deadline >= :today ORDER BY deadline, _id")
-    fun getActual(
+    suspend fun getActual(
         semesterId: Long,
         subjectName: String,
         today: LocalDate = LocalDate.now()
     ): List<HomeworkNew>
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline < :today ORDER BY deadline, _id")
-    fun getPast(semesterId: Long, today: LocalDate = LocalDate.now()): List<HomeworkNew>
+    fun getPast(semesterId: Long, today: LocalDate = LocalDate.now()): LiveData<List<HomeworkNew>>
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName AND deadline < :today ORDER BY deadline, _id")
-    fun getPast(
+    suspend fun getPast(
         semesterId: Long,
         subjectName: String,
         today: LocalDate = LocalDate.now()
     ): List<HomeworkNew>
 
     @Query("SELECT COUNT(_id) FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName")
-    fun getCount(semesterId: Long, subjectName: String): Int
+    suspend fun getCount(semesterId: Long, subjectName: String): Int
 
     @Query("UPDATE homeworks SET subject_name = :newName WHERE semester_id = :semesterId AND subject_name = :oldName")
-    fun renameSubject(semesterId: Long, oldName: String, newName: String)
+    suspend fun renameSubject(semesterId: Long, oldName: String, newName: String)
 
     @Delete
-    fun delete(homework: HomeworkNew)
+    suspend fun delete(homework: HomeworkNew)
 
     @Query("DELETE FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName")
-    fun delete(semesterId: Long, subjectName: String)
+    suspend fun delete(semesterId: Long, subjectName: String)
 
     @Deprecated("Only for debugging")
     @Query("DELETE FROM homeworks")
-    fun deleteAll()
+    suspend fun deleteAll()
 
     @Deprecated("Only for debugging")
     @Query("DELETE FROM homeworks WHERE semester_id = :semesterId")
-    fun deleteAll(semesterId: Long)
+    suspend fun deleteAll(semesterId: Long)
 }
