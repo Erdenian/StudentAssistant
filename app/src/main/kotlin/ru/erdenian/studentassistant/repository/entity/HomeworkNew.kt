@@ -61,6 +61,7 @@ data class HomeworkNew(
 
     override fun compareTo(other: HomeworkNew) = compareValuesBy(
         this, other,
-        HomeworkNew::deadline, HomeworkNew::id
+        HomeworkNew::deadline,
+        HomeworkNew::id
     )
 }

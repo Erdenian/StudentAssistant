@@ -5,8 +5,7 @@ import org.joda.time.Days
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 import org.joda.time.Period
-import ru.erdenian.studentassistant.extensions.toImmutableSortedSet
-import ru.erdenian.studentassistant.schedule.LessonRepeat
+import ru.erdenian.studentassistant.repository.entity.LessonRepeatNew
 
 class Converters {
 
@@ -37,38 +36,32 @@ class Converters {
         if (value == null) null else Period.millis(value)
 
     @TypeConverter
-    fun stringsToString(value: List<String?>?): String? =
+    fun stringsImmutableSortedSetToString(value: ImmutableSortedSet<String?>?): String? =
         value?.joinToString(SEPARATOR)
 
     @TypeConverter
-    fun stringToStrings(value: String?): List<String?>? =
-        value?.split(SEPARATOR)
+    fun stringToStringsImmutableSortedSet(value: String?): ImmutableSortedSet<String>? =
+        value?.split(SEPARATOR)?.toImmutableSortedSet()
 
     @TypeConverter
-    fun lessonRepeatToString(value: LessonRepeat?): String? =
+    fun lessonRepeatToString(value: LessonRepeatNew?): String? =
         if (value == null) null else when (value) {
-            is LessonRepeat.ByWeekday -> value.weekday.toString() +
-                    SEPARATOR + value.weeks.joinToString(
-                SEPARATOR
-            )
-            is LessonRepeat.ByDates -> value.dates.joinToString(SEPARATOR)
+            is LessonRepeatNew.ByWeekday ->
+                value.weekday.toString() + SEPARATOR + value.weeks.joinToString(SEPARATOR)
+            is LessonRepeatNew.ByDates -> value.dates.joinToString(SEPARATOR)
         }
 
     @TypeConverter
-    fun stringToLessonRepeat(value: String?): LessonRepeat? =
+    fun stringToLessonRepeat(value: String?): LessonRepeatNew? =
         if (value == null) null else {
-            if (value.contains('.')) LessonRepeat.ByDates(
-                value.split(SEPARATOR).map {
-                    LocalDate.parse(
-                        it
-                    )
-                }.toImmutableSortedSet()
+            if (value.contains('.')) LessonRepeatNew.ByDates(
+                value.split(SEPARATOR).map { LocalDate.parse(it) }.toImmutableSortedSet()
             )
             else {
                 val separated = value.split(SEPARATOR)
-                LessonRepeat.ByWeekday(
+                LessonRepeatNew.ByWeekday(
                     separated[0].toInt(),
-                    separated.drop(1).map { it.toBoolean() }
+                    separated.asSequence().drop(1).map { it.toBoolean() }.toList()
                 )
             }
         }

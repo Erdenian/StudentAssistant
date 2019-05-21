@@ -8,6 +8,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.LocalTime
+import ru.erdenian.studentassistant.repository.ImmutableSortedSet
 import ru.erdenian.studentassistant.schedule.generateId
 
 /**
@@ -48,10 +49,10 @@ data class LessonNew(
     val type: String,
 
     @ColumnInfo(name = "teachers")
-    val teachers: List<String>,
+    val teachers: ImmutableSortedSet<String>,
 
     @ColumnInfo(name = "classrooms")
-    val classrooms: List<String>,
+    val classrooms: ImmutableSortedSet<String>,
 
     @ColumnInfo(name = "start_time")
     val startTime: LocalTime,
@@ -77,6 +78,8 @@ data class LessonNew(
 
     override fun compareTo(other: LessonNew) = compareValuesBy(
         this, other,
-        LessonNew::startTime, LessonNew::endTime, LessonNew::id
+        LessonNew::startTime,
+        LessonNew::endTime,
+        LessonNew::id
     )
 }
