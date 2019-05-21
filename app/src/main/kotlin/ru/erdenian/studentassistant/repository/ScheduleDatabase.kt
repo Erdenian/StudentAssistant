@@ -34,7 +34,6 @@ abstract class ScheduleDatabase : RoomDatabase() {
             "schedule1.db"
         )
             // Todo: убрать
-            .allowMainThreadQueries()
             .fallbackToDestructiveMigration()
             .build()
     })

@@ -29,6 +29,9 @@ abstract class LessonDao {
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId ORDER BY start_time, end_time, _id")
     abstract fun get(semesterId: Long): LiveData<List<LessonNew>>
 
+    @Query("SELECT * FROM lessons WHERE semester_id = :semesterId ORDER BY start_time, end_time, _id")
+    abstract suspend fun getList(semesterId: Long): List<LessonNew>
+
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId AND subject_name = :subjectName ORDER BY start_time, end_time, _id")
     abstract suspend fun get(semesterId: Long, subjectName: String): List<LessonNew>
 
@@ -67,6 +70,9 @@ abstract class LessonDao {
 
     @Query("SELECT COUNT(_id) FROM lessons WHERE semester_id = :semesterId AND subject_name = :subjectName")
     abstract suspend fun getCount(semesterId: Long, subjectName: String): Int
+
+    @Query("SELECT COUNT(_id) > 0 FROM lessons WHERE semester_id = :semesterId AND subject_name = :subjectName")
+    abstract suspend fun hasSubject(semesterId: Long, subjectName: String): Boolean
 
     @Query("UPDATE lessons SET subject_name = :newName WHERE semester_id = :semesterId AND subject_name = :oldName")
     abstract suspend fun renameSubject(semesterId: Long, oldName: String, newName: String)
