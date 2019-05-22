@@ -5,17 +5,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import android.widget.Spinner
+import android.widget.ViewFlipper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
-import kotlinx.android.synthetic.main.activity_schedule.content_schedule_add_schedule
-import kotlinx.android.synthetic.main.activity_schedule.content_schedule_get_schedule_from_server
 import kotlinx.android.synthetic.main.activity_schedule.drawer_layout
-import kotlinx.android.synthetic.main.activity_schedule.schedule_flipper
-import kotlinx.android.synthetic.main.toolbar_with_spinner.toolbar_with_spinner
-import kotlinx.android.synthetic.main.toolbar_with_spinner.toolbar_with_spinner_spinner
 import kotlinx.android.synthetic.main.view_pager.view_pager
 import kotlinx.android.synthetic.main.view_pager.view_pager_pager_tab_strip
 import org.jetbrains.anko.startActivity
@@ -42,6 +39,10 @@ class ScheduleActivity : AppCompatActivity() {
 
     private val viewModel by lazy { ViewModelProviders.of(this).get<ScheduleViewModel>() }
 
+
+    private val spinner by lazy { findViewById<Spinner>(R.id.as_toolbar_spinner) }
+
+
     private var pagerAdapter: SchedulePagerAdapter? = null
 
     private val actionBar by lazy {
@@ -51,9 +52,9 @@ class ScheduleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule)
-        setSupportActionBar(toolbar_with_spinner)
+        setSupportActionBar(findViewById(R.id.as_toolbar))
 
-        toolbar_with_spinner_spinner.onItemSelectedListener =
+        spinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>, view: View, position: Int, id: Long
@@ -80,9 +81,10 @@ class ScheduleActivity : AppCompatActivity() {
         view_pager_pager_tab_strip.setTextColor(getCompatColor(R.color.colorPrimary))
         view_pager_pager_tab_strip.setTabIndicatorColorResource(R.color.colorPrimary)
 
+        val flipper = findViewById<ViewFlipper>(R.id.as_flipper)
         viewModel.allSemesters.observe(this, Observer { semesters ->
             isSemestersEmpty = semesters.isEmpty()
-            schedule_flipper.displayedChild = when (isSemestersEmpty) {
+            flipper.displayedChild = when (isSemestersEmpty) {
                 true -> BUTTONS_INDEX
                 false -> SCHEDULE_INDEX
             }
@@ -100,16 +102,16 @@ class ScheduleActivity : AppCompatActivity() {
                     actionBar.setDisplayShowTitleEnabled(false)
                     actionBar.title = null
 
-                    toolbar_with_spinner_spinner.adapter = SemestersAdapter(this, semesters)
-                    toolbar_with_spinner_spinner.setSelection(selectedSemesterIndex)
-                    toolbar_with_spinner_spinner.visibility = View.VISIBLE
+                    spinner.adapter = SemestersAdapter(this, semesters)
+                    spinner.setSelection(selectedSemesterIndex)
+                    spinner.visibility = View.VISIBLE
                 }
                 (semesters.size == 1) -> {
                     actionBar.title = semesters[selectedSemesterIndex].name
                     actionBar.setDisplayShowTitleEnabled(true)
 
-                    toolbar_with_spinner_spinner.visibility = View.GONE
-                    toolbar_with_spinner_spinner.adapter = null
+                    spinner.visibility = View.GONE
+                    spinner.adapter = null
 
                     /*val adapter = SchedulePagerAdapter(supportFragmentManager, selectedSemester, false)
                     view_pager.adapter = adapter
@@ -120,8 +122,8 @@ class ScheduleActivity : AppCompatActivity() {
                     actionBar.setTitle(R.string.title_activity_schedule)
                     actionBar.setDisplayShowTitleEnabled(true)
 
-                    toolbar_with_spinner_spinner.visibility = View.GONE
-                    toolbar_with_spinner_spinner.adapter = null
+                    spinner.visibility = View.GONE
+                    spinner.adapter = null
 
                     pagerAdapter = null
                     view_pager.adapter = null
