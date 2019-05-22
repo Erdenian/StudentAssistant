@@ -31,7 +31,6 @@ import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.initializeDrawerAndNavigationView
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.extensions.showDatePicker
-import ru.erdenian.studentassistant.repository.entity.SemesterNew
 import ru.erdenian.studentassistant.schedule.Semester
 
 class ScheduleActivity : AppCompatActivity() {
@@ -42,9 +41,6 @@ class ScheduleActivity : AppCompatActivity() {
     }
 
     private val viewModel by lazy { ViewModelProviders.of(this).get<ScheduleViewModel>() }
-
-    private var selectedSemester: SemesterNew? = null
-    private var isSemestersEmpty = false
 
     private var pagerAdapter: SchedulePagerAdapter? = null
 
