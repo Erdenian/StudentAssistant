@@ -12,10 +12,28 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/toolbar_with_spinner" />
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/as_toolbar"
+                style="@style/Toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize">
+
+                <Spinner
+                    android:id="@+id/as_toolbar_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/spinner_item_semesters" />
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <ViewFlipper
-            android:id="@+id/schedule_flipper"
+            android:id="@+id/as_flipper"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -28,7 +46,7 @@
                 android:padding="@dimen/activity_vertical_margin">
 
                 <Button
-                    android:id="@+id/content_schedule_get_schedule_from_server"
+                    android:id="@+id/as_download_schedule"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -37,7 +55,7 @@
                     tools:visibility="visible" />
 
                 <Button
-                    android:id="@+id/content_schedule_add_schedule"
+                    android:id="@+id/as_create_schedule"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -45,7 +63,18 @@
 
             </LinearLayout>
 
-            <include layout="@layout/view_pager" />
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/as_view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.viewpager.widget.PagerTabStrip
+                    android:id="@+id/as_pager_tab_strip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top" />
+
+            </androidx.viewpager.widget.ViewPager>
 
         </ViewFlipper>
 
