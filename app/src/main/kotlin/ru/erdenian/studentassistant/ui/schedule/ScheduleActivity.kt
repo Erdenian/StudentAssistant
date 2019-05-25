@@ -5,134 +5,109 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import android.widget.Button
 import android.widget.Spinner
 import android.widget.ViewFlipper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
-import androidx.lifecycle.Observer
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
-import kotlinx.android.synthetic.main.activity_schedule.drawer_layout
+import androidx.lifecycle.observe
+import androidx.viewpager.widget.PagerTabStrip
+import androidx.viewpager.widget.ViewPager
 import kotlinx.android.synthetic.main.view_pager.view_pager
-import kotlinx.android.synthetic.main.view_pager.view_pager_pager_tab_strip
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
-import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.activity.LessonsEditorActivity
-import ru.erdenian.studentassistant.activity.SEMESTER_ID
 import ru.erdenian.studentassistant.activity.SemesterEditorActivity
-import ru.erdenian.studentassistant.adapter.SchedulePagerAdapter
-import ru.erdenian.studentassistant.adapter.SemestersAdapter
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.initializeDrawerAndNavigationView
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.extensions.showDatePicker
-import ru.erdenian.studentassistant.schedule.Semester
+import ru.erdenian.studentassistant.repository.entity.SemesterNew
+import ru.erdenian.studentassistant.ui.adapter.SemestersSpinnerAdapter
 
 class ScheduleActivity : AppCompatActivity() {
 
-    companion object {
-        private const val BUTTONS_INDEX = 0
-        private const val SCHEDULE_INDEX = 1
-    }
-
     private val viewModel by lazy { ViewModelProviders.of(this).get<ScheduleViewModel>() }
 
-
-    private val spinner by lazy { findViewById<Spinner>(R.id.as_toolbar_spinner) }
-
-
-    private var pagerAdapter: SchedulePagerAdapter? = null
-
-    private val actionBar by lazy {
-        supportActionBar ?: throw NullPointerException("supportActionBar == null")
-    }
+    private val drawer by lazy { findViewById<DrawerLayout>(R.id.as_drawer) }
+    private val pagerAdapter by lazy { SchedulePagerAdapter(supportFragmentManager) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule)
-        setSupportActionBar(findViewById(R.id.as_toolbar))
 
-        spinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>, view: View, position: Int, id: Long
-                ) {
-                    val semester = parent.adapter.getItem(position) as Semester
-                    val adapter = SchedulePagerAdapter(supportFragmentManager, semester, false)
-                    view_pager.adapter = adapter
-                    view_pager.setCurrentItem(adapter.getPosition(LocalDate.now()), false)
+        findViewById<Toolbar>(R.id.as_toolbar).let { toolbar ->
+            setSupportActionBar(toolbar)
+            initializeDrawerAndNavigationView(toolbar)
+        }
+        val actionBar = checkNotNull(supportActionBar)
 
-                    //selectedSemester = semester
-                    pagerAdapter = adapter
+        val spinner = findViewById<Spinner>(R.id.as_toolbar_spinner)
+        val spinnerAdapter = SemestersSpinnerAdapter()
+        spinner.adapter = spinnerAdapter
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>, view: View, position: Int, id: Long
+            ) {
+                viewModel.selectedSemester.apply {
+                    val semester = parent.adapter.getItem(position) as SemesterNew
+                    if (value != semester) value = semester
                 }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) = Unit
             }
 
-        content_schedule_get_schedule_from_server.setOnClickListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+        }
+
+        val flipper = findViewById<ViewFlipper>(R.id.as_flipper)
+        val flipperButtonsIndex = 0
+        val flipperScheduleIndex = 1
+
+        findViewById<Button>(R.id.as_download_schedule).setOnClickListener {
             toast(R.string.content_schedule_get_schedule_from_server_button)
         }
-        content_schedule_add_schedule.setOnClickListener {
+        findViewById<Button>(R.id.as_create_schedule).setOnClickListener {
             startActivity<SemesterEditorActivity>()
         }
 
-        view_pager_pager_tab_strip.setTextColor(getCompatColor(R.color.colorPrimary))
-        view_pager_pager_tab_strip.setTabIndicatorColorResource(R.color.colorPrimary)
+        findViewById<ViewPager>(R.id.as_view_pager).adapter = pagerAdapter
+        findViewById<PagerTabStrip>(R.id.as_pager_tab_strip).apply {
+            setTextColor(getCompatColor(R.color.colorPrimary))
+            setTabIndicatorColorResource(R.color.colorPrimary)
+        }
 
-        val flipper = findViewById<ViewFlipper>(R.id.as_flipper)
-        viewModel.allSemesters.observe(this, Observer { semesters ->
-            isSemestersEmpty = semesters.isEmpty()
-            flipper.displayedChild = when (isSemestersEmpty) {
-                true -> BUTTONS_INDEX
-                false -> SCHEDULE_INDEX
-            }
-
-            val selectedSemesterIndex = semesters.run {
-                val index = semesters.indexOfFirst { it.id == selectedSemester?.id }
-                if (index == -1) {
-                    selectedSemester = semesters.defaultSemester
-                    semesters.indexOf(selectedSemester)
-                } else index
-            }
-
-            when {
-                (semesters.size > 1) -> {
-                    actionBar.setDisplayShowTitleEnabled(false)
-                    actionBar.title = null
-
-                    spinner.adapter = SemestersAdapter(this, semesters)
-                    spinner.setSelection(selectedSemesterIndex)
-                    spinner.visibility = View.VISIBLE
-                }
-                (semesters.size == 1) -> {
-                    actionBar.title = semesters[selectedSemesterIndex].name
-                    actionBar.setDisplayShowTitleEnabled(true)
-
-                    spinner.visibility = View.GONE
-                    spinner.adapter = null
-
-                    /*val adapter = SchedulePagerAdapter(supportFragmentManager, selectedSemester, false)
-                    view_pager.adapter = adapter
-                    view_pager.setCurrentItem(adapter.getPosition(LocalDate.now()), false)
-                    pagerAdapter = adapter*/
-                }
-                else -> {
+        viewModel.allSemesters.observe(this) { semesters ->
+            when (semesters.size) {
+                0 -> {
                     actionBar.setTitle(R.string.title_activity_schedule)
                     actionBar.setDisplayShowTitleEnabled(true)
-
                     spinner.visibility = View.GONE
-                    spinner.adapter = null
-
-                    pagerAdapter = null
-                    view_pager.adapter = null
+                }
+                1 -> {
+                    actionBar.title = viewModel.selectedSemester.value?.name
+                    actionBar.setDisplayShowTitleEnabled(true)
+                    spinner.visibility = View.GONE
+                }
+                else -> {
+                    actionBar.title = null
+                    actionBar.setDisplayShowTitleEnabled(false)
+                    spinner.visibility = View.VISIBLE
                 }
             }
-
+            spinnerAdapter.semesters = semesters.list
+            flipper.displayedChild =
+                if (semesters.isNotEmpty()) flipperScheduleIndex else flipperButtonsIndex
             invalidateOptionsMenu()
-            initializeDrawerAndNavigationView(toolbar_with_spinner)
-        })
+        }
+
+        viewModel.selectedSemester.observe(this) { semester ->
+            spinner.setSelection(viewModel.allSemesters.value.indexOf(semester))
+            pagerAdapter.semester = semester
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -142,35 +117,38 @@ class ScheduleActivity : AppCompatActivity() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.menu_schedule_calendar).isVisible = !isSemestersEmpty
-        menu.findItem(R.id.menu_schedule_edit_schedule).isVisible = !isSemestersEmpty
+        val isNotEmpty = viewModel.allSemesters.value.isNotEmpty()
+        menu.findItem(R.id.menu_schedule_calendar).isVisible = isNotEmpty
+        menu.findItem(R.id.menu_schedule_edit_schedule).isVisible = isNotEmpty
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_schedule_calendar -> selectedSemester?.let {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.menu_schedule_calendar -> {
+            viewModel.selectedSemester.value?.run {
                 showDatePicker(
-                    pagerAdapter?.getDate(view_pager.currentItem),
-                    it.firstDay,
-                    it.lastDay
-                ) { newDate ->
-                    pagerAdapter?.run { view_pager.currentItem = getPosition(newDate) }
-                }
+                    pagerAdapter.getDate(view_pager.currentItem), firstDay, lastDay
+                ) { pagerAdapter.run { view_pager.currentItem = getPosition(it) } }
             }
-            R.id.menu_schedule_add_schedule -> startActivity<SemesterEditorActivity>(
-                SemesterEditorActivity.SEMESTERS_NAMES_INTENT_KEY to viewModel.semestersNames.toTypedArray()
-            )
-            R.id.menu_schedule_edit_schedule -> startActivity<LessonsEditorActivity>(
-                SEMESTER_ID to selectedSemester?.id
-            )
-            else -> throw IllegalArgumentException("Неизвестный id: ${item.itemId}")
+            true
         }
-        return super.onOptionsItemSelected(item)
+        R.id.menu_schedule_add_schedule -> {
+            startActivity<SemesterEditorActivity>(
+                SemesterEditorActivity.SEMESTER_INTENT_KEY to viewModel.selectedSemester.value
+            )
+            true
+        }
+        R.id.menu_schedule_edit_schedule -> {
+            startActivity<LessonsEditorActivity>(
+                LessonsEditorActivity.SEMESTER_INTENT_KEY to viewModel.selectedSemester.value
+            )
+            true
+        }
+        else -> false
     }
 
     override fun onBackPressed() {
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) drawer_layout.closeDrawer(GravityCompat.START)
+        if (drawer.isDrawerOpen(GravityCompat.START)) drawer.closeDrawer(GravityCompat.START)
         else super.onBackPressed()
     }
 }

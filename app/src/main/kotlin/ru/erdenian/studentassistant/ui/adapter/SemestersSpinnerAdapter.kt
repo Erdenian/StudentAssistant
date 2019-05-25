@@ -8,7 +8,13 @@ import android.widget.TextView
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.repository.entity.SemesterNew
 
-class SemestersSpinnerAdapter(private val semesters: List<SemesterNew>) : BaseAdapter() {
+class SemestersSpinnerAdapter : BaseAdapter() {
+
+    var semesters: List<SemesterNew> = listOf()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View =
         ((convertView ?: LayoutInflater.from(parent.context).inflate(

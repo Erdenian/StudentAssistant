@@ -7,19 +7,23 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_lessons_editor.*
-import kotlinx.android.synthetic.main.toolbar_with_spinner.*
-import kotlinx.android.synthetic.main.view_pager.*
+import kotlinx.android.synthetic.main.activity_lessons_editor.activity_lessons_editor_add_lesson
+import kotlinx.android.synthetic.main.activity_lessons_editor.activity_lessons_editor_flipper
+import kotlinx.android.synthetic.main.view_pager.view_pager
+import kotlinx.android.synthetic.main.view_pager.view_pager_pager_tab_strip
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.adapter.SchedulePagerAdapter
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.localdata.ScheduleManager
+import ru.erdenian.studentassistant.ui.schedule.SchedulePagerAdapter
 
-class LessonsEditorActivity : AppCompatActivity(),
-    ScheduleManager.OnScheduleUpdateListener {
+class LessonsEditorActivity : AppCompatActivity(), ScheduleManager.OnScheduleUpdateListener {
+
+    companion object {
+        const val SEMESTER_INTENT_KEY = "semester_intent_key"
+    }
 
     private val semesterId: Long by lazy {
         intent.getLongExtra(SEMESTER_ID, -1L).takeIf { it != -1L }
@@ -75,7 +79,11 @@ class LessonsEditorActivity : AppCompatActivity(),
     override fun onScheduleUpdate() {
         ScheduleManager.getSemesterOrNull(semesterId)?.let {
             val page = view_pager.currentItem
-            view_pager.adapter = SchedulePagerAdapter(supportFragmentManager, it, true)
+            view_pager.adapter = SchedulePagerAdapter(
+                supportFragmentManager,
+                it,
+                true
+            )
             view_pager.currentItem = page
 
             // TODO: 13.11.2016 добавить заполнение списка пар по датам

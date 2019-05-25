@@ -4,11 +4,10 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import org.joda.time.Days
 import org.joda.time.LocalDate
-import ru.erdenian.studentassistant.schedule.Semester
+import ru.erdenian.studentassistant.repository.entity.SemesterNew
 
 class SchedulePagerAdapter(
-    fm: FragmentManager,
-    private val semester: Semester
+    fm: FragmentManager
 ) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     companion object {
@@ -16,10 +15,16 @@ class SchedulePagerAdapter(
         private const val TITLE_FORMAT_FULL = "EEEE, dd MMMM yyyy"
     }
 
-    override fun getCount(): Int = semester.length
+    var semester: SemesterNew? = null
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    override fun getCount(): Int = semester?.length ?: 0
 
     override fun getPageTitle(position: Int): CharSequence {
-        val date = semester.firstDay.plusDays(position)
+        val date = semester?.firstDay?.plusDays(position) ?: return ""
         return date.toString(
             if (date.year == LocalDate.now().year) TITLE_FORMAT
             else TITLE_FORMAT_FULL
@@ -28,6 +33,9 @@ class SchedulePagerAdapter(
 
     override fun getItem(position: Int) = SchedulePageFragment.newInstance(getDate(position))
 
-    fun getPosition(date: LocalDate): Int = Days.daysBetween(semester.firstDay, date).days
-    fun getDate(position: Int): LocalDate = semester.firstDay.plusDays(position)
+    fun getPosition(date: LocalDate): Int =
+        Days.daysBetween(checkNotNull(semester).firstDay, date).days
+
+    fun getDate(position: Int): LocalDate =
+        checkNotNull(semester).firstDay.plusDays(position)
 }
