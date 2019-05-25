@@ -24,9 +24,7 @@ import ru.erdenian.studentassistant.repository.entity.SemesterNew
 class SemesterEditorActivity : AppCompatActivity() {
 
     companion object {
-
         const val SEMESTER_INTENT_KEY = "SEMESTER"
-        const val SEMESTERS_NAMES_INTENT_KEY = "SEMESTERS_NAMES"
 
         private const val FIRST_DAY = "first_day"
         private const val LAST_DAY = "last_day"

@@ -111,6 +111,7 @@ dependencies {
     implementation("androidx.core:core-ktx:$core_ktx_version")
     implementation("androidx.appcompat:appcompat:$appcompat_version")
     implementation("androidx.cardview:cardview:$cardview_version")
+    implementation("androidx.recyclerview:recyclerview:1.1.0-alpha05")
 
     implementation("androidx.lifecycle:lifecycle-extensions:$lifecycle_version")
     kapt("androidx.lifecycle:lifecycle-compiler:$lifecycle_version")
