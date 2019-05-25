@@ -36,7 +36,7 @@ class Converters {
         if (value == null) null else Period.millis(value)
 
     @TypeConverter
-    fun stringsImmutableSortedSetToString(value: ImmutableSortedSet<String?>?): String? =
+    fun stringsImmutableSortedSetToString(value: ImmutableSortedSet<String>?): String? =
         value?.joinToString(SEPARATOR)
 
     @TypeConverter
