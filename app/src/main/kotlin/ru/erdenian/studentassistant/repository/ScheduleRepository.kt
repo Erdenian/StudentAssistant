@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.shopify.livedataktx.toKtx
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.repository.dao.HomeworkDao
 import ru.erdenian.studentassistant.repository.dao.LessonDao
@@ -46,7 +44,6 @@ class ScheduleRepository(context: Context) {
     suspend fun insertLesson(lesson: LessonNew) = lessonDao.insert(lesson)
     suspend fun getLesson(semesterId: Long, lessonId: Long) = lessonDao.get(semesterId, lessonId)
     fun getLessons(semesterId: Long) = lessonDao.get(semesterId).map()
-    private suspend fun getLessonsList(semesterId: Long) = lessonDao.getList(semesterId)
     suspend fun getLessons(semesterId: Long, subjectName: String) =
         lessonDao.get(semesterId, subjectName).map()
 
@@ -68,16 +65,19 @@ class ScheduleRepository(context: Context) {
         }
     }
 
-    suspend fun getLessons(semester: SemesterNew, day: LocalDate) = withContext(Dispatchers.IO) {
-        val weekNumber = semester.getWeekNumber(day)
-        getLessonsList(semester.id).filter { it.lessonRepeat.repeatsOnDay(day, weekNumber) }.map()
-    }
+    fun getLessons(semester: SemesterNew, day: LocalDate) =
+        getLessons(semester.id).map { lessons ->
+            val weekNumber = semester.getWeekNumber(day)
+            lessons.filter { it.lessonRepeat.repeatsOnDay(day, weekNumber) }.map()
+        }
 
-    suspend fun getLessons(semesterId: Long, weekday: Int) = withContext(Dispatchers.IO) {
-        getLessonsList(semesterId).filter {
-            (it.lessonRepeat as? LessonRepeatNew.ByWeekday)?.repeatsOnWeekday(weekday) ?: false
-        }.map()
-    }
+    fun getLessons(semesterId: Long, weekday: Int) =
+        getLessons(semesterId).map { lessons ->
+            lessons.filter { lesson ->
+                if (lesson.lessonRepeat !is LessonRepeatNew.ByWeekday) false
+                else lesson.lessonRepeat.repeatsOnWeekday(weekday)
+            }.map()
+        }
 
     // endregion
 
