@@ -18,6 +18,7 @@ import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.localdata.ScheduleManager
 import ru.erdenian.studentassistant.ui.schedule.SchedulePagerAdapter
+import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
 
 class LessonsEditorActivity : AppCompatActivity(), ScheduleManager.OnScheduleUpdateListener {
 

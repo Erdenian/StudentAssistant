@@ -3,24 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.semestereditor.SemesterEditorActivity">
 
-    <include layout="@layout/toolbar" />
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/ase_toolbar"
+            style="@style/Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="8dp"
-        tools:context=".activity.SemesterEditorActivity">
+        android:padding="8dp">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/content_semester_editor_semester_name"
+            android:id="@+id/ase_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/content_semester_editor_semester_name_edit_text"
+                android:id="@+id/ase_name_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/content_semester_editor_semester_name"
@@ -40,7 +50,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/content_semester_editor_first_day"
+                android:id="@+id/ase_first_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/content_semester_editor_first_day" />
@@ -52,7 +62,7 @@
                 tools:ignore="HardcodedText" />
 
             <Button
-                android:id="@+id/content_semester_editor_last_day"
+                android:id="@+id/ase_last_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/content_semester_editor_last_day" />
