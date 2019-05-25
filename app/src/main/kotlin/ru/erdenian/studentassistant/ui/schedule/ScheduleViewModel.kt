@@ -11,18 +11,29 @@ import ru.erdenian.studentassistant.repository.ImmutableSortedSet
 import ru.erdenian.studentassistant.repository.ScheduleRepository
 import ru.erdenian.studentassistant.repository.entity.LessonNew
 import ru.erdenian.studentassistant.repository.entity.SemesterNew
-import ru.erdenian.studentassistant.repository.toImmutableSortedSet
+import ru.erdenian.studentassistant.repository.immutableSortedSetOf
 
 class ScheduleViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val scheduleRepository = ScheduleRepository(application)
+    private val repository = ScheduleRepository(application)
 
-    val allSemesters = scheduleRepository.getAllSemesters()
-    val semestersNames = scheduleRepository.getSemestersNames()
+    val allSemesters = repository.getAllSemesters()
+    val semestersNames = repository.getSemestersNames()
     val selectedSemester = MutableLiveDataKtx<SemesterNew?>()
-    private var privateLessons: LiveDataKtx<ImmutableSortedSet<LessonNew>>? = null
-    private val privateLessonsMediator = MediatorLiveDataKtx<ImmutableSortedSet<LessonNew>>()
-    val lessons: LiveDataKtx<ImmutableSortedSet<LessonNew>> get() = privateLessonsMediator
+
+    fun getLessons(day: LocalDate) = MediatorLiveDataKtx<ImmutableSortedSet<LessonNew>>().apply {
+        val onChanged = Observer<ImmutableSortedSet<LessonNew>> { value = it }
+        var lessonsLiveData: LiveDataKtx<ImmutableSortedSet<LessonNew>>? = null
+        addSource(selectedSemester, Observer { semester ->
+            lessonsLiveData?.let { removeSource(it) }
+            lessonsLiveData = null
+
+            if (semester != null) {
+                val data = repository.getLessons(semester, day)
+                addSource(data, onChanged)
+            } else value = immutableSortedSetOf()
+        })
+    }
 
     private val semestersObserver = Observer<ImmutableSortedSet<SemesterNew>> { value ->
         when (selectedSemester.safeValue) {
@@ -32,29 +43,11 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    private val selectedSemesterObserver = Observer<SemesterNew?> { value ->
-        val mediatorObserver = Observer<ImmutableSortedSet<LessonNew>> {
-            privateLessonsMediator.value = it
-        }
-        if (value == null) {
-            privateLessons?.let { privateLessonsMediator.removeSource(it) }
-            privateLessons = null
-            privateLessonsMediator.value = setOf<LessonNew>().toImmutableSortedSet()
-        } else {
-            privateLessons?.let { privateLessonsMediator.removeSource(it) }
-            privateLessons = scheduleRepository.getLessons(value.id).also { lessons ->
-                privateLessonsMediator.addSource(lessons, mediatorObserver)
-            }
-        }
-    }
-
     init {
         allSemesters.observeForever(semestersObserver)
-        selectedSemester.observeForever(selectedSemesterObserver)
     }
 
     override fun onCleared() {
         allSemesters.removeObserver(semestersObserver)
-        selectedSemester.removeObserver(selectedSemesterObserver)
     }
 }
