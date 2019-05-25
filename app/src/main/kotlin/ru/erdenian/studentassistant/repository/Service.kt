@@ -27,6 +27,9 @@ fun <E : Comparable<E>> Collection<E>.toImmutableSortedSet() = ImmutableSortedSe
  */
 fun <E : Comparable<E>> Sequence<E>.toImmutableSortedSet() = ImmutableSortedSet(toSortedSet())
 
+fun <T : Comparable<T>> immutableSortedSetOf(vararg elements: T) =
+    ImmutableSortedSet(elements.toSortedSet())
+
 class SortedList<E : Comparable<E>>(private val value: List<E>) : List<E> by value.sorted()
 
 /**
