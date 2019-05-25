@@ -29,9 +29,6 @@ abstract class LessonDao {
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId ORDER BY start_time, end_time, _id")
     abstract fun get(semesterId: Long): LiveData<List<LessonNew>>
 
-    @Query("SELECT * FROM lessons WHERE semester_id = :semesterId ORDER BY start_time, end_time, _id")
-    abstract suspend fun getList(semesterId: Long): List<LessonNew>
-
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId AND subject_name = :subjectName ORDER BY start_time, end_time, _id")
     abstract suspend fun get(semesterId: Long, subjectName: String): List<LessonNew>
 
