@@ -18,7 +18,7 @@ interface SemesterDao {
     fun getAll(): LiveData<List<SemesterNew>>
 
     @Query("SELECT * FROM semesters WHERE _id = :semesterId")
-    suspend fun get(semesterId: Long): SemesterNew?
+    fun get(semesterId: Long): LiveData<SemesterNew?>
 
     @Query("SELECT name FROM semesters ORDER BY first_day, last_day, name, _id")
     fun getNames(): LiveData<List<String>>

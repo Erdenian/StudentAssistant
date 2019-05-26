@@ -31,7 +31,7 @@ class ScheduleRepository(context: Context) {
 
     suspend fun insertSemester(semester: SemesterNew) = semesterDao.insert(semester)
     fun getAllSemesters() = semesterDao.getAll().map()
-    suspend fun getSemester(semesterId: Long) = semesterDao.get(semesterId)
+    fun getSemester(semesterId: Long) = semesterDao.get(semesterId)
     fun getSemestersNames() = semesterDao.getNames().map()
     suspend fun getLessonsCount(semesterId: Long) = semesterDao.lessonsCount(semesterId)
     suspend fun hasLessons(semesterId: Long) = semesterDao.hasLessons(semesterId)

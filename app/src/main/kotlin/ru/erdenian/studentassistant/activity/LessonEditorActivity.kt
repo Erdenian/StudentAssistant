@@ -7,14 +7,25 @@ import android.widget.ArrayAdapter
 import android.widget.MultiAutoCompleteTextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.common.collect.ImmutableSortedSet
-import kotlinx.android.synthetic.main.activity_lesson_editor.*
-import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.activity_lesson_editor.content_lesson_editor_classrooms_edit_text
+import kotlinx.android.synthetic.main.activity_lesson_editor.content_lesson_editor_end_time
+import kotlinx.android.synthetic.main.activity_lesson_editor.content_lesson_editor_lesson_type_edit_text
+import kotlinx.android.synthetic.main.activity_lesson_editor.content_lesson_editor_start_time
+import kotlinx.android.synthetic.main.activity_lesson_editor.content_lesson_editor_subject_name_edit_text
+import kotlinx.android.synthetic.main.activity_lesson_editor.content_lesson_editor_teachers_edit_text
+import kotlinx.android.synthetic.main.activity_lesson_editor.content_lesson_editor_weekdays
+import kotlinx.android.synthetic.main.activity_lesson_editor.content_lesson_editor_weeks_selector
+import kotlinx.android.synthetic.main.toolbar.toolbar
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.startService
 import org.jetbrains.anko.toast
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.extensions.*
+import ru.erdenian.studentassistant.extensions.exhaustive
+import ru.erdenian.studentassistant.extensions.getCompatColor
+import ru.erdenian.studentassistant.extensions.setColor
+import ru.erdenian.studentassistant.extensions.showTimePicker
+import ru.erdenian.studentassistant.extensions.toSingleLine
 import ru.erdenian.studentassistant.localdata.ScheduleManager
 import ru.erdenian.studentassistant.schedule.Lesson
 import ru.erdenian.studentassistant.schedule.LessonRepeat
@@ -23,6 +34,9 @@ import ru.erdenian.studentassistant.service.ScheduleService
 class LessonEditorActivity : AppCompatActivity() {
 
     companion object {
+        const val SEMESTER_INTENT_KEY = "semester_intent_key"
+        const val WEEKDAY_INTENT_KEY = "weekday_intent_key"
+        const val LESSON_INTENT_KEY = "lesson_intent_key"
 
         private const val START_TIME = "start_time"
         private const val END_TIME = "end_time"
@@ -99,7 +113,7 @@ class LessonEditorActivity : AppCompatActivity() {
                 }
             } ?: run {
                 supportActionBar!!.title =
-                        getString(R.string.title_activity_lesson_editor_new_lesson)
+                    getString(R.string.title_activity_lesson_editor_new_lesson)
                 content_lesson_editor_weekdays.setPosition(weekday - 1, false)
             }
         } else {
