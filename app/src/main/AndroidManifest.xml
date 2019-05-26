@@ -35,13 +35,13 @@
             android:windowSoftInputMode="stateAlwaysVisible" />
 
         <activity
-            android:name=".activity.HomeworksActivity"
-            android:label="@string/title_activity_homeworks"
+            android:name=".ui.lessonseditor.LessonsEditorActivity"
+            android:label="@string/title_activity_lessons_editor"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".activity.LessonsEditorActivity"
-            android:label="@string/title_activity_lessons_editor"
+            android:name=".activity.HomeworksActivity"
+            android:label="@string/title_activity_homeworks"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity

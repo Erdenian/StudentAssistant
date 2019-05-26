@@ -25,7 +25,7 @@ class SemesterEditorActivity : AppCompatActivity() {
 
     companion object {
         const val SEMESTER_INTENT_KEY = "semester"
-        const val DATE_FORMAT = "dd.MM.yyyy"
+        private const val DATE_FORMAT = "dd.MM.yyyy"
     }
 
     private val semester by lazy { intent.getParcelableExtra<SemesterNew?>(SEMESTER_INTENT_KEY) }

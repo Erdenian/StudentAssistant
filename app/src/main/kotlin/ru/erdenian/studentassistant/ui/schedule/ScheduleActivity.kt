@@ -21,13 +21,13 @@ import kotlinx.android.synthetic.main.view_pager.view_pager
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.activity.LessonsEditorActivity
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.initializeDrawerAndNavigationView
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.extensions.showDatePicker
 import ru.erdenian.studentassistant.repository.entity.SemesterNew
 import ru.erdenian.studentassistant.ui.adapter.SemestersSpinnerAdapter
+import ru.erdenian.studentassistant.ui.lessonseditor.LessonsEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
 
 class ScheduleActivity : AppCompatActivity() {
