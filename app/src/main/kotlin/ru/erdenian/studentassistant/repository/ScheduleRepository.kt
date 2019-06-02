@@ -4,6 +4,10 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.shopify.livedataktx.toKtx
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.withContext
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.repository.dao.HomeworkDao
 import ru.erdenian.studentassistant.repository.dao.LessonDao
@@ -27,58 +31,75 @@ class ScheduleRepository(context: Context) {
         }
     }
 
+    @Deprecated("Only for debugging")
+    suspend fun clear() = withContext(Dispatchers.IO) {
+        listOf(
+            async { deleteSemesters() },
+            async { deleteLessons() },
+            async { deleteHomeworks() }
+        ).awaitAll()
+    }
+
     // region Semesters
 
-    suspend fun insertSemester(semester: SemesterNew) = semesterDao.insert(semester)
-    fun getAllSemesters() = semesterDao.getAll().map()
+    suspend fun insert(semester: SemesterNew) = semesterDao.insert(semester)
+    suspend fun delete(semester: SemesterNew) = semesterDao.delete(semester)
+
+    @Deprecated("Only for debugging")
+    suspend fun deleteSemesters() = semesterDao.deleteAll()
+
+    fun getSemesters() = semesterDao.getAll().map()
     fun getSemester(semesterId: Long) = semesterDao.get(semesterId)
     fun getSemestersNames() = semesterDao.getNames().map()
-    suspend fun getLessonsCount(semesterId: Long) = semesterDao.lessonsCount(semesterId)
-    suspend fun hasLessons(semesterId: Long) = semesterDao.hasLessons(semesterId)
-
-    suspend fun getHomeworksCount(semesterId: Long, subjectName: String) =
-        semesterDao.homeworksCount(semesterId, subjectName)
-
-    suspend fun hasHomeworks(semesterId: Long, subjectName: String) =
-        semesterDao.hasHomeworks(semesterId, subjectName)
-
-    suspend fun delete(semester: SemesterNew) = semesterDao.delete(semester)
 
     // endregion
 
     // region Lessons
 
-    suspend fun insertLesson(lesson: LessonNew) {
+    suspend fun insert(lesson: LessonNew) {
         val oldLesson = getLesson(lesson.semesterId, lesson.id)
         lessonDao.insert(lesson)
-        if ((oldLesson != null) &&
+        if (
+            (oldLesson != null) &&
             (oldLesson.subjectName != lesson.subjectName) &&
-            getLessons(lesson.semesterId, oldLesson.subjectName).isEmpty()
+            !hasLessons(lesson.semesterId, oldLesson.subjectName)
         ) renameSubject(lesson.semesterId, oldLesson.subjectName, lesson.subjectName)
     }
 
     suspend fun getLesson(semesterId: Long, lessonId: Long) = lessonDao.get(semesterId, lessonId)
-    fun getLessons(semesterId: Long) = lessonDao.get(semesterId).map()
-    suspend fun getLessons(semesterId: Long, subjectName: String) =
-        lessonDao.get(semesterId, subjectName).map()
 
-    suspend fun getSubjects(semesterId: Long) = lessonDao.getSubjects(semesterId).map()
-    suspend fun getTypes(semesterId: Long) = lessonDao.getTypes(semesterId).map()
-    suspend fun getTeachers(semesterId: Long) = lessonDao.getTeachers(semesterId).map()
-    suspend fun getClassrooms(semesterId: Long) = lessonDao.getClassrooms(semesterId).map()
-    suspend fun getLessonLength(semesterId: Long) = lessonDao.getLessonLength(semesterId)
-    suspend fun getLessonsCount(semesterId: Long, subjectName: String) =
-        lessonDao.getCount(semesterId, subjectName)
-
-    suspend fun hasSubject(semesterId: Long, subjectName: String) =
-        lessonDao.hasSubject(semesterId, subjectName)
-
-    suspend fun deleteLesson(lesson: LessonNew) {
+    suspend fun delete(lesson: LessonNew) {
         lessonDao.delete(lesson)
-        if (!hasSubject(lesson.semesterId, lesson.subjectName)) {
+        if (!hasLessons(lesson.semesterId, lesson.subjectName)) {
             homeworkDao.delete(lesson.semesterId, lesson.subjectName)
         }
     }
+
+    @Deprecated("Only for debugging")
+    suspend fun deleteLessons(semesterId: Long) = lessonDao.deleteAll(semesterId)
+
+    @Deprecated("Only for debugging")
+    suspend fun deleteLessons() = lessonDao.deleteAll()
+
+    fun getLessons(semesterId: Long) = lessonDao.get(semesterId).map()
+    suspend fun getLessonsCount(semesterId: Long) = lessonDao.getCount(semesterId)
+    suspend fun hasLessons(semesterId: Long) = lessonDao.hasLessons(semesterId)
+
+    fun getLessons(semesterId: Long, subjectName: String) =
+        lessonDao.get(semesterId, subjectName).map()
+
+    suspend fun getLessonsCount(semesterId: Long, subjectName: String) =
+        lessonDao.getCount(semesterId, subjectName)
+
+    suspend fun hasLessons(semesterId: Long, subjectName: String) =
+        lessonDao.hasLessons(semesterId, subjectName)
+
+    fun getSubjects(semesterId: Long) = lessonDao.getSubjects(semesterId).map()
+
+    fun getTypes(semesterId: Long) = lessonDao.getTypes(semesterId).map()
+    fun getTeachers(semesterId: Long) = lessonDao.getTeachers(semesterId).map()
+    fun getClassrooms(semesterId: Long) = lessonDao.getClassrooms(semesterId).map()
+    suspend fun getLessonLength(semesterId: Long) = lessonDao.getLessonLength(semesterId)
 
     fun getLessons(semester: SemesterNew, day: LocalDate) =
         getLessons(semester.id).map { lessons ->
@@ -96,25 +117,45 @@ class ScheduleRepository(context: Context) {
 
     // endregion
 
-    // region Homework
+    // region Homeworks
 
-    suspend fun insertHomework(homework: HomeworkNew) = homeworkDao.insert(homework)
+    suspend fun insert(homework: HomeworkNew) = homeworkDao.insert(homework)
+
     suspend fun getHomework(semesterId: Long, homeworkId: Long) =
         homeworkDao.get(semesterId, homeworkId)
 
+    suspend fun delete(homework: HomeworkNew) = homeworkDao.delete(homework)
+
+    suspend fun deleteHomeworks(semesterId: Long, subjectName: String) =
+        homeworkDao.delete(semesterId, subjectName)
+
+    @Deprecated("Only for debugging")
+    suspend fun deleteHomeworks(semesterId: Long) = homeworkDao.deleteAll(semesterId)
+
+    @Deprecated("Only for debugging")
+    suspend fun deleteHomeworks() = homeworkDao.deleteAll()
+
     fun getHomeworks(semesterId: Long) = homeworkDao.get(semesterId).map()
-    suspend fun getHomeworks(semesterId: Long, subjectName: String) =
+    suspend fun getHomeworksCount(semesterId: Long) = homeworkDao.getCount(semesterId)
+    suspend fun hasHomeworks(semesterId: Long) = homeworkDao.hasHomeworks(semesterId)
+
+    fun getHomeworks(semesterId: Long, subjectName: String) =
         homeworkDao.get(semesterId, subjectName).map()
 
+    suspend fun getHomeworksCount(semesterId: Long, subjectName: String) =
+        homeworkDao.getCount(semesterId, subjectName)
+
+    suspend fun hasHomeworks(semesterId: Long, subjectName: String) =
+        homeworkDao.hasHomeworks(semesterId, subjectName)
+
     fun getActualHomeworks(semesterId: Long) = homeworkDao.getActual(semesterId).map()
-    suspend fun getActualHomeworks(semesterId: Long, subjectName: String) =
+    fun getPastHomeworks(semesterId: Long) = homeworkDao.getPast(semesterId).map()
+
+    fun getActualHomeworks(semesterId: Long, subjectName: String) =
         homeworkDao.getActual(semesterId, subjectName).map()
 
-    fun getPastHomeworks(semesterId: Long) = homeworkDao.getPast(semesterId).map()
-    suspend fun getPastHomeworks(semesterId: Long, subjectName: String) =
+    fun getPastHomeworks(semesterId: Long, subjectName: String) =
         homeworkDao.getPast(semesterId, subjectName).map()
-
-    suspend fun deleteHomework(homework: HomeworkNew) = homeworkDao.delete(homework)
 
     // endregion
 
