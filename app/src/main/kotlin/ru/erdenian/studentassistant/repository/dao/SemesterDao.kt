@@ -29,6 +29,12 @@ interface SemesterDao {
     @Query("SELECT COUNT(_id) > 0 FROM lessons WHERE semester_id = :semesterId")
     suspend fun hasLessons(semesterId: Long): Boolean
 
+    @Query("SELECT COUNT(_id) FROM homeworks WHERE subject_name = :subjectName AND semester_id = :semesterId")
+    suspend fun homeworksCount(semesterId: Long, subjectName: String): Int
+
+    @Query("SELECT COUNT(_id) > 0 FROM homeworks WHERE subject_name = :subjectName AND semester_id = :semesterId")
+    suspend fun hasHomeworks(semesterId: Long, subjectName: String): Boolean
+
     @Delete
     suspend fun delete(semester: SemesterNew)
 

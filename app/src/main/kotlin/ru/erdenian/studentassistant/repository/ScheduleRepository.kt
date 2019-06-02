@@ -35,13 +35,28 @@ class ScheduleRepository(context: Context) {
     fun getSemestersNames() = semesterDao.getNames().map()
     suspend fun getLessonsCount(semesterId: Long) = semesterDao.lessonsCount(semesterId)
     suspend fun hasLessons(semesterId: Long) = semesterDao.hasLessons(semesterId)
+
+    suspend fun getHomeworksCount(semesterId: Long, subjectName: String) =
+        semesterDao.homeworksCount(semesterId, subjectName)
+
+    suspend fun hasHomeworks(semesterId: Long, subjectName: String) =
+        semesterDao.hasHomeworks(semesterId, subjectName)
+
     suspend fun delete(semester: SemesterNew) = semesterDao.delete(semester)
 
     // endregion
 
     // region Lessons
 
-    suspend fun insertLesson(lesson: LessonNew) = lessonDao.insert(lesson)
+    suspend fun insertLesson(lesson: LessonNew) {
+        val oldLesson = getLesson(lesson.semesterId, lesson.id)
+        lessonDao.insert(lesson)
+        if ((oldLesson != null) &&
+            (oldLesson.subjectName != lesson.subjectName) &&
+            getLessons(lesson.semesterId, oldLesson.subjectName).isEmpty()
+        ) renameSubject(lesson.semesterId, oldLesson.subjectName, lesson.subjectName)
+    }
+
     suspend fun getLesson(semesterId: Long, lessonId: Long) = lessonDao.get(semesterId, lessonId)
     fun getLessons(semesterId: Long) = lessonDao.get(semesterId).map()
     suspend fun getLessons(semesterId: Long, subjectName: String) =
@@ -98,9 +113,6 @@ class ScheduleRepository(context: Context) {
     fun getPastHomeworks(semesterId: Long) = homeworkDao.getPast(semesterId).map()
     suspend fun getPastHomeworks(semesterId: Long, subjectName: String) =
         homeworkDao.getPast(semesterId, subjectName).map()
-
-    suspend fun getHomeworksCount(semesterId: Long, subjectName: String) =
-        homeworkDao.getCount(semesterId, subjectName)
 
     suspend fun deleteHomework(homework: HomeworkNew) = homeworkDao.delete(homework)
 

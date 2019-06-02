@@ -6,14 +6,20 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_lesson_information.*
-import kotlinx.android.synthetic.main.content_lesson_information.*
-import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.activity_lesson_information.activity_lesson_information_add_homework
+import kotlinx.android.synthetic.main.content_lesson_information.content_lesson_information_end_time
+import kotlinx.android.synthetic.main.content_lesson_information.content_lesson_information_homeworks_parent
+import kotlinx.android.synthetic.main.content_lesson_information.content_lesson_information_no_homeworks
+import kotlinx.android.synthetic.main.content_lesson_information.content_lesson_information_start_time
+import kotlinx.android.synthetic.main.content_lesson_information.content_lesson_information_subject_name
+import kotlinx.android.synthetic.main.content_lesson_information.content_lesson_information_type
+import kotlinx.android.synthetic.main.toolbar.toolbar
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.localdata.ScheduleManager
+import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 
 class LessonInformationActivity : AppCompatActivity(),
     ScheduleManager.OnScheduleUpdateListener {

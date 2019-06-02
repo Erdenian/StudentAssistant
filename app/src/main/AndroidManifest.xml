@@ -40,13 +40,13 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".activity.HomeworksActivity"
-            android:label="@string/title_activity_homeworks"
+            android:name=".ui.lessoneditor.LessonEditorActivity"
+            android:label="@string/title_activity_lesson_editor"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".activity.LessonEditorActivity"
-            android:label="@string/title_activity_lesson_editor"
+            android:name=".activity.HomeworksActivity"
+            android:label="@string/title_activity_homeworks"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
