@@ -43,11 +43,12 @@ sealed class LessonRepeatNew : Parcelable {
             require(weekday in DateTimeConstants.MONDAY..DateTimeConstants.SUNDAY) {
                 "Неверный день недели: $weekday"
             }
-            require(weeks.isNotEmpty()) { "Массив недель пуст" }
+            require(weeks.isNotEmpty()) { "Список недель пуст" }
+            require(weeks.contains(true)) { "Нет повторений ни на одной неделе" }
         }
 
         override fun repeatsOnDay(day: LocalDate, weekNumber: Int) =
-            (weeks[weekNumber % weeks.size]) && (day.dayOfWeek == weekday)
+            (day.dayOfWeek == weekday) && (weeks[weekNumber % weeks.size])
 
         /**
          * Показывает, повторяется ли пара в заданный день недели без учета номера недели.

@@ -134,7 +134,9 @@ dependencies {
     implementation("joda-time:joda-time:$joda_time_version")
     implementation("com.google.guava:guava:$guava_version")
 
-    implementation("com.github.ceryle:SegmentedButton:v1.2.2")
+    // region UI
+    implementation("com.github.DavidProdinger:weekdays-selector:1.1.0")
+    // endregion
 }
 
 fun isMainBranch(mainBranchName: String = "master"): Boolean {

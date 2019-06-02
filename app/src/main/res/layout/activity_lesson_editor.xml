@@ -4,17 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.lessoneditor.LessonEditorActivity">
 
-    <include layout="@layout/toolbar" />
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/ale_toolbar"
+            style="@style/Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:padding="8dp"
-        android:scrollbarStyle="outsideOverlay"
-        tools:context=".activity.LessonEditorActivity">
+        android:scrollbarStyle="outsideOverlay">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,12 +32,12 @@
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/content_lesson_editor_subject_name"
+                android:id="@+id/ale_subject_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <AutoCompleteTextView
-                    android:id="@+id/content_lesson_editor_subject_name_edit_text"
+                    android:id="@+id/ale_subject_name_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/content_lesson_editor_subject_name"
@@ -41,12 +51,12 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/content_lesson_editor_lesson_type"
+                android:id="@+id/ale_lesson_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <AutoCompleteTextView
-                    android:id="@+id/content_lesson_editor_lesson_type_edit_text"
+                    android:id="@+id/ale_lesson_type_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/content_lesson_editor_lesson_type"
@@ -56,12 +66,12 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/content_lesson_editor_teachers"
+                android:id="@+id/ale_teachers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <MultiAutoCompleteTextView
-                    android:id="@+id/content_lesson_editor_teachers_edit_text"
+                    android:id="@+id/ale_teachers_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/content_lesson_editor_teachers"
@@ -71,12 +81,12 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/content_lesson_editor_classrooms"
+                android:id="@+id/ale_classrooms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <MultiAutoCompleteTextView
-                    android:id="@+id/content_lesson_editor_classrooms_edit_text"
+                    android:id="@+id/ale_classrooms_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/content_lesson_editor_classrooms"
@@ -92,7 +102,7 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/content_lesson_editor_start_time"
+                    android:id="@+id/ale_start_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/content_lesson_editor_start_time" />
@@ -104,7 +114,7 @@
                     tools:ignore="HardcodedText" />
 
                 <Button
-                    android:id="@+id/content_lesson_editor_end_time"
+                    android:id="@+id/ale_end_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/content_lesson_editor_end_time" />
@@ -112,87 +122,37 @@
             </LinearLayout>
 
             <Spinner
-                android:id="@+id/content_lesson_editor_repeat_type"
+                android:id="@+id/ale_repeat_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:entries="@array/lesson_repeat_types"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <ViewFlipper
+                android:id="@+id/ale_repeat_type_flipper"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:id="@+id/content_lesson_editor_by_weekday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <co.ceryle.segmentedbutton.SegmentedButtonGroup
-                        android:id="@+id/content_lesson_editor_weekdays"
+                    <com.dpro.widgets.WeekdaysPicker
+                        android:id="@+id/ale_weekday"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:sbg_position="0"
-                        app:sbg_radius="10dp"
-                        app:sbg_selectorColor="@android:color/darker_gray"
-                        app:sbg_selectorTextColor="@android:color/white"
-                        app:sbg_shadow="true"
-                        app:sbg_shadowElevation="2dp"
-                        app:sbg_shadowMargin="4dp">
-
-                        <co.ceryle.segmentedbutton.SegmentedButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/content_lesson_editor_monday" />
-
-                        <co.ceryle.segmentedbutton.SegmentedButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/content_lesson_editor_tuesday" />
-
-                        <co.ceryle.segmentedbutton.SegmentedButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/content_lesson_editor_wednesday" />
-
-                        <co.ceryle.segmentedbutton.SegmentedButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/content_lesson_editor_thursday" />
-
-                        <co.ceryle.segmentedbutton.SegmentedButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/content_lesson_editor_friday" />
-
-                        <co.ceryle.segmentedbutton.SegmentedButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/content_lesson_editor_saturday" />
-
-                        <co.ceryle.segmentedbutton.SegmentedButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/content_lesson_editor_sunday" />
-
-                    </co.ceryle.segmentedbutton.SegmentedButtonGroup>
+                        app:sunday_first_day="false" />
 
                     <ru.erdenian.studentassistant.customviews.WeeksSelector
-                        android:id="@+id/content_lesson_editor_weeks_selector"
+                        android:id="@+id/ale_weeks_selector"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/content_lesson_editor_by_dates"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <!-- Todo: редактор дат -->
-
-                </LinearLayout>
+                <!-- Todo: редактор дат -->
 
             </ViewFlipper>
 
