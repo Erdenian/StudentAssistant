@@ -20,10 +20,10 @@ import kotlinx.coroutines.launch
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.activity.LessonEditorActivity
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.repository.entity.SemesterNew
+import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
 
 class LessonsEditorActivity : AppCompatActivity() {
@@ -34,26 +34,26 @@ class LessonsEditorActivity : AppCompatActivity() {
 
     private val viewModel by lazy { ViewModelProviders.of(this).get<LessonsEditorViewModel>() }
 
-    private val byWeekdaysPager by lazy { findViewById<ViewPager>(R.id.ale_by_weekdays_pager) }
+    private val byWeekdaysPager by lazy { findViewById<ViewPager>(R.id.alse_by_weekdays_pager) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lessons_editor)
 
-        setSupportActionBar(findViewById(R.id.ale_toolbar))
+        setSupportActionBar(findViewById(R.id.alse_toolbar))
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowTitleEnabled(false)
         }
 
-        findViewById<Spinner>(R.id.ale_spinner).apply {
+        findViewById<Spinner>(R.id.alse_spinner).apply {
             adapter = ArrayAdapter(
                 context,
                 R.layout.spinner_item_semesters,
                 resources.getStringArray(R.array.lesson_repeat_types)
             ).apply { setDropDownViewResource(R.layout.spinner_dropdown_item_semesters) }
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                private val flipper = findViewById<ViewFlipper>(R.id.ale_flipper)
+                private val flipper = findViewById<ViewFlipper>(R.id.alse_flipper)
 
                 override fun onItemSelected(
                     parent: AdapterView<*>,
@@ -68,14 +68,14 @@ class LessonsEditorActivity : AppCompatActivity() {
             }
         }
 
-        findViewById<PagerTabStrip>(R.id.ale_by_weekdays_pager_tab_strip).apply {
+        findViewById<PagerTabStrip>(R.id.alse_by_weekdays_pager_tab_strip).apply {
             setTextColor(getCompatColor(R.color.colorPrimary))
             setTabIndicatorColorResource(R.color.colorPrimary)
         }
         val byWeekdaysPagerAdapter = LessonsEditorPagerAdapter(supportFragmentManager)
         byWeekdaysPager.adapter = byWeekdaysPagerAdapter
 
-        findViewById<FloatingActionButton>(R.id.ale_add_lesson).setOnClickListener {
+        findViewById<FloatingActionButton>(R.id.alse_add_lesson).setOnClickListener {
             startActivity<LessonEditorActivity>(
                 LessonEditorActivity.SEMESTER_INTENT_KEY to viewModel.semester.value,
                 LessonEditorActivity.WEEKDAY_INTENT_KEY to byWeekdaysPager.currentItem + 1
