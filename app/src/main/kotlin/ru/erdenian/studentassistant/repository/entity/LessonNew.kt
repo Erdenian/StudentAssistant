@@ -63,12 +63,12 @@ data class LessonNew(
     @ColumnInfo(name = "lesson_repeat")
     val lessonRepeat: LessonRepeatNew,
 
+    @ColumnInfo(name = "semester_id")
+    val semesterId: Long,
+
     @PrimaryKey
     @ColumnInfo(name = "_id")
-    val id: Long = generateId(),
-
-    @ColumnInfo(name = "semester_id")
-    val semesterId: Long
+    val id: Long = generateId()
 ) : Comparable<LessonNew>, Parcelable {
 
     init {
