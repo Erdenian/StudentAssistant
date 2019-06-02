@@ -15,13 +15,13 @@
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/ale_toolbar"
+                android:id="@+id/alse_toolbar"
                 style="@style/Toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize">
 
                 <Spinner
-                    android:id="@+id/ale_spinner"
+                    android:id="@+id/alse_spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:listitem="@layout/spinner_item_semesters" />
@@ -31,17 +31,17 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <ViewFlipper
-            android:id="@+id/ale_flipper"
+            android:id="@+id/alse_flipper"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <androidx.viewpager.widget.ViewPager
-                android:id="@+id/ale_by_weekdays_pager"
+                android:id="@+id/alse_by_weekdays_pager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <androidx.viewpager.widget.PagerTabStrip
-                    android:id="@+id/ale_by_weekdays_pager_tab_strip"
+                    android:id="@+id/alse_by_weekdays_pager_tab_strip"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top" />
@@ -49,7 +49,7 @@
             </androidx.viewpager.widget.ViewPager>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/ale_by_dates"
+                android:id="@+id/alse_by_dates"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
@@ -58,7 +58,7 @@
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/ale_add_lesson"
+        android:id="@+id/alse_add_lesson"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
