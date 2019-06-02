@@ -46,12 +46,12 @@ data class HomeworkNew(
     @ColumnInfo(name = "deadline")
     val deadline: LocalDate,
 
+    @ColumnInfo(name = "semester_id")
+    val semesterId: Long,
+
     @PrimaryKey
     @ColumnInfo(name = "_id")
-    val id: Long = generateId(),
-
-    @ColumnInfo(name = "semester_id")
-    val semesterId: Long
+    val id: Long = generateId()
 ) : Comparable<HomeworkNew>, Parcelable {
 
     init {
