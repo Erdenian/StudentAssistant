@@ -6,8 +6,6 @@ import android.view.MenuItem
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.get
 import androidx.lifecycle.observe
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.textfield.TextInputEditText
@@ -15,7 +13,9 @@ import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.extensions.compareAndSet
 import ru.erdenian.studentassistant.extensions.getCompatColor
+import ru.erdenian.studentassistant.extensions.lazyViewModel
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.extensions.showDatePicker
 import ru.erdenian.studentassistant.repository.entity.SemesterNew
@@ -28,14 +28,15 @@ class SemesterEditorActivity : AppCompatActivity() {
         private const val DATE_FORMAT = "dd.MM.yyyy"
     }
 
-    private val semester by lazy { intent.getParcelableExtra<SemesterNew?>(SEMESTER_INTENT_KEY) }
-
-    private val viewModel by lazy { ViewModelProviders.of(this).get<SemesterEditorViewModel>() }
-    private val nameInputLayout by lazy { findViewById<TextInputLayout>(R.id.ase_name) }
+    private val viewModel by lazyViewModel<SemesterEditorViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_semester_editor)
+
+        val semester = intent.getParcelableExtra<SemesterNew?>(
+            SEMESTER_INTENT_KEY
+        )?.also { viewModel.setSemester(it) }
 
         setSupportActionBar(findViewById(R.id.ase_toolbar))
         supportActionBar?.apply {
@@ -45,28 +46,35 @@ class SemesterEditorActivity : AppCompatActivity() {
             )
         }
 
-        val nameEditText = findViewById<TextInputEditText>(R.id.ase_name_edit_text)
-        val firstDay = findViewById<Button>(R.id.ase_first_day)
-        val lastDay = findViewById<Button>(R.id.ase_last_day)
-
-        viewModel.name.observe(this) { nameEditText.setText(it) }
-        viewModel.firstDay.observe(this) { firstDay.text = it.toString(DATE_FORMAT) }
-        viewModel.lastDay.observe(this) { lastDay.text = it.toString(DATE_FORMAT) }
-        viewModel.error.observe(this) { error ->
-            when (error) {
-                Error.SEMESTER_EXISTS -> nameInputLayout.error = getString(
-                    R.string.activity_semester_editor_error_name_not_avaliable
-                )
-                else -> nameInputLayout.isErrorEnabled = false
+        findViewById<TextInputLayout>(R.id.ase_name).apply {
+            viewModel.error.observe(this@SemesterEditorActivity) { error ->
+                when (error) {
+                    Error.SEMESTER_EXISTS -> this.error = getString(
+                        R.string.activity_semester_editor_error_name_not_avaliable
+                    )
+                    else -> isErrorEnabled = false
+                }
             }
         }
 
-        nameEditText.addTextChangedListener { text ->
-            val name = text.toString()
-            viewModel.name.apply { if (name != value) value = name }
+        findViewById<TextInputEditText>(R.id.ase_name_edit_text).apply {
+            viewModel.name.observe(this@SemesterEditorActivity) { setText(it) }
+            addTextChangedListener { viewModel.name.compareAndSet(it.toString()) }
         }
-        firstDay.setOnClickListener { showDatePicker { viewModel.firstDay.value = it } }
-        lastDay.setOnClickListener { showDatePicker { viewModel.lastDay.value = it } }
+
+        findViewById<Button>(R.id.ase_first_day).apply {
+            viewModel.firstDay.observe(this@SemesterEditorActivity) { firstDay ->
+                text = firstDay.toString(DATE_FORMAT)
+            }
+            setOnClickListener { showDatePicker { viewModel.firstDay.value = it } }
+        }
+
+        findViewById<Button>(R.id.ase_last_day).apply {
+            viewModel.lastDay.observe(this@SemesterEditorActivity) { lastDay ->
+                text = lastDay.toString(DATE_FORMAT)
+            }
+            setOnClickListener { showDatePicker { viewModel.lastDay.value = it } }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
