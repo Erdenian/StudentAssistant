@@ -29,6 +29,8 @@ class SemesterEditorViewModel(application: Application) : AndroidViewModel(appli
     val firstDay = MutableLiveDataKtx<LocalDate>()
     val lastDay = MutableLiveDataKtx<LocalDate>()
 
+    private val semestersNames = repository.getSemestersNames()
+
     val error: LiveDataKtx<Error?> = MediatorLiveDataKtx<Error?>().apply {
         val onChanged = Observer<Any?> {
             value = when {
@@ -41,17 +43,30 @@ class SemesterEditorViewModel(application: Application) : AndroidViewModel(appli
         addSource(name, onChanged)
         addSource(firstDay, onChanged)
         addSource(lastDay, onChanged)
+        addSource(semestersNames, onChanged)
     }
 
-    private val semestersNames = repository.getSemestersNames()
+    private var semester: SemesterNew? = null
+
+    fun setSemester(semester: SemesterNew) {
+        this.semester = semester
+        name.value = semester.name
+        firstDay.value = semester.firstDay
+        lastDay.value = semester.lastDay
+    }
 
     suspend fun save(): Long {
         check(error.value == null)
-        return SemesterNew(
+
+        val oldSemester = semester
+        val newSemester = SemesterNew(
             name.value,
             firstDay.value,
             lastDay.value
-        ).also { repository.insertSemester(it) }.id
+        ).run { oldSemester?.let { copy(id = it.id) } ?: this }
+
+        repository.insert(newSemester)
+        return newSemester.id
     }
 
     init {
