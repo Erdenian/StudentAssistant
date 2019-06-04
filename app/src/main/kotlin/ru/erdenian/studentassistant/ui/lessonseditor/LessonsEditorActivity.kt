@@ -9,8 +9,6 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.ViewFlipper
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.get
 import androidx.lifecycle.observe
 import androidx.lifecycle.viewModelScope
 import androidx.viewpager.widget.PagerTabStrip
@@ -21,6 +19,7 @@ import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.getCompatColor
+import ru.erdenian.studentassistant.extensions.lazyViewModel
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.repository.entity.SemesterNew
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
@@ -32,13 +31,13 @@ class LessonsEditorActivity : AppCompatActivity() {
         const val SEMESTER_INTENT_KEY = "semester_intent_key"
     }
 
-    private val viewModel by lazy { ViewModelProviders.of(this).get<LessonsEditorViewModel>() }
-
-    private val byWeekdaysPager by lazy { findViewById<ViewPager>(R.id.alse_by_weekdays_pager) }
+    private val viewModel by lazyViewModel<LessonsEditorViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lessons_editor)
+
+        viewModel.semesterId.value = intent.getParcelableExtra<SemesterNew>(SEMESTER_INTENT_KEY).id
 
         setSupportActionBar(findViewById(R.id.alse_toolbar))
         supportActionBar?.apply {
@@ -48,18 +47,15 @@ class LessonsEditorActivity : AppCompatActivity() {
 
         findViewById<Spinner>(R.id.alse_spinner).apply {
             adapter = ArrayAdapter(
-                context,
-                R.layout.spinner_item_semesters,
+                context, R.layout.spinner_item_semesters,
                 resources.getStringArray(R.array.lesson_repeat_types)
             ).apply { setDropDownViewResource(R.layout.spinner_dropdown_item_semesters) }
+
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 private val flipper = findViewById<ViewFlipper>(R.id.alse_flipper)
 
                 override fun onItemSelected(
-                    parent: AdapterView<*>,
-                    view: View,
-                    position: Int,
-                    id: Long
+                    parent: AdapterView<*>, view: View, position: Int, id: Long
                 ) {
                     flipper.displayedChild = position
                 }
@@ -68,12 +64,17 @@ class LessonsEditorActivity : AppCompatActivity() {
             }
         }
 
+        val byWeekdaysPager = findViewById<ViewPager>(R.id.alse_by_weekdays_pager).apply {
+            adapter = LessonsEditorPagerAdapter(supportFragmentManager).apply {
+                viewModel.semester.observe(this@LessonsEditorActivity) { semester = it }
+            }
+        }
         findViewById<PagerTabStrip>(R.id.alse_by_weekdays_pager_tab_strip).apply {
             setTextColor(getCompatColor(R.color.colorPrimary))
             setTabIndicatorColorResource(R.color.colorPrimary)
         }
-        val byWeekdaysPagerAdapter = LessonsEditorPagerAdapter(supportFragmentManager)
-        byWeekdaysPager.adapter = byWeekdaysPagerAdapter
+
+        // TODO: 13.11.2016 добавить заполнение списка пар по датам
 
         findViewById<FloatingActionButton>(R.id.alse_add_lesson).setOnClickListener {
             startActivity<LessonEditorActivity>(
@@ -82,13 +83,7 @@ class LessonsEditorActivity : AppCompatActivity() {
             )
         }
 
-        viewModel.semesterId.value = intent.getParcelableExtra<SemesterNew>(SEMESTER_INTENT_KEY).id
-        viewModel.semester.observe(this) { semester ->
-            byWeekdaysPagerAdapter.semester = semester
-            if (semester == null) finish()
-
-            // TODO: 13.11.2016 добавить заполнение списка пар по датам
-        }
+        viewModel.semester.observe(this) { if (it == null) finish() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
