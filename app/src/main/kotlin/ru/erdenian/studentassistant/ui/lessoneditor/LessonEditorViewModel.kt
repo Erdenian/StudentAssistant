@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.shopify.livedataktx.LiveDataKtx
 import com.shopify.livedataktx.MediatorLiveDataKtx
 import com.shopify.livedataktx.MutableLiveDataKtx
+import com.shopify.livedataktx.switchMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -59,7 +60,7 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
     }
 
     val error: LiveDataKtx<Error?> = MediatorLiveDataKtx<Error?>().apply {
-        val onChanged = Observer<Any?> { _ ->
+        val onChanged = Observer<Any?> {
             value = when {
                 subjectName.value.isBlank() -> Error.EMPTY_SUBJECT_NAME
                 startTime.value >= endTime.value -> Error.WRONG_TIMES
@@ -76,38 +77,15 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
         addSource(lessonRepeat, onChanged)
     }
 
-    val existingSubjects: LiveDataKtx<ImmutableSortedSet<String>> =
-        MediatorLiveDataKtx<ImmutableSortedSet<String>>().apply {
-            addSource(semester, Observer { semester ->
-                viewModelScope.launch { value = repository.getSubjects(semester.id) }
-            })
-        }
-
-    val existingTypes: LiveDataKtx<ImmutableSortedSet<String>> =
-        MediatorLiveDataKtx<ImmutableSortedSet<String>>().apply {
-            addSource(semester, Observer { semester ->
-                viewModelScope.launch { value = repository.getTypes(semester.id) }
-            })
-        }
-
-    val existingTeachers: LiveDataKtx<ImmutableSortedSet<String>> =
-        MediatorLiveDataKtx<ImmutableSortedSet<String>>().apply {
-            addSource(semester, Observer { semester ->
-                viewModelScope.launch { value = repository.getTeachers(semester.id) }
-            })
-        }
-
-    val existingClassrooms: LiveDataKtx<ImmutableSortedSet<String>> =
-        MediatorLiveDataKtx<ImmutableSortedSet<String>>().apply {
-            addSource(semester, Observer { semester ->
-                viewModelScope.launch { value = repository.getClassrooms(semester.id) }
-            })
-        }
+    val existingSubjects = semester.switchMap { repository.getSubjects(it.id) }
+    val existingTypes = semester.switchMap { repository.getTypes(it.id) }
+    val existingTeachers = semester.switchMap { repository.getTeachers(it.id) }
+    val existingClassrooms = semester.switchMap { repository.getClassrooms(it.id) }
 
     private var lesson: LessonNew? = null
 
     fun setLesson(lesson: LessonNew, copy: Boolean = false) {
-        if (copy) this.lesson = lesson
+        if (!copy) this.lesson = lesson
 
         subjectName.value = lesson.subjectName
         type.value = lesson.type
@@ -136,6 +114,7 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
 
     suspend fun save(forceRenameOther: Boolean = false): Long {
         check(error.value == null)
+
         val oldLesson = lesson
         val newLesson = LessonNew(
             subjectName.value,
@@ -147,7 +126,8 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
             lessonRepeat.value.value,
             semester.value.id
         ).run { oldLesson?.let { copy(id = it.id) } ?: this }
-        repository.insertLesson(newLesson)
+
+        repository.insert(newLesson)
         if (forceRenameOther && oldLesson != null) repository.renameSubject(
             newLesson.id,
             oldLesson.subjectName,
@@ -164,6 +144,6 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
     }
 
     suspend fun delete() {
-        lesson?.let { repository.deleteLesson(it) }
+        lesson?.let { repository.delete(it) }
     }
 }

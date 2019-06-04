@@ -32,7 +32,6 @@ import ru.erdenian.studentassistant.extensions.showTimePicker
 import ru.erdenian.studentassistant.extensions.toSingleLine
 import ru.erdenian.studentassistant.repository.entity.LessonNew
 import ru.erdenian.studentassistant.repository.entity.LessonRepeatNew
-import ru.erdenian.studentassistant.repository.entity.SemesterNew
 import ru.erdenian.studentassistant.repository.toImmutableSortedSet
 import ru.erdenian.studentassistant.service.ScheduleService
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorViewModel.Error
@@ -51,23 +50,24 @@ class LessonEditorActivity : AppCompatActivity() {
 
     private val viewModel by lazyViewModel<LessonEditorViewModel>()
 
-    private val semester: SemesterNew by lazy {
-        intent.getParcelableExtra<SemesterNew>(SEMESTER_INTENT_KEY)
-    }
-    private val lesson: LessonNew? by lazy {
-        intent.getParcelableExtra<LessonNew?>(LESSON_INTENT_KEY)
-    }
-    private val copy by lazy { intent.getBooleanExtra(COPY_INTENT_KEY, false) }
-    private val weekday by lazy {
-        intent.getIntExtra(
-            WEEKDAY_INTENT_KEY,
-            (lesson?.lessonRepeat as? LessonRepeatNew.ByWeekday)?.weekday ?: 1
-        )
-    }
+    private val lesson by lazy { intent.getParcelableExtra<LessonNew?>(LESSON_INTENT_KEY) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lesson_editor)
+
+        intent.apply {
+            viewModel.semester.value = getParcelableExtra(SEMESTER_INTENT_KEY)
+            lesson?.let { viewModel.setLesson(it, intent.getBooleanExtra(COPY_INTENT_KEY, false)) }
+            viewModel.byWeekday.compareAndSet(
+                viewModel.byWeekday.value.copy(
+                    weekday = intent.getIntExtra(
+                        WEEKDAY_INTENT_KEY,
+                        (lesson?.lessonRepeat as? LessonRepeatNew.ByWeekday)?.weekday ?: 1
+                    )
+                )
+            )
+        }
 
         setSupportActionBar(findViewById(R.id.ale_toolbar))
         supportActionBar?.apply {
@@ -76,10 +76,6 @@ class LessonEditorActivity : AppCompatActivity() {
                 title = getString(R.string.title_activity_lesson_editor_new_lesson)
             }
         }
-
-        viewModel.semester.value = semester
-        lesson?.let { viewModel.setLesson(it, copy) }
-        viewModel.byWeekday.compareAndSet(viewModel.byWeekday.value.copy(weekday = weekday))
 
         findViewById<TextInputLayout>(R.id.ale_subject_name).apply {
             viewModel.error.observe(this@LessonEditorActivity) { error ->
@@ -261,7 +257,7 @@ class LessonEditorActivity : AppCompatActivity() {
                 )
                 val oldRepeat = viewModel.byWeekday.value
                 if (oldRepeat.weekday == newWeekday) return@setOnWeekdaysChangeListener
-                viewModel.byWeekday.compareAndSet(oldRepeat.copy(weekday = weekday))
+                viewModel.byWeekday.compareAndSet(oldRepeat.copy(weekday = newWeekday))
             }
         }
 
