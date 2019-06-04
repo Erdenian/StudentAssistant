@@ -49,7 +49,7 @@ class ScheduleRepository(context: Context) {
     suspend fun deleteSemesters() = semesterDao.deleteAll()
 
     fun getSemesters() = semesterDao.getAll().map()
-    fun getSemester(semesterId: Long) = semesterDao.get(semesterId)
+    fun getSemester(semesterId: Long) = semesterDao.get(semesterId).toKtx()
     fun getSemestersNames() = semesterDao.getNames().map()
 
     // endregion
@@ -104,16 +104,16 @@ class ScheduleRepository(context: Context) {
     fun getLessons(semester: SemesterNew, day: LocalDate) =
         getLessons(semester.id).map { lessons ->
             val weekNumber = semester.getWeekNumber(day)
-            lessons.filter { it.lessonRepeat.repeatsOnDay(day, weekNumber) }.map()
-        }
+            lessons.filter { it.lessonRepeat.repeatsOnDay(day, weekNumber) }
+        }.map()
 
     fun getLessons(semesterId: Long, weekday: Int) =
         getLessons(semesterId).map { lessons ->
             lessons.filter { lesson ->
                 if (lesson.lessonRepeat !is LessonRepeatNew.ByWeekday) false
                 else lesson.lessonRepeat.repeatsOnWeekday(weekday)
-            }.map()
-        }
+            }
+        }.map()
 
     // endregion
 

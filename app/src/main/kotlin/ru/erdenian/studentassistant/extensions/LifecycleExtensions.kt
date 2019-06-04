@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
+import com.shopify.livedataktx.LiveDataKtx
 import com.shopify.livedataktx.MutableLiveDataKtx
 
 // region ViewModelProviders
@@ -29,5 +30,13 @@ fun <T> MutableLiveData<T>.compareAndSet(value: T) {
 fun <T> MutableLiveDataKtx<T>.compareAndSet(value: T) {
     if (this.value != value) this.value = value
 }
+
+// endregion
+
+// region LiveData
+
+fun <T> T.toLiveData(): LiveDataKtx<T> = MutableLiveDataKtx<T>().apply { value = this@toLiveData }
+
+fun <T> liveDataOf(value: T): LiveDataKtx<T> = MutableLiveDataKtx<T>().also { it.value = value }
 
 // endregion
