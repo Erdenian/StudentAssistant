@@ -142,6 +142,9 @@ class ScheduleRepository(context: Context) {
     fun getHomeworks(semesterId: Long, subjectName: String) =
         homeworkDao.get(semesterId, subjectName).map()
 
+    fun getHomeworks(lesson: LessonNew) =
+        homeworkDao.get(lesson.semesterId, lesson.subjectName).map()
+
     suspend fun getHomeworksCount(semesterId: Long, subjectName: String) =
         homeworkDao.getCount(semesterId, subjectName)
 
@@ -154,8 +157,14 @@ class ScheduleRepository(context: Context) {
     fun getActualHomeworks(semesterId: Long, subjectName: String) =
         homeworkDao.getActual(semesterId, subjectName).map()
 
+    fun getActualHomeworks(lesson: LessonNew) =
+        homeworkDao.getActual(lesson.semesterId, lesson.subjectName).map()
+
     fun getPastHomeworks(semesterId: Long, subjectName: String) =
         homeworkDao.getPast(semesterId, subjectName).map()
+
+    fun getPastHomeworks(lesson: LessonNew) =
+        homeworkDao.getPast(lesson.semesterId, lesson.subjectName).map()
 
     // endregion
 
