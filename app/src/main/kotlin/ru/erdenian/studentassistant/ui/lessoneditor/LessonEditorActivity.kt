@@ -40,7 +40,7 @@ import java.util.Calendar
 class LessonEditorActivity : AppCompatActivity() {
 
     companion object {
-        const val SEMESTER_INTENT_KEY = "semester_intent_key"
+        const val SEMESTER_ID_INTENT_KEY = "semester_id_intent_key"
         const val LESSON_INTENT_KEY = "lesson_intent_key"
         const val COPY_INTENT_KEY = "copy_intent_key"
         const val WEEKDAY_INTENT_KEY = "weekday_intent_key"
@@ -57,7 +57,10 @@ class LessonEditorActivity : AppCompatActivity() {
         setContentView(R.layout.activity_lesson_editor)
 
         intent.apply {
-            viewModel.semester.value = getParcelableExtra(SEMESTER_INTENT_KEY)
+            viewModel.semesterId.value = getLongExtra(
+                SEMESTER_ID_INTENT_KEY,
+                checkNotNull(lesson).semesterId
+            )
             lesson?.let { viewModel.setLesson(it, intent.getBooleanExtra(COPY_INTENT_KEY, false)) }
             viewModel.byWeekday.compareAndSet(
                 viewModel.byWeekday.value.copy(

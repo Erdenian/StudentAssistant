@@ -19,7 +19,6 @@ import ru.erdenian.studentassistant.repository.ImmutableSortedSet
 import ru.erdenian.studentassistant.repository.ScheduleRepository
 import ru.erdenian.studentassistant.repository.entity.LessonNew
 import ru.erdenian.studentassistant.repository.entity.LessonRepeatNew
-import ru.erdenian.studentassistant.repository.entity.SemesterNew
 import ru.erdenian.studentassistant.repository.immutableSortedSetOf
 
 class LessonEditorViewModel(application: Application) : AndroidViewModel(application) {
@@ -31,7 +30,7 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
 
     private val repository = ScheduleRepository(application)
 
-    val semester = MutableLiveDataKtx<SemesterNew>()
+    val semesterId = MutableLiveDataKtx<Long>()
 
     val subjectName = MutableLiveDataKtx<String>().apply { value = "" }
     val type = MutableLiveDataKtx<String>().apply { value = "" }
@@ -45,7 +44,7 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
     val endTime: MutableLiveDataKtx<LocalTime> = MediatorLiveDataKtx<LocalTime>().apply {
         addSource(startTime, Observer { startTime ->
             viewModelScope.launch {
-                value = startTime + repository.getLessonLength(semester.value.id)
+                value = startTime + repository.getLessonLength(semesterId.value)
             }
         })
     }
@@ -77,10 +76,10 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
         addSource(lessonRepeat, onChanged)
     }
 
-    val existingSubjects = semester.switchMap { repository.getSubjects(it.id) }
-    val existingTypes = semester.switchMap { repository.getTypes(it.id) }
-    val existingTeachers = semester.switchMap { repository.getTeachers(it.id) }
-    val existingClassrooms = semester.switchMap { repository.getClassrooms(it.id) }
+    val existingSubjects = semesterId.switchMap { repository.getSubjects(it) }
+    val existingTypes = semesterId.switchMap { repository.getTypes(it) }
+    val existingTeachers = semesterId.switchMap { repository.getTeachers(it) }
+    val existingClassrooms = semesterId.switchMap { repository.getClassrooms(it) }
 
     private var lesson: LessonNew? = null
 
@@ -108,7 +107,7 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
 
     suspend fun isSubjectNameChangedAndNotLast() = withContext(Dispatchers.IO) {
         isSubjectNameChanged && repository.getLessonsCount(
-            semester.value.id, (lesson ?: return@withContext false).subjectName
+            semesterId.value, (lesson ?: return@withContext false).subjectName
         ) > 1
     }
 
@@ -124,7 +123,7 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
             startTime.value,
             endTime.value,
             lessonRepeat.value.value,
-            semester.value.id
+            semesterId.value
         ).run { oldLesson?.let { copy(id = it.id) } ?: this }
 
         repository.insert(newLesson)
@@ -138,8 +137,8 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
 
     suspend fun isLastLessonOfSubjectsAndHasHomeworks(): Boolean = withContext(Dispatchers.IO) {
         val subjectName = lesson?.subjectName ?: return@withContext false
-        val isLastLesson = async { repository.getLessonsCount(semester.value.id, subjectName) == 1 }
-        val hasHomeworks = async { repository.hasHomeworks(semester.value.id, subjectName) }
+        val isLastLesson = async { repository.getLessonsCount(semesterId.value, subjectName) == 1 }
+        val hasHomeworks = async { repository.hasHomeworks(semesterId.value, subjectName) }
         isLastLesson.await() && hasHomeworks.await()
     }
 
