@@ -78,7 +78,7 @@ class LessonsEditorActivity : AppCompatActivity() {
 
         findViewById<FloatingActionButton>(R.id.alse_add_lesson).setOnClickListener {
             startActivity<LessonEditorActivity>(
-                LessonEditorActivity.SEMESTER_INTENT_KEY to viewModel.semester.value,
+                LessonEditorActivity.SEMESTER_ID_INTENT_KEY to viewModel.semester.value?.id,
                 LessonEditorActivity.WEEKDAY_INTENT_KEY to byWeekdaysPager.currentItem + 1
             )
         }
