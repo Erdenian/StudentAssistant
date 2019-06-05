@@ -6,7 +6,9 @@ import android.view.MenuItem
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.google.common.collect.ImmutableSortedSet
-import kotlinx.android.synthetic.main.activity_homework_editor.*
+import kotlinx.android.synthetic.main.activity_homework_editor.content_homework_editor_deadline
+import kotlinx.android.synthetic.main.activity_homework_editor.content_homework_editor_subject_name
+import kotlinx.android.synthetic.main.activity_homework_editor.content_homeworks_editor_description
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
@@ -21,9 +23,11 @@ import ru.erdenian.studentassistant.schedule.Semester
 
 class HomeworkEditorActivity : AppCompatActivity() {
 
-    private companion object {
+    companion object {
+        const val LESSON_INTENT_KEY = "lesson_intent_key"
+        const val HOMEWORK_INTENT_KEY = "homework_intent_key"
 
-        const val DEADLINE = "deadline"
+        private const val DEADLINE = "deadline"
     }
 
     private val semester: Semester by lazy {
