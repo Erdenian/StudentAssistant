@@ -1,163 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:padding="8dp"
+    android:scrollbarStyle="outsideOverlay"
     tools:context=".ui.lessoneditor.LessonEditorActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/ale_toolbar"
-            style="@style/Toolbar"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ale_subject_name"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
+            android:layout_height="wrap_content">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <AutoCompleteTextView
+                android:id="@+id/ale_subject_name_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/content_lesson_editor_subject_name"
+                android:inputType="text"
+                android:maxLines="1">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:padding="8dp"
-        android:scrollbarStyle="outsideOverlay">
+                <requestFocus />
+
+            </AutoCompleteTextView>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ale_lesson_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <AutoCompleteTextView
+                android:id="@+id/ale_lesson_type_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/content_lesson_editor_lesson_type"
+                android:inputType="text"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ale_teachers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <MultiAutoCompleteTextView
+                android:id="@+id/ale_teachers_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/content_lesson_editor_teachers"
+                android:inputType="text"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ale_classrooms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <MultiAutoCompleteTextView
+                android:id="@+id/ale_classrooms_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/content_lesson_editor_classrooms"
+                android:inputType="text"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ale_subject_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <AutoCompleteTextView
-                    android:id="@+id/ale_subject_name_edit_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/content_lesson_editor_subject_name"
-                    android:inputType="text"
-                    android:maxLines="1">
-
-                    <requestFocus />
-
-                </AutoCompleteTextView>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ale_lesson_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <AutoCompleteTextView
-                    android:id="@+id/ale_lesson_type_edit_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/content_lesson_editor_lesson_type"
-                    android:inputType="text"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ale_teachers"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <MultiAutoCompleteTextView
-                    android:id="@+id/ale_teachers_edit_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/content_lesson_editor_teachers"
-                    android:inputType="text"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ale_classrooms"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <MultiAutoCompleteTextView
-                    android:id="@+id/ale_classrooms_edit_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/content_lesson_editor_classrooms"
-                    android:inputType="text"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <LinearLayout
+            <Button
+                android:id="@+id/ale_start_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:orientation="horizontal">
+                android:text="@string/content_lesson_editor_start_time" />
 
-                <Button
-                    android:id="@+id/ale_start_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/content_lesson_editor_start_time" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" - "
-                    tools:ignore="HardcodedText" />
-
-                <Button
-                    android:id="@+id/ale_end_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/content_lesson_editor_end_time" />
-
-            </LinearLayout>
-
-            <Spinner
-                android:id="@+id/ale_repeat_type"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:entries="@array/lesson_repeat_types"
-                android:visibility="gone"
-                tools:visibility="visible" />
+                android:text=" - "
+                tools:ignore="HardcodedText" />
 
-            <ViewFlipper
-                android:id="@+id/ale_repeat_type_flipper"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <com.dpro.widgets.WeekdaysPicker
-                        android:id="@+id/ale_weekday"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:sunday_first_day="false" />
-
-                    <ru.erdenian.studentassistant.customviews.WeeksSelector
-                        android:id="@+id/ale_weeks_selector"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                </LinearLayout>
-
-                <!-- Todo: редактор дат -->
-
-            </ViewFlipper>
+            <Button
+                android:id="@+id/ale_end_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/content_lesson_editor_end_time" />
 
         </LinearLayout>
 
-    </ScrollView>
+        <Spinner
+            android:id="@+id/ale_repeat_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/lesson_repeat_types"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
-</LinearLayout>
+        <ViewFlipper
+            android:id="@+id/ale_repeat_type_flipper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.dpro.widgets.WeekdaysPicker
+                    android:id="@+id/ale_weekday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:sunday_first_day="false" />
+
+                <ru.erdenian.studentassistant.customviews.WeeksSelector
+                    android:id="@+id/ale_weeks_selector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <!-- Todo: редактор дат -->
+
+        </ViewFlipper>
+
+    </LinearLayout>
+
+</ScrollView>

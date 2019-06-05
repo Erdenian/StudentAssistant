@@ -24,11 +24,12 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/content_lesson_information_subject_name"
+                android:id="@+id/ali_subject_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/action_bar_icons_color"
-                android:textSize="23sp" />
+                android:textSize="23sp"
+                tools:text="Военная кафедра" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -36,12 +37,13 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/content_lesson_information_start_time"
+                    android:id="@+id/ali_start_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/action_bar_icons_color"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    tools:text="09:00" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -53,21 +55,23 @@
                     tools:ignore="HardcodedText" />
 
                 <TextView
-                    android:id="@+id/content_lesson_information_end_time"
+                    android:id="@+id/ali_end_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/action_bar_icons_color"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    tools:text="17:10" />
 
             </LinearLayout>
 
             <TextView
-                android:id="@+id/content_lesson_information_type"
+                android:id="@+id/ali_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/action_bar_icons_color"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                tools:text="Лекция" />
 
         </LinearLayout>
 
@@ -75,30 +79,28 @@
 
     <include layout="@layout/divider_vertical" />
 
-    <FrameLayout
-        android:id="@+id/homeworks_background_card_view"
+    <ViewFlipper
+        android:id="@+id/ali_homeworks_flipper"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="10dp"
         android:layout_weight="1">
 
-        <include
-            android:id="@+id/content_lesson_information_no_homeworks"
-            layout="@layout/fragment_no_homeworks" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/activity_lesson_information_no_homeworks"
+            android:textSize="40sp" />
 
-        <ScrollView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ali_homeworks"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:padding="10dp"
+            android:scrollbarStyle="outsideOverlay" />
 
-            <LinearLayout
-                android:id="@+id/content_lesson_information_homeworks_parent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
-
-        </ScrollView>
-
-    </FrameLayout>
+    </ViewFlipper>
 
 </LinearLayout>

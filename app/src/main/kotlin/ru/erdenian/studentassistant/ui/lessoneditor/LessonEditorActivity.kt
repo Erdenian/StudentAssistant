@@ -72,7 +72,6 @@ class LessonEditorActivity : AppCompatActivity() {
             )
         }
 
-        setSupportActionBar(findViewById(R.id.ale_toolbar))
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             if (lesson == null) {

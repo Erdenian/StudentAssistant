@@ -29,9 +29,12 @@
             android:theme="@style/AppTheme.NoActionBar.TransparentStatusBar" />
 
         <activity
+            android:name=".ui.lessoninformation.LessonInformationActivity"
+            android:label="@string/title_activity_lesson_information" />
+
+        <activity
             android:name=".ui.semestereditor.SemesterEditorActivity"
             android:label="@string/title_activity_semester_editor"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysVisible" />
 
         <activity
@@ -41,17 +44,11 @@
 
         <activity
             android:name=".ui.lessoneditor.LessonEditorActivity"
-            android:label="@string/title_activity_lesson_editor"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_lesson_editor" />
 
         <activity
             android:name=".activity.HomeworksActivity"
             android:label="@string/title_activity_homeworks"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
-            android:name=".activity.LessonInformationActivity"
-            android:label="@string/title_activity_lesson_information"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity

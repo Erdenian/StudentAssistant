@@ -38,7 +38,6 @@ class SemesterEditorActivity : AppCompatActivity() {
             SEMESTER_INTENT_KEY
         )?.also { viewModel.setSemester(it) }
 
-        setSupportActionBar(findViewById(R.id.ase_toolbar))
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             if (semester == null) title = getString(
