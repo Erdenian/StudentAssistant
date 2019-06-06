@@ -118,6 +118,11 @@
 
     <string name="title_activity_homeworks">Домашние задания</string>
 
+    <string-array name="homeworks_pages">
+        <item>Текущие</item>
+        <item>Завершенные</item>
+    </string-array>
+
 
     <string name="title_activity_alarm">Будильник</string>
 

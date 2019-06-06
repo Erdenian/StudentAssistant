@@ -24,6 +24,7 @@ import ru.erdenian.studentassistant.schedule.Semester
 class HomeworkEditorActivity : AppCompatActivity() {
 
     companion object {
+        const val SEMESTER_ID_INTENT_KEY = "semester_id_intent_key"
         const val LESSON_INTENT_KEY = "lesson_intent_key"
         const val HOMEWORK_INTENT_KEY = "homework_intent_key"
 
