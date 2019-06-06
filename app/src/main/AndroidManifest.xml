@@ -47,7 +47,7 @@
             android:label="@string/title_activity_lesson_editor" />
 
         <activity
-            android:name=".activity.HomeworksActivity"
+            android:name=".ui.homeworks.HomeworksActivity"
             android:label="@string/title_activity_homeworks"
             android:theme="@style/AppTheme.NoActionBar" />
 

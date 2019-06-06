@@ -11,8 +11,8 @@ import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.activity.AlarmEditorActivity
 import ru.erdenian.studentassistant.activity.HelpActivity
-import ru.erdenian.studentassistant.activity.HomeworksActivity
 import ru.erdenian.studentassistant.localdata.ScheduleManager
+import ru.erdenian.studentassistant.ui.homeworks.HomeworksActivity
 import ru.erdenian.studentassistant.ui.schedule.ScheduleActivity
 
 /**
