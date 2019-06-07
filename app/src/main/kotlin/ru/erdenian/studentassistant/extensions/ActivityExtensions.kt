@@ -5,13 +5,12 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import kotlinx.android.synthetic.main.navigation_view.navigation_view
+import com.google.android.material.navigation.NavigationView
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.activity.AlarmEditorActivity
 import ru.erdenian.studentassistant.activity.HelpActivity
-import ru.erdenian.studentassistant.localdata.ScheduleManager
 import ru.erdenian.studentassistant.ui.homeworks.HomeworksActivity
 import ru.erdenian.studentassistant.ui.schedule.ScheduleActivity
 
@@ -24,6 +23,7 @@ import ru.erdenian.studentassistant.ui.schedule.ScheduleActivity
  */
 fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
     val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+    val navigationView = findViewById<NavigationView>(R.id.navigation_view)
 
     ActionBarDrawerToggle(
         this,
@@ -36,12 +36,12 @@ fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
         syncState()
     }
 
-    ScheduleManager.hasLessons.let {
-        navigation_view.menu.findItem(R.id.nav_homeworks).isEnabled = it
-        navigation_view.menu.findItem(R.id.nav_alarm).isEnabled = it
-    }
+    /*ScheduleRepository(applicationContext).hasLessons().let {
+        navigationView.menu.findItem(R.id.nav_homeworks).isEnabled = it
+        navigationView.menu.findItem(R.id.nav_alarm).isEnabled = it
+    }*/
 
-    navigation_view.setCheckedItem(
+    navigationView.setCheckedItem(
         when (this) {
             is ScheduleActivity -> R.id.nav_schedule
             is HomeworksActivity -> R.id.nav_homeworks
@@ -50,26 +50,39 @@ fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
         }
     )
 
-    navigation_view.setNavigationItemSelectedListener {
-        when (it.itemId) {
-            R.id.nav_schedule -> if (this !is ScheduleActivity) {
-                startActivity<ScheduleActivity>()
-                finish()
-            }
-            R.id.nav_homeworks -> if (this !is HomeworksActivity) {
-                startActivity<HomeworksActivity>()
-                finish()
-            }
-            R.id.nav_alarm -> if (this !is AlarmEditorActivity) {
-                startActivity<AlarmEditorActivity>()
-                finish()
-            }
-            R.id.nav_settings -> toast(R.string.nav_settings)
-            R.id.nav_help -> startActivity<HelpActivity>()
-            else -> throw IllegalArgumentException("Неизвестный id: ${it.itemId}")
-        }
-
+    navigationView.setNavigationItemSelectedListener {
         drawerLayout.closeDrawer(GravityCompat.START)
-        true
+        when (it.itemId) {
+            R.id.nav_schedule -> {
+                if (this !is ScheduleActivity) {
+                    startActivity<ScheduleActivity>()
+                    finish()
+                }
+                true
+            }
+            R.id.nav_homeworks -> {
+                if (this !is HomeworksActivity) {
+                    startActivity<HomeworksActivity>()
+                    finish()
+                }
+                true
+            }
+            R.id.nav_alarm -> {
+                if (this !is AlarmEditorActivity) {
+                    startActivity<AlarmEditorActivity>()
+                    finish()
+                }
+                true
+            }
+            R.id.nav_settings -> {
+                toast(R.string.nav_settings)
+                true
+            }
+            R.id.nav_help -> {
+                startActivity<HelpActivity>()
+                true
+            }
+            else -> false
+        }
     }
 }
