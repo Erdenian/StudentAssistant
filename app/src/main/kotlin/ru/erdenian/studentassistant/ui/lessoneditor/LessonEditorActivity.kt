@@ -56,9 +56,8 @@ class LessonEditorActivity : AppCompatActivity() {
 
         intent.apply {
             viewModel.semesterId.value = getLongExtra(
-                SEMESTER_ID_INTENT_KEY,
-                checkNotNull(lesson).semesterId
-            )
+                SEMESTER_ID_INTENT_KEY, -1
+            ).takeIf { it > 0 } ?: checkNotNull(lesson).semesterId
             lesson?.let { viewModel.setLesson(it, intent.getBooleanExtra(COPY_INTENT_KEY, false)) }
             viewModel.byWeekday.compareAndSet(
                 viewModel.byWeekday.value.copy(

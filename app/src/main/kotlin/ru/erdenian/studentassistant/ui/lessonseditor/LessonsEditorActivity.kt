@@ -52,7 +52,9 @@ class LessonsEditorActivity : AppCompatActivity() {
             ).apply { setDropDownViewResource(R.layout.spinner_dropdown_item_semesters) }
 
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                private val flipper = findViewById<ViewFlipper>(R.id.alse_flipper)
+                private val flipper = this@LessonsEditorActivity.findViewById<ViewFlipper>(
+                    R.id.alse_flipper
+                )
 
                 override fun onItemSelected(
                     parent: AdapterView<*>, view: View, position: Int, id: Long
