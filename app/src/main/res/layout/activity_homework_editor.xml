@@ -6,12 +6,12 @@
     android:layout_marginStart="2dp"
     android:layout_marginEnd="2dp"
     android:orientation="vertical"
-    tools:context=".activity.HomeworkEditorActivity">
+    tools:context=".ui.homeworkeditor.HomeworkEditorActivity">
 
     <Spinner
-        android:id="@+id/content_homework_editor_subject_name"
+        android:id="@+id/ahe_subject_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginBottom="4dp"
         android:prompt="@string/content_homework_editor_choose_subject"
         android:spinnerMode="dialog"
@@ -19,7 +19,7 @@
         android:textSize="@dimen/card_secondary_text_size" />
 
     <EditText
-        android:id="@+id/content_homeworks_editor_description"
+        android:id="@+id/ahe_description"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -31,7 +31,7 @@
         tools:ignore="Autofill" />
 
     <Button
-        android:id="@+id/content_homework_editor_deadline"
+        android:id="@+id/ahe_deadline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/content_homework_editor_date" />
