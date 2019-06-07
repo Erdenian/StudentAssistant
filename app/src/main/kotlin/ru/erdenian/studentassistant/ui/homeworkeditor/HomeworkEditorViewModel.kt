@@ -32,14 +32,12 @@ class HomeworkEditorViewModel(application: Application) : AndroidViewModel(appli
     val error: LiveDataKtx<Error?> = MediatorLiveDataKtx<Error?>().apply {
         val onChanged = Observer<Any?> {
             value = when {
-                description.value.isBlank() -> Error.EMPTY_DESCRIPTION
+                description.safeValue?.isBlank() == true -> Error.EMPTY_DESCRIPTION
                 else -> null
             }
         }
 
-        addSource(subjectName, onChanged)
         addSource(description, onChanged)
-        addSource(deadline, onChanged)
     }
 
     val existingSubjects = semesterId.switchMap { repository.getSubjects(it) }
