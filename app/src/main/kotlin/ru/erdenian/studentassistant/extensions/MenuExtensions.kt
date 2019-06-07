@@ -3,6 +3,7 @@ package ru.erdenian.studentassistant.extensions
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.view.Menu
+import androidx.core.view.forEach
 
 /**
  * Перекрашивает иконки меню в заданный цвет.
@@ -11,10 +12,8 @@ import android.view.Menu
  * @since 0.0.0
  * @param color цвет, в который нужно покрасить иконки
  */
-fun Menu.setColor(color: Int) {
-    for (i in 0 until size()) {
-        val drawable: Drawable? = getItem(i).icon
-        drawable?.mutate()
-        drawable?.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
-    }
+fun Menu.setColor(color: Int) = forEach { item ->
+    val drawable: Drawable? = item.icon
+    drawable?.mutate()
+    drawable?.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
 }

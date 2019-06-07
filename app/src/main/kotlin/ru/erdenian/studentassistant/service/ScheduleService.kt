@@ -1,17 +1,6 @@
 package ru.erdenian.studentassistant.service
 
-import android.app.AlarmManager
-import android.app.IntentService
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.preference.PreferenceManager
-import org.joda.time.LocalDate
-import org.joda.time.LocalTime
-import ru.erdenian.studentassistant.activity.AlarmActivity
-import ru.erdenian.studentassistant.localdata.ScheduleManager
-
-class ScheduleService : IntentService("ScheduleService") {
+/*class ScheduleService : IntentService("ScheduleService") {
 
     override fun onHandleIntent(intent: Intent?) {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -56,4 +45,4 @@ class ScheduleService : IntentService("ScheduleService") {
             )
         }
     }
-}
+}*/
