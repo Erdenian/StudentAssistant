@@ -19,7 +19,6 @@ import com.dpro.widgets.WeekdaysPicker
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.alert
-import org.jetbrains.anko.startService
 import org.jetbrains.anko.toast
 import org.joda.time.DateTimeConstants
 import ru.erdenian.studentassistant.R
@@ -33,7 +32,6 @@ import ru.erdenian.studentassistant.extensions.toSingleLine
 import ru.erdenian.studentassistant.repository.entity.LessonNew
 import ru.erdenian.studentassistant.repository.entity.LessonRepeatNew
 import ru.erdenian.studentassistant.repository.toImmutableSortedSet
-import ru.erdenian.studentassistant.service.ScheduleService
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorViewModel.Error
 import java.util.Calendar
 
@@ -306,14 +304,12 @@ class LessonEditorActivity : AppCompatActivity() {
                                 positiveButton(R.string.activity_lesson_editor_alert_rename_lessons_yes) {
                                     viewModel.viewModelScope.launch {
                                         viewModel.save(true)
-                                        startService<ScheduleService>()
                                         finish()
                                     }
                                 }
                                 negativeButton(R.string.activity_lesson_editor_alert_rename_lessons_no) {
                                     viewModel.viewModelScope.launch {
                                         viewModel.save(false)
-                                        startService<ScheduleService>()
                                         finish()
                                     }
                                 }
@@ -321,7 +317,6 @@ class LessonEditorActivity : AppCompatActivity() {
                             }.show()
                         } else {
                             viewModel.save()
-                            startService<ScheduleService>()
                             finish()
                         }
                     }
@@ -338,7 +333,6 @@ class LessonEditorActivity : AppCompatActivity() {
                             positiveButton(R.string.activity_lesson_editor_alert_delete_homeworks_yes) {
                                 viewModel.viewModelScope.launch {
                                     viewModel.delete()
-                                    startService<ScheduleService>()
                                     finish()
                                 }
                             }
@@ -349,7 +343,6 @@ class LessonEditorActivity : AppCompatActivity() {
                             positiveButton(R.string.activity_lesson_editor_alert_delete_yes) {
                                 viewModel.viewModelScope.launch {
                                     viewModel.delete()
-                                    startService<ScheduleService>()
                                     finish()
                                 }
                             }
