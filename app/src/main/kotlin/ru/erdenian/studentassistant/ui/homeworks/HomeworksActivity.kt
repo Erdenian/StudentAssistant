@@ -12,7 +12,6 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.activity.HomeworkEditorActivity
 import ru.erdenian.studentassistant.extensions.compareAndSet
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.getViewModel
@@ -20,6 +19,7 @@ import ru.erdenian.studentassistant.extensions.initializeDrawerAndNavigationView
 import ru.erdenian.studentassistant.localdata.ScheduleManager
 import ru.erdenian.studentassistant.repository.entity.SemesterNew
 import ru.erdenian.studentassistant.ui.adapter.SemestersSpinnerAdapter
+import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 
 class HomeworksActivity : AppCompatActivity() {
 

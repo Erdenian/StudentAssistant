@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.activity.HomeworkEditorActivity
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.lazyViewModel
 import ru.erdenian.studentassistant.extensions.setColor
+import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 
 class LessonInformationActivity : AppCompatActivity() {
@@ -56,12 +56,6 @@ class LessonInformationActivity : AppCompatActivity() {
             viewModel.lesson.observe(this@LessonInformationActivity) { text = it.type }
         }
 
-        findViewById<FloatingActionButton>(R.id.ali_add_homework).setOnClickListener {
-            startActivity<HomeworkEditorActivity>(
-                HomeworkEditorActivity.LESSON_INTENT_KEY to viewModel.lesson.value
-            )
-        }
-
         findViewById<ViewFlipper>(R.id.ali_homeworks_flipper).apply {
             val noHomeworksIndex = 0
             val containsHomeworksIndex = 1
@@ -79,6 +73,13 @@ class LessonInformationActivity : AppCompatActivity() {
                     this.homeworks = homeworks.list
                 }
             }
+        }
+
+        findViewById<FloatingActionButton>(R.id.ali_add_homework).setOnClickListener {
+            startActivity<HomeworkEditorActivity>(
+                HomeworkEditorActivity.SEMESTER_ID_INTENT_KEY to viewModel.lesson.value.semesterId,
+                HomeworkEditorActivity.SUBJECT_NAME_INTENT_KEY to viewModel.lesson.value.subjectName
+            )
         }
     }
 

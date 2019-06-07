@@ -10,9 +10,9 @@ import androidx.fragment.app.Fragment
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.activity.HOMEWORK_ID
-import ru.erdenian.studentassistant.activity.HomeworkEditorActivity
 import ru.erdenian.studentassistant.activity.SEMESTER_ID
 import ru.erdenian.studentassistant.localdata.ScheduleManager
+import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 
 class HomeworksPageFragment : Fragment() {
 
@@ -56,10 +56,10 @@ class HomeworksPageFragment : Fragment() {
 
         for ((subjectName, description, deadline, id) in homeworks) {
             with(inflater.inflate(R.layout.card_homework, llCardsParent, false)) {
-                (findViewById<TextView>(R.id.card_homework_subject_name)).text = subjectName
-                (findViewById<TextView>(R.id.card_homework_description)).text = description
-                (findViewById<TextView>(R.id.card_homework_deadline)).text =
-                        deadline.toString("dd.MM.yyyy")
+                (findViewById<TextView>(R.id.ch_subject_name)).text = subjectName
+                (findViewById<TextView>(R.id.ch_description)).text = description
+                (findViewById<TextView>(R.id.ch_deadline)).text =
+                    deadline.toString("dd.MM.yyyy")
 
                 setOnClickListener {
                     context.startActivity<HomeworkEditorActivity>(
