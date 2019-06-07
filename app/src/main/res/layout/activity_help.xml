@@ -6,10 +6,10 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:scrollbarStyle="outsideOverlay"
-    tools:context=".activity.HelpActivity">
+    tools:context=".ui.help.HelpActivity">
 
     <TextView
-        android:id="@+id/content_help_help"
+        android:id="@+id/ahlp_help"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

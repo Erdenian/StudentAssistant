@@ -9,7 +9,7 @@ import com.google.android.material.navigation.NavigationView
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.activity.HelpActivity
+import ru.erdenian.studentassistant.ui.help.HelpActivity
 import ru.erdenian.studentassistant.ui.homeworks.HomeworksActivity
 import ru.erdenian.studentassistant.ui.schedule.ScheduleActivity
 

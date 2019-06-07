@@ -56,31 +56,9 @@
             android:label="@string/title_activity_homework_editor"
             android:windowSoftInputMode="adjustResize" />
 
-        <service android:name=".service.ScheduleService" />
-
-        <receiver
-            android:name=".reciever.BootReceiver"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
         <activity
-            android:name=".activity.AlarmActivity"
-            android:label="@string/title_activity_alarm"
-            android:noHistory="true"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
-            android:name=".activity.AlarmEditorActivity"
-            android:label="@string/title_activity_alarm_editor"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
-            android:name=".activity.HelpActivity"
-            android:label="@string/title_activity_help"
-            android:theme="@style/AppTheme" />
+            android:name=".ui.help.HelpActivity"
+            android:label="@string/title_activity_help" />
 
     </application>
 
