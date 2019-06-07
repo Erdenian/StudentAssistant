@@ -7,7 +7,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
 import org.joda.time.Period
 import ru.erdenian.studentassistant.repository.Converters
 import ru.erdenian.studentassistant.repository.entity.LessonNew
@@ -80,8 +79,7 @@ abstract class LessonDao {
     @Query("SELECT teachers FROM lessons WHERE semester_id = :semesterId")
     protected abstract fun getTeachersRaw(semesterId: Long): LiveData<List<String>>
 
-    @Transaction
-    open fun getTeachers(semesterId: Long): LiveData<List<String>> =
+    fun getTeachers(semesterId: Long): LiveData<List<String>> =
         getTeachersRaw(semesterId).map { rawTeachers ->
             rawTeachers.asSequence()
                 .flatMap { it.splitToSequence(Converters.SEPARATOR) }
@@ -93,8 +91,7 @@ abstract class LessonDao {
     @Query("SELECT classrooms FROM lessons WHERE semester_id = :semesterId")
     protected abstract fun getClassroomsRaw(semesterId: Long): LiveData<List<String>>
 
-    @Transaction
-    open fun getClassrooms(semesterId: Long): LiveData<List<String>> =
+    fun getClassrooms(semesterId: Long): LiveData<List<String>> =
         getClassroomsRaw(semesterId).map { rawClassrooms ->
             rawClassrooms.asSequence()
                 .flatMap { it.splitToSequence(Converters.SEPARATOR) }
