@@ -2,14 +2,15 @@ package ru.erdenian.studentassistant.customviews;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
+import com.google.common.collect.Lists;
 
+import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -107,36 +108,51 @@ public class LessonCard extends CardView {
 
     //endregion
 
+
     /**
      * Заполняет элементы интерфейса в соответствии с переданной парой.
      *
-     * @param lesson пара
      * @since 0.2.6
      */
-    public void setLesson(@NonNull Lesson lesson) {
-        if ((this.lesson != null) && (this.lesson.equals(lesson))) return;
-        this.lesson = lesson;
+    public void setLesson(
+            @NonNull String subjectName,
+            @NonNull String type,
+            @NonNull List<String> teachers,
+            @NonNull List<String> classrooms,
+            @NonNull LocalTime startTime,
+            @NonNull LocalTime endTime
+    ) {
+        this.lesson = new Lesson(
+                subjectName,
+                type,
+                ImmutableSortedSet.copyOf(teachers),
+                ImmutableSortedSet.copyOf(classrooms),
+                startTime,
+                endTime,
+                new LessonRepeat.ByWeekday(1, Lists.newArrayList(true)),
+                0
+        );
 
-        startTime.setText(timeFormatter.print(lesson.getStartTime()));
-        endTime.setText(timeFormatter.print(lesson.getEndTime()));
+        this.startTime.setText(timeFormatter.print(lesson.getStartTime()));
+        this.endTime.setText(timeFormatter.print(lesson.getEndTime()));
 
         ImmutableSortedSet<String> classroomsSet = lesson.getClassrooms();
         if (classroomsSet.isEmpty()) {
-            classroomsParent.setVisibility(GONE);
+            this.classroomsParent.setVisibility(GONE);
         } else {
-            classrooms.setVisibility(VISIBLE);
-            classrooms.setText(joiner.join(classroomsSet));
+            this.classrooms.setVisibility(VISIBLE);
+            this.classrooms.setText(joiner.join(classroomsSet));
         }
 
         String typeString = lesson.getType();
         if (typeString.isEmpty()) {
-            type.setVisibility(GONE);
+            this.type.setVisibility(GONE);
         } else {
-            type.setVisibility(VISIBLE);
-            type.setText(typeString);
+            this.type.setVisibility(VISIBLE);
+            this.type.setText(typeString);
         }
 
-        subjectName.setText(lesson.getSubjectName());
+        this.subjectName.setText(lesson.getSubjectName());
 
         ImmutableList<String> teachersList = lesson.getTeachers().asList();
         if (teachersList.isEmpty()) {
@@ -182,7 +198,7 @@ public class LessonCard extends CardView {
         } else {
             repeatsParent.setVisibility(VISIBLE);
 
-            LessonRepeat lessonRepeat = lesson.getLessonRepeat();
+            /*LessonRepeat lessonRepeat = lesson.getLessonRepeat();
             if (lessonRepeat instanceof LessonRepeat.ByWeekday) {
                 LessonRepeat.ByWeekday byWeekday = (LessonRepeat.ByWeekday) lessonRepeat;
                 List<Boolean> weeks = byWeekday.getWeeks();
@@ -213,7 +229,7 @@ public class LessonCard extends CardView {
                 if (repeatsParent.getChildCount() > 2)
                     repeatsParent.removeViews(2, repeatsParent.getChildCount() - 2);
             } else
-                throw new IllegalStateException("Неизвестный тип повторений: " + lessonRepeat.getClass().getName());
+                throw new IllegalStateException("Неизвестный тип повторений: " + lessonRepeat.getClass().getName());*/
         }
     }
 

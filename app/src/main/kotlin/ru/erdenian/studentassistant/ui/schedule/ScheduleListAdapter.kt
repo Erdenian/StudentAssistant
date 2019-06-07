@@ -39,4 +39,13 @@ class ScheduleListAdapter : RecyclerView.Adapter<ScheduleListAdapter.ItemViewHol
     }
 
     class ItemViewHolder(val card: LessonCard) : RecyclerView.ViewHolder(card)
+
+    private fun LessonCard.setLesson(lesson: LessonNew) = setLesson(
+        lesson.subjectName,
+        lesson.type,
+        lesson.teachers.list,
+        lesson.classrooms.list,
+        lesson.startTime,
+        lesson.endTime
+    )
 }
