@@ -29,8 +29,6 @@
             android:textSize="@dimen/card_secondary_text_size"
             tools:text="Сделать лабы" />
 
-        <include layout="@layout/empty_space_vertical" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -58,17 +56,6 @@
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="@dimen/card_secondary_text_size"
                 tools:text="05.06.2019" />
-
-            <include layout="@layout/empty_space_horizontal" />
-
-            <LinearLayout
-                android:id="@+id/ch_icons_parent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:orientation="horizontal">
-
-            </LinearLayout>
 
         </LinearLayout>
 
