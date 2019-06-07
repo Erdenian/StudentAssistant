@@ -61,6 +61,9 @@ class ScheduleActivity : AppCompatActivity() {
         }
 
         findViewById<Spinner>(R.id.as_toolbar_spinner).apply {
+            viewModel.allSemesters.observe(this@ScheduleActivity) { semesters ->
+                visibility = if (semesters.size > 1) View.VISIBLE else View.GONE
+            }
             viewModel.selectedSemester.observe(this@ScheduleActivity) { semester ->
                 setSelection(viewModel.allSemesters.value.indexOf(semester))
             }
@@ -85,7 +88,7 @@ class ScheduleActivity : AppCompatActivity() {
             val buttonsIndex = 0
             val scheduleIndex = 1
             viewModel.allSemesters.observe(this@ScheduleActivity) { semesters ->
-                displayedChild = if (semesters.isNotEmpty()) buttonsIndex else scheduleIndex
+                displayedChild = if (semesters.isNotEmpty()) scheduleIndex else buttonsIndex
             }
         }
 

@@ -60,20 +60,19 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
 
     val error: LiveDataKtx<Error?> = MediatorLiveDataKtx<Error?>().apply {
         val onChanged = Observer<Any?> {
+            val subjectName = subjectName.safeValue
+            val startTime = startTime.safeValue
+            val endTime = endTime.safeValue
             value = when {
-                subjectName.value.isBlank() -> Error.EMPTY_SUBJECT_NAME
-                startTime.value >= endTime.value -> Error.WRONG_TIMES
+                subjectName?.isBlank() == true -> Error.EMPTY_SUBJECT_NAME
+                (startTime != null) && (endTime != null) && (startTime > endTime) -> Error.WRONG_TIMES
                 else -> null
             }
         }
 
         addSource(subjectName, onChanged)
-        addSource(type, onChanged)
-        addSource(teachers, onChanged)
-        addSource(classrooms, onChanged)
         addSource(startTime, onChanged)
         addSource(endTime, onChanged)
-        addSource(lessonRepeat, onChanged)
     }
 
     val existingSubjects = semesterId.switchMap { repository.getSubjects(it) }

@@ -33,9 +33,12 @@ class SemesterEditorViewModel(application: Application) : AndroidViewModel(appli
 
     val error: LiveDataKtx<Error?> = MediatorLiveDataKtx<Error?>().apply {
         val onChanged = Observer<Any?> {
+            val semestersNames = semestersNames.safeValue
+            val firstDay = firstDay.safeValue
+            val lastDay = lastDay.safeValue
             value = when {
-                name.value in semestersNames.value -> Error.SEMESTER_EXISTS
-                firstDay.value >= lastDay.value -> Error.WRONG_DATES
+                semestersNames?.contains(name.value) == true -> Error.SEMESTER_EXISTS
+                (firstDay != null) && (lastDay != null) && (firstDay > lastDay) -> Error.WRONG_DATES
                 else -> null
             }
         }
