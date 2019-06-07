@@ -9,7 +9,6 @@ import com.google.android.material.navigation.NavigationView
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.activity.AlarmEditorActivity
 import ru.erdenian.studentassistant.activity.HelpActivity
 import ru.erdenian.studentassistant.ui.homeworks.HomeworksActivity
 import ru.erdenian.studentassistant.ui.schedule.ScheduleActivity
@@ -21,8 +20,7 @@ import ru.erdenian.studentassistant.ui.schedule.ScheduleActivity
  * @since 0.0.0
  * @author Ilya Solovyev
  */
-fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
-    val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar, drawerLayout: DrawerLayout) {
     val navigationView = findViewById<NavigationView>(R.id.navigation_view)
 
     ActionBarDrawerToggle(
@@ -45,7 +43,6 @@ fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
         when (this) {
             is ScheduleActivity -> R.id.nav_schedule
             is HomeworksActivity -> R.id.nav_homeworks
-            is AlarmEditorActivity -> R.id.nav_alarm
             else -> throw IllegalStateException("Неизвестное Activity: ${this.javaClass.name}")
         }
     )
@@ -68,10 +65,7 @@ fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar) {
                 true
             }
             R.id.nav_alarm -> {
-                if (this !is AlarmEditorActivity) {
-                    startActivity<AlarmEditorActivity>()
-                    finish()
-                }
+                toast("AlarmEditorActivity")
                 true
             }
             R.id.nav_settings -> {

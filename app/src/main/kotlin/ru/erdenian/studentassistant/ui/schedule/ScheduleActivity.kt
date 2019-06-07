@@ -47,7 +47,7 @@ class ScheduleActivity : AppCompatActivity() {
 
         findViewById<Toolbar>(R.id.as_toolbar).let { toolbar ->
             setSupportActionBar(toolbar)
-            initializeDrawerAndNavigationView(toolbar)
+            initializeDrawerAndNavigationView(toolbar, drawer)
         }
         supportActionBar?.apply {
             viewModel.allSemesters.observe(this@ScheduleActivity) { semesters ->

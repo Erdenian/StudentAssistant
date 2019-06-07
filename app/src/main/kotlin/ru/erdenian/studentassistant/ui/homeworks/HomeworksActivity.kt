@@ -6,6 +6,8 @@ import android.widget.AdapterView
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.observe
 import androidx.viewpager.widget.PagerTabStrip
 import androidx.viewpager.widget.ViewPager
@@ -22,6 +24,8 @@ import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 
 class HomeworksActivity : AppCompatActivity() {
 
+    private val drawer by lazy { findViewById<DrawerLayout>(R.id.ah_drawer) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_homeworks)
@@ -30,7 +34,7 @@ class HomeworksActivity : AppCompatActivity() {
 
         findViewById<Toolbar>(R.id.ah_toolbar).let { toolbar ->
             setSupportActionBar(toolbar)
-            initializeDrawerAndNavigationView(toolbar)
+            initializeDrawerAndNavigationView(toolbar, drawer)
         }
         supportActionBar?.apply {
             viewModel.allSemesters.observe(this@HomeworksActivity) { semesters ->
@@ -80,5 +84,10 @@ class HomeworksActivity : AppCompatActivity() {
                 HomeworkEditorActivity.SEMESTER_ID_INTENT_KEY to viewModel.selectedSemester.value?.id
             )
         }
+    }
+
+    override fun onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) drawer.closeDrawer(GravityCompat.START)
+        else super.onBackPressed()
     }
 }
