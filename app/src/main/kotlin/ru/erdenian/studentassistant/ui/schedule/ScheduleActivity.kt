@@ -50,12 +50,8 @@ class ScheduleActivity : AppCompatActivity() {
             initializeDrawerAndNavigationView(toolbar, drawer)
         }
         supportActionBar?.apply {
+            viewModel.selectedSemester.observe(this@ScheduleActivity) { title = it?.name }
             viewModel.allSemesters.observe(this@ScheduleActivity) { semesters ->
-                title = when (semesters.size) {
-                    0 -> getText(R.string.title_activity_schedule)
-                    1 -> viewModel.selectedSemester.value?.name
-                    else -> null
-                }
                 setDisplayShowTitleEnabled(semesters.size <= 1)
             }
         }
@@ -115,7 +111,7 @@ class ScheduleActivity : AppCompatActivity() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        val isNotEmpty = viewModel.allSemesters.value.isNotEmpty()
+        val isNotEmpty = viewModel.allSemesters.safeValue?.isNotEmpty() ?: return false
         menu.findItem(R.id.menu_schedule_calendar).isVisible = isNotEmpty
         menu.findItem(R.id.menu_schedule_edit_schedule).isVisible = isNotEmpty
         return true

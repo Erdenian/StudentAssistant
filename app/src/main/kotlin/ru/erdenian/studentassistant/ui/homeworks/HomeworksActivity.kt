@@ -37,12 +37,8 @@ class HomeworksActivity : AppCompatActivity() {
             initializeDrawerAndNavigationView(toolbar, drawer)
         }
         supportActionBar?.apply {
+            viewModel.selectedSemester.observe(this@HomeworksActivity) { title = it?.name }
             viewModel.allSemesters.observe(this@HomeworksActivity) { semesters ->
-                title = when (semesters.size) {
-                    0 -> getText(R.string.title_activity_homeworks)
-                    1 -> viewModel.selectedSemester.value?.name
-                    else -> null
-                }
                 setDisplayShowTitleEnabled(semesters.size <= 1)
             }
         }

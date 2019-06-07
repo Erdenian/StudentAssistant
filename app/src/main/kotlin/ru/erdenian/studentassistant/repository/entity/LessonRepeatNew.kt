@@ -60,7 +60,7 @@ sealed class LessonRepeatNew : Parcelable {
          * @throws IllegalArgumentException если [weekday] задан некорректно
          */
         fun repeatsOnWeekday(weekday: Int): Boolean {
-            require(weekday !in DateTimeConstants.MONDAY..DateTimeConstants.SUNDAY) {
+            require(weekday in DateTimeConstants.MONDAY..DateTimeConstants.SUNDAY) {
                 "Неверный день недели: $weekday"
             }
             return (weekday == this.weekday)

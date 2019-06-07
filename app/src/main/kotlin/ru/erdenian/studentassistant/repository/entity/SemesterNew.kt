@@ -62,8 +62,8 @@ data class SemesterNew(
     private val firstWeekMonday = firstDay.minusDays(firstDay.dayOfWeek - 1)
 
     init {
-        require(name.isBlank()) { "Пустое название" }
-        require(firstDay > lastDay) { "Неверно заданы даты: $firstDay - $lastDay" }
+        require(name.isNotBlank()) { "Пустое название" }
+        require(firstDay < lastDay) { "Неверно заданы даты: $firstDay - $lastDay" }
     }
 
     /**

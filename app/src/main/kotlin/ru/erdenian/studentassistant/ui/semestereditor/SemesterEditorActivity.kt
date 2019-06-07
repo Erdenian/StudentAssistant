@@ -65,14 +65,18 @@ class SemesterEditorActivity : AppCompatActivity() {
             viewModel.firstDay.observe(this@SemesterEditorActivity) { firstDay ->
                 text = firstDay.toString(DATE_FORMAT)
             }
-            setOnClickListener { showDatePicker { viewModel.firstDay.value = it } }
+            setOnClickListener {
+                showDatePicker(viewModel.firstDay.value) { viewModel.firstDay.value = it }
+            }
         }
 
         findViewById<Button>(R.id.ase_last_day).apply {
             viewModel.lastDay.observe(this@SemesterEditorActivity) { lastDay ->
                 text = lastDay.toString(DATE_FORMAT)
             }
-            setOnClickListener { showDatePicker { viewModel.lastDay.value = it } }
+            setOnClickListener {
+                showDatePicker(viewModel.firstDay.value) { viewModel.lastDay.value = it }
+            }
         }
     }
 
