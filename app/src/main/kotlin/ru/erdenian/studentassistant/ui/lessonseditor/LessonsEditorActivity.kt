@@ -57,7 +57,10 @@ class LessonsEditorActivity : AppCompatActivity() {
                 )
 
                 override fun onItemSelected(
-                    parent: AdapterView<*>, view: View, position: Int, id: Long
+                    parent: AdapterView<*>,
+                    view: View,
+                    position: Int,
+                    id: Long
                 ) {
                     flipper.displayedChild = position
                 }

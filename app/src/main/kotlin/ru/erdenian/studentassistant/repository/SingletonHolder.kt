@@ -14,7 +14,7 @@ open class SingletonHolder<T, A>(creator: (A) -> T) {
             val i = instance
             if (i != null) i
             else {
-                val created = creator!!(arg)
+                val created = checkNotNull(creator)(arg)
                 instance = created
                 creator = null
                 created

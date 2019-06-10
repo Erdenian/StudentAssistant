@@ -47,9 +47,9 @@ fun Activity.initializeDrawerAndNavigationView(toolbar: Toolbar, drawerLayout: D
         }
     )
 
-    navigationView.setNavigationItemSelectedListener {
+    navigationView.setNavigationItemSelectedListener { menuItem ->
         drawerLayout.closeDrawer(GravityCompat.START)
-        when (it.itemId) {
+        when (menuItem.itemId) {
             R.id.nav_schedule -> {
                 if (this !is ScheduleActivity) {
                     startActivity<ScheduleActivity>()

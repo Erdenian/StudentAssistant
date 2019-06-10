@@ -53,7 +53,8 @@ fun Context.clearApplicationData() {
  */
 fun Context.showDatePicker(
     preselectedDate: LocalDate? = null,
-    minDate: LocalDate? = null, maxDate: LocalDate? = null,
+    minDate: LocalDate? = null,
+    maxDate: LocalDate? = null,
     onDateSet: (LocalDate) -> Unit
 ) {
     val preselected = preselectedDate ?: LocalDate.now()
