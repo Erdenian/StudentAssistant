@@ -97,7 +97,7 @@ class LessonsEditorPageFragment : Fragment() {
                             negativeButton(R.string.activity_lesson_editor_alert_delete_homeworks_cancel) {}
                         }.show()
                     } else {
-                        context!!.alert(R.string.activity_lesson_editor_alert_delete_message) {
+                        requireContext().alert(R.string.activity_lesson_editor_alert_delete_message) {
                             positiveButton(R.string.activity_lesson_editor_alert_delete_yes) {
                                 viewModel.viewModelScope.launch { viewModel.delete(lesson) }
                             }

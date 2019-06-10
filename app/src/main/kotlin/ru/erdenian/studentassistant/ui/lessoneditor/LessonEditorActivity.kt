@@ -275,83 +275,81 @@ class LessonEditorActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                true
-            }
-            R.id.menu_lesson_editor_save -> {
-                viewModel.error.value?.let { error ->
-                    toast(
-                        when (error) {
-                            Error.EMPTY_SUBJECT_NAME -> {
-                                R.string.activity_lesson_editor_incorrect_subject_name_message
-                            }
-                            Error.WRONG_TIMES -> {
-                                R.string.activity_lesson_editor_incorrect_time_message
-                            }
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        android.R.id.home -> {
+            finish()
+            true
+        }
+        R.id.menu_lesson_editor_save -> {
+            viewModel.error.value?.let { error ->
+                toast(
+                    when (error) {
+                        Error.EMPTY_SUBJECT_NAME -> {
+                            R.string.activity_lesson_editor_incorrect_subject_name_message
                         }
-                    )
-                } ?: run {
-                    viewModel.viewModelScope.launch {
-                        if (viewModel.isSubjectNameChangedAndNotLast()) {
-                            alert(
-                                R.string.activity_lesson_editor_alert_rename_lessons_message,
-                                R.string.activity_lesson_editor_alert_rename_lessons_title
-                            ) {
-                                positiveButton(R.string.activity_lesson_editor_alert_rename_lessons_yes) {
-                                    viewModel.viewModelScope.launch {
-                                        viewModel.save(true)
-                                        finish()
-                                    }
-                                }
-                                negativeButton(R.string.activity_lesson_editor_alert_rename_lessons_no) {
-                                    viewModel.viewModelScope.launch {
-                                        viewModel.save(false)
-                                        finish()
-                                    }
-                                }
-                                //neutralButton(R.string.activity_lesson_editor_alert_rename_lessons_cancel)
-                            }.show()
-                        } else {
-                            viewModel.save()
-                            finish()
+                        Error.WRONG_TIMES -> {
+                            R.string.activity_lesson_editor_incorrect_time_message
                         }
                     }
-                }
-                true
-            }
-            R.id.menu_lesson_editor_delete_lesson -> {
+                )
+            } ?: run {
                 viewModel.viewModelScope.launch {
-                    if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) {
+                    if (viewModel.isSubjectNameChangedAndNotLast()) {
                         alert(
-                            R.string.activity_lesson_editor_alert_delete_homeworks_message,
-                            R.string.activity_lesson_editor_alert_delete_homeworks_title
+                            R.string.activity_lesson_editor_alert_rename_lessons_message,
+                            R.string.activity_lesson_editor_alert_rename_lessons_title
                         ) {
-                            positiveButton(R.string.activity_lesson_editor_alert_delete_homeworks_yes) {
+                            positiveButton(R.string.activity_lesson_editor_alert_rename_lessons_yes) {
                                 viewModel.viewModelScope.launch {
-                                    viewModel.delete()
+                                    viewModel.save(true)
                                     finish()
                                 }
                             }
-                            negativeButton(R.string.activity_lesson_editor_alert_delete_homeworks_cancel) {}
+                            negativeButton(R.string.activity_lesson_editor_alert_rename_lessons_no) {
+                                viewModel.viewModelScope.launch {
+                                    viewModel.save(false)
+                                    finish()
+                                }
+                            }
+                            //neutralButton(R.string.activity_lesson_editor_alert_rename_lessons_cancel)
                         }.show()
                     } else {
-                        alert(R.string.activity_lesson_editor_alert_delete_message) {
-                            positiveButton(R.string.activity_lesson_editor_alert_delete_yes) {
-                                viewModel.viewModelScope.launch {
-                                    viewModel.delete()
-                                    finish()
-                                }
-                            }
-                            negativeButton(R.string.activity_lesson_editor_alert_delete_no) {}
-                        }.show()
+                        viewModel.save()
+                        finish()
                     }
                 }
-                true
             }
-            else -> false
+            true
         }
+        R.id.menu_lesson_editor_delete_lesson -> {
+            viewModel.viewModelScope.launch {
+                if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) {
+                    alert(
+                        R.string.activity_lesson_editor_alert_delete_homeworks_message,
+                        R.string.activity_lesson_editor_alert_delete_homeworks_title
+                    ) {
+                        positiveButton(R.string.activity_lesson_editor_alert_delete_homeworks_yes) {
+                            viewModel.viewModelScope.launch {
+                                viewModel.delete()
+                                finish()
+                            }
+                        }
+                        negativeButton(R.string.activity_lesson_editor_alert_delete_homeworks_cancel) {}
+                    }.show()
+                } else {
+                    alert(R.string.activity_lesson_editor_alert_delete_message) {
+                        positiveButton(R.string.activity_lesson_editor_alert_delete_yes) {
+                            viewModel.viewModelScope.launch {
+                                viewModel.delete()
+                                finish()
+                            }
+                        }
+                        negativeButton(R.string.activity_lesson_editor_alert_delete_no) {}
+                    }.show()
+                }
+            }
+            true
+        }
+        else -> false
     }
 }

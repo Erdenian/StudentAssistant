@@ -17,6 +17,7 @@ import ru.erdenian.studentassistant.repository.entity.LessonNew
 import ru.erdenian.studentassistant.repository.entity.LessonRepeatNew
 import ru.erdenian.studentassistant.repository.entity.SemesterNew
 
+@Suppress("TooManyFunctions")
 class ScheduleRepository(context: Context) {
 
     private val semesterDao: SemesterDao

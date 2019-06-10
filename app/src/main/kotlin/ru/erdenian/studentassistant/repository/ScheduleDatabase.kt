@@ -27,14 +27,11 @@ abstract class ScheduleDatabase : RoomDatabase() {
     abstract val lessonDao: LessonDao
     abstract val homeworkDao: HomeworkDao
 
-    companion object : SingletonHolder<ScheduleDatabase, Context>({
+    companion object : SingletonHolder<ScheduleDatabase, Context>({ context ->
         Room.databaseBuilder(
-            it.applicationContext,
+            context.applicationContext,
             ScheduleDatabase::class.java,
             "schedule1.db"
-        )
-            // Todo: убрать
-            .fallbackToDestructiveMigration()
-            .build()
+        ).build()
     })
 }

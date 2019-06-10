@@ -9,5 +9,5 @@ import android.widget.ListView
  * @since 0.0.0
  */
 var ListView.scrollPosition: Pair<Int, Int>
-    get() = Pair(firstVisiblePosition, (getChildAt(0)?.top ?: paddingTop) - paddingTop)
+    get() = firstVisiblePosition to (getChildAt(0)?.top ?: paddingTop) - paddingTop
     set(value) = setSelectionFromTop(value.first, value.second)

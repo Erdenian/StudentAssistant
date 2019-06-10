@@ -80,7 +80,6 @@ class HomeworkEditorActivity : AppCompatActivity() {
                         viewModel.existingSubjects.value.list[position]
                     )
                 }
-
             }
         }
 

@@ -9,6 +9,7 @@ import androidx.room.Query
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.repository.entity.HomeworkNew
 
+@Suppress("TooManyFunctions", "MaxLineLength", "MaximumLineLength")
 @Dao
 interface HomeworkDao {
 

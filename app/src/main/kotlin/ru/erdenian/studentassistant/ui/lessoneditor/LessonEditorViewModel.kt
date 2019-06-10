@@ -92,12 +92,8 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
         startTime.value = lesson.startTime
         endTime.value = lesson.endTime
         lessonRepeat.value = when (lesson.lessonRepeat) {
-            is LessonRepeatNew.ByWeekday -> {
-                byWeekday.apply { value = lesson.lessonRepeat }
-            }
-            is LessonRepeatNew.ByDates -> {
-                byDates.apply { value = lesson.lessonRepeat }
-            }
+            is LessonRepeatNew.ByWeekday -> byWeekday.apply { value = lesson.lessonRepeat }
+            is LessonRepeatNew.ByDates -> byDates.apply { value = lesson.lessonRepeat }
         }
     }
 
