@@ -15,6 +15,7 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.lazyViewModel
 import ru.erdenian.studentassistant.extensions.setColor
+import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 
@@ -69,7 +70,7 @@ class LessonInformationActivity : AppCompatActivity() {
 
         findViewById<RecyclerView>(R.id.ali_homeworks).apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = LessonInformationHomeworksAdapter().apply {
+            adapter = HomeworksListAdapter().apply {
                 viewModel.homeworks.observe(this@LessonInformationActivity) { homeworks ->
                     this.homeworks = homeworks.list
                 }

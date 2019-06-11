@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.lessoninformation
+package ru.erdenian.studentassistant.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.repository.entity.HomeworkNew
 
-class LessonInformationHomeworksAdapter :
-    RecyclerView.Adapter<LessonInformationHomeworksAdapter.ItemViewHolder>() {
+class HomeworksListAdapter : RecyclerView.Adapter<HomeworksListAdapter.ItemViewHolder>() {
 
     companion object {
         private const val DATE_FORMAT = "dd.MM.yyyy"
