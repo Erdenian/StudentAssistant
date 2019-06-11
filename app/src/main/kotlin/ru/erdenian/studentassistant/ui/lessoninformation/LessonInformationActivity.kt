@@ -28,6 +28,7 @@ class LessonInformationActivity : AppCompatActivity() {
 
     private val viewModel by lazyViewModel<LessonInformationViewModel>()
 
+    @Suppress("ComplexMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lesson_information)

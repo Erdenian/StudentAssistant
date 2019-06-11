@@ -41,6 +41,7 @@ class ScheduleActivity : AppCompatActivity() {
         }
     }
 
+    @Suppress("ComplexMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule)

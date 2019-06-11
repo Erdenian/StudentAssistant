@@ -16,11 +16,11 @@ class LessonsEditorPagerAdapter(
             notifyDataSetChanged()
         }
 
-    private val weekdays = Array<String>(7) { i ->
+    private val weekdays = Array<String>(DateTimeConstants.DAYS_PER_WEEK) { i ->
         LocalDate().withDayOfWeek(i + 1).dayOfWeek().asText
     }
 
-    override fun getCount(): Int = DateTimeConstants.DAYS_PER_WEEK
+    override fun getCount(): Int = weekdays.size
 
     override fun getPageTitle(position: Int): CharSequence = weekdays[position]
 
