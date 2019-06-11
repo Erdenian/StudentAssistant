@@ -50,6 +50,7 @@ class LessonEditorActivity : AppCompatActivity() {
 
     private val lesson by lazy { intent.getParcelableExtra<LessonNew?>(LESSON_INTENT_KEY) }
 
+    @Suppress("ComplexMethod", "LongMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lesson_editor)
@@ -311,7 +312,7 @@ class LessonEditorActivity : AppCompatActivity() {
                                     finish()
                                 }
                             }
-                            //neutralButton(R.string.activity_lesson_editor_alert_rename_lessons_cancel)
+                            neutralPressed(R.string.activity_lesson_editor_alert_rename_lessons_cancel) {}
                         }.show()
                     } else {
                         viewModel.save()
