@@ -11,7 +11,7 @@ import org.joda.time.Period
 import ru.erdenian.studentassistant.repository.Converters
 import ru.erdenian.studentassistant.repository.entity.LessonNew
 
-@Suppress("TooManyFunctions", "MaxLineLength", "MaximumLineLength")
+@Suppress("TooManyFunctions", "MaxLineLength")
 @Dao
 abstract class LessonDao {
 
