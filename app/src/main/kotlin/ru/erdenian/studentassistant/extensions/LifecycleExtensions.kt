@@ -39,4 +39,6 @@ fun <T> T.toLiveData(): LiveDataKtx<T> = MutableLiveDataKtx<T>().apply { value =
 
 fun <T> liveDataOf(value: T): LiveDataKtx<T> = MutableLiveDataKtx<T>().also { it.value = value }
 
+val <T, L : LiveDataKtx<T>> L.asLiveData get() = this as LiveDataKtx<T>
+
 // endregion
