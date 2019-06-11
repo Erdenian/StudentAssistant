@@ -40,19 +40,19 @@ class HomeworksPageFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val view = requireView()
-        val flipper = view.findViewById<ViewFlipper>(R.id.fhp_flipper)
-        val flipperProgressIndex = 0
-        val flipperHomeworksIndex = 1
-        val flipperNoHomeworksIndex = 2
-
-        requireActivity().getViewModel<HomeworksViewModel>().run {
-            if (requireArguments().getBoolean(IS_ACTUAL)) getActualHomeworks()
-            else getPastHomeworks()
-        }.observe(this) { value ->
-            adapter.homeworks = value.list
-            flipper.displayedChild =
-                if (value.isNotEmpty()) flipperHomeworksIndex else flipperNoHomeworksIndex
+        val isActual = requireArguments().getBoolean(IS_ACTUAL)
+        val homeworks = requireActivity().getViewModel<HomeworksViewModel>().run {
+            if (isActual) getActualHomeworks() else getPastHomeworks()
         }
+
+        requireView().findViewById<ViewFlipper>(R.id.fsp_flipper).apply {
+            val homeworksIndex = 0
+            val noHomeworksIndex = 1
+            homeworks.observe(this@HomeworksPageFragment) { value ->
+                displayedChild = if (value.isNotEmpty()) homeworksIndex else noHomeworksIndex
+            }
+        }
+
+        homeworks.observe(this) { adapter.homeworks = it.list }
     }
 }
