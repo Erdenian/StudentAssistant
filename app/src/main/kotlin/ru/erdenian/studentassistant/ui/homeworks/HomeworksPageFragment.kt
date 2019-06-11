@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.getViewModel
+import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
 
 class HomeworksPageFragment : Fragment() {
 

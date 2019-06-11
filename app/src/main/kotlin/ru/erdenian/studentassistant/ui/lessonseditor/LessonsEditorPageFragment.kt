@@ -19,6 +19,7 @@ import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.getViewModel
+import ru.erdenian.studentassistant.ui.adapter.LessonsListAdapter
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 
 class LessonsEditorPageFragment : Fragment() {
@@ -32,7 +33,7 @@ class LessonsEditorPageFragment : Fragment() {
     }
 
     private val viewModel by lazy { requireActivity().getViewModel<LessonsEditorViewModel>() }
-    private val adapter = LessonsEditorListAdapter()
+    private val adapter = LessonsListAdapter(true)
 
     override fun onCreateView(
         inflater: LayoutInflater,

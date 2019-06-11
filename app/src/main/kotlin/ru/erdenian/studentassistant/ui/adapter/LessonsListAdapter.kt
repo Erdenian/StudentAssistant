@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.schedule
+package ru.erdenian.studentassistant.ui.adapter
 
 import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.erdenian.studentassistant.customviews.LessonCard
 import ru.erdenian.studentassistant.repository.entity.LessonNew
 
-class ScheduleListAdapter : RecyclerView.Adapter<ScheduleListAdapter.ItemViewHolder>() {
+class LessonsListAdapter(
+    private val isEditing: Boolean = false
+) : RecyclerView.Adapter<LessonsListAdapter.ItemViewHolder>() {
 
     var lessons: List<LessonNew> = listOf()
         set(value) {
@@ -28,7 +30,7 @@ class ScheduleListAdapter : RecyclerView.Adapter<ScheduleListAdapter.ItemViewHol
                 width = ViewGroup.LayoutParams.MATCH_PARENT
                 height = ViewGroup.LayoutParams.WRAP_CONTENT
             }
-            setEditing(false)
+            setEditing(isEditing)
         }
     ).apply {
         card.setOnClickListener { onLessonClickListener?.onLessonClick(lessons[adapterPosition]) }

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.ui.adapter.LessonsListAdapter
 
 class SchedulePageFragment : Fragment() {
 
@@ -25,7 +26,7 @@ class SchedulePageFragment : Fragment() {
         }
     }
 
-    private val adapter = ScheduleListAdapter()
+    private val adapter = LessonsListAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
