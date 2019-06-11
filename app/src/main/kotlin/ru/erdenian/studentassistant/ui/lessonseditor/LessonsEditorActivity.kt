@@ -21,7 +21,6 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.lazyViewModel
 import ru.erdenian.studentassistant.extensions.setColor
-import ru.erdenian.studentassistant.repository.entity.SemesterNew
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
 
@@ -37,7 +36,7 @@ class LessonsEditorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lessons_editor)
 
-        viewModel.semesterId.value = intent.getParcelableExtra<SemesterNew>(SEMESTER_INTENT_KEY).id
+        viewModel.init(intent.getParcelableExtra(SEMESTER_INTENT_KEY))
 
         setSupportActionBar(findViewById(R.id.alse_toolbar))
         supportActionBar?.apply {
@@ -70,9 +69,7 @@ class LessonsEditorActivity : AppCompatActivity() {
         }
 
         val byWeekdaysPager = findViewById<ViewPager>(R.id.alse_by_weekdays_pager).apply {
-            adapter = LessonsEditorPagerAdapter(supportFragmentManager).apply {
-                viewModel.semester.observe(this@LessonsEditorActivity) { semester = it }
-            }
+            adapter = LessonsEditorPagerAdapter(supportFragmentManager)
         }
         findViewById<PagerTabStrip>(R.id.alse_by_weekdays_pager_tab_strip).apply {
             setTextColor(getCompatColor(R.color.colorPrimary))

@@ -49,17 +49,18 @@ class LessonsEditorPageFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val view = requireView()
-        val flipper = view.findViewById<ViewFlipper>(R.id.flep_flipper)
-        val flipperProgressIndex = 0
-        val flipperLessonsIndex = 1
-        val flipperFreeDayIndex = 2
-
         val weekday = requireArguments().getInt(PAGE_WEEKDAY)
+
+        requireView().findViewById<ViewFlipper>(R.id.flep_flipper).apply {
+            val lessonsIndex = 0
+            val freeDayIndex = 1
+            viewModel.getLessons(weekday).observe(this@LessonsEditorPageFragment) { value ->
+                displayedChild = if (value.isNotEmpty()) lessonsIndex else freeDayIndex
+            }
+        }
+
         viewModel.getLessons(weekday).observe(this) { value ->
             adapter.lessons = value.list
-            flipper.displayedChild =
-                if (value.isNotEmpty()) flipperLessonsIndex else flipperFreeDayIndex
         }
     }
 
