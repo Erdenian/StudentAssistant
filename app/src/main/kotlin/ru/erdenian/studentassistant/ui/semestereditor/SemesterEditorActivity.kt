@@ -46,15 +46,18 @@ class SemesterEditorActivity : AppCompatActivity() {
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             if (semester == null) title = getString(
-                R.string.title_activity_semester_editor_new_semester
+                R.string.sea_title_new
             )
         }
 
         findViewById<TextInputLayout>(R.id.ase_name).apply {
             viewModel.error.observe(this@SemesterEditorActivity) { error ->
                 when (error) {
+                    Error.EMPTY_NAME -> this.error = getString(
+                        R.string.sea_error_empty_name
+                    )
                     Error.SEMESTER_EXISTS -> this.error = getString(
-                        R.string.activity_semester_editor_error_name_not_avaliable
+                        R.string.sea_error_name_not_available
                     )
                     else -> isErrorEnabled = false
                 }
@@ -100,8 +103,9 @@ class SemesterEditorActivity : AppCompatActivity() {
             viewModel.error.value?.let { error ->
                 toast(
                     when (error) {
-                        Error.SEMESTER_EXISTS -> R.string.activity_semester_editor_error_name_not_avaliable
-                        Error.WRONG_DATES -> R.string.activity_semester_editor_incorrect_dates
+                        Error.EMPTY_NAME -> R.string.sea_error_empty_name
+                        Error.SEMESTER_EXISTS -> R.string.sea_error_name_not_available
+                        Error.WRONG_DATES -> R.string.sea_error_wrong_dates
                     }
                 )
             } ?: run {

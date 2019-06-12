@@ -25,40 +25,40 @@
 
         <activity
             android:name=".ui.schedule.ScheduleActivity"
-            android:label="@string/title_activity_schedule"
+            android:label="@string/sa_title"
             android:theme="@style/AppTheme.NoActionBar.TransparentStatusBar" />
 
         <activity
             android:name=".ui.lessoninformation.LessonInformationActivity"
-            android:label="@string/title_activity_lesson_information" />
+            android:label="@string/lia_title" />
 
         <activity
             android:name=".ui.semestereditor.SemesterEditorActivity"
-            android:label="@string/title_activity_semester_editor"
+            android:label="@string/sea_title_edit"
             android:windowSoftInputMode="stateAlwaysVisible" />
 
         <activity
             android:name=".ui.lessonseditor.LessonsEditorActivity"
-            android:label="@string/title_activity_lessons_editor"
+            android:label="@string/lsea_title"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".ui.lessoneditor.LessonEditorActivity"
-            android:label="@string/title_activity_lesson_editor" />
+            android:label="@string/lea_title_edit" />
 
         <activity
             android:name=".ui.homeworks.HomeworksActivity"
-            android:label="@string/title_activity_homeworks"
+            android:label="@string/ha_title"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".ui.homeworkeditor.HomeworkEditorActivity"
-            android:label="@string/title_activity_homework_editor"
+            android:label="@string/hea_title"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".ui.help.HelpActivity"
-            android:label="@string/title_activity_help" />
+            android:label="@string/hlpa_title" />
 
     </application>
 

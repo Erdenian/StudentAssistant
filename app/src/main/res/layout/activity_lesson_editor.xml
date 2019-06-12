@@ -23,7 +23,7 @@
                 android:id="@+id/ale_subject_name_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/content_lesson_editor_subject_name"
+                android:hint="@string/lea_subject_name"
                 android:inputType="text"
                 android:maxLines="1">
 
@@ -41,7 +41,7 @@
                 android:id="@+id/ale_lesson_type_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/content_lesson_editor_lesson_type"
+                android:hint="@string/lea_type"
                 android:inputType="text"
                 android:maxLines="1" />
 
@@ -55,7 +55,7 @@
                 android:id="@+id/ale_teachers_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/content_lesson_editor_teachers"
+                android:hint="@string/lea_teachers"
                 android:inputType="text"
                 android:maxLines="1" />
 
@@ -69,7 +69,7 @@
                 android:id="@+id/ale_classrooms_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/content_lesson_editor_classrooms"
+                android:hint="@string/lea_classrooms"
                 android:inputType="text"
                 android:maxLines="1" />
 
@@ -85,7 +85,7 @@
                 android:id="@+id/ale_start_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/content_lesson_editor_start_time" />
+                tools:text="09:00" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -97,7 +97,7 @@
                 android:id="@+id/ale_end_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/content_lesson_editor_end_time" />
+                tools:text="10:30" />
 
         </LinearLayout>
 
