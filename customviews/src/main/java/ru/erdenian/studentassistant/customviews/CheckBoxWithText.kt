@@ -7,6 +7,8 @@ import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatCheckBox
+import androidx.appcompat.widget.AppCompatTextView
 
 /**
  * Чекбокс с текстом под ним.
@@ -21,8 +23,8 @@ class CheckBoxWithText @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private val checkBox: CheckBox = findViewById(R.id.cwt_checkbox)
-    private val textView: TextView = findViewById(R.id.cwt_text)
+    private val checkBox = AppCompatCheckBox(context)
+    private val textView = AppCompatTextView(context)
 
 
     /**
@@ -50,7 +52,9 @@ class CheckBoxWithText @JvmOverloads constructor(
     init {
         orientation = VERTICAL
         gravity = Gravity.CENTER_HORIZONTAL
-        inflate(context, R.layout.checkbox_with_text, this)
+
+        addView(checkBox)
+        addView(textView)
 
         if (attrs != null) {
             val typedArray = context.theme.obtainStyledAttributes(
