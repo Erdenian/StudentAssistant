@@ -34,9 +34,8 @@ class SemesterEditorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_semester_editor)
 
-        val semester = intent.getParcelableExtra<SemesterNew?>(
-            SEMESTER_INTENT_KEY
-        )?.also { viewModel.setSemester(it) }
+        val semester = intent.getParcelableExtra<SemesterNew?>(SEMESTER_INTENT_KEY)
+        viewModel.init(semester)
 
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
