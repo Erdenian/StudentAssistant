@@ -2,12 +2,12 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <CheckBox
-        android:id="@+id/checkbox_with_text_checkbox"
+        android:id="@+id/cwt_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/checkbox_with_text_text"
+        android:id="@+id/cwt_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
