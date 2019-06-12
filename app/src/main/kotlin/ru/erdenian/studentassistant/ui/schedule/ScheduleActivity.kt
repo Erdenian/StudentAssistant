@@ -51,7 +51,9 @@ class ScheduleActivity : AppCompatActivity() {
             initializeDrawerAndNavigationView(toolbar, drawer)
         }
         supportActionBar?.apply {
-            viewModel.selectedSemester.observe(this@ScheduleActivity) { title = it?.name }
+            viewModel.selectedSemester.observe(this@ScheduleActivity) { semester ->
+                title = semester?.name ?: getString(R.string.title_activity_schedule)
+            }
             viewModel.allSemesters.observe(this@ScheduleActivity) { semesters ->
                 setDisplayShowTitleEnabled(semesters.size <= 1)
             }
