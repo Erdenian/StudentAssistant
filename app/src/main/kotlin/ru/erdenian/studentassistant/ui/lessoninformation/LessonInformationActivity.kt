@@ -34,28 +34,28 @@ class LessonInformationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lesson_information)
 
-        viewModel.lesson.value = intent.getParcelableExtra(LESSON_INTENT_KEY)
+        viewModel.init(intent.getParcelableExtra(LESSON_INTENT_KEY))
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         findViewById<TextView>(R.id.ali_subject_name).apply {
-            viewModel.lesson.observe(this@LessonInformationActivity) { text = it.subjectName }
+            viewModel.lesson.observe(this@LessonInformationActivity) { text = it?.subjectName }
         }
 
         findViewById<TextView>(R.id.ali_start_time).apply {
             viewModel.lesson.observe(this@LessonInformationActivity) { lesson ->
-                text = lesson.startTime.toString(TIME_FORMAT)
+                text = lesson?.startTime?.toString(TIME_FORMAT)
             }
         }
 
         findViewById<TextView>(R.id.ali_end_time).apply {
             viewModel.lesson.observe(this@LessonInformationActivity) { lesson ->
-                text = lesson.endTime.toString(TIME_FORMAT)
+                text = lesson?.endTime?.toString(TIME_FORMAT)
             }
         }
 
         findViewById<TextView>(R.id.ali_type).apply {
-            viewModel.lesson.observe(this@LessonInformationActivity) { text = it.type }
+            viewModel.lesson.observe(this@LessonInformationActivity) { text = it?.type }
         }
 
         findViewById<ViewFlipper>(R.id.ali_homeworks_flipper).apply {
@@ -79,10 +79,12 @@ class LessonInformationActivity : AppCompatActivity() {
 
         findViewById<FloatingActionButton>(R.id.ali_add_homework).setOnClickListener {
             startActivity<HomeworkEditorActivity>(
-                HomeworkEditorActivity.SEMESTER_ID_INTENT_KEY to viewModel.lesson.value.semesterId,
-                HomeworkEditorActivity.SUBJECT_NAME_INTENT_KEY to viewModel.lesson.value.subjectName
+                HomeworkEditorActivity.SEMESTER_ID_INTENT_KEY to viewModel.lesson.value?.semesterId,
+                HomeworkEditorActivity.SUBJECT_NAME_INTENT_KEY to viewModel.lesson.value?.subjectName
             )
         }
+
+        viewModel.lesson.observe(this) { if (it == null) finish() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
