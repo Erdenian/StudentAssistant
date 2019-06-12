@@ -21,6 +21,9 @@ interface HomeworkDao {
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND _id = :homeworkId")
     suspend fun get(semesterId: Long, homeworkId: Long): HomeworkNew?
 
+    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND _id = :homeworkId")
+    fun getLive(semesterId: Long, homeworkId: Long): LiveData<HomeworkNew?>
+
     @Delete
     suspend fun delete(homework: HomeworkNew)
 

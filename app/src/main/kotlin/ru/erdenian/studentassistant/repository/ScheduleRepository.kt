@@ -69,6 +69,8 @@ class ScheduleRepository(context: Context) {
 
     suspend fun getLesson(semesterId: Long, lessonId: Long) = lessonDao.get(semesterId, lessonId)
 
+    fun getLesson(lesson: LessonNew) = lessonDao.getLive(lesson.semesterId, lesson.id).toKtx()
+
     suspend fun delete(lesson: LessonNew) {
         lessonDao.delete(lesson)
         if (!hasLessons(lesson.semesterId, lesson.subjectName)) {
@@ -124,6 +126,9 @@ class ScheduleRepository(context: Context) {
 
     suspend fun getHomework(semesterId: Long, homeworkId: Long) =
         homeworkDao.get(semesterId, homeworkId)
+
+    fun getHomework(homework: HomeworkNew) =
+        homeworkDao.getLive(homework.semesterId, homework.id).toKtx()
 
     suspend fun delete(homework: HomeworkNew) = homeworkDao.delete(homework)
 

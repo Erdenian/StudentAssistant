@@ -27,6 +27,9 @@ abstract class LessonDao {
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId AND _id = :lessonId")
     abstract suspend fun get(semesterId: Long, lessonId: Long): LessonNew?
 
+    @Query("SELECT * FROM lessons WHERE semester_id = :semesterId AND _id = :lessonId")
+    abstract fun getLive(semesterId: Long, lessonId: Long): LiveData<LessonNew?>
+
     @Delete
     abstract suspend fun delete(lesson: LessonNew)
 
