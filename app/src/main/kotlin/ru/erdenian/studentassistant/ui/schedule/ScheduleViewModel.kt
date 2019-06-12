@@ -7,6 +7,7 @@ import com.shopify.livedataktx.MediatorLiveDataKtx
 import com.shopify.livedataktx.MutableLiveDataKtx
 import com.shopify.livedataktx.switchMap
 import org.joda.time.LocalDate
+import ru.erdenian.studentassistant.extensions.asLiveData
 import ru.erdenian.studentassistant.extensions.liveDataOf
 import ru.erdenian.studentassistant.repository.ScheduleRepository
 import ru.erdenian.studentassistant.repository.entity.SemesterNew
@@ -26,7 +27,7 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
             })
         }
 
-    fun getLessons(day: LocalDate) = selectedSemester.switchMap { semester ->
+    fun getLessons(day: LocalDate) = selectedSemester.asLiveData.switchMap { semester ->
         semester?.let { repository.getLessons(it, day) } ?: liveDataOf(immutableSortedSetOf())
     }
 }
