@@ -12,7 +12,6 @@ import androidx.lifecycle.observe
 import androidx.viewpager.widget.PagerTabStrip
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.compareAndSet
 import ru.erdenian.studentassistant.extensions.getCompatColor
@@ -79,8 +78,9 @@ class HomeworksActivity : AppCompatActivity() {
         }
 
         findViewById<FloatingActionButton>(R.id.ah_add_homework).setOnClickListener {
-            startActivity<HomeworkEditorActivity>(
-                HomeworkEditorActivity.SEMESTER_ID_INTENT_KEY to viewModel.selectedSemester.value?.id
+            HomeworkEditorActivity.start(
+                this,
+                checkNotNull(viewModel.selectedSemester.value).id
             )
         }
     }

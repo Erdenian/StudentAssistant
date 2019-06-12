@@ -1,10 +1,10 @@
 package ru.erdenian.studentassistant.ui.help
 
 import android.os.Bundle
-import android.text.Html
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.HtmlCompat
 import ru.erdenian.studentassistant.R
 
 class HelpActivity : AppCompatActivity() {
@@ -15,8 +15,9 @@ class HelpActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        findViewById<TextView>(R.id.ahlp_help).text = Html.fromHtml(
-            resources.openRawResource(R.raw.help).bufferedReader().readText()
+        findViewById<TextView>(R.id.ahlp_help).text = HtmlCompat.fromHtml(
+            resources.openRawResource(R.raw.help).bufferedReader().readText(),
+            HtmlCompat.FROM_HTML_MODE_LEGACY
         )
     }
 

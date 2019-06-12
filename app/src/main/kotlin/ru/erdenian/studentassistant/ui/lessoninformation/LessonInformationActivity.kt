@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.ui.lessoninformation
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -15,6 +16,7 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.lazyViewModel
 import ru.erdenian.studentassistant.extensions.setColor
+import ru.erdenian.studentassistant.repository.entity.LessonNew
 import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
@@ -22,7 +24,10 @@ import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 class LessonInformationActivity : AppCompatActivity() {
 
     companion object {
-        const val LESSON_INTENT_KEY = "lesson_intent_key"
+        private const val LESSON_INTENT_KEY = "lesson_intent_key"
+        fun start(context: Context, lesson: LessonNew) {
+            context.startActivity<LessonInformationActivity>(LESSON_INTENT_KEY to lesson)
+        }
 
         private const val TIME_FORMAT = "HH:mm"
     }
@@ -78,10 +83,7 @@ class LessonInformationActivity : AppCompatActivity() {
         }
 
         findViewById<FloatingActionButton>(R.id.ali_add_homework).setOnClickListener {
-            startActivity<HomeworkEditorActivity>(
-                HomeworkEditorActivity.SEMESTER_ID_INTENT_KEY to viewModel.lesson.value?.semesterId,
-                HomeworkEditorActivity.SUBJECT_NAME_INTENT_KEY to viewModel.lesson.value?.subjectName
-            )
+            HomeworkEditorActivity.start(this, checkNotNull(viewModel.lesson.value))
         }
 
         viewModel.lesson.observe(this) { if (it == null) finish() }
@@ -99,8 +101,9 @@ class LessonInformationActivity : AppCompatActivity() {
             true
         }
         R.id.menu_lesson_information_edit_button -> {
-            startActivity<LessonEditorActivity>(
-                LessonEditorActivity.LESSON_INTENT_KEY to viewModel.lesson
+            LessonEditorActivity.start(
+                this,
+                checkNotNull(viewModel.lesson.value)
             )
             true
         }

@@ -135,9 +135,7 @@ class ScheduleActivity : AppCompatActivity() {
             true
         }
         R.id.menu_schedule_edit_schedule -> {
-            startActivity<LessonsEditorActivity>(
-                LessonsEditorActivity.SEMESTER_INTENT_KEY to viewModel.selectedSemester.value
-            )
+            LessonsEditorActivity.start(this, checkNotNull(viewModel.selectedSemester.value))
             true
         }
         else -> false

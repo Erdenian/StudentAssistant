@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.ui.lessoneditor
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -19,6 +20,7 @@ import com.dpro.widgets.WeekdaysPicker
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.alert
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.joda.time.DateTimeConstants
 import ru.erdenian.studentassistant.R
@@ -38,10 +40,25 @@ import java.util.Calendar
 class LessonEditorActivity : AppCompatActivity() {
 
     companion object {
-        const val SEMESTER_ID_INTENT_KEY = "semester_id_intent_key"
-        const val LESSON_INTENT_KEY = "lesson_intent_key"
-        const val COPY_INTENT_KEY = "copy_intent_key"
-        const val WEEKDAY_INTENT_KEY = "weekday_intent_key"
+        private const val SEMESTER_ID_INTENT_KEY = "semester_id_intent_key"
+        private const val WEEKDAY_INTENT_KEY = "weekday_intent_key"
+        private const val LESSON_INTENT_KEY = "lesson_intent_key"
+        private const val COPY_INTENT_KEY = "copy_intent_key"
+
+        fun start(context: Context, semesterId: Long, weekday: Int) {
+            context.startActivity<LessonEditorActivity>(
+                SEMESTER_ID_INTENT_KEY to semesterId,
+                WEEKDAY_INTENT_KEY to weekday
+            )
+        }
+
+        fun start(context: Context, lesson: LessonNew, copy: Boolean = false) {
+            context.startActivity<LessonEditorActivity>(
+                SEMESTER_ID_INTENT_KEY to lesson.semesterId,
+                LESSON_INTENT_KEY to lesson,
+                COPY_INTENT_KEY to copy
+            )
+        }
 
         private const val TIME_FORMAT = "HH:mm"
     }
