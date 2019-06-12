@@ -9,6 +9,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import ru.erdenian.studentassistant.extensions.asLiveData
 import ru.erdenian.studentassistant.extensions.liveDataOf
+import ru.erdenian.studentassistant.extensions.setIfEmpty
 import ru.erdenian.studentassistant.repository.ScheduleRepository
 import ru.erdenian.studentassistant.repository.entity.LessonNew
 import ru.erdenian.studentassistant.repository.entity.SemesterNew
@@ -18,13 +19,15 @@ class LessonsEditorViewModel(application: Application) : AndroidViewModel(applic
 
     private val repository = ScheduleRepository(application)
 
-    private val semesterId = MutableLiveDataKtx<Long>()
+    private val privateSemester = MutableLiveDataKtx<SemesterNew>()
 
     fun init(semester: SemesterNew) {
-        semesterId.value = semester.id
+        privateSemester.setIfEmpty(semester)
     }
 
-    val semester = semesterId.asLiveData.switchMap { repository.getSemester(it) }
+    val semester = privateSemester.asLiveData.switchMap { semester ->
+        liveDataOf(semester, repository.getSemester(semester.id))
+    }
 
     fun getLessons(weekday: Int) = semester.switchMap { semester ->
         semester
