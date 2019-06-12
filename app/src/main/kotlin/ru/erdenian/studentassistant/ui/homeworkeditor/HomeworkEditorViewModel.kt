@@ -9,6 +9,7 @@ import com.shopify.livedataktx.MutableLiveDataKtx
 import com.shopify.livedataktx.map
 import com.shopify.livedataktx.switchMap
 import org.joda.time.LocalDate
+import ru.erdenian.studentassistant.extensions.asLiveData
 import ru.erdenian.studentassistant.repository.ScheduleRepository
 import ru.erdenian.studentassistant.repository.entity.HomeworkNew
 
@@ -20,11 +21,26 @@ class HomeworkEditorViewModel(application: Application) : AndroidViewModel(appli
 
     private val repository = ScheduleRepository(application)
 
-    val semesterId = MutableLiveDataKtx<Long>()
+    private val semesterId = MutableLiveDataKtx<Long>()
+    private var homework: HomeworkNew? = null
+
+    fun init(semesterId: Long, subjectName: String) {
+        this.semesterId.value = semesterId
+        this.subjectName.value = subjectName
+    }
+
+    fun init(semesterId: Long, homework: HomeworkNew?) {
+        this.semesterId.value = semesterId
+
+        this.homework = homework?.also { h ->
+            subjectName.value = h.subjectName
+            description.value = h.description
+            deadline.value = h.deadline
+        }
+    }
 
     val subjectName: MutableLiveDataKtx<String> = MediatorLiveDataKtx<String>().apply {
-        value = ""
-        addSource(existingSubjects, Observer { if (value !in it) value = it.first() })
+        addSource(existingSubjects, Observer { if (safeValue !in it) value = it.first() })
     }
     val description = MutableLiveDataKtx<String>().apply { value = "" }
     val deadline = MutableLiveDataKtx<LocalDate>().apply { value = LocalDate.now() }
@@ -40,18 +56,10 @@ class HomeworkEditorViewModel(application: Application) : AndroidViewModel(appli
         addSource(description, onChanged)
     }
 
-    val existingSubjects = semesterId.switchMap { repository.getSubjects(it) }
-    val semesterLastDay = semesterId.switchMap { id ->
+    val existingSubjects = semesterId.asLiveData.switchMap { repository.getSubjects(it) }
+    val semesterLastDay = semesterId.asLiveData.switchMap { id ->
         repository.getSemester(id)
     }.map { checkNotNull(it).lastDay }
-
-    private var homework: HomeworkNew? = null
-
-    fun setHomework(homework: HomeworkNew) {
-        subjectName.value = homework.subjectName
-        description.value = homework.description
-        deadline.value = homework.deadline
-    }
 
     suspend fun save(): Long {
         check(error.value == null)

@@ -7,6 +7,7 @@ import com.shopify.livedataktx.MediatorLiveDataKtx
 import com.shopify.livedataktx.MutableLiveDataKtx
 import com.shopify.livedataktx.switchMap
 import org.joda.time.LocalDate
+import ru.erdenian.studentassistant.extensions.asLiveData
 import ru.erdenian.studentassistant.extensions.liveDataOf
 import ru.erdenian.studentassistant.repository.ScheduleRepository
 import ru.erdenian.studentassistant.repository.entity.SemesterNew
@@ -26,11 +27,11 @@ class HomeworksViewModel(application: Application) : AndroidViewModel(applicatio
             })
         }
 
-    fun getActualHomeworks() = selectedSemester.switchMap { semester ->
+    fun getActualHomeworks() = selectedSemester.asLiveData.switchMap { semester ->
         semester?.let { repository.getActualHomeworks(it.id) } ?: liveDataOf(immutableSortedSetOf())
     }
 
-    fun getPastHomeworks() = selectedSemester.switchMap { semester ->
+    fun getPastHomeworks() = selectedSemester.asLiveData.switchMap { semester ->
         semester?.let { repository.getPastHomeworks(it.id) } ?: liveDataOf(immutableSortedSetOf())
     }
 }

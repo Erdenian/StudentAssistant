@@ -28,12 +28,11 @@ class SemesterEditorViewModel(application: Application) : AndroidViewModel(appli
     private var semester: SemesterNew? = null
 
     fun init(semester: SemesterNew?) {
-        if (semester == null) return
-
-        this.semester = semester
-        name.value = semester.name
-        firstDay.value = semester.firstDay
-        lastDay.value = semester.lastDay
+        this.semester = semester?.also { s ->
+            name.value = s.name
+            firstDay.value = s.firstDay
+            lastDay.value = s.lastDay
+        }
     }
 
     val name = MutableLiveDataKtx<String>().apply { value = "" }

@@ -15,6 +15,7 @@ import kotlinx.coroutines.withContext
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
+import ru.erdenian.studentassistant.extensions.asLiveData
 import ru.erdenian.studentassistant.extensions.compareAndSet
 import ru.erdenian.studentassistant.extensions.setIfEmpty
 import ru.erdenian.studentassistant.repository.ImmutableSortedSet
@@ -99,10 +100,10 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
         addSource(endTime, onChanged)
     }
 
-    val existingSubjects = semesterId.switchMap { repository.getSubjects(it) }
-    val existingTypes = semesterId.switchMap { repository.getTypes(it) }
-    val existingTeachers = semesterId.switchMap { repository.getTeachers(it) }
-    val existingClassrooms = semesterId.switchMap { repository.getClassrooms(it) }
+    val existingSubjects = semesterId.asLiveData.switchMap { repository.getSubjects(it) }
+    val existingTypes = semesterId.asLiveData.switchMap { repository.getTypes(it) }
+    val existingTeachers = semesterId.asLiveData.switchMap { repository.getTeachers(it) }
+    val existingClassrooms = semesterId.asLiveData.switchMap { repository.getClassrooms(it) }
 
     private val isSubjectNameChanged
         get() = lesson?.let { it.subjectName != subjectName.value } ?: false

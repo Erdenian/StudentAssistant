@@ -44,12 +44,12 @@ class HomeworkEditorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_homework_editor)
 
-        viewModel.apply {
-            semesterId.value = intent.getLongExtra(SEMESTER_ID_INTENT_KEY, -1)
-            subjectName.value = intent.getStringExtra(
-                SUBJECT_NAME_INTENT_KEY
-            ) ?: checkNotNull(homework).subjectName
-            homework?.let { setHomework(it) }
+        intent.apply {
+            val homework = homework
+            val semesterId = getLongExtra(SEMESTER_ID_INTENT_KEY, -1)
+            if (homework == null) viewModel.init(
+                semesterId, intent.getStringExtra(SUBJECT_NAME_INTENT_KEY)
+            ) else viewModel.init(semesterId, homework)
         }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
