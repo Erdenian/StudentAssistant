@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.ui.homeworkeditor
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -15,6 +16,7 @@ import androidx.lifecycle.observe
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.alert
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
@@ -24,14 +26,34 @@ import ru.erdenian.studentassistant.extensions.lazyViewModel
 import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.extensions.showDatePicker
 import ru.erdenian.studentassistant.repository.entity.HomeworkNew
+import ru.erdenian.studentassistant.repository.entity.LessonNew
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorViewModel.Error
 
 class HomeworkEditorActivity : AppCompatActivity() {
 
     companion object {
-        const val SEMESTER_ID_INTENT_KEY = "semester_id_intent_key"
-        const val SUBJECT_NAME_INTENT_KEY = "subject_name_intent_key"
-        const val HOMEWORK_INTENT_KEY = "homework_intent_key"
+        private const val SEMESTER_ID_INTENT_KEY = "semester_id_intent_key"
+        private const val SUBJECT_NAME_INTENT_KEY = "subject_name_intent_key"
+        private const val HOMEWORK_INTENT_KEY = "homework_intent_key"
+
+        fun start(context: Context, semesterId: Long) {
+            context.startActivity<HomeworkEditorActivity>(
+                SEMESTER_ID_INTENT_KEY to semesterId
+            )
+        }
+
+        fun start(context: Context, lesson: LessonNew) {
+            context.startActivity<HomeworkEditorActivity>(
+                SEMESTER_ID_INTENT_KEY to lesson.semesterId,
+                SUBJECT_NAME_INTENT_KEY to lesson.subjectName
+            )
+        }
+
+        fun start(context: Context, homework: HomeworkNew) {
+            context.startActivity<HomeworkEditorActivity>(
+                HOMEWORK_INTENT_KEY to homework
+            )
+        }
 
         private const val DATE_FORMAT = "dd.MM.yyyy"
     }

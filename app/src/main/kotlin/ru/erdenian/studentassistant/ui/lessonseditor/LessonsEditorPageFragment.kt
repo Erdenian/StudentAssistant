@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.alert
-import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.getViewModel
+import ru.erdenian.studentassistant.repository.entity.LessonNew
 import ru.erdenian.studentassistant.ui.adapter.LessonsListAdapter
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 
@@ -33,7 +33,14 @@ class LessonsEditorPageFragment : Fragment() {
     }
 
     private val viewModel by lazy { requireActivity().getViewModel<LessonsEditorViewModel>() }
-    private val adapter = LessonsListAdapter(true)
+    private val adapter = LessonsListAdapter(true).apply {
+        onLessonClickListener = object : LessonsListAdapter.OnLessonClickListener {
+            override fun onLessonClick(lesson: LessonNew) {
+                LessonEditorActivity.start(requireContext(), lesson)
+            }
+        }
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -81,10 +88,7 @@ class LessonsEditorPageFragment : Fragment() {
         val lesson = adapter.lessons[info.position]
         return when (item.itemId) {
             R.id.context_menu_schedule_page_fragment_copy -> {
-                requireContext().startActivity<LessonEditorActivity>(
-                    LessonEditorActivity.LESSON_INTENT_KEY to lesson,
-                    LessonEditorActivity.COPY_INTENT_KEY to true
-                )
+                LessonEditorActivity.start(requireContext(), lesson, true)
                 true
             }
             R.id.context_menu_schedule_page_fragment_delete -> {

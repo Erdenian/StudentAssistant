@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.ui.semestereditor
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -11,6 +12,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.compareAndSet
@@ -24,7 +26,11 @@ import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorViewModel.Er
 class SemesterEditorActivity : AppCompatActivity() {
 
     companion object {
-        const val SEMESTER_INTENT_KEY = "semester"
+        private const val SEMESTER_INTENT_KEY = "semester_intent_key"
+        fun start(context: Context, semester: SemesterNew? = null) {
+            context.startActivity<SemesterEditorActivity>(SEMESTER_INTENT_KEY to semester)
+        }
+
         private const val DATE_FORMAT = "dd.MM.yyyy"
     }
 

@@ -21,7 +21,7 @@ class HomeworksListAdapter : RecyclerView.Adapter<HomeworksListAdapter.ItemViewH
         }
 
     interface OnHomeworkClickListener {
-        fun onHomeworkClick(lesson: HomeworkNew)
+        fun onHomeworkClick(homework: HomeworkNew)
     }
 
     var onHomeworkClickListener: OnHomeworkClickListener? = null

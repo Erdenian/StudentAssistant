@@ -24,9 +24,9 @@ class HomeworkEditorViewModel(application: Application) : AndroidViewModel(appli
     private val semesterId = MutableLiveDataKtx<Long>()
     private var homework: HomeworkNew? = null
 
-    fun init(semesterId: Long, subjectName: String) {
+    fun init(semesterId: Long, subjectName: String?) {
         this.semesterId.value = semesterId
-        this.subjectName.value = subjectName
+        subjectName?.let { this.subjectName.value = it }
     }
 
     fun init(semesterId: Long, homework: HomeworkNew?) {

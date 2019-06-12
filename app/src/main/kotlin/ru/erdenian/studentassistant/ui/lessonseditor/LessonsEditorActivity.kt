@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.ui.lessonseditor
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -21,13 +22,17 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.lazyViewModel
 import ru.erdenian.studentassistant.extensions.setColor
+import ru.erdenian.studentassistant.repository.entity.SemesterNew
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
 
 class LessonsEditorActivity : AppCompatActivity() {
 
     companion object {
-        const val SEMESTER_INTENT_KEY = "semester_intent_key"
+        private const val SEMESTER_INTENT_KEY = "semester_intent_key"
+        fun start(context: Context, semester: SemesterNew) {
+            context.startActivity<LessonsEditorActivity>(SEMESTER_INTENT_KEY to semester)
+        }
     }
 
     private val viewModel by lazyViewModel<LessonsEditorViewModel>()
@@ -79,9 +84,10 @@ class LessonsEditorActivity : AppCompatActivity() {
         // TODO: 13.11.2016 добавить заполнение списка пар по датам
 
         findViewById<FloatingActionButton>(R.id.alse_add_lesson).setOnClickListener {
-            startActivity<LessonEditorActivity>(
-                LessonEditorActivity.SEMESTER_ID_INTENT_KEY to viewModel.semester.value?.id,
-                LessonEditorActivity.WEEKDAY_INTENT_KEY to byWeekdaysPager.currentItem + 1
+            LessonEditorActivity.start(
+                this,
+                checkNotNull(viewModel.semester.value).id,
+                byWeekdaysPager.currentItem + 1
             )
         }
 
@@ -100,9 +106,7 @@ class LessonsEditorActivity : AppCompatActivity() {
             true
         }
         R.id.menu_lessons_editor_edit_semester -> {
-            startActivity<SemesterEditorActivity>(
-                SemesterEditorActivity.SEMESTER_INTENT_KEY to viewModel.semester.value
-            )
+            SemesterEditorActivity.start(this, viewModel.semester.value)
             true
         }
         R.id.menu_lessons_editor_delete_semester -> {
