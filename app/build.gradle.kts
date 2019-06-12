@@ -85,10 +85,10 @@ dependencies {
 
     val lifecycle_version: String by project
     val navigation_version: String by project
-    val room_version = "2.1.0-beta01"
+    val room_version = "2.1.0-rc01"
 
-    val kodein_version = "6.2.0"
-    val retrofit_version = "2.5.0"
+    val kodein_version = "6.2.1"
+    val retrofit_version = "2.6.0"
 
     val joda_time_version: String by project
     val guava_version: String by project
@@ -108,10 +108,11 @@ dependencies {
     // endregion
 
     // region AndroidX
+    implementation("androidx.core:core:$core_ktx_version")
     implementation("androidx.core:core-ktx:$core_ktx_version")
     implementation("androidx.appcompat:appcompat:$appcompat_version")
     implementation("androidx.cardview:cardview:$cardview_version")
-    implementation("androidx.recyclerview:recyclerview:1.1.0-alpha05")
+    implementation("androidx.recyclerview:recyclerview:1.1.0-alpha06")
 
     implementation("androidx.lifecycle:lifecycle-extensions:$lifecycle_version")
     kapt("androidx.lifecycle:lifecycle-compiler:$lifecycle_version")
@@ -128,13 +129,12 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
     // endregion
 
-    implementation("com.google.android.material:material:1.0.0")
-
     implementation("org.jetbrains.anko:anko-common:0.10.8")
     implementation("joda-time:joda-time:$joda_time_version")
     implementation("com.google.guava:guava:$guava_version")
 
     // region UI
+    implementation("com.google.android.material:material:1.1.0-alpha07")
     implementation("com.github.DavidProdinger:weekdays-selector:1.1.0")
     // endregion
 }
