@@ -56,17 +56,15 @@ class LessonEditorActivity : AppCompatActivity() {
         setContentView(R.layout.activity_lesson_editor)
 
         intent.apply {
-            viewModel.semesterId.value = getLongExtra(
-                SEMESTER_ID_INTENT_KEY, -1
-            ).takeIf { it > 0 } ?: checkNotNull(lesson).semesterId
-            lesson?.let { viewModel.setLesson(it, intent.getBooleanExtra(COPY_INTENT_KEY, false)) }
-            viewModel.byWeekday.compareAndSet(
-                viewModel.byWeekday.value.copy(
-                    weekday = intent.getIntExtra(
-                        WEEKDAY_INTENT_KEY,
-                        (lesson?.lessonRepeat as? LessonRepeatNew.ByWeekday)?.weekday ?: 1
-                    )
-                )
+            val l = lesson
+            val semesterId = getLongExtra(SEMESTER_ID_INTENT_KEY, -1)
+            if (l == null) viewModel.init(
+                semesterId,
+                getIntExtra(WEEKDAY_INTENT_KEY, DateTimeConstants.MONDAY)
+            ) else viewModel.init(
+                semesterId,
+                l,
+                intent.getBooleanExtra(COPY_INTENT_KEY, false)
             )
         }
 

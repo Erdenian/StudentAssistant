@@ -15,6 +15,8 @@ import kotlinx.coroutines.withContext
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
+import ru.erdenian.studentassistant.extensions.compareAndSet
+import ru.erdenian.studentassistant.extensions.setIfEmpty
 import ru.erdenian.studentassistant.repository.ImmutableSortedSet
 import ru.erdenian.studentassistant.repository.ScheduleRepository
 import ru.erdenian.studentassistant.repository.entity.LessonNew
@@ -30,7 +32,29 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
 
     private val repository = ScheduleRepository(application)
 
-    val semesterId = MutableLiveDataKtx<Long>()
+    private val semesterId = MutableLiveDataKtx<Long>()
+    private var lesson: LessonNew? = null
+
+    fun init(semesterId: Long, weekday: Int = DateTimeConstants.MONDAY) {
+        this.semesterId.setIfEmpty(semesterId)
+        byWeekday.compareAndSet(byWeekday.value.copy(weekday = weekday))
+    }
+
+    fun init(semesterId: Long, lesson: LessonNew, copy: Boolean) {
+        this.semesterId.setIfEmpty(semesterId)
+
+        if (!copy) this.lesson = lesson
+        subjectName.value = lesson.subjectName
+        type.value = lesson.type
+        teachers.value = lesson.teachers
+        classrooms.value = lesson.classrooms
+        startTime.value = lesson.startTime
+        endTime.value = lesson.endTime
+        lessonRepeat.value = when (lesson.lessonRepeat) {
+            is LessonRepeatNew.ByWeekday -> byWeekday.apply { value = lesson.lessonRepeat }
+            is LessonRepeatNew.ByDates -> byDates.apply { value = lesson.lessonRepeat }
+        }
+    }
 
     val subjectName = MutableLiveDataKtx<String>().apply { value = "" }
     val type = MutableLiveDataKtx<String>().apply { value = "" }
@@ -79,23 +103,6 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
     val existingTypes = semesterId.switchMap { repository.getTypes(it) }
     val existingTeachers = semesterId.switchMap { repository.getTeachers(it) }
     val existingClassrooms = semesterId.switchMap { repository.getClassrooms(it) }
-
-    private var lesson: LessonNew? = null
-
-    fun setLesson(lesson: LessonNew, copy: Boolean = false) {
-        if (!copy) this.lesson = lesson
-
-        subjectName.value = lesson.subjectName
-        type.value = lesson.type
-        teachers.value = lesson.teachers
-        classrooms.value = lesson.classrooms
-        startTime.value = lesson.startTime
-        endTime.value = lesson.endTime
-        lessonRepeat.value = when (lesson.lessonRepeat) {
-            is LessonRepeatNew.ByWeekday -> byWeekday.apply { value = lesson.lessonRepeat }
-            is LessonRepeatNew.ByDates -> byDates.apply { value = lesson.lessonRepeat }
-        }
-    }
 
     private val isSubjectNameChanged
         get() = lesson?.let { it.subjectName != subjectName.value } ?: false
