@@ -1,5 +1,6 @@
 plugins {
     id("com.android.library")
+    kotlin("android")
 }
 
 android {
@@ -38,17 +39,24 @@ android {
 }
 
 dependencies {
+    val kotlin_version: String by project
+
+    val core_ktx_version: String by project
     val appcompat_version: String by project
     val cardview_version: String by project
 
     val joda_time_version: String by project
-    val guava_version: String by project
 
-    implementation(project(":schedule"))
+    // region Kotlin
+    implementation(kotlin("stdlib-jdk8", kotlin_version))
+    // endregion
 
+    // region AndroidX
+    implementation("androidx.core:core:$core_ktx_version")
+    implementation("androidx.core:core-ktx:$core_ktx_version")
     implementation("androidx.appcompat:appcompat:$appcompat_version")
     implementation("androidx.cardview:cardview:$cardview_version")
+    // endregion
 
     implementation("joda-time:joda-time:$joda_time_version")
-    implementation("com.google.guava:guava:$guava_version")
 }
