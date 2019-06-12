@@ -12,7 +12,7 @@
         tools:ignore="ContentDescription" />
 
     <TextView
-        android:id="@+id/teacher_view_name"
+        android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorSecondaryText"
