@@ -90,7 +90,7 @@ public class LessonCard extends CardView {
         inflate(context, R.layout.lesson_card, this);
 
         if (weeksVariants == null) {
-            weeksVariants = getResources().getStringArray(R.array.weeks_selector_weeks_variants);
+            weeksVariants = getResources().getStringArray(R.array.repeat_variants);
             weeksVariants = Arrays.copyOf(weeksVariants, weeksVariants.length - 1);
         }
 
