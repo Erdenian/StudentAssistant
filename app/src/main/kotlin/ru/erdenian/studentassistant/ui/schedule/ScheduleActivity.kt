@@ -52,7 +52,7 @@ class ScheduleActivity : AppCompatActivity() {
         }
         supportActionBar?.apply {
             viewModel.selectedSemester.observe(this@ScheduleActivity) { semester ->
-                title = semester?.name ?: getString(R.string.title_activity_schedule)
+                title = semester?.name ?: getString(R.string.sa_title)
             }
             viewModel.allSemesters.observe(this@ScheduleActivity) { semesters ->
                 setDisplayShowTitleEnabled(semesters.size <= 1)
@@ -95,7 +95,7 @@ class ScheduleActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.as_download_schedule).setOnClickListener {
-            toast(R.string.content_schedule_get_schedule_from_server_button)
+            toast(R.string.sa_download)
         }
         findViewById<Button>(R.id.as_create_schedule).setOnClickListener {
             startActivity<SemesterEditorActivity>()

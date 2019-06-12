@@ -6,7 +6,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.ViewFlipper
 import androidx.appcompat.app.AppCompatActivity
@@ -50,11 +49,6 @@ class LessonsEditorActivity : AppCompatActivity() {
         }
 
         findViewById<Spinner>(R.id.alse_spinner).apply {
-            adapter = ArrayAdapter(
-                context, R.layout.spinner_item_semesters,
-                resources.getStringArray(R.array.lesson_repeat_types)
-            ).apply { setDropDownViewResource(R.layout.spinner_dropdown_item_semesters) }
-
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 private val flipper = this@LessonsEditorActivity.findViewById<ViewFlipper>(
                     R.id.alse_flipper
@@ -110,11 +104,11 @@ class LessonsEditorActivity : AppCompatActivity() {
             true
         }
         R.id.menu_lessons_editor_delete_semester -> {
-            alert(R.string.activity_lessons_editor_alert_delete_message) {
-                positiveButton(R.string.activity_lessons_editor_alert_delete_yes) {
+            alert(R.string.lsea_delete_message) {
+                positiveButton(R.string.lsea_delete_yes) {
                     viewModel.viewModelScope.launch { viewModel.deleteSemester() }
                 }
-                negativeButton(R.string.activity_lessons_editor_alert_delete_no) {}
+                negativeButton(R.string.lsea_delete_no) {}
             }.show()
             true
         }

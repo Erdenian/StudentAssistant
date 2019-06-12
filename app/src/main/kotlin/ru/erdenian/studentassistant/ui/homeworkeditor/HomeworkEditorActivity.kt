@@ -141,7 +141,7 @@ class HomeworkEditorActivity : AppCompatActivity() {
                 toast(
                     when (error) {
                         Error.EMPTY_DESCRIPTION -> {
-                            R.string.content_homework_editor_activity_null_description
+                            R.string.hea_error_empty_description
                         }
                     }
                 )
@@ -152,14 +152,14 @@ class HomeworkEditorActivity : AppCompatActivity() {
             true
         }
         R.id.menu_homework_editor_delete_homework -> {
-            alert(R.string.activity_homework_editor_alert_delete_message) {
-                positiveButton(R.string.activity_homework_editor_alert_delete_yes) {
+            alert(R.string.hea_delete_message) {
+                positiveButton(R.string.hea_delete_yes) {
                     viewModel.viewModelScope.launch {
                         viewModel.delete()
                         finish()
                     }
                 }
-                negativeButton(R.string.activity_homework_editor_alert_delete_no) {}
+                negativeButton(R.string.hea_delete_no) {}
             }.show()
             true
         }

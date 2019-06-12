@@ -88,7 +88,7 @@ class LessonEditorActivity : AppCompatActivity() {
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             if (lesson == null) {
-                title = getString(R.string.title_activity_lesson_editor_new_lesson)
+                title = getString(R.string.lea_title_new)
             }
         }
 
@@ -96,7 +96,7 @@ class LessonEditorActivity : AppCompatActivity() {
             viewModel.error.observe(this@LessonEditorActivity) { error ->
                 if (error == Error.EMPTY_SUBJECT_NAME) {
                     this.error = getText(
-                        R.string.activity_lesson_editor_incorrect_subject_name_message
+                        R.string.lea_error_empty_subject_name
                     )
                 } else isErrorEnabled = false
             }
@@ -123,12 +123,13 @@ class LessonEditorActivity : AppCompatActivity() {
             addTextChangedListener { editable ->
                 viewModel.type.compareAndSet(editable?.toString() ?: "")
             }
+            val predefinedTypes = resources.getStringArray(R.array.lesson_types)
             viewModel.existingTypes.observe(this@LessonEditorActivity) { types ->
                 setAdapter(
                     ArrayAdapter(
                         context,
                         android.R.layout.simple_dropdown_item_1line,
-                        types.list
+                        predefinedTypes + types.list
                     )
                 )
             }
@@ -205,12 +206,6 @@ class LessonEditorActivity : AppCompatActivity() {
         findViewById<Spinner>(R.id.ale_repeat_type).apply {
             val byWeekdayIndex = 0
             val byDatesIndex = 1
-
-            adapter = ArrayAdapter(
-                context,
-                android.R.layout.simple_dropdown_item_1line,
-                resources.getStringArray(R.array.lesson_repeat_types)
-            )
             viewModel.lessonRepeat.observe(this@LessonEditorActivity) { lessonRepeat ->
                 setSelection(
                     when (lessonRepeat.value) {
@@ -301,10 +296,10 @@ class LessonEditorActivity : AppCompatActivity() {
                 toast(
                     when (error) {
                         Error.EMPTY_SUBJECT_NAME -> {
-                            R.string.activity_lesson_editor_incorrect_subject_name_message
+                            R.string.lea_error_empty_subject_name
                         }
                         Error.WRONG_TIMES -> {
-                            R.string.activity_lesson_editor_incorrect_time_message
+                            R.string.lea_error_wrong_time
                         }
                     }
                 )
@@ -312,22 +307,22 @@ class LessonEditorActivity : AppCompatActivity() {
                 viewModel.viewModelScope.launch {
                     if (viewModel.isSubjectNameChangedAndNotLast()) {
                         alert(
-                            R.string.activity_lesson_editor_alert_rename_lessons_message,
-                            R.string.activity_lesson_editor_alert_rename_lessons_title
+                            R.string.lea_rename_others_message,
+                            R.string.lea_rename_others_title
                         ) {
-                            positiveButton(R.string.activity_lesson_editor_alert_rename_lessons_yes) {
+                            positiveButton(R.string.lea_rename_others_yes) {
                                 viewModel.viewModelScope.launch {
                                     viewModel.save(true)
                                     finish()
                                 }
                             }
-                            negativeButton(R.string.activity_lesson_editor_alert_rename_lessons_no) {
+                            negativeButton(R.string.lea_rename_others_no) {
                                 viewModel.viewModelScope.launch {
                                     viewModel.save(false)
                                     finish()
                                 }
                             }
-                            neutralPressed(R.string.activity_lesson_editor_alert_rename_lessons_cancel) {}
+                            neutralPressed(R.string.lea_rename_others_cancel) {}
                         }.show()
                     } else {
                         viewModel.save()
@@ -341,26 +336,26 @@ class LessonEditorActivity : AppCompatActivity() {
             viewModel.viewModelScope.launch {
                 if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) {
                     alert(
-                        R.string.activity_lesson_editor_alert_delete_homeworks_message,
-                        R.string.activity_lesson_editor_alert_delete_homeworks_title
+                        R.string.lea_delete_homeworks_message,
+                        R.string.lea_delete_homeworks_title
                     ) {
-                        positiveButton(R.string.activity_lesson_editor_alert_delete_homeworks_yes) {
+                        positiveButton(R.string.lea_delete_homeworks_yes) {
                             viewModel.viewModelScope.launch {
                                 viewModel.delete()
                                 finish()
                             }
                         }
-                        negativeButton(R.string.activity_lesson_editor_alert_delete_homeworks_cancel) {}
+                        negativeButton(R.string.lea_delete_homeworks_cancel) {}
                     }.show()
                 } else {
-                    alert(R.string.activity_lesson_editor_alert_delete_message) {
-                        positiveButton(R.string.activity_lesson_editor_alert_delete_yes) {
+                    alert(R.string.lea_delete_message) {
+                        positiveButton(R.string.lea_delete_yes) {
                             viewModel.viewModelScope.launch {
                                 viewModel.delete()
                                 finish()
                             }
                         }
-                        negativeButton(R.string.activity_lesson_editor_alert_delete_no) {}
+                        negativeButton(R.string.lea_delete_no) {}
                     }.show()
                 }
             }

@@ -16,7 +16,7 @@
             android:id="@+id/ase_name_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/content_semester_editor_semester_name"
+            android:hint="@string/sea_name"
             android:imeOptions="flagNoExtractUi"
             android:inputType="text"
             android:maxLines="1">
@@ -36,7 +36,7 @@
             android:id="@+id/ase_first_day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/content_semester_editor_first_day" />
+            tools:text="01.09.2014" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
             android:id="@+id/ase_last_day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/content_semester_editor_last_day" />
+            tools:text="31.12.2014" />
 
     </LinearLayout>
 

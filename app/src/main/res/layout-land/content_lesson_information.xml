@@ -90,7 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="@string/activity_lesson_information_no_homeworks"
+            android:text="@string/lia_no_homeworks"
             android:textSize="40sp" />
 
         <androidx.recyclerview.widget.RecyclerView

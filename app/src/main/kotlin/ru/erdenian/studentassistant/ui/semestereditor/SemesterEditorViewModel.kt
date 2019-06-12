@@ -14,6 +14,7 @@ import ru.erdenian.studentassistant.repository.entity.SemesterNew
 class SemesterEditorViewModel(application: Application) : AndroidViewModel(application) {
 
     enum class Error {
+        EMPTY_NAME,
         SEMESTER_EXISTS,
         WRONG_DATES
     }
@@ -47,6 +48,7 @@ class SemesterEditorViewModel(application: Application) : AndroidViewModel(appli
             val firstDay = firstDay.safeValue
             val lastDay = lastDay.safeValue
             value = when {
+                name.value.isBlank() -> Error.EMPTY_NAME
                 semestersNames?.contains(name.value) == true -> Error.SEMESTER_EXISTS
                 (firstDay != null) && (lastDay != null) && (firstDay > lastDay) -> Error.WRONG_DATES
                 else -> null

@@ -54,7 +54,7 @@ class HomeworksPageFragment : Fragment() {
             if (isActual) getActualHomeworks() else getPastHomeworks()
         }
 
-        requireView().findViewById<ViewFlipper>(R.id.fsp_flipper).apply {
+        requireView().findViewById<ViewFlipper>(R.id.fhp_flipper).apply {
             val homeworksIndex = 0
             val noHomeworksIndex = 1
             homeworks.observe(this@HomeworksPageFragment) { value ->
