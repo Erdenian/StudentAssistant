@@ -18,12 +18,12 @@ import kotlinx.coroutines.launch
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.lazyViewModel
-import ru.erdenian.studentassistant.extensions.setColor
 import ru.erdenian.studentassistant.repository.entity.SemesterNew
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
+import ru.erdenian.studentassistant.utils.getCompatColor
+import ru.erdenian.studentassistant.utils.setColor
 
 class LessonsEditorActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.extensions
+package ru.erdenian.studentassistant.utils
 
 private val lineSeparator = System.getProperty("line.separator")
 

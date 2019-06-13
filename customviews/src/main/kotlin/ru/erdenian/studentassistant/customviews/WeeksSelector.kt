@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.Spinner
 import androidx.core.view.children
 import androidx.core.view.forEach
+import ru.erdenian.studentassistant.utils.setViewCount
 
 /**
  * View для выбора недель для повторения пары
