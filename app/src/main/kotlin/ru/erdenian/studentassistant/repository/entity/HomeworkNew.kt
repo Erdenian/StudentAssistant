@@ -8,7 +8,6 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.LocalDate
-import ru.erdenian.studentassistant.schedule.generateId
 
 /**
  * Класс домашнего задания.

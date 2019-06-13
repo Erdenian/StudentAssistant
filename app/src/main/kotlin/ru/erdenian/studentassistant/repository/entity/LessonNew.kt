@@ -9,7 +9,6 @@ import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.repository.ImmutableSortedSet
-import ru.erdenian.studentassistant.schedule.generateId
 
 /**
  * Класс пары (урока).
