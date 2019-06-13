@@ -30,7 +30,6 @@ class LessonsListAdapter(
                 width = ViewGroup.LayoutParams.MATCH_PARENT
                 height = ViewGroup.LayoutParams.WRAP_CONTENT
             }
-            setEditing(isEditing)
         }
     ).apply {
         card.setOnClickListener { onLessonClickListener?.onLessonClick(lessons[adapterPosition]) }
