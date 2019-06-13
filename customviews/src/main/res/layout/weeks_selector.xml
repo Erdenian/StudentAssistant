@@ -11,12 +11,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/weeks_selector_weeks_variants_title"
+            android:text="@string/ws_variants_title"
             android:textSize="16sp"
             android:textStyle="bold" />
 
         <Spinner
-            android:id="@+id/weeks_selector_weeks_variants"
+            android:id="@+id/ws_variants"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:entries="@array/repeat_variants"
@@ -31,7 +31,7 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/weeks_selector_remove_week"
+            android:id="@+id/ws_remove"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
@@ -39,13 +39,13 @@
             tools:ignore="ContentDescription" />
 
         <HorizontalScrollView
-            android:id="@+id/weeks_selector_scroll_view"
+            android:id="@+id/ws_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
             <LinearLayout
-                android:id="@+id/weeks_selector_weeks_parent"
+                android:id="@+id/ws_weeks_parent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -62,7 +62,7 @@
         </HorizontalScrollView>
 
         <ImageButton
-            android:id="@+id/weeks_selector_add_week"
+            android:id="@+id/ws_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"

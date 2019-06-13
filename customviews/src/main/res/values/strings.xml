@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="weeks_selector_weeks_variants_title">Повторять</string>
+
+    <!-- WeeksSelector -->
+    <string name="ws_variants_title">Повторять</string>
 
 </resources>
