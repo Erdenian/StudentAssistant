@@ -97,7 +97,6 @@ dependencies {
         exclude("com.android.support", "support-annotations")
     }
 
-    implementation(project(":schedule"))
     implementation(project(":customviews"))
 
     // region Kotlin

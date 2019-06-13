@@ -10,7 +10,6 @@ import kotlinx.android.parcel.Parcelize
 import org.joda.time.Days
 import org.joda.time.LocalDate
 import org.joda.time.Weeks
-import ru.erdenian.studentassistant.schedule.generateId
 
 /**
  * Класс семестра (четверти).

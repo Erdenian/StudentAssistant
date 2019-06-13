@@ -1,1 +1,1 @@
-include(":app", ":schedule", ":customviews")
+include(":app", ":customviews")
