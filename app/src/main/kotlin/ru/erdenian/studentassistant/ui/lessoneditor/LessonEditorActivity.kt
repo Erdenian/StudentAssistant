@@ -272,9 +272,7 @@ class LessonEditorActivity : AppCompatActivity() {
         }
 
         findViewById<WeeksSelector>(R.id.ale_weeks_selector).apply {
-            viewModel.byWeekday.observe(this@LessonEditorActivity) { byWeekday ->
-                weeks = byWeekday.weeks.toBooleanArray()
-            }
+            viewModel.byWeekday.observe(this@LessonEditorActivity) { weeks = it.weeks }
             // Todo: обработчик изменения выбранных недель
         }
     }

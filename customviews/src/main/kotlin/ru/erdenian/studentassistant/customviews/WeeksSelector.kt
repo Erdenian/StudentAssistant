@@ -133,7 +133,7 @@ class WeeksSelector @JvmOverloads constructor(
                 { CheckBoxWithText(context).apply { text = it.toString() } }
             )
         }
-        ibAdd.setOnClickListener { v ->
+        ibAdd.setOnClickListener {
             ibRemove.setOnClickListener {
                 llWeeksParent.setViewCount(
                     llWeeksParent.childCount + 1,
