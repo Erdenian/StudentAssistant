@@ -3,7 +3,7 @@ package ru.erdenian.studentassistant.repository
 import java.io.Serializable
 import java.util.SortedSet
 
-class ImmutableSortedSet<E : Comparable<E>>(
+data class ImmutableSortedSet<E : Comparable<E>>(
     private val value: SortedSet<E>
 ) : Set<E> by value, Serializable {
     val list: SortedList<E> by lazy { value.toSortedList() }

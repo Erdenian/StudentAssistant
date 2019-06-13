@@ -31,11 +31,11 @@ class WeeksSelector @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private val spVariants: Spinner = findViewById(R.id.ws_variants)
-    private val ibRemove: ImageButton = findViewById(R.id.ws_remove)
-    private val ibAdd: ImageButton = findViewById(R.id.ws_add)
-    private val hsvWeeks: HorizontalScrollView = findViewById(R.id.ws_scroll)
-    private val llWeeksParent: LinearLayout = findViewById(R.id.ws_weeks_parent)
+    private val spVariants: Spinner
+    private val ibRemove: ImageButton
+    private val ibAdd: ImageButton
+    private val hsvWeeks: HorizontalScrollView
+    private val llWeeksParent: LinearLayout
 
     /**
      * Список предустановленных вариантов
@@ -98,7 +98,8 @@ class WeeksSelector @JvmOverloads constructor(
 
             llWeeksParent.setViewCount(
                 weeks.size,
-                { CheckBoxWithText(context).apply { text = it.toString() } }
+                { CheckBoxWithText(context).apply { text = it.toString() } },
+                { isChecked = weeks[it] }
             )
 
             setCustomEnabled(selection == weeksVariants.size)
@@ -107,6 +108,12 @@ class WeeksSelector @JvmOverloads constructor(
     init {
         orientation = VERTICAL
         inflate(context, R.layout.weeks_selector, this)
+
+        spVariants = findViewById(R.id.ws_variants)
+        ibRemove = findViewById(R.id.ws_remove)
+        ibAdd = findViewById(R.id.ws_add)
+        hsvWeeks = findViewById(R.id.ws_scroll)
+        llWeeksParent = findViewById(R.id.ws_weeks_parent)
 
         check(spVariants.adapter.count == weeksVariants.size + 1) {
             "Несоответствие вариантов выбора и количества предустановок"
