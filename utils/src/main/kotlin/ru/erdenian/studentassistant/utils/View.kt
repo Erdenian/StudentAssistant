@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.customviews
+package ru.erdenian.studentassistant.utils
 
 import android.view.View
 import android.view.ViewGroup

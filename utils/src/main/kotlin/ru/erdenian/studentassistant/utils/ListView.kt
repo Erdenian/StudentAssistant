@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.extensions
+package ru.erdenian.studentassistant.utils
 
 import android.widget.ListView
 

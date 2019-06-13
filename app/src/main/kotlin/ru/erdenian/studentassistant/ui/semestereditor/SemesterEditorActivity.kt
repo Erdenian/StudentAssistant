@@ -16,12 +16,12 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.compareAndSet
-import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.lazyViewModel
-import ru.erdenian.studentassistant.extensions.setColor
-import ru.erdenian.studentassistant.extensions.showDatePicker
 import ru.erdenian.studentassistant.repository.entity.SemesterNew
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorViewModel.Error
+import ru.erdenian.studentassistant.utils.getCompatColor
+import ru.erdenian.studentassistant.utils.setColor
+import ru.erdenian.studentassistant.utils.showDatePicker
 
 class SemesterEditorActivity : AppCompatActivity() {
 

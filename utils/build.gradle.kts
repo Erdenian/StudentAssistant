@@ -52,8 +52,7 @@ dependencies {
     // endregion
 
     // region AndroidX
-    //implementation("androidx.core:core:$core_ktx_version")
-    //implementation("androidx.core:core-ktx:$core_ktx_version")
+    implementation("androidx.core:core-ktx:$core_ktx_version")
     implementation("androidx.appcompat:appcompat:$appcompat_version")
     implementation("androidx.cardview:cardview:$cardview_version")
     // endregion

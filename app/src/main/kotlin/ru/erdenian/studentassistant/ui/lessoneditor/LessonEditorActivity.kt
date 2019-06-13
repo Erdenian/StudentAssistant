@@ -26,15 +26,15 @@ import org.joda.time.DateTimeConstants
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.customviews.WeeksSelector
 import ru.erdenian.studentassistant.extensions.compareAndSet
-import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.lazyViewModel
-import ru.erdenian.studentassistant.extensions.setColor
-import ru.erdenian.studentassistant.extensions.showTimePicker
-import ru.erdenian.studentassistant.extensions.toSingleLine
 import ru.erdenian.studentassistant.repository.entity.LessonNew
 import ru.erdenian.studentassistant.repository.entity.LessonRepeatNew
 import ru.erdenian.studentassistant.repository.toImmutableSortedSet
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorViewModel.Error
+import ru.erdenian.studentassistant.utils.getCompatColor
+import ru.erdenian.studentassistant.utils.setColor
+import ru.erdenian.studentassistant.utils.showTimePicker
+import ru.erdenian.studentassistant.utils.toSingleLine
 import java.util.Calendar
 
 class LessonEditorActivity : AppCompatActivity() {

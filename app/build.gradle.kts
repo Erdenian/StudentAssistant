@@ -97,6 +97,7 @@ dependencies {
         exclude("com.android.support", "support-annotations")
     }
 
+    implementation(project(":utils"))
     implementation(project(":customviews"))
 
     // region Kotlin
@@ -107,7 +108,6 @@ dependencies {
     // endregion
 
     // region AndroidX
-    implementation("androidx.core:core:$core_ktx_version")
     implementation("androidx.core:core-ktx:$core_ktx_version")
     implementation("androidx.appcompat:appcompat:$appcompat_version")
     implementation("androidx.cardview:cardview:$cardview_version")

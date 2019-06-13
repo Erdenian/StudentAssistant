@@ -21,13 +21,13 @@ import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.compareAndSet
-import ru.erdenian.studentassistant.extensions.getCompatColor
 import ru.erdenian.studentassistant.extensions.lazyViewModel
-import ru.erdenian.studentassistant.extensions.setColor
-import ru.erdenian.studentassistant.extensions.showDatePicker
 import ru.erdenian.studentassistant.repository.entity.HomeworkNew
 import ru.erdenian.studentassistant.repository.entity.LessonNew
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorViewModel.Error
+import ru.erdenian.studentassistant.utils.getCompatColor
+import ru.erdenian.studentassistant.utils.setColor
+import ru.erdenian.studentassistant.utils.showDatePicker
 
 class HomeworkEditorActivity : AppCompatActivity() {
 

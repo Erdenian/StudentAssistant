@@ -47,12 +47,13 @@ dependencies {
 
     val joda_time_version: String by project
 
+    implementation(project(":utils"))
+
     // region Kotlin
     implementation(kotlin("stdlib-jdk8", kotlin_version))
     // endregion
 
     // region AndroidX
-    implementation("androidx.core:core:$core_ktx_version")
     implementation("androidx.core:core-ktx:$core_ktx_version")
     implementation("androidx.appcompat:appcompat:$appcompat_version")
     implementation("androidx.cardview:cardview:$cardview_version")
