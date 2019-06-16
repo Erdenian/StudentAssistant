@@ -18,7 +18,7 @@ import androidx.viewpager.widget.ViewPager
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.extensions.compareAndSet
+import ru.erdenian.studentassistant.extensions.distinctUntilChanged
 import ru.erdenian.studentassistant.extensions.initializeDrawerAndNavigationView
 import ru.erdenian.studentassistant.extensions.lazyViewModel
 import ru.erdenian.studentassistant.repository.entity.SemesterNew
@@ -46,29 +46,33 @@ class ScheduleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule)
 
+        val owner = this
+
         findViewById<Toolbar>(R.id.as_toolbar).let { toolbar ->
             setSupportActionBar(toolbar)
             initializeDrawerAndNavigationView(toolbar, drawer)
         }
         supportActionBar?.apply {
-            viewModel.selectedSemester.observe(this@ScheduleActivity) { semester ->
+            viewModel.selectedSemester.observe(owner) { semester ->
                 title = semester?.name ?: getString(R.string.sa_title)
             }
-            viewModel.allSemesters.observe(this@ScheduleActivity) { semesters ->
+            viewModel.allSemesters.observe(owner) { semesters ->
                 setDisplayShowTitleEnabled(semesters.size <= 1)
             }
         }
 
         findViewById<Spinner>(R.id.as_toolbar_spinner).apply {
-            viewModel.allSemesters.observe(this@ScheduleActivity) { semesters ->
+            viewModel.allSemesters.observe(owner) { semesters ->
                 visibility = if (semesters.size > 1) View.VISIBLE else View.GONE
             }
-            viewModel.selectedSemester.observe(this@ScheduleActivity) { semester ->
+            viewModel.selectedSemester.distinctUntilChanged { value ->
+                value == selectedItem as SemesterNew?
+            }.observe(owner) { semester ->
                 setSelection(viewModel.allSemesters.value.indexOf(semester))
             }
 
             adapter = SemestersSpinnerAdapter().apply {
-                viewModel.allSemesters.observe(this@ScheduleActivity) { semesters = it.list }
+                viewModel.allSemesters.observe(owner) { semesters = it.list }
             }
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
@@ -77,9 +81,8 @@ class ScheduleActivity : AppCompatActivity() {
                     position: Int,
                     id: Long
                 ) {
-                    viewModel.selectedSemester.compareAndSet(
+                    viewModel.selectedSemester.value =
                         parent.adapter.getItem(position) as SemesterNew
-                    )
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) = Unit
@@ -89,7 +92,7 @@ class ScheduleActivity : AppCompatActivity() {
         findViewById<ViewFlipper>(R.id.as_flipper).apply {
             val buttonsIndex = 0
             val scheduleIndex = 1
-            viewModel.allSemesters.observe(this@ScheduleActivity) { semesters ->
+            viewModel.allSemesters.observe(owner) { semesters ->
                 displayedChild = if (semesters.isNotEmpty()) scheduleIndex else buttonsIndex
             }
         }

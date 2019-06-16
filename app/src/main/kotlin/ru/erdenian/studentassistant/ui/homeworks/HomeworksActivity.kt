@@ -13,7 +13,7 @@ import androidx.viewpager.widget.PagerTabStrip
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.extensions.compareAndSet
+import ru.erdenian.studentassistant.extensions.distinctUntilChanged
 import ru.erdenian.studentassistant.extensions.getViewModel
 import ru.erdenian.studentassistant.extensions.initializeDrawerAndNavigationView
 import ru.erdenian.studentassistant.repository.entity.SemesterNew
@@ -30,25 +30,28 @@ class HomeworksActivity : AppCompatActivity() {
         setContentView(R.layout.activity_homeworks)
 
         val viewModel = getViewModel<HomeworksViewModel>()
+        val owner = this
 
         findViewById<Toolbar>(R.id.ah_toolbar).let { toolbar ->
             setSupportActionBar(toolbar)
             initializeDrawerAndNavigationView(toolbar, drawer)
         }
         supportActionBar?.apply {
-            viewModel.selectedSemester.observe(this@HomeworksActivity) { title = it?.name }
-            viewModel.allSemesters.observe(this@HomeworksActivity) { semesters ->
+            viewModel.selectedSemester.observe(owner) { title = it?.name }
+            viewModel.allSemesters.observe(owner) { semesters ->
                 setDisplayShowTitleEnabled(semesters.size <= 1)
             }
         }
 
         findViewById<Spinner>(R.id.ah_toolbar_spinner).apply {
-            viewModel.selectedSemester.observe(this@HomeworksActivity) { semester ->
+            viewModel.selectedSemester.distinctUntilChanged { value ->
+                value == selectedItem as SemesterNew?
+            }.observe(owner) { semester ->
                 setSelection(viewModel.allSemesters.value.indexOf(semester))
             }
 
             adapter = SemestersSpinnerAdapter().apply {
-                viewModel.allSemesters.observe(this@HomeworksActivity) { semesters = it.list }
+                viewModel.allSemesters.observe(owner) { semesters = it.list }
             }
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
@@ -57,9 +60,8 @@ class HomeworksActivity : AppCompatActivity() {
                     position: Int,
                     id: Long
                 ) {
-                    viewModel.selectedSemester.compareAndSet(
+                    viewModel.selectedSemester.value =
                         parent.adapter.getItem(position) as SemesterNew
-                    )
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) = Unit
@@ -68,7 +70,7 @@ class HomeworksActivity : AppCompatActivity() {
 
         findViewById<ViewPager>(R.id.ah_view_pager).apply {
             adapter = HomeworksPagerAdapter(context, supportFragmentManager).apply {
-                viewModel.selectedSemester.observe(this@HomeworksActivity) { semester = it }
+                viewModel.selectedSemester.observe(owner) { semester = it }
             }
         }
 

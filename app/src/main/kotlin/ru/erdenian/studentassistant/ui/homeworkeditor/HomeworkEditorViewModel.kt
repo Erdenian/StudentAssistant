@@ -53,7 +53,7 @@ class HomeworkEditorViewModel(application: Application) : AndroidViewModel(appli
     val error: LiveDataKtx<Error?> = MediatorLiveDataKtx<Error?>().apply {
         val onChanged = Observer<Any?> {
             value = when {
-                description.safeValue?.isBlank() == true -> Error.EMPTY_DESCRIPTION
+                description.safeValue?.isBlank() ?: true -> Error.EMPTY_DESCRIPTION
                 else -> null
             }
         }
@@ -63,6 +63,7 @@ class HomeworkEditorViewModel(application: Application) : AndroidViewModel(appli
 
     suspend fun save(): Long {
         check(error.value == null)
+        check(subjectName.value in existingSubjects.value)
 
         val oldHomework = homework
         val newHomework = HomeworkNew(

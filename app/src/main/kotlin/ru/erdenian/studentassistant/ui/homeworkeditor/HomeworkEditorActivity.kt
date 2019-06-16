@@ -20,7 +20,7 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.extensions.compareAndSet
+import ru.erdenian.studentassistant.extensions.distinctUntilChanged
 import ru.erdenian.studentassistant.extensions.lazyViewModel
 import ru.erdenian.studentassistant.repository.entity.HomeworkNew
 import ru.erdenian.studentassistant.repository.entity.LessonNew
@@ -76,17 +76,25 @@ class HomeworkEditorActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        val owner = this
+
         findViewById<Spinner>(R.id.ahe_subject_name).apply {
-            viewModel.existingSubjects.observe(this@HomeworkEditorActivity) { subjects ->
+            viewModel.existingSubjects.observe(owner) { subjects ->
+                val selection = selectedItem as String?
                 adapter = ArrayAdapter<String>(
                     context,
                     android.R.layout.simple_spinner_item,
                     subjects.toTypedArray()
                 ).apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+                (selection ?: viewModel.subjectName.safeValue)?.let { subjectName ->
+                    setSelection(subjects.list.indexOf(subjectName))
+                }
             }
 
-            viewModel.subjectName.observe(this@HomeworkEditorActivity) { subjectName ->
-                setSelection(viewModel.existingSubjects.value.list.indexOf(subjectName))
+            viewModel.subjectName.distinctUntilChanged { value ->
+                value == selectedItem as String?
+            }.observe(owner) { subjectName ->
+                viewModel.existingSubjects.safeValue?.run { setSelection(list.indexOf(subjectName)) }
             }
 
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -98,20 +106,20 @@ class HomeworkEditorActivity : AppCompatActivity() {
                     position: Int,
                     id: Long
                 ) {
-                    viewModel.subjectName.compareAndSet(
-                        viewModel.existingSubjects.value.list[position]
-                    )
+                    viewModel.subjectName.value = selectedItem as String
                 }
             }
         }
 
         findViewById<EditText>(R.id.ahe_description).apply {
-            viewModel.description.observe(this@HomeworkEditorActivity) { setText(it) }
-            addTextChangedListener { viewModel.description.compareAndSet(it?.toString() ?: "") }
+            viewModel.description.distinctUntilChanged { value ->
+                value == text?.toString() ?: ""
+            }.observe(owner) { setText(it) }
+            addTextChangedListener { viewModel.description.value = it?.toString() ?: "" }
         }
 
         findViewById<Button>(R.id.ahe_deadline).apply {
-            viewModel.deadline.observe(this@HomeworkEditorActivity) { deadline ->
+            viewModel.deadline.observe(owner) { deadline ->
                 text = deadline.toString(DATE_FORMAT)
             }
             setOnClickListener {

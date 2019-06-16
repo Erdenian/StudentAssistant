@@ -25,16 +25,14 @@ import org.jetbrains.anko.toast
 import org.joda.time.DateTimeConstants
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.customviews.WeeksSelector
-import ru.erdenian.studentassistant.extensions.compareAndSet
+import ru.erdenian.studentassistant.extensions.distinctUntilChanged
 import ru.erdenian.studentassistant.extensions.lazyViewModel
 import ru.erdenian.studentassistant.repository.entity.LessonNew
 import ru.erdenian.studentassistant.repository.entity.LessonRepeatNew
-import ru.erdenian.studentassistant.repository.toImmutableSortedSet
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorViewModel.Error
 import ru.erdenian.studentassistant.utils.getCompatColor
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showTimePicker
-import ru.erdenian.studentassistant.utils.toSingleLine
 import java.util.Calendar
 
 class LessonEditorActivity : AppCompatActivity() {
@@ -92,8 +90,10 @@ class LessonEditorActivity : AppCompatActivity() {
             }
         }
 
+        val owner = this
+
         findViewById<TextInputLayout>(R.id.ale_subject_name).apply {
-            viewModel.error.observe(this@LessonEditorActivity) { error ->
+            viewModel.error.observe(owner) { error ->
                 if (error == Error.EMPTY_SUBJECT_NAME) {
                     this.error = getText(
                         R.string.lea_error_empty_subject_name
@@ -103,11 +103,13 @@ class LessonEditorActivity : AppCompatActivity() {
         }
 
         findViewById<AutoCompleteTextView>(R.id.ale_subject_name_edit_text).apply {
-            viewModel.subjectName.observe(this@LessonEditorActivity) { setText(it) }
+            viewModel.subjectName.distinctUntilChanged { value ->
+                value == text?.toString() ?: ""
+            }.observe(owner) { setText(it) }
             addTextChangedListener { editable ->
-                viewModel.subjectName.compareAndSet(editable?.toString() ?: "")
+                viewModel.subjectName.value = editable?.toString() ?: ""
             }
-            viewModel.existingSubjects.observe(this@LessonEditorActivity) { subjects ->
+            viewModel.existingSubjects.observe(owner) { subjects ->
                 setAdapter(
                     ArrayAdapter(
                         context,
@@ -119,12 +121,12 @@ class LessonEditorActivity : AppCompatActivity() {
         }
 
         findViewById<AutoCompleteTextView>(R.id.ale_lesson_type_edit_text).apply {
-            viewModel.type.observe(this@LessonEditorActivity) { setText(it) }
-            addTextChangedListener { editable ->
-                viewModel.type.compareAndSet(editable?.toString() ?: "")
-            }
+            viewModel.type.distinctUntilChanged { value ->
+                value == text?.toString() ?: ""
+            }.observe(owner) { setText(it) }
+            addTextChangedListener { viewModel.type.value = it?.toString() ?: "" }
             val predefinedTypes = resources.getStringArray(R.array.lesson_types)
-            viewModel.existingTypes.observe(this@LessonEditorActivity) { types ->
+            viewModel.existingTypes.observe(owner) { types ->
                 setAdapter(
                     ArrayAdapter(
                         context,
@@ -136,19 +138,11 @@ class LessonEditorActivity : AppCompatActivity() {
         }
 
         findViewById<MultiAutoCompleteTextView>(R.id.ale_teachers_edit_text).apply {
-            viewModel.teachers.observe(this@LessonEditorActivity) { setText(it.joinToString()) }
-            addTextChangedListener { editable ->
-                viewModel.teachers.compareAndSet(
-                    (editable?.toString() ?: "")
-                        .toSingleLine()
-                        .split(',')
-                        .asSequence()
-                        .map(String::trim)
-                        .filter(String::isNotBlank)
-                        .toImmutableSortedSet()
-                )
-            }
-            viewModel.existingTeachers.observe(this@LessonEditorActivity) { teachers ->
+            viewModel.teachers.distinctUntilChanged { value ->
+                value == text?.toString() ?: ""
+            }.observe(owner) { setText(it) }
+            addTextChangedListener { viewModel.teachers.value = it?.toString() ?: "" }
+            viewModel.existingTeachers.observe(owner) { teachers ->
                 setAdapter(
                     ArrayAdapter(
                         context,
@@ -161,19 +155,11 @@ class LessonEditorActivity : AppCompatActivity() {
         }
 
         findViewById<MultiAutoCompleteTextView>(R.id.ale_classrooms_edit_text).apply {
-            viewModel.classrooms.observe(this@LessonEditorActivity) { setText(it.joinToString()) }
-            addTextChangedListener { editable ->
-                viewModel.classrooms.compareAndSet(
-                    (editable?.toString() ?: "")
-                        .toSingleLine()
-                        .split(',')
-                        .asSequence()
-                        .map(String::trim)
-                        .filter(String::isNotBlank)
-                        .toImmutableSortedSet()
-                )
-            }
-            viewModel.existingClassrooms.observe(this@LessonEditorActivity) { classrooms ->
+            viewModel.classrooms.distinctUntilChanged { value ->
+                value == text?.toString() ?: ""
+            }.observe(owner) { setText(it) }
+            addTextChangedListener { viewModel.classrooms.value = it?.toString() ?: "" }
+            viewModel.existingClassrooms.observe(owner) { classrooms ->
                 setAdapter(
                     ArrayAdapter(
                         context,
@@ -186,31 +172,36 @@ class LessonEditorActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.ale_start_time).apply {
-            viewModel.startTime.observe(this@LessonEditorActivity) { startTime ->
-                text = startTime.toString(TIME_FORMAT)
-            }
+            viewModel.startTime.observe(owner) { text = it.toString(TIME_FORMAT) }
             setOnClickListener {
-                showTimePicker(viewModel.startTime.value, viewModel.startTime::compareAndSet)
+                showTimePicker(viewModel.startTime.value, viewModel.startTime::setValue)
             }
         }
 
         findViewById<Button>(R.id.ale_end_time).apply {
-            viewModel.endTime.observe(this@LessonEditorActivity) { endTime ->
-                text = endTime.toString(TIME_FORMAT)
-            }
+            viewModel.endTime.observe(owner) { text = it.toString(TIME_FORMAT) }
             setOnClickListener {
-                showTimePicker(viewModel.endTime.value, viewModel.endTime::compareAndSet)
+                showTimePicker(viewModel.endTime.value, viewModel.endTime::setValue)
             }
         }
 
         findViewById<Spinner>(R.id.ale_repeat_type).apply {
             val byWeekdayIndex = 0
             val byDatesIndex = 1
-            viewModel.lessonRepeat.observe(this@LessonEditorActivity) { lessonRepeat ->
+            viewModel.lessonRepeat.distinctUntilChanged { value ->
+                value == when (selectedItemPosition) {
+                    byWeekdayIndex -> LessonRepeatNew.ByWeekday::class
+                    byDatesIndex -> LessonRepeatNew.ByDates::class
+                    else -> throw IllegalStateException("Неизвестный тип повторения")
+                }
+            }.observe(owner) { lessonRepeat ->
                 setSelection(
-                    when (lessonRepeat.value) {
-                        is LessonRepeatNew.ByWeekday -> byWeekdayIndex
-                        is LessonRepeatNew.ByDates -> byDatesIndex
+                    when (lessonRepeat) {
+                        LessonRepeatNew.ByWeekday::class -> byWeekdayIndex
+                        LessonRepeatNew.ByDates::class -> byDatesIndex
+                        else -> throw IllegalStateException(
+                            "Неизвестный тип повторений: $lessonRepeat"
+                        )
                     }
                 )
             }
@@ -223,13 +214,11 @@ class LessonEditorActivity : AppCompatActivity() {
                     position: Int,
                     id: Long
                 ) {
-                    viewModel.lessonRepeat.compareAndSet(
-                        when (position) {
-                            byWeekdayIndex -> viewModel.byWeekday
-                            byDatesIndex -> viewModel.byDates
-                            else -> throw IllegalStateException("Неизвестный тип повторения")
-                        }
-                    )
+                    viewModel.lessonRepeat.value = when (position) {
+                        byWeekdayIndex -> LessonRepeatNew.ByWeekday::class
+                        byDatesIndex -> LessonRepeatNew.ByDates::class
+                        else -> throw IllegalStateException("Неизвестный тип повторения")
+                    }
                 }
             }
         }
@@ -238,10 +227,13 @@ class LessonEditorActivity : AppCompatActivity() {
             val byWeekdayIndex = 0
             val byDatesIndex = 1
 
-            viewModel.lessonRepeat.observe(this@LessonEditorActivity) { lessonRepeat ->
-                displayedChild = when (lessonRepeat.value) {
-                    is LessonRepeatNew.ByWeekday -> byWeekdayIndex
-                    is LessonRepeatNew.ByDates -> byDatesIndex
+            viewModel.lessonRepeat.observe(owner) { lessonRepeat ->
+                displayedChild = when (lessonRepeat) {
+                    LessonRepeatNew.ByWeekday::class -> byWeekdayIndex
+                    LessonRepeatNew.ByDates::class -> byDatesIndex
+                    else -> throw IllegalStateException(
+                        "Неизвестный тип повторений: $lessonRepeat"
+                    )
                 }
             }
         }
@@ -258,22 +250,27 @@ class LessonEditorActivity : AppCompatActivity() {
                 DateTimeConstants.SUNDAY to Calendar.SUNDAY
             )
 
-            viewModel.byWeekday.observe(this@LessonEditorActivity) { byWeekday ->
-                selectDay(checkNotNull(isoToUs[byWeekday.weekday]))
+            viewModel.weekday.distinctUntilChanged { value ->
+                value == selectedDays.single()
+            }.observe(owner) { weekday ->
+                selectDay(checkNotNull(isoToUs[weekday]))
             }
             setOnWeekdaysChangeListener { _, _, weekdays ->
-                val newWeekday = checkNotNull(
+                viewModel.weekday.value = checkNotNull(
                     isoToUs.entries.find { it.value == weekdays.single() }?.key
                 )
-                val oldRepeat = viewModel.byWeekday.value
-                if (oldRepeat.weekday == newWeekday) return@setOnWeekdaysChangeListener
-                viewModel.byWeekday.compareAndSet(oldRepeat.copy(weekday = newWeekday))
             }
         }
 
         findViewById<WeeksSelector>(R.id.ale_weeks_selector).apply {
-            viewModel.byWeekday.observe(this@LessonEditorActivity) { weeks = it.weeks }
-            // Todo: обработчик изменения выбранных недель
+            viewModel.weeks.distinctUntilChanged { value ->
+                value == weeks
+            }.observe(owner) { weeks = it }
+            onWeeksChangeListener = object : WeeksSelector.OnWeeksChangeListener {
+                override fun onWeeksChange(weeks: List<Boolean>) {
+                    viewModel.weeks.value = weeks
+                }
+            }
         }
     }
 
