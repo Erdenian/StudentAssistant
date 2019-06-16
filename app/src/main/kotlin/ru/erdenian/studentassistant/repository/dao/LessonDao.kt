@@ -77,7 +77,7 @@ abstract class LessonDao {
 
     // region Other fields
 
-    @Query("SELECT DISTINCT type FROM lessons WHERE semester_id = :semesterId ORDER BY type")
+    @Query("SELECT DISTINCT type FROM lessons WHERE type IS NOT NULL AND semester_id = :semesterId ORDER BY type")
     abstract fun getTypes(semesterId: Long): LiveData<List<String>>
 
     @Query("SELECT teachers FROM lessons WHERE semester_id = :semesterId")

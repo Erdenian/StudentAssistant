@@ -1,7 +1,6 @@
 package ru.erdenian.studentassistant.ui.adapter
 
 import android.view.ViewGroup
-import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import ru.erdenian.studentassistant.customviews.LessonCard
 import ru.erdenian.studentassistant.repository.entity.LessonNew
@@ -26,10 +25,10 @@ class LessonsListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
         LessonCard(parent.context).apply {
-            updateLayoutParams {
-                width = ViewGroup.LayoutParams.MATCH_PARENT
-                height = ViewGroup.LayoutParams.WRAP_CONTENT
-            }
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
         }
     ).apply {
         card.setOnClickListener { onLessonClickListener?.onLessonClick(lessons[adapterPosition]) }

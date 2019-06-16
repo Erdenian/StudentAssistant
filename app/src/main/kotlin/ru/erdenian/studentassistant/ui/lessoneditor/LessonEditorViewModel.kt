@@ -46,7 +46,7 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
 
         if (!copy) this.lesson = lesson
         subjectName.value = lesson.subjectName
-        type.value = lesson.type
+        type.value = lesson.type ?: ""
         teachers.value = lesson.teachers
         classrooms.value = lesson.classrooms
         startTime.value = lesson.startTime
@@ -120,7 +120,7 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
         val oldLesson = lesson
         val newLesson = LessonNew(
             subjectName.value,
-            type.value,
+            type.value.run { if (isNotBlank()) this else null },
             teachers.value,
             classrooms.value,
             startTime.value,

@@ -3,6 +3,7 @@ package ru.erdenian.studentassistant.customviews
 import android.content.Context
 import android.content.res.ColorStateList
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.Gravity
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -24,7 +25,10 @@ class TeacherView @JvmOverloads constructor(
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     private val textView = AppCompatTextView(context).apply {
-        textSize = resources.getDimension(R.dimen.card_secondary_text_size)
+        setTextSize(
+            TypedValue.COMPLEX_UNIT_PX,
+            resources.getDimension(R.dimen.card_secondary_text_size)
+        )
         setTextColor(ContextCompat.getColor(context, R.color.colorSecondaryText))
     }
 
@@ -44,7 +48,10 @@ class TeacherView @JvmOverloads constructor(
         gravity = Gravity.BOTTOM
 
         addView(AppCompatImageView(context).apply {
-            layoutParams = layoutParams.apply { gravity = Gravity.CENTER_VERTICAL }
+            layoutParams = LayoutParams(
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT
+            ).apply { gravity = Gravity.CENTER_VERTICAL }
             setImageResource(R.drawable.ic_menu_account)
             imageTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(context, R.color.colorSecondaryText)

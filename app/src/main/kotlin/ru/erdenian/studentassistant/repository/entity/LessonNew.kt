@@ -45,7 +45,7 @@ data class LessonNew(
     val subjectName: String,
 
     @ColumnInfo(name = "type")
-    val type: String,
+    val type: String?,
 
     @ColumnInfo(name = "teachers")
     val teachers: ImmutableSortedSet<String>,
@@ -72,6 +72,9 @@ data class LessonNew(
 
     init {
         require(subjectName.isNotBlank()) { "Отсутствует название предмета" }
+        require(type?.isNotBlank() ?: true)
+        require(teachers.all { it.isNotBlank() })
+        require(classrooms.all { it.isNotBlank() })
         require(startTime < endTime) { "Неверно заданы даты: $startTime - $endTime" }
     }
 
