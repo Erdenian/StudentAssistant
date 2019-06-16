@@ -3,7 +3,9 @@ package ru.erdenian.studentassistant.customviews
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.CompoundButton
 import android.widget.HorizontalScrollView
 import android.widget.ImageButton
 import android.widget.LinearLayout
@@ -62,6 +64,15 @@ class WeeksSelector @JvmOverloads constructor(
     private fun getWeeksVariantIndex(weeks: List<Boolean>) =
         weeksVariants.indexOf(weeks).takeIf { it >= 0 } ?: weeksVariants.lastIndex
 
+    private val creator: ViewGroup.(Int) -> CheckBoxWithText = { position ->
+        CheckBoxWithText(context).apply {
+            text = position.toString()
+            setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { _, _ ->
+                onWeeksChangeListener?.onWeeksChange(weeks)
+            })
+        }
+    }
+
     /**
      * Список недель на текущий момент
      *
@@ -96,14 +107,16 @@ class WeeksSelector @JvmOverloads constructor(
                 onItemSelectedListener = listener
             }
 
-            llWeeksParent.setViewCount(
-                weeks.size,
-                { CheckBoxWithText(context).apply { text = it.toString() } },
-                { isChecked = weeks[it] }
-            )
+            llWeeksParent.setViewCount(weeks.size, creator) { isChecked = weeks[it] }
 
             setCustomEnabled(selection == weeksVariants.size)
         }
+
+    interface OnWeeksChangeListener {
+        fun onWeeksChange(weeks: List<Boolean>)
+    }
+
+    var onWeeksChangeListener: OnWeeksChangeListener? = null
 
     init {
         orientation = VERTICAL
@@ -136,17 +149,11 @@ class WeeksSelector @JvmOverloads constructor(
         }
 
         ibRemove.setOnClickListener {
-            llWeeksParent.setViewCount(
-                llWeeksParent.childCount - 1,
-                { CheckBoxWithText(context).apply { text = it.toString() } }
-            )
+            llWeeksParent.setViewCount(llWeeksParent.childCount - 1, creator)
         }
         ibAdd.setOnClickListener {
             ibRemove.setOnClickListener {
-                llWeeksParent.setViewCount(
-                    llWeeksParent.childCount + 1,
-                    { CheckBoxWithText(context).apply { text = it.toString() } }
-                )
+                llWeeksParent.setViewCount(llWeeksParent.childCount + 1, creator)
             }
             hsvWeeks.post { hsvWeeks.fullScroll(HorizontalScrollView.FOCUS_RIGHT) }
         }

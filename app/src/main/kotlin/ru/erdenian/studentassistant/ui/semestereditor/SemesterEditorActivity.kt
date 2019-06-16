@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.extensions.compareAndSet
+import ru.erdenian.studentassistant.extensions.distinctUntilChanged
 import ru.erdenian.studentassistant.extensions.lazyViewModel
 import ru.erdenian.studentassistant.repository.entity.SemesterNew
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorViewModel.Error
@@ -50,8 +50,10 @@ class SemesterEditorActivity : AppCompatActivity() {
             )
         }
 
+        val owner = this
+
         findViewById<TextInputLayout>(R.id.ase_name).apply {
-            viewModel.error.observe(this@SemesterEditorActivity) { error ->
+            viewModel.error.observe(owner) { error ->
                 when (error) {
                     Error.EMPTY_NAME -> this.error = getString(
                         R.string.sea_error_empty_name
@@ -65,23 +67,21 @@ class SemesterEditorActivity : AppCompatActivity() {
         }
 
         findViewById<TextInputEditText>(R.id.ase_name_edit_text).apply {
-            viewModel.name.observe(this@SemesterEditorActivity) { setText(it) }
-            addTextChangedListener { viewModel.name.compareAndSet(it.toString()) }
+            viewModel.name.distinctUntilChanged { value ->
+                value == text?.toString() ?: ""
+            }.observe(owner) { setText(it) }
+            addTextChangedListener { viewModel.name.value = it?.toString() ?: "" }
         }
 
         findViewById<Button>(R.id.ase_first_day).apply {
-            viewModel.firstDay.observe(this@SemesterEditorActivity) { firstDay ->
-                text = firstDay.toString(DATE_FORMAT)
-            }
+            viewModel.firstDay.observe(owner) { text = it.toString(DATE_FORMAT) }
             setOnClickListener {
                 showDatePicker(viewModel.firstDay.value) { viewModel.firstDay.value = it }
             }
         }
 
         findViewById<Button>(R.id.ase_last_day).apply {
-            viewModel.lastDay.observe(this@SemesterEditorActivity) { lastDay ->
-                text = lastDay.toString(DATE_FORMAT)
-            }
+            viewModel.lastDay.observe(owner) { text = it.toString(DATE_FORMAT) }
             setOnClickListener {
                 showDatePicker(viewModel.firstDay.value) { viewModel.lastDay.value = it }
             }

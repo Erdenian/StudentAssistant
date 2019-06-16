@@ -3,12 +3,15 @@ package ru.erdenian.studentassistant.extensions
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.shopify.livedataktx.LiveDataKtx
+import com.shopify.livedataktx.MediatorLiveDataKtx
 import com.shopify.livedataktx.MutableLiveDataKtx
 import com.shopify.livedataktx.toKtx
 
@@ -25,15 +28,21 @@ inline fun <reified T : ViewModel> FragmentActivity.lazyViewModel() = lazy { get
 
 // endregion
 
-// region compareAndSet
+// region distinctUntilChanged
 
-fun <T> MutableLiveData<T>.compareAndSet(value: T) {
-    if (this.value != value) this.value = value
-}
+fun <T> LiveData<T>.distinctUntilChanged(checker: (T) -> Boolean) =
+    MediatorLiveData<T>().apply {
+        addSource(this@distinctUntilChanged.distinctUntilChanged()) { newValue ->
+            if (!checker(newValue)) value = newValue
+        }
+    }
 
-fun <T> MutableLiveDataKtx<T>.compareAndSet(value: T) {
-    if (this.value != value) this.value = value
-}
+fun <T> LiveDataKtx<T>.distinctUntilChanged(checker: (T) -> Boolean) =
+    MediatorLiveDataKtx<T>().apply {
+        addSource(this@distinctUntilChanged.distinctUntilChanged(), Observer { newValue ->
+            if (!checker(newValue)) value = newValue
+        })
+    }
 
 // endregion
 
