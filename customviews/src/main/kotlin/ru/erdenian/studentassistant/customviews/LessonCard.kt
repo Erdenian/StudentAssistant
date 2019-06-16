@@ -25,18 +25,28 @@ class LessonCard @JvmOverloads constructor(
         private const val TIME_FORMAT = "HH:mm"
     }
 
-    private val tvStartTime: TextView = findViewById(R.id.lc_start_time)
-    private val tvEndTime: TextView = findViewById(R.id.lc_end_time)
-    private val llClassroomsParent: LinearLayout = findViewById(R.id.lc_classrooms_parent)
-    private val tvClassrooms: TextView = findViewById(R.id.lc_classrooms)
-    private val tvType: TextView = findViewById(R.id.lc_type)
-    private val tvSubjectName: TextView = findViewById(R.id.lc_subject_name)
-    private val llTeachersParent: LinearLayout = findViewById(R.id.lc_teachers_parent)
-    private val llRepeatsParent: LinearLayout = findViewById(R.id.lc_repeats_parent)
-    private val tvRepeatsText: TextView = findViewById(R.id.lc_repeats_text)
+    private val tvStartTime: TextView
+    private val tvEndTime: TextView
+    private val llClassroomsParent: LinearLayout
+    private val tvClassrooms: TextView
+    private val tvType: TextView
+    private val tvSubjectName: TextView
+    private val llTeachersParent: LinearLayout
+    private val llRepeatsParent: LinearLayout
+    private val tvRepeatsText: TextView
 
     init {
         inflate(context, R.layout.lesson_card, this)
+
+        tvStartTime = findViewById(R.id.lc_start_time)
+        tvEndTime = findViewById(R.id.lc_end_time)
+        llClassroomsParent = findViewById(R.id.lc_classrooms_parent)
+        tvClassrooms = findViewById(R.id.lc_classrooms)
+        tvType = findViewById(R.id.lc_type)
+        tvSubjectName = findViewById(R.id.lc_subject_name)
+        llTeachersParent = findViewById(R.id.lc_teachers_parent)
+        llRepeatsParent = findViewById(R.id.lc_repeats_parent)
+        tvRepeatsText = findViewById(R.id.lc_repeats_text)
     }
 
     /**
@@ -46,7 +56,7 @@ class LessonCard @JvmOverloads constructor(
      */
     fun setLesson(
         subjectName: String,
-        type: String,
+        type: String?,
         teachers: List<String>,
         classrooms: List<String>,
         startTime: LocalTime,
@@ -58,7 +68,7 @@ class LessonCard @JvmOverloads constructor(
         llClassroomsParent.visibility = if (classrooms.isNotEmpty()) View.VISIBLE else View.GONE
         tvClassrooms.text = classrooms.joinToString()
 
-        tvType.visibility = if (type.isNotBlank()) View.VISIBLE else View.GONE
+        tvType.visibility = if (type?.isNotBlank() == true) View.VISIBLE else View.GONE
         tvType.text = type
 
         tvSubjectName.text = subjectName

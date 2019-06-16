@@ -48,7 +48,7 @@ class LessonsEditorPageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_lessons_editor_page, container, false).apply {
         with(findViewById<RecyclerView>(R.id.flep_lessons)) {
-            adapter = this.adapter
+            adapter = this@LessonsEditorPageFragment.adapter
             layoutManager = LinearLayoutManager(inflater.context)
         }
     }

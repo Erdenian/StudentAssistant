@@ -41,7 +41,7 @@ class HomeworksPageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_homeworks_page, container, false).apply {
         with(findViewById<RecyclerView>(R.id.fhp_homeworks)) {
-            adapter = this.adapter
+            adapter = this@HomeworksPageFragment.adapter
             layoutManager = LinearLayoutManager(inflater.context)
         }
     }

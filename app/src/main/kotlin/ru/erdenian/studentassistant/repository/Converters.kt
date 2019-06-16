@@ -36,12 +36,13 @@ class Converters {
         if (value == null) null else Period.millis(value)
 
     @TypeConverter
-    fun stringsImmutableSortedSetToString(value: ImmutableSortedSet<String>?): String? =
-        value?.joinToString(SEPARATOR)
+    fun stringsImmutableSortedSetToString(value: ImmutableSortedSet<String>): String =
+        value.joinToString(SEPARATOR)
 
     @TypeConverter
-    fun stringToStringsImmutableSortedSet(value: String?): ImmutableSortedSet<String>? =
-        value?.split(SEPARATOR)?.toImmutableSortedSet()
+    fun stringToStringsImmutableSortedSet(value: String): ImmutableSortedSet<String> =
+        if (value.isNotEmpty()) value.split(SEPARATOR).toImmutableSortedSet()
+        else immutableSortedSetOf()
 
     @TypeConverter
     fun lessonRepeatToString(value: LessonRepeatNew?): String? =

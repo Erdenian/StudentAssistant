@@ -41,7 +41,7 @@ class SchedulePageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_schedule_page, container, false).apply {
         with(findViewById<RecyclerView>(R.id.fsp_lessons)) {
-            adapter = this.adapter
+            adapter = this@SchedulePageFragment.adapter
             layoutManager = LinearLayoutManager(inflater.context)
         }
     }
@@ -60,6 +60,8 @@ class SchedulePageFragment : Fragment() {
             }
         }
 
-        lessons.observe(this) { adapter.lessons = it.list }
+        lessons.observe(this) {
+            adapter.lessons = it.list
+        }
     }
 }
