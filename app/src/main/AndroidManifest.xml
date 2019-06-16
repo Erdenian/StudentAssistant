@@ -49,7 +49,7 @@
         <activity
             android:name=".ui.homeworks.HomeworksActivity"
             android:label="@string/ha_title"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.TransparentStatusBar" />
 
         <activity
             android:name=".ui.homeworkeditor.HomeworkEditorActivity"
