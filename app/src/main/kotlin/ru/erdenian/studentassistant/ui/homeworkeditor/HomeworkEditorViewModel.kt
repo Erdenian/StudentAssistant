@@ -39,6 +39,11 @@ class HomeworkEditorViewModel(application: Application) : AndroidViewModel(appli
         }
     }
 
+    val existingSubjects = semesterId.asLiveData.switchMap { repository.getSubjects(it) }
+    val semesterLastDay = semesterId.asLiveData.switchMap { id ->
+        repository.getSemester(id)
+    }.map { checkNotNull(it).lastDay }
+
     val subjectName: MutableLiveDataKtx<String> = MediatorLiveDataKtx<String>().apply {
         addSource(existingSubjects, Observer { if (safeValue !in it) value = it.first() })
     }
@@ -55,11 +60,6 @@ class HomeworkEditorViewModel(application: Application) : AndroidViewModel(appli
 
         addSource(description, onChanged)
     }
-
-    val existingSubjects = semesterId.asLiveData.switchMap { repository.getSubjects(it) }
-    val semesterLastDay = semesterId.asLiveData.switchMap { id ->
-        repository.getSemester(id)
-    }.map { checkNotNull(it).lastDay }
 
     suspend fun save(): Long {
         check(error.value == null)
