@@ -1,12 +1,38 @@
 package ru.erdenian.studentassistant.repository
 
-import java.io.Serializable
+import android.os.Parcel
+import android.os.Parcelable
 import java.util.SortedSet
 
 data class ImmutableSortedSet<E : Comparable<E>>(
     private val value: SortedSet<E>
-) : Set<E> by value, Serializable {
+) : Set<E> by value, Parcelable {
+
+    companion object CREATOR : Parcelable.Creator<ImmutableSortedSet<Comparable<Any>>> {
+
+        override fun createFromParcel(parcel: Parcel): ImmutableSortedSet<Comparable<Any>>? {
+            return ImmutableSortedSet(parcel)
+        }
+
+        override fun newArray(size: Int): Array<out ImmutableSortedSet<Comparable<Any>>?> {
+            return arrayOfNulls(size)
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private constructor(parcel: Parcel) : this(
+        (parcel.readArrayList(
+            ImmutableSortedSet<E>::value.javaClass.classLoader
+        ) as List<E>).toSortedSet()
+    )
+
     val list: SortedList<E> by lazy { value.toSortedList() }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeList(list)
+    }
+
+    override fun describeContents() = 0
 }
 
 /**
