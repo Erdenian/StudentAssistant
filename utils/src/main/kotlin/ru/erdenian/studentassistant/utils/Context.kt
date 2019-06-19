@@ -55,7 +55,7 @@ fun Context.showDatePicker(
     preselectedDate: LocalDate? = null,
     minDate: LocalDate? = null,
     maxDate: LocalDate? = null,
-    onDateSet: (LocalDate) -> Unit
+    onDateSet: (selected: LocalDate) -> Unit
 ) {
     val preselected = preselectedDate ?: LocalDate.now()
 
@@ -81,7 +81,10 @@ fun Context.showDatePicker(
  * @param onTimeSet обработчик результата выбора
  * @since 0.0.0
  */
-fun Context.showTimePicker(preselectedTime: LocalTime? = null, onTimeSet: (LocalTime) -> Unit) {
+fun Context.showTimePicker(
+    preselectedTime: LocalTime? = null,
+    onTimeSet: (selected: LocalTime) -> Unit
+) {
     val preselected = preselectedTime ?: LocalTime.now()
 
     TimePickerDialog(

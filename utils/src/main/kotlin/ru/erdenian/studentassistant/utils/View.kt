@@ -36,8 +36,8 @@ fun EditText.showKeyboard() {
  */
 fun <V : View> ViewGroup.setViewCount(
     count: Int,
-    creator: ViewGroup.(Int) -> V,
-    transformation: (V.(Int) -> Unit)? = null
+    creator: ViewGroup.(index: Int) -> V,
+    transformation: (V.(index: Int) -> Unit)? = null
 ) {
     require(count >= 0) { "Count must be >= 0" }
 

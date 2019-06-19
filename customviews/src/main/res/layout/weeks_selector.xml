@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:orientation="vertical"
+    tools:parentTag="android.widget.LinearLayout">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -51,7 +53,6 @@
                 android:orientation="horizontal">
 
                 <ru.erdenian.studentassistant.customviews.CheckBoxWithText
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:checked="true"
