@@ -9,7 +9,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.content.ContextCompat
+import ru.erdenian.studentassistant.utils.getCompatColor
 
 /**
  * Иконка и имя преподавателя.
@@ -29,7 +29,7 @@ class TeacherView @JvmOverloads constructor(
             TypedValue.COMPLEX_UNIT_PX,
             resources.getDimension(R.dimen.card_secondary_text_size)
         )
-        setTextColor(ContextCompat.getColor(context, R.color.colorSecondaryText))
+        setTextColor(context.getCompatColor(R.color.colorSecondaryText))
     }
 
     /**
@@ -54,7 +54,7 @@ class TeacherView @JvmOverloads constructor(
             ).apply { gravity = Gravity.CENTER_VERTICAL }
             setImageResource(R.drawable.ic_menu_account)
             imageTintList = ColorStateList.valueOf(
-                ContextCompat.getColor(context, R.color.colorSecondaryText)
+                context.getCompatColor(R.color.colorSecondaryText)
             )
         })
         addView(textView)

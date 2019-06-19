@@ -64,7 +64,7 @@ class WeeksSelector @JvmOverloads constructor(
     private fun getWeeksVariantIndex(weeks: List<Boolean>) =
         weeksVariants.indexOf(weeks).takeIf { it >= 0 } ?: weeksVariants.lastIndex
 
-    private val creator: ViewGroup.(Int) -> CheckBoxWithText = { position ->
+    private val creator: ViewGroup.(position: Int) -> CheckBoxWithText = { position ->
         CheckBoxWithText(context).apply {
             text = position.toString()
             setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { _, _ ->
