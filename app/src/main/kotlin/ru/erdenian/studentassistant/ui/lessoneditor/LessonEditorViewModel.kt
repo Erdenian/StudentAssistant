@@ -119,6 +119,7 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
         ) > 1
     }
 
+    @Suppress("ComplexMethod")
     suspend fun save(forceRenameOther: Boolean = false): Long {
         check(error.value == null)
 

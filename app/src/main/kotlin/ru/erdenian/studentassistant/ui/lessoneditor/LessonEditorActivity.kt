@@ -14,7 +14,6 @@ import android.widget.Spinner
 import android.widget.ViewFlipper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.observe
 import androidx.lifecycle.viewModelScope
 import com.dpro.widgets.WeekdaysPicker
 import com.google.android.material.textfield.TextInputLayout
@@ -281,6 +280,7 @@ class LessonEditorActivity : AppCompatActivity() {
         return true
     }
 
+    @Suppress("ComplexMethod", "LongMethod")
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home -> {
             finish()
