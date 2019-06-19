@@ -12,7 +12,6 @@ import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.observe
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.alert
@@ -62,6 +61,7 @@ class HomeworkEditorActivity : AppCompatActivity() {
 
     private val homework by lazy { intent.getParcelableExtra<HomeworkNew>(HOMEWORK_INTENT_KEY) }
 
+    @Suppress("ComplexMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_homework_editor)

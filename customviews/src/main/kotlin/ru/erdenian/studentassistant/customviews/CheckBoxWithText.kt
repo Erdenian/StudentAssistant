@@ -20,12 +20,13 @@ import androidx.appcompat.widget.AppCompatTextView
  * @since 0.2.6
  */
 class CheckBoxWithText @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     private val checkBox = AppCompatCheckBox(context)
     private val textView = AppCompatTextView(context)
-
 
     /**
      * Оборачивает [CheckBox.isChecked] и [CheckBox.setChecked]

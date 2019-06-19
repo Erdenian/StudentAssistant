@@ -10,7 +10,6 @@ import android.widget.AdapterView
 import android.widget.ViewFlipper
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.observe
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -40,7 +39,6 @@ class LessonsEditorPageFragment : Fragment() {
             }
         }
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,

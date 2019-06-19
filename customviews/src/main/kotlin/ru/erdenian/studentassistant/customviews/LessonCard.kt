@@ -18,7 +18,9 @@ import ru.erdenian.studentassistant.utils.setViewCount
  * @since 0.2.6
  */
 class LessonCard @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : CardView(context, attrs, defStyleAttr) {
 
     companion object {

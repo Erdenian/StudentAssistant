@@ -9,14 +9,8 @@ data class ImmutableSortedSet<E : Comparable<E>>(
 ) : Set<E> by value, Parcelable {
 
     companion object CREATOR : Parcelable.Creator<ImmutableSortedSet<Comparable<Any>>> {
-
-        override fun createFromParcel(parcel: Parcel): ImmutableSortedSet<Comparable<Any>>? {
-            return ImmutableSortedSet(parcel)
-        }
-
-        override fun newArray(size: Int): Array<out ImmutableSortedSet<Comparable<Any>>?> {
-            return arrayOfNulls(size)
-        }
+        override fun createFromParcel(parcel: Parcel) = ImmutableSortedSet<Comparable<Any>>(parcel)
+        override fun newArray(size: Int) = arrayOfNulls<ImmutableSortedSet<Comparable<Any>>?>(size)
     }
 
     @Suppress("UNCHECKED_CAST")
