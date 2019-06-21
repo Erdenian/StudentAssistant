@@ -30,14 +30,14 @@ inline fun <reified T : ViewModel> FragmentActivity.lazyViewModel() = lazy { get
 
 // region distinctUntilChanged
 
-fun <T> LiveData<T>.distinctUntilChanged(checker: (T) -> Boolean) =
+fun <T> LiveData<T>.distinctUntilChanged(checker: (newValue: T) -> Boolean) =
     MediatorLiveData<T>().apply {
         addSource(this@distinctUntilChanged.distinctUntilChanged()) { newValue ->
             if (!checker(newValue)) value = newValue
         }
     }
 
-fun <T> LiveDataKtx<T>.distinctUntilChanged(checker: (T) -> Boolean) =
+fun <T> LiveDataKtx<T>.distinctUntilChanged(checker: (newValue: T) -> Boolean) =
     MediatorLiveDataKtx<T>().apply {
         addSource(this@distinctUntilChanged.distinctUntilChanged(), Observer { newValue ->
             if (!checker(newValue)) value = newValue
