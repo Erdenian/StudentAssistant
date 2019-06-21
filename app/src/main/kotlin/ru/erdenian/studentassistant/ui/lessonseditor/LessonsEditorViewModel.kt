@@ -11,17 +11,17 @@ import ru.erdenian.studentassistant.extensions.asLiveData
 import ru.erdenian.studentassistant.extensions.liveDataOf
 import ru.erdenian.studentassistant.extensions.setIfEmpty
 import ru.erdenian.studentassistant.repository.ScheduleRepository
-import ru.erdenian.studentassistant.repository.entity.LessonNew
-import ru.erdenian.studentassistant.repository.entity.SemesterNew
+import ru.erdenian.studentassistant.repository.entity.Lesson
+import ru.erdenian.studentassistant.repository.entity.Semester
 import ru.erdenian.studentassistant.repository.immutableSortedSetOf
 
 class LessonsEditorViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = ScheduleRepository(application)
 
-    private val privateSemester = MutableLiveDataKtx<SemesterNew>()
+    private val privateSemester = MutableLiveDataKtx<Semester>()
 
-    fun init(semester: SemesterNew) {
+    fun init(semester: Semester) {
         privateSemester.setIfEmpty(semester)
     }
 
@@ -38,7 +38,7 @@ class LessonsEditorViewModel(application: Application) : AndroidViewModel(applic
     suspend fun deleteSemester() = repository.delete(checkNotNull(semester.value))
 
     suspend fun isLastLessonOfSubjectsAndHasHomeworks(
-        lesson: LessonNew
+        lesson: Lesson
     ): Boolean = withContext(Dispatchers.IO) {
         val semesterId = checkNotNull(semester.value).id
         val subjectName = lesson.subjectName
@@ -47,5 +47,5 @@ class LessonsEditorViewModel(application: Application) : AndroidViewModel(applic
         isLastLesson.await() && hasHomeworks.await()
     }
 
-    suspend fun delete(lesson: LessonNew) = repository.delete(lesson)
+    suspend fun delete(lesson: Lesson) = repository.delete(lesson)
 }

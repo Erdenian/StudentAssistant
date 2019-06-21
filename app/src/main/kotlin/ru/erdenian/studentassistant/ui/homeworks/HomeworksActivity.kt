@@ -16,7 +16,7 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.distinctUntilChanged
 import ru.erdenian.studentassistant.extensions.getViewModel
 import ru.erdenian.studentassistant.extensions.initializeDrawerAndNavigationView
-import ru.erdenian.studentassistant.repository.entity.SemesterNew
+import ru.erdenian.studentassistant.repository.entity.Semester
 import ru.erdenian.studentassistant.ui.adapter.SemestersSpinnerAdapter
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.utils.getCompatColor
@@ -45,7 +45,7 @@ class HomeworksActivity : AppCompatActivity() {
 
         findViewById<Spinner>(R.id.ah_toolbar_spinner).apply {
             viewModel.selectedSemester.distinctUntilChanged { value ->
-                value == selectedItem as SemesterNew?
+                value == selectedItem as Semester?
             }.observe(owner) { semester ->
                 setSelection(viewModel.allSemesters.value.indexOf(semester))
             }
@@ -61,7 +61,7 @@ class HomeworksActivity : AppCompatActivity() {
                     id: Long
                 ) {
                     viewModel.selectedSemester.value =
-                        parent.adapter.getItem(position) as SemesterNew
+                        parent.adapter.getItem(position) as Semester
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) = Unit

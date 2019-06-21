@@ -5,7 +5,7 @@ import org.joda.time.Days
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 import org.joda.time.Period
-import ru.erdenian.studentassistant.repository.entity.LessonRepeatNew
+import ru.erdenian.studentassistant.repository.entity.LessonRepeat
 
 class Converters {
 
@@ -45,22 +45,22 @@ class Converters {
         else immutableSortedSetOf()
 
     @TypeConverter
-    fun lessonRepeatToString(value: LessonRepeatNew?): String? =
+    fun lessonRepeatToString(value: LessonRepeat?): String? =
         if (value == null) null else when (value) {
-            is LessonRepeatNew.ByWeekday ->
+            is LessonRepeat.ByWeekday ->
                 value.weekday.toString() + SEPARATOR + value.weeks.joinToString(SEPARATOR)
-            is LessonRepeatNew.ByDates -> value.dates.joinToString(SEPARATOR)
+            is LessonRepeat.ByDates -> value.dates.joinToString(SEPARATOR)
         }
 
     @TypeConverter
-    fun stringToLessonRepeat(value: String?): LessonRepeatNew? =
+    fun stringToLessonRepeat(value: String?): LessonRepeat? =
         if (value == null) null else {
-            if (value.contains('.')) LessonRepeatNew.ByDates(
+            if (value.contains('.')) LessonRepeat.ByDates(
                 value.split(SEPARATOR).map { LocalDate.parse(it) }.toImmutableSortedSet()
             )
             else {
                 val separated = value.split(SEPARATOR)
-                LessonRepeatNew.ByWeekday(
+                LessonRepeat.ByWeekday(
                     separated[0].toInt(),
                     separated.asSequence().drop(1).map { it.toBoolean() }.toList()
                 )

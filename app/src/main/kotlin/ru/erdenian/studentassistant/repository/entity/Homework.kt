@@ -25,7 +25,7 @@ import org.joda.time.LocalDate
     tableName = "homeworks",
     foreignKeys = [
         ForeignKey(
-            entity = SemesterNew::class,
+            entity = Semester::class,
             parentColumns = ["_id"],
             childColumns = ["semester_id"],
             onDelete = ForeignKey.CASCADE,
@@ -34,7 +34,7 @@ import org.joda.time.LocalDate
     ],
     indices = [Index("semester_id")]
 )
-data class HomeworkNew(
+data class Homework(
 
     @ColumnInfo(name = "subject_name")
     val subjectName: String,
@@ -51,16 +51,16 @@ data class HomeworkNew(
     @PrimaryKey
     @ColumnInfo(name = "_id")
     val id: Long = generateId()
-) : Comparable<HomeworkNew>, Parcelable {
+) : Comparable<Homework>, Parcelable {
 
     init {
         require(subjectName.isNotBlank()) { "Пустое название предмета" }
         require(description.isNotBlank()) { "Пустое описание" }
     }
 
-    override fun compareTo(other: HomeworkNew) = compareValuesBy(
+    override fun compareTo(other: Homework) = compareValuesBy(
         this, other,
-        HomeworkNew::deadline,
-        HomeworkNew::id
+        Homework::deadline,
+        Homework::id
     )
 }

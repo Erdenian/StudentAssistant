@@ -12,10 +12,10 @@ import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.repository.dao.HomeworkDao
 import ru.erdenian.studentassistant.repository.dao.LessonDao
 import ru.erdenian.studentassistant.repository.dao.SemesterDao
-import ru.erdenian.studentassistant.repository.entity.HomeworkNew
-import ru.erdenian.studentassistant.repository.entity.LessonNew
-import ru.erdenian.studentassistant.repository.entity.LessonRepeatNew
-import ru.erdenian.studentassistant.repository.entity.SemesterNew
+import ru.erdenian.studentassistant.repository.entity.Homework
+import ru.erdenian.studentassistant.repository.entity.Lesson
+import ru.erdenian.studentassistant.repository.entity.LessonRepeat
+import ru.erdenian.studentassistant.repository.entity.Semester
 
 @Suppress("TooManyFunctions")
 class ScheduleRepository(context: Context) {
@@ -43,8 +43,8 @@ class ScheduleRepository(context: Context) {
 
     // region Semesters
 
-    suspend fun insert(semester: SemesterNew) = semesterDao.insert(semester)
-    suspend fun delete(semester: SemesterNew) = semesterDao.delete(semester)
+    suspend fun insert(semester: Semester) = semesterDao.insert(semester)
+    suspend fun delete(semester: Semester) = semesterDao.delete(semester)
 
     @Deprecated("Only for debugging")
     suspend fun deleteSemesters() = semesterDao.deleteAll()
@@ -57,7 +57,7 @@ class ScheduleRepository(context: Context) {
 
     // region Lessons
 
-    suspend fun insert(lesson: LessonNew) {
+    suspend fun insert(lesson: Lesson) {
         val oldLesson = getLesson(lesson.semesterId, lesson.id)
         lessonDao.insert(lesson)
         if (
@@ -69,9 +69,9 @@ class ScheduleRepository(context: Context) {
 
     suspend fun getLesson(semesterId: Long, lessonId: Long) = lessonDao.get(semesterId, lessonId)
 
-    fun getLesson(lesson: LessonNew) = lessonDao.getLive(lesson.semesterId, lesson.id).toKtx()
+    fun getLesson(lesson: Lesson) = lessonDao.getLive(lesson.semesterId, lesson.id).toKtx()
 
-    suspend fun delete(lesson: LessonNew) {
+    suspend fun delete(lesson: Lesson) {
         lessonDao.delete(lesson)
         if (!hasLessons(lesson.semesterId, lesson.subjectName)) {
             homeworkDao.delete(lesson.semesterId, lesson.subjectName)
@@ -104,7 +104,7 @@ class ScheduleRepository(context: Context) {
     fun getClassrooms(semesterId: Long) = lessonDao.getClassrooms(semesterId).map()
     suspend fun getLessonLength(semesterId: Long) = lessonDao.getLessonLength(semesterId)
 
-    fun getLessons(semester: SemesterNew, day: LocalDate) =
+    fun getLessons(semester: Semester, day: LocalDate) =
         getLessons(semester.id).map { lessons ->
             val weekNumber = semester.getWeekNumber(day)
             lessons.filter { it.lessonRepeat.repeatsOnDay(day, weekNumber) }
@@ -113,7 +113,7 @@ class ScheduleRepository(context: Context) {
     fun getLessons(semesterId: Long, weekday: Int) =
         getLessons(semesterId).map { lessons ->
             lessons.filter { lesson ->
-                if (lesson.lessonRepeat !is LessonRepeatNew.ByWeekday) false
+                if (lesson.lessonRepeat !is LessonRepeat.ByWeekday) false
                 else lesson.lessonRepeat.repeatsOnWeekday(weekday)
             }
         }.map()
@@ -122,15 +122,15 @@ class ScheduleRepository(context: Context) {
 
     // region Homeworks
 
-    suspend fun insert(homework: HomeworkNew) = homeworkDao.insert(homework)
+    suspend fun insert(homework: Homework) = homeworkDao.insert(homework)
 
     suspend fun getHomework(semesterId: Long, homeworkId: Long) =
         homeworkDao.get(semesterId, homeworkId)
 
-    fun getHomework(homework: HomeworkNew) =
+    fun getHomework(homework: Homework) =
         homeworkDao.getLive(homework.semesterId, homework.id).toKtx()
 
-    suspend fun delete(homework: HomeworkNew) = homeworkDao.delete(homework)
+    suspend fun delete(homework: Homework) = homeworkDao.delete(homework)
 
     suspend fun deleteHomeworks(semesterId: Long, subjectName: String) =
         homeworkDao.delete(semesterId, subjectName)
@@ -148,7 +148,7 @@ class ScheduleRepository(context: Context) {
     fun getHomeworks(semesterId: Long, subjectName: String) =
         homeworkDao.get(semesterId, subjectName).map()
 
-    fun getHomeworks(lesson: LessonNew) =
+    fun getHomeworks(lesson: Lesson) =
         homeworkDao.get(lesson.semesterId, lesson.subjectName).map()
 
     suspend fun getHomeworksCount(semesterId: Long, subjectName: String) =
@@ -163,13 +163,13 @@ class ScheduleRepository(context: Context) {
     fun getActualHomeworks(semesterId: Long, subjectName: String) =
         homeworkDao.getActual(semesterId, subjectName).map()
 
-    fun getActualHomeworks(lesson: LessonNew) =
+    fun getActualHomeworks(lesson: Lesson) =
         homeworkDao.getActual(lesson.semesterId, lesson.subjectName).map()
 
     fun getPastHomeworks(semesterId: Long, subjectName: String) =
         homeworkDao.getPast(semesterId, subjectName).map()
 
-    fun getPastHomeworks(lesson: LessonNew) =
+    fun getPastHomeworks(lesson: Lesson) =
         homeworkDao.getPast(lesson.semesterId, lesson.subjectName).map()
 
     // endregion

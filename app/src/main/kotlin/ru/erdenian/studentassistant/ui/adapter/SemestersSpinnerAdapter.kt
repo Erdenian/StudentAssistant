@@ -6,11 +6,11 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.repository.entity.SemesterNew
+import ru.erdenian.studentassistant.repository.entity.Semester
 
 class SemestersSpinnerAdapter : BaseAdapter() {
 
-    var semesters: List<SemesterNew> = listOf()
+    var semesters: List<Semester> = listOf()
         set(value) {
             field = value
             notifyDataSetChanged()

@@ -10,7 +10,7 @@ import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.extensions.asLiveData
 import ru.erdenian.studentassistant.extensions.liveDataOf
 import ru.erdenian.studentassistant.repository.ScheduleRepository
-import ru.erdenian.studentassistant.repository.entity.SemesterNew
+import ru.erdenian.studentassistant.repository.entity.Semester
 import ru.erdenian.studentassistant.repository.immutableSortedSetOf
 
 class HomeworksViewModel(application: Application) : AndroidViewModel(application) {
@@ -18,8 +18,8 @@ class HomeworksViewModel(application: Application) : AndroidViewModel(applicatio
     private val repository = ScheduleRepository(application)
 
     val allSemesters = repository.getSemesters()
-    val selectedSemester: MutableLiveDataKtx<SemesterNew?> =
-        MediatorLiveDataKtx<SemesterNew?>().apply {
+    val selectedSemester: MutableLiveDataKtx<Semester?> =
+        MediatorLiveDataKtx<Semester?>().apply {
             addSource(allSemesters, Observer { semesters ->
                 if (value !in semesters) value = semesters.find { semester ->
                     LocalDate.now() in semester.firstDay..semester.lastDay

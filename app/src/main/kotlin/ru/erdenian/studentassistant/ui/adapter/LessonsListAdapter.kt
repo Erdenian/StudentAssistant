@@ -3,20 +3,20 @@ package ru.erdenian.studentassistant.ui.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.erdenian.studentassistant.customviews.LessonCard
-import ru.erdenian.studentassistant.repository.entity.LessonNew
+import ru.erdenian.studentassistant.repository.entity.Lesson
 
 class LessonsListAdapter(
     private val isEditing: Boolean = false
 ) : RecyclerView.Adapter<LessonsListAdapter.ItemViewHolder>() {
 
-    var lessons: List<LessonNew> = listOf()
+    var lessons: List<Lesson> = listOf()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
 
     interface OnLessonClickListener {
-        fun onLessonClick(lesson: LessonNew)
+        fun onLessonClick(lesson: Lesson)
     }
 
     var onLessonClickListener: OnLessonClickListener? = null
@@ -40,7 +40,7 @@ class LessonsListAdapter(
 
     class ItemViewHolder(val card: LessonCard) : RecyclerView.ViewHolder(card)
 
-    private fun LessonCard.setLesson(lesson: LessonNew) = setLesson(
+    private fun LessonCard.setLesson(lesson: Lesson) = setLesson(
         lesson.subjectName,
         lesson.type,
         lesson.teachers.list,

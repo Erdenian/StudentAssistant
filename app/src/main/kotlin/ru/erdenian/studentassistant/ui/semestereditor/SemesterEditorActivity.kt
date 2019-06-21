@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.observe
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -16,7 +17,7 @@ import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.distinctUntilChanged
 import ru.erdenian.studentassistant.extensions.lazyViewModel
-import ru.erdenian.studentassistant.repository.entity.SemesterNew
+import ru.erdenian.studentassistant.repository.entity.Semester
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorViewModel.Error
 import ru.erdenian.studentassistant.utils.getCompatColor
 import ru.erdenian.studentassistant.utils.setColor
@@ -26,7 +27,7 @@ class SemesterEditorActivity : AppCompatActivity() {
 
     companion object {
         private const val SEMESTER_INTENT_KEY = "semester_intent_key"
-        fun start(context: Context, semester: SemesterNew? = null) {
+        fun start(context: Context, semester: Semester? = null) {
             context.startActivity<SemesterEditorActivity>(SEMESTER_INTENT_KEY to semester)
         }
 
@@ -40,7 +41,7 @@ class SemesterEditorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_semester_editor)
 
-        val semester = intent.getParcelableExtra<SemesterNew?>(SEMESTER_INTENT_KEY)
+        val semester = intent.getParcelableExtra<Semester?>(SEMESTER_INTENT_KEY)
         viewModel.init(semester)
 
         supportActionBar?.apply {

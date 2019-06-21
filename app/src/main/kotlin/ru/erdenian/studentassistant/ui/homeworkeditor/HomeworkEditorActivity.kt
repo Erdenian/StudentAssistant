@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.observe
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.alert
@@ -21,8 +22,8 @@ import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.distinctUntilChanged
 import ru.erdenian.studentassistant.extensions.lazyViewModel
-import ru.erdenian.studentassistant.repository.entity.HomeworkNew
-import ru.erdenian.studentassistant.repository.entity.LessonNew
+import ru.erdenian.studentassistant.repository.entity.Homework
+import ru.erdenian.studentassistant.repository.entity.Lesson
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorViewModel.Error
 import ru.erdenian.studentassistant.utils.getCompatColor
 import ru.erdenian.studentassistant.utils.setColor
@@ -41,14 +42,14 @@ class HomeworkEditorActivity : AppCompatActivity() {
             )
         }
 
-        fun start(context: Context, lesson: LessonNew) {
+        fun start(context: Context, lesson: Lesson) {
             context.startActivity<HomeworkEditorActivity>(
                 SEMESTER_ID_INTENT_KEY to lesson.semesterId,
                 SUBJECT_NAME_INTENT_KEY to lesson.subjectName
             )
         }
 
-        fun start(context: Context, homework: HomeworkNew) {
+        fun start(context: Context, homework: Homework) {
             context.startActivity<HomeworkEditorActivity>(
                 HOMEWORK_INTENT_KEY to homework
             )
@@ -59,7 +60,7 @@ class HomeworkEditorActivity : AppCompatActivity() {
 
     private val viewModel by lazyViewModel<HomeworkEditorViewModel>()
 
-    private val homework by lazy { intent.getParcelableExtra<HomeworkNew>(HOMEWORK_INTENT_KEY) }
+    private val homework by lazy { intent.getParcelableExtra<Homework>(HOMEWORK_INTENT_KEY) }
 
     @Suppress("ComplexMethod")
     override fun onCreate(savedInstanceState: Bundle?) {

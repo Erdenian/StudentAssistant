@@ -14,7 +14,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.lazyViewModel
-import ru.erdenian.studentassistant.repository.entity.LessonNew
+import ru.erdenian.studentassistant.repository.entity.Lesson
 import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
@@ -25,7 +25,7 @@ class LessonInformationActivity : AppCompatActivity() {
 
     companion object {
         private const val LESSON_INTENT_KEY = "lesson_intent_key"
-        fun start(context: Context, lesson: LessonNew) {
+        fun start(context: Context, lesson: Lesson) {
             context.startActivity<LessonInformationActivity>(LESSON_INTENT_KEY to lesson)
         }
 

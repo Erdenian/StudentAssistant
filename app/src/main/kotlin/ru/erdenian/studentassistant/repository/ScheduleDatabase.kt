@@ -8,15 +8,15 @@ import androidx.room.TypeConverters
 import ru.erdenian.studentassistant.repository.dao.HomeworkDao
 import ru.erdenian.studentassistant.repository.dao.LessonDao
 import ru.erdenian.studentassistant.repository.dao.SemesterDao
-import ru.erdenian.studentassistant.repository.entity.HomeworkNew
-import ru.erdenian.studentassistant.repository.entity.LessonNew
-import ru.erdenian.studentassistant.repository.entity.SemesterNew
+import ru.erdenian.studentassistant.repository.entity.Homework
+import ru.erdenian.studentassistant.repository.entity.Lesson
+import ru.erdenian.studentassistant.repository.entity.Semester
 
 @Database(
     entities = [
-        SemesterNew::class,
-        LessonNew::class,
-        HomeworkNew::class
+        Semester::class,
+        Lesson::class,
+        Homework::class
     ],
     version = 1
 )

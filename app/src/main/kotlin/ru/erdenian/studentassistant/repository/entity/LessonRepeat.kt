@@ -12,7 +12,7 @@ import ru.erdenian.studentassistant.repository.ImmutableSortedSet
  * @author Ilya Solovyev
  * @since 0.0.0
  */
-sealed class LessonRepeatNew : Parcelable {
+sealed class LessonRepeat : Parcelable {
 
     /**
      * Показывает, повторяется ли пара в заданный день.
@@ -37,7 +37,7 @@ sealed class LessonRepeatNew : Parcelable {
      * @throws IllegalArgumentException если [weekday] задан некорректно или [weeks] пуст
      */
     @Parcelize
-    data class ByWeekday(val weekday: Int, val weeks: List<Boolean>) : LessonRepeatNew() {
+    data class ByWeekday(val weekday: Int, val weeks: List<Boolean>) : LessonRepeat() {
 
         init {
             require(weekday in DateTimeConstants.MONDAY..DateTimeConstants.SUNDAY) {
@@ -76,7 +76,7 @@ sealed class LessonRepeatNew : Parcelable {
      * @throws IllegalArgumentException если [dates] пуст
      */
     @Parcelize
-    data class ByDates(val dates: ImmutableSortedSet<LocalDate>) : LessonRepeatNew() {
+    data class ByDates(val dates: ImmutableSortedSet<LocalDate>) : LessonRepeat() {
 
         init {
             require(dates.isNotEmpty()) { "Массив дат пуст" }

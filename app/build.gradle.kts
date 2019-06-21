@@ -1,4 +1,5 @@
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsFeature
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.ByteArrayOutputStream
 
@@ -66,7 +67,10 @@ android {
     }
 }
 
-androidExtensions { isExperimental = true }
+androidExtensions {
+    features = setOf(AndroidExtensionsFeature.PARCELIZE.featureName)
+    isExperimental = true
+}
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {

@@ -9,7 +9,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import org.joda.time.Period
 import ru.erdenian.studentassistant.repository.Converters
-import ru.erdenian.studentassistant.repository.entity.LessonNew
+import ru.erdenian.studentassistant.repository.entity.Lesson
 
 @Suppress("TooManyFunctions", "MaxLineLength")
 @Dao
@@ -22,16 +22,16 @@ abstract class LessonDao {
     // region Primary actions
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insert(lesson: LessonNew)
+    abstract suspend fun insert(lesson: Lesson)
 
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId AND _id = :lessonId")
-    abstract suspend fun get(semesterId: Long, lessonId: Long): LessonNew?
+    abstract suspend fun get(semesterId: Long, lessonId: Long): Lesson?
 
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId AND _id = :lessonId")
-    abstract fun getLive(semesterId: Long, lessonId: Long): LiveData<LessonNew?>
+    abstract fun getLive(semesterId: Long, lessonId: Long): LiveData<Lesson?>
 
     @Delete
-    abstract suspend fun delete(lesson: LessonNew)
+    abstract suspend fun delete(lesson: Lesson)
 
     @Deprecated("Only for debugging")
     @Query("DELETE FROM lessons WHERE semester_id = :semesterId")
@@ -46,7 +46,7 @@ abstract class LessonDao {
     // region Lessons
 
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId ORDER BY start_time, end_time, _id")
-    abstract fun get(semesterId: Long): LiveData<List<LessonNew>>
+    abstract fun get(semesterId: Long): LiveData<List<Lesson>>
 
     @Query("SELECT COUNT(_id) FROM lessons WHERE semester_id = :semesterId")
     abstract suspend fun getCount(semesterId: Long): Int
@@ -59,7 +59,7 @@ abstract class LessonDao {
     // region Subjects
 
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId AND subject_name = :subjectName ORDER BY start_time, end_time, _id")
-    abstract fun get(semesterId: Long, subjectName: String): LiveData<List<LessonNew>>
+    abstract fun get(semesterId: Long, subjectName: String): LiveData<List<Lesson>>
 
     @Query("SELECT COUNT(_id) FROM lessons WHERE semester_id = :semesterId AND subject_name = :subjectName")
     abstract suspend fun getCount(semesterId: Long, subjectName: String): Int

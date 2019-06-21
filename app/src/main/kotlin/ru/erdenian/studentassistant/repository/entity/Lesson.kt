@@ -30,7 +30,7 @@ import ru.erdenian.studentassistant.repository.ImmutableSortedSet
     tableName = "lessons",
     foreignKeys = [
         ForeignKey(
-            entity = SemesterNew::class,
+            entity = Semester::class,
             parentColumns = ["_id"],
             childColumns = ["semester_id"],
             onDelete = ForeignKey.CASCADE,
@@ -39,7 +39,7 @@ import ru.erdenian.studentassistant.repository.ImmutableSortedSet
     ],
     indices = [Index("semester_id")]
 )
-data class LessonNew(
+data class Lesson(
 
     @ColumnInfo(name = "subject_name")
     val subjectName: String,
@@ -60,7 +60,7 @@ data class LessonNew(
     val endTime: LocalTime,
 
     @ColumnInfo(name = "lesson_repeat")
-    val lessonRepeat: LessonRepeatNew,
+    val lessonRepeat: LessonRepeat,
 
     @ColumnInfo(name = "semester_id")
     val semesterId: Long,
@@ -68,7 +68,7 @@ data class LessonNew(
     @PrimaryKey
     @ColumnInfo(name = "_id")
     val id: Long = generateId()
-) : Comparable<LessonNew>, Parcelable {
+) : Comparable<Lesson>, Parcelable {
 
     init {
         require(subjectName.isNotBlank()) { "Отсутствует название предмета" }
@@ -78,10 +78,10 @@ data class LessonNew(
         require(startTime < endTime) { "Неверно заданы даты: $startTime - $endTime" }
     }
 
-    override fun compareTo(other: LessonNew) = compareValuesBy(
+    override fun compareTo(other: Lesson) = compareValuesBy(
         this, other,
-        LessonNew::startTime,
-        LessonNew::endTime,
-        LessonNew::id
+        Lesson::startTime,
+        Lesson::endTime,
+        Lesson::id
     )
 }

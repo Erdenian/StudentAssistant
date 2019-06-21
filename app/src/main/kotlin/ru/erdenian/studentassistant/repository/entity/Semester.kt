@@ -24,7 +24,7 @@ import org.joda.time.Weeks
  */
 @Parcelize
 @Entity(tableName = "semesters")
-data class SemesterNew(
+data class Semester(
 
     @ColumnInfo(name = "name")
     val name: String,
@@ -38,7 +38,7 @@ data class SemesterNew(
     @PrimaryKey
     @ColumnInfo(name = "_id")
     val id: Long = generateId()
-) : Comparable<SemesterNew>, Parcelable {
+) : Comparable<Semester>, Parcelable {
 
     /**
      * Длина семестра в днях.
@@ -78,11 +78,11 @@ data class SemesterNew(
     fun getWeekNumber(day: LocalDate) =
         Weeks.weeksBetween(firstWeekMonday, day).weeks - if (day >= firstWeekMonday) 0 else 1
 
-    override fun compareTo(other: SemesterNew) = compareValuesBy(
+    override fun compareTo(other: Semester) = compareValuesBy(
         this, other,
-        SemesterNew::lastDay,
-        SemesterNew::firstDay,
-        SemesterNew::name,
-        SemesterNew::id
+        Semester::lastDay,
+        Semester::firstDay,
+        Semester::name,
+        Semester::id
     )
 }

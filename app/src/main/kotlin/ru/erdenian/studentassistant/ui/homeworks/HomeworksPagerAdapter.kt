@@ -4,14 +4,14 @@ import android.content.Context
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.repository.entity.SemesterNew
+import ru.erdenian.studentassistant.repository.entity.Semester
 
 class HomeworksPagerAdapter(
     context: Context,
     fm: FragmentManager
 ) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
-    var semester: SemesterNew? = null
+    var semester: Semester? = null
         set(value) {
             field = value
             notifyDataSetChanged()
