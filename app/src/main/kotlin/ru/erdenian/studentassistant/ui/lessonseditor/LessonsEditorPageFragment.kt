@@ -10,6 +10,7 @@ import android.widget.AdapterView
 import android.widget.ViewFlipper
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.observe
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.anko.alert
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.getViewModel
-import ru.erdenian.studentassistant.repository.entity.LessonNew
+import ru.erdenian.studentassistant.repository.entity.Lesson
 import ru.erdenian.studentassistant.ui.adapter.LessonsListAdapter
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 
@@ -34,7 +35,7 @@ class LessonsEditorPageFragment : Fragment() {
     private val viewModel by lazy { requireActivity().getViewModel<LessonsEditorViewModel>() }
     private val adapter = LessonsListAdapter(true).apply {
         onLessonClickListener = object : LessonsListAdapter.OnLessonClickListener {
-            override fun onLessonClick(lesson: LessonNew) {
+            override fun onLessonClick(lesson: Lesson) {
                 LessonEditorActivity.start(requireContext(), lesson)
             }
         }

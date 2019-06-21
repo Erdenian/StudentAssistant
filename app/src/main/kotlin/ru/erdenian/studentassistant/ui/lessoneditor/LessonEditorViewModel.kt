@@ -19,8 +19,8 @@ import ru.erdenian.studentassistant.extensions.asLiveData
 import ru.erdenian.studentassistant.extensions.setIfEmpty
 import ru.erdenian.studentassistant.repository.ImmutableSortedSet
 import ru.erdenian.studentassistant.repository.ScheduleRepository
-import ru.erdenian.studentassistant.repository.entity.LessonNew
-import ru.erdenian.studentassistant.repository.entity.LessonRepeatNew
+import ru.erdenian.studentassistant.repository.entity.Lesson
+import ru.erdenian.studentassistant.repository.entity.LessonRepeat
 import ru.erdenian.studentassistant.repository.immutableSortedSetOf
 import ru.erdenian.studentassistant.repository.toImmutableSortedSet
 import ru.erdenian.studentassistant.utils.toSingleLine
@@ -36,14 +36,14 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
     private val repository = ScheduleRepository(application)
 
     private val semesterId = MutableLiveDataKtx<Long>()
-    private var lesson: LessonNew? = null
+    private var lesson: Lesson? = null
 
     fun init(semesterId: Long, weekday: Int = DateTimeConstants.MONDAY) {
         this.semesterId.setIfEmpty(semesterId)
         this.weekday.value = weekday
     }
 
-    fun init(semesterId: Long, lesson: LessonNew, copy: Boolean) {
+    fun init(semesterId: Long, lesson: Lesson, copy: Boolean) {
         this.semesterId.setIfEmpty(semesterId)
 
         if (!copy) this.lesson = lesson
@@ -54,14 +54,14 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
         startTime.value = lesson.startTime
         endTime.value = lesson.endTime
         lessonRepeat.value = when (lesson.lessonRepeat) {
-            is LessonRepeatNew.ByWeekday -> {
+            is LessonRepeat.ByWeekday -> {
                 weekday.value = lesson.lessonRepeat.weekday
                 weeks.value = lesson.lessonRepeat.weeks
-                LessonRepeatNew.ByWeekday::class
+                LessonRepeat.ByWeekday::class
             }
-            is LessonRepeatNew.ByDates -> {
+            is LessonRepeat.ByDates -> {
                 dates.value = lesson.lessonRepeat.dates
-                LessonRepeatNew.ByDates::class
+                LessonRepeat.ByDates::class
             }
         }
     }
@@ -84,8 +84,8 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
         value = immutableSortedSetOf()
     }
 
-    val lessonRepeat = MutableLiveDataKtx<KClass<out LessonRepeatNew>>().apply {
-        value = LessonRepeatNew.ByWeekday::class
+    val lessonRepeat = MutableLiveDataKtx<KClass<out LessonRepeat>>().apply {
+        value = LessonRepeat.ByWeekday::class
     }
 
     val error: LiveDataKtx<Error?> = MediatorLiveDataKtx<Error?>().apply {
@@ -124,7 +124,7 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
         check(error.value == null)
 
         val oldLesson = lesson
-        val newLesson = LessonNew(
+        val newLesson = Lesson(
             subjectName.value,
             type.value.run { if (isNotBlank()) this else null },
             teachers.value
@@ -144,10 +144,10 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
             startTime.value,
             endTime.value,
             when (lessonRepeat.value) {
-                LessonRepeatNew.ByWeekday::class ->
-                    LessonRepeatNew.ByWeekday(weekday.value, weeks.value)
-                LessonRepeatNew.ByDates::class ->
-                    LessonRepeatNew.ByDates(dates.value)
+                LessonRepeat.ByWeekday::class ->
+                    LessonRepeat.ByWeekday(weekday.value, weeks.value)
+                LessonRepeat.ByDates::class ->
+                    LessonRepeat.ByDates(dates.value)
                 else -> throw IllegalStateException(
                     "Неизвестный тип повторений: ${lessonRepeat.value}"
                 )

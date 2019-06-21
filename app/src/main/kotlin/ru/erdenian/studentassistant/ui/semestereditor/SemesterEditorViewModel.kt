@@ -9,7 +9,7 @@ import com.shopify.livedataktx.MutableLiveDataKtx
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.repository.ScheduleRepository
-import ru.erdenian.studentassistant.repository.entity.SemesterNew
+import ru.erdenian.studentassistant.repository.entity.Semester
 
 class SemesterEditorViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -26,9 +26,9 @@ class SemesterEditorViewModel(application: Application) : AndroidViewModel(appli
 
     private val repository = ScheduleRepository(application)
 
-    private var semester: SemesterNew? = null
+    private var semester: Semester? = null
 
-    fun init(semester: SemesterNew?) {
+    fun init(semester: Semester?) {
         this.semester = semester?.also { s ->
             name.value = s.name
             firstDay.value = s.firstDay
@@ -65,7 +65,7 @@ class SemesterEditorViewModel(application: Application) : AndroidViewModel(appli
         check(error.value == null)
 
         val oldSemester = semester
-        val newSemester = SemesterNew(
+        val newSemester = Semester(
             name.value,
             firstDay.value,
             lastDay.value

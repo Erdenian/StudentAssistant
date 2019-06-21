@@ -11,7 +11,7 @@ import com.shopify.livedataktx.switchMap
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.extensions.asLiveData
 import ru.erdenian.studentassistant.repository.ScheduleRepository
-import ru.erdenian.studentassistant.repository.entity.HomeworkNew
+import ru.erdenian.studentassistant.repository.entity.Homework
 
 class HomeworkEditorViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -22,14 +22,14 @@ class HomeworkEditorViewModel(application: Application) : AndroidViewModel(appli
     private val repository = ScheduleRepository(application)
 
     private val semesterId = MutableLiveDataKtx<Long>()
-    private var homework: HomeworkNew? = null
+    private var homework: Homework? = null
 
     fun init(semesterId: Long, subjectName: String?) {
         this.semesterId.value = semesterId
         subjectName?.let { this.subjectName.value = it }
     }
 
-    fun init(semesterId: Long, homework: HomeworkNew?) {
+    fun init(semesterId: Long, homework: Homework?) {
         this.semesterId.value = semesterId
 
         this.homework = homework?.also { h ->
@@ -66,7 +66,7 @@ class HomeworkEditorViewModel(application: Application) : AndroidViewModel(appli
         check(subjectName.value in existingSubjects.value)
 
         val oldHomework = homework
-        val newHomework = HomeworkNew(
+        val newHomework = Homework(
             subjectName.value,
             description.value,
             deadline.value,

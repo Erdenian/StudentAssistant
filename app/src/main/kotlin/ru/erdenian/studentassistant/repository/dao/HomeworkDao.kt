@@ -7,7 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import org.joda.time.LocalDate
-import ru.erdenian.studentassistant.repository.entity.HomeworkNew
+import ru.erdenian.studentassistant.repository.entity.Homework
 
 @Suppress("TooManyFunctions", "MaxLineLength")
 @Dao
@@ -16,16 +16,16 @@ interface HomeworkDao {
     // region Primary actions
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(homework: HomeworkNew)
+    suspend fun insert(homework: Homework)
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND _id = :homeworkId")
-    suspend fun get(semesterId: Long, homeworkId: Long): HomeworkNew?
+    suspend fun get(semesterId: Long, homeworkId: Long): Homework?
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND _id = :homeworkId")
-    fun getLive(semesterId: Long, homeworkId: Long): LiveData<HomeworkNew?>
+    fun getLive(semesterId: Long, homeworkId: Long): LiveData<Homework?>
 
     @Delete
-    suspend fun delete(homework: HomeworkNew)
+    suspend fun delete(homework: Homework)
 
     @Query("DELETE FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName")
     suspend fun delete(semesterId: Long, subjectName: String)
@@ -43,7 +43,7 @@ interface HomeworkDao {
     // region Homeworks list
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId ORDER BY deadline, _id")
-    fun get(semesterId: Long): LiveData<List<HomeworkNew>>
+    fun get(semesterId: Long): LiveData<List<Homework>>
 
     @Query("SELECT COUNT(_id) FROM homeworks WHERE semester_id = :semesterId")
     suspend fun getCount(semesterId: Long): Int
@@ -56,7 +56,7 @@ interface HomeworkDao {
     // region By subject name
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName ORDER BY deadline, _id")
-    fun get(semesterId: Long, subjectName: String): LiveData<List<HomeworkNew>>
+    fun get(semesterId: Long, subjectName: String): LiveData<List<Homework>>
 
     @Query("SELECT COUNT(_id) FROM homeworks WHERE subject_name = :subjectName AND semester_id = :semesterId")
     suspend fun getCount(semesterId: Long, subjectName: String): Int
@@ -69,10 +69,10 @@ interface HomeworkDao {
     // region By deadline
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline >= :today ORDER BY deadline, _id")
-    fun getActual(semesterId: Long, today: LocalDate = LocalDate.now()): LiveData<List<HomeworkNew>>
+    fun getActual(semesterId: Long, today: LocalDate = LocalDate.now()): LiveData<List<Homework>>
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline < :today ORDER BY deadline, _id")
-    fun getPast(semesterId: Long, today: LocalDate = LocalDate.now()): LiveData<List<HomeworkNew>>
+    fun getPast(semesterId: Long, today: LocalDate = LocalDate.now()): LiveData<List<Homework>>
 
     // endregion
 
@@ -83,14 +83,14 @@ interface HomeworkDao {
         semesterId: Long,
         subjectName: String,
         today: LocalDate = LocalDate.now()
-    ): LiveData<List<HomeworkNew>>
+    ): LiveData<List<Homework>>
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName AND deadline < :today ORDER BY deadline, _id")
     fun getPast(
         semesterId: Long,
         subjectName: String,
         today: LocalDate = LocalDate.now()
-    ): LiveData<List<HomeworkNew>>
+    ): LiveData<List<Homework>>
 
     // endregion
 

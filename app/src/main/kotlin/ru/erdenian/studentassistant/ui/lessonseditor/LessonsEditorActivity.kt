@@ -19,7 +19,7 @@ import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.lazyViewModel
-import ru.erdenian.studentassistant.repository.entity.SemesterNew
+import ru.erdenian.studentassistant.repository.entity.Semester
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
 import ru.erdenian.studentassistant.utils.getCompatColor
@@ -29,7 +29,7 @@ class LessonsEditorActivity : AppCompatActivity() {
 
     companion object {
         private const val SEMESTER_INTENT_KEY = "semester_intent_key"
-        fun start(context: Context, semester: SemesterNew) {
+        fun start(context: Context, semester: Semester) {
             context.startActivity<LessonsEditorActivity>(SEMESTER_INTENT_KEY to semester)
         }
     }

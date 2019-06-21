@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.repository.entity.HomeworkNew
+import ru.erdenian.studentassistant.repository.entity.Homework
 
 class HomeworksListAdapter : RecyclerView.Adapter<HomeworksListAdapter.ItemViewHolder>() {
 
@@ -14,14 +14,14 @@ class HomeworksListAdapter : RecyclerView.Adapter<HomeworksListAdapter.ItemViewH
         private const val DATE_FORMAT = "dd.MM.yyyy"
     }
 
-    var homeworks: List<HomeworkNew> = listOf()
+    var homeworks: List<Homework> = listOf()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
 
     interface OnHomeworkClickListener {
-        fun onHomeworkClick(homework: HomeworkNew)
+        fun onHomeworkClick(homework: Homework)
     }
 
     var onHomeworkClickListener: OnHomeworkClickListener? = null

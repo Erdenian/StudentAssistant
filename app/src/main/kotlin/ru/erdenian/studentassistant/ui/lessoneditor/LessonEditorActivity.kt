@@ -14,6 +14,7 @@ import android.widget.Spinner
 import android.widget.ViewFlipper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.observe
 import androidx.lifecycle.viewModelScope
 import com.dpro.widgets.WeekdaysPicker
 import com.google.android.material.textfield.TextInputLayout
@@ -26,8 +27,8 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.customviews.WeeksSelector
 import ru.erdenian.studentassistant.extensions.distinctUntilChanged
 import ru.erdenian.studentassistant.extensions.lazyViewModel
-import ru.erdenian.studentassistant.repository.entity.LessonNew
-import ru.erdenian.studentassistant.repository.entity.LessonRepeatNew
+import ru.erdenian.studentassistant.repository.entity.Lesson
+import ru.erdenian.studentassistant.repository.entity.LessonRepeat
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorViewModel.Error
 import ru.erdenian.studentassistant.utils.getCompatColor
 import ru.erdenian.studentassistant.utils.setColor
@@ -49,7 +50,7 @@ class LessonEditorActivity : AppCompatActivity() {
             )
         }
 
-        fun start(context: Context, lesson: LessonNew, copy: Boolean = false) {
+        fun start(context: Context, lesson: Lesson, copy: Boolean = false) {
             context.startActivity<LessonEditorActivity>(
                 SEMESTER_ID_INTENT_KEY to lesson.semesterId,
                 LESSON_INTENT_KEY to lesson,
@@ -62,7 +63,7 @@ class LessonEditorActivity : AppCompatActivity() {
 
     private val viewModel by lazyViewModel<LessonEditorViewModel>()
 
-    private val lesson by lazy { intent.getParcelableExtra<LessonNew?>(LESSON_INTENT_KEY) }
+    private val lesson by lazy { intent.getParcelableExtra<Lesson?>(LESSON_INTENT_KEY) }
 
     @Suppress("ComplexMethod", "LongMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -189,15 +190,15 @@ class LessonEditorActivity : AppCompatActivity() {
             val byDatesIndex = 1
             viewModel.lessonRepeat.distinctUntilChanged { value ->
                 value == when (selectedItemPosition) {
-                    byWeekdayIndex -> LessonRepeatNew.ByWeekday::class
-                    byDatesIndex -> LessonRepeatNew.ByDates::class
+                    byWeekdayIndex -> LessonRepeat.ByWeekday::class
+                    byDatesIndex -> LessonRepeat.ByDates::class
                     else -> throw IllegalStateException("Неизвестный тип повторения")
                 }
             }.observe(owner) { lessonRepeat ->
                 setSelection(
                     when (lessonRepeat) {
-                        LessonRepeatNew.ByWeekday::class -> byWeekdayIndex
-                        LessonRepeatNew.ByDates::class -> byDatesIndex
+                        LessonRepeat.ByWeekday::class -> byWeekdayIndex
+                        LessonRepeat.ByDates::class -> byDatesIndex
                         else -> throw IllegalStateException(
                             "Неизвестный тип повторений: $lessonRepeat"
                         )
@@ -214,8 +215,8 @@ class LessonEditorActivity : AppCompatActivity() {
                     id: Long
                 ) {
                     viewModel.lessonRepeat.value = when (position) {
-                        byWeekdayIndex -> LessonRepeatNew.ByWeekday::class
-                        byDatesIndex -> LessonRepeatNew.ByDates::class
+                        byWeekdayIndex -> LessonRepeat.ByWeekday::class
+                        byDatesIndex -> LessonRepeat.ByDates::class
                         else -> throw IllegalStateException("Неизвестный тип повторения")
                     }
                 }
@@ -228,8 +229,8 @@ class LessonEditorActivity : AppCompatActivity() {
 
             viewModel.lessonRepeat.observe(owner) { lessonRepeat ->
                 displayedChild = when (lessonRepeat) {
-                    LessonRepeatNew.ByWeekday::class -> byWeekdayIndex
-                    LessonRepeatNew.ByDates::class -> byDatesIndex
+                    LessonRepeat.ByWeekday::class -> byWeekdayIndex
+                    LessonRepeat.ByDates::class -> byDatesIndex
                     else -> throw IllegalStateException(
                         "Неизвестный тип повторений: $lessonRepeat"
                     )

@@ -6,7 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import ru.erdenian.studentassistant.repository.entity.SemesterNew
+import ru.erdenian.studentassistant.repository.entity.Semester
 
 @Suppress("TooManyFunctions", "MaxLineLength")
 @Dao
@@ -15,10 +15,10 @@ interface SemesterDao {
     // region Primary actions
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(semester: SemesterNew)
+    suspend fun insert(semester: Semester)
 
     @Delete
-    suspend fun delete(semester: SemesterNew)
+    suspend fun delete(semester: Semester)
 
     @Deprecated("Only for debugging")
     @Query("DELETE FROM semesters")
@@ -27,10 +27,10 @@ interface SemesterDao {
     // endregion
 
     @Query("SELECT * FROM semesters ORDER BY first_day, last_day, name, _id")
-    fun getAll(): LiveData<List<SemesterNew>>
+    fun getAll(): LiveData<List<Semester>>
 
     @Query("SELECT * FROM semesters WHERE _id = :semesterId")
-    fun get(semesterId: Long): LiveData<SemesterNew?>
+    fun get(semesterId: Long): LiveData<Semester?>
 
     @Query("SELECT name FROM semesters ORDER BY first_day, last_day, name, _id")
     fun getNames(): LiveData<List<String>>

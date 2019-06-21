@@ -8,16 +8,16 @@ import ru.erdenian.studentassistant.extensions.asLiveData
 import ru.erdenian.studentassistant.extensions.liveDataOf
 import ru.erdenian.studentassistant.extensions.setIfEmpty
 import ru.erdenian.studentassistant.repository.ScheduleRepository
-import ru.erdenian.studentassistant.repository.entity.LessonNew
+import ru.erdenian.studentassistant.repository.entity.Lesson
 import ru.erdenian.studentassistant.repository.immutableSortedSetOf
 
 class LessonInformationViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = ScheduleRepository(application)
 
-    private val privateLesson = MutableLiveDataKtx<LessonNew>()
+    private val privateLesson = MutableLiveDataKtx<Lesson>()
 
-    fun init(lesson: LessonNew) {
+    fun init(lesson: Lesson) {
         privateLesson.setIfEmpty(lesson)
     }
 

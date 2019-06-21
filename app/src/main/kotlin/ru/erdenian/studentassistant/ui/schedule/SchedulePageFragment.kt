@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.getViewModel
-import ru.erdenian.studentassistant.repository.entity.LessonNew
+import ru.erdenian.studentassistant.repository.entity.Lesson
 import ru.erdenian.studentassistant.ui.adapter.LessonsListAdapter
 import ru.erdenian.studentassistant.ui.lessoninformation.LessonInformationActivity
 
@@ -29,7 +29,7 @@ class SchedulePageFragment : Fragment() {
 
     private val adapter = LessonsListAdapter().apply {
         onLessonClickListener = object : LessonsListAdapter.OnLessonClickListener {
-            override fun onLessonClick(lesson: LessonNew) {
+            override fun onLessonClick(lesson: Lesson) {
                 LessonInformationActivity.start(requireContext(), lesson)
             }
         }

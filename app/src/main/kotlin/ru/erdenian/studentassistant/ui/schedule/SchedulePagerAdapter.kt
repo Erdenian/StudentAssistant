@@ -4,7 +4,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import org.joda.time.Days
 import org.joda.time.LocalDate
-import ru.erdenian.studentassistant.repository.entity.SemesterNew
+import ru.erdenian.studentassistant.repository.entity.Semester
 
 class SchedulePagerAdapter(
     fm: FragmentManager
@@ -15,7 +15,7 @@ class SchedulePagerAdapter(
         private const val TITLE_FORMAT_FULL = "EEEE, dd MMMM yyyy"
     }
 
-    var semester: SemesterNew? = null
+    var semester: Semester? = null
         set(value) {
             field = value
             notifyDataSetChanged()

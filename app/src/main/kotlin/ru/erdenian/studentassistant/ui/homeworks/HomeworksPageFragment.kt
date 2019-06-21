@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import android.widget.ViewFlipper
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.getViewModel
-import ru.erdenian.studentassistant.repository.entity.HomeworkNew
+import ru.erdenian.studentassistant.repository.entity.Homework
 import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 
@@ -27,7 +28,7 @@ class HomeworksPageFragment : Fragment() {
 
     private val adapter = HomeworksListAdapter().apply {
         onHomeworkClickListener = object : HomeworksListAdapter.OnHomeworkClickListener {
-            override fun onHomeworkClick(homework: HomeworkNew) {
+            override fun onHomeworkClick(homework: Homework) {
                 HomeworkEditorActivity.start(requireContext(), homework)
             }
         }
