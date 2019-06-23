@@ -1,9 +1,11 @@
 package ru.erdenian.studentassistant.ui.adapter
 
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.repository.entity.Homework
@@ -33,6 +35,12 @@ class HomeworksListAdapter : RecyclerView.Adapter<HomeworksListAdapter.ItemViewH
             R.layout.card_homework, parent, false
         )
     ).apply {
+        TypedValue().also { outValue ->
+            parent.context.theme.resolveAttribute(
+                android.R.attr.selectableItemBackground, outValue, true
+            )
+            (itemView as CardView).foreground = parent.context.getDrawable(outValue.resourceId)
+        }
         itemView.setOnClickListener {
             onHomeworkClickListener?.onHomeworkClick(homeworks[adapterPosition])
         }

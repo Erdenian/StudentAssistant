@@ -2,12 +2,14 @@ package ru.erdenian.studentassistant.customviews
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.utils.setViewCount
+
 
 /**
  * Карточка пары.
@@ -39,6 +41,11 @@ class LessonCard @JvmOverloads constructor(
 
     init {
         inflate(context, R.layout.lesson_card, this)
+
+        TypedValue().also { outValue ->
+            context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
+            foreground = context.getDrawable(outValue.resourceId)
+        }
 
         tvStartTime = findViewById(R.id.lc_start_time)
         tvEndTime = findViewById(R.id.lc_end_time)
