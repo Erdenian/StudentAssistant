@@ -51,6 +51,7 @@ class HomeworkEditorActivity : AppCompatActivity() {
 
         fun start(context: Context, homework: Homework) {
             context.startActivity<HomeworkEditorActivity>(
+                SEMESTER_ID_INTENT_KEY to homework.semesterId,
                 HOMEWORK_INTENT_KEY to homework
             )
         }
