@@ -44,6 +44,9 @@ class HomeworksActivity : AppCompatActivity() {
         }
 
         findViewById<Spinner>(R.id.ah_toolbar_spinner).apply {
+            viewModel.allSemesters.observe(owner) { semesters ->
+                visibility = if (semesters.size > 1) View.VISIBLE else View.GONE
+            }
             viewModel.selectedSemester.distinctUntilChanged { value ->
                 value == selectedItem as Semester?
             }.observe(owner) { semester ->
