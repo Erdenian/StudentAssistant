@@ -25,6 +25,7 @@ class HomeworksActivity : AppCompatActivity() {
 
     private val drawer by lazy { findViewById<DrawerLayout>(R.id.ah_drawer) }
 
+    @Suppress("ComplexMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_homeworks)
