@@ -15,6 +15,7 @@ import org.jetbrains.anko.dimen
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.lazyViewModel
+import ru.erdenian.studentassistant.repository.entity.Homework
 import ru.erdenian.studentassistant.repository.entity.Lesson
 import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
@@ -77,6 +78,11 @@ class LessonInformationActivity : AppCompatActivity() {
 
         findViewById<RecyclerView>(R.id.ali_homeworks).apply {
             adapter = HomeworksListAdapter().apply {
+                onHomeworkClickListener = object : HomeworksListAdapter.OnHomeworkClickListener {
+                    override fun onHomeworkClick(homework: Homework) {
+                        HomeworkEditorActivity.start(context, homework)
+                    }
+                }
                 viewModel.homeworks.observe(this@LessonInformationActivity) { homeworks ->
                     this.homeworks = homeworks.list
                 }
