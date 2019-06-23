@@ -3,11 +3,12 @@ package ru.erdenian.studentassistant.ui.lessoneditor
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.shopify.livedataktx.LiveDataKtx
 import com.shopify.livedataktx.MediatorLiveDataKtx
 import com.shopify.livedataktx.MutableLiveDataKtx
-import com.shopify.livedataktx.switchMap
+import com.shopify.livedataktx.toKtx
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -105,10 +106,11 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
         addSource(endTime, onChanged)
     }
 
-    val existingSubjects = semesterId.asLiveData.switchMap { repository.getSubjects(it) }
-    val existingTypes = semesterId.asLiveData.switchMap { repository.getTypes(it) }
-    val existingTeachers = semesterId.asLiveData.switchMap { repository.getTeachers(it) }
-    val existingClassrooms = semesterId.asLiveData.switchMap { repository.getClassrooms(it) }
+    val existingSubjects = semesterId.asLiveData.switchMap { repository.getSubjects(it) }.toKtx()
+    val existingTypes = semesterId.asLiveData.switchMap { repository.getTypes(it) }.toKtx()
+    val existingTeachers = semesterId.asLiveData.switchMap { repository.getTeachers(it) }.toKtx()
+    val existingClassrooms =
+        semesterId.asLiveData.switchMap { repository.getClassrooms(it) }.toKtx()
 
     private val isSubjectNameChanged
         get() = lesson?.let { it.subjectName != subjectName.value } ?: false

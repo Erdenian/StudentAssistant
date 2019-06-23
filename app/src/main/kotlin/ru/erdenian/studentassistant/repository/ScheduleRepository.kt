@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.shopify.livedataktx.toKtx
+import com.shopify.livedataktx.toNullableKtx
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -50,7 +51,7 @@ class ScheduleRepository(context: Context) {
     suspend fun deleteSemesters() = semesterDao.deleteAll()
 
     fun getSemesters() = semesterDao.getAll().map()
-    fun getSemester(semesterId: Long) = semesterDao.get(semesterId).toKtx()
+    fun getSemester(semesterId: Long) = semesterDao.get(semesterId).toNullableKtx()
     fun getSemestersNames() = semesterDao.getNames().map()
 
     // endregion
@@ -69,7 +70,7 @@ class ScheduleRepository(context: Context) {
 
     suspend fun getLesson(semesterId: Long, lessonId: Long) = lessonDao.get(semesterId, lessonId)
 
-    fun getLesson(lesson: Lesson) = lessonDao.getLive(lesson.semesterId, lesson.id).toKtx()
+    fun getLesson(lesson: Lesson) = lessonDao.getLive(lesson.semesterId, lesson.id).toNullableKtx()
 
     suspend fun delete(lesson: Lesson) {
         lessonDao.delete(lesson)
@@ -128,7 +129,7 @@ class ScheduleRepository(context: Context) {
         homeworkDao.get(semesterId, homeworkId)
 
     fun getHomework(homework: Homework) =
-        homeworkDao.getLive(homework.semesterId, homework.id).toKtx()
+        homeworkDao.getLive(homework.semesterId, homework.id).toNullableKtx()
 
     suspend fun delete(homework: Homework) = homeworkDao.delete(homework)
 

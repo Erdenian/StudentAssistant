@@ -13,7 +13,6 @@ import androidx.lifecycle.viewModelScope
 import com.shopify.livedataktx.LiveDataKtx
 import com.shopify.livedataktx.MediatorLiveDataKtx
 import com.shopify.livedataktx.MutableLiveDataKtx
-import com.shopify.livedataktx.toKtx
 
 // region ViewModelProviders
 
@@ -60,11 +59,11 @@ fun <T> T.toLiveData(): LiveDataKtx<T> = MutableLiveDataKtx<T>().apply { value =
 
 fun <T> liveDataOf(value: T): LiveDataKtx<T> = MutableLiveDataKtx<T>().also { it.value = value }
 
-fun <T> ViewModel.liveDataOf(value: T, source: LiveData<T>): LiveDataKtx<T> =
+fun <T> ViewModel.liveDataOf(value: T, source: LiveData<T>): LiveData<T> =
     liveData(viewModelScope.coroutineContext) {
         emit(value)
         emitSource(source)
-    }.toKtx()
+    }
 
 val <T, L : LiveDataKtx<T>> L.asLiveData get() = this as LiveDataKtx<T>
 
