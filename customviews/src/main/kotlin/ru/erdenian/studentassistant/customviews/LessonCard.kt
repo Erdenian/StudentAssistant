@@ -10,7 +10,6 @@ import androidx.cardview.widget.CardView
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.utils.setViewCount
 
-
 /**
  * Карточка пары.
  *
