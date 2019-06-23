@@ -4,6 +4,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <dimen name="cards_spacing">10dp</dimen>
+
     <dimen name="card_margin_top">12dp</dimen>
     <dimen name="card_margin_horizontal">8dp</dimen>
     <dimen name="card_margin_bottom">4dp</dimen>

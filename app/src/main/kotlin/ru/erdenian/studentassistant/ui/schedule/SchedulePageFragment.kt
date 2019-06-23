@@ -10,11 +10,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.jetbrains.anko.dimen
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.getViewModel
 import ru.erdenian.studentassistant.repository.entity.Lesson
 import ru.erdenian.studentassistant.ui.adapter.LessonsListAdapter
+import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.lessoninformation.LessonInformationActivity
 
 class SchedulePageFragment : Fragment() {
@@ -43,6 +45,7 @@ class SchedulePageFragment : Fragment() {
         with(findViewById<RecyclerView>(R.id.fsp_lessons)) {
             adapter = this@SchedulePageFragment.adapter
             layoutManager = LinearLayoutManager(inflater.context)
+            addItemDecoration(SpacingItemDecoration(dimen(R.dimen.cards_spacing)))
         }
     }
 
