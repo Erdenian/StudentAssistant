@@ -2,8 +2,10 @@ package ru.erdenian.studentassistant.ui.lessonseditor
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.switchMap
 import com.shopify.livedataktx.MutableLiveDataKtx
-import com.shopify.livedataktx.switchMap
+import com.shopify.livedataktx.toKtx
+import com.shopify.livedataktx.toNullableKtx
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
@@ -27,13 +29,13 @@ class LessonsEditorViewModel(application: Application) : AndroidViewModel(applic
 
     val semester = privateSemester.asLiveData.switchMap { semester ->
         liveDataOf(semester, repository.getSemester(semester.id))
-    }
+    }.toNullableKtx()
 
     fun getLessons(weekday: Int) = semester.switchMap { semester ->
         semester
             ?.let { repository.getLessons(it.id, weekday) }
             ?: liveDataOf(immutableSortedSetOf())
-    }
+    }.toKtx()
 
     suspend fun deleteSemester() = repository.delete(checkNotNull(semester.value))
 

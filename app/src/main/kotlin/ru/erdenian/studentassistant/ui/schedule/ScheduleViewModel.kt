@@ -3,9 +3,10 @@ package ru.erdenian.studentassistant.ui.schedule
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
+import androidx.lifecycle.switchMap
 import com.shopify.livedataktx.MediatorLiveDataKtx
 import com.shopify.livedataktx.MutableLiveDataKtx
-import com.shopify.livedataktx.switchMap
+import com.shopify.livedataktx.toKtx
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.extensions.asLiveData
 import ru.erdenian.studentassistant.extensions.liveDataOf
@@ -29,5 +30,5 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
 
     fun getLessons(day: LocalDate) = selectedSemester.asLiveData.switchMap { semester ->
         semester?.let { repository.getLessons(it, day) } ?: liveDataOf(immutableSortedSetOf())
-    }
+    }.toKtx()
 }

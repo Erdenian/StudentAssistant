@@ -3,9 +3,10 @@ package ru.erdenian.studentassistant.ui.homeworks
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
+import androidx.lifecycle.switchMap
 import com.shopify.livedataktx.MediatorLiveDataKtx
 import com.shopify.livedataktx.MutableLiveDataKtx
-import com.shopify.livedataktx.switchMap
+import com.shopify.livedataktx.toKtx
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.extensions.asLiveData
 import ru.erdenian.studentassistant.extensions.liveDataOf
@@ -29,9 +30,9 @@ class HomeworksViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun getActualHomeworks() = selectedSemester.asLiveData.switchMap { semester ->
         semester?.let { repository.getActualHomeworks(it.id) } ?: liveDataOf(immutableSortedSetOf())
-    }
+    }.toKtx()
 
     fun getPastHomeworks() = selectedSemester.asLiveData.switchMap { semester ->
         semester?.let { repository.getPastHomeworks(it.id) } ?: liveDataOf(immutableSortedSetOf())
-    }
+    }.toKtx()
 }

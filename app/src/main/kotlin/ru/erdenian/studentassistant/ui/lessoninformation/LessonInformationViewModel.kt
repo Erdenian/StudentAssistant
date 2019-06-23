@@ -2,8 +2,10 @@ package ru.erdenian.studentassistant.ui.lessoninformation
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.switchMap
 import com.shopify.livedataktx.MutableLiveDataKtx
-import com.shopify.livedataktx.switchMap
+import com.shopify.livedataktx.toKtx
+import com.shopify.livedataktx.toNullableKtx
 import ru.erdenian.studentassistant.extensions.asLiveData
 import ru.erdenian.studentassistant.extensions.liveDataOf
 import ru.erdenian.studentassistant.extensions.setIfEmpty
@@ -23,9 +25,9 @@ class LessonInformationViewModel(application: Application) : AndroidViewModel(ap
 
     val lesson = privateLesson.asLiveData.switchMap { lesson ->
         liveDataOf(lesson, repository.getLesson(lesson))
-    }
+    }.toNullableKtx()
 
     val homeworks = lesson.switchMap { lesson ->
         lesson?.let { repository.getActualHomeworks(it) } ?: liveDataOf(immutableSortedSetOf())
-    }
+    }.toKtx()
 }

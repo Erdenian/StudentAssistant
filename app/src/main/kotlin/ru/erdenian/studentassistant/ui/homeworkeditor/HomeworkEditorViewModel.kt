@@ -3,11 +3,12 @@ package ru.erdenian.studentassistant.ui.homeworkeditor
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
+import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
 import com.shopify.livedataktx.LiveDataKtx
 import com.shopify.livedataktx.MediatorLiveDataKtx
 import com.shopify.livedataktx.MutableLiveDataKtx
-import com.shopify.livedataktx.map
-import com.shopify.livedataktx.switchMap
+import com.shopify.livedataktx.toKtx
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.extensions.asLiveData
 import ru.erdenian.studentassistant.repository.ScheduleRepository
@@ -39,10 +40,10 @@ class HomeworkEditorViewModel(application: Application) : AndroidViewModel(appli
         }
     }
 
-    val existingSubjects = semesterId.asLiveData.switchMap { repository.getSubjects(it) }
+    val existingSubjects = semesterId.asLiveData.switchMap { repository.getSubjects(it) }.toKtx()
     val semesterLastDay = semesterId.asLiveData.switchMap { id ->
         repository.getSemester(id)
-    }.map { checkNotNull(it).lastDay }
+    }.map { checkNotNull(it).lastDay }.toKtx()
 
     val subjectName: MutableLiveDataKtx<String> = MediatorLiveDataKtx<String>().apply {
         addSource(existingSubjects, Observer { if (safeValue !in it) value = it.first() })
