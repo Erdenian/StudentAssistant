@@ -11,11 +11,13 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.jetbrains.anko.dimen
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.lazyViewModel
 import ru.erdenian.studentassistant.repository.entity.Lesson
 import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
+import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.utils.getCompatColor
@@ -74,12 +76,13 @@ class LessonInformationActivity : AppCompatActivity() {
         }
 
         findViewById<RecyclerView>(R.id.ali_homeworks).apply {
-            layoutManager = LinearLayoutManager(context)
             adapter = HomeworksListAdapter().apply {
                 viewModel.homeworks.observe(this@LessonInformationActivity) { homeworks ->
                     this.homeworks = homeworks.list
                 }
             }
+            layoutManager = LinearLayoutManager(context)
+            addItemDecoration(SpacingItemDecoration(dimen(R.dimen.cards_spacing)))
         }
 
         findViewById<FloatingActionButton>(R.id.ali_add_homework).setOnClickListener {

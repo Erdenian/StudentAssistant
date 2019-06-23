@@ -10,10 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.jetbrains.anko.dimen
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.getViewModel
 import ru.erdenian.studentassistant.repository.entity.Homework
 import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
+import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 
 class HomeworksPageFragment : Fragment() {
@@ -42,6 +44,7 @@ class HomeworksPageFragment : Fragment() {
         with(findViewById<RecyclerView>(R.id.fhp_homeworks)) {
             adapter = this@HomeworksPageFragment.adapter
             layoutManager = LinearLayoutManager(inflater.context)
+            addItemDecoration(SpacingItemDecoration(dimen(R.dimen.cards_spacing)))
         }
     }
 
