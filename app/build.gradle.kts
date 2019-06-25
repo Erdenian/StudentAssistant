@@ -83,18 +83,12 @@ dependencies {
     val kotlin_version: String by project
     val coroutines_version: String by project
 
-    val core_ktx_version: String by project
-    val appcompat_version: String by project
-    val cardview_version: String by project
-
-    val lifecycle_version = "2.2.0-alpha01"
+    val lifecycle_version: String by project
     //val navigation_version: String by project
     val room_version = "2.1.0-rc01"
 
     //val kodein_version = "6.2.1"
     //val retrofit_version = "2.6.0"
-
-    val joda_time_version: String by project
 
     androidTestImplementation("androidx.test.espresso:espresso-core:3.1.1") {
         exclude("com.android.support", "support-annotations")
@@ -111,19 +105,12 @@ dependencies {
     // endregion
 
     // region AndroidX
-    implementation("androidx.core:core-ktx:$core_ktx_version")
     implementation("androidx.fragment:fragment-ktx:1.1.0-beta01")
-    implementation("androidx.appcompat:appcompat:$appcompat_version")
-    implementation("androidx.cardview:cardview:$cardview_version")
     implementation("androidx.recyclerview:recyclerview:1.1.0-alpha06")
     implementation("androidx.drawerlayout:drawerlayout:1.1.0-alpha02")
     implementation("androidx.viewpager:viewpager:1.0.0")
 
-    implementation("androidx.lifecycle:lifecycle-extensions:$lifecycle_version")
     kapt("androidx.lifecycle:lifecycle-compiler:$lifecycle_version")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
-    implementation("com.shopify:livedata-ktx:3.0.0")
 
     //implementation("androidx.navigation:navigation-fragment-ktx:$navigation_version")
     //implementation("androidx.navigation:navigation-ui-ktx:$navigation_version")
@@ -133,7 +120,6 @@ dependencies {
     // endregion
 
     implementation("org.jetbrains.anko:anko-common:0.10.8")
-    implementation("joda-time:joda-time:$joda_time_version")
 
     // region UI
     implementation("com.google.android.material:material:1.1.0-alpha07")

@@ -16,14 +16,14 @@ import kotlinx.coroutines.withContext
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
-import ru.erdenian.studentassistant.extensions.asLiveData
-import ru.erdenian.studentassistant.extensions.setIfEmpty
 import ru.erdenian.studentassistant.repository.ImmutableSortedSet
 import ru.erdenian.studentassistant.repository.ScheduleRepository
 import ru.erdenian.studentassistant.repository.entity.Lesson
 import ru.erdenian.studentassistant.repository.entity.LessonRepeat
 import ru.erdenian.studentassistant.repository.immutableSortedSetOf
 import ru.erdenian.studentassistant.repository.toImmutableSortedSet
+import ru.erdenian.studentassistant.utils.asLiveData
+import ru.erdenian.studentassistant.utils.setIfEmpty
 import ru.erdenian.studentassistant.utils.toSingleLine
 import kotlin.reflect.KClass
 

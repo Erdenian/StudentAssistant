@@ -10,9 +10,9 @@ import com.shopify.livedataktx.MediatorLiveDataKtx
 import com.shopify.livedataktx.MutableLiveDataKtx
 import com.shopify.livedataktx.toKtx
 import org.joda.time.LocalDate
-import ru.erdenian.studentassistant.extensions.asLiveData
 import ru.erdenian.studentassistant.repository.ScheduleRepository
 import ru.erdenian.studentassistant.repository.entity.Homework
+import ru.erdenian.studentassistant.utils.asLiveData
 
 class HomeworkEditorViewModel(application: Application) : AndroidViewModel(application) {
 

@@ -9,13 +9,13 @@ import com.shopify.livedataktx.toNullableKtx
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
-import ru.erdenian.studentassistant.extensions.asLiveData
-import ru.erdenian.studentassistant.extensions.liveDataOf
-import ru.erdenian.studentassistant.extensions.setIfEmpty
 import ru.erdenian.studentassistant.repository.ScheduleRepository
 import ru.erdenian.studentassistant.repository.entity.Lesson
 import ru.erdenian.studentassistant.repository.entity.Semester
 import ru.erdenian.studentassistant.repository.immutableSortedSetOf
+import ru.erdenian.studentassistant.utils.asLiveData
+import ru.erdenian.studentassistant.utils.liveDataOf
+import ru.erdenian.studentassistant.utils.setIfEmpty
 
 class LessonsEditorViewModel(application: Application) : AndroidViewModel(application) {
 

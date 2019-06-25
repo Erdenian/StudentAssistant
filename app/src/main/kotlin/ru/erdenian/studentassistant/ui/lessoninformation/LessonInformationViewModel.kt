@@ -6,12 +6,12 @@ import androidx.lifecycle.switchMap
 import com.shopify.livedataktx.MutableLiveDataKtx
 import com.shopify.livedataktx.toKtx
 import com.shopify.livedataktx.toNullableKtx
-import ru.erdenian.studentassistant.extensions.asLiveData
-import ru.erdenian.studentassistant.extensions.liveDataOf
-import ru.erdenian.studentassistant.extensions.setIfEmpty
 import ru.erdenian.studentassistant.repository.ScheduleRepository
 import ru.erdenian.studentassistant.repository.entity.Lesson
 import ru.erdenian.studentassistant.repository.immutableSortedSetOf
+import ru.erdenian.studentassistant.utils.asLiveData
+import ru.erdenian.studentassistant.utils.liveDataOf
+import ru.erdenian.studentassistant.utils.setIfEmpty
 
 class LessonInformationViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -28,6 +28,8 @@ class LessonInformationViewModel(application: Application) : AndroidViewModel(ap
     }.toNullableKtx()
 
     val homeworks = lesson.switchMap { lesson ->
-        lesson?.let { repository.getActualHomeworks(it) } ?: liveDataOf(immutableSortedSetOf())
+        lesson?.let { repository.getActualHomeworks(it) } ?: liveDataOf(
+            immutableSortedSetOf()
+        )
     }.toKtx()
 }

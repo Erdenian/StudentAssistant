@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.extensions
+package ru.erdenian.studentassistant.utils
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
