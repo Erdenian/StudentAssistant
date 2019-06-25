@@ -14,7 +14,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.jetbrains.anko.dimen
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.extensions.lazyViewModel
 import ru.erdenian.studentassistant.repository.entity.Homework
 import ru.erdenian.studentassistant.repository.entity.Lesson
 import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
@@ -22,6 +21,7 @@ import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.utils.getCompatColor
+import ru.erdenian.studentassistant.utils.lazyViewModel
 import ru.erdenian.studentassistant.utils.setColor
 
 class LessonInformationActivity : AppCompatActivity() {

@@ -18,11 +18,11 @@ import kotlinx.coroutines.launch
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.dimen
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.extensions.getViewModel
 import ru.erdenian.studentassistant.repository.entity.Lesson
 import ru.erdenian.studentassistant.ui.adapter.LessonsListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
+import ru.erdenian.studentassistant.utils.getViewModel
 
 class LessonsEditorPageFragment : Fragment() {
 

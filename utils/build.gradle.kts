@@ -43,6 +43,8 @@ dependencies {
 
     val core_ktx_version: String by project
 
+    val lifecycle_version: String by project
+
     val joda_time_version: String by project
 
     // region Kotlin
@@ -50,8 +52,13 @@ dependencies {
     // endregion
 
     // region AndroidX
-    implementation("androidx.core:core-ktx:$core_ktx_version")
+    api("androidx.core:core-ktx:$core_ktx_version")
+
+    api("androidx.lifecycle:lifecycle-extensions:$lifecycle_version")
+    api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
+    api("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
+    api("com.shopify:livedata-ktx:3.0.0")
     // endregion
 
-    implementation("joda-time:joda-time:$joda_time_version")
+    api("joda-time:joda-time:$joda_time_version")
 }

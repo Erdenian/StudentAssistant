@@ -12,11 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.jetbrains.anko.dimen
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.extensions.getViewModel
 import ru.erdenian.studentassistant.repository.entity.Homework
 import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
+import ru.erdenian.studentassistant.utils.getViewModel
 
 class HomeworksPageFragment : Fragment() {
 

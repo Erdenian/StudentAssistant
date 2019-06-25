@@ -25,12 +25,12 @@ import org.jetbrains.anko.toast
 import org.joda.time.DateTimeConstants
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.customviews.WeeksSelector
-import ru.erdenian.studentassistant.extensions.distinctUntilChanged
-import ru.erdenian.studentassistant.extensions.lazyViewModel
 import ru.erdenian.studentassistant.repository.entity.Lesson
 import ru.erdenian.studentassistant.repository.entity.LessonRepeat
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorViewModel.Error
+import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getCompatColor
+import ru.erdenian.studentassistant.utils.lazyViewModel
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showTimePicker
 import java.util.Calendar
