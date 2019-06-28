@@ -84,7 +84,7 @@ class SemesterEditorActivity : AppCompatActivity() {
         findViewById<Button>(R.id.ase_last_day).apply {
             viewModel.lastDay.observe(owner) { text = it.toString(DATE_FORMAT) }
             setOnClickListener {
-                showDatePicker(viewModel.firstDay.value) { viewModel.lastDay.value = it }
+                showDatePicker(viewModel.lastDay.value) { viewModel.lastDay.value = it }
             }
         }
     }
