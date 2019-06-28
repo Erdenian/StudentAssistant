@@ -33,8 +33,9 @@ class SchedulePagerAdapter(
 
     override fun getItem(position: Int) = SchedulePageFragment.newInstance(getDate(position))
 
-    fun getPosition(date: LocalDate): Int =
-        Days.daysBetween(checkNotNull(semester).firstDay, date).days
+    fun getPosition(date: LocalDate) = checkNotNull(semester).run {
+        Days.daysBetween(firstDay, date.coerceIn(range)).days
+    }
 
     fun getDate(position: Int): LocalDate =
         checkNotNull(semester).firstDay.plusDays(position)
