@@ -31,7 +31,8 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
 
     enum class Error {
         EMPTY_SUBJECT_NAME,
-        WRONG_TIMES
+        WRONG_TIMES,
+        EMPTY_REPEAT
     }
 
     private val repository = ScheduleRepository(application)
@@ -97,6 +98,8 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
             value = when {
                 subjectName?.isBlank() == true -> Error.EMPTY_SUBJECT_NAME
                 (startTime != null) && (endTime != null) && (startTime > endTime) -> Error.WRONG_TIMES
+                ((lessonRepeat.value == LessonRepeat.ByWeekday::class) && !weeks.value.contains(true)) -> Error.EMPTY_REPEAT
+                ((lessonRepeat.value == LessonRepeat.ByDates::class) && dates.value.isEmpty()) -> Error.EMPTY_REPEAT
                 else -> null
             }
         }
@@ -104,6 +107,9 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
         addSource(subjectName, onChanged)
         addSource(startTime, onChanged)
         addSource(endTime, onChanged)
+        addSource(lessonRepeat, onChanged)
+        addSource(weeks, onChanged)
+        addSource(dates, onChanged)
     }
 
     val existingSubjects = semesterId.asLiveData.switchMap { repository.getSubjects(it) }.toKtx()

@@ -26,7 +26,9 @@ class CheckBoxWithText @JvmOverloads constructor(
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     private val checkBox = AppCompatCheckBox(context)
-    private val textView = AppCompatTextView(context)
+    private val textView = AppCompatTextView(context).apply {
+        gravity = Gravity.CENTER_HORIZONTAL
+    }
 
     /**
      * Оборачивает [CheckBox.isChecked] и [CheckBox.setChecked]

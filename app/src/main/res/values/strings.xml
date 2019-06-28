@@ -55,7 +55,7 @@
     <string name="lea_save">Сохранить</string>
     <string name="lea_error_empty_subject_name">Введите название занятия</string>
     <string name="lea_error_wrong_time">Время начала и конца введено некорректно</string>
-    <string name="lea_wrong_repeat">Отметьте хотя бы одну неделю</string>
+    <string name="lea_error_empty_repeat">Не выбраны дни для повторения</string>
     <string name="lea_rename_others_title">Изменить занятия?</string>
     <string name="lea_rename_others_message">Предмет был изменен. Изменить его у остальных занятий?</string>
     <string name="lea_rename_others_yes">Да</string>
