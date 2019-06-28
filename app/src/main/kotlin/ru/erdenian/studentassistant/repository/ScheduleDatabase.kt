@@ -31,7 +31,7 @@ abstract class ScheduleDatabase : RoomDatabase() {
         Room.databaseBuilder(
             context.applicationContext,
             ScheduleDatabase::class.java,
-            "schedule1.db"
+            "schedule.db"
         ).build()
     })
 }
