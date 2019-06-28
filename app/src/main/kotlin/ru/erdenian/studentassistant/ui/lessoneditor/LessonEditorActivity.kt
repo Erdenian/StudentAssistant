@@ -291,12 +291,9 @@ class LessonEditorActivity : AppCompatActivity() {
             viewModel.error.value?.let { error ->
                 toast(
                     when (error) {
-                        Error.EMPTY_SUBJECT_NAME -> {
-                            R.string.lea_error_empty_subject_name
-                        }
-                        Error.WRONG_TIMES -> {
-                            R.string.lea_error_wrong_time
-                        }
+                        Error.EMPTY_SUBJECT_NAME -> R.string.lea_error_empty_subject_name
+                        Error.WRONG_TIMES -> R.string.lea_error_wrong_time
+                        Error.EMPTY_REPEAT -> R.string.lea_error_empty_repeat
                     }
                 )
             } ?: run {

@@ -64,14 +64,16 @@ class WeeksSelector @JvmOverloads constructor(
      * @since 0.2.6
      */
     private fun getWeeksVariantIndex(weeks: List<Boolean>) =
-        weeksVariants.indexOf(weeks).takeIf { it >= 0 } ?: weeksVariants.lastIndex
+        weeksVariants.indexOf(weeks).takeIf { it >= 0 } ?: weeksVariants.size
+
+    private val onCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, _ ->
+        onWeeksChangeListener?.onWeeksChange(weeks)
+    }
 
     private val creator: ViewGroup.(position: Int) -> CheckBoxWithText = { position ->
         CheckBoxWithText(context).apply {
-            text = position.toString()
-            setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { _, _ ->
-                onWeeksChangeListener?.onWeeksChange(weeks)
-            })
+            text = (position + 1).toString()
+            setOnCheckedChangeListener(onCheckedChangeListener)
         }
     }
 
@@ -143,8 +145,7 @@ class WeeksSelector @JvmOverloads constructor(
                 position: Int,
                 id: Long
             ) {
-                weeks = weeksVariants[position]
-                setCustomEnabled(position == weeksVariants.size)
+                weeks = weeksVariants.getOrNull(position) ?: return setCustomEnabled(true)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
@@ -152,12 +153,17 @@ class WeeksSelector @JvmOverloads constructor(
 
         ibRemove.setOnClickListener {
             llWeeksParent.setViewCount(llWeeksParent.childCount - 1, creator)
+            ibRemove.isEnabled = llWeeksParent.childCount > 1
+            onWeeksChangeListener?.onWeeksChange(weeks)
         }
         ibAdd.setOnClickListener {
-            ibRemove.setOnClickListener {
-                llWeeksParent.setViewCount(llWeeksParent.childCount + 1, creator)
-            }
+            llWeeksParent.setViewCount(llWeeksParent.childCount + 1, creator)
+            ibRemove.isEnabled = true
             hsvWeeks.post { hsvWeeks.fullScroll(HorizontalScrollView.FOCUS_RIGHT) }
+            onWeeksChangeListener?.onWeeksChange(weeks)
+        }
+        llWeeksParent.setViewCount(llWeeksParent.childCount, creator) { _ ->
+            setOnCheckedChangeListener(onCheckedChangeListener)
         }
     }
 
