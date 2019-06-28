@@ -17,6 +17,7 @@ import androidx.viewpager.widget.PagerTabStrip
 import androidx.viewpager.widget.ViewPager
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
+import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.extensions.initializeDrawerAndNavigationView
 import ru.erdenian.studentassistant.repository.entity.Semester
@@ -37,7 +38,15 @@ class ScheduleActivity : AppCompatActivity() {
     private val pager by lazy { findViewById<ViewPager>(R.id.as_view_pager) }
     private val pagerAdapter by lazy {
         SchedulePagerAdapter(supportFragmentManager).apply {
-            viewModel.selectedSemester.observe(this@ScheduleActivity) { semester = it }
+            var selectedDate = LocalDate.now()
+            viewModel.selectedSemester.observe(this@ScheduleActivity) { semester ->
+                if (count > 0) selectedDate = getDate(pager.currentItem)
+                this.semester = semester
+                if (count > 0) pager.setCurrentItem(
+                    getPosition(selectedDate ?: LocalDate.now()), false
+                )
+                selectedDate = null
+            }
         }
     }
 

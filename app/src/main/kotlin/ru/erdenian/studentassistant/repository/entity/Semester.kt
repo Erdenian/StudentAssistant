@@ -50,6 +50,10 @@ data class Semester(
     @Ignore
     val length = Days.daysBetween(firstDay, lastDay).days + 1
 
+    @IgnoredOnParcel
+    @Ignore
+    val range = firstDay..lastDay
+
     /**
      * Дата понедельника в неделе, содержащей [firstDay].
      *
