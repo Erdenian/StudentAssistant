@@ -165,7 +165,7 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
 
         repository.insert(newLesson)
         if (forceRenameOther && oldLesson != null) repository.renameSubject(
-            newLesson.id,
+            oldLesson.semesterId,
             oldLesson.subjectName,
             newLesson.subjectName
         )
