@@ -132,6 +132,8 @@ class HomeworkEditorActivity : AppCompatActivity() {
                 ) { viewModel.deadline.value = it }
             }
         }
+
+        viewModel.error.observe(owner) {}
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
