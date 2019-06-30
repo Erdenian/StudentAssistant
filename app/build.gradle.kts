@@ -85,10 +85,10 @@ dependencies {
 
     val lifecycle_version: String by project
     //val navigation_version: String by project
-    val room_version = "2.1.0-rc01"
+    val room_version: String by project
 
-    //val kodein_version = "6.2.1"
-    //val retrofit_version = "2.6.0"
+    //val kodein_version: String by project
+    //val retrofit_version: String by project
 
     androidTestImplementation("androidx.test.espresso:espresso-core:3.1.1") {
         exclude("com.android.support", "support-annotations")
@@ -101,7 +101,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8", kotlin_version))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
-    //implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.11.0")
+    //implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.11.1")
     // endregion
 
     // region AndroidX
