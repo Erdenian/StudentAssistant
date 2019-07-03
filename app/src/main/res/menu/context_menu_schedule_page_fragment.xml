@@ -3,10 +3,10 @@
 
     <item
         android:id="@+id/context_menu_schedule_page_fragment_copy"
-        android:title="@string/context_menu_schedule_page_fragment_copy" />
+        android:title="@string/lsea_copy_lesson" />
 
     <item
         android:id="@+id/context_menu_schedule_page_fragment_delete"
-        android:title="@string/context_menu_schedule_page_fragment_delete" />
+        android:title="@string/lsea_delete_lesson" />
 
 </menu>

@@ -1,16 +1,6 @@
 package ru.erdenian.studentassistant.reciever
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import org.jetbrains.anko.startService
-import org.joda.time.LocalDate
-import org.joda.time.LocalTime
-import ru.erdenian.studentassistant.service.ScheduleService
-
-class BootReceiver : BroadcastReceiver() {
+/*class BootReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -25,4 +15,4 @@ class BootReceiver : BroadcastReceiver() {
 
         context.startService<ScheduleService>()
     }
-}
+}*/

@@ -1,134 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="@dimen/card_margin_inside"
-    android:orientation="vertical">
+    tools:layout_height="wrap_content"
+    tools:parentTag="androidx.cardview.widget.CardView">
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/card_margin_inside"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:gravity="bottom"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/lc_start_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/card_primary_text_size"
+                    tools:text="09:00" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" - "
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="@dimen/card_primary_text_size"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:id="@+id/lc_end_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="@dimen/card_primary_text_size"
+                    tools:text="10:30" />
+
+            </LinearLayout>
+
+            <!-- Не используется compound drawable, так как для них tint можно задать только с api 23 -->
+            <LinearLayout
+                android:id="@+id/lc_classrooms_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:gravity="bottom"
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
+
+                <TextView
+                    android:id="@+id/lc_classrooms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="@dimen/card_secondary_text_size"
+                    tools:text="4212а, 4212б" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:tint="@color/colorSecondaryText"
+                    app:srcCompat="@drawable/ic_menu_map_marker"
+                    tools:ignore="ContentDescription" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <include layout="@layout/divider_horizontal" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:gravity="bottom"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/lesson_card_start_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimaryText"
-                android:textSize="@dimen/card_primary_text_size"
-                tools:text="09:00" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" - "
-                android:textColor="@color/colorSecondaryText"
-                android:textSize="@dimen/card_primary_text_size"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:id="@+id/lesson_card_end_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorSecondaryText"
-                android:textSize="@dimen/card_primary_text_size"
-                tools:text="10:30" />
-
-        </LinearLayout>
-
-        <!-- Не используется compound drawable, так как для них tint можно задать только с api 23 -->
-        <LinearLayout
-            android:id="@+id/lesson_card_classrooms_parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:gravity="bottom"
-            android:orientation="horizontal"
-            tools:ignore="UseCompoundDrawables">
-
-            <TextView
-                android:id="@+id/lesson_card_classrooms"
+                android:id="@+id/lc_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="@dimen/card_secondary_text_size"
-                tools:text="4212а, 4212б" />
+                tools:text="Лабораторная работа" />
+
+            <TextView
+                android:id="@+id/lc_subject_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="@dimen/card_primary_text_size"
+                tools:text="Интернет программирование" />
+
+            <LinearLayout
+                android:id="@+id/lc_teachers_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lc_repeats_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            tools:ignore="UseCompoundDrawables"
+            tools:visibility="visible">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:tint="@color/colorSecondaryText"
-                app:srcCompat="@drawable/ic_menu_map_marker"
+                app:srcCompat="@drawable/calendar_range"
                 tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/lc_repeats_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/card_secondary_text_size"
+                tools:text="Каждую неделю" />
 
         </LinearLayout>
 
-    </FrameLayout>
-
-    <include layout="@layout/divider_horizontal" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/lesson_card_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorSecondaryText"
-            android:textSize="@dimen/card_secondary_text_size"
-            tools:text="Лабораторная работа" />
-
-        <TextView
-            android:id="@+id/lesson_card_subject_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="@dimen/card_primary_text_size"
-            tools:text="Интернет программирование" />
-
-        <LinearLayout
-            android:id="@+id/lesson_card_teachers_parent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/lesson_card_repeats_parent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        tools:ignore="UseCompoundDrawables">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:tint="@color/colorSecondaryText"
-            app:srcCompat="@drawable/calendar_range"
-            tools:ignore="ContentDescription" />
-
-        <TextView
-            android:id="@+id/lesson_card_repeats_string"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:textColor="@color/colorSecondaryText"
-            android:textSize="@dimen/card_secondary_text_size"
-            tools:text="Каждую неделю" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</merge>
