@@ -12,22 +12,22 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/card_homework_subject_name"
+            android:id="@+id/ch_subject_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="@dimen/card_primary_text_size" />
+            android:textSize="@dimen/card_primary_text_size"
+            tools:text="Матлогика" />
 
         <include layout="@layout/divider_horizontal" />
 
         <TextView
-            android:id="@+id/card_homework_description"
+            android:id="@+id/ch_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="@dimen/card_secondary_text_size" />
-
-        <include layout="@layout/empy_space_vertical" />
+            android:textSize="@dimen/card_secondary_text_size"
+            tools:text="Сделать лабы" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,23 +49,13 @@
                 tools:ignore="HardcodedText" />
 
             <TextView
-                android:id="@+id/card_homework_deadline"
+                android:id="@+id/ch_deadline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/colorSecondaryText"
-                android:textSize="@dimen/card_secondary_text_size" />
-
-            <include layout="@layout/empty_space_horizontal" />
-
-            <LinearLayout
-                android:id="@+id/card_homework_icons_parent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:orientation="horizontal">
-
-            </LinearLayout>
+                android:textSize="@dimen/card_secondary_text_size"
+                tools:text="05.06.2019" />
 
         </LinearLayout>
 

@@ -1,0 +1,121 @@
+package ru.erdenian.studentassistant.ui.lessoninformation
+
+import android.content.Context
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.TextView
+import android.widget.ViewFlipper
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.observe
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.jetbrains.anko.dimen
+import org.jetbrains.anko.startActivity
+import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.repository.entity.Homework
+import ru.erdenian.studentassistant.repository.entity.Lesson
+import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
+import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
+import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
+import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
+import ru.erdenian.studentassistant.utils.getCompatColor
+import ru.erdenian.studentassistant.utils.lazyViewModel
+import ru.erdenian.studentassistant.utils.setColor
+
+class LessonInformationActivity : AppCompatActivity() {
+
+    companion object {
+        private const val LESSON_INTENT_KEY = "lesson_intent_key"
+        fun start(context: Context, lesson: Lesson) {
+            context.startActivity<LessonInformationActivity>(LESSON_INTENT_KEY to lesson)
+        }
+
+        private const val TIME_FORMAT = "HH:mm"
+    }
+
+    private val viewModel by lazyViewModel<LessonInformationViewModel>()
+
+    @Suppress("ComplexMethod")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_lesson_information)
+
+        viewModel.init(intent.getParcelableExtra(LESSON_INTENT_KEY))
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        findViewById<TextView>(R.id.ali_subject_name).apply {
+            viewModel.lesson.observe(this@LessonInformationActivity) { text = it?.subjectName }
+        }
+
+        findViewById<TextView>(R.id.ali_start_time).apply {
+            viewModel.lesson.observe(this@LessonInformationActivity) { lesson ->
+                text = lesson?.startTime?.toString(TIME_FORMAT)
+            }
+        }
+
+        findViewById<TextView>(R.id.ali_end_time).apply {
+            viewModel.lesson.observe(this@LessonInformationActivity) { lesson ->
+                text = lesson?.endTime?.toString(TIME_FORMAT)
+            }
+        }
+
+        findViewById<TextView>(R.id.ali_type).apply {
+            viewModel.lesson.observe(this@LessonInformationActivity) { text = it?.type }
+        }
+
+        findViewById<ViewFlipper>(R.id.ali_homeworks_flipper).apply {
+            val noHomeworksIndex = 0
+            val containsHomeworksIndex = 1
+            viewModel.homeworks.observe(this@LessonInformationActivity) { homeworks ->
+                displayedChild =
+                    if (homeworks.isEmpty()) noHomeworksIndex
+                    else containsHomeworksIndex
+            }
+        }
+
+        findViewById<RecyclerView>(R.id.ali_homeworks).apply {
+            adapter = HomeworksListAdapter().apply {
+                onHomeworkClickListener = object : HomeworksListAdapter.OnHomeworkClickListener {
+                    override fun onHomeworkClick(homework: Homework) {
+                        HomeworkEditorActivity.start(context, homework)
+                    }
+                }
+                viewModel.homeworks.observe(this@LessonInformationActivity) { homeworks ->
+                    this.homeworks = homeworks.list
+                }
+            }
+            layoutManager = LinearLayoutManager(context)
+            addItemDecoration(SpacingItemDecoration(dimen(R.dimen.cards_spacing)))
+        }
+
+        findViewById<FloatingActionButton>(R.id.ali_add_homework).setOnClickListener {
+            HomeworkEditorActivity.start(this, checkNotNull(viewModel.lesson.value))
+        }
+
+        viewModel.lesson.observe(this) { if (it == null) finish() }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_lesson_information, menu)
+        menu.setColor(getCompatColor(R.color.action_bar_icons_color))
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        android.R.id.home -> {
+            finish()
+            true
+        }
+        R.id.menu_lesson_information_edit_button -> {
+            LessonEditorActivity.start(
+                this,
+                checkNotNull(viewModel.lesson.value)
+            )
+            true
+        }
+        else -> false
+    }
+}

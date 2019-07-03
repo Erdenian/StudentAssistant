@@ -5,7 +5,7 @@
     <item
         android:id="@+id/menu_semester_editor_save"
         android:icon="@drawable/check"
-        android:title="@string/menu_semester_editor_save"
+        android:title="@string/sea_save"
         app:showAsAction="ifRoom" />
 
 </menu>
