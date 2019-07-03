@@ -106,7 +106,6 @@ dependencies {
 
     // region AndroidX
     implementation("androidx.fragment:fragment-ktx:1.1.0-beta01")
-    implementation("androidx.recyclerview:recyclerview:1.1.0-alpha06")
     implementation("androidx.drawerlayout:drawerlayout:1.1.0-alpha02")
     implementation("androidx.viewpager:viewpager:1.0.0")
 
