@@ -52,6 +52,7 @@ class LessonsEditorPageFragment : Fragment() {
             adapter = this@LessonsEditorPageFragment.adapter
             layoutManager = LinearLayoutManager(inflater.context)
             addItemDecoration(SpacingItemDecoration(dimen(R.dimen.cards_spacing)))
+            registerForContextMenu(this)
         }
     }
 

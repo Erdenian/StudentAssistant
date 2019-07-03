@@ -29,6 +29,7 @@ class LessonsListAdapter(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
+            setOnLongClickListener { it.showContextMenu() }
         }
     ).apply {
         card.setOnClickListener { onLessonClickListener?.onLessonClick(lessons[adapterPosition]) }
