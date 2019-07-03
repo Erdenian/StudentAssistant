@@ -98,8 +98,10 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
             value = when {
                 subjectName?.isBlank() == true -> Error.EMPTY_SUBJECT_NAME
                 (startTime != null) && (endTime != null) && (startTime > endTime) -> Error.WRONG_TIMES
-                ((lessonRepeat.value == LessonRepeat.ByWeekday::class) && !weeks.value.contains(true)) -> Error.EMPTY_REPEAT
-                ((lessonRepeat.value == LessonRepeat.ByDates::class) && dates.value.isEmpty()) -> Error.EMPTY_REPEAT
+                ((lessonRepeat.value == LessonRepeat.ByWeekday::class) &&
+                        !weeks.value.contains(true)) -> Error.EMPTY_REPEAT
+                ((lessonRepeat.value == LessonRepeat.ByDates::class) &&
+                        dates.value.isEmpty()) -> Error.EMPTY_REPEAT
                 else -> null
             }
         }
