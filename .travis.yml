@@ -1,4 +1,4 @@
-language: android
+language: java
 jdk: oraclejdk8
 
 env:
@@ -20,4 +20,4 @@ before_install:
   - set -o pipefail
 
 script:
-  - ./gradlew detekt lint assembleDebug
+  - ./gradlew detekt lint assemble
