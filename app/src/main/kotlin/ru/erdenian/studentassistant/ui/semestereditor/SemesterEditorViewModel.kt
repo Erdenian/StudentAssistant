@@ -8,10 +8,17 @@ import com.shopify.livedataktx.MediatorLiveDataKtx
 import com.shopify.livedataktx.MutableLiveDataKtx
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.kodein
+import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.repository.ScheduleRepository
 import ru.erdenian.studentassistant.repository.entity.Semester
 
-class SemesterEditorViewModel(application: Application) : AndroidViewModel(application) {
+class SemesterEditorViewModel(
+    application: Application
+) : AndroidViewModel(application), KodeinAware {
+
+    override val kodein by kodein()
 
     enum class Error {
         EMPTY_NAME,
@@ -24,7 +31,7 @@ class SemesterEditorViewModel(application: Application) : AndroidViewModel(appli
         DateTimeConstants.SEPTEMBER..DateTimeConstants.DECEMBER
     )
 
-    private val repository = ScheduleRepository(application)
+    private val repository: ScheduleRepository by instance()
 
     private var semester: Semester? = null
 
