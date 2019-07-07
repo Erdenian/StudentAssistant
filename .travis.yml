@@ -20,4 +20,4 @@ before_install:
   - set -o pipefail
 
 script:
-  - ./gradlew detekt lint assemble
+  - ./gradlew detekt lint assemble connectedCheck
