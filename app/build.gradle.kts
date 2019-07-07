@@ -90,9 +90,8 @@ dependencies {
     //val kodein_version: String by project
     //val retrofit_version: String by project
 
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.1.1") {
-        exclude("com.android.support", "support-annotations")
-    }
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.2")
 
     implementation(project(":utils"))
     implementation(project(":customviews"))
@@ -105,7 +104,7 @@ dependencies {
     // endregion
 
     // region AndroidX
-    implementation("androidx.fragment:fragment-ktx:1.1.0-beta01")
+    implementation("androidx.fragment:fragment-ktx:1.2.0-alpha01")
     implementation("androidx.drawerlayout:drawerlayout:1.1.0-alpha02")
     implementation("androidx.viewpager:viewpager:1.0.0")
 
