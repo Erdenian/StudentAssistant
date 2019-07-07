@@ -9,6 +9,9 @@ import com.shopify.livedataktx.toNullableKtx
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.kodein
+import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.repository.ScheduleRepository
 import ru.erdenian.studentassistant.repository.entity.Lesson
 import ru.erdenian.studentassistant.repository.entity.Semester
@@ -17,9 +20,13 @@ import ru.erdenian.studentassistant.utils.asLiveData
 import ru.erdenian.studentassistant.utils.liveDataOf
 import ru.erdenian.studentassistant.utils.setIfEmpty
 
-class LessonsEditorViewModel(application: Application) : AndroidViewModel(application) {
+class LessonsEditorViewModel(
+    application: Application
+) : AndroidViewModel(application), KodeinAware {
 
-    private val repository = ScheduleRepository(application)
+    override val kodein by kodein()
+
+    private val repository: ScheduleRepository by instance()
 
     private val privateSemester = MutableLiveDataKtx<Semester>()
 
