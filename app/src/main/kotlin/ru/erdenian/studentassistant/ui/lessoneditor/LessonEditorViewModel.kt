@@ -16,6 +16,9 @@ import kotlinx.coroutines.withContext
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.kodein
+import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.repository.ImmutableSortedSet
 import ru.erdenian.studentassistant.repository.ScheduleRepository
 import ru.erdenian.studentassistant.repository.entity.Lesson
@@ -27,7 +30,9 @@ import ru.erdenian.studentassistant.utils.setIfEmpty
 import ru.erdenian.studentassistant.utils.toSingleLine
 import kotlin.reflect.KClass
 
-class LessonEditorViewModel(application: Application) : AndroidViewModel(application) {
+class LessonEditorViewModel(application: Application) : AndroidViewModel(application), KodeinAware {
+
+    override val kodein by kodein()
 
     enum class Error {
         EMPTY_SUBJECT_NAME,
@@ -35,7 +40,7 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
         EMPTY_REPEAT
     }
 
-    private val repository = ScheduleRepository(application)
+    private val repository: ScheduleRepository by instance()
 
     private val semesterId = MutableLiveDataKtx<Long>()
     private var lesson: Lesson? = null

@@ -10,17 +10,24 @@ import com.shopify.livedataktx.MediatorLiveDataKtx
 import com.shopify.livedataktx.MutableLiveDataKtx
 import com.shopify.livedataktx.toKtx
 import org.joda.time.LocalDate
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.kodein
+import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.repository.ScheduleRepository
 import ru.erdenian.studentassistant.repository.entity.Homework
 import ru.erdenian.studentassistant.utils.asLiveData
 
-class HomeworkEditorViewModel(application: Application) : AndroidViewModel(application) {
+class HomeworkEditorViewModel(
+    application: Application
+) : AndroidViewModel(application), KodeinAware {
+
+    override val kodein by kodein()
 
     enum class Error {
         EMPTY_DESCRIPTION
     }
 
-    private val repository = ScheduleRepository(application)
+    private val repository: ScheduleRepository by instance()
 
     private val semesterId = MutableLiveDataKtx<Long>()
     private var homework: Homework? = null

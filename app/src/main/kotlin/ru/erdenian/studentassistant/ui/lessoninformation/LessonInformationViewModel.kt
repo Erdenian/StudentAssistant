@@ -6,6 +6,9 @@ import androidx.lifecycle.switchMap
 import com.shopify.livedataktx.MutableLiveDataKtx
 import com.shopify.livedataktx.toKtx
 import com.shopify.livedataktx.toNullableKtx
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.kodein
+import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.repository.ScheduleRepository
 import ru.erdenian.studentassistant.repository.entity.Lesson
 import ru.erdenian.studentassistant.repository.immutableSortedSetOf
@@ -13,9 +16,13 @@ import ru.erdenian.studentassistant.utils.asLiveData
 import ru.erdenian.studentassistant.utils.liveDataOf
 import ru.erdenian.studentassistant.utils.setIfEmpty
 
-class LessonInformationViewModel(application: Application) : AndroidViewModel(application) {
+class LessonInformationViewModel(
+    application: Application
+) : AndroidViewModel(application), KodeinAware {
 
-    private val repository = ScheduleRepository(application)
+    override val kodein by kodein()
+
+    private val repository: ScheduleRepository by instance()
 
     private val privateLesson = MutableLiveDataKtx<Lesson>()
 
