@@ -87,7 +87,7 @@ dependencies {
     //val navigation_version: String by project
     val room_version: String by project
 
-    //val kodein_version: String by project
+    val kodein_version: String by project
     //val retrofit_version: String by project
 
     androidTestImplementation("androidx.test.espresso:espresso-core:3.1.1") {
@@ -105,7 +105,7 @@ dependencies {
     // endregion
 
     // region AndroidX
-    implementation("androidx.fragment:fragment-ktx:1.1.0-beta01")
+    implementation("androidx.fragment:fragment-ktx:1.2.0-alpha01")
     implementation("androidx.drawerlayout:drawerlayout:1.1.0-alpha02")
     implementation("androidx.viewpager:viewpager:1.0.0")
 
@@ -116,6 +116,11 @@ dependencies {
 
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
+    // endregion
+
+    // region DI
+    implementation("org.kodein.di:kodein-di-generic-jvm:$kodein_version")
+    implementation("org.kodein.di:kodein-di-framework-android-x:$kodein_version")
     // endregion
 
     implementation("org.jetbrains.anko:anko-common:0.10.8")

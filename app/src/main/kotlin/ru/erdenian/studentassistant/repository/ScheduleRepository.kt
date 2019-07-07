@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.repository
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.shopify.livedataktx.toKtx
@@ -19,19 +18,11 @@ import ru.erdenian.studentassistant.repository.entity.LessonRepeat
 import ru.erdenian.studentassistant.repository.entity.Semester
 
 @Suppress("TooManyFunctions")
-class ScheduleRepository(context: Context) {
-
-    private val semesterDao: SemesterDao
-    private val lessonDao: LessonDao
+class ScheduleRepository(
+    private val semesterDao: SemesterDao,
+    private val lessonDao: LessonDao,
     private val homeworkDao: HomeworkDao
-
-    init {
-        ScheduleDatabase.getInstance(context).also { db ->
-            semesterDao = db.semesterDao
-            lessonDao = db.lessonDao
-            homeworkDao = db.homeworkDao
-        }
-    }
+) {
 
     @Deprecated("Only for debugging")
     suspend fun clear() = withContext(Dispatchers.IO) {
