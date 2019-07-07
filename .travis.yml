@@ -19,5 +19,8 @@ before_install:
   - yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses > /dev/null
   - set -o pipefail
 
+install:
+  - ./gradlew init
+
 script:
   - ./gradlew detekt lint assemble
