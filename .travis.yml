@@ -3,8 +3,10 @@ jdk: oraclejdk8
 
 env:
   global:
+    - ANDROID_EMULATOR_SDK: 28
     - ANDROID_SDK_REPOSITORY: "https://dl.google.com/android/repository"
     - ANDROID_SDK_TOOLS: "4333796"
+    - PLATFORM_TOOLS_LINK: "https://dl.google.com/android/repository/platform-tools_r29.0.1-linux.zip"
     - ANDROID_SDK_DIR: "android-sdk"
     - GRADLE_DIR: ".gradle"
 
@@ -18,6 +20,26 @@ before_install:
   - set +o pipefail
   - yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses > /dev/null
   - set -o pipefail
+    # creating emulator
+    - ${ANDROID_SDK_ROOT}/tools/bin/sdkmanager "emulator" "system-images;android-${ANDROID_EMULATOR_SDK};google_apis;armeabi-v7a"
+    - echo y | ${ANDROID_SDK_ROOT}/tools/bin/sdkmanager --update
+    - echo no | ${ANDROID_SDK_ROOT}/tools/bin/avdmanager create avd -n test -k "system-images;android-${ANDROID_EMULATOR_SDK};google_apis;armeabi-v7a"
+    # starting emulator
+    - mkdir -p ${ANDROID_SDK_ROOT}/emulator
+    - mkdir -p ${ANDROID_SDK_ROOT}/platforms
+    - mkdir -p ${ANDROID_SDK_ROOT}/platform-tools
+    - mkdir -p ${ANDROID_SDK_ROOT}/system-images
+    - ${ANDROID_SDK_ROOT}/emulator/emulator -avd test -no-window &
+    # connecting to emulator
+    - wget -q -O platform-tools.zip ${PLATFORM_TOOLS_LINK}
+    - unzip -d ${ANDROID_SDK_DIR}/platform-tools android-sdk.zip
+    - wget -q -O android-wait-for-emulator https://raw.githubusercontent.com/travis-ci/travis-cookbooks/0f497eb71291b52a703143c5cd63a217c8766dc9/community-cookbooks/android-sdk/files/default/android-wait-for-emulator
+    - chmod +x android-wait-for-emulator
+  #- ./android-wait-for-emulator
+  #- ${ANDROID_SDK_DIR}/platform-tools/adb shell input keyevent 82 # pass lockscreen
+
+install:
+  - ./gradlew init
 
 script:
-  - ./gradlew detekt lint assemble
+  - ./gradlew detekt lint assemble connectedCheck
