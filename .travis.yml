@@ -23,4 +23,4 @@ install:
   - ./gradlew init
 
 script:
-  - ./gradlew detekt lint assemble
+  - ./gradlew detekt #lint assemble
