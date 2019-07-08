@@ -4,14 +4,17 @@ jdk: oraclejdk8
 env:
   global:
     - ANDROID_EMULATOR_SDK: 28
-    - ANDROID_SDK_REPOSITORY: "https://dl.google.com/android/repository"
-    - ANDROID_SDK_TOOLS: "4333796"
+    - ANDROID_EMULATOR_IMAGE: "\"system-images;android-27;default;x86_64\""
+    - ANDROID_EMULATOR_NAME: "test"
+    # dirs
     - ANDROID_SDK_DIR: "android-sdk"
     - GRADLE_DIR: ".gradle"
+    # links
+    - ANDROID_SDK_LINK: "https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip"
     - ANDROID_WAIT_FOR_EMULATOR_LINK: "https://raw.githubusercontent.com/travis-ci/travis-cookbooks/master/community-cookbooks/android-sdk/files/default/android-wait-for-emulator"
 
 before_install:
-  - if [[ ! -d ${ANDROID_SDK_DIR} ]] ; then wget -q -O android-sdk.zip ${ANDROID_SDK_REPOSITORY}/sdk-tools-linux-${ANDROID_SDK_TOOLS}.zip ; fi
+  - if [[ ! -d ${ANDROID_SDK_DIR} ]] ; then wget -q -O android-sdk.zip ${ANDROID_SDK_LINK} ; fi
   - if [[ ! -d ${ANDROID_SDK_DIR} ]] ; then unzip -d ${ANDROID_SDK_DIR} android-sdk.zip > /dev/null ; fi
   # setting environmental variables
   - export ANDROID_SDK_ROOT=$PWD/${ANDROID_SDK_DIR}
@@ -21,24 +24,25 @@ before_install:
   - yes | $ANDROID_SDK_ROOT/tools/bin/sdkmanager --licenses > /dev/null
   - set -o pipefail
   # creating emulator
-  - ${ANDROID_SDK_ROOT}/tools/bin/sdkmanager "platform-tools" "emulator" "system-images;android-${ANDROID_EMULATOR_SDK};google_apis;x86"
+  - ${ANDROID_SDK_ROOT}/tools/bin/sdkmanager "platform-tools" "emulator" ${ANDROID_EMULATOR_IMAGE}
   - echo y | ${ANDROID_SDK_ROOT}/tools/bin/sdkmanager --update
-  - echo no | ${ANDROID_SDK_ROOT}/tools/bin/avdmanager create avd -n test -k "system-images;android-${ANDROID_EMULATOR_SDK};google_apis;x86"
+  - echo no | ${ANDROID_SDK_ROOT}/tools/bin/avdmanager create avd -n ${ANDROID_EMULATOR_NAME} -k ${ANDROID_EMULATOR_IMAGE} -f
   # starting emulator
   - mkdir -p ${ANDROID_SDK_ROOT}/emulator
   - mkdir -p ${ANDROID_SDK_ROOT}/platforms
   - mkdir -p ${ANDROID_SDK_ROOT}/platform-tools
   - mkdir -p ${ANDROID_SDK_ROOT}/system-images
-  - ${ANDROID_SDK_ROOT}/emulator/emulator -avd test -no-window -no-accel &
+  - ${ANDROID_SDK_ROOT}/emulator/emulator -avd ${ANDROID_EMULATOR_NAME} -no-window -no-audio
   # connecting to emulator
   - wget -q -O android-wait-for-emulator ${ANDROID_WAIT_FOR_EMULATOR_LINK}
   - chmod +x android-wait-for-emulator
   - PATH="$PATH:$ANDROID_SDK_ROOT/platform-tools"
-  - ./android-wait-for-emulator
-  - ${$ANDROID_SDK_ROOT}/platform-tools/adb shell input keyevent 82 # pass lockscreen
+  #- ${ANDROID_SDK_ROOT}/platform-tools/adb shell input keyevent 82 # pass lockscreen
 
 install:
   - ./gradlew init
 
 script:
-  - ./gradlew detekt lint assemble
+  - ./gradlew detekt lintDebug testDebugUnitTest
+  - ./android-wait-for-emulator
+  - ./gradlew connectedDebugAndroidTest

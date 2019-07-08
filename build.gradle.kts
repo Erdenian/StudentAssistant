@@ -16,6 +16,7 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
         classpath("org.jetbrains.kotlin:kotlin-serialization:$kotlin_version")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navigation_version")
+        classpath("de.mannodermaus.gradle.plugins:android-junit5:1.4.2.1")
     }
 }
 
@@ -34,9 +35,13 @@ tasks.register("clean", Delete::class) {
 
 detekt {
     config = files("detekt-config.yml")
-    input = files(*subprojects.map { "${it.name}/src/main/kotlin" }.toTypedArray())
     reports { xml { enabled = false } }
     failFast = false
+
+    val sourceSets = listOf("main", "test", "androidTest")
+    input = files(*subprojects.flatMap { project ->
+        sourceSets.map { "${project.name}/src/$it/kotlin" }
+    }.toTypedArray())
 }
 
 dependencies {
