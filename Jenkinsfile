@@ -25,7 +25,7 @@ pipeline {
     stage('UnitTest') {
       steps {
         sh './gradlew testDebugUnitTest'
-        archiveArtifacts '*/build/reports/tests/testDebugUnitTest'
+        archiveArtifacts '*/build/reports/tests/testDebugUnitTest/'
       }
     }
     stage('Assemble') {
