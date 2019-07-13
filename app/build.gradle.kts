@@ -10,6 +10,7 @@ plugins {
     kotlin("kapt")
     id("kotlinx-serialization")
     id("androidx.navigation.safeargs.kotlin")
+    id("de.mannodermaus.android-junit5")
 }
 
 android {
@@ -27,6 +28,10 @@ android {
         targetSdkVersion(target_sdk_version.toInt())
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArgument(
+            "runnerBuilder",
+            "de.mannodermaus.junit5.AndroidJUnit5Builder"
+        )
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -45,6 +50,10 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude("META-INF/LICENSE*")
     }
 
     sourceSets {
@@ -74,6 +83,7 @@ androidExtensions {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
+        jvmTarget = "1.8"
         @Suppress("SuspiciousCollectionReassignment")
         freeCompilerArgs += "-XXLanguage:+InlineClasses"
     }
@@ -90,9 +100,13 @@ dependencies {
     val kodein_version: String by project
     //val retrofit_version: String by project
 
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.1.1") {
-        exclude("com.android.support", "support-annotations")
-    }
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.2")
+
+    androidTestImplementation("androidx.test:runner:1.2.0")
+    androidTestImplementation("org.junit.jupiter:junit-jupiter-api:5.4.2")
+    androidTestImplementation("de.mannodermaus.junit5:android-test-core:1.0.0")
+    androidTestRuntimeOnly("de.mannodermaus.junit5:android-test-runner:1.0.0")
 
     implementation(project(":utils"))
     implementation(project(":customviews"))
