@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id("com.android.library")
     kotlin("android")
@@ -38,6 +40,12 @@ android {
     }
 }
 
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
 dependencies {
     val kotlin_version: String by project
 
@@ -53,6 +61,6 @@ dependencies {
     // region AndroidX
     api("androidx.appcompat:appcompat:$appcompat_version")
     api("androidx.cardview:cardview:$cardview_version")
-    api("androidx.recyclerview:recyclerview:1.1.0-alpha06")
+    api("androidx.recyclerview:recyclerview:1.1.0-beta01")
     // endregion
 }
