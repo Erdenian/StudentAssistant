@@ -21,16 +21,8 @@ class LessonRepository(private val lessonDao: LessonDao) {
 
     fun get(semesterId: Long) = lessonDao.get(semesterId).map()
     suspend fun getCount(semesterId: Long) = lessonDao.getCount(semesterId)
-    suspend fun hasLessons(semesterId: Long) = lessonDao.hasLessons(semesterId)
-
-    fun getLessons(semesterId: Long, subjectName: String) =
-        lessonDao.get(semesterId, subjectName).map()
-
     suspend fun getCount(semesterId: Long, subjectName: String) =
         lessonDao.getCount(semesterId, subjectName)
-
-    suspend fun hasLessons(semesterId: Long, subjectName: String) =
-        lessonDao.hasLessons(semesterId, subjectName)
 
     fun getSubjects(semesterId: Long) = lessonDao.getSubjects(semesterId).map()
     suspend fun renameSubject(semesterId: Long, oldName: String, newName: String) =

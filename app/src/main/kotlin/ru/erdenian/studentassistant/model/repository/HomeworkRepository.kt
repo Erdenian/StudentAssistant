@@ -22,7 +22,6 @@ class HomeworkRepository(private val homeworkDao: HomeworkDao) {
 
     fun get(semesterId: Long) = homeworkDao.get(semesterId).map()
     suspend fun getCount(semesterId: Long) = homeworkDao.getCount(semesterId)
-    suspend fun hasHomeworks(semesterId: Long) = homeworkDao.hasHomeworks(semesterId)
 
     fun get(semesterId: Long, subjectName: String) =
         homeworkDao.get(semesterId, subjectName).map()
@@ -39,17 +38,8 @@ class HomeworkRepository(private val homeworkDao: HomeworkDao) {
     fun getActual(semesterId: Long) = homeworkDao.getActual(semesterId).map()
     fun getPast(semesterId: Long) = homeworkDao.getPast(semesterId).map()
 
-    fun getActual(semesterId: Long, subjectName: String) =
-        homeworkDao.getActual(semesterId, subjectName).map()
-
     fun getActual(lesson: Lesson) =
         homeworkDao.getActual(lesson.semesterId, lesson.subjectName).map()
-
-    fun getPast(semesterId: Long, subjectName: String) =
-        homeworkDao.getPast(semesterId, subjectName).map()
-
-    fun getPast(lesson: Lesson) =
-        homeworkDao.getPast(lesson.semesterId, lesson.subjectName).map()
 
     private fun <T : Comparable<T>> List<T>.map() = toImmutableSortedSet()
     private fun <T : Comparable<T>> LiveData<List<T>>.map() =

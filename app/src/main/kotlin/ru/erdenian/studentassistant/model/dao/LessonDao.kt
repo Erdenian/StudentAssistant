@@ -68,21 +68,15 @@ abstract class LessonDao {
     @Query("SELECT COUNT(_id) FROM lessons WHERE semester_id = :semesterId")
     abstract suspend fun getCount(semesterId: Long): Int
 
-    @Query("SELECT COUNT(_id) > 0 FROM lessons WHERE semester_id = :semesterId")
-    abstract suspend fun hasLessons(semesterId: Long): Boolean
-
     // endregion
 
     // region Subjects
-
-    @Query("SELECT * FROM lessons WHERE semester_id = :semesterId AND subject_name = :subjectName ORDER BY start_time, end_time, _id")
-    abstract fun get(semesterId: Long, subjectName: String): LiveData<List<Lesson>>
 
     @Query("SELECT COUNT(_id) FROM lessons WHERE semester_id = :semesterId AND subject_name = :subjectName")
     abstract suspend fun getCount(semesterId: Long, subjectName: String): Int
 
     @Query("SELECT COUNT(_id) > 0 FROM lessons WHERE semester_id = :semesterId AND subject_name = :subjectName")
-    abstract suspend fun hasLessons(semesterId: Long, subjectName: String): Boolean
+    protected abstract suspend fun hasLessons(semesterId: Long, subjectName: String): Boolean
 
     @Query("SELECT DISTINCT subject_name FROM lessons WHERE semester_id = :semesterId ORDER BY subject_name")
     abstract fun getSubjects(semesterId: Long): LiveData<List<String>>
