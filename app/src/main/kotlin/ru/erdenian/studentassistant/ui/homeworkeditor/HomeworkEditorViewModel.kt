@@ -14,7 +14,9 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.model.entity.Homework
-import ru.erdenian.studentassistant.model.repository.ScheduleRepository
+import ru.erdenian.studentassistant.model.repository.HomeworkRepository
+import ru.erdenian.studentassistant.model.repository.LessonRepository
+import ru.erdenian.studentassistant.model.repository.SemesterRepository
 import ru.erdenian.studentassistant.utils.asLiveData
 
 class HomeworkEditorViewModel(
@@ -22,12 +24,13 @@ class HomeworkEditorViewModel(
 ) : AndroidViewModel(application), KodeinAware {
 
     override val kodein by kodein()
+    private val semesterRepository: SemesterRepository by instance()
+    private val lessonRepository: LessonRepository by instance()
+    private val homeworkRepository: HomeworkRepository by instance()
 
     enum class Error {
         EMPTY_DESCRIPTION
     }
-
-    private val repository: ScheduleRepository by instance()
 
     private val semesterId = MutableLiveDataKtx<Long>()
     private var homework: Homework? = null
@@ -47,10 +50,11 @@ class HomeworkEditorViewModel(
         }
     }
 
-    val existingSubjects = semesterId.asLiveData.switchMap { repository.getSubjects(it) }.toKtx()
-    val semesterLastDay = semesterId.asLiveData.switchMap { id ->
-        repository.getSemester(id)
-    }.map { checkNotNull(it).lastDay }.toKtx()
+    val existingSubjects = semesterId.asLiveData
+        .switchMap { lessonRepository.getSubjects(it) }.toKtx()
+    val semesterLastDay = semesterId.asLiveData
+        .switchMap { semesterRepository.get(it) }
+        .map { checkNotNull(it).lastDay }.toKtx()
 
     val subjectName: MutableLiveDataKtx<String> = MediatorLiveDataKtx<String>().apply {
         addSource(existingSubjects, Observer { if (safeValue !in it) value = it.first() })
@@ -81,11 +85,11 @@ class HomeworkEditorViewModel(
             semesterId.value
         ).run { oldHomework?.let { copy(id = it.id) } ?: this }
 
-        repository.insert(newHomework)
+        homeworkRepository.insert(newHomework)
         return newHomework.id
     }
 
     suspend fun delete() {
-        homework?.let { repository.delete(it) }
+        homework?.let { homeworkRepository.delete(it) }
     }
 }

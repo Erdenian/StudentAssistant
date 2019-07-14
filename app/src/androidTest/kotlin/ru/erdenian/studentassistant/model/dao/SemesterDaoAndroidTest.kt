@@ -20,7 +20,7 @@ import ru.erdenian.studentassistant.model.entity.Semester
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-internal class SemesterAndroidTest {
+internal class SemesterDaoAndroidTest {
 
     private val kodein = databaseKodein(ApplicationProvider.getApplicationContext())
 
