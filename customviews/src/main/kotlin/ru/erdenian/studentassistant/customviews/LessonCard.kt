@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import org.joda.time.LocalTime
+import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setViewCount
 
 /**
@@ -46,15 +47,15 @@ class LessonCard @JvmOverloads constructor(
             foreground = context.getDrawable(outValue.resourceId)
         }
 
-        tvStartTime = findViewById(R.id.lc_start_time)
-        tvEndTime = findViewById(R.id.lc_end_time)
-        llClassroomsParent = findViewById(R.id.lc_classrooms_parent)
-        tvClassrooms = findViewById(R.id.lc_classrooms)
-        tvType = findViewById(R.id.lc_type)
-        tvSubjectName = findViewById(R.id.lc_subject_name)
-        llTeachersParent = findViewById(R.id.lc_teachers_parent)
-        llRepeatsParent = findViewById(R.id.lc_repeats_parent)
-        tvRepeatsText = findViewById(R.id.lc_repeats_text)
+        tvStartTime = requireViewByIdCompat(R.id.lc_start_time)
+        tvEndTime = requireViewByIdCompat(R.id.lc_end_time)
+        llClassroomsParent = requireViewByIdCompat(R.id.lc_classrooms_parent)
+        tvClassrooms = requireViewByIdCompat(R.id.lc_classrooms)
+        tvType = requireViewByIdCompat(R.id.lc_type)
+        tvSubjectName = requireViewByIdCompat(R.id.lc_subject_name)
+        llTeachersParent = requireViewByIdCompat(R.id.lc_teachers_parent)
+        llRepeatsParent = requireViewByIdCompat(R.id.lc_repeats_parent)
+        tvRepeatsText = requireViewByIdCompat(R.id.lc_repeats_text)
     }
 
     /**

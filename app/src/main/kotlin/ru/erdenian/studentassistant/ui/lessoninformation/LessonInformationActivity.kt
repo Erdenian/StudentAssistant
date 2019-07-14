@@ -22,6 +22,7 @@ import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.utils.getCompatColor
 import ru.erdenian.studentassistant.utils.lazyViewModel
+import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 
 class LessonInformationActivity : AppCompatActivity() {
@@ -46,27 +47,27 @@ class LessonInformationActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        findViewById<TextView>(R.id.ali_subject_name).apply {
+        requireViewByIdCompat<TextView>(R.id.ali_subject_name).apply {
             viewModel.lesson.observe(this@LessonInformationActivity) { text = it?.subjectName }
         }
 
-        findViewById<TextView>(R.id.ali_start_time).apply {
+        requireViewByIdCompat<TextView>(R.id.ali_start_time).apply {
             viewModel.lesson.observe(this@LessonInformationActivity) { lesson ->
                 text = lesson?.startTime?.toString(TIME_FORMAT)
             }
         }
 
-        findViewById<TextView>(R.id.ali_end_time).apply {
+        requireViewByIdCompat<TextView>(R.id.ali_end_time).apply {
             viewModel.lesson.observe(this@LessonInformationActivity) { lesson ->
                 text = lesson?.endTime?.toString(TIME_FORMAT)
             }
         }
 
-        findViewById<TextView>(R.id.ali_type).apply {
+        requireViewByIdCompat<TextView>(R.id.ali_type).apply {
             viewModel.lesson.observe(this@LessonInformationActivity) { text = it?.type }
         }
 
-        findViewById<ViewFlipper>(R.id.ali_homeworks_flipper).apply {
+        requireViewByIdCompat<ViewFlipper>(R.id.ali_homeworks_flipper).apply {
             val noHomeworksIndex = 0
             val containsHomeworksIndex = 1
             viewModel.homeworks.observe(this@LessonInformationActivity) { homeworks ->
@@ -76,7 +77,7 @@ class LessonInformationActivity : AppCompatActivity() {
             }
         }
 
-        findViewById<RecyclerView>(R.id.ali_homeworks).apply {
+        requireViewByIdCompat<RecyclerView>(R.id.ali_homeworks).apply {
             adapter = HomeworksListAdapter().apply {
                 onHomeworkClickListener = object : HomeworksListAdapter.OnHomeworkClickListener {
                     override fun onHomeworkClick(homework: Homework) {
@@ -91,7 +92,7 @@ class LessonInformationActivity : AppCompatActivity() {
             addItemDecoration(SpacingItemDecoration(dimen(R.dimen.cards_spacing)))
         }
 
-        findViewById<FloatingActionButton>(R.id.ali_add_homework).setOnClickListener {
+        requireViewByIdCompat<FloatingActionButton>(R.id.ali_add_homework).setOnClickListener {
             HomeworkEditorActivity.start(this, checkNotNull(viewModel.lesson.value))
         }
 

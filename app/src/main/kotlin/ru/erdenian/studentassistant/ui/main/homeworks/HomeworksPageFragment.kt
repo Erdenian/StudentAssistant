@@ -18,6 +18,7 @@ import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.ui.main.MainViewModel
 import ru.erdenian.studentassistant.utils.getViewModel
+import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 
 class HomeworksPageFragment : Fragment() {
 
@@ -42,7 +43,7 @@ class HomeworksPageFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_homeworks_page, container, false).apply {
-        with(findViewById<RecyclerView>(R.id.fhp_homeworks)) {
+        with(requireViewByIdCompat<RecyclerView>(R.id.fhp_homeworks)) {
             adapter = this@HomeworksPageFragment.adapter
             layoutManager = LinearLayoutManager(inflater.context)
             addItemDecoration(SpacingItemDecoration(dimen(R.dimen.cards_spacing)))
@@ -57,7 +58,7 @@ class HomeworksPageFragment : Fragment() {
             if (isActual) getActualHomeworks() else getPastHomeworks()
         }
 
-        requireView().findViewById<ViewFlipper>(R.id.fhp_flipper).apply {
+        requireView().requireViewByIdCompat<ViewFlipper>(R.id.fhp_flipper).apply {
             val homeworksIndex = 0
             val noHomeworksIndex = 1
             homeworks.observe(this@HomeworksPageFragment) { value ->

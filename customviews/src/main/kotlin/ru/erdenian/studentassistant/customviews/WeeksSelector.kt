@@ -12,6 +12,7 @@ import android.widget.LinearLayout
 import android.widget.Spinner
 import androidx.core.view.children
 import androidx.core.view.forEach
+import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setViewCount
 
 /**
@@ -126,11 +127,11 @@ class WeeksSelector @JvmOverloads constructor(
         orientation = VERTICAL
         inflate(context, R.layout.weeks_selector, this)
 
-        spVariants = findViewById(R.id.ws_variants)
-        ibRemove = findViewById(R.id.ws_remove)
-        ibAdd = findViewById(R.id.ws_add)
-        hsvWeeks = findViewById(R.id.ws_scroll)
-        llWeeksParent = findViewById(R.id.ws_weeks_parent)
+        spVariants = requireViewByIdCompat(R.id.ws_variants)
+        ibRemove = requireViewByIdCompat(R.id.ws_remove)
+        ibAdd = requireViewByIdCompat(R.id.ws_add)
+        hsvWeeks = requireViewByIdCompat(R.id.ws_scroll)
+        llWeeksParent = requireViewByIdCompat(R.id.ws_weeks_parent)
 
         check(spVariants.adapter.count == weeksVariants.size + 1) {
             "Несоответствие вариантов выбора и количества предустановок"

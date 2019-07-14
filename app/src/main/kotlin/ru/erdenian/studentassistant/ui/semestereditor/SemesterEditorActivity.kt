@@ -20,6 +20,7 @@ import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorViewModel.Er
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getCompatColor
 import ru.erdenian.studentassistant.utils.lazyViewModel
+import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
 
@@ -53,7 +54,7 @@ class SemesterEditorActivity : AppCompatActivity() {
 
         val owner = this
 
-        findViewById<TextInputLayout>(R.id.ase_name).apply {
+        requireViewByIdCompat<TextInputLayout>(R.id.ase_name).apply {
             viewModel.error.observe(owner) { error ->
                 when (error) {
                     Error.EMPTY_NAME -> this.error = getString(
@@ -67,21 +68,21 @@ class SemesterEditorActivity : AppCompatActivity() {
             }
         }
 
-        findViewById<TextInputEditText>(R.id.ase_name_edit_text).apply {
+        requireViewByIdCompat<TextInputEditText>(R.id.ase_name_edit_text).apply {
             viewModel.name.distinctUntilChanged { value ->
                 value == text?.toString() ?: ""
             }.observe(owner) { setText(it) }
             addTextChangedListener { viewModel.name.value = it?.toString() ?: "" }
         }
 
-        findViewById<Button>(R.id.ase_first_day).apply {
+        requireViewByIdCompat<Button>(R.id.ase_first_day).apply {
             viewModel.firstDay.observe(owner) { text = it.toString(DATE_FORMAT) }
             setOnClickListener {
                 showDatePicker(viewModel.firstDay.value) { viewModel.firstDay.value = it }
             }
         }
 
-        findViewById<Button>(R.id.ase_last_day).apply {
+        requireViewByIdCompat<Button>(R.id.ase_last_day).apply {
             viewModel.lastDay.observe(owner) { text = it.toString(DATE_FORMAT) }
             setOnClickListener {
                 showDatePicker(viewModel.lastDay.value) { viewModel.lastDay.value = it }

@@ -16,6 +16,7 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.ui.main.MainViewModel
 import ru.erdenian.studentassistant.utils.getCompatColor
 import ru.erdenian.studentassistant.utils.lazyActivityViewModel
+import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
 
@@ -23,7 +24,7 @@ class ScheduleFragment : Fragment() {
 
     private val viewModel by lazyActivityViewModel<MainViewModel>()
 
-    private val pager by lazy { requireView().findViewById<ViewPager>(R.id.fs_view_pager) }
+    private val pager by lazy { requireView().requireViewByIdCompat<ViewPager>(R.id.fs_view_pager) }
     private val pagerAdapter by lazy {
         SchedulePagerAdapter(childFragmentManager).apply {
             var selectedDate = LocalDate.now()
@@ -49,7 +50,7 @@ class ScheduleFragment : Fragment() {
         setHasOptionsMenu(true)
 
         pager.adapter = pagerAdapter
-        requireView().findViewById<PagerTabStrip>(R.id.fs_pager_tab_strip).apply {
+        requireView().requireViewByIdCompat<PagerTabStrip>(R.id.fs_pager_tab_strip).apply {
             setTextColor(getCompatColor(R.color.colorPrimary))
             setTabIndicatorColorResource(R.color.colorPrimary)
         }

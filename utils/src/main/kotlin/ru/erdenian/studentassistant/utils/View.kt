@@ -4,8 +4,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.annotation.IdRes
+import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
+import androidx.core.view.ViewCompat
 import androidx.core.view.children
+
+/**
+ * Обертка над [ActivityCompat.requireViewById].
+ *
+ * @author Ilya Solovyev
+ * @return View
+ * @param id id View
+ * @since 0.0.0
+ */
+fun <T : View> View.requireViewByIdCompat(@IdRes id: Int) =
+    ViewCompat.requireViewById<T>(this, id)
 
 /**
  * Установить курсор в [EditText] и показать клавиатуру

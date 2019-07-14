@@ -25,13 +25,14 @@ import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getCompatColor
 import ru.erdenian.studentassistant.utils.lazyViewModel
+import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 
 class MainActivity : AppCompatActivity() {
 
     private val viewModel by lazyViewModel<MainViewModel>()
 
-    private val drawer by lazy { findViewById<DrawerLayout>(R.id.am_drawer) }
+    private val drawer by lazy { requireViewByIdCompat<DrawerLayout>(R.id.am_drawer) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +40,10 @@ class MainActivity : AppCompatActivity() {
 
         val owner = this
 
-        findViewById<Toolbar>(R.id.am_toolbar).also { toolbar ->
+        requireViewByIdCompat<Toolbar>(R.id.am_toolbar).also { toolbar ->
             setSupportActionBar(toolbar)
 
-            val navigationView = findViewById<NavigationView>(R.id.am_navigation_view)
+            val navigationView = requireViewByIdCompat<NavigationView>(R.id.am_navigation_view)
             val navController = findNavController(R.id.am_nav_host_fragment)
 
             ActionBarDrawerToggle(
@@ -115,7 +116,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        findViewById<Spinner>(R.id.am_toolbar_spinner).apply {
+        requireViewByIdCompat<Spinner>(R.id.am_toolbar_spinner).apply {
             viewModel.allSemesters.observe(owner) { semesters ->
                 visibility = if (semesters.size > 1) View.VISIBLE else View.GONE
             }

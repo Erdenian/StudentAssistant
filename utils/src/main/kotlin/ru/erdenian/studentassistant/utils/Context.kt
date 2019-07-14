@@ -3,6 +3,7 @@ package ru.erdenian.studentassistant.utils
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import org.joda.time.LocalDate
@@ -17,7 +18,7 @@ import java.io.File
  * @param id id цвета
  * @since 0.0.0
  */
-fun Context.getCompatColor(id: Int) = ContextCompat.getColor(this, id)
+fun Context.getCompatColor(@ColorRes id: Int) = ContextCompat.getColor(this, id)
 
 /**
  * Обертка над [ContextCompat.getColor].
@@ -27,7 +28,7 @@ fun Context.getCompatColor(id: Int) = ContextCompat.getColor(this, id)
  * @param id id цвета
  * @since 0.0.0
  */
-fun Fragment.getCompatColor(id: Int) = ContextCompat.getColor(requireContext(), id)
+fun Fragment.getCompatColor(@ColorRes id: Int) = ContextCompat.getColor(requireContext(), id)
 
 /**
  * Очищает данные приложения.
