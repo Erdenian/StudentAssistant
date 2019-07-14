@@ -9,6 +9,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.repository.entity.Homework
+import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 
 class HomeworksListAdapter : RecyclerView.Adapter<HomeworksListAdapter.ItemViewHolder>() {
 
@@ -55,8 +56,8 @@ class HomeworksListAdapter : RecyclerView.Adapter<HomeworksListAdapter.ItemViewH
     }
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val subjectName: TextView = itemView.findViewById(R.id.ch_subject_name)
-        val description: TextView = itemView.findViewById(R.id.ch_description)
-        val deadline: TextView = itemView.findViewById(R.id.ch_deadline)
+        val subjectName: TextView = itemView.requireViewByIdCompat(R.id.ch_subject_name)
+        val description: TextView = itemView.requireViewByIdCompat(R.id.ch_description)
+        val deadline: TextView = itemView.requireViewByIdCompat(R.id.ch_deadline)
     }
 }

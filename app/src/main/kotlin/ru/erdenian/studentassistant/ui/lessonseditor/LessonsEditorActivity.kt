@@ -23,6 +23,7 @@ import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
 import ru.erdenian.studentassistant.utils.getCompatColor
 import ru.erdenian.studentassistant.utils.lazyViewModel
+import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 
 class LessonsEditorActivity : AppCompatActivity() {
@@ -42,15 +43,15 @@ class LessonsEditorActivity : AppCompatActivity() {
 
         viewModel.init(intent.getParcelableExtra(SEMESTER_INTENT_KEY))
 
-        setSupportActionBar(findViewById(R.id.alse_toolbar))
+        setSupportActionBar(requireViewByIdCompat(R.id.alse_toolbar))
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowTitleEnabled(false)
         }
 
-        findViewById<Spinner>(R.id.alse_spinner).apply {
+        requireViewByIdCompat<Spinner>(R.id.alse_spinner).apply {
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                private val flipper = this@LessonsEditorActivity.findViewById<ViewFlipper>(
+                private val flipper = this@LessonsEditorActivity.requireViewByIdCompat<ViewFlipper>(
                     R.id.alse_flipper
                 )
 
@@ -67,17 +68,17 @@ class LessonsEditorActivity : AppCompatActivity() {
             }
         }
 
-        val byWeekdaysPager = findViewById<ViewPager>(R.id.alse_by_weekdays_pager).apply {
+        val byWeekdaysPager = requireViewByIdCompat<ViewPager>(R.id.alse_by_weekdays_pager).apply {
             adapter = LessonsEditorPagerAdapter(supportFragmentManager)
         }
-        findViewById<PagerTabStrip>(R.id.alse_by_weekdays_pager_tab_strip).apply {
+        requireViewByIdCompat<PagerTabStrip>(R.id.alse_by_weekdays_pager_tab_strip).apply {
             setTextColor(getCompatColor(R.color.colorPrimary))
             setTabIndicatorColorResource(R.color.colorPrimary)
         }
 
         // TODO: 13.11.2016 добавить заполнение списка пар по датам
 
-        findViewById<FloatingActionButton>(R.id.alse_add_lesson).setOnClickListener {
+        requireViewByIdCompat<FloatingActionButton>(R.id.alse_add_lesson).setOnClickListener {
             LessonEditorActivity.start(
                 this,
                 checkNotNull(viewModel.semester.value).id,

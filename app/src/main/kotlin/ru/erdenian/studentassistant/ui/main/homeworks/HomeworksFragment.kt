@@ -14,6 +14,7 @@ import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.ui.main.MainViewModel
 import ru.erdenian.studentassistant.utils.getActivityViewModel
 import ru.erdenian.studentassistant.utils.getCompatColor
+import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 
 class HomeworksFragment : Fragment() {
 
@@ -29,17 +30,18 @@ class HomeworksFragment : Fragment() {
         val viewModel = getActivityViewModel<MainViewModel>()
         val owner = this
 
-        requireView().findViewById<ViewPager>(R.id.fh_view_pager).apply {
+        requireView().requireViewByIdCompat<ViewPager>(R.id.fh_view_pager).apply {
             adapter = HomeworksPagerAdapter(context, childFragmentManager).apply {
                 viewModel.selectedSemester.observe(owner) { semester = it }
             }
         }
-        requireView().findViewById<PagerTabStrip>(R.id.fh_pager_tab_strip).apply {
+        requireView().requireViewByIdCompat<PagerTabStrip>(R.id.fh_pager_tab_strip).apply {
             setTextColor(getCompatColor(R.color.colorPrimary))
             setTabIndicatorColorResource(R.color.colorPrimary)
         }
 
-        requireView().findViewById<FloatingActionButton>(R.id.fh_add_homework).setOnClickListener {
+        requireView().requireViewByIdCompat<FloatingActionButton>(R.id.fh_add_homework)
+            .setOnClickListener {
             HomeworkEditorActivity.start(
                 requireContext(), checkNotNull(viewModel.selectedSemester.value).id
             )

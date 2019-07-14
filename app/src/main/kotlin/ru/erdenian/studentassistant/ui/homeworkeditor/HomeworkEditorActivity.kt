@@ -26,6 +26,7 @@ import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorViewModel.Er
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getCompatColor
 import ru.erdenian.studentassistant.utils.lazyViewModel
+import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
 
@@ -80,7 +81,7 @@ class HomeworkEditorActivity : AppCompatActivity() {
 
         val owner = this
 
-        findViewById<Spinner>(R.id.ahe_subject_name).apply {
+        requireViewByIdCompat<Spinner>(R.id.ahe_subject_name).apply {
             viewModel.existingSubjects.observe(owner) { subjects ->
                 val selection = selectedItem as String?
                 adapter = ArrayAdapter<String>(
@@ -113,14 +114,14 @@ class HomeworkEditorActivity : AppCompatActivity() {
             }
         }
 
-        findViewById<EditText>(R.id.ahe_description).apply {
+        requireViewByIdCompat<EditText>(R.id.ahe_description).apply {
             viewModel.description.distinctUntilChanged { value ->
                 value == text?.toString() ?: ""
             }.observe(owner) { setText(it) }
             addTextChangedListener { viewModel.description.value = it?.toString() ?: "" }
         }
 
-        findViewById<Button>(R.id.ahe_deadline).apply {
+        requireViewByIdCompat<Button>(R.id.ahe_deadline).apply {
             viewModel.deadline.observe(owner) { deadline ->
                 text = deadline.toString(DATE_FORMAT)
             }

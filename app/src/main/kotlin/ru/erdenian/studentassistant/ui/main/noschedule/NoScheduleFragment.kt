@@ -10,6 +10,7 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
+import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 
 class NoScheduleFragment : Fragment() {
 
@@ -18,10 +19,10 @@ class NoScheduleFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_no_schedule, container, false).apply {
-        findViewById<Button>(R.id.fns_download_schedule).setOnClickListener {
+        requireViewByIdCompat<Button>(R.id.fns_download_schedule).setOnClickListener {
             requireContext().toast(R.string.sa_download)
         }
-        findViewById<Button>(R.id.fns_create_schedule).setOnClickListener {
+        requireViewByIdCompat<Button>(R.id.fns_create_schedule).setOnClickListener {
             requireContext().startActivity<SemesterEditorActivity>()
         }
     }

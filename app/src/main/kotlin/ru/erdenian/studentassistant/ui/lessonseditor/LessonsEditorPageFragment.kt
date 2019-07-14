@@ -23,6 +23,7 @@ import ru.erdenian.studentassistant.ui.adapter.LessonsListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.utils.getViewModel
+import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 
 class LessonsEditorPageFragment : Fragment() {
 
@@ -48,7 +49,7 @@ class LessonsEditorPageFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_lessons_editor_page, container, false).apply {
-        with(findViewById<RecyclerView>(R.id.flep_lessons)) {
+        with(requireViewByIdCompat<RecyclerView>(R.id.flep_lessons)) {
             adapter = this@LessonsEditorPageFragment.adapter
             layoutManager = LinearLayoutManager(inflater.context)
             addItemDecoration(SpacingItemDecoration(dimen(R.dimen.cards_spacing)))
@@ -62,7 +63,7 @@ class LessonsEditorPageFragment : Fragment() {
         val weekday = requireArguments().getInt(PAGE_WEEKDAY)
         val lessons = viewModel.getLessons(weekday)
 
-        requireView().findViewById<ViewFlipper>(R.id.flep_flipper).apply {
+        requireView().requireViewByIdCompat<ViewFlipper>(R.id.flep_flipper).apply {
             val lessonsIndex = 0
             val freeDayIndex = 1
             lessons.observe(this@LessonsEditorPageFragment) { value ->
