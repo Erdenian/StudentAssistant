@@ -16,7 +16,7 @@ class HelpActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        requireViewByIdCompat<TextView>(R.id.ahlp_help).text = HtmlCompat.fromHtml(
+        requireViewByIdCompat<TextView>(R.id.ah_help).text = HtmlCompat.fromHtml(
             resources.openRawResource(R.raw.help).bufferedReader().readText(),
             HtmlCompat.FROM_HTML_MODE_LEGACY
         )
