@@ -8,19 +8,19 @@
     <fragment
         android:id="@+id/noScheduleFragment"
         android:name="ru.erdenian.studentassistant.ui.main.noschedule.NoScheduleFragment"
-        android:label="@string/sa_title"
+        android:label="@string/nsf_title"
         tools:layout="@layout/fragment_no_schedule" />
 
     <fragment
         android:id="@+id/scheduleFragment"
         android:name="ru.erdenian.studentassistant.ui.main.schedule.ScheduleFragment"
-        android:label="@string/sa_title"
+        android:label="@string/sf_title"
         tools:layout="@layout/fragment_schedule" />
 
     <fragment
         android:id="@+id/homeworksFragment"
         android:name="ru.erdenian.studentassistant.ui.main.homeworks.HomeworksFragment"
-        android:label="@string/ha_title"
+        android:label="@string/hf_title"
         tools:layout="@layout/fragment_homeworks" />
 
     <action

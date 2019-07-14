@@ -20,7 +20,7 @@ class NoScheduleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_no_schedule, container, false).apply {
         requireViewByIdCompat<Button>(R.id.fns_download_schedule).setOnClickListener {
-            requireContext().toast(R.string.sa_download)
+            requireContext().toast(R.string.nsf_download)
         }
         requireViewByIdCompat<Button>(R.id.fns_create_schedule).setOnClickListener {
             requireContext().startActivity<SemesterEditorActivity>()

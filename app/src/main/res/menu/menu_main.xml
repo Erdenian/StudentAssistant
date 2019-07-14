@@ -4,12 +4,12 @@
 
     <item
         android:id="@+id/mm_add_schedule"
-        android:title="@string/sa_add"
+        android:title="@string/ma_add"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/mm_edit_schedule"
-        android:title="@string/sa_edit"
+        android:title="@string/ma_edit"
         app:showAsAction="never" />
 
 </menu>

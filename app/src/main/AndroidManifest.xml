@@ -26,7 +26,7 @@
 
         <activity
             android:name="ru.erdenian.studentassistant.ui.main.MainActivity"
-            android:label="@string/sa_title"
+            android:label="@string/ma_title"
             android:theme="@style/AppTheme.NoActionBar.TransparentStatusBar" />
 
         <activity
@@ -54,7 +54,7 @@
 
         <activity
             android:name=".ui.help.HelpActivity"
-            android:label="@string/hlpa_title" />
+            android:label="@string/ha_title" />
 
     </application>
 
