@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.schedule
+package ru.erdenian.studentassistant.ui.main.schedule
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,6 +17,7 @@ import ru.erdenian.studentassistant.repository.entity.Lesson
 import ru.erdenian.studentassistant.ui.adapter.LessonsListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.lessoninformation.LessonInformationActivity
+import ru.erdenian.studentassistant.ui.main.MainViewModel
 import ru.erdenian.studentassistant.utils.getViewModel
 
 class SchedulePageFragment : Fragment() {
@@ -53,7 +54,7 @@ class SchedulePageFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         val date = requireArguments().get(PAGE_DATE) as LocalDate
-        val lessons = requireActivity().getViewModel<ScheduleViewModel>().getLessons(date)
+        val lessons = requireActivity().getViewModel<MainViewModel>().getLessons(date)
 
         requireView().findViewById<ViewFlipper>(R.id.fsp_flipper).apply {
             val lessonsIndex = 0

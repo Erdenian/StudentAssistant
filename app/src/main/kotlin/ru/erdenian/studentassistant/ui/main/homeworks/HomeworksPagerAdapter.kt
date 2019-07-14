@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.homeworks
+package ru.erdenian.studentassistant.ui.main.homeworks
 
 import android.content.Context
 import androidx.fragment.app.FragmentManager

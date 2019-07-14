@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.schedule
+package ru.erdenian.studentassistant.ui.main.schedule
 
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter

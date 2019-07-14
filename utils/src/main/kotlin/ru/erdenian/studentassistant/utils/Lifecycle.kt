@@ -19,10 +19,17 @@ import com.shopify.livedataktx.MutableLiveDataKtx
 inline fun <reified T : ViewModel> Fragment.getViewModel() =
     ViewModelProviders.of(this).get(T::class.java)
 
+inline fun <reified T : ViewModel> Fragment.getActivityViewModel() =
+    ViewModelProviders.of(requireActivity()).get(T::class.java)
+
 inline fun <reified T : ViewModel> FragmentActivity.getViewModel() =
     ViewModelProviders.of(this).get(T::class.java)
 
 inline fun <reified T : ViewModel> Fragment.lazyViewModel() = lazy { getViewModel<T>() }
+inline fun <reified T : ViewModel> Fragment.lazyActivityViewModel() = lazy {
+    requireActivity().getViewModel<T>()
+}
+
 inline fun <reified T : ViewModel> FragmentActivity.lazyViewModel() = lazy { getViewModel<T>() }
 
 // endregion
