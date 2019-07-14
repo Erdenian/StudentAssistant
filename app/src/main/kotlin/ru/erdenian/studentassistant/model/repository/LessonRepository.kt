@@ -1,18 +1,15 @@
 package ru.erdenian.studentassistant.model.repository
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
-import com.shopify.livedataktx.toKtx
 import com.shopify.livedataktx.toNullableKtx
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.model.dao.LessonDao
 import ru.erdenian.studentassistant.model.entity.Lesson
 import ru.erdenian.studentassistant.model.entity.LessonRepeat
 import ru.erdenian.studentassistant.model.entity.Semester
-import ru.erdenian.studentassistant.model.toImmutableSortedSet
 
 @Suppress("TooManyFunctions")
-class LessonRepository(private val lessonDao: LessonDao) {
+class LessonRepository(private val lessonDao: LessonDao) : BaseRepository() {
 
     suspend fun insert(lesson: Lesson) = lessonDao.insert(lesson)
     suspend fun get(semesterId: Long, lessonId: Long) = lessonDao.get(semesterId, lessonId)
@@ -46,8 +43,4 @@ class LessonRepository(private val lessonDao: LessonDao) {
                 else lesson.lessonRepeat.repeatsOnWeekday(weekday)
             }
         }.map()
-
-    private fun <T : Comparable<T>> List<T>.map() = toImmutableSortedSet()
-    private fun <T : Comparable<T>> LiveData<List<T>>.map() =
-        map { it.toImmutableSortedSet() }.toKtx()
 }
