@@ -1,16 +1,12 @@
 package ru.erdenian.studentassistant.model.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
-import com.shopify.livedataktx.toKtx
 import com.shopify.livedataktx.toNullableKtx
 import ru.erdenian.studentassistant.model.dao.HomeworkDao
 import ru.erdenian.studentassistant.model.entity.Homework
 import ru.erdenian.studentassistant.model.entity.Lesson
-import ru.erdenian.studentassistant.model.toImmutableSortedSet
 
 @Suppress("TooManyFunctions")
-class HomeworkRepository(private val homeworkDao: HomeworkDao) {
+class HomeworkRepository(private val homeworkDao: HomeworkDao) : BaseRepository() {
 
     suspend fun insert(homework: Homework) = homeworkDao.insert(homework)
 
@@ -40,8 +36,4 @@ class HomeworkRepository(private val homeworkDao: HomeworkDao) {
 
     fun getActual(lesson: Lesson) =
         homeworkDao.getActual(lesson.semesterId, lesson.subjectName).map()
-
-    private fun <T : Comparable<T>> List<T>.map() = toImmutableSortedSet()
-    private fun <T : Comparable<T>> LiveData<List<T>>.map() =
-        map { it.toImmutableSortedSet() }.toKtx()
 }
