@@ -3,8 +3,8 @@ pipeline {
     node {
       label 'android'
     }
-
   }
+
   stages {
     stage('Info') {
       steps {
