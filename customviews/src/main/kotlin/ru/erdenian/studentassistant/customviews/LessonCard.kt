@@ -63,6 +63,7 @@ class LessonCard @JvmOverloads constructor(
      *
      * @since 0.2.6
      */
+    @Suppress("LongParameterList")
     fun setLesson(
         subjectName: String,
         type: String?,

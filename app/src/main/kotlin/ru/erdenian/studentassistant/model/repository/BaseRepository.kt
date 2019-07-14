@@ -5,7 +5,7 @@ import androidx.lifecycle.map
 import com.shopify.livedataktx.toKtx
 import ru.erdenian.studentassistant.model.toImmutableSortedSet
 
-@Suppress("TooManyFunctions")
+@Suppress("UnnecessaryAbstractClass")
 abstract class BaseRepository {
 
     protected fun <T : Comparable<T>> List<T>.map() = toImmutableSortedSet()

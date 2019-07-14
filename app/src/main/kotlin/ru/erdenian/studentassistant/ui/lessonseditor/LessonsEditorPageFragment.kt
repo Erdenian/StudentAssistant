@@ -36,7 +36,7 @@ class LessonsEditorPageFragment : Fragment() {
     }
 
     private val viewModel by lazy { requireActivity().getViewModel<LessonsEditorViewModel>() }
-    private val adapter = LessonsListAdapter(true).apply {
+    private val adapter = LessonsListAdapter().apply {
         onLessonClickListener = object : LessonsListAdapter.OnLessonClickListener {
             override fun onLessonClick(lesson: Lesson) {
                 LessonEditorActivity.start(requireContext(), lesson)

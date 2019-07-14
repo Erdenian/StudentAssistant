@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import com.google.android.material.navigation.NavigationView
@@ -22,7 +23,6 @@ import ru.erdenian.studentassistant.ui.adapter.SemestersSpinnerAdapter
 import ru.erdenian.studentassistant.ui.help.HelpActivity
 import ru.erdenian.studentassistant.ui.lessonseditor.LessonsEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
-import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getCompatColor
 import ru.erdenian.studentassistant.utils.lazyViewModel
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     private val drawer by lazy { requireViewByIdCompat<DrawerLayout>(R.id.am_drawer) }
 
+    @Suppress("LongMethod", "ComplexMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -120,9 +121,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.allSemesters.observe(owner) { semesters ->
                 visibility = if (semesters.size > 1) View.VISIBLE else View.GONE
             }
-            viewModel.selectedSemester.distinctUntilChanged { value ->
-                false//value == selectedItem as Semester?
-            }.observe(owner) { semester ->
+            viewModel.selectedSemester.distinctUntilChanged().observe(owner) { semester ->
                 setSelection(viewModel.allSemesters.value.indexOf(semester))
             }
 
