@@ -37,9 +37,6 @@ interface HomeworkDao {
     @Query("SELECT COUNT(_id) FROM homeworks WHERE semester_id = :semesterId")
     suspend fun getCount(semesterId: Long): Int
 
-    @Query("SELECT COUNT(_id) > 0 FROM homeworks WHERE semester_id = :semesterId")
-    suspend fun hasHomeworks(semesterId: Long): Boolean
-
     // endregion
 
     // region By subject name
@@ -69,13 +66,6 @@ interface HomeworkDao {
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName AND deadline >= :today ORDER BY deadline, _id")
     fun getActual(
-        semesterId: Long,
-        subjectName: String,
-        today: LocalDate = LocalDate.now()
-    ): LiveData<List<Homework>>
-
-    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName AND deadline < :today ORDER BY deadline, _id")
-    fun getPast(
         semesterId: Long,
         subjectName: String,
         today: LocalDate = LocalDate.now()
