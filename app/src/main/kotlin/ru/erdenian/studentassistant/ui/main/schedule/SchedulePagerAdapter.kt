@@ -4,7 +4,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import org.joda.time.Days
 import org.joda.time.LocalDate
-import ru.erdenian.studentassistant.repository.entity.Semester
+import ru.erdenian.studentassistant.model.entity.Semester
 
 class SchedulePagerAdapter(
     fm: FragmentManager

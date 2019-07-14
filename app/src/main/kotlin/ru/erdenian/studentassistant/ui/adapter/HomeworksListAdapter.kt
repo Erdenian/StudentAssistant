@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.repository.entity.Homework
+import ru.erdenian.studentassistant.model.entity.Homework
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 
 class HomeworksListAdapter : RecyclerView.Adapter<HomeworksListAdapter.ItemViewHolder>() {

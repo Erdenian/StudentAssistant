@@ -17,7 +17,7 @@ import com.google.android.material.navigation.NavigationView
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.repository.entity.Semester
+import ru.erdenian.studentassistant.model.entity.Semester
 import ru.erdenian.studentassistant.ui.adapter.SemestersSpinnerAdapter
 import ru.erdenian.studentassistant.ui.help.HelpActivity
 import ru.erdenian.studentassistant.ui.lessonseditor.LessonsEditorActivity
