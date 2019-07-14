@@ -55,14 +55,14 @@ class MainActivity : AppCompatActivity() {
             }
 
             viewModel.selectedSemester.observe(owner) { semester ->
-                navigationView.menu.findItem(R.id.nav_homeworks).isEnabled = (semester != null)
-                navigationView.menu.findItem(R.id.nav_alarm).isEnabled = (semester != null)
+                navigationView.menu.findItem(R.id.dm_homeworks).isEnabled = (semester != null)
+                navigationView.menu.findItem(R.id.dm_alarm).isEnabled = (semester != null)
             }
 
             navigationView.setNavigationItemSelectedListener { menuItem ->
                 drawer.closeDrawer(GravityCompat.START)
                 when (menuItem.itemId) {
-                    R.id.nav_schedule -> {
+                    R.id.dm_schedule -> {
                         navController.navigate(
                             if (viewModel.selectedSemester.value != null)
                                 R.id.action_global_scheduleFragment
@@ -70,19 +70,19 @@ class MainActivity : AppCompatActivity() {
                         )
                         true
                     }
-                    R.id.nav_homeworks -> {
+                    R.id.dm_homeworks -> {
                         navController.navigate(R.id.action_global_homeworksFragment)
                         true
                     }
-                    R.id.nav_alarm -> {
+                    R.id.dm_alarm -> {
                         toast("AlarmEditorActivity")
                         true
                     }
-                    R.id.nav_settings -> {
+                    R.id.dm_settings -> {
                         toast(R.string.nav_settings)
                         true
                     }
-                    R.id.nav_help -> {
+                    R.id.dm_help -> {
                         startActivity<HelpActivity>()
                         true
                     }
@@ -93,8 +93,8 @@ class MainActivity : AppCompatActivity() {
             navController.addOnDestinationChangedListener { _, destination, _ ->
                 when (destination.id) {
                     R.id.noScheduleFragment, R.id.scheduleFragment ->
-                        navigationView.setCheckedItem(R.id.nav_schedule)
-                    R.id.homeworksFragment -> navigationView.setCheckedItem(R.id.nav_homeworks)
+                        navigationView.setCheckedItem(R.id.dm_schedule)
+                    R.id.homeworksFragment -> navigationView.setCheckedItem(R.id.dm_homeworks)
                 }
             }
 
@@ -147,23 +147,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main, menu)
+        menuInflater.inflate(R.menu.menu_main, menu)
         menu.setColor(getCompatColor(R.color.action_bar_icons_color))
         return true
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         val isNotEmpty = viewModel.allSemesters.safeValue?.isNotEmpty() ?: return false
-        menu.findItem(R.id.menu_main_edit_schedule).isVisible = isNotEmpty
+        menu.findItem(R.id.mm_edit_schedule).isVisible = isNotEmpty
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-        R.id.menu_main_add_schedule -> {
+        R.id.mm_add_schedule -> {
             startActivity<SemesterEditorActivity>()
             true
         }
-        R.id.menu_main_edit_schedule -> {
+        R.id.mm_edit_schedule -> {
             LessonsEditorActivity.start(this, checkNotNull(viewModel.selectedSemester.value))
             true
         }

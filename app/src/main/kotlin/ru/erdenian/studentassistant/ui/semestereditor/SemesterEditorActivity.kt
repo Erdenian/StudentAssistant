@@ -101,7 +101,7 @@ class SemesterEditorActivity : AppCompatActivity() {
             finish()
             true
         }
-        R.id.menu_semester_editor_save -> {
+        R.id.mse_save -> {
             viewModel.error.value?.let { error ->
                 toast(
                     when (error) {

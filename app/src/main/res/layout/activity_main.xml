@@ -50,6 +50,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/navigation_view_header_main"
-        app:menu="@menu/drawer_schedule" />
+        app:menu="@menu/drawer_main" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

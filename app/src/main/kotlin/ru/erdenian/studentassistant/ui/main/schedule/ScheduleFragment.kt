@@ -63,11 +63,11 @@ class ScheduleFragment : Fragment() {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         val isNotEmpty = viewModel.allSemesters.safeValue?.isNotEmpty() ?: false
-        menu.findItem(R.id.menu_schedule_calendar).isVisible = isNotEmpty
+        menu.findItem(R.id.ms_calendar).isVisible = isNotEmpty
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-        R.id.menu_schedule_calendar -> {
+        R.id.ms_calendar -> {
             viewModel.selectedSemester.value?.run {
                 requireContext().showDatePicker(
                     pagerAdapter.getDate(pager.currentItem), firstDay, lastDay

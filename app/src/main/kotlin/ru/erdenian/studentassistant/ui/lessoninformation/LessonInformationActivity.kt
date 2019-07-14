@@ -110,7 +110,7 @@ class LessonInformationActivity : AppCompatActivity() {
             finish()
             true
         }
-        R.id.menu_lesson_information_edit_button -> {
+        R.id.mli_edit -> {
             LessonEditorActivity.start(
                 this,
                 checkNotNull(viewModel.lesson.value)

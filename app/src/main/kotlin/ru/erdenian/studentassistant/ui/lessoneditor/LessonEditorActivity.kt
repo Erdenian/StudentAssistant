@@ -277,7 +277,7 @@ class LessonEditorActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_lesson_editor, menu)
-        menu.findItem(R.id.menu_lesson_editor_delete_lesson).isVisible = (lesson != null)
+        menu.findItem(R.id.mle_delete).isVisible = (lesson != null)
         menu.setColor(getCompatColor(R.color.action_bar_icons_color))
         return true
     }
@@ -288,7 +288,7 @@ class LessonEditorActivity : AppCompatActivity() {
             finish()
             true
         }
-        R.id.menu_lesson_editor_save -> {
+        R.id.mle_save -> {
             viewModel.error.value?.let { error ->
                 toast(
                     when (error) {
@@ -326,7 +326,7 @@ class LessonEditorActivity : AppCompatActivity() {
             }
             true
         }
-        R.id.menu_lesson_editor_delete_lesson -> {
+        R.id.mle_delete -> {
             viewModel.viewModelScope.launch {
                 if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) {
                     alert(

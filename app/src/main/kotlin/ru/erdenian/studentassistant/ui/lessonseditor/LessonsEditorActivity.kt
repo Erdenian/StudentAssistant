@@ -100,11 +100,11 @@ class LessonsEditorActivity : AppCompatActivity() {
             finish()
             true
         }
-        R.id.menu_lessons_editor_edit_semester -> {
+        R.id.mlse_edit_semester -> {
             SemesterEditorActivity.start(this, viewModel.semester.value)
             true
         }
-        R.id.menu_lessons_editor_delete_semester -> {
+        R.id.mlse_delete_semester -> {
             alert(R.string.lsea_delete_message) {
                 positiveButton(R.string.lsea_delete_yes) {
                     viewModel.viewModelScope.launch { viewModel.deleteSemester() }
