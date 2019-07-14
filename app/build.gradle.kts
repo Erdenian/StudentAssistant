@@ -140,7 +140,7 @@ dependencies {
     implementation("org.jetbrains.anko:anko-common:0.10.8")
 
     // region UI
-    implementation("com.google.android.material:material:1.1.0-alpha07")
+    implementation("com.google.android.material:material:1.1.0-alpha08")
     implementation("com.github.DavidProdinger:weekdays-selector:1.1.0")
     // endregion
 }

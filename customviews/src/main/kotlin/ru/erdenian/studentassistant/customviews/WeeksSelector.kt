@@ -148,7 +148,7 @@ class WeeksSelector @JvmOverloads constructor(
                 weeks = weeksVariants.getOrNull(position) ?: return setCustomEnabled(true)
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>) {}
+            override fun onNothingSelected(parent: AdapterView<*>) = Unit
         }
 
         ibRemove.setOnClickListener {
