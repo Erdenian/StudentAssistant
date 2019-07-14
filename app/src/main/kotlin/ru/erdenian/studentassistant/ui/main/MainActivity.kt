@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                         true
                     }
                     R.id.dm_settings -> {
-                        toast(R.string.nav_settings)
+                        toast(R.string.dm_settings)
                         true
                     }
                     R.id.dm_help -> {
@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity() {
         }
         supportActionBar?.apply {
             viewModel.selectedSemester.observe(owner) { semester ->
-                title = semester?.name ?: getString(R.string.sa_title)
+                title = semester?.name ?: getString(R.string.nsf_title)
             }
             viewModel.allSemesters.observe(owner) { semesters ->
                 setDisplayShowTitleEnabled(semesters.size <= 1)
