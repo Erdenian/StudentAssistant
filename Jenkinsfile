@@ -1,11 +1,13 @@
 pipeline {
   agent any
+
   stages {
     stage('Info') {
       steps {
         sh './gradlew printVersion'
       }
     }
+
     stage('Analysis') {
       parallel {
         stage('Detekt') {
@@ -14,6 +16,7 @@ pipeline {
             archiveArtifacts 'build/reports/detekt/detekt.html'
           }
         }
+
         stage('Lint') {
           steps {
             sh './gradlew lintDebug'
@@ -22,12 +25,14 @@ pipeline {
         }
       }
     }
+
     stage('UnitTest') {
       steps {
         sh './gradlew testDebugUnitTest'
         archiveArtifacts '*/build/reports/tests/testDebugUnitTest/'
       }
     }
+
     stage('Assemble') {
       steps {
         sh './gradlew assembleDebug'
