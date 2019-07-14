@@ -4,17 +4,17 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/nav_schedule"
+            android:id="@+id/dm_schedule"
             android:icon="@drawable/ic_menu_clock"
             android:title="@string/nav_schedule" />
 
         <item
-            android:id="@+id/nav_homeworks"
+            android:id="@+id/dm_homeworks"
             android:icon="@drawable/ic_menu_book_open_variant"
             android:title="@string/nav_homeworks" />
 
         <item
-            android:id="@+id/nav_alarm"
+            android:id="@+id/dm_alarm"
             android:icon="@drawable/ic_menu_alarm"
             android:title="@string/nav_alarm" />
 
@@ -25,13 +25,13 @@
         <menu>
 
             <item
-                android:id="@+id/nav_settings"
+                android:id="@+id/dm_settings"
                 android:icon="@drawable/ic_menu_settings"
                 android:title="@string/nav_settings"
                 android:visible="false" />
 
             <item
-                android:id="@+id/nav_help"
+                android:id="@+id/dm_help"
                 android:icon="@drawable/ic_menu_help_circle"
                 android:title="@string/nav_help" />
 

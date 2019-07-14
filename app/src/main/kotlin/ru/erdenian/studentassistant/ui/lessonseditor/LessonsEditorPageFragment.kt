@@ -81,7 +81,7 @@ class LessonsEditorPageFragment : Fragment() {
         v: View,
         menuInfo: ContextMenu.ContextMenuInfo?
     ) {
-        requireActivity().menuInflater.inflate(R.menu.context_menu_schedule_page_fragment, menu)
+        requireActivity().menuInflater.inflate(R.menu.context_lessons_editor, menu)
         (menuInfo as AdapterView.AdapterContextMenuInfo?)?.run {
             menu.setHeaderTitle(adapter.lessons[position].subjectName)
         }
@@ -91,11 +91,11 @@ class LessonsEditorPageFragment : Fragment() {
         val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
         val lesson = adapter.lessons[info.position]
         return when (item.itemId) {
-            R.id.context_menu_schedule_page_fragment_copy -> {
+            R.id.cle_copy -> {
                 LessonEditorActivity.start(requireContext(), lesson, true)
                 true
             }
-            R.id.context_menu_schedule_page_fragment_delete -> {
+            R.id.cle_delete -> {
                 viewModel.viewModelScope.launch {
                     if (viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson)) {
                         requireContext().alert(

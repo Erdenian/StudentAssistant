@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_main_add_schedule"
+        android:id="@+id/mm_add_schedule"
         android:title="@string/sa_add"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/menu_main_edit_schedule"
+        android:id="@+id/mm_edit_schedule"
         android:title="@string/sa_edit"
         app:showAsAction="never" />
 

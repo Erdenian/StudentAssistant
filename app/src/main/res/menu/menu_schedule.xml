@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_schedule_calendar"
+        android:id="@+id/ms_calendar"
         android:icon="@drawable/ic_menu_calendar"
         android:title="@string/sa_calendar"
         app:showAsAction="ifRoom" />

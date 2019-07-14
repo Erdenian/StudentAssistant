@@ -139,7 +139,7 @@ class HomeworkEditorActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_homework_editor, menu)
-        menu.findItem(R.id.menu_homework_editor_delete_homework).isVisible = (homework != null)
+        menu.findItem(R.id.mhe_delete).isVisible = (homework != null)
         menu.setColor(getCompatColor(R.color.action_bar_icons_color))
         return super.onCreateOptionsMenu(menu)
     }
@@ -149,7 +149,7 @@ class HomeworkEditorActivity : AppCompatActivity() {
             finish()
             true
         }
-        R.id.menu_lesson_editor_save -> {
+        R.id.mhe_save -> {
             viewModel.error.value?.let { error ->
                 toast(
                     when (error) {
@@ -164,7 +164,7 @@ class HomeworkEditorActivity : AppCompatActivity() {
             }
             true
         }
-        R.id.menu_homework_editor_delete_homework -> {
+        R.id.mhe_delete -> {
             alert(R.string.hea_delete_message) {
                 positiveButton(R.string.hea_delete_yes) {
                     viewModel.viewModelScope.launch {
