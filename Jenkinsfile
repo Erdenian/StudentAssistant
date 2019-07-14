@@ -30,13 +30,14 @@ pipeline {
       steps {
         sh './gradlew testDebugUnitTest'
         archiveArtifacts '*/build/reports/tests/testDebugUnitTest/'
+        junit '*/build/test-results/testDebugUnitTest/*.xml'
       }
     }
 
     stage('Assemble') {
       steps {
         sh './gradlew assembleDebug'
-        archiveArtifacts 'app/build/outputs/apk/debug/*.apk'
+        archiveArtifacts '*/build/outputs/apk/debug/*.apk'
       }
     }
   }
