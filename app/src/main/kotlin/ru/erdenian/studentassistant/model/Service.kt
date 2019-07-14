@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.repository
+package ru.erdenian.studentassistant.model
 
 import android.os.Parcel
 import android.os.Parcelable

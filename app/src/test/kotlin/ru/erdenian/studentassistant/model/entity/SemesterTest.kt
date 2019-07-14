@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.repository.entity
+package ru.erdenian.studentassistant.model.entity
 
 import org.joda.time.LocalDate
 import org.junit.jupiter.api.Test

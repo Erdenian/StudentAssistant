@@ -1,11 +1,11 @@
-package ru.erdenian.studentassistant.repository
+package ru.erdenian.studentassistant.model
 
 import androidx.room.TypeConverter
 import org.joda.time.Days
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 import org.joda.time.Period
-import ru.erdenian.studentassistant.repository.entity.LessonRepeat
+import ru.erdenian.studentassistant.model.entity.LessonRepeat
 
 class Converters {
 

@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.repository
+package ru.erdenian.studentassistant.model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
@@ -9,13 +9,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 import org.joda.time.LocalDate
-import ru.erdenian.studentassistant.repository.dao.HomeworkDao
-import ru.erdenian.studentassistant.repository.dao.LessonDao
-import ru.erdenian.studentassistant.repository.dao.SemesterDao
-import ru.erdenian.studentassistant.repository.entity.Homework
-import ru.erdenian.studentassistant.repository.entity.Lesson
-import ru.erdenian.studentassistant.repository.entity.LessonRepeat
-import ru.erdenian.studentassistant.repository.entity.Semester
+import ru.erdenian.studentassistant.model.dao.HomeworkDao
+import ru.erdenian.studentassistant.model.dao.LessonDao
+import ru.erdenian.studentassistant.model.dao.SemesterDao
+import ru.erdenian.studentassistant.model.entity.Homework
+import ru.erdenian.studentassistant.model.entity.Lesson
+import ru.erdenian.studentassistant.model.entity.LessonRepeat
+import ru.erdenian.studentassistant.model.entity.Semester
 
 @Suppress("TooManyFunctions")
 class ScheduleRepository(

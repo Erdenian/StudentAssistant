@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.repository.dao
+package ru.erdenian.studentassistant.model.dao
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
@@ -8,8 +8,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import org.joda.time.Period
-import ru.erdenian.studentassistant.repository.Converters
-import ru.erdenian.studentassistant.repository.entity.Lesson
+import ru.erdenian.studentassistant.model.Converters
+import ru.erdenian.studentassistant.model.entity.Lesson
 
 @Suppress("TooManyFunctions", "MaxLineLength")
 @Dao

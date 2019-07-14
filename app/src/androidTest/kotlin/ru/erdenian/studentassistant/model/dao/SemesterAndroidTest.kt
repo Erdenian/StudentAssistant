@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.repository.dao
+package ru.erdenian.studentassistant.model.dao
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -15,8 +15,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.di.databaseKodein
-import ru.erdenian.studentassistant.repository.ScheduleDatabase
-import ru.erdenian.studentassistant.repository.entity.Semester
+import ru.erdenian.studentassistant.model.ScheduleDatabase
+import ru.erdenian.studentassistant.model.entity.Semester
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 

@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.repository
+package ru.erdenian.studentassistant.model
 
 open class SingletonHolder<T, A>(creator: (A) -> T) {
 
