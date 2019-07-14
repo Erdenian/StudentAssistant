@@ -8,7 +8,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import ru.erdenian.studentassistant.model.entity.Semester
 
-@Suppress("TooManyFunctions", "MaxLineLength")
 @Dao
 interface SemesterDao {
 

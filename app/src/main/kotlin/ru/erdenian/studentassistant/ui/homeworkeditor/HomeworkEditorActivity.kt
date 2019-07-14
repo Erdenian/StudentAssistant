@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.observe
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
@@ -94,9 +95,7 @@ class HomeworkEditorActivity : AppCompatActivity() {
                 }
             }
 
-            viewModel.subjectName.distinctUntilChanged { value ->
-                value == selectedItem as String?
-            }.observe(owner) { subjectName ->
+            viewModel.subjectName.distinctUntilChanged().observe(owner) { subjectName ->
                 viewModel.existingSubjects.safeValue?.run { setSelection(list.indexOf(subjectName)) }
             }
 

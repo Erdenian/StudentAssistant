@@ -4,7 +4,6 @@ import com.shopify.livedataktx.toNullableKtx
 import ru.erdenian.studentassistant.model.dao.SemesterDao
 import ru.erdenian.studentassistant.model.entity.Semester
 
-@Suppress("TooManyFunctions")
 class SemesterRepository(private val semesterDao: SemesterDao) : BaseRepository() {
 
     suspend fun insert(semester: Semester) = semesterDao.insert(semester)

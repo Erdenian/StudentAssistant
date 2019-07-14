@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package ru.erdenian.studentassistant.utils
 
 import androidx.fragment.app.Fragment
