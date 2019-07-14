@@ -13,8 +13,8 @@ import org.joda.time.LocalDate
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
-import ru.erdenian.studentassistant.model.ScheduleRepository
 import ru.erdenian.studentassistant.model.entity.Homework
+import ru.erdenian.studentassistant.model.repository.ScheduleRepository
 import ru.erdenian.studentassistant.utils.asLiveData
 
 class HomeworkEditorViewModel(
