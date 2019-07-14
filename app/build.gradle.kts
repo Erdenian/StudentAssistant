@@ -94,7 +94,7 @@ dependencies {
     val coroutines_version: String by project
 
     val lifecycle_version: String by project
-    //val navigation_version: String by project
+    val navigation_version: String by project
     val room_version: String by project
 
     val kodein_version: String by project
@@ -125,8 +125,8 @@ dependencies {
 
     kapt("androidx.lifecycle:lifecycle-compiler:$lifecycle_version")
 
-    //implementation("androidx.navigation:navigation-fragment-ktx:$navigation_version")
-    //implementation("androidx.navigation:navigation-ui-ktx:$navigation_version")
+    implementation("androidx.navigation:navigation-fragment-ktx:$navigation_version")
+    implementation("androidx.navigation:navigation-ui-ktx:$navigation_version")
 
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")

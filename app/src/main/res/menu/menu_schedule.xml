@@ -8,14 +8,4 @@
         android:title="@string/sa_calendar"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/menu_schedule_add_schedule"
-        android:title="@string/sa_add"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/menu_schedule_edit_schedule"
-        android:title="@string/sa_edit"
-        app:showAsAction="never" />
-
 </menu>

@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.homeworks
+package ru.erdenian.studentassistant.ui.main
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -17,7 +17,7 @@ import ru.erdenian.studentassistant.repository.immutableSortedSetOf
 import ru.erdenian.studentassistant.utils.asLiveData
 import ru.erdenian.studentassistant.utils.liveDataOf
 
-class HomeworksViewModel(application: Application) : AndroidViewModel(application), KodeinAware {
+class MainViewModel(application: Application) : AndroidViewModel(application), KodeinAware {
 
     override val kodein by kodein()
 
@@ -32,6 +32,12 @@ class HomeworksViewModel(application: Application) : AndroidViewModel(applicatio
                 } ?: semesters.lastOrNull()
             })
         }
+
+    fun getLessons(day: LocalDate) = selectedSemester.asLiveData.switchMap { semester ->
+        semester?.let { repository.getLessons(it, day) } ?: liveDataOf(
+            immutableSortedSetOf()
+        )
+    }.toKtx()
 
     fun getActualHomeworks() = selectedSemester.asLiveData.switchMap { semester ->
         semester?.let { repository.getActualHomeworks(it.id) } ?: liveDataOf(

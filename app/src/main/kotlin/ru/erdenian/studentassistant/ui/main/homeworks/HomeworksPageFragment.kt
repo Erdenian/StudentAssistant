@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.homeworks
+package ru.erdenian.studentassistant.ui.main.homeworks
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,6 +16,7 @@ import ru.erdenian.studentassistant.repository.entity.Homework
 import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
+import ru.erdenian.studentassistant.ui.main.MainViewModel
 import ru.erdenian.studentassistant.utils.getViewModel
 
 class HomeworksPageFragment : Fragment() {
@@ -52,7 +53,7 @@ class HomeworksPageFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         val isActual = requireArguments().getBoolean(IS_ACTUAL)
-        val homeworks = requireActivity().getViewModel<HomeworksViewModel>().run {
+        val homeworks = requireActivity().getViewModel<MainViewModel>().run {
             if (isActual) getActualHomeworks() else getPastHomeworks()
         }
 

@@ -70,7 +70,7 @@
     <string name="lea_delete_homeworks_yes">Да</string>
     <string name="lea_delete_homeworks_cancel">Отмена</string>
 
-    <!-- HomeworksActivity -->
+    <!-- HomeworksFragment -->
     <string name="ha_title">Домашние задания</string>
     <string name="ha_no_homeworks">Нет заданий</string>
 
