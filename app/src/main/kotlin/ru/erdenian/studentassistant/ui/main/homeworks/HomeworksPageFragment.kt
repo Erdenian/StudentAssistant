@@ -42,8 +42,8 @@ class HomeworksPageFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_homeworks_page, container, false).apply {
-        with(requireViewByIdCompat<RecyclerView>(R.id.fhp_homeworks)) {
+    ): View = inflater.inflate(R.layout.page_fragment_homeworks, container, false).apply {
+        with(requireViewByIdCompat<RecyclerView>(R.id.pfh_homeworks)) {
             adapter = this@HomeworksPageFragment.adapter
             layoutManager = LinearLayoutManager(inflater.context)
             addItemDecoration(SpacingItemDecoration(dimen(R.dimen.cards_spacing)))
@@ -58,7 +58,7 @@ class HomeworksPageFragment : Fragment() {
             if (isActual) getActualHomeworks() else getPastHomeworks()
         }
 
-        requireView().requireViewByIdCompat<ViewFlipper>(R.id.fhp_flipper).apply {
+        requireView().requireViewByIdCompat<ViewFlipper>(R.id.pfh_flipper).apply {
             val homeworksIndex = 0
             val noHomeworksIndex = 1
             homeworks.observe(this@HomeworksPageFragment) { value ->

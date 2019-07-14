@@ -43,8 +43,8 @@ class SchedulePageFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_schedule_page, container, false).apply {
-        with(requireViewByIdCompat<RecyclerView>(R.id.fsp_lessons)) {
+    ): View = inflater.inflate(R.layout.page_fragment_schedule, container, false).apply {
+        with(requireViewByIdCompat<RecyclerView>(R.id.pfs_lessons)) {
             adapter = this@SchedulePageFragment.adapter
             layoutManager = LinearLayoutManager(inflater.context)
             addItemDecoration(SpacingItemDecoration(dimen(R.dimen.cards_spacing)))
@@ -57,7 +57,7 @@ class SchedulePageFragment : Fragment() {
         val date = requireArguments().get(PAGE_DATE) as LocalDate
         val lessons = requireActivity().getViewModel<MainViewModel>().getLessons(date)
 
-        requireView().requireViewByIdCompat<ViewFlipper>(R.id.fsp_flipper).apply {
+        requireView().requireViewByIdCompat<ViewFlipper>(R.id.pfs_flipper).apply {
             val lessonsIndex = 0
             val freeDayIndex = 1
             lessons.observe(this@SchedulePageFragment) { value ->

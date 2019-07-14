@@ -48,8 +48,8 @@ class LessonsEditorPageFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_lessons_editor_page, container, false).apply {
-        with(requireViewByIdCompat<RecyclerView>(R.id.flep_lessons)) {
+    ): View = inflater.inflate(R.layout.page_fragment_lessons_editor, container, false).apply {
+        with(requireViewByIdCompat<RecyclerView>(R.id.pfle_lessons)) {
             adapter = this@LessonsEditorPageFragment.adapter
             layoutManager = LinearLayoutManager(inflater.context)
             addItemDecoration(SpacingItemDecoration(dimen(R.dimen.cards_spacing)))
@@ -63,7 +63,7 @@ class LessonsEditorPageFragment : Fragment() {
         val weekday = requireArguments().getInt(PAGE_WEEKDAY)
         val lessons = viewModel.getLessons(weekday)
 
-        requireView().requireViewByIdCompat<ViewFlipper>(R.id.flep_flipper).apply {
+        requireView().requireViewByIdCompat<ViewFlipper>(R.id.pfle_flipper).apply {
             val lessonsIndex = 0
             val freeDayIndex = 1
             lessons.observe(this@LessonsEditorPageFragment) { value ->
