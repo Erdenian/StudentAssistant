@@ -7,6 +7,9 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.joda.time.Period
 import ru.erdenian.studentassistant.model.Converters
 import ru.erdenian.studentassistant.model.entity.Lesson
@@ -21,8 +24,19 @@ abstract class LessonDao {
 
     // region Primary actions
 
+    @Transaction
+    open suspend fun insert(lesson: Lesson) = withContext(Dispatchers.IO) {
+        val oldLesson = get(lesson.semesterId, lesson.id)
+        insertLesson(lesson)
+        if (
+            (oldLesson != null) &&
+            (oldLesson.subjectName != lesson.subjectName) &&
+            !hasLessons(lesson.semesterId, oldLesson.subjectName)
+        ) renameSubject(lesson.semesterId, oldLesson.subjectName, lesson.subjectName)
+    }
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insert(lesson: Lesson)
+    protected abstract suspend fun insertLesson(lesson: Lesson)
 
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId AND _id = :lessonId")
     abstract suspend fun get(semesterId: Long, lessonId: Long): Lesson?
@@ -30,16 +44,19 @@ abstract class LessonDao {
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId AND _id = :lessonId")
     abstract fun getLive(semesterId: Long, lessonId: Long): LiveData<Lesson?>
 
+    @Transaction
+    open suspend fun delete(lesson: Lesson) = withContext(Dispatchers.IO) {
+        deleteLesson(lesson)
+        if (!hasLessons(lesson.semesterId, lesson.subjectName)) {
+            deleteHomeworks(lesson.semesterId, lesson.subjectName)
+        }
+    }
+
     @Delete
-    abstract suspend fun delete(lesson: Lesson)
+    protected abstract suspend fun deleteLesson(lesson: Lesson)
 
-    @Deprecated("Only for debugging")
-    @Query("DELETE FROM lessons WHERE semester_id = :semesterId")
-    abstract suspend fun deleteAll(semesterId: Long)
-
-    @Deprecated("Only for debugging")
-    @Query("DELETE FROM lessons")
-    abstract suspend fun deleteAll()
+    @Query("DELETE FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName")
+    protected abstract suspend fun deleteHomeworks(semesterId: Long, subjectName: String)
 
     // endregion
 
@@ -70,8 +87,26 @@ abstract class LessonDao {
     @Query("SELECT DISTINCT subject_name FROM lessons WHERE semester_id = :semesterId ORDER BY subject_name")
     abstract fun getSubjects(semesterId: Long): LiveData<List<String>>
 
+    @Transaction
+    open suspend fun renameSubject(semesterId: Long, oldName: String, newName: String) =
+        withContext(Dispatchers.IO) {
+            renameLessonsSubject(semesterId, oldName, newName)
+            renameHomeworksSubject(semesterId, oldName, newName)
+        }
+
     @Query("UPDATE lessons SET subject_name = :newName WHERE semester_id = :semesterId AND subject_name = :oldName")
-    abstract suspend fun renameSubject(semesterId: Long, oldName: String, newName: String)
+    protected abstract suspend fun renameLessonsSubject(
+        semesterId: Long,
+        oldName: String,
+        newName: String
+    )
+
+    @Query("UPDATE homeworks SET subject_name = :newName WHERE semester_id = :semesterId AND subject_name = :oldName")
+    protected abstract suspend fun renameHomeworksSubject(
+        semesterId: Long,
+        oldName: String,
+        newName: String
+    )
 
     // endregion
 

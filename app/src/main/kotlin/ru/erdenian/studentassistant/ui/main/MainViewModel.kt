@@ -13,17 +13,20 @@ import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.model.entity.Semester
 import ru.erdenian.studentassistant.model.immutableSortedSetOf
-import ru.erdenian.studentassistant.model.repository.ScheduleRepository
+import ru.erdenian.studentassistant.model.repository.HomeworkRepository
+import ru.erdenian.studentassistant.model.repository.LessonRepository
+import ru.erdenian.studentassistant.model.repository.SemesterRepository
 import ru.erdenian.studentassistant.utils.asLiveData
 import ru.erdenian.studentassistant.utils.liveDataOf
 
 class MainViewModel(application: Application) : AndroidViewModel(application), KodeinAware {
 
     override val kodein by kodein()
+    private val semesterRepository: SemesterRepository by instance()
+    private val lessonRepository: LessonRepository by instance()
+    private val homeworkRepository: HomeworkRepository by instance()
 
-    private val repository: ScheduleRepository by instance()
-
-    val allSemesters = repository.getSemesters()
+    val allSemesters = semesterRepository.getAll()
     val selectedSemester: MutableLiveDataKtx<Semester?> =
         MediatorLiveDataKtx<Semester?>().apply {
             addSource(allSemesters, Observer { semesters ->
@@ -34,20 +37,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application), K
         }
 
     fun getLessons(day: LocalDate) = selectedSemester.asLiveData.switchMap { semester ->
-        semester?.let { repository.getLessons(it, day) } ?: liveDataOf(
-            immutableSortedSetOf()
-        )
+        semester?.let { lessonRepository.get(it, day) } ?: liveDataOf(immutableSortedSetOf())
     }.toKtx()
 
     fun getActualHomeworks() = selectedSemester.asLiveData.switchMap { semester ->
-        semester?.let { repository.getActualHomeworks(it.id) } ?: liveDataOf(
-            immutableSortedSetOf()
-        )
+        semester?.let { homeworkRepository.getActual(it.id) } ?: liveDataOf(immutableSortedSetOf())
     }.toKtx()
 
     fun getPastHomeworks() = selectedSemester.asLiveData.switchMap { semester ->
-        semester?.let { repository.getPastHomeworks(it.id) } ?: liveDataOf(
-            immutableSortedSetOf()
-        )
+        semester?.let { homeworkRepository.getPast(it.id) } ?: liveDataOf(immutableSortedSetOf())
     }.toKtx()
 }

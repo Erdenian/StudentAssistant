@@ -20,10 +20,6 @@ interface SemesterDao {
     @Delete
     suspend fun delete(semester: Semester)
 
-    @Deprecated("Only for debugging")
-    @Query("DELETE FROM semesters")
-    suspend fun deleteAll()
-
     // endregion
 
     @Query("SELECT * FROM semesters ORDER BY first_day, last_day, name, _id")

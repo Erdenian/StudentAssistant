@@ -12,13 +12,14 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.model.entity.Semester
-import ru.erdenian.studentassistant.model.repository.ScheduleRepository
+import ru.erdenian.studentassistant.model.repository.SemesterRepository
 
 class SemesterEditorViewModel(
     application: Application
 ) : AndroidViewModel(application), KodeinAware {
 
     override val kodein by kodein()
+    private val semesterRepository: SemesterRepository by instance()
 
     enum class Error {
         EMPTY_NAME,
@@ -30,8 +31,6 @@ class SemesterEditorViewModel(
         DateTimeConstants.FEBRUARY..DateTimeConstants.MAY,
         DateTimeConstants.SEPTEMBER..DateTimeConstants.DECEMBER
     )
-
-    private val repository: ScheduleRepository by instance()
 
     private var semester: Semester? = null
 
@@ -47,7 +46,7 @@ class SemesterEditorViewModel(
     val firstDay = MutableLiveDataKtx<LocalDate>()
     val lastDay = MutableLiveDataKtx<LocalDate>()
 
-    private val semestersNames = repository.getSemestersNames()
+    private val semestersNames = semesterRepository.getNames()
 
     val error: LiveDataKtx<Error?> = MediatorLiveDataKtx<Error?>().apply {
         val onChanged = Observer<Any?> {
@@ -78,14 +77,14 @@ class SemesterEditorViewModel(
             lastDay.value
         ).run { oldSemester?.let { copy(id = it.id) } ?: this }
 
-        repository.insert(newSemester)
+        semesterRepository.insert(newSemester)
         return newSemester.id
     }
 
     init {
         val today = LocalDate.now().withDayOfMonth(1)
-        val range = ranges.find { today.monthOfYear <= it.endInclusive } ?: ranges.first()
-        firstDay.value = today.withMonthOfYear(range.start)
-        lastDay.value = today.withMonthOfYear(range.endInclusive)
+        val range = ranges.find { today.monthOfYear <= it.last } ?: ranges.first()
+        firstDay.value = today.withMonthOfYear(range.first)
+        lastDay.value = today.withMonthOfYear(range.last)
     }
 }

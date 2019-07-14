@@ -27,17 +27,6 @@ interface HomeworkDao {
     @Delete
     suspend fun delete(homework: Homework)
 
-    @Query("DELETE FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName")
-    suspend fun delete(semesterId: Long, subjectName: String)
-
-    @Deprecated("Only for debugging")
-    @Query("DELETE FROM homeworks WHERE semester_id = :semesterId")
-    suspend fun deleteAll(semesterId: Long)
-
-    @Deprecated("Only for debugging")
-    @Query("DELETE FROM homeworks")
-    suspend fun deleteAll()
-
     // endregion
 
     // region Homeworks list
@@ -93,7 +82,4 @@ interface HomeworkDao {
     ): LiveData<List<Homework>>
 
     // endregion
-
-    @Query("UPDATE homeworks SET subject_name = :newName WHERE semester_id = :semesterId AND subject_name = :oldName")
-    suspend fun renameSubject(semesterId: Long, oldName: String, newName: String)
 }

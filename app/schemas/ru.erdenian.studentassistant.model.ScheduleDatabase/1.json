@@ -114,7 +114,7 @@
             "columnNames": [
               "semester_id"
             ],
-            "createSql": "CREATE  INDEX `index_lessons_semester_id` ON `${TABLE_NAME}` (`semester_id`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_lessons_semester_id` ON `${TABLE_NAME}` (`semester_id`)"
           }
         ],
         "foreignKeys": [
@@ -179,7 +179,7 @@
             "columnNames": [
               "semester_id"
             ],
-            "createSql": "CREATE  INDEX `index_homeworks_semester_id` ON `${TABLE_NAME}` (`semester_id`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_homeworks_semester_id` ON `${TABLE_NAME}` (`semester_id`)"
           }
         ],
         "foreignKeys": [
