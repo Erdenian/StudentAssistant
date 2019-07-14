@@ -9,9 +9,9 @@ import com.shopify.livedataktx.toNullableKtx
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
-import ru.erdenian.studentassistant.model.ScheduleRepository
 import ru.erdenian.studentassistant.model.entity.Lesson
 import ru.erdenian.studentassistant.model.immutableSortedSetOf
+import ru.erdenian.studentassistant.model.repository.ScheduleRepository
 import ru.erdenian.studentassistant.utils.asLiveData
 import ru.erdenian.studentassistant.utils.liveDataOf
 import ru.erdenian.studentassistant.utils.setIfEmpty

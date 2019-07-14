@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.model
+package ru.erdenian.studentassistant.model.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
@@ -16,6 +16,7 @@ import ru.erdenian.studentassistant.model.entity.Homework
 import ru.erdenian.studentassistant.model.entity.Lesson
 import ru.erdenian.studentassistant.model.entity.LessonRepeat
 import ru.erdenian.studentassistant.model.entity.Semester
+import ru.erdenian.studentassistant.model.toImmutableSortedSet
 
 @Suppress("TooManyFunctions")
 class ScheduleRepository(
