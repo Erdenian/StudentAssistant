@@ -18,7 +18,7 @@ import java.io.File
  * @param id id цвета
  * @since 0.0.0
  */
-fun Context.getCompatColor(@ColorRes id: Int) = ContextCompat.getColor(this, id)
+fun Context.getColorCompat(@ColorRes id: Int) = ContextCompat.getColor(this, id)
 
 /**
  * Обертка над [ContextCompat.getColor].
@@ -28,7 +28,7 @@ fun Context.getCompatColor(@ColorRes id: Int) = ContextCompat.getColor(this, id)
  * @param id id цвета
  * @since 0.0.0
  */
-fun Fragment.getCompatColor(@ColorRes id: Int) = ContextCompat.getColor(requireContext(), id)
+fun Fragment.getColorCompat(@ColorRes id: Int) = ContextCompat.getColor(requireContext(), id)
 
 /**
  * Очищает данные приложения.

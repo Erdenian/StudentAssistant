@@ -29,7 +29,7 @@ import ru.erdenian.studentassistant.model.entity.Lesson
 import ru.erdenian.studentassistant.model.entity.LessonRepeat
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorViewModel.Error
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
-import ru.erdenian.studentassistant.utils.getCompatColor
+import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.lazyViewModel
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
@@ -278,7 +278,7 @@ class LessonEditorActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_lesson_editor, menu)
         menu.findItem(R.id.mle_delete).isVisible = (lesson != null)
-        menu.setColor(getCompatColor(R.color.action_bar_icons_color))
+        menu.setColor(getColorCompat(R.color.action_bar_icons_color))
         return true
     }
 
