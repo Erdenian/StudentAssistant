@@ -30,13 +30,4 @@
         <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
 
-    <style name="ScheduleCard">
-        <item name="android:layout_gravity">center</item>
-        <item name="android:layout_marginBottom">@dimen/card_margin_bottom</item>
-        <item name="android:layout_marginStart">@dimen/card_margin_horizontal</item>
-        <item name="android:layout_marginEnd">@dimen/card_margin_horizontal</item>
-        <item name="android:layout_marginTop">@dimen/card_margin_top</item>
-        <item name="android:foreground">?android:attr/selectableItemBackgroundBorderless</item>
-    </style>
-
 </resources>
