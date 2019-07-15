@@ -26,7 +26,7 @@ class LessonCard @JvmOverloads constructor(
 ) : CardView(context, attrs, defStyleAttr) {
 
     companion object {
-        private const val TIME_FORMAT = "HH:mm"
+        private const val TIME_FORMATTER = "HH:mm"
     }
 
     private val tvStartTime: TextView
@@ -40,7 +40,7 @@ class LessonCard @JvmOverloads constructor(
     private val tvRepeatsText: TextView
 
     init {
-        inflate(context, R.layout.lesson_card, this)
+        inflate(context, R.layout.card_lesson, this)
 
         TypedValue().also { outValue ->
             context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
@@ -72,8 +72,8 @@ class LessonCard @JvmOverloads constructor(
         startTime: LocalTime,
         endTime: LocalTime
     ) {
-        tvStartTime.text = startTime.toString(TIME_FORMAT)
-        tvEndTime.text = endTime.toString(TIME_FORMAT)
+        tvStartTime.text = startTime.toString(TIME_FORMATTER)
+        tvEndTime.text = endTime.toString(TIME_FORMATTER)
 
         llClassroomsParent.visibility = if (classrooms.isNotEmpty()) View.VISIBLE else View.GONE
         tvClassrooms.text = classrooms.joinToString()

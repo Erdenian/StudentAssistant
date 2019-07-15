@@ -12,7 +12,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import ru.erdenian.studentassistant.utils.getColorCompat
 
 /**
- * Иконка и имя преподавателя.
+ * Иконка и имя преподавателя
  *
  * @author Ilya Solovyev
  * @version 1.0.0
