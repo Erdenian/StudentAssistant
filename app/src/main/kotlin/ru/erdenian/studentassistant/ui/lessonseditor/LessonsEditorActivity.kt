@@ -21,7 +21,7 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.model.entity.Semester
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
-import ru.erdenian.studentassistant.utils.getCompatColor
+import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.lazyViewModel
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
@@ -72,7 +72,7 @@ class LessonsEditorActivity : AppCompatActivity() {
             adapter = LessonsEditorPagerAdapter(supportFragmentManager)
         }
         requireViewByIdCompat<PagerTabStrip>(R.id.alse_by_weekdays_pager_tab_strip).apply {
-            setTextColor(getCompatColor(R.color.colorPrimary))
+            setTextColor(getColorCompat(R.color.colorPrimary))
             setTabIndicatorColorResource(R.color.colorPrimary)
         }
 
@@ -91,7 +91,7 @@ class LessonsEditorActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_lessons_editor, menu)
-        menu.setColor(getCompatColor(R.color.action_bar_icons_color))
+        menu.setColor(getColorCompat(R.color.action_bar_icons_color))
         return true
     }
 

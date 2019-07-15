@@ -14,7 +14,7 @@ import androidx.viewpager.widget.ViewPager
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.ui.main.MainViewModel
-import ru.erdenian.studentassistant.utils.getCompatColor
+import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.lazyActivityViewModel
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
@@ -51,14 +51,14 @@ class ScheduleFragment : Fragment() {
 
         pager.adapter = pagerAdapter
         requireView().requireViewByIdCompat<PagerTabStrip>(R.id.fs_pager_tab_strip).apply {
-            setTextColor(getCompatColor(R.color.colorPrimary))
+            setTextColor(getColorCompat(R.color.colorPrimary))
             setTabIndicatorColorResource(R.color.colorPrimary)
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_schedule, menu)
-        menu.setColor(getCompatColor(R.color.action_bar_icons_color))
+        menu.setColor(getColorCompat(R.color.action_bar_icons_color))
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {

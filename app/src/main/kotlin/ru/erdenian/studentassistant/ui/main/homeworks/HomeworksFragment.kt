@@ -13,7 +13,7 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.ui.main.MainViewModel
 import ru.erdenian.studentassistant.utils.getActivityViewModel
-import ru.erdenian.studentassistant.utils.getCompatColor
+import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 
 class HomeworksFragment : Fragment() {
@@ -36,7 +36,7 @@ class HomeworksFragment : Fragment() {
             }
         }
         requireView().requireViewByIdCompat<PagerTabStrip>(R.id.fh_pager_tab_strip).apply {
-            setTextColor(getCompatColor(R.color.colorPrimary))
+            setTextColor(getColorCompat(R.color.colorPrimary))
             setTabIndicatorColorResource(R.color.colorPrimary)
         }
 
