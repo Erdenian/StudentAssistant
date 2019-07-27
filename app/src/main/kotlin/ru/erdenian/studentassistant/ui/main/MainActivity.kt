@@ -12,7 +12,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.distinctUntilChanged
-import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import com.google.android.material.navigation.NavigationView
 import org.jetbrains.anko.startActivity
@@ -134,12 +133,11 @@ class MainActivity : AppCompatActivity() {
             viewModel.allSemesters.observe(owner) { semesters ->
                 visibility = if (semesters.size > 1) View.VISIBLE else View.GONE
             }
-            viewModel.selectedSemester.distinctUntilChanged().observe(owner) { semester ->
-                setSelection(viewModel.allSemesters.value.indexOf(semester))
-            }
-
             adapter = SemestersSpinnerAdapter().apply {
                 viewModel.allSemesters.observe(owner) { semesters = it.list }
+            }
+            viewModel.selectedSemester.distinctUntilChanged().observe(owner) { semester ->
+                setSelection(viewModel.allSemesters.value.indexOf(semester))
             }
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
