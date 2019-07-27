@@ -92,7 +92,7 @@ class SemesterEditorActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_semester_editor, menu)
-        menu.setColor(getColorCompat(R.color.action_bar_icons_color))
+        menu.setColor(getColorCompat(R.color.menu))
         return true
     }
 

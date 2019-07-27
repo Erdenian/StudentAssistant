@@ -6,13 +6,6 @@
 
     <dimen name="cards_spacing">10dp</dimen>
 
-    <dimen name="card_margin_top">12dp</dimen>
-    <dimen name="card_margin_horizontal">8dp</dimen>
-    <dimen name="card_margin_bottom">4dp</dimen>
-    <dimen name="card_margin_inside">8dp</dimen>
-    <dimen name="card_primary_text_size">20sp</dimen>
-    <dimen name="card_secondary_text_size">16sp</dimen>
-
     <dimen name="fab_margin">16dp</dimen>
 
 </resources>

@@ -139,7 +139,7 @@ class HomeworkEditorActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_homework_editor, menu)
         menu.findItem(R.id.mhe_delete).isVisible = (homework != null)
-        menu.setColor(getColorCompat(R.color.action_bar_icons_color))
+        menu.setColor(getColorCompat(R.color.menu))
         return super.onCreateOptionsMenu(menu)
     }
 

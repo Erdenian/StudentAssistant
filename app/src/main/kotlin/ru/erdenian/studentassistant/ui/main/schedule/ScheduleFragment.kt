@@ -51,14 +51,14 @@ class ScheduleFragment : Fragment() {
 
         pager.adapter = pagerAdapter
         requireView().requireViewByIdCompat<PagerTabStrip>(R.id.fs_pager_tab_strip).apply {
-            setTextColor(getColorCompat(R.color.colorPrimary))
-            setTabIndicatorColorResource(R.color.colorPrimary)
+            setTextColor(getColorCompat(R.color.primary))
+            setTabIndicatorColorResource(R.color.primary)
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_schedule, menu)
-        menu.setColor(getColorCompat(R.color.action_bar_icons_color))
+        menu.setColor(getColorCompat(R.color.menu))
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {

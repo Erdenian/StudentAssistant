@@ -36,8 +36,8 @@ class HomeworksFragment : Fragment() {
             }
         }
         requireView().requireViewByIdCompat<PagerTabStrip>(R.id.fh_pager_tab_strip).apply {
-            setTextColor(getColorCompat(R.color.colorPrimary))
-            setTabIndicatorColorResource(R.color.colorPrimary)
+            setTextColor(getColorCompat(R.color.primary))
+            setTabIndicatorColorResource(R.color.primary)
         }
 
         requireView().requireViewByIdCompat<FloatingActionButton>(R.id.fh_add_homework)

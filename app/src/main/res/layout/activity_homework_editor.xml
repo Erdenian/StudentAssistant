@@ -15,8 +15,7 @@
         android:layout_marginBottom="4dp"
         android:prompt="@string/hea_subject"
         android:spinnerMode="dialog"
-        android:textColor="@color/colorPrimaryText"
-        android:textSize="@dimen/card_secondary_text_size" />
+        android:textColor="@color/primary_text" />
 
     <EditText
         android:id="@+id/ahe_description"
@@ -26,8 +25,7 @@
         android:gravity="top"
         android:hint="@string/hea_description"
         android:inputType="textMultiLine"
-        android:textColor="@color/colorPrimaryText"
-        android:textSize="@dimen/card_secondary_text_size"
+        android:textColor="@color/primary_text"
         tools:ignore="Autofill" />
 
     <Button
