@@ -2,11 +2,13 @@ package ru.erdenian.studentassistant.ui.main
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.switchMap
 import com.shopify.livedataktx.MediatorLiveDataKtx
 import com.shopify.livedataktx.MutableLiveDataKtx
 import com.shopify.livedataktx.toKtx
+import com.shopify.livedataktx.toNullableKtx
 import org.joda.time.LocalDate
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
@@ -35,6 +37,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application), K
                 } ?: semesters.lastOrNull()
             })
         }
+
+    val hasLessons = selectedSemester.asLiveData.switchMap { semester ->
+        semester?.let { s ->
+            @Suppress("UNCHECKED_CAST")
+            lessonRepository.hasLessons(s.id) as LiveData<Boolean?>
+        } ?: liveDataOf(null)
+    }.toNullableKtx()
 
     fun getLessons(day: LocalDate) = selectedSemester.asLiveData.switchMap { semester ->
         semester?.let { lessonRepository.get(it, day) } ?: liveDataOf(immutableSortedSetOf())

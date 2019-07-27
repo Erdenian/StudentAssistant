@@ -85,7 +85,10 @@ tasks.withType<KotlinCompile> {
     kotlinOptions {
         jvmTarget = "1.8"
         @Suppress("SuspiciousCollectionReassignment")
-        freeCompilerArgs += "-XXLanguage:+InlineClasses"
+        freeCompilerArgs += listOf(
+            "-XXLanguage:+InlineClasses",
+            "-Xnew-inference"
+        )
     }
 }
 

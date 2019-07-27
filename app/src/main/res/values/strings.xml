@@ -25,6 +25,10 @@
     <string name="sf_calendar">Календарь</string>
     <string name="sf_free_day">Выходной</string>
 
+    <!-- NoLessonsFragment -->
+    <string name="nlf_title">Домашние задания</string>
+    <string name="nlf_create">Добавить занятие</string>
+
     <!-- HomeworksFragment -->
     <string name="hf_title">Домашние задания</string>
     <string name="hf_no_homeworks">Нет заданий</string>
