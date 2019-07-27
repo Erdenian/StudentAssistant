@@ -72,8 +72,8 @@ class LessonsEditorActivity : AppCompatActivity() {
             adapter = LessonsEditorPagerAdapter(supportFragmentManager)
         }
         requireViewByIdCompat<PagerTabStrip>(R.id.alse_by_weekdays_pager_tab_strip).apply {
-            setTextColor(getColorCompat(R.color.colorPrimary))
-            setTabIndicatorColorResource(R.color.colorPrimary)
+            setTextColor(getColorCompat(R.color.primary))
+            setTabIndicatorColorResource(R.color.primary)
         }
 
         // TODO: 13.11.2016 добавить заполнение списка пар по датам
@@ -91,7 +91,7 @@ class LessonsEditorActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_lessons_editor, menu)
-        menu.setColor(getColorCompat(R.color.action_bar_icons_color))
+        menu.setColor(getColorCompat(R.color.menu))
         return true
     }
 

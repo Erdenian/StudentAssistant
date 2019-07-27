@@ -31,7 +31,7 @@ class TeacherView @JvmOverloads constructor(
             TypedValue.COMPLEX_UNIT_PX,
             resources.getDimension(R.dimen.card_secondary_text_size)
         )
-        setTextColor(context.getColorCompat(R.color.colorSecondaryText))
+        setTextColor(context.getColorCompat(R.color.secondary_text))
     }
 
     /**
@@ -56,7 +56,7 @@ class TeacherView @JvmOverloads constructor(
             ).apply { gravity = Gravity.CENTER_VERTICAL }
             setImageResource(R.drawable.ic_menu_account)
             imageTintList = ColorStateList.valueOf(
-                context.getColorCompat(R.color.colorSecondaryText)
+                context.getColorCompat(R.color.secondary_text)
             )
         })
         addView(textView)

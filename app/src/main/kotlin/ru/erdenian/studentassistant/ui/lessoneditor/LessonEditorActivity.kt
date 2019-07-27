@@ -278,7 +278,7 @@ class LessonEditorActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_lesson_editor, menu)
         menu.findItem(R.id.mle_delete).isVisible = (lesson != null)
-        menu.setColor(getColorCompat(R.color.action_bar_icons_color))
+        menu.setColor(getColorCompat(R.color.menu))
         return true
     }
 

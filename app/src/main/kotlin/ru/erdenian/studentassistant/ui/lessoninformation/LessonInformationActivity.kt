@@ -101,7 +101,7 @@ class LessonInformationActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_lesson_information, menu)
-        menu.setColor(getColorCompat(R.color.action_bar_icons_color))
+        menu.setColor(getColorCompat(R.color.menu))
         return true
     }
 

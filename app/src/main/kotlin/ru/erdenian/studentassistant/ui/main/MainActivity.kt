@@ -160,7 +160,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
-        menu.setColor(getColorCompat(R.color.action_bar_icons_color))
+        menu.setColor(getColorCompat(R.color.menu))
         return true
     }
 
