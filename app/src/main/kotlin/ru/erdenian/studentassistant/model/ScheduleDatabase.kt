@@ -1,8 +1,6 @@
 package ru.erdenian.studentassistant.model
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import ru.erdenian.studentassistant.model.dao.HomeworkDao
@@ -26,12 +24,4 @@ abstract class ScheduleDatabase : RoomDatabase() {
     abstract val semesterDao: SemesterDao
     abstract val lessonDao: LessonDao
     abstract val homeworkDao: HomeworkDao
-
-    companion object : SingletonHolder<ScheduleDatabase, Context>({ context ->
-        Room.databaseBuilder(
-            context.applicationContext,
-            ScheduleDatabase::class.java,
-            "schedule.db"
-        ).build()
-    })
 }
