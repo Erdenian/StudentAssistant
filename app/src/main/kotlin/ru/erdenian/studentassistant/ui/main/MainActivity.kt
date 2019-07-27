@@ -72,7 +72,11 @@ class MainActivity : AppCompatActivity() {
                         true
                     }
                     R.id.dm_homeworks -> {
-                        navController.navigate(R.id.action_global_homeworksFragment)
+                        navController.navigate(
+                            if (viewModel.hasLessons.value == true) {
+                                R.id.action_global_homeworksFragment
+                            } else R.id.action_global_noLessonsFragment
+                        )
                         true
                     }
                     R.id.dm_alarm -> {
@@ -105,6 +109,15 @@ class MainActivity : AppCompatActivity() {
                     navController.navigate(R.id.action_global_scheduleFragment)
                 } else if ((currentId != R.id.noScheduleFragment) && (selectedSemester == null)) {
                     navController.navigate(R.id.noScheduleFragment)
+                }
+            }
+
+            viewModel.hasLessons.observe(owner) { hasLessons ->
+                val currentId = navController.currentDestination?.id
+                if ((currentId == R.id.noLessonsFragment) && (hasLessons == true)) {
+                    navController.navigate(R.id.action_global_homeworksFragment)
+                } else if ((currentId == R.id.homeworksFragment) && (hasLessons == false)) {
+                    navController.navigate(R.id.action_global_noLessonsFragment)
                 }
             }
         }

@@ -44,6 +44,9 @@ abstract class LessonDao {
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId AND _id = :lessonId")
     abstract fun getLive(semesterId: Long, lessonId: Long): LiveData<Lesson?>
 
+    @Query("SELECT EXISTS(SELECT _id FROM lessons WHERE semester_id = :semesterId)")
+    abstract fun hasLessons(semesterId: Long): LiveData<Boolean>
+
     @Transaction
     open suspend fun delete(lesson: Lesson) = withContext(Dispatchers.IO) {
         deleteLesson(lesson)

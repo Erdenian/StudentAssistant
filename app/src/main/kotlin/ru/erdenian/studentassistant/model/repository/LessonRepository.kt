@@ -14,6 +14,7 @@ class LessonRepository(private val lessonDao: LessonDao) : BaseRepository() {
     suspend fun insert(lesson: Lesson) = lessonDao.insert(lesson)
     suspend fun get(semesterId: Long, lessonId: Long) = lessonDao.get(semesterId, lessonId)
     fun get(lesson: Lesson) = lessonDao.getLive(lesson.semesterId, lesson.id).toNullableKtx()
+    fun hasLessons(semesterId: Long) = lessonDao.hasLessons(semesterId)
     suspend fun delete(lesson: Lesson) = lessonDao.delete(lesson)
 
     fun get(semesterId: Long) = lessonDao.get(semesterId).map()

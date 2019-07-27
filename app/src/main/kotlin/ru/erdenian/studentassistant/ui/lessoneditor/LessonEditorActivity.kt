@@ -44,7 +44,7 @@ class LessonEditorActivity : AppCompatActivity() {
         private const val LESSON_INTENT_KEY = "lesson_intent_key"
         private const val COPY_INTENT_KEY = "copy_intent_key"
 
-        fun start(context: Context, semesterId: Long, weekday: Int) {
+        fun start(context: Context, semesterId: Long, weekday: Int = DateTimeConstants.MONDAY) {
             context.startActivity<LessonEditorActivity>(
                 SEMESTER_ID_INTENT_KEY to semesterId,
                 WEEKDAY_INTENT_KEY to weekday
