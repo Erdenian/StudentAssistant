@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.ui.main.MainViewModel
-import ru.erdenian.studentassistant.utils.getViewModel
+import ru.erdenian.studentassistant.utils.getActivityViewModel
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 
 class NoLessonsFragment : Fragment() {
@@ -22,9 +22,7 @@ class NoLessonsFragment : Fragment() {
         requireViewByIdCompat<Button>(R.id.fnl_create_lesson).setOnClickListener {
             LessonEditorActivity.start(
                 requireContext(),
-                checkNotNull(
-                    requireActivity().getViewModel<MainViewModel>().selectedSemester.value
-                ).id
+                checkNotNull(getActivityViewModel<MainViewModel>().selectedSemester.value).id
             )
         }
     }

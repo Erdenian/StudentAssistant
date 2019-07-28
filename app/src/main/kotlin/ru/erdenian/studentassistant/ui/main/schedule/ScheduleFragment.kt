@@ -8,13 +8,13 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.observe
 import androidx.viewpager.widget.PagerTabStrip
 import androidx.viewpager.widget.ViewPager
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.ui.main.MainViewModel
 import ru.erdenian.studentassistant.utils.getColorCompat
+import ru.erdenian.studentassistant.utils.id
 import ru.erdenian.studentassistant.utils.lazyActivityViewModel
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
@@ -24,7 +24,7 @@ class ScheduleFragment : Fragment() {
 
     private val viewModel by lazyActivityViewModel<MainViewModel>()
 
-    private val pager by lazy { requireView().requireViewByIdCompat<ViewPager>(R.id.fs_view_pager) }
+    private val pager: ViewPager by id(R.id.fs_view_pager)
     private val pagerAdapter by lazy {
         SchedulePagerAdapter(childFragmentManager).apply {
             var selectedDate = LocalDate.now()
@@ -45,12 +45,11 @@ class ScheduleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_schedule, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
 
         pager.adapter = pagerAdapter
-        requireView().requireViewByIdCompat<PagerTabStrip>(R.id.fs_pager_tab_strip).apply {
+        view.requireViewByIdCompat<PagerTabStrip>(R.id.fs_pager_tab_strip).apply {
             setTextColor(getColorCompat(R.color.primary))
             setTabIndicatorColorResource(R.color.primary)
         }

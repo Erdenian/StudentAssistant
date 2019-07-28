@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ViewFlipper
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.jetbrains.anko.dimen
@@ -51,13 +50,11 @@ class SchedulePageFragment : Fragment() {
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val date = requireArguments().get(PAGE_DATE) as LocalDate
         val lessons = requireActivity().getViewModel<MainViewModel>().getLessons(date)
 
-        requireView().requireViewByIdCompat<ViewFlipper>(R.id.pfs_flipper).apply {
+        view.requireViewByIdCompat<ViewFlipper>(R.id.pfs_flipper).apply {
             val lessonsIndex = 0
             val freeDayIndex = 1
             lessons.observe(this@SchedulePageFragment) { value ->

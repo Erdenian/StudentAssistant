@@ -10,7 +10,6 @@ import android.widget.AdapterView
 import android.widget.ViewFlipper
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.observe
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +21,7 @@ import ru.erdenian.studentassistant.model.entity.Lesson
 import ru.erdenian.studentassistant.ui.adapter.LessonsListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
-import ru.erdenian.studentassistant.utils.getViewModel
+import ru.erdenian.studentassistant.utils.lazyActivityViewModel
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 
 class LessonsEditorPageFragment : Fragment() {
@@ -35,7 +34,7 @@ class LessonsEditorPageFragment : Fragment() {
         }
     }
 
-    private val viewModel by lazy { requireActivity().getViewModel<LessonsEditorViewModel>() }
+    private val viewModel by lazyActivityViewModel<LessonsEditorViewModel>()
     private val adapter = LessonsListAdapter().apply {
         onLessonClickListener = object : LessonsListAdapter.OnLessonClickListener {
             override fun onLessonClick(lesson: Lesson) {
@@ -57,13 +56,11 @@ class LessonsEditorPageFragment : Fragment() {
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val weekday = requireArguments().getInt(PAGE_WEEKDAY)
         val lessons = viewModel.getLessons(weekday)
 
-        requireView().requireViewByIdCompat<ViewFlipper>(R.id.pfle_flipper).apply {
+        view.requireViewByIdCompat<ViewFlipper>(R.id.pfle_flipper).apply {
             val lessonsIndex = 0
             val freeDayIndex = 1
             lessons.observe(this@LessonsEditorPageFragment) { value ->
