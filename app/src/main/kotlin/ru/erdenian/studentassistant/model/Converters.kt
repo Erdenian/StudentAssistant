@@ -55,7 +55,7 @@ class Converters {
     @TypeConverter
     fun stringToLessonRepeat(value: String?): LessonRepeat? =
         if (value == null) null else {
-            if (value.contains('.')) LessonRepeat.ByDates(
+            if (value.contains('-')) LessonRepeat.ByDates(
                 value.split(SEPARATOR).map { LocalDate.parse(it) }.toImmutableSortedSet()
             )
             else {
