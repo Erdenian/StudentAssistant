@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.ui.semestereditor
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.Menu
@@ -7,15 +8,16 @@ import android.view.MenuItem
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.observe
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.model.entity.Semester
+import ru.erdenian.studentassistant.ui.lessonseditor.LessonsEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorViewModel.Error
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
@@ -112,7 +114,9 @@ class SemesterEditorActivity : AppCompatActivity() {
                 )
             } ?: run {
                 viewModel.viewModelScope.launch {
-                    viewModel.save()
+                    viewModel.save().let { semester ->
+                        LessonsEditorActivity.start(this@SemesterEditorActivity, semester)
+                    }
                     finish()
                 }
             }
