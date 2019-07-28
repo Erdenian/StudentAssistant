@@ -9,7 +9,6 @@ import android.widget.AdapterView
 import android.widget.Spinner
 import android.widget.ViewFlipper
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.observe
 import androidx.lifecycle.viewModelScope
 import androidx.viewpager.widget.PagerTabStrip
 import androidx.viewpager.widget.ViewPager
@@ -79,11 +78,15 @@ class LessonsEditorActivity : AppCompatActivity() {
         // TODO: 13.11.2016 добавить заполнение списка пар по датам
 
         requireViewByIdCompat<FloatingActionButton>(R.id.alse_add_lesson).setOnClickListener {
-            LessonEditorActivity.start(
-                this,
-                checkNotNull(viewModel.semester.value).id,
-                byWeekdaysPager.currentItem + 1
-            )
+            viewModel.viewModelScope.launch {
+                val weekday = byWeekdaysPager.currentItem + 1
+                LessonEditorActivity.start(
+                    this@LessonsEditorActivity,
+                    checkNotNull(viewModel.semester.value).id,
+                    viewModel.getNextStartTime(weekday),
+                    weekday
+                )
+            }
         }
 
         viewModel.semester.observe(this) { if (it == null) finish() }

@@ -1,11 +1,9 @@
 package ru.erdenian.studentassistant.model.repository
 
-import androidx.lifecycle.map
 import com.shopify.livedataktx.toNullableKtx
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.model.dao.LessonDao
 import ru.erdenian.studentassistant.model.entity.Lesson
-import ru.erdenian.studentassistant.model.entity.LessonRepeat
 import ru.erdenian.studentassistant.model.entity.Semester
 
 @Suppress("TooManyFunctions")
@@ -18,6 +16,8 @@ class LessonRepository(private val lessonDao: LessonDao) : BaseRepository() {
     suspend fun delete(lesson: Lesson) = lessonDao.delete(lesson)
 
     fun get(semesterId: Long) = lessonDao.get(semesterId).map()
+    fun get(semester: Semester, day: LocalDate) = lessonDao.get(semester, day).map()
+    fun get(semesterId: Long, weekday: Int) = lessonDao.get(semesterId, weekday).map()
     suspend fun getCount(semesterId: Long) = lessonDao.getCount(semesterId)
     suspend fun getCount(semesterId: Long, subjectName: String) =
         lessonDao.getCount(semesterId, subjectName)
@@ -30,18 +30,6 @@ class LessonRepository(private val lessonDao: LessonDao) : BaseRepository() {
     fun getTeachers(semesterId: Long) = lessonDao.getTeachers(semesterId).map()
     fun getClassrooms(semesterId: Long) = lessonDao.getClassrooms(semesterId).map()
     suspend fun getLessonLength(semesterId: Long) = lessonDao.getLessonLength(semesterId)
-
-    fun get(semester: Semester, day: LocalDate) =
-        get(semester.id).map { lessons ->
-            val weekNumber = semester.getWeekNumber(day)
-            lessons.filter { it.lessonRepeat.repeatsOnDay(day, weekNumber) }
-        }.map()
-
-    fun get(semesterId: Long, weekday: Int) =
-        get(semesterId).map { lessons ->
-            lessons.filter { lesson ->
-                if (lesson.lessonRepeat !is LessonRepeat.ByWeekday) false
-                else lesson.lessonRepeat.repeatsOnWeekday(weekday)
-            }
-        }.map()
+    suspend fun getNextStartTime(semesterId: Long, weekday: Int) =
+        lessonDao.getNextStartTime(semesterId, weekday)
 }

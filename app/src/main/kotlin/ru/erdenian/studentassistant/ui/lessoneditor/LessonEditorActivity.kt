@@ -14,7 +14,6 @@ import android.widget.Spinner
 import android.widget.ViewFlipper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.observe
 import androidx.lifecycle.viewModelScope
 import com.dpro.widgets.WeekdaysPicker
 import com.google.android.material.textfield.TextInputLayout
@@ -23,6 +22,7 @@ import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.joda.time.DateTimeConstants
+import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.customviews.WeeksSelector
 import ru.erdenian.studentassistant.model.entity.Lesson
@@ -40,13 +40,20 @@ class LessonEditorActivity : AppCompatActivity() {
 
     companion object {
         private const val SEMESTER_ID_INTENT_KEY = "semester_id_intent_key"
+        private const val START_TIME_INTENT_KEY = "start_time_intent_key"
         private const val WEEKDAY_INTENT_KEY = "weekday_intent_key"
         private const val LESSON_INTENT_KEY = "lesson_intent_key"
         private const val COPY_INTENT_KEY = "copy_intent_key"
 
-        fun start(context: Context, semesterId: Long, weekday: Int = DateTimeConstants.MONDAY) {
+        fun start(
+            context: Context,
+            semesterId: Long,
+            startTime: LocalTime = LocalTime(9, 0),
+            weekday: Int = DateTimeConstants.MONDAY
+        ) {
             context.startActivity<LessonEditorActivity>(
                 SEMESTER_ID_INTENT_KEY to semesterId,
+                START_TIME_INTENT_KEY to startTime,
                 WEEKDAY_INTENT_KEY to weekday
             )
         }
@@ -74,8 +81,10 @@ class LessonEditorActivity : AppCompatActivity() {
         intent.apply {
             val l = lesson
             val semesterId = getLongExtra(SEMESTER_ID_INTENT_KEY, -1)
+            @Suppress("UnsafeCast")
             if (l == null) viewModel.init(
                 semesterId,
+                getSerializableExtra(START_TIME_INTENT_KEY) as LocalTime,
                 getIntExtra(WEEKDAY_INTENT_KEY, DateTimeConstants.MONDAY)
             ) else viewModel.init(
                 semesterId,

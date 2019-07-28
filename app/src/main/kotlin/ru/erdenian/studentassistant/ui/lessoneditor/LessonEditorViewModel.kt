@@ -46,8 +46,13 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
     private val semesterId = MutableLiveDataKtx<Long>()
     private var lesson: Lesson? = null
 
-    fun init(semesterId: Long, weekday: Int = DateTimeConstants.MONDAY) {
+    fun init(
+        semesterId: Long,
+        startTime: LocalTime = this.startTime.value,
+        weekday: Int = this.weekday.value
+    ) {
         this.semesterId.setIfEmpty(semesterId)
+        this.startTime.value = startTime
         this.weekday.value = weekday
     }
 
