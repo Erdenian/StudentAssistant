@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.model.ImmutableSortedSet
+import ru.erdenian.studentassistant.model.immutableSortedSetOf
 
 /**
  * Класс пары (урока).
@@ -45,13 +46,13 @@ data class Lesson(
     val subjectName: String,
 
     @ColumnInfo(name = "type")
-    val type: String?,
+    val type: String? = null,
 
     @ColumnInfo(name = "teachers")
-    val teachers: ImmutableSortedSet<String>,
+    val teachers: ImmutableSortedSet<String> = immutableSortedSetOf(),
 
     @ColumnInfo(name = "classrooms")
-    val classrooms: ImmutableSortedSet<String>,
+    val classrooms: ImmutableSortedSet<String> = immutableSortedSetOf(),
 
     @ColumnInfo(name = "start_time")
     val startTime: LocalTime,
