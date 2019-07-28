@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ViewFlipper
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.jetbrains.anko.dimen
@@ -50,15 +49,13 @@ class HomeworksPageFragment : Fragment() {
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val isActual = requireArguments().getBoolean(IS_ACTUAL)
         val homeworks = requireActivity().getViewModel<MainViewModel>().run {
             if (isActual) getActualHomeworks() else getPastHomeworks()
         }
 
-        requireView().requireViewByIdCompat<ViewFlipper>(R.id.pfh_flipper).apply {
+        view.requireViewByIdCompat<ViewFlipper>(R.id.pfh_flipper).apply {
             val homeworksIndex = 0
             val noHomeworksIndex = 1
             homeworks.observe(this@HomeworksPageFragment) { value ->

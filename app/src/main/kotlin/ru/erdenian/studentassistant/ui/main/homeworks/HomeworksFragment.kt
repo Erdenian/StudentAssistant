@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.observe
 import androidx.viewpager.widget.PagerTabStrip
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -24,27 +23,25 @@ class HomeworksFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_homeworks, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val viewModel = getActivityViewModel<MainViewModel>()
-        val owner = this
+        val owner = this@HomeworksFragment
 
-        requireView().requireViewByIdCompat<ViewPager>(R.id.fh_view_pager).apply {
+        view.requireViewByIdCompat<ViewPager>(R.id.fh_view_pager).apply {
             adapter = HomeworksPagerAdapter(context, childFragmentManager).apply {
                 viewModel.selectedSemester.observe(owner) { semester = it }
             }
         }
-        requireView().requireViewByIdCompat<PagerTabStrip>(R.id.fh_pager_tab_strip).apply {
+        view.requireViewByIdCompat<PagerTabStrip>(R.id.fh_pager_tab_strip).apply {
             setTextColor(getColorCompat(R.color.primary))
             setTabIndicatorColorResource(R.color.primary)
         }
 
-        requireView().requireViewByIdCompat<FloatingActionButton>(R.id.fh_add_homework)
+        view.requireViewByIdCompat<FloatingActionButton>(R.id.fh_add_homework)
             .setOnClickListener {
-            HomeworkEditorActivity.start(
-                requireContext(), checkNotNull(viewModel.selectedSemester.value).id
-            )
-        }
+                HomeworkEditorActivity.start(
+                    requireContext(), checkNotNull(viewModel.selectedSemester.value).id
+                )
+            }
     }
 }
