@@ -63,9 +63,9 @@ class MainActivity : AppCompatActivity() {
                 when (menuItem.itemId) {
                     R.id.dm_schedule -> {
                         navController.navigate(
-                            if (viewModel.selectedSemester.value != null)
+                            if (viewModel.selectedSemester.value != null) {
                                 R.id.action_global_scheduleFragment
-                            else R.id.action_global_noScheduleFragment
+                            } else R.id.action_global_noScheduleFragment
                         )
                         true
                     }
