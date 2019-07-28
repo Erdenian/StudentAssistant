@@ -12,7 +12,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.observe
+import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.alert
@@ -20,12 +20,13 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.repository.entity.Homework
-import ru.erdenian.studentassistant.repository.entity.Lesson
+import ru.erdenian.studentassistant.model.entity.Homework
+import ru.erdenian.studentassistant.model.entity.Lesson
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorViewModel.Error
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
-import ru.erdenian.studentassistant.utils.getCompatColor
+import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.lazyViewModel
+import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
 
@@ -80,10 +81,11 @@ class HomeworkEditorActivity : AppCompatActivity() {
 
         val owner = this
 
-        findViewById<Spinner>(R.id.ahe_subject_name).apply {
+        requireViewByIdCompat<Spinner>(R.id.ahe_subject_name).apply {
             viewModel.existingSubjects.observe(owner) { subjects ->
+                @Suppress("UnsafeCast")
                 val selection = selectedItem as String?
-                adapter = ArrayAdapter<String>(
+                adapter = ArrayAdapter(
                     context,
                     android.R.layout.simple_spinner_item,
                     subjects.toTypedArray()
@@ -93,9 +95,7 @@ class HomeworkEditorActivity : AppCompatActivity() {
                 }
             }
 
-            viewModel.subjectName.distinctUntilChanged { value ->
-                value == selectedItem as String?
-            }.observe(owner) { subjectName ->
+            viewModel.subjectName.distinctUntilChanged().observe(owner) { subjectName ->
                 viewModel.existingSubjects.safeValue?.run { setSelection(list.indexOf(subjectName)) }
             }
 
@@ -108,19 +108,20 @@ class HomeworkEditorActivity : AppCompatActivity() {
                     position: Int,
                     id: Long
                 ) {
+                    @Suppress("UnsafeCast")
                     viewModel.subjectName.value = selectedItem as String
                 }
             }
         }
 
-        findViewById<EditText>(R.id.ahe_description).apply {
+        requireViewByIdCompat<EditText>(R.id.ahe_description).apply {
             viewModel.description.distinctUntilChanged { value ->
                 value == text?.toString() ?: ""
             }.observe(owner) { setText(it) }
             addTextChangedListener { viewModel.description.value = it?.toString() ?: "" }
         }
 
-        findViewById<Button>(R.id.ahe_deadline).apply {
+        requireViewByIdCompat<Button>(R.id.ahe_deadline).apply {
             viewModel.deadline.observe(owner) { deadline ->
                 text = deadline.toString(DATE_FORMAT)
             }
@@ -138,8 +139,8 @@ class HomeworkEditorActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_homework_editor, menu)
-        menu.findItem(R.id.menu_homework_editor_delete_homework).isVisible = (homework != null)
-        menu.setColor(getCompatColor(R.color.action_bar_icons_color))
+        menu.findItem(R.id.mhe_delete).isVisible = (homework != null)
+        menu.setColor(getColorCompat(R.color.menu))
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -148,7 +149,7 @@ class HomeworkEditorActivity : AppCompatActivity() {
             finish()
             true
         }
-        R.id.menu_lesson_editor_save -> {
+        R.id.mhe_save -> {
             viewModel.error.value?.let { error ->
                 toast(
                     when (error) {
@@ -163,7 +164,7 @@ class HomeworkEditorActivity : AppCompatActivity() {
             }
             true
         }
-        R.id.menu_homework_editor_delete_homework -> {
+        R.id.mhe_delete -> {
             alert(R.string.hea_delete_message) {
                 positiveButton(R.string.hea_delete_yes) {
                     viewModel.viewModelScope.launch {

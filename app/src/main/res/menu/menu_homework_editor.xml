@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_lesson_editor_save"
+        android:id="@+id/mhe_save"
         android:icon="@drawable/check"
         android:title="@string/hea_save"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/menu_homework_editor_delete_homework"
+        android:id="@+id/mhe_delete"
         android:title="@string/hea_delete"
         app:showAsAction="never" />
 

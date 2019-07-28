@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <style name="ScheduleCard">
-        <item name="android:foreground">?android:attr/selectableItemBackgroundBorderless</item>
-    </style>
-
-</resources>

@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import org.joda.time.LocalTime
+import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setViewCount
 
 /**
@@ -25,7 +26,7 @@ class LessonCard @JvmOverloads constructor(
 ) : CardView(context, attrs, defStyleAttr) {
 
     companion object {
-        private const val TIME_FORMAT = "HH:mm"
+        private const val TIME_FORMATTER = "HH:mm"
     }
 
     private val tvStartTime: TextView
@@ -39,22 +40,22 @@ class LessonCard @JvmOverloads constructor(
     private val tvRepeatsText: TextView
 
     init {
-        inflate(context, R.layout.lesson_card, this)
+        inflate(context, R.layout.card_lesson, this)
 
         TypedValue().also { outValue ->
             context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
             foreground = context.getDrawable(outValue.resourceId)
         }
 
-        tvStartTime = findViewById(R.id.lc_start_time)
-        tvEndTime = findViewById(R.id.lc_end_time)
-        llClassroomsParent = findViewById(R.id.lc_classrooms_parent)
-        tvClassrooms = findViewById(R.id.lc_classrooms)
-        tvType = findViewById(R.id.lc_type)
-        tvSubjectName = findViewById(R.id.lc_subject_name)
-        llTeachersParent = findViewById(R.id.lc_teachers_parent)
-        llRepeatsParent = findViewById(R.id.lc_repeats_parent)
-        tvRepeatsText = findViewById(R.id.lc_repeats_text)
+        tvStartTime = requireViewByIdCompat(R.id.lc_start_time)
+        tvEndTime = requireViewByIdCompat(R.id.lc_end_time)
+        llClassroomsParent = requireViewByIdCompat(R.id.lc_classrooms_parent)
+        tvClassrooms = requireViewByIdCompat(R.id.lc_classrooms)
+        tvType = requireViewByIdCompat(R.id.lc_type)
+        tvSubjectName = requireViewByIdCompat(R.id.lc_subject_name)
+        llTeachersParent = requireViewByIdCompat(R.id.lc_teachers_parent)
+        llRepeatsParent = requireViewByIdCompat(R.id.lc_repeats_parent)
+        tvRepeatsText = requireViewByIdCompat(R.id.lc_repeats_text)
     }
 
     /**
@@ -62,6 +63,7 @@ class LessonCard @JvmOverloads constructor(
      *
      * @since 0.2.6
      */
+    @Suppress("LongParameterList")
     fun setLesson(
         subjectName: String,
         type: String?,
@@ -70,8 +72,8 @@ class LessonCard @JvmOverloads constructor(
         startTime: LocalTime,
         endTime: LocalTime
     ) {
-        tvStartTime.text = startTime.toString(TIME_FORMAT)
-        tvEndTime.text = endTime.toString(TIME_FORMAT)
+        tvStartTime.text = startTime.toString(TIME_FORMATTER)
+        tvEndTime.text = endTime.toString(TIME_FORMATTER)
 
         llClassroomsParent.visibility = if (classrooms.isNotEmpty()) View.VISIBLE else View.GONE
         tvClassrooms.text = classrooms.joinToString()

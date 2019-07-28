@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_lessons_editor_edit_semester"
+        android:id="@+id/mlse_edit_semester"
         android:title="@string/lsea_edit"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/menu_lessons_editor_delete_semester"
+        android:id="@+id/mlse_delete_semester"
         android:title="@string/lsea_delete"
         app:showAsAction="never" />
 

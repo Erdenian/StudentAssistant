@@ -15,11 +15,12 @@ import kotlinx.coroutines.launch
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.repository.entity.Semester
+import ru.erdenian.studentassistant.model.entity.Semester
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorViewModel.Error
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
-import ru.erdenian.studentassistant.utils.getCompatColor
+import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.lazyViewModel
+import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
 
@@ -53,7 +54,7 @@ class SemesterEditorActivity : AppCompatActivity() {
 
         val owner = this
 
-        findViewById<TextInputLayout>(R.id.ase_name).apply {
+        requireViewByIdCompat<TextInputLayout>(R.id.ase_name).apply {
             viewModel.error.observe(owner) { error ->
                 when (error) {
                     Error.EMPTY_NAME -> this.error = getString(
@@ -67,21 +68,21 @@ class SemesterEditorActivity : AppCompatActivity() {
             }
         }
 
-        findViewById<TextInputEditText>(R.id.ase_name_edit_text).apply {
+        requireViewByIdCompat<TextInputEditText>(R.id.ase_name_edit_text).apply {
             viewModel.name.distinctUntilChanged { value ->
                 value == text?.toString() ?: ""
             }.observe(owner) { setText(it) }
             addTextChangedListener { viewModel.name.value = it?.toString() ?: "" }
         }
 
-        findViewById<Button>(R.id.ase_first_day).apply {
+        requireViewByIdCompat<Button>(R.id.ase_first_day).apply {
             viewModel.firstDay.observe(owner) { text = it.toString(DATE_FORMAT) }
             setOnClickListener {
                 showDatePicker(viewModel.firstDay.value) { viewModel.firstDay.value = it }
             }
         }
 
-        findViewById<Button>(R.id.ase_last_day).apply {
+        requireViewByIdCompat<Button>(R.id.ase_last_day).apply {
             viewModel.lastDay.observe(owner) { text = it.toString(DATE_FORMAT) }
             setOnClickListener {
                 showDatePicker(viewModel.lastDay.value) { viewModel.lastDay.value = it }
@@ -91,7 +92,7 @@ class SemesterEditorActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_semester_editor, menu)
-        menu.setColor(getCompatColor(R.color.action_bar_icons_color))
+        menu.setColor(getColorCompat(R.color.menu))
         return true
     }
 
@@ -100,7 +101,7 @@ class SemesterEditorActivity : AppCompatActivity() {
             finish()
             true
         }
-        R.id.menu_semester_editor_save -> {
+        R.id.mse_save -> {
             viewModel.error.value?.let { error ->
                 toast(
                     when (error) {

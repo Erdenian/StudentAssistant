@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_weight="1"
-        app:cardBackgroundColor="@color/colorPrimary"
+        app:cardBackgroundColor="@color/primary"
         app:cardCornerRadius="5dp">
 
         <LinearLayout
@@ -27,7 +27,7 @@
                 android:id="@+id/ali_subject_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/action_bar_icons_color"
+                android:textColor="@android:color/white"
                 android:textSize="23sp"
                 tools:text="Военная кафедра" />
 
@@ -41,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textColor="@color/action_bar_icons_color"
+                    android:textColor="@android:color/white"
                     android:textSize="20sp"
                     tools:text="09:00" />
 
@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text=" - "
-                    android:textColor="@color/action_bar_icons_color"
+                    android:textColor="@android:color/white"
                     android:textSize="20sp"
                     tools:ignore="HardcodedText" />
 
@@ -59,7 +59,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textColor="@color/action_bar_icons_color"
+                    android:textColor="@android:color/white"
                     android:textSize="20sp"
                     tools:text="17:10" />
 
@@ -69,7 +69,7 @@
                 android:id="@+id/ali_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/action_bar_icons_color"
+                android:textColor="@android:color/white"
                 android:textSize="20sp"
                 tools:text="Лекция" />
 

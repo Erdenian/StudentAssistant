@@ -2,29 +2,46 @@
 
     <string name="app_name">Student Assistant</string>
 
-    <!-- NavigationView -->
-    <string name="nav_schedule">Расписание</string>
-    <string name="nav_homeworks">Домашние задания</string>
-    <string name="nav_alarm">Будильник</string>
-    <string name="nav_tools">Инструменты</string>
-    <string name="nav_settings">Настройки</string>
-    <string name="nav_help">Справка</string>
+    <!-- DrawerMain -->
+    <string name="dm_schedule">Расписание</string>
+    <string name="dm_homeworks">Домашние задания</string>
+    <string name="dm_alarm">Будильник</string>
+    <string name="dm_tools">Инструменты</string>
+    <string name="dm_settings">Настройки</string>
+    <string name="dm_help">Справка</string>
 
-    <!-- ScheduleActivity -->
-    <string name="sa_title">Расписание</string>
-    <string name="sa_download">Загрузить расписание с сервера</string>
-    <string name="sa_create">Добавить расписание</string>
-    <string name="sa_free_day">Выходной</string>
-    <string name="sa_calendar">Календарь</string>
-    <string name="sa_add">Добавить расписание</string>
-    <string name="sa_edit">Редактировать расписание</string>
+    <!-- region MainActivity -->
+    <string name="ma_title">Расписание</string>
+    <string name="ma_add">Добавить расписание</string>
+    <string name="ma_edit">Редактировать расписание</string>
 
-    <!-- LessonInformationActivity -->
+    <!-- NoScheduleFragment -->
+    <string name="nsf_title">Расписание</string>
+    <string name="nsf_download">Загрузить расписание с сервера</string>
+    <string name="nsf_create">Добавить расписание</string>
+
+    <!-- ScheduleFragment -->
+    <string name="sf_title">Расписание</string>
+    <string name="sf_calendar">Календарь</string>
+    <string name="sf_free_day">Выходной</string>
+
+    <!-- NoLessonsFragment -->
+    <string name="nlf_title">Домашние задания</string>
+    <string name="nlf_create">Добавить занятие</string>
+
+    <!-- HomeworksFragment -->
+    <string name="hf_title">Домашние задания</string>
+    <string name="hf_no_homeworks">Нет заданий</string>
+
+    <!-- endregion -->
+
+    <!-- region LessonInformationActivity -->
     <string name="lia_title">Данные занятия</string>
     <string name="lia_no_homeworks">Нет заданий</string>
     <string name="lia_edit">Редактировать</string>
+    <!-- endregion -->
 
-    <!-- SemesterEditorActivity -->
+    <!-- region SemesterEditorActivity -->
     <string name="sea_title_new">Добавление расписания</string>
     <string name="sea_title_edit">Данные расписания</string>
     <string name="sea_name">Название</string>
@@ -32,8 +49,9 @@
     <string name="sea_error_empty_name">Имя не может быть пустым</string>
     <string name="sea_error_name_not_available">Такое имя уже занято</string>
     <string name="sea_error_wrong_dates">Даты первого и последнего дня введены некорректно</string>
+    <!-- endregion -->
 
-    <!-- LessonsEditorActivity -->
+    <!-- region LessonsEditorActivity -->
     <string name="lsea_title">Редактор расписания</string>
     <string name="lsea_free_day">Выходной</string>
     <string name="lsea_edit">Изменить данные расписания</string>
@@ -43,8 +61,9 @@
     <string name="lsea_delete_no">Нет</string>
     <string name="lsea_copy_lesson">Копировать</string>
     <string name="lsea_delete_lesson">Удалить</string>
+    <!-- endregion -->
 
-    <!-- LessonEditorActivity -->
+    <!-- region LessonEditorActivity -->
     <string name="lea_title_new">Добавление занятия</string>
     <string name="lea_title_edit">Данные занятия</string>
     <string name="lea_subject_name">Название занятия</string>
@@ -69,12 +88,9 @@
     <string name="lea_delete_homeworks_message">Для данного предмета есть домашние задания, они будут удалены вместе с ним</string>
     <string name="lea_delete_homeworks_yes">Да</string>
     <string name="lea_delete_homeworks_cancel">Отмена</string>
+    <!-- endregion -->
 
-    <!-- HomeworksActivity -->
-    <string name="ha_title">Домашние задания</string>
-    <string name="ha_no_homeworks">Нет заданий</string>
-
-    <!-- HomeworkEditorActivity -->
+    <!-- region HomeworkEditorActivity -->
     <string name="hea_title">Редактор задания</string>
     <string name="hea_subject">Выберите занятие</string>
     <string name="hea_description">Описание</string>
@@ -85,11 +101,11 @@
     <string name="hea_delete_message">Удалить задание?</string>
     <string name="hea_delete_yes">Да</string>
     <string name="hea_delete_no">Нет</string>
+    <!-- endregion -->
 
-    <!-- HelpActivity -->
-    <string name="hlpa_title">Справка</string>
-
-    <string name="card_homework_before">До</string>
+    <!-- region HelpActivity -->
+    <string name="ha_title">Справка</string>
+    <!-- endregion -->
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

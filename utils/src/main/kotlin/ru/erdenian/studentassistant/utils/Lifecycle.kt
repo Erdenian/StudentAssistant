@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package ru.erdenian.studentassistant.utils
 
 import androidx.fragment.app.Fragment
@@ -19,10 +21,17 @@ import com.shopify.livedataktx.MutableLiveDataKtx
 inline fun <reified T : ViewModel> Fragment.getViewModel() =
     ViewModelProviders.of(this).get(T::class.java)
 
+inline fun <reified T : ViewModel> Fragment.getActivityViewModel() =
+    ViewModelProviders.of(requireActivity()).get(T::class.java)
+
 inline fun <reified T : ViewModel> FragmentActivity.getViewModel() =
     ViewModelProviders.of(this).get(T::class.java)
 
 inline fun <reified T : ViewModel> Fragment.lazyViewModel() = lazy { getViewModel<T>() }
+inline fun <reified T : ViewModel> Fragment.lazyActivityViewModel() = lazy {
+    requireActivity().getViewModel<T>()
+}
+
 inline fun <reified T : ViewModel> FragmentActivity.lazyViewModel() = lazy { getViewModel<T>() }
 
 // endregion
@@ -65,6 +74,8 @@ fun <T> ViewModel.liveDataOf(value: T, source: LiveData<T>): LiveData<T> =
         emitSource(source)
     }
 
-val <T, L : LiveDataKtx<T>> L.asLiveData get() = this as LiveDataKtx<T>
+@Suppress("UnsafeCast")
+val <T, L : LiveDataKtx<T>> L.asLiveData
+    get() = this as LiveDataKtx<T>
 
 // endregion

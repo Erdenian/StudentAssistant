@@ -1,5 +1,5 @@
 build:
-  maxIssues: 30
+  maxIssues: 10
   weights:
     UnsafeCallOnNullableType: 100500
     # complexity: 2
@@ -182,6 +182,8 @@ formatting:
   active: true
   android: false
   autoCorrect: true
+  AnnotationOnSeparateLine:
+    active: false
   ChainWrapping:
     active: true
     autoCorrect: true
@@ -197,13 +199,15 @@ formatting:
     active: false
   Indentation:
     active: true
-    autoCorrect: true
     indentSize: 4
     continuationIndentSize: 4
   MaximumLineLength:
     active: false
     maxLineLength: 120
   ModifierOrdering:
+    active: true
+    autoCorrect: true
+  MultiLineIfElse:
     active: true
     autoCorrect: true
   NoBlankLineBeforeRbrace:
@@ -257,6 +261,9 @@ formatting:
   SpacingAroundCurly:
     active: true
     autoCorrect: true
+  SpacingAroundDot:
+    active: true
+    autoCorrect: true
   SpacingAroundKeyword:
     active: true
     autoCorrect: true
@@ -267,6 +274,9 @@ formatting:
     active: true
     autoCorrect: true
   SpacingAroundRangeOperator:
+    active: true
+    autoCorrect: true
+  SpacingAroundUnaryOperators:
     active: true
     autoCorrect: true
   StringTemplate:
@@ -389,6 +399,8 @@ potential-bugs:
     ignoreOnClassesPattern: ""
   MissingWhenCase:
     active: false
+  RedundantElseInWhen:
+    active: true
   UnconditionalJumpStatementInLoop:
     active: false
   UnreachableCode:
@@ -433,6 +445,8 @@ style:
     active: true
     ignoreOverridableFunction: true
     excludedFunctions: 'describeContents'
+  LibraryCodeMustSpecifyReturnType:
+    active: true
   LoopWithTooManyJumpStatements:
     active: true
     maxJumpCount: 1
@@ -519,7 +533,7 @@ style:
     active: true
     allowedNames: "(_|ignored|expected|serialVersionUID)"
   UseCheckOrError:
-    active: true
+    active: false
   UseDataClass:
     active: true
     excludeAnnotatedClasses: ""

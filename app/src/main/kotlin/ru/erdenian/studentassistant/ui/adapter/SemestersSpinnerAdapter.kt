@@ -3,12 +3,12 @@ package ru.erdenian.studentassistant.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.TextView
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.repository.entity.Semester
+import ru.erdenian.studentassistant.model.entity.Semester
+import ru.erdenian.studentassistant.utils.GenericBaseAdapter
 
-class SemestersSpinnerAdapter : BaseAdapter() {
+class SemestersSpinnerAdapter : GenericBaseAdapter<Semester>() {
 
     var semesters: List<Semester> = listOf()
         set(value) {
@@ -16,11 +16,13 @@ class SemestersSpinnerAdapter : BaseAdapter() {
             notifyDataSetChanged()
         }
 
+    @Suppress("UnsafeCast")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View =
         ((convertView ?: LayoutInflater.from(parent.context).inflate(
             R.layout.spinner_item_semesters, parent, false
         )) as TextView).apply { text = semesters[position].name }
 
+    @Suppress("UnsafeCast")
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View =
         ((convertView ?: LayoutInflater.from(parent.context).inflate(
             R.layout.spinner_dropdown_item_semesters, parent, false
