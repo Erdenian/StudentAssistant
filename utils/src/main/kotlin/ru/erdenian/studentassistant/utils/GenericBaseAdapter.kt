@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.adapter
+package ru.erdenian.studentassistant.utils
 
 import android.widget.BaseAdapter
 

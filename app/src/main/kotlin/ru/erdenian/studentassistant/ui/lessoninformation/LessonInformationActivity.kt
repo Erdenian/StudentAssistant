@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.widget.TextView
 import android.widget.ViewFlipper
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -43,34 +42,36 @@ class LessonInformationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lesson_information)
 
+        val owner = this
+
         viewModel.init(intent.getParcelableExtra(LESSON_INTENT_KEY))
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         requireViewByIdCompat<TextView>(R.id.ali_subject_name).apply {
-            viewModel.lesson.observe(this@LessonInformationActivity) { text = it?.subjectName }
+            viewModel.lesson.observe(owner) { text = it?.subjectName }
         }
 
         requireViewByIdCompat<TextView>(R.id.ali_start_time).apply {
-            viewModel.lesson.observe(this@LessonInformationActivity) { lesson ->
+            viewModel.lesson.observe(owner) { lesson ->
                 text = lesson?.startTime?.toString(TIME_FORMAT)
             }
         }
 
         requireViewByIdCompat<TextView>(R.id.ali_end_time).apply {
-            viewModel.lesson.observe(this@LessonInformationActivity) { lesson ->
+            viewModel.lesson.observe(owner) { lesson ->
                 text = lesson?.endTime?.toString(TIME_FORMAT)
             }
         }
 
         requireViewByIdCompat<TextView>(R.id.ali_type).apply {
-            viewModel.lesson.observe(this@LessonInformationActivity) { text = it?.type }
+            viewModel.lesson.observe(owner) { text = it?.type }
         }
 
         requireViewByIdCompat<ViewFlipper>(R.id.ali_homeworks_flipper).apply {
             val noHomeworksIndex = 0
             val containsHomeworksIndex = 1
-            viewModel.homeworks.observe(this@LessonInformationActivity) { homeworks ->
+            viewModel.homeworks.observe(owner) { homeworks ->
                 displayedChild =
                     if (homeworks.isEmpty()) noHomeworksIndex
                     else containsHomeworksIndex
@@ -84,7 +85,7 @@ class LessonInformationActivity : AppCompatActivity() {
                         HomeworkEditorActivity.start(context, homework)
                     }
                 }
-                viewModel.homeworks.observe(this@LessonInformationActivity) { homeworks ->
+                viewModel.homeworks.observe(owner) { homeworks ->
                     this.homeworks = homeworks.list
                 }
             }
