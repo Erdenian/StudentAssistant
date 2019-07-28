@@ -47,6 +47,10 @@ class LessonsEditorViewModel(
             ?: liveDataOf(immutableSortedSetOf())
     }.toKtx()
 
+    suspend fun getNextStartTime(weekday: Int) = lessonRepository.getNextStartTime(
+        checkNotNull(semester.value).id, weekday
+    )
+
     suspend fun deleteSemester() = semesterRepository.delete(checkNotNull(semester.value))
 
     suspend fun isLastLessonOfSubjectsAndHasHomeworks(
