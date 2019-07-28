@@ -9,10 +9,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
-import ru.erdenian.studentassistant.utils.getCompatColor
+import ru.erdenian.studentassistant.utils.getColorCompat
 
 /**
- * Иконка и имя преподавателя.
+ * Иконка и имя преподавателя
  *
  * @author Ilya Solovyev
  * @version 1.0.0
@@ -31,7 +31,7 @@ class TeacherView @JvmOverloads constructor(
             TypedValue.COMPLEX_UNIT_PX,
             resources.getDimension(R.dimen.card_secondary_text_size)
         )
-        setTextColor(context.getCompatColor(R.color.colorSecondaryText))
+        setTextColor(context.getColorCompat(R.color.secondary_text))
     }
 
     /**
@@ -56,7 +56,7 @@ class TeacherView @JvmOverloads constructor(
             ).apply { gravity = Gravity.CENTER_VERTICAL }
             setImageResource(R.drawable.ic_menu_account)
             imageTintList = ColorStateList.valueOf(
-                context.getCompatColor(R.color.colorSecondaryText)
+                context.getColorCompat(R.color.secondary_text)
             )
         })
         addView(textView)

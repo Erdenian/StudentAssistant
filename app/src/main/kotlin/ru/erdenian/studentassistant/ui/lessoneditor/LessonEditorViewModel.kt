@@ -19,12 +19,13 @@ import org.joda.time.LocalTime
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
-import ru.erdenian.studentassistant.repository.ImmutableSortedSet
-import ru.erdenian.studentassistant.repository.ScheduleRepository
-import ru.erdenian.studentassistant.repository.entity.Lesson
-import ru.erdenian.studentassistant.repository.entity.LessonRepeat
-import ru.erdenian.studentassistant.repository.immutableSortedSetOf
-import ru.erdenian.studentassistant.repository.toImmutableSortedSet
+import ru.erdenian.studentassistant.model.ImmutableSortedSet
+import ru.erdenian.studentassistant.model.entity.Lesson
+import ru.erdenian.studentassistant.model.entity.LessonRepeat
+import ru.erdenian.studentassistant.model.immutableSortedSetOf
+import ru.erdenian.studentassistant.model.repository.HomeworkRepository
+import ru.erdenian.studentassistant.model.repository.LessonRepository
+import ru.erdenian.studentassistant.model.toImmutableSortedSet
 import ru.erdenian.studentassistant.utils.asLiveData
 import ru.erdenian.studentassistant.utils.setIfEmpty
 import ru.erdenian.studentassistant.utils.toSingleLine
@@ -33,14 +34,14 @@ import kotlin.reflect.KClass
 class LessonEditorViewModel(application: Application) : AndroidViewModel(application), KodeinAware {
 
     override val kodein by kodein()
+    private val lessonRepository: LessonRepository by instance()
+    private val homeworkRepository: HomeworkRepository by instance()
 
     enum class Error {
         EMPTY_SUBJECT_NAME,
         WRONG_TIMES,
         EMPTY_REPEAT
     }
-
-    private val repository: ScheduleRepository by instance()
 
     private val semesterId = MutableLiveDataKtx<Long>()
     private var lesson: Lesson? = null
@@ -81,7 +82,7 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
     val endTime: MutableLiveDataKtx<LocalTime> = MediatorLiveDataKtx<LocalTime>().apply {
         addSource(startTime, Observer { startTime ->
             viewModelScope.launch {
-                value = startTime + repository.getLessonLength(semesterId.value)
+                value = startTime + lessonRepository.getLessonLength(semesterId.value)
             }
         })
     }
@@ -119,17 +120,20 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
         addSource(dates, onChanged)
     }
 
-    val existingSubjects = semesterId.asLiveData.switchMap { repository.getSubjects(it) }.toKtx()
-    val existingTypes = semesterId.asLiveData.switchMap { repository.getTypes(it) }.toKtx()
-    val existingTeachers = semesterId.asLiveData.switchMap { repository.getTeachers(it) }.toKtx()
+    val existingSubjects =
+        semesterId.asLiveData.switchMap { lessonRepository.getSubjects(it) }.toKtx()
+    val existingTypes =
+        semesterId.asLiveData.switchMap { lessonRepository.getTypes(it) }.toKtx()
+    val existingTeachers =
+        semesterId.asLiveData.switchMap { lessonRepository.getTeachers(it) }.toKtx()
     val existingClassrooms =
-        semesterId.asLiveData.switchMap { repository.getClassrooms(it) }.toKtx()
+        semesterId.asLiveData.switchMap { lessonRepository.getClassrooms(it) }.toKtx()
 
     private val isSubjectNameChanged
         get() = lesson?.let { it.subjectName != subjectName.value } ?: false
 
     suspend fun isSubjectNameChangedAndNotLast() = withContext(Dispatchers.IO) {
-        isSubjectNameChanged && repository.getLessonsCount(
+        isSubjectNameChanged && lessonRepository.getCount(
             semesterId.value, (lesson ?: return@withContext false).subjectName
         ) > 1
     }
@@ -170,8 +174,8 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
             semesterId.value
         ).run { oldLesson?.let { copy(id = it.id) } ?: this }
 
-        repository.insert(newLesson)
-        if (forceRenameOther && oldLesson != null) repository.renameSubject(
+        lessonRepository.insert(newLesson)
+        if (forceRenameOther && oldLesson != null) lessonRepository.renameSubject(
             oldLesson.semesterId,
             oldLesson.subjectName,
             newLesson.subjectName
@@ -181,12 +185,13 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
 
     suspend fun isLastLessonOfSubjectsAndHasHomeworks(): Boolean = withContext(Dispatchers.IO) {
         val subjectName = lesson?.subjectName ?: return@withContext false
-        val isLastLesson = async { repository.getLessonsCount(semesterId.value, subjectName) == 1 }
-        val hasHomeworks = async { repository.hasHomeworks(semesterId.value, subjectName) }
+        val isLastLesson =
+            async { lessonRepository.getCount(semesterId.value, subjectName) == 1 }
+        val hasHomeworks = async { homeworkRepository.hasHomeworks(semesterId.value, subjectName) }
         isLastLesson.await() && hasHomeworks.await()
     }
 
     suspend fun delete() {
-        lesson?.let { repository.delete(it) }
+        lesson?.let { lessonRepository.delete(it) }
     }
 }

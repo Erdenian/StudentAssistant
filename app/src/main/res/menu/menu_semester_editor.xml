@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_semester_editor_save"
+        android:id="@+id/mse_save"
         android:icon="@drawable/check"
         android:title="@string/sea_save"
         app:showAsAction="ifRoom" />

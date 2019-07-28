@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--HomeworkCard -->
+    <string name="hc_deadline">До</string>
+
     <!-- WeeksSelector -->
     <string name="ws_variants_title">Повторять</string>
 

@@ -3,11 +3,9 @@ package ru.erdenian.studentassistant.ui.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.erdenian.studentassistant.customviews.LessonCard
-import ru.erdenian.studentassistant.repository.entity.Lesson
+import ru.erdenian.studentassistant.model.entity.Lesson
 
-class LessonsListAdapter(
-    private val isEditing: Boolean = false
-) : RecyclerView.Adapter<LessonsListAdapter.ItemViewHolder>() {
+class LessonsListAdapter : RecyclerView.Adapter<LessonsListAdapter.ItemViewHolder>() {
 
     var lessons: List<Lesson> = listOf()
         set(value) {

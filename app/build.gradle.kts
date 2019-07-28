@@ -85,28 +85,34 @@ tasks.withType<KotlinCompile> {
     kotlinOptions {
         jvmTarget = "1.8"
         @Suppress("SuspiciousCollectionReassignment")
-        freeCompilerArgs += "-XXLanguage:+InlineClasses"
+        freeCompilerArgs += listOf(
+            "-XXLanguage:+InlineClasses",
+            "-Xnew-inference"
+        )
     }
 }
 
 dependencies {
+    val junit_version = "5.5.0"
+    val android_test_version = "1.1.0"
+
     val kotlin_version: String by project
     val coroutines_version: String by project
 
     val lifecycle_version: String by project
-    //val navigation_version: String by project
+    val navigation_version: String by project
     val room_version: String by project
 
     val kodein_version: String by project
     //val retrofit_version: String by project
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_version")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit_version")
 
     androidTestImplementation("androidx.test:runner:1.2.0")
-    androidTestImplementation("org.junit.jupiter:junit-jupiter-api:5.4.2")
-    androidTestImplementation("de.mannodermaus.junit5:android-test-core:1.0.0")
-    androidTestRuntimeOnly("de.mannodermaus.junit5:android-test-runner:1.0.0")
+    androidTestImplementation("org.junit.jupiter:junit-jupiter-api:$junit_version")
+    androidTestImplementation("de.mannodermaus.junit5:android-test-core:$android_test_version")
+    androidTestRuntimeOnly("de.mannodermaus.junit5:android-test-runner:$android_test_version")
 
     implementation(project(":utils"))
     implementation(project(":customviews"))
@@ -125,8 +131,8 @@ dependencies {
 
     kapt("androidx.lifecycle:lifecycle-compiler:$lifecycle_version")
 
-    //implementation("androidx.navigation:navigation-fragment-ktx:$navigation_version")
-    //implementation("androidx.navigation:navigation-ui-ktx:$navigation_version")
+    implementation("androidx.navigation:navigation-fragment-ktx:$navigation_version")
+    implementation("androidx.navigation:navigation-ui-ktx:$navigation_version")
 
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")

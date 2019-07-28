@@ -1,5 +1,9 @@
 pipeline {
-  agent any
+  agent {
+    node {
+      label 'android'
+    }
+  }
 
   stages {
     stage('Info') {
@@ -7,7 +11,6 @@ pipeline {
         sh './gradlew printVersion'
       }
     }
-
     stage('Analysis') {
       parallel {
         stage('Detekt') {
@@ -16,7 +19,6 @@ pipeline {
             archiveArtifacts 'build/reports/detekt/detekt.html'
           }
         }
-
         stage('Lint') {
           steps {
             sh './gradlew lintDebug'
@@ -25,7 +27,6 @@ pipeline {
         }
       }
     }
-
     stage('UnitTest') {
       steps {
         sh './gradlew testDebugUnitTest'
@@ -33,7 +34,6 @@ pipeline {
         junit '*/build/test-results/testDebugUnitTest/*.xml'
       }
     }
-
     stage('Assemble') {
       steps {
         sh './gradlew assembleDebug'

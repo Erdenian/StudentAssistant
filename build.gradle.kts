@@ -16,7 +16,7 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
         classpath("org.jetbrains.kotlin:kotlin-serialization:$kotlin_version")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navigation_version")
-        classpath("de.mannodermaus.gradle.plugins:android-junit5:1.4.2.1")
+        classpath("de.mannodermaus.gradle.plugins:android-junit5:1.5.0.0")
     }
 }
 
