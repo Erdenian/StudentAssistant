@@ -2,8 +2,6 @@
 
 Приложение-помощник для студентов.
 
-![Скриншот](https://bitbucket.org/Erdenian/studentassistant/downloads/StudentAssistant.png)
-
 ### Основные фичи ###
 
 * Отображение расписания
