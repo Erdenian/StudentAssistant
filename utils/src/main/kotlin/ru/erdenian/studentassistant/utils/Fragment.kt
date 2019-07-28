@@ -23,6 +23,7 @@ private class IdDelegate<T : View>(
         }
     }
 
+    @Suppress("unused")
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     private fun onDestroy() {
         value = null

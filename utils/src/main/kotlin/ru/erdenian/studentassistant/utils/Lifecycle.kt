@@ -74,6 +74,8 @@ fun <T> ViewModel.liveDataOf(value: T, source: LiveData<T>): LiveData<T> =
         emitSource(source)
     }
 
-val <T, L : LiveDataKtx<T>> L.asLiveData get() = this as LiveDataKtx<T>
+@Suppress("UnsafeCast")
+val <T, L : LiveDataKtx<T>> L.asLiveData
+    get() = this as LiveDataKtx<T>
 
 // endregion

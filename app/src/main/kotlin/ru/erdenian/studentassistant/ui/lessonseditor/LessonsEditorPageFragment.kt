@@ -79,12 +79,14 @@ class LessonsEditorPageFragment : Fragment() {
         menuInfo: ContextMenu.ContextMenuInfo?
     ) {
         requireActivity().menuInflater.inflate(R.menu.context_lessons_editor, menu)
+        @Suppress("UnsafeCast")
         (menuInfo as AdapterView.AdapterContextMenuInfo?)?.run {
             menu.setHeaderTitle(adapter.lessons[position].subjectName)
         }
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
+        @Suppress("UnsafeCast")
         val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
         val lesson = adapter.lessons[info.position]
         return when (item.itemId) {
