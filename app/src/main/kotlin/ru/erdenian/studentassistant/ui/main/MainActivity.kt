@@ -17,7 +17,6 @@ import com.google.android.material.navigation.NavigationView
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.model.entity.Semester
 import ru.erdenian.studentassistant.ui.adapter.SemestersSpinnerAdapter
 import ru.erdenian.studentassistant.ui.help.HelpActivity
 import ru.erdenian.studentassistant.ui.lessonseditor.LessonsEditorActivity
@@ -133,9 +132,10 @@ class MainActivity : AppCompatActivity() {
             viewModel.allSemesters.observe(owner) { semesters ->
                 visibility = if (semesters.size > 1) View.VISIBLE else View.GONE
             }
-            adapter = SemestersSpinnerAdapter().apply {
+            val adapter = SemestersSpinnerAdapter().apply {
                 viewModel.allSemesters.observe(owner) { semesters = it.list }
             }
+            this.adapter = adapter
             viewModel.selectedSemester.distinctUntilChanged().observe(owner) { semester ->
                 setSelection(viewModel.allSemesters.value.indexOf(semester))
             }
@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity() {
                     position: Int,
                     id: Long
                 ) {
-                    viewModel.selectedSemester.value = parent.adapter.getItem(position) as Semester
+                    viewModel.selectedSemester.value = adapter.getItem(position)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) = Unit

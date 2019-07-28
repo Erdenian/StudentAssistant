@@ -13,7 +13,6 @@ import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.distinctUntilChanged
-import androidx.lifecycle.observe
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.alert
@@ -84,8 +83,9 @@ class HomeworkEditorActivity : AppCompatActivity() {
 
         requireViewByIdCompat<Spinner>(R.id.ahe_subject_name).apply {
             viewModel.existingSubjects.observe(owner) { subjects ->
+                @Suppress("UnsafeCast")
                 val selection = selectedItem as String?
-                adapter = ArrayAdapter<String>(
+                adapter = ArrayAdapter(
                     context,
                     android.R.layout.simple_spinner_item,
                     subjects.toTypedArray()
@@ -108,6 +108,7 @@ class HomeworkEditorActivity : AppCompatActivity() {
                     position: Int,
                     id: Long
                 ) {
+                    @Suppress("UnsafeCast")
                     viewModel.subjectName.value = selectedItem as String
                 }
             }

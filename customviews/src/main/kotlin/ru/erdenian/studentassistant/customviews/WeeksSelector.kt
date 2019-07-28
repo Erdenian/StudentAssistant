@@ -89,7 +89,10 @@ class WeeksSelector @JvmOverloads constructor(
      */
     var weeks: List<Boolean>
         get() {
-            val weeks = llWeeksParent.children.map { (it as CheckBoxWithText).isChecked }.toList()
+            val weeks = llWeeksParent.children.map { v ->
+                @Suppress("UnsafeCast")
+                (v as CheckBoxWithText).isChecked
+            }.toList()
             cycleLengthLoop@ for (cycleLength in 1..(weeks.size / 2)) {
                 if (weeks.size % cycleLength != 0) continue
                 for (offset in cycleLength until weeks.size step cycleLength) {

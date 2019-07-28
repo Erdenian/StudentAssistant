@@ -51,6 +51,7 @@ class SchedulePageFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        @Suppress("UnsafeCast")
         val date = requireArguments().get(PAGE_DATE) as LocalDate
         val lessons = requireActivity().getViewModel<MainViewModel>().getLessons(date)
 
