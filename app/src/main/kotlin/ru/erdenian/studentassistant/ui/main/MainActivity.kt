@@ -64,16 +64,16 @@ class MainActivity : AppCompatActivity() {
                     R.id.dm_schedule -> {
                         navController.navigate(
                             if (viewModel.selectedSemester.value != null) {
-                                R.id.action_global_scheduleFragment
-                            } else R.id.action_global_noScheduleFragment
+                                R.id.nav_action_schedule
+                            } else R.id.nav_action_no_schedule
                         )
                         true
                     }
                     R.id.dm_homeworks -> {
                         navController.navigate(
                             if (viewModel.hasLessons.value == true) {
-                                R.id.action_global_homeworksFragment
-                            } else R.id.action_global_noLessonsFragment
+                                R.id.nav_action_homeworks
+                            } else R.id.nav_action_no_lessons
                         )
                         true
                     }
@@ -95,27 +95,27 @@ class MainActivity : AppCompatActivity() {
 
             navController.addOnDestinationChangedListener { _, destination, _ ->
                 when (destination.id) {
-                    R.id.noScheduleFragment, R.id.scheduleFragment ->
+                    R.id.nav_fragment_no_schedule, R.id.nav_fragment_schedule ->
                         navigationView.setCheckedItem(R.id.dm_schedule)
-                    R.id.homeworksFragment -> navigationView.setCheckedItem(R.id.dm_homeworks)
+                    R.id.nav_fragment_homeworks -> navigationView.setCheckedItem(R.id.dm_homeworks)
                 }
             }
 
             viewModel.selectedSemester.observe(owner) { selectedSemester ->
                 val currentId = navController.currentDestination?.id
-                if ((currentId == R.id.noScheduleFragment) && (selectedSemester != null)) {
-                    navController.navigate(R.id.action_global_scheduleFragment)
-                } else if ((currentId != R.id.noScheduleFragment) && (selectedSemester == null)) {
-                    navController.navigate(R.id.noScheduleFragment)
+                if ((currentId == R.id.nav_fragment_no_schedule) && (selectedSemester != null)) {
+                    navController.navigate(R.id.nav_action_schedule)
+                } else if ((currentId != R.id.nav_fragment_no_schedule) && (selectedSemester == null)) {
+                    navController.navigate(R.id.nav_fragment_no_schedule)
                 }
             }
 
             viewModel.hasLessons.observe(owner) { hasLessons ->
                 val currentId = navController.currentDestination?.id
-                if ((currentId == R.id.noLessonsFragment) && (hasLessons == true)) {
-                    navController.navigate(R.id.action_global_homeworksFragment)
-                } else if ((currentId == R.id.homeworksFragment) && (hasLessons == false)) {
-                    navController.navigate(R.id.action_global_noLessonsFragment)
+                if ((currentId == R.id.nav_fragment_no_lessons) && (hasLessons == true)) {
+                    navController.navigate(R.id.nav_action_homeworks)
+                } else if ((currentId == R.id.nav_fragment_homeworks) && (hasLessons == false)) {
+                    navController.navigate(R.id.nav_action_no_lessons)
                 }
             }
         }
