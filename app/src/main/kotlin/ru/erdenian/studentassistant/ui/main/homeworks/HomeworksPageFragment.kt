@@ -1,14 +1,20 @@
 package ru.erdenian.studentassistant.ui.main.homeworks
 
 import android.os.Bundle
+import android.view.ContextMenu
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ViewFlipper
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.launch
+import org.jetbrains.anko.alert
 import org.jetbrains.anko.dimen
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.model.entity.Homework
@@ -16,7 +22,7 @@ import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.ui.main.MainViewModel
-import ru.erdenian.studentassistant.utils.getViewModel
+import ru.erdenian.studentassistant.utils.lazyActivityViewModel
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 
 class HomeworksPageFragment : Fragment() {
@@ -28,6 +34,8 @@ class HomeworksPageFragment : Fragment() {
             arguments = bundleOf(IS_ACTUAL to isActual)
         }
     }
+
+    private val viewModel by lazyActivityViewModel<MainViewModel>()
 
     private val adapter = HomeworksListAdapter().apply {
         onHomeworkClickListener = object : HomeworksListAdapter.OnHomeworkClickListener {
@@ -46,14 +54,13 @@ class HomeworksPageFragment : Fragment() {
             adapter = this@HomeworksPageFragment.adapter
             layoutManager = LinearLayoutManager(inflater.context)
             addItemDecoration(SpacingItemDecoration(dimen(R.dimen.cards_spacing)))
+            registerForContextMenu(this)
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val isActual = requireArguments().getBoolean(IS_ACTUAL)
-        val homeworks = requireActivity().getViewModel<MainViewModel>().run {
-            if (isActual) getActualHomeworks() else getPastHomeworks()
-        }
+        val homeworks = viewModel.run { if (isActual) getActualHomeworks() else getPastHomeworks() }
 
         view.requireViewByIdCompat<ViewFlipper>(R.id.pfh_flipper).apply {
             val homeworksIndex = 0
@@ -64,5 +71,37 @@ class HomeworksPageFragment : Fragment() {
         }
 
         homeworks.observe(this) { adapter.homeworks = it.list }
+    }
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu,
+        v: View,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        requireActivity().menuInflater.inflate(R.menu.context_homeworks, menu)
+        @Suppress("UnsafeCast")
+        (menuInfo as AdapterView.AdapterContextMenuInfo?)?.run {
+            menu.setHeaderTitle(adapter.homeworks[position].subjectName)
+        }
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        @Suppress("UnsafeCast")
+        val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
+        val homework = adapter.homeworks[info.position]
+        return when (item.itemId) {
+            R.id.ch_delete -> {
+                viewModel.viewModelScope.launch {
+                    requireContext().alert(R.string.hf_delete_message) {
+                        positiveButton(R.string.hf_delete_yes) {
+                            viewModel.viewModelScope.launch { viewModel.delete(homework) }
+                        }
+                        negativeButton(R.string.hf_delete_no) {}
+                    }.show()
+                }
+                true
+            }
+            else -> false
+        }
     }
 }

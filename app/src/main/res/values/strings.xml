@@ -32,6 +32,10 @@
     <!-- HomeworksFragment -->
     <string name="hf_title">Домашние задания</string>
     <string name="hf_no_homeworks">Нет заданий</string>
+    <string name="hf_delete_homework">Удалить</string>
+    <string name="hf_delete_message">Удалить задание?</string>
+    <string name="hf_delete_yes">Да</string>
+    <string name="hf_delete_no">Нет</string>
 
     <!-- endregion -->
 
@@ -39,6 +43,9 @@
     <string name="lia_title">Данные занятия</string>
     <string name="lia_no_homeworks">Нет заданий</string>
     <string name="lia_edit">Редактировать</string>
+    <string name="lia_delete_message">Удалить задание?</string>
+    <string name="lia_delete_yes">Да</string>
+    <string name="lia_delete_no">Нет</string>
     <!-- endregion -->
 
     <!-- region SemesterEditorActivity -->
