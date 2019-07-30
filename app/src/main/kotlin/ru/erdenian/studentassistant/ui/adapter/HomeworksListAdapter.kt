@@ -27,7 +27,7 @@ class HomeworksListAdapter : RecyclerView.Adapter<HomeworksListAdapter.ItemViewH
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
-            //setOnLongClickListener { it.showContextMenu() }
+            setOnLongClickListener { it.showContextMenu() }
         }
     ).apply {
         card.setOnClickListener {
