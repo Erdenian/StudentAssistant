@@ -9,6 +9,7 @@ import com.shopify.livedataktx.toNullableKtx
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
+import ru.erdenian.studentassistant.model.entity.Homework
 import ru.erdenian.studentassistant.model.entity.Lesson
 import ru.erdenian.studentassistant.model.immutableSortedSetOf
 import ru.erdenian.studentassistant.model.repository.HomeworkRepository
@@ -38,4 +39,6 @@ class LessonInformationViewModel(
     val homeworks = lesson.switchMap { lesson ->
         lesson?.let { homeworkRepository.getActual(it) } ?: liveDataOf(immutableSortedSetOf())
     }.toKtx()
+
+    suspend fun delete(homework: Homework) = homeworkRepository.delete(homework)
 }

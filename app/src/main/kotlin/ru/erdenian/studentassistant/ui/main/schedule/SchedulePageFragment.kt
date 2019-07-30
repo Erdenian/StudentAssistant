@@ -17,7 +17,7 @@ import ru.erdenian.studentassistant.ui.adapter.LessonsListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.lessoninformation.LessonInformationActivity
 import ru.erdenian.studentassistant.ui.main.MainViewModel
-import ru.erdenian.studentassistant.utils.getViewModel
+import ru.erdenian.studentassistant.utils.getActivityViewModel
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 
 class SchedulePageFragment : Fragment() {
@@ -53,7 +53,7 @@ class SchedulePageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         @Suppress("UnsafeCast")
         val date = requireArguments().get(PAGE_DATE) as LocalDate
-        val lessons = requireActivity().getViewModel<MainViewModel>().getLessons(date)
+        val lessons = getActivityViewModel<MainViewModel>().getLessons(date)
 
         view.requireViewByIdCompat<ViewFlipper>(R.id.pfs_flipper).apply {
             val lessonsIndex = 0

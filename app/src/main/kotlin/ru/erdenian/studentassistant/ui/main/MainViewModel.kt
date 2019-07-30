@@ -12,6 +12,7 @@ import org.joda.time.LocalDate
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
+import ru.erdenian.studentassistant.model.entity.Homework
 import ru.erdenian.studentassistant.model.entity.Semester
 import ru.erdenian.studentassistant.model.immutableSortedSetOf
 import ru.erdenian.studentassistant.model.repository.HomeworkRepository
@@ -65,4 +66,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application), K
     fun getPastHomeworks() = selectedSemester.asLiveData.switchMap { semester ->
         semester?.let { homeworkRepository.getPast(it.id) } ?: liveDataOf(immutableSortedSetOf())
     }.toKtx()
+
+    suspend fun delete(homework: Homework) = homeworkRepository.delete(homework)
 }
