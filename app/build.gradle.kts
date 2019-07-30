@@ -63,15 +63,11 @@ android {
     }
 
     val app_name: String by project
-    applicationVariants.all {
-        outputs.forEach { output ->
-            output as BaseVariantOutputImpl
-            output.apply {
-                outputFileName = outputFileName.replace(
-                    project.name,
-                    "$app_name-${defaultConfig.versionName}"
-                )
-            }
+    applicationVariants.flatMap { it.outputs }.forEach { output ->
+        (output as BaseVariantOutputImpl).apply {
+            outputFileName = outputFileName.replace(
+                project.name, "$app_name-${defaultConfig.versionName}"
+            )
         }
     }
 }

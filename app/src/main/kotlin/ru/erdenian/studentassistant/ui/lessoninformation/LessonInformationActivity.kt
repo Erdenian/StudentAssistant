@@ -2,14 +2,20 @@ package ru.erdenian.studentassistant.ui.lessoninformation
 
 import android.content.Context
 import android.os.Bundle
+import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
 import android.widget.TextView
 import android.widget.ViewFlipper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.launch
+import org.jetbrains.anko.alert
 import org.jetbrains.anko.dimen
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
@@ -36,6 +42,18 @@ class LessonInformationActivity : AppCompatActivity() {
     }
 
     private val viewModel by lazyViewModel<LessonInformationViewModel>()
+    private val homeworksAdapter by lazy {
+        HomeworksListAdapter().apply {
+            onHomeworkClickListener = object : HomeworksListAdapter.OnHomeworkClickListener {
+                override fun onHomeworkClick(homework: Homework) {
+                    HomeworkEditorActivity.start(this@LessonInformationActivity, homework)
+                }
+            }
+            viewModel.homeworks.observe(this@LessonInformationActivity) { homeworks ->
+                this.homeworks = homeworks.list
+            }
+        }
+    }
 
     @Suppress("ComplexMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,18 +97,10 @@ class LessonInformationActivity : AppCompatActivity() {
         }
 
         requireViewByIdCompat<RecyclerView>(R.id.ali_homeworks).apply {
-            adapter = HomeworksListAdapter().apply {
-                onHomeworkClickListener = object : HomeworksListAdapter.OnHomeworkClickListener {
-                    override fun onHomeworkClick(homework: Homework) {
-                        HomeworkEditorActivity.start(context, homework)
-                    }
-                }
-                viewModel.homeworks.observe(owner) { homeworks ->
-                    this.homeworks = homeworks.list
-                }
-            }
+            adapter = homeworksAdapter
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(SpacingItemDecoration(dimen(R.dimen.cards_spacing)))
+            registerForContextMenu(this)
         }
 
         requireViewByIdCompat<FloatingActionButton>(R.id.ali_add_homework).setOnClickListener {
@@ -104,6 +114,39 @@ class LessonInformationActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_lesson_information, menu)
         menu.setColor(getColorCompat(R.color.menu))
         return true
+    }
+
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu,
+        v: View,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        menuInflater.inflate(R.menu.context_homeworks, menu)
+        @Suppress("UnsafeCast")
+        (menuInfo as AdapterView.AdapterContextMenuInfo?)?.run {
+            menu.setHeaderTitle(homeworksAdapter.homeworks[position].subjectName)
+        }
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        @Suppress("UnsafeCast")
+        val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
+        val homework = homeworksAdapter.homeworks[info.position]
+        return when (item.itemId) {
+            R.id.ch_delete -> {
+                viewModel.viewModelScope.launch {
+                    alert(R.string.lia_delete_message) {
+                        positiveButton(R.string.lia_delete_yes) {
+                            viewModel.viewModelScope.launch { viewModel.delete(homework) }
+                        }
+                        negativeButton(R.string.lia_delete_no) {}
+                    }.show()
+                }
+                true
+            }
+            else -> false
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
