@@ -67,7 +67,7 @@ class SemesterEditorViewModel(
         addSource(semestersNames, onChanged)
     }
 
-    suspend fun save(): Long {
+    suspend fun save(): Semester {
         check(error.value == null)
 
         val oldSemester = semester
@@ -78,7 +78,7 @@ class SemesterEditorViewModel(
         ).run { oldSemester?.let { copy(id = it.id) } ?: this }
 
         semesterRepository.insert(newSemester)
-        return newSemester.id
+        return newSemester
     }
 
     init {

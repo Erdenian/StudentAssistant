@@ -1,21 +1,24 @@
 package ru.erdenian.studentassistant.ui.semestereditor
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.observe
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.model.entity.Semester
+import ru.erdenian.studentassistant.ui.lessonseditor.LessonsEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorViewModel.Error
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
@@ -27,9 +30,15 @@ import ru.erdenian.studentassistant.utils.showDatePicker
 class SemesterEditorActivity : AppCompatActivity() {
 
     companion object {
+        const val SEMESTER_RESULT_EXTRA = "semester_result_extra"
+
         private const val SEMESTER_INTENT_KEY = "semester_intent_key"
         fun start(context: Context, semester: Semester? = null) {
             context.startActivity<SemesterEditorActivity>(SEMESTER_INTENT_KEY to semester)
+        }
+
+        fun startForResult(activity: Activity, requestCode: Int) {
+            activity.startActivityForResult<SemesterEditorActivity>(requestCode)
         }
 
         private const val DATE_FORMAT = "dd.MM.yyyy"
@@ -112,7 +121,13 @@ class SemesterEditorActivity : AppCompatActivity() {
                 )
             } ?: run {
                 viewModel.viewModelScope.launch {
-                    viewModel.save()
+                    viewModel.save().let { semester ->
+                        setResult(
+                            RESULT_OK,
+                            Intent().apply { putExtra(SEMESTER_RESULT_EXTRA, semester) }
+                        )
+                        LessonsEditorActivity.start(this@SemesterEditorActivity, semester)
+                    }
                     finish()
                 }
             }
