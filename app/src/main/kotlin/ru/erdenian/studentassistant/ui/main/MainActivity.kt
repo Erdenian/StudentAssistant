@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -27,6 +28,10 @@ import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        private const val SEMESTER_EDITOR_REQUEST_CODE = 1
+    }
 
     private val viewModel by lazyViewModel<MainViewModel>()
 
@@ -137,7 +142,9 @@ class MainActivity : AppCompatActivity() {
             }
             this.adapter = adapter
             viewModel.selectedSemester.distinctUntilChanged().observe(owner) { semester ->
-                setSelection(viewModel.allSemesters.value.indexOf(semester))
+                viewModel.allSemesters.value.indexOf(semester)
+                    .takeIf { it >= 0 }
+                    ?.let { setSelection(it) }
             }
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
@@ -146,7 +153,7 @@ class MainActivity : AppCompatActivity() {
                     position: Int,
                     id: Long
                 ) {
-                    viewModel.selectedSemester.value = adapter.getItem(position)
+                    viewModel.selectSemester(adapter.getItem(position))
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) = Unit
@@ -170,7 +177,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.mm_add_schedule -> {
-            startActivity<SemesterEditorActivity>()
+            SemesterEditorActivity.startForResult(this, SEMESTER_EDITOR_REQUEST_CODE)
             true
         }
         R.id.mm_edit_schedule -> {
@@ -178,6 +185,17 @@ class MainActivity : AppCompatActivity() {
             true
         }
         else -> false
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if ((requestCode == SEMESTER_EDITOR_REQUEST_CODE) && (resultCode == RESULT_OK)) {
+            viewModel.selectSemester(
+                requireNotNull(
+                    data?.getParcelableExtra(SemesterEditorActivity.SEMESTER_RESULT_EXTRA)
+                )
+            )
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onBackPressed() {
