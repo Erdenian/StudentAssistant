@@ -56,7 +56,7 @@ class LessonsEditorActivity : AppCompatActivity() {
 
                 override fun onItemSelected(
                     parent: AdapterView<*>,
-                    view: View,
+                    view: View?,
                     position: Int,
                     id: Long
                 ) {
