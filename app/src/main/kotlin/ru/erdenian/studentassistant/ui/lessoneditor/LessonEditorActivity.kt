@@ -220,7 +220,7 @@ class LessonEditorActivity : AppCompatActivity() {
 
                 override fun onItemSelected(
                     parent: AdapterView<*>,
-                    view: View,
+                    view: View?,
                     position: Int,
                     id: Long
                 ) {
@@ -266,9 +266,13 @@ class LessonEditorActivity : AppCompatActivity() {
                 selectDay(checkNotNull(isoToUs[weekday]))
             }
             setOnWeekdaysChangeListener { _, _, weekdays ->
-                viewModel.weekday.value = checkNotNull(
-                    isoToUs.entries.find { it.value == weekdays.single() }?.key
-                )
+                if (weekdays.isNotEmpty()) {
+                    viewModel.weekday.value = checkNotNull(
+                        isoToUs.entries.find { it.value == weekdays.single() }?.key
+                    )
+                } else {
+                    selectDay(checkNotNull(isoToUs[viewModel.weekday.value]))
+                }
             }
         }
 
