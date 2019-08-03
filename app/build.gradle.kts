@@ -63,11 +63,13 @@ android {
     }
 
     val app_name: String by project
-    applicationVariants.flatMap { it.outputs }.forEach { output ->
-        (output as BaseVariantOutputImpl).apply {
-            outputFileName = outputFileName.replace(
-                project.name, "$app_name-${defaultConfig.versionName}"
-            )
+    applicationVariants.configureEach {
+        outputs.forEach { output ->
+            (output as BaseVariantOutputImpl).apply {
+                outputFileName = outputFileName.replace(
+                    project.name, "$app_name-${defaultConfig.versionName}"
+                )
+            }
         }
     }
 }
@@ -142,7 +144,7 @@ dependencies {
     implementation("org.jetbrains.anko:anko-common:0.10.8")
 
     // region UI
-    implementation("com.google.android.material:material:1.1.0-alpha08")
+    implementation("com.google.android.material:material:1.1.0-alpha09")
     implementation("com.github.DavidProdinger:weekdays-selector:1.1.0")
     // endregion
 }
