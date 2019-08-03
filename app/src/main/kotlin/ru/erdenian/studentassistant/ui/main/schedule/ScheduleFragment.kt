@@ -22,12 +22,17 @@ import ru.erdenian.studentassistant.utils.showDatePicker
 
 class ScheduleFragment : Fragment() {
 
+    companion object {
+        private const val PAGE_DATE = "page_date"
+    }
+
     private val viewModel by lazyActivityViewModel<MainViewModel>()
 
     private val pager: ViewPager by id(R.id.fs_view_pager)
+
+    private var selectedDate: LocalDate? = LocalDate.now()
     private val pagerAdapter by lazy {
         SchedulePagerAdapter(childFragmentManager).apply {
-            var selectedDate = LocalDate.now()
             viewModel.selectedSemester.observe(this@ScheduleFragment) { semester ->
                 if (count > 0) selectedDate = getDate(pager.currentItem)
                 this.semester = semester
@@ -53,6 +58,15 @@ class ScheduleFragment : Fragment() {
             setTextColor(getColorCompat(R.color.primary))
             setTabIndicatorColorResource(R.color.primary)
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putSerializable(PAGE_DATE, pagerAdapter.getDate(pager.currentItem))
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        selectedDate = savedInstanceState?.getSerializable(PAGE_DATE) as? LocalDate
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
