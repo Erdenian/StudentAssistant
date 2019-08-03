@@ -55,7 +55,8 @@ class SemesterEditorViewModel(
             val lastDay = lastDay.safeValue
             value = when {
                 name.value.isBlank() -> Error.EMPTY_NAME
-                semestersNames?.contains(name.value) == true -> Error.SEMESTER_EXISTS
+                semestersNames?.run { semester?.let { minus(it.name) } ?: this }
+                    ?.contains(name.value) == true -> Error.SEMESTER_EXISTS
                 (firstDay != null) && (lastDay != null) && (firstDay > lastDay) -> Error.WRONG_DATES
                 else -> null
             }
@@ -78,6 +79,7 @@ class SemesterEditorViewModel(
         ).run { oldSemester?.let { copy(id = it.id) } ?: this }
 
         semesterRepository.insert(newSemester)
+        semester = newSemester
         return newSemester
     }
 
