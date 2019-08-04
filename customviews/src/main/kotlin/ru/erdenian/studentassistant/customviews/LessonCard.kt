@@ -8,15 +8,16 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import org.joda.time.LocalTime
-import ru.erdenian.studentassistant.utils.requireViewByIdCompat
+import ru.erdenian.studentassistant.utils.id
 import ru.erdenian.studentassistant.utils.setViewCount
 
 /**
- * Карточка пары.
+ * Карточка пары
  *
- * @author Ilya Solovyev
- * @version 1.0.0
  * @see CardView
+ *
+ * @version 1.0.0
+ * @author Ilya Solovyov
  * @since 0.2.6
  */
 class LessonCard @JvmOverloads constructor(
@@ -29,39 +30,28 @@ class LessonCard @JvmOverloads constructor(
         private const val TIME_FORMATTER = "HH:mm"
     }
 
-    private val tvStartTime: TextView
-    private val tvEndTime: TextView
-    private val llClassroomsParent: LinearLayout
-    private val tvClassrooms: TextView
-    private val tvType: TextView
-    private val tvSubjectName: TextView
-    private val llTeachersParent: LinearLayout
-    private val llRepeatsParent: LinearLayout
-    private val tvRepeatsText: TextView
+    private val tvStartTime: TextView by id(R.id.lc_start_time)
+    private val tvEndTime: TextView by id(R.id.lc_end_time)
+    private val llClassroomsParent: LinearLayout by id(R.id.lc_classrooms_parent)
+    private val tvClassrooms: TextView by id(R.id.lc_classrooms)
+    private val tvType: TextView by id(R.id.lc_type)
+    private val tvSubjectName: TextView by id(R.id.lc_subject_name)
+    private val llTeachersParent: LinearLayout by id(R.id.lc_teachers_parent)
+    private val llRepeatsParent: LinearLayout by id(R.id.lc_repeats_parent)
+    private val tvRepeatsText: TextView by id(R.id.lc_repeats_text)
 
     init {
         inflate(context, R.layout.card_lesson, this)
-
         TypedValue().also { outValue ->
             context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
             foreground = context.getDrawable(outValue.resourceId)
         }
-
-        tvStartTime = requireViewByIdCompat(R.id.lc_start_time)
-        tvEndTime = requireViewByIdCompat(R.id.lc_end_time)
-        llClassroomsParent = requireViewByIdCompat(R.id.lc_classrooms_parent)
-        tvClassrooms = requireViewByIdCompat(R.id.lc_classrooms)
-        tvType = requireViewByIdCompat(R.id.lc_type)
-        tvSubjectName = requireViewByIdCompat(R.id.lc_subject_name)
-        llTeachersParent = requireViewByIdCompat(R.id.lc_teachers_parent)
-        llRepeatsParent = requireViewByIdCompat(R.id.lc_repeats_parent)
-        tvRepeatsText = requireViewByIdCompat(R.id.lc_repeats_text)
     }
 
     /**
-     * Заполняет элементы интерфейса в соответствии с переданной парой.
+     * Заполняет элементы интерфейса в соответствии с переданными данными
      *
-     * @since 0.2.6
+     * @since 0.3.0
      */
     @Suppress("LongParameterList")
     fun setLesson(
