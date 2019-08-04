@@ -21,8 +21,8 @@ android {
 
     defaultConfig {
         applicationId = "ru.erdenian.studentassistant"
-        versionCode = gitVersionCode()
-        versionName = gitVersionName()
+        versionCode = 10
+        versionName = "0.2.9"
 
         minSdkVersion(21)
         targetSdkVersion(target_sdk_version.toInt())
@@ -156,31 +156,4 @@ fun isMainBranch(mainBranchName: String = "master"): Boolean {
         standardOutput = out
     }
     return out.toString().trim() == mainBranchName
-}
-
-fun gitVersionName(): String {
-    val out = ByteArrayOutputStream()
-    exec {
-        commandLine("git", "describe", "--tags")
-        standardOutput = out
-    }
-    val version = out.toString().trim()
-    return if (!isMainBranch()) version else version.takeWhile { it != '-' }
-}
-
-fun gitVersionCode(): Int {
-    val out = ByteArrayOutputStream()
-    exec {
-        commandLine("git", "tag")
-        standardOutput = out
-    }
-    return out.toString().lineSequence().count()
-}
-
-tasks.register("printVersion") {
-    group = "Other"
-    doLast {
-        println("Version name: ${gitVersionName()}")
-        println("Version code: ${gitVersionCode()}")
-    }
 }
