@@ -14,10 +14,11 @@ import ru.erdenian.studentassistant.utils.getColorCompat
 /**
  * Иконка и имя преподавателя
  *
- * @author Ilya Solovyev
- * @version 1.0.0
  * @see android.widget.ImageView
  * @see TextView
+ *
+ * @version 1.0.0
+ * @author Ilya Solovyov
  * @since 0.2.6
  */
 class TeacherView @JvmOverloads constructor(
@@ -34,11 +35,6 @@ class TeacherView @JvmOverloads constructor(
         setTextColor(context.getColorCompat(R.color.secondary_text))
     }
 
-    /**
-     * Оборачивает [TextView.getText] и [TextView.setText]
-     *
-     * @since 0.2.6
-     */
     var name: CharSequence?
         get() = textView.text
         set(value) {

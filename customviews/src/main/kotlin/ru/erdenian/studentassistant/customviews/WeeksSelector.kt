@@ -12,22 +12,20 @@ import android.widget.LinearLayout
 import android.widget.Spinner
 import androidx.core.view.children
 import androidx.core.view.forEach
-import ru.erdenian.studentassistant.utils.requireViewByIdCompat
+import ru.erdenian.studentassistant.utils.id
 import ru.erdenian.studentassistant.utils.setViewCount
 
 /**
  * View для выбора недель для повторения пары
  *
+ * Состоит из спиннера с предустановленными вариантами и чекбоксов для самостоятельного
+ * выбора недель, если ни один из предустановленных вариантов не подходит.
  *
- * Состоит из спиннера с предустановленными вариантами и чекбоксов для самостоятельного выбора недель,
- * если ни один из предустановленных вариантов не подходит.
- *
- * @author Ilya Solovyev
- * @version 1.0.0
  * @see Spinner
- *
  * @see CheckBoxWithText
  *
+ * @version 1.0.0
+ * @author Ilya Solovyov
  * @since 0.2.6
  */
 class WeeksSelector @JvmOverloads constructor(
@@ -36,11 +34,11 @@ class WeeksSelector @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private val spVariants: Spinner
-    private val ibRemove: ImageButton
-    private val ibAdd: ImageButton
-    private val hsvWeeks: HorizontalScrollView
-    private val llWeeksParent: LinearLayout
+    private val spVariants: Spinner by id(R.id.ws_variants)
+    private val ibRemove: ImageButton by id(R.id.ws_remove)
+    private val ibAdd: ImageButton by id(R.id.ws_add)
+    private val hsvWeeks: HorizontalScrollView by id(R.id.ws_scroll)
+    private val llWeeksParent: LinearLayout by id(R.id.ws_weeks_parent)
 
     /**
      * Список предустановленных вариантов
@@ -81,9 +79,10 @@ class WeeksSelector @JvmOverloads constructor(
     /**
      * Список недель на текущий момент
      *
-     * Список недель - список boolean значений, где i-е значение показывает была ли выбрана i-я неделя.
-     * Если список недель состоит из нескольких повторяющихся последовательностей, то вернет только одну из них.
-     * Например, в случае списка { true, false, true, true, false, true } вернет { true, false, true }.
+     * Список недель - список boolean значений, где i-е значение показывает была ли выбрана
+     * i-я неделя. Если список недель состоит из нескольких повторяющихся последовательностей,
+     * то вернет только одну из них. Например, в случае списка
+     * `{ true, false, true, true, false, true }` вернет `{ true, false, true }`.
      *
      * @since 0.2.6
      */
@@ -129,12 +128,6 @@ class WeeksSelector @JvmOverloads constructor(
     init {
         orientation = VERTICAL
         inflate(context, R.layout.weeks_selector, this)
-
-        spVariants = requireViewByIdCompat(R.id.ws_variants)
-        ibRemove = requireViewByIdCompat(R.id.ws_remove)
-        ibAdd = requireViewByIdCompat(R.id.ws_add)
-        hsvWeeks = requireViewByIdCompat(R.id.ws_scroll)
-        llWeeksParent = requireViewByIdCompat(R.id.ws_weeks_parent)
 
         check(spVariants.adapter.count == weeksVariants.size + 1) {
             "Несоответствие вариантов выбора и количества предустановок"

@@ -12,10 +12,8 @@ import ru.erdenian.studentassistant.model.ImmutableSortedSet
 import ru.erdenian.studentassistant.model.immutableSortedSetOf
 
 /**
- * Класс пары (урока).
+ * Класс пары (урока)
  *
- * @author Ilya Solovyev
- * @since 0.0.0
  * @param subjectName название предмета
  * @param type тип пары (лекция, семинар, ...)
  * @param teachers список преподавателей, ведущих пару
@@ -25,6 +23,8 @@ import ru.erdenian.studentassistant.model.immutableSortedSetOf
  * @param lessonRepeat когда повторяется пара
  * @param id уникальный id пары
  * @throws IllegalArgumentException если [subjectName] пусто или [startTime] >= [endTime]
+ * @author Ilya Solovyov
+ * @since 0.0.0
  */
 @Parcelize
 @Entity(

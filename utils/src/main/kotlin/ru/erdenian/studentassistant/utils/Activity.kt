@@ -8,10 +8,10 @@ import androidx.core.app.ActivityCompat
 /**
  * Обертка над [ActivityCompat.requireViewById].
  *
- * @author Ilya Solovyev
+ * @param id id нужного View
  * @return View
- * @param id id View
- * @since 0.0.0
+ * @author Ilya Solovyov
+ * @since 0.3.0
  */
 fun <T : View> Activity.requireViewByIdCompat(@IdRes id: Int) =
     ActivityCompat.requireViewById<T>(this, id)

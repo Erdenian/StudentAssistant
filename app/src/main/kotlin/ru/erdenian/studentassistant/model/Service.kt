@@ -4,7 +4,13 @@ import android.os.Parcel
 import android.os.Parcelable
 import java.util.SortedSet
 
-data class ImmutableSortedSet<E : Comparable<E>>(
+/**
+ * Неизменяемый отсортированный набор объектов
+ *
+ * @author Ilya Solovyov
+ * @since 0.3.0
+ */
+class ImmutableSortedSet<E : Comparable<E>>(
     private val value: SortedSet<E>
 ) : Set<E> by value, Parcelable {
 
@@ -30,20 +36,20 @@ data class ImmutableSortedSet<E : Comparable<E>>(
 }
 
 /**
- * Преобразовывает коллекцию в [ImmutableSortedSet].
+ * Преобразовывает коллекцию в [ImmutableSortedSet]
  *
- * @author Ilya Solovyev
- * @since 0.2.6
  * @return ImmutableSortedSet, содержащий те же элементы, что и коллекция
+ * @author Ilya Solovyov
+ * @since 0.2.6
  */
 fun <E : Comparable<E>> Collection<E>.toImmutableSortedSet() = ImmutableSortedSet(toSortedSet())
 
 /**
- * Преобразовывает [Sequence] в [ImmutableSortedSet].
+ * Преобразовывает [Sequence] в [ImmutableSortedSet]
  *
- * @author Ilya Solovyev
- * @since 0.3.0
  * @return ImmutableSortedSet, содержащий те же элементы, что и коллекция
+ * @author Ilya Solovyov
+ * @since 0.3.0
  */
 fun <E : Comparable<E>> Sequence<E>.toImmutableSortedSet() = ImmutableSortedSet(toSortedSet())
 
@@ -53,19 +59,19 @@ fun <T : Comparable<T>> immutableSortedSetOf(vararg elements: T) =
 class SortedList<E : Comparable<E>>(private val value: List<E>) : List<E> by value.sorted()
 
 /**
- * Преобразовывает коллекцию в [SortedList].
+ * Преобразовывает коллекцию в [SortedList]
  *
- * @author Ilya Solovyev
- * @since 0.3.0
  * @return SortedList, содержащий те же элементы, что и коллекция
+ * @author Ilya Solovyov
+ * @since 0.3.0
  */
 fun <E : Comparable<E>> Collection<E>.toSortedList() = SortedList(toList())
 
 /**
- * Преобразовывает [Sequence] в [SortedList].
+ * Преобразовывает [Sequence] в [SortedList]
  *
- * @author Ilya Solovyev
- * @since 0.3.0
  * @return SortedList, содержащий те же элементы, что и коллекция
+ * @author Ilya Solovyov
+ * @since 0.3.0
  */
 fun <E : Comparable<E>> Sequence<E>.toSortedList() = SortedList(toList())
