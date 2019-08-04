@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/dm_schedule"
+            android:icon="@drawable/ic_menu_clock"
+            android:title="@string/dm_schedule" />
+
+        <item
+            android:id="@+id/dm_homeworks"
+            android:icon="@drawable/ic_menu_book_open_variant"
+            android:title="@string/dm_homeworks" />
+
+        <item
+            android:id="@+id/dm_alarm"
+            android:icon="@drawable/ic_menu_alarm"
+            android:title="@string/dm_alarm" />
+
+    </group>
+
+    <item android:title="@string/dm_tools">
+
+        <menu>
+
+            <item
+                android:id="@+id/dm_settings"
+                android:icon="@drawable/ic_menu_settings"
+                android:title="@string/dm_settings"
+                android:visible="false" />
+
+            <item
+                android:id="@+id/dm_help"
+                android:icon="@drawable/ic_menu_help_circle"
+                android:title="@string/dm_help" />
+
+        </menu>
+
+    </item>
+
+</menu>
