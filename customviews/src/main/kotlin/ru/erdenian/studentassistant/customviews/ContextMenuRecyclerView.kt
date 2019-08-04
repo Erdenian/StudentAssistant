@@ -6,6 +6,12 @@ import android.view.View
 import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * [RecyclerView] с возможностью отображать контекстное меню для элементов списка
+ *
+ * @author Ilya Solovyov
+ * @since 0.3.0
+ */
 class ContextMenuRecyclerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,

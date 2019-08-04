@@ -11,12 +11,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.children
 
 /**
- * Обертка над [ActivityCompat.requireViewById].
+ * Обертка над [ActivityCompat.requireViewById]
  *
- * @author Ilya Solovyev
- * @return View
  * @param id id View
- * @since 0.0.0
+ * @return View
+ * @author Ilya Solovyov
+ * @since 0.3.0
  */
 fun <T : View> View.requireViewByIdCompat(@IdRes id: Int) =
     ViewCompat.requireViewById<T>(this, id)
@@ -26,6 +26,9 @@ fun <T : View> View.requireViewByIdCompat(@IdRes id: Int) =
  *
  * Может не срабатывать при вызове в ***onCreate***,
  * тогда можно обернуть вызов в **post** или аналогичный метод.
+ *
+ * @author Ilya Solovyov
+ * @since 0.3.0
  */
 fun EditText.showKeyboard() {
     requestFocus()
@@ -47,6 +50,9 @@ fun EditText.showKeyboard() {
  *        будет выброшено [IllegalStateException]
  * @param transformation вызовется для преобразования дочерних [View],
  *        как тех, что уже были, так и тех, что созданы только что с помощью [creator]
+ *
+ * @author Ilya Solovyov
+ * @since 0.3.0
  */
 fun <V : View> ViewGroup.setViewCount(
     count: Int,
@@ -81,3 +87,5 @@ fun <V : View> ViewGroup.setViewCount(
         }
     }
 }
+
+fun <T : View> View.id(@IdRes id: Int) = lazy { requireViewByIdCompat<T>(id) }

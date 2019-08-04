@@ -6,14 +6,15 @@ import android.util.TypedValue
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import org.joda.time.LocalDate
-import ru.erdenian.studentassistant.utils.requireViewByIdCompat
+import ru.erdenian.studentassistant.utils.id
 
 /**
  * Карточка домашнего задания
  *
- * @author Ilya Solovyev
- * @version 1.0.0
  * @see CardView
+ *
+ * @version 1.0.0
+ * @author Ilya Solovyov
  * @since 0.3.0
  */
 class HomeworkCard @JvmOverloads constructor(
@@ -26,31 +27,26 @@ class HomeworkCard @JvmOverloads constructor(
         private const val DATE_FORMATTER = "dd.MM.yyyy"
     }
 
-    private val tvSubjectName: TextView
-    private val tvDescription: TextView
-    private val tvDeadline: TextView
+    private val subjectName: TextView by id(R.id.ch_subject_name)
+    private val description: TextView by id(R.id.ch_description)
+    private val deadline: TextView by id(R.id.ch_deadline)
 
     init {
         inflate(context, R.layout.card_homework, this)
-
         TypedValue().also { outValue ->
             context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
             foreground = context.getDrawable(outValue.resourceId)
         }
-
-        tvSubjectName = requireViewByIdCompat(R.id.ch_subject_name)
-        tvDescription = requireViewByIdCompat(R.id.ch_description)
-        tvDeadline = requireViewByIdCompat(R.id.ch_deadline)
     }
 
     /**
-     * Заполняет элементы интерфейса в соответствии с переданным домашним заданием.
+     * Заполняет элементы интерфейса в соответствии с переданными данными
      *
      * @since 0.3.0
      */
     fun setHomework(subjectName: String, description: String, deadline: LocalDate) {
-        tvSubjectName.text = subjectName
-        tvDescription.text = description
-        tvDeadline.text = deadline.toString(DATE_FORMATTER)
+        this.subjectName.text = subjectName
+        this.description.text = description
+        this.deadline.text = deadline.toString(DATE_FORMATTER)
     }
 }

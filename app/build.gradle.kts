@@ -1,7 +1,6 @@
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsFeature
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.io.ByteArrayOutputStream
 
 plugins {
     id("com.android.application")
@@ -21,8 +20,8 @@ android {
 
     defaultConfig {
         applicationId = "ru.erdenian.studentassistant"
-        versionCode = gitVersionCode()
-        versionName = gitVersionName()
+        versionCode = 11
+        versionName = "0.3.0"
 
         minSdkVersion(21)
         targetSdkVersion(target_sdk_version.toInt())
@@ -147,40 +146,4 @@ dependencies {
     implementation("com.google.android.material:material:1.1.0-alpha09")
     implementation("com.github.DavidProdinger:weekdays-selector:1.1.0")
     // endregion
-}
-
-fun isMainBranch(mainBranchName: String = "master"): Boolean {
-    val out = ByteArrayOutputStream()
-    exec {
-        commandLine("git", "rev-parse", "--abbrev-ref", "HEAD")
-        standardOutput = out
-    }
-    return out.toString().trim() == mainBranchName
-}
-
-fun gitVersionName(): String {
-    val out = ByteArrayOutputStream()
-    exec {
-        commandLine("git", "describe", "--tags")
-        standardOutput = out
-    }
-    val version = out.toString().trim()
-    return if (!isMainBranch()) version else version.takeWhile { it != '-' }
-}
-
-fun gitVersionCode(): Int {
-    val out = ByteArrayOutputStream()
-    exec {
-        commandLine("git", "tag")
-        standardOutput = out
-    }
-    return out.toString().lineSequence().count()
-}
-
-tasks.register("printVersion") {
-    group = "Other"
-    doLast {
-        println("Version name: ${gitVersionName()}")
-        println("Version code: ${gitVersionCode()}")
-    }
 }

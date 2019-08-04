@@ -29,8 +29,21 @@ private class IdDelegate<T : View>(
         value = null
     }
 
-    override fun getValue(thisRef: Any?, property: KProperty<*>) =
+    override fun getValue(thisRef: Any?, property: KProperty<*>) = checkNotNull(
         value ?: fragment.requireView().requireViewByIdCompat<T>(id).also { value = it }
+    )
 }
 
+/**
+ * Создает делегат, поддерживающий актуальность ссылки на [View] при его пересоздании
+ *
+ * Если [View] в момент обращения находится в состоянии [Lifecycle.State.DESTROYED],
+ * то будет выброшено исключение.
+ *
+ * @receiver фрагмент, содержащий View
+ * @param T тип нужного View
+ * @param id id нужного View
+ * @author Ilya Solovyov
+ * @since 0.3.0
+ */
 fun <T : View> Fragment.id(@IdRes id: Int): ReadOnlyProperty<Any?, T> = IdDelegate(this, id)

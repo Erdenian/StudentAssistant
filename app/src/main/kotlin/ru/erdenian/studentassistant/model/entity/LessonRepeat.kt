@@ -7,34 +7,34 @@ import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.model.ImmutableSortedSet
 
 /**
- * Класс повторений пары.
+ * Класс повторений пары
  *
- * @author Ilya Solovyev
+ * @author Ilya Solovyov
  * @since 0.0.0
  */
 sealed class LessonRepeat : Parcelable {
 
     /**
-     * Показывает, повторяется ли пара в заданный день.
+     * Показывает, повторяется ли пара в заданный день
      *
-     * @author Ilya Solovyev
-     * @since 0.0.0
      * @param day день
      * @param weekNumber номер недели, содержащей этот день (начинается с 0)
      * @return true, если пара повторяется в заданный день, в противном случае false
+     * @author Ilya Solovyov
+     * @since 0.0.0
      */
     abstract fun repeatsOnDay(day: LocalDate, weekNumber: Int): Boolean
 
     /**
-     * Повторение по дням недели.
+     * Повторение по дням недели
      *
      * Для хранения списка недель используется List, так как массивы изменяемы.
      *
-     * @author Ilya Solovyev
-     * @since 0.0.0
      * @param weekday день недели (1 - понедельник, 7 - воскресенье)
      * @param weeks список boolean значений, где i-е значение показывает повторять ли пару каждую i-ю неделю
      * @throws IllegalArgumentException если [weekday] задан некорректно или [weeks] пуст
+     * @author Ilya Solovyov
+     * @since 0.0.0
      */
     @Parcelize
     data class ByWeekday(val weekday: Int, val weeks: List<Boolean>) : LessonRepeat() {
@@ -51,13 +51,13 @@ sealed class LessonRepeat : Parcelable {
             (day.dayOfWeek == weekday) && (weeks[weekNumber % weeks.size])
 
         /**
-         * Показывает, повторяется ли пара в заданный день недели без учета номера недели.
+         * Показывает, повторяется ли пара в заданный день недели без учета номера недели
          *
-         * @author Ilya Solovyev
-         * @since 0.0.0
          * @param weekday день недели (1 - понедельник, 7 - воскресенье)
          * @return true, если пара повторяется в этот день недели, хотя бы на одной неделе, false в противном случае
          * @throws IllegalArgumentException если [weekday] задан некорректно
+         * @author Ilya Solovyov
+         * @since 0.0.0
          */
         fun repeatsOnWeekday(weekday: Int): Boolean {
             require(weekday in DateTimeConstants.MONDAY..DateTimeConstants.SUNDAY) {
@@ -68,12 +68,12 @@ sealed class LessonRepeat : Parcelable {
     }
 
     /**
-     * Повторение по датам.
+     * Повторение по датам
      *
-     * @author Ilya Solovyev
-     * @since 0.0.0
      * @param dates список дат, по которым повторяется пара
      * @throws IllegalArgumentException если [dates] пуст
+     * @author Ilya Solovyov
+     * @since 0.0.0
      */
     @Parcelize
     data class ByDates(val dates: ImmutableSortedSet<LocalDate>) : LessonRepeat() {
@@ -87,10 +87,10 @@ sealed class LessonRepeat : Parcelable {
         /**
          * То же, что и [repeatsOnDay], но без ненужного второго параметра
          *
-         * @author Ilya Solovyev
-         * @since 0.0.0
          * @param date день
          * @return true, если пара повторяется в заданный день, в противном случае false
+         * @author Ilya Solovyov
+         * @since 0.0.0
          */
         fun repeatsOnDate(date: LocalDate) = repeatsOnDay(date, -1)
     }
