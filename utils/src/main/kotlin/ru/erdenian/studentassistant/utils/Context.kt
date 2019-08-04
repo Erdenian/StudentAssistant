@@ -11,29 +11,29 @@ import org.joda.time.LocalTime
 import java.io.File
 
 /**
- * Обертка над [ContextCompat.getColor].
+ * Обертка над [ContextCompat.getColor]
  *
- * @author Ilya Solovyev
- * @return цвет
  * @param id id цвета
+ * @return цвет
+ * @author Ilya Solovyov
  * @since 0.0.0
  */
 fun Context.getColorCompat(@ColorRes id: Int) = ContextCompat.getColor(this, id)
 
 /**
- * Обертка над [ContextCompat.getColor].
+ * Обертка над [ContextCompat.getColor]
  *
- * @author Ilya Solovyev
- * @return цвет
  * @param id id цвета
+ * @return цвет
+ * @author Ilya Solovyov
  * @since 0.0.0
  */
 fun Fragment.getColorCompat(@ColorRes id: Int) = ContextCompat.getColor(requireContext(), id)
 
 /**
- * Очищает данные приложения.
+ * Очищает данные приложения
  *
- * @author Ilya Solovyev
+ * @author Ilya Solovyov
  * @since 0.2.6
  */
 fun Context.clearApplicationData() {
@@ -52,15 +52,15 @@ fun Context.clearApplicationData() {
 }
 
 /**
- * Отображает date picker.
+ * Отображает [DatePickerDialog]
  *
  * Выбор даты будет возможен в заданном промежутке дат ([minDate] - [maxDate]).
  *
- * @author Ilya Solovyev
  * @param preselectedDate изначально выбранный день (если null, используется текущая дата)
  * @param minDate первый день промежутка (если null, используется 1 января 1900)
  * @param maxDate последний день промежутка (если null, используется 31 декабря 2100)
  * @param onDateSet обработчик результата выбора
+ * @author Ilya Solovyov
  * @since 0.0.0
  */
 fun Context.showDatePicker(
@@ -86,11 +86,11 @@ fun Context.showDatePicker(
 }
 
 /**
- * Отображает time picker.
+ * Отображает [TimePickerDialog]
  *
- * @author Ilya Solovyev
  * @param preselectedTime изначально выбранное время (если null, используется текущее время)
  * @param onTimeSet обработчик результата выбора
+ * @author Ilya Solovyov
  * @since 0.0.0
  */
 fun Context.showTimePicker(
