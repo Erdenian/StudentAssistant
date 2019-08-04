@@ -6,11 +6,6 @@ pipeline {
   }
 
   stages {
-    stage('Info') {
-      steps {
-        sh './gradlew printVersion'
-      }
-    }
     stage('Analysis') {
       parallel {
         stage('Detekt') {
