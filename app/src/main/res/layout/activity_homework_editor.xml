@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="2dp"
+    android:layout_marginEnd="2dp"
+    android:orientation="vertical"
+    tools:context=".ui.homeworkeditor.HomeworkEditorActivity">
+
+    <Spinner
+        android:id="@+id/ahe_subject_name"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="4dp"
+        android:prompt="@string/hea_subject"
+        android:spinnerMode="dialog"
+        android:textColor="@color/primary_text" />
+
+    <EditText
+        android:id="@+id/ahe_description"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="top"
+        android:hint="@string/hea_description"
+        android:inputType="textMultiLine"
+        android:textColor="@color/primary_text"
+        tools:ignore="Autofill" />
+
+    <Button
+        android:id="@+id/ahe_deadline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hea_deadline" />
+
+</LinearLayout>

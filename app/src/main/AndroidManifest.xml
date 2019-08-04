@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="ru.erdenian.studentassistant">
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+        android:name=".SaApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+
+        <activity
+            android:name=".ui.SplashActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:label="@string/ma_title"
+            android:theme="@style/AppTheme.NoActionBar.TransparentStatusBar" />
+
+        <activity
+            android:name=".ui.lessoninformation.LessonInformationActivity"
+            android:label="@string/lia_title" />
+
+        <activity
+            android:name=".ui.semestereditor.SemesterEditorActivity"
+            android:label="@string/sea_title_edit"
+            android:windowSoftInputMode="stateAlwaysVisible" />
+
+        <activity
+            android:name=".ui.lessonseditor.LessonsEditorActivity"
+            android:label="@string/lsea_title"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ui.lessoneditor.LessonEditorActivity"
+            android:label="@string/lea_title_edit" />
+
+        <activity
+            android:name=".ui.homeworkeditor.HomeworkEditorActivity"
+            android:label="@string/hea_title"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.help.HelpActivity"
+            android:label="@string/ha_title" />
+
+    </application>
+
+</manifest>
