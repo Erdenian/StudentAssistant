@@ -10,15 +10,15 @@ import kotlinx.android.parcel.Parcelize
 import org.joda.time.LocalDate
 
 /**
- * Класс домашнего задания.
+ * Класс домашнего задания
  *
- * @author Ilya Solovyev
- * @since 0.0.0
  * @property subjectName название предмета, по которому задано задание
  * @property description описание задания
  * @property deadline срок сдачи
  * @property id уникальный id задания
  * @throws IllegalArgumentException если [subjectName] или [description] пусты
+ * @author Ilya Solovyov
+ * @since 0.0.0
  */
 @Parcelize
 @Entity(
