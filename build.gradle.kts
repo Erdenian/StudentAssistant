@@ -1,5 +1,5 @@
 plugins {
-    id("io.gitlab.arturbosch.detekt") version ("1.0.0-RC16")
+    id("io.gitlab.arturbosch.detekt") version ("1.0.0")
 }
 
 buildscript {
@@ -16,7 +16,7 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
         classpath("org.jetbrains.kotlin:kotlin-serialization:$kotlin_version")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navigation_version")
-        classpath("de.mannodermaus.gradle.plugins:android-junit5:1.5.0.0")
+        classpath("de.mannodermaus.gradle.plugins:android-junit5:1.5.1.0")
     }
 }
 
@@ -45,5 +45,5 @@ detekt {
 }
 
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0-RC16")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0")
 }
