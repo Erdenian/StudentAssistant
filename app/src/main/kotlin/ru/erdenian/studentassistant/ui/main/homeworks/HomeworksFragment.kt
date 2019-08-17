@@ -25,7 +25,7 @@ class HomeworksFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val viewModel = getActivityViewModel<MainViewModel>()
-        val owner = this@HomeworksFragment
+        val owner = viewLifecycleOwner
 
         view.requireViewByIdCompat<ViewPager>(R.id.fh_view_pager).apply {
             adapter = HomeworksPagerAdapter(context, childFragmentManager).apply {

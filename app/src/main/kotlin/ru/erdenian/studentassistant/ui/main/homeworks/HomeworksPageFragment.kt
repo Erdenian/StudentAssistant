@@ -65,7 +65,7 @@ class HomeworksPageFragment : Fragment() {
         view.requireViewByIdCompat<ViewFlipper>(R.id.pfh_flipper).apply {
             val homeworksIndex = 0
             val noHomeworksIndex = 1
-            homeworks.observe(this@HomeworksPageFragment) { value ->
+            homeworks.observe(viewLifecycleOwner) { value ->
                 displayedChild = if (value.isNotEmpty()) homeworksIndex else noHomeworksIndex
             }
         }
