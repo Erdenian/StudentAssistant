@@ -90,7 +90,7 @@ tasks.withType<KotlinCompile> {
 }
 
 dependencies {
-    val junit_version = "5.5.0"
+    val junit_version = "5.5.1"
     val android_test_version = "1.1.0"
 
     val kotlin_version: String by project
@@ -122,8 +122,8 @@ dependencies {
     // endregion
 
     // region AndroidX
-    implementation("androidx.fragment:fragment-ktx:1.2.0-alpha01")
-    implementation("androidx.drawerlayout:drawerlayout:1.1.0-alpha02")
+    implementation("androidx.fragment:fragment-ktx:1.2.0-alpha02")
+    implementation("androidx.drawerlayout:drawerlayout:1.1.0-alpha03")
     implementation("androidx.viewpager:viewpager:1.0.0")
 
     kapt("androidx.lifecycle:lifecycle-compiler:$lifecycle_version")
