@@ -61,6 +61,6 @@ dependencies {
     // region AndroidX
     api("androidx.appcompat:appcompat:$appcompat_version")
     api("androidx.cardview:cardview:$cardview_version")
-    api("androidx.recyclerview:recyclerview:1.1.0-beta01")
+    api("androidx.recyclerview:recyclerview:1.1.0-beta03")
     // endregion
 }
