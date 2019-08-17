@@ -148,6 +148,7 @@ exceptions:
   SwallowedException:
     active: true
     ignoredExceptionTypes: 'InterruptedException,NumberFormatException,ParseException,MalformedURLException'
+    allowedExceptionNameRegex: "^(_|(ignore|expected).*)"
   ThrowingExceptionFromFinally:
     active: true
   ThrowingExceptionInMain:
@@ -184,6 +185,7 @@ formatting:
   autoCorrect: true
   AnnotationOnSeparateLine:
     active: false
+    autoCorrect: false
   ChainWrapping:
     active: true
     autoCorrect: true
@@ -197,8 +199,10 @@ formatting:
     autoCorrect: true
   ImportOrdering:
     active: false
+    autoCorrect: false
   Indentation:
     active: true
+    autoCorrect: false
     indentSize: 4
     continuationIndentSize: 4
   MaximumLineLength:
@@ -244,7 +248,6 @@ formatting:
     autoCorrect: true
   NoWildcardImports:
     active: true
-    autoCorrect: true
   PackageName:
     active: true
     autoCorrect: true
@@ -441,6 +444,7 @@ style:
   ForbiddenVoid:
     active: true
     ignoreOverridden: false
+    ignoreUsageInGenerics: false
   FunctionOnlyReturningConstant:
     active: true
     ignoreOverridableFunction: true
