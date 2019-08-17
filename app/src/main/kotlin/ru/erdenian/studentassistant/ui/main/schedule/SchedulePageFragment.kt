@@ -58,7 +58,7 @@ class SchedulePageFragment : Fragment() {
         view.requireViewByIdCompat<ViewFlipper>(R.id.pfs_flipper).apply {
             val lessonsIndex = 0
             val freeDayIndex = 1
-            lessons.observe(this@SchedulePageFragment) { value ->
+            lessons.observe(viewLifecycleOwner) { value ->
                 displayedChild = if (value.isNotEmpty()) lessonsIndex else freeDayIndex
             }
         }
