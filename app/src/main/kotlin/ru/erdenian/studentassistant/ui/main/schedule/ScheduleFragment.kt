@@ -61,7 +61,9 @@ class ScheduleFragment : Fragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putSerializable(PAGE_DATE, pagerAdapter.getDate(pager.currentItem))
+        if ((view != null) && (pagerAdapter.semester != null)) {
+            outState.putSerializable(PAGE_DATE, pagerAdapter.getDate(pager.currentItem))
+        }
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
