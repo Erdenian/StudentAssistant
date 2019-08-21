@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
@@ -19,13 +19,13 @@ import com.shopify.livedataktx.MutableLiveDataKtx
 // region ViewModelProviders
 
 inline fun <reified T : ViewModel> Fragment.getViewModel() =
-    ViewModelProviders.of(this).get(T::class.java)
+    ViewModelProvider(this).get(T::class.java)
 
 inline fun <reified T : ViewModel> Fragment.getActivityViewModel() =
-    ViewModelProviders.of(requireActivity()).get(T::class.java)
+    ViewModelProvider(requireActivity()).get(T::class.java)
 
 inline fun <reified T : ViewModel> FragmentActivity.getViewModel() =
-    ViewModelProviders.of(this).get(T::class.java)
+    ViewModelProvider(this).get(T::class.java)
 
 inline fun <reified T : ViewModel> Fragment.lazyViewModel() = lazy { getViewModel<T>() }
 inline fun <reified T : ViewModel> Fragment.lazyActivityViewModel() = lazy {
