@@ -118,7 +118,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8", kotlin_version))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
-    //implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.11.1")
+    //implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.12.0")
     // endregion
 
     // region AndroidX
