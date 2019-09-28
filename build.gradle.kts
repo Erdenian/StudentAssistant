@@ -1,5 +1,5 @@
 plugins {
-    id("io.gitlab.arturbosch.detekt") version ("1.0.0")
+    id("io.gitlab.arturbosch.detekt") version ("1.0.1")
 }
 
 buildscript {
@@ -45,5 +45,5 @@ detekt {
 }
 
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.0.1")
 }

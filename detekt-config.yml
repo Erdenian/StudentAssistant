@@ -10,6 +10,7 @@ build:
 processors:
   active: true
   exclude:
+  # - 'DetektProgressListener'
   # - 'FunctionCountProcessor'
   # - 'PropertyCountProcessor'
   # - 'ClassCountProcessor'
@@ -181,11 +182,11 @@ exceptions:
 
 formatting:
   active: true
-  android: false
-  autoCorrect: true
+  android: true
+  autoCorrect: false
   AnnotationOnSeparateLine:
     active: false
-    autoCorrect: false
+    autoCorrect: true
   ChainWrapping:
     active: true
     autoCorrect: true
@@ -199,10 +200,10 @@ formatting:
     autoCorrect: true
   ImportOrdering:
     active: false
-    autoCorrect: false
+    autoCorrect: true
   Indentation:
     active: true
-    autoCorrect: false
+    autoCorrect: true
     indentSize: 4
     continuationIndentSize: 4
   MaximumLineLength:
@@ -223,8 +224,6 @@ formatting:
   NoEmptyClassBody:
     active: true
     autoCorrect: true
-  NoItParamInMultilineLambda:
-    active: true
   NoLineBreakAfterElse:
     active: true
     autoCorrect: true
@@ -277,9 +276,6 @@ formatting:
     active: true
     autoCorrect: true
   SpacingAroundRangeOperator:
-    active: true
-    autoCorrect: true
-  SpacingAroundUnaryOperators:
     active: true
     autoCorrect: true
   StringTemplate:
@@ -401,7 +397,7 @@ potential-bugs:
     excludeAnnotatedProperties: ""
     ignoreOnClassesPattern: ""
   MissingWhenCase:
-    active: false
+    active: true
   RedundantElseInWhen:
     active: true
   UnconditionalJumpStatementInLoop:
