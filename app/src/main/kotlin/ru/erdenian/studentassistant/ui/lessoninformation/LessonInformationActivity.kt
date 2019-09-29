@@ -116,7 +116,6 @@ class LessonInformationActivity : AppCompatActivity() {
         return true
     }
 
-
     override fun onCreateContextMenu(
         menu: ContextMenu,
         v: View,
