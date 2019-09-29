@@ -35,6 +35,8 @@ android {
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments["room.schemaLocation"] = "$projectDir/schemas"
+                arguments["room.incremental"] = "true"
+                arguments["room.expandProjection"] = "true"
             }
         }
     }
@@ -83,14 +85,14 @@ tasks.withType<KotlinCompile> {
         jvmTarget = "1.8"
         @Suppress("SuspiciousCollectionReassignment")
         freeCompilerArgs += listOf(
-            "-XXLanguage:+InlineClasses",
+            //"-XXLanguage:+InlineClasses",
             "-Xnew-inference"
         )
     }
 }
 
 dependencies {
-    val junit_version = "5.5.1"
+    val junit_version = "5.5.2"
     val android_test_version = "1.1.0"
 
     val kotlin_version: String by project
@@ -122,7 +124,7 @@ dependencies {
     // endregion
 
     // region AndroidX
-    implementation("androidx.fragment:fragment-ktx:1.2.0-alpha02")
+    implementation("androidx.fragment:fragment-ktx:1.2.0-alpha04")
     implementation("androidx.drawerlayout:drawerlayout:1.1.0-alpha03")
     implementation("androidx.viewpager:viewpager:1.0.0")
 
@@ -143,7 +145,7 @@ dependencies {
     implementation("org.jetbrains.anko:anko-common:0.10.8")
 
     // region UI
-    implementation("com.google.android.material:material:1.1.0-alpha09")
+    implementation("com.google.android.material:material:1.1.0-alpha10")
     implementation("com.github.DavidProdinger:weekdays-selector:1.1.0")
     // endregion
 }

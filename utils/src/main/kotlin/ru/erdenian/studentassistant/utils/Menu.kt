@@ -1,6 +1,7 @@
 package ru.erdenian.studentassistant.utils
 
 import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.view.Menu
 import androidx.annotation.ColorInt
 import androidx.core.view.forEach
@@ -15,6 +16,6 @@ import androidx.core.view.forEach
 fun Menu.setColor(@ColorInt color: Int) = forEach { item ->
     item.icon?.apply {
         mutate()
-        setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+        colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
     }
 }
