@@ -40,7 +40,7 @@ class LessonsEditorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lessons_editor)
 
-        viewModel.init(intent.getParcelableExtra(SEMESTER_INTENT_KEY))
+        viewModel.init(checkNotNull(intent.getParcelableExtra(SEMESTER_INTENT_KEY)))
 
         setSupportActionBar(requireViewByIdCompat(R.id.alse_toolbar))
         supportActionBar?.apply {

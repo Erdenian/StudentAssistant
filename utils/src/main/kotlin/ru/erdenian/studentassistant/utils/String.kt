@@ -1,6 +1,6 @@
 package ru.erdenian.studentassistant.utils
 
-private val lineSeparator = System.getProperty("line.separator")
+private val lineSeparator = checkNotNull(System.getProperty("line.separator"))
 
 /**
  * Преобразует многострочный текст в единственную строку

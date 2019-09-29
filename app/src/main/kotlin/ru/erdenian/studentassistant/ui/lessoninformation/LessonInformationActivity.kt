@@ -62,7 +62,7 @@ class LessonInformationActivity : AppCompatActivity() {
 
         val owner = this
 
-        viewModel.init(intent.getParcelableExtra(LESSON_INTENT_KEY))
+        viewModel.init(checkNotNull(intent.getParcelableExtra(LESSON_INTENT_KEY)))
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -115,7 +115,6 @@ class LessonInformationActivity : AppCompatActivity() {
         menu.setColor(getColorCompat(R.color.menu))
         return true
     }
-
 
     override fun onCreateContextMenu(
         menu: ContextMenu,
