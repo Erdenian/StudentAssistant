@@ -10,6 +10,7 @@ import android.widget.AdapterView
 import android.widget.ViewFlipper
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +23,6 @@ import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.ui.main.MainViewModel
-import ru.erdenian.studentassistant.utils.lazyActivityViewModel
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 
 class HomeworksPageFragment : Fragment() {
@@ -35,7 +35,7 @@ class HomeworksPageFragment : Fragment() {
         }
     }
 
-    private val viewModel by lazyActivityViewModel<MainViewModel>()
+    private val viewModel by activityViewModels<MainViewModel>()
 
     private val adapter = HomeworksListAdapter().apply {
         onHomeworkClickListener = object : HomeworksListAdapter.OnHomeworkClickListener {
@@ -70,7 +70,7 @@ class HomeworksPageFragment : Fragment() {
             }
         }
 
-        homeworks.observe(this) { adapter.homeworks = it.list }
+        homeworks.observe(viewLifecycleOwner) { adapter.homeworks = it.list }
     }
 
     override fun onCreateContextMenu(
