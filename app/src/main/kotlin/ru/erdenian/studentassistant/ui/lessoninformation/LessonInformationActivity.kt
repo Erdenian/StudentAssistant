@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.TextView
 import android.widget.ViewFlipper
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +27,6 @@ import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.utils.getColorCompat
-import ru.erdenian.studentassistant.utils.lazyViewModel
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 
@@ -41,7 +41,7 @@ class LessonInformationActivity : AppCompatActivity() {
         private const val TIME_FORMAT = "HH:mm"
     }
 
-    private val viewModel by lazyViewModel<LessonInformationViewModel>()
+    private val viewModel by viewModels<LessonInformationViewModel>()
     private val homeworksAdapter by lazy {
         HomeworksListAdapter().apply {
             onHomeworkClickListener = object : HomeworksListAdapter.OnHomeworkClickListener {

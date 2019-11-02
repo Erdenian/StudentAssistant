@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ViewFlipper
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.jetbrains.anko.dimen
@@ -17,7 +18,6 @@ import ru.erdenian.studentassistant.ui.adapter.LessonsListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.lessoninformation.LessonInformationActivity
 import ru.erdenian.studentassistant.ui.main.MainViewModel
-import ru.erdenian.studentassistant.utils.getActivityViewModel
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 
 class SchedulePageFragment : Fragment() {
@@ -53,7 +53,8 @@ class SchedulePageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         @Suppress("UnsafeCast")
         val date = requireArguments().get(PAGE_DATE) as LocalDate
-        val lessons = getActivityViewModel<MainViewModel>().getLessons(date)
+        val viewModel by activityViewModels<MainViewModel>()
+        val lessons = viewModel.getLessons(date)
 
         view.requireViewByIdCompat<ViewFlipper>(R.id.pfs_flipper).apply {
             val lessonsIndex = 0
@@ -63,7 +64,7 @@ class SchedulePageFragment : Fragment() {
             }
         }
 
-        lessons.observe(this) {
+        lessons.observe(viewLifecycleOwner) {
             adapter.lessons = it.list
         }
     }

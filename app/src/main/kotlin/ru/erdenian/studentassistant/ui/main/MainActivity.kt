@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -23,7 +24,6 @@ import ru.erdenian.studentassistant.ui.help.HelpActivity
 import ru.erdenian.studentassistant.ui.lessonseditor.LessonsEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
 import ru.erdenian.studentassistant.utils.getColorCompat
-import ru.erdenian.studentassistant.utils.lazyViewModel
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 
@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         private const val SEMESTER_EDITOR_REQUEST_CODE = 1
     }
 
-    private val viewModel by lazyViewModel<MainViewModel>()
+    private val viewModel by viewModels<MainViewModel>()
 
     private val drawer by lazy { requireViewByIdCompat<DrawerLayout>(R.id.am_drawer) }
 

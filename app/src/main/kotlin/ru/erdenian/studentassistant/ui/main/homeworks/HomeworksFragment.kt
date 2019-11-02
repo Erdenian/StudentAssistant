@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.viewpager.widget.PagerTabStrip
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.ui.main.MainViewModel
-import ru.erdenian.studentassistant.utils.getActivityViewModel
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 
@@ -24,7 +24,7 @@ class HomeworksFragment : Fragment() {
     ): View = inflater.inflate(R.layout.fragment_homeworks, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val viewModel = getActivityViewModel<MainViewModel>()
+        val viewModel by activityViewModels<MainViewModel>()
         val owner = viewLifecycleOwner
 
         view.requireViewByIdCompat<ViewPager>(R.id.fh_view_pager).apply {

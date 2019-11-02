@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.distinctUntilChanged
@@ -25,7 +26,6 @@ import ru.erdenian.studentassistant.model.entity.Lesson
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorViewModel.Error
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
-import ru.erdenian.studentassistant.utils.lazyViewModel
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
@@ -60,7 +60,7 @@ class HomeworkEditorActivity : AppCompatActivity() {
         private const val DATE_FORMAT = "dd.MM.yyyy"
     }
 
-    private val viewModel by lazyViewModel<HomeworkEditorViewModel>()
+    private val viewModel by viewModels<HomeworkEditorViewModel>()
 
     private val homework by lazy { intent.getParcelableExtra<Homework>(HOMEWORK_INTENT_KEY) }
 

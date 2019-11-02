@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.viewpager.widget.PagerTabStrip
 import androidx.viewpager.widget.ViewPager
 import org.joda.time.LocalDate
@@ -15,7 +16,6 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.ui.main.MainViewModel
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.id
-import ru.erdenian.studentassistant.utils.lazyActivityViewModel
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
@@ -26,7 +26,7 @@ class ScheduleFragment : Fragment() {
         private const val PAGE_DATE = "page_date"
     }
 
-    private val viewModel by lazyActivityViewModel<MainViewModel>()
+    private val viewModel by activityViewModels<MainViewModel>()
 
     private val pager: ViewPager by id(R.id.fs_view_pager)
 
