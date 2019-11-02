@@ -13,10 +13,10 @@ plugins {
 }
 
 android {
-    val compile_sdk_version: String by project
-    val target_sdk_version: String by project
+    val compileSdkVersion: String by project
+    val targetSdkVersion: String by project
 
-    compileSdkVersion(compile_sdk_version.toInt())
+    compileSdkVersion(compileSdkVersion.toInt())
 
     defaultConfig {
         applicationId = "ru.erdenian.studentassistant"
@@ -24,7 +24,7 @@ android {
         versionName = "0.3.1"
 
         minSdkVersion(21)
-        targetSdkVersion(target_sdk_version.toInt())
+        targetSdkVersion(targetSdkVersion.toInt())
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArgument(
@@ -54,6 +54,7 @@ android {
     }
 
     packagingOptions {
+        // JUnit 5
         exclude("META-INF/LICENSE*")
     }
 
@@ -63,12 +64,12 @@ android {
         getByName("androidTest").java.srcDirs("src/androidTest/kotlin")
     }
 
-    val app_name: String by project
-    applicationVariants.configureEach {
+    applicationVariants.all {
         outputs.forEach { output ->
-            (output as BaseVariantOutputImpl).apply {
+            output as BaseVariantOutputImpl
+            output.apply {
                 outputFileName = outputFileName.replace(
-                    project.name, "$app_name-${defaultConfig.versionName}"
+                    project.name, "${rootProject.name}-${defaultConfig.versionName}"
                 )
             }
         }
@@ -92,60 +93,60 @@ tasks.withType<KotlinCompile> {
 }
 
 dependencies {
-    val junit_version = "5.5.2"
-    val android_test_version = "1.1.0"
+    val junitVersion = "5.5.2"
+    val androidTestVersion = "1.1.0"
 
-    val kotlin_version: String by project
-    val coroutines_version: String by project
+    val kotlinVersion: String by project
+    val coroutinesVersion: String by project
 
-    val lifecycle_version: String by project
-    val navigation_version: String by project
-    val room_version: String by project
+    val lifecycleVersion: String by project
+    val navigationVersion: String by project
+    val roomVersion: String by project
 
-    val kodein_version: String by project
+    val kodeinVersion: String by project
     //val retrofit_version: String by project
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_version")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit_version")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
     androidTestImplementation("androidx.test:runner:1.2.0")
-    androidTestImplementation("org.junit.jupiter:junit-jupiter-api:$junit_version")
-    androidTestImplementation("de.mannodermaus.junit5:android-test-core:$android_test_version")
-    androidTestRuntimeOnly("de.mannodermaus.junit5:android-test-runner:$android_test_version")
+    androidTestImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    androidTestImplementation("de.mannodermaus.junit5:android-test-core:$androidTestVersion")
+    androidTestRuntimeOnly("de.mannodermaus.junit5:android-test-runner:$androidTestVersion")
 
     implementation(project(":utils"))
     implementation(project(":customviews"))
 
     // region Kotlin
-    implementation(kotlin("stdlib-jdk8", kotlin_version))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
-    //implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.12.0")
+    implementation(kotlin("stdlib-jdk8", kotlinVersion))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
+    //implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.13.0")
     // endregion
 
     // region AndroidX
-    implementation("androidx.fragment:fragment-ktx:1.2.0-alpha04")
+    implementation("androidx.fragment:fragment-ktx:1.2.0-rc01")
     implementation("androidx.drawerlayout:drawerlayout:1.1.0-alpha03")
     implementation("androidx.viewpager:viewpager:1.0.0")
 
-    kapt("androidx.lifecycle:lifecycle-compiler:$lifecycle_version")
+    kapt("androidx.lifecycle:lifecycle-compiler:$lifecycleVersion")
 
-    implementation("androidx.navigation:navigation-fragment-ktx:$navigation_version")
-    implementation("androidx.navigation:navigation-ui-ktx:$navigation_version")
+    implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
+    implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
 
-    kapt("androidx.room:room-compiler:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
+    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
     // endregion
 
     // region DI
-    implementation("org.kodein.di:kodein-di-generic-jvm:$kodein_version")
-    implementation("org.kodein.di:kodein-di-framework-android-x:$kodein_version")
+    implementation("org.kodein.di:kodein-di-generic-jvm:$kodeinVersion")
+    implementation("org.kodein.di:kodein-di-framework-android-x:$kodeinVersion")
     // endregion
 
     implementation("org.jetbrains.anko:anko-common:0.10.8")
 
     // region UI
-    implementation("com.google.android.material:material:1.1.0-alpha10")
+    implementation("com.google.android.material:material:1.2.0-alpha01")
     implementation("com.github.DavidProdinger:weekdays-selector:1.1.0")
     // endregion
 }

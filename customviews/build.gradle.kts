@@ -6,17 +6,17 @@ plugins {
 }
 
 android {
-    val compile_sdk_version: String by project
-    val target_sdk_version: String by project
+    val compileSdkVersion: String by project
+    val targetSdkVersion: String by project
 
-    compileSdkVersion(compile_sdk_version.toInt())
+    compileSdkVersion(compileSdkVersion.toInt())
 
     defaultConfig {
         versionCode = 1
         versionName = "1.0"
 
         minSdkVersion(21)
-        targetSdkVersion(target_sdk_version.toInt())
+        targetSdkVersion(targetSdkVersion.toInt())
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -43,24 +43,29 @@ android {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         jvmTarget = "1.8"
+        @Suppress("SuspiciousCollectionReassignment")
+        freeCompilerArgs += listOf(
+            //"-XXLanguage:+InlineClasses",
+            "-Xnew-inference"
+        )
     }
 }
 
 dependencies {
-    val kotlin_version: String by project
+    val kotlinVersion: String by project
 
-    val appcompat_version: String by project
-    val cardview_version: String by project
+    val appcompatVersion: String by project
+    val cardviewVersion: String by project
 
     implementation(project(":utils"))
 
     // region Kotlin
-    implementation(kotlin("stdlib-jdk8", kotlin_version))
+    implementation(kotlin("stdlib-jdk8", kotlinVersion))
     // endregion
 
     // region AndroidX
-    api("androidx.appcompat:appcompat:$appcompat_version")
-    api("androidx.cardview:cardview:$cardview_version")
-    api("androidx.recyclerview:recyclerview:1.1.0-beta04")
+    api("androidx.appcompat:appcompat:$appcompatVersion")
+    api("androidx.cardview:cardview:$cardviewVersion")
+    api("androidx.recyclerview:recyclerview:1.1.0-rc01")
     // endregion
 }

@@ -6,17 +6,17 @@ plugins {
 }
 
 android {
-    val compile_sdk_version: String by project
-    val target_sdk_version: String by project
+    val compileSdkVersion: String by project
+    val targetSdkVersion: String by project
 
-    compileSdkVersion(compile_sdk_version.toInt())
+    compileSdkVersion(compileSdkVersion.toInt())
 
     defaultConfig {
         versionCode = 1
         versionName = "1.0"
 
         minSdkVersion(16)
-        targetSdkVersion(target_sdk_version.toInt())
+        targetSdkVersion(targetSdkVersion.toInt())
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -43,30 +43,32 @@ android {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         jvmTarget = "1.8"
+        @Suppress("SuspiciousCollectionReassignment")
+        freeCompilerArgs += listOf(
+            //"-XXLanguage:+InlineClasses",
+            "-Xnew-inference"
+        )
     }
 }
 
 dependencies {
-    val kotlin_version: String by project
-
-    val core_ktx_version: String by project
-
-    val lifecycle_version: String by project
-
-    val joda_time_version: String by project
+    val kotlinVersion: String by project
+    val coreKtxVersion: String by project
+    val lifecycleVersion: String by project
+    val jodaTimeVersion: String by project
 
     // region Kotlin
-    implementation(kotlin("stdlib-jdk8", kotlin_version))
+    implementation(kotlin("stdlib-jdk8", kotlinVersion))
     // endregion
 
     // region AndroidX
-    api("androidx.core:core-ktx:$core_ktx_version")
+    api("androidx.core:core-ktx:$coreKtxVersion")
 
-    api("androidx.lifecycle:lifecycle-extensions:$lifecycle_version")
-    api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
-    api("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
+    api("androidx.lifecycle:lifecycle-extensions:$lifecycleVersion")
+    api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    api("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     api("com.shopify:livedata-ktx:3.0.0")
     // endregion
 
-    api("joda-time:joda-time:$joda_time_version")
+    api("joda-time:joda-time:$jodaTimeVersion")
 }
