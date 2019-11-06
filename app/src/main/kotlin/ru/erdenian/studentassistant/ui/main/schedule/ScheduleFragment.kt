@@ -1,12 +1,10 @@
 package ru.erdenian.studentassistant.ui.main.schedule
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager.widget.PagerTabStrip
@@ -20,7 +18,7 @@ import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
 
-class ScheduleFragment : Fragment() {
+class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
     companion object {
         private const val PAGE_DATE = "page_date"
@@ -43,12 +41,6 @@ class ScheduleFragment : Fragment() {
             }
         }
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_schedule, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)

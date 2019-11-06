@@ -1,9 +1,7 @@
 package ru.erdenian.studentassistant.ui.main.homeworks
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager.widget.PagerTabStrip
@@ -15,13 +13,7 @@ import ru.erdenian.studentassistant.ui.main.MainViewModel
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 
-class HomeworksFragment : Fragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_homeworks, container, false)
+class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val viewModel by activityViewModels<MainViewModel>()

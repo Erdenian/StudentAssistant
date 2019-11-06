@@ -56,9 +56,7 @@ class SemesterEditorActivity : AppCompatActivity() {
 
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
-            if (semester == null) title = getString(
-                R.string.sea_title_new
-            )
+            if (semester == null) title = getString(R.string.sea_title_new)
         }
 
         val owner = this
