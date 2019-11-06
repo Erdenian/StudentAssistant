@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id("io.gitlab.arturbosch.detekt") version ("1.1.1")
 }
@@ -31,6 +33,19 @@ allprojects {
 
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
+}
+
+subprojects.forEach { module ->
+    module.tasks.withType<KotlinCompile> {
+        kotlinOptions {
+            jvmTarget = "1.8"
+            @Suppress("SuspiciousCollectionReassignment")
+            freeCompilerArgs += listOf(
+                //"-XXLanguage:+InlineClasses",
+                "-Xnew-inference"
+            )
+        }
+    }
 }
 
 detekt {
