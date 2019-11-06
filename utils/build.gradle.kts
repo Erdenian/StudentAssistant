@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("com.android.library")
     kotlin("android")
@@ -37,17 +35,12 @@ android {
         getByName("main").java.srcDirs("src/main/kotlin")
         getByName("test").java.srcDirs("src/test/kotlin")
         getByName("androidTest").java.srcDirs("src/androidTest/kotlin")
-    }
-}
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "1.8"
-        @Suppress("SuspiciousCollectionReassignment")
-        freeCompilerArgs += listOf(
-            //"-XXLanguage:+InlineClasses",
-            "-Xnew-inference"
-        )
+        productFlavors.forEach { flavor ->
+            getByName(flavor.name).java.srcDirs("src/${flavor.name}/kotlin")
+            "test${flavor.name.capitalize()}".let { getByName(it).java.srcDirs("src/$it/kotlin") }
+            "androidTest${flavor.name.capitalize()}".let { getByName(it).java.srcDirs("src/$it/kotlin") }
+        }
     }
 }
 
