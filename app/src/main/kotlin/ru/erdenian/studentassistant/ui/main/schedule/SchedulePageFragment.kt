@@ -1,9 +1,7 @@
 package ru.erdenian.studentassistant.ui.main.schedule
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ViewFlipper
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -20,7 +18,7 @@ import ru.erdenian.studentassistant.ui.lessoninformation.LessonInformationActivi
 import ru.erdenian.studentassistant.ui.main.MainViewModel
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 
-class SchedulePageFragment : Fragment() {
+class SchedulePageFragment : Fragment(R.layout.page_fragment_schedule) {
 
     companion object {
         private const val PAGE_DATE = "page_date"
@@ -38,19 +36,13 @@ class SchedulePageFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.page_fragment_schedule, container, false).apply {
-        with(requireViewByIdCompat<RecyclerView>(R.id.pfs_lessons)) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        view.requireViewByIdCompat<RecyclerView>(R.id.pfs_lessons).apply {
             adapter = this@SchedulePageFragment.adapter
-            layoutManager = LinearLayoutManager(inflater.context)
+            layoutManager = LinearLayoutManager(view.context)
             addItemDecoration(SpacingItemDecoration(dimen(R.dimen.cards_spacing)))
         }
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         @Suppress("UnsafeCast")
         val date = requireArguments().get(PAGE_DATE) as LocalDate
         val viewModel by activityViewModels<MainViewModel>()
