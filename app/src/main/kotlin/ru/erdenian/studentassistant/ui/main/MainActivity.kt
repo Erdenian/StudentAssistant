@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity() {
                 if ((currentId == R.id.nav_fragment_no_schedule) && (selectedSemester != null)) {
                     navController.navigate(R.id.nav_action_schedule)
                 } else if ((currentId != R.id.nav_fragment_no_schedule) && (selectedSemester == null)) {
-                    navController.navigate(R.id.nav_fragment_no_schedule)
+                    navController.navigate(R.id.nav_action_no_schedule)
                 }
             }
 
