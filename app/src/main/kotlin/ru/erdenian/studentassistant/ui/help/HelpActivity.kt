@@ -8,11 +8,10 @@ import androidx.core.text.HtmlCompat
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 
-class HelpActivity : AppCompatActivity() {
+class HelpActivity : AppCompatActivity(R.layout.activity_help) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_help)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 

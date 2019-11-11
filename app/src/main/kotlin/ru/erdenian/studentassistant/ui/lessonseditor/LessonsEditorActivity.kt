@@ -25,7 +25,7 @@ import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 
-class LessonsEditorActivity : AppCompatActivity() {
+class LessonsEditorActivity : AppCompatActivity(R.layout.activity_lessons_editor) {
 
     companion object {
         private const val SEMESTER_INTENT_KEY = "semester_intent_key"
@@ -38,7 +38,6 @@ class LessonsEditorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_lessons_editor)
 
         viewModel.init(checkNotNull(intent.getParcelableExtra(SEMESTER_INTENT_KEY)))
 

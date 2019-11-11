@@ -27,7 +27,7 @@ import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     companion object {
         private const val SEMESTER_EDITOR_REQUEST_CODE = 1
@@ -40,7 +40,6 @@ class MainActivity : AppCompatActivity() {
     @Suppress("LongMethod", "ComplexMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
         val owner = this
 

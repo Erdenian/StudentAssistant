@@ -36,7 +36,7 @@ import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showTimePicker
 import java.util.Calendar
 
-class LessonEditorActivity : AppCompatActivity() {
+class LessonEditorActivity : AppCompatActivity(R.layout.activity_lesson_editor) {
 
     companion object {
         private const val SEMESTER_ID_INTENT_KEY = "semester_id_intent_key"
@@ -76,7 +76,6 @@ class LessonEditorActivity : AppCompatActivity() {
     @Suppress("ComplexMethod", "LongMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_lesson_editor)
 
         intent.apply {
             val l = lesson
