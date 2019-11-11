@@ -119,7 +119,7 @@ dependencies {
     // endregion
 
     // region AndroidX
-    implementation("androidx.fragment:fragment-ktx:1.2.0-rc01")
+    implementation("androidx.fragment:fragment-ktx:1.2.0-rc02")
     implementation("androidx.drawerlayout:drawerlayout:1.1.0-alpha03")
     implementation("androidx.viewpager:viewpager:1.0.0")
 

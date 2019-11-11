@@ -27,7 +27,7 @@ import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
 
-class SemesterEditorActivity : AppCompatActivity() {
+class SemesterEditorActivity : AppCompatActivity(R.layout.activity_semester_editor) {
 
     companion object {
         const val SEMESTER_RESULT_EXTRA = "semester_result_extra"
@@ -49,7 +49,6 @@ class SemesterEditorActivity : AppCompatActivity() {
     @Suppress("ComplexMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_semester_editor)
 
         val semester = intent.getParcelableExtra<Semester?>(SEMESTER_INTENT_KEY)
         viewModel.init(semester)

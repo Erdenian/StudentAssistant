@@ -30,7 +30,7 @@ import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
 
-class HomeworkEditorActivity : AppCompatActivity() {
+class HomeworkEditorActivity : AppCompatActivity(R.layout.activity_homework_editor) {
 
     companion object {
         private const val SEMESTER_ID_INTENT_KEY = "semester_id_intent_key"
@@ -67,7 +67,6 @@ class HomeworkEditorActivity : AppCompatActivity() {
     @Suppress("ComplexMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_homework_editor)
 
         intent.apply {
             val homework = homework

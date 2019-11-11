@@ -30,7 +30,8 @@ import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 
-class LessonInformationActivity : AppCompatActivity() {
+class LessonInformationActivity : AppCompatActivity(R.layout.activity_lesson_information) {
+
 
     companion object {
         private const val LESSON_INTENT_KEY = "lesson_intent_key"
@@ -58,7 +59,6 @@ class LessonInformationActivity : AppCompatActivity() {
     @Suppress("ComplexMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_lesson_information)
 
         val owner = this
 
