@@ -13,9 +13,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.viewModelScope
 import androidx.viewpager.widget.PagerTabStrip
 import androidx.viewpager.widget.ViewPager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.entity.Semester
@@ -108,12 +108,13 @@ class LessonsEditorActivity : AppCompatActivity(R.layout.activity_lessons_editor
             true
         }
         R.id.mlse_delete_semester -> {
-            alert(R.string.lsea_delete_message) {
-                positiveButton(R.string.lsea_delete_yes) {
+            MaterialAlertDialogBuilder(this)
+                .setMessage(R.string.lsea_delete_message)
+                .setPositiveButton(R.string.lsea_delete_yes) { _, _ ->
                     viewModel.viewModelScope.launch { viewModel.deleteSemester() }
                 }
-                negativeButton(R.string.lsea_delete_no) {}
-            }.show()
+                .setNegativeButton(R.string.lsea_delete_no, null)
+                .show()
             true
         }
         else -> false

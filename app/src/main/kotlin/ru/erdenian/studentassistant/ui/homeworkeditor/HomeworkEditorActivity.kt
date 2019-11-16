@@ -15,8 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
@@ -164,15 +164,16 @@ class HomeworkEditorActivity : AppCompatActivity(R.layout.activity_homework_edit
             true
         }
         R.id.mhe_delete -> {
-            alert(R.string.hea_delete_message) {
-                positiveButton(R.string.hea_delete_yes) {
+            MaterialAlertDialogBuilder(this)
+                .setMessage(R.string.hea_delete_message)
+                .setPositiveButton(R.string.hea_delete_yes) { _, _ ->
                     viewModel.viewModelScope.launch {
                         viewModel.delete()
                         finish()
                     }
                 }
-                negativeButton(R.string.hea_delete_no) {}
-            }.show()
+                .setNegativeButton(R.string.hea_delete_no, null)
+                .show()
             true
         }
         else -> false
