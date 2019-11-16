@@ -55,7 +55,7 @@ androidExtensions {
 
 dependencies {
     // region Versions
-    val junitVersion = "5.5.2"
+    val junitVersion: String by project
 
     val kotlinVersion: String by project
     val roomVersion: String by project

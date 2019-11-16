@@ -5,13 +5,12 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.annotation.IdRes
-import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
 
 /**
- * Обертка над [ActivityCompat.requireViewById]
+ * Обертка над [ViewCompat.requireViewById]
  *
  * @param id id View
  * @return View
