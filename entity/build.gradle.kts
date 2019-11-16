@@ -1,6 +1,9 @@
+import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsFeature
+
 plugins {
     id("com.android.library")
     kotlin("android")
+    kotlin("android.extensions")
 }
 
 android {
@@ -42,6 +45,11 @@ android {
             "androidTest${flavor.name.capitalize()}".let { getByName(it).java.srcDirs("src/$it/kotlin") }
         }
     }
+}
+
+androidExtensions {
+    features = setOf(AndroidExtensionsFeature.PARCELIZE.featureName)
+    isExperimental = true
 }
 
 dependencies {

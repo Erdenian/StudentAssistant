@@ -3,6 +3,7 @@ package ru.erdenian.studentassistant.model.entity
 import org.joda.time.LocalDate
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import ru.erdenian.studentassistant.entity.Homework
 
 internal class HomeworkTest {
 

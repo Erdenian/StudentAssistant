@@ -3,7 +3,7 @@ package ru.erdenian.studentassistant.model.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.shopify.livedataktx.toKtx
-import ru.erdenian.studentassistant.model.toImmutableSortedSet
+import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 
 @Suppress("UnnecessaryAbstractClass")
 abstract class BaseRepository {

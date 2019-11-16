@@ -1,8 +1,8 @@
 package ru.erdenian.studentassistant.model.repository
 
 import com.shopify.livedataktx.toNullableKtx
+import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.model.dao.SemesterDao
-import ru.erdenian.studentassistant.model.entity.Semester
 
 class SemesterRepository(private val semesterDao: SemesterDao) : BaseRepository() {
 
