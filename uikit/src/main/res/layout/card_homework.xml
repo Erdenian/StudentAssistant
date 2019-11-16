@@ -2,7 +2,8 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:layout_height="wrap_content"
-    tools:parentTag="androidx.cardview.widget.CardView">
+    tools:parentTag="com.google.android.material.card.MaterialCardView"
+    tools:theme="@style/AppTheme">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,8 +15,8 @@
             android:id="@+id/ch_subject_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/primary_text"
-            android:textSize="@dimen/card_primary_text_size"
+            android:textAppearance="?textAppearanceBody1"
+            android:textColor="?android:textColorPrimary"
             tools:text="Матлогика" />
 
         <include layout="@layout/divider_horizontal" />
@@ -24,8 +25,8 @@
             android:id="@+id/ch_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/primary_text"
-            android:textSize="@dimen/card_secondary_text_size"
+            android:textAppearance="?textAppearanceBody2"
+            android:textColor="?android:textColorPrimary"
             tools:text="Сделать лабы" />
 
         <LinearLayout
@@ -38,8 +39,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/hc_deadline"
-                android:textColor="@color/secondary_text"
-                android:textSize="@dimen/card_secondary_text_size" />
+                android:textAppearance="?textAppearanceBody2"
+                android:textColor="?android:textColorSecondary" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -52,8 +53,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:textColor="@color/secondary_text"
-                android:textSize="@dimen/card_secondary_text_size"
+                android:textAppearance="?textAppearanceBody2"
+                android:textColor="?android:textColorSecondary"
                 tools:text="05.06.2019" />
 
         </LinearLayout>

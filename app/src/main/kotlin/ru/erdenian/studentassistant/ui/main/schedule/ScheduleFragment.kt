@@ -13,6 +13,7 @@ import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.ui.main.MainViewModel
 import ru.erdenian.studentassistant.utils.getColorCompat
+import ru.erdenian.studentassistant.utils.getResId
 import ru.erdenian.studentassistant.utils.id
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
@@ -47,8 +48,10 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
         pager.adapter = pagerAdapter
         view.requireViewByIdCompat<PagerTabStrip>(R.id.fs_pager_tab_strip).apply {
-            setTextColor(getColorCompat(R.color.primary))
-            setTabIndicatorColorResource(R.color.primary)
+            with(requireContext()) {
+                setTextColor(getColorCompat(getResId(R.attr.colorPrimary)))
+                setTabIndicatorColorResource(getResId(R.attr.colorPrimary))
+            }
         }
     }
 
@@ -65,7 +68,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_schedule, menu)
-        menu.setColor(getColorCompat(R.color.menu))
+        menu.setColor(requireContext().getColorCompat(R.color.menu))
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {

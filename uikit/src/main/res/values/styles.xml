@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AmountKeyboardButtonStyle">
-        <item name="android:layout_gravity">fill</item>
-        <item name="android:background">@android:color/darker_gray</item>
-        <item name="android:layout_margin">5dp</item>
+    <style name="ToolbarStyle" parent="Widget.MaterialComponents.Toolbar.PrimarySurface">
+        <item name="android:theme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
+        <item name="popupTheme">@style/ThemeOverlay.MaterialComponents.Light</item>
     </style>
 
 </resources>

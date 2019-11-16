@@ -17,9 +17,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.viewModelScope
 import com.dpro.widgets.WeekdaysPicker
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.joda.time.DateTimeConstants
@@ -312,24 +312,23 @@ class LessonEditorActivity : AppCompatActivity(R.layout.activity_lesson_editor) 
             } ?: run {
                 viewModel.viewModelScope.launch {
                     if (viewModel.isSubjectNameChangedAndNotLast()) {
-                        alert(
-                            R.string.lea_rename_others_message,
-                            R.string.lea_rename_others_title
-                        ) {
-                            positiveButton(R.string.lea_rename_others_yes) {
+                        MaterialAlertDialogBuilder(this@LessonEditorActivity)
+                            .setTitle(R.string.lea_rename_others_title)
+                            .setMessage(R.string.lea_rename_others_message)
+                            .setPositiveButton(R.string.lea_rename_others_yes) { _, _ ->
                                 viewModel.viewModelScope.launch {
                                     viewModel.save(true)
                                     finish()
                                 }
                             }
-                            negativeButton(R.string.lea_rename_others_no) {
+                            .setNegativeButton(R.string.lea_rename_others_no) { _, _ ->
                                 viewModel.viewModelScope.launch {
                                     viewModel.save(false)
                                     finish()
                                 }
                             }
-                            neutralPressed(R.string.lea_rename_others_cancel) {}
-                        }.show()
+                            .setNeutralButton(R.string.lea_rename_others_cancel, null)
+                            .show()
                     } else {
                         viewModel.save()
                         finish()
@@ -341,28 +340,28 @@ class LessonEditorActivity : AppCompatActivity(R.layout.activity_lesson_editor) 
         R.id.mle_delete -> {
             viewModel.viewModelScope.launch {
                 if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) {
-                    alert(
-                        R.string.lea_delete_homeworks_message,
-                        R.string.lea_delete_homeworks_title
-                    ) {
-                        positiveButton(R.string.lea_delete_homeworks_yes) {
+                    MaterialAlertDialogBuilder(this@LessonEditorActivity)
+                        .setTitle(R.string.lea_delete_homeworks_title)
+                        .setMessage(R.string.lea_delete_homeworks_message)
+                        .setPositiveButton(R.string.lea_delete_homeworks_yes) { _, _ ->
                             viewModel.viewModelScope.launch {
                                 viewModel.delete()
                                 finish()
                             }
                         }
-                        negativeButton(R.string.lea_delete_homeworks_cancel) {}
-                    }.show()
+                        .setNegativeButton(R.string.lea_delete_homeworks_cancel, null)
+                        .show()
                 } else {
-                    alert(R.string.lea_delete_message) {
-                        positiveButton(R.string.lea_delete_yes) {
+                    MaterialAlertDialogBuilder(this@LessonEditorActivity)
+                        .setMessage(R.string.lea_delete_message)
+                        .setPositiveButton(R.string.lea_delete_yes) { _, _ ->
                             viewModel.viewModelScope.launch {
                                 viewModel.delete()
                                 finish()
                             }
                         }
-                        negativeButton(R.string.lea_delete_no) {}
-                    }.show()
+                        .setNegativeButton(R.string.lea_delete_no, null)
+                        .show()
                 }
             }
             true

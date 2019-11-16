@@ -4,29 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.lessoninformation.LessonInformationActivity">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:cardBackgroundColor="@color/primary"
-        app:cardCornerRadius="5dp">
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        app:cardBackgroundColor="?colorPrimarySurface">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_margin="@dimen/card_margin_inside"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/ali_subject_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:textSize="23sp"
+                android:textAppearance="?textAppearanceBody1"
+                android:textColor="?colorOnPrimarySurface"
                 tools:text="Военная кафедра" />
 
             <LinearLayout
@@ -39,8 +39,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
+                    android:textAppearance="?textAppearanceBody1"
+                    android:textColor="?colorOnPrimarySurface"
                     tools:text="09.00" />
 
                 <TextView
@@ -48,8 +48,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text=" - "
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
+                    android:textAppearance="?textAppearanceBody1"
+                    android:textColor="?colorOnPrimarySurface"
                     tools:ignore="HardcodedText" />
 
                 <TextView
@@ -57,8 +57,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
+                    android:textAppearance="?textAppearanceBody1"
+                    android:textColor="?colorOnPrimarySurface"
                     tools:text="17:10" />
 
             </LinearLayout>
@@ -67,13 +67,13 @@
                 android:id="@+id/ali_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"
+                android:textAppearance="?textAppearanceBody1"
+                android:textColor="?colorOnPrimarySurface"
                 tools:text="Лекция" />
 
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
     <ViewFlipper
         android:id="@+id/ali_homeworks_flipper"
@@ -86,12 +86,17 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/lia_no_homeworks"
-            android:textSize="40sp" />
+            android:textAppearance="?textAppearanceHeadline3" />
 
         <ru.erdenian.studentassistant.uikit.ContextMenuRecyclerView
             android:id="@+id/ali_homeworks"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin" />
 
     </ViewFlipper>
 
