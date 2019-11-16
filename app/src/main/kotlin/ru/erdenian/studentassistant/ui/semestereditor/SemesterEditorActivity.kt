@@ -18,7 +18,7 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.model.entity.Semester
+import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.ui.lessonseditor.LessonsEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorViewModel.Error
 import ru.erdenian.studentassistant.utils.distinctUntilChanged

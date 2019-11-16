@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.model.entity
+package ru.erdenian.studentassistant.entity
 
 /**
  * Возвращает long, который можно использовать как id

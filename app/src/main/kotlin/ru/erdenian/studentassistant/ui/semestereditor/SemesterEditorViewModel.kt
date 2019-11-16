@@ -11,7 +11,7 @@ import org.joda.time.LocalDate
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
-import ru.erdenian.studentassistant.model.entity.Semester
+import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.model.repository.SemesterRepository
 
 class SemesterEditorViewModel(

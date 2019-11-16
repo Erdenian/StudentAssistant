@@ -19,13 +19,13 @@ import org.joda.time.LocalTime
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
-import ru.erdenian.studentassistant.model.ImmutableSortedSet
-import ru.erdenian.studentassistant.model.entity.Lesson
-import ru.erdenian.studentassistant.model.entity.LessonRepeat
-import ru.erdenian.studentassistant.model.immutableSortedSetOf
+import ru.erdenian.studentassistant.entity.ImmutableSortedSet
+import ru.erdenian.studentassistant.entity.Lesson
+import ru.erdenian.studentassistant.entity.LessonRepeat
+import ru.erdenian.studentassistant.entity.immutableSortedSetOf
+import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 import ru.erdenian.studentassistant.model.repository.HomeworkRepository
 import ru.erdenian.studentassistant.model.repository.LessonRepository
-import ru.erdenian.studentassistant.model.toImmutableSortedSet
 import ru.erdenian.studentassistant.utils.asLiveData
 import ru.erdenian.studentassistant.utils.setIfEmpty
 import ru.erdenian.studentassistant.utils.toSingleLine
@@ -66,14 +66,14 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
         classrooms.value = lesson.classrooms.joinToString()
         startTime.value = lesson.startTime
         endTime.value = lesson.endTime
-        lessonRepeat.value = when (lesson.lessonRepeat) {
+        lessonRepeat.value = when (val lessonRepeat = lesson.lessonRepeat) {
             is LessonRepeat.ByWeekday -> {
-                weekday.value = lesson.lessonRepeat.weekday
-                weeks.value = lesson.lessonRepeat.weeks
+                weekday.value = lessonRepeat.weekday
+                weeks.value = lessonRepeat.weeks
                 LessonRepeat.ByWeekday::class
             }
             is LessonRepeat.ByDates -> {
-                dates.value = lesson.lessonRepeat.dates
+                dates.value = lessonRepeat.dates
                 LessonRepeat.ByDates::class
             }
         }

@@ -7,7 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import org.joda.time.LocalDate
-import ru.erdenian.studentassistant.model.entity.Homework
+import ru.erdenian.studentassistant.entity.Homework
 
 @Suppress("TooManyFunctions", "MaxLineLength")
 @Dao

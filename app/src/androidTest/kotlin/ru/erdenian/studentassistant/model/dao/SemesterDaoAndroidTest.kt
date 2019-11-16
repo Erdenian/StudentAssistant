@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.di.databaseKodein
+import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.model.ScheduleDatabase
-import ru.erdenian.studentassistant.model.entity.Semester
 import ru.erdenian.studentassistant.utils.waitValue
 
 internal class SemesterDaoAndroidTest {

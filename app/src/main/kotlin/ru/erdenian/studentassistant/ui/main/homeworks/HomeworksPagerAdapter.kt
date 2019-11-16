@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.model.entity.Semester
+import ru.erdenian.studentassistant.entity.Semester
 
 class HomeworksPagerAdapter(
     context: Context,
