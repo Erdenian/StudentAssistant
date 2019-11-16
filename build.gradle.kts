@@ -16,7 +16,6 @@ buildscript {
 
         classpath("com.android.tools.build:gradle:$gradlePluginVersion")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-        classpath("org.jetbrains.kotlin:kotlin-serialization:$kotlinVersion")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion")
         classpath("de.mannodermaus.gradle.plugins:android-junit5:1.5.2.0")
     }
@@ -26,7 +25,6 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven("https://kotlin.bintray.com/kotlinx")
         maven("https://jitpack.io")
     }
 }
