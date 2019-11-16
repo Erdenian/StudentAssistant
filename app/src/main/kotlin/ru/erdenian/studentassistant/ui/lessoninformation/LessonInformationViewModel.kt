@@ -12,8 +12,8 @@ import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.entity.Homework
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.entity.immutableSortedSetOf
-import ru.erdenian.studentassistant.model.repository.HomeworkRepository
-import ru.erdenian.studentassistant.model.repository.LessonRepository
+import ru.erdenian.studentassistant.repository.HomeworkRepository
+import ru.erdenian.studentassistant.repository.LessonRepository
 import ru.erdenian.studentassistant.utils.asLiveData
 import ru.erdenian.studentassistant.utils.liveDataOf
 import ru.erdenian.studentassistant.utils.setIfEmpty

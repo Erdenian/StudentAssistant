@@ -4,6 +4,7 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("android.extensions")
+    id("de.mannodermaus.android-junit5")
 }
 
 android {
@@ -53,9 +54,18 @@ androidExtensions {
 }
 
 dependencies {
+    // region Versions
+    val junitVersion = "5.5.2"
+
     val kotlinVersion: String by project
     val roomVersion: String by project
     val jodaTimeVersion: String by project
+    // endregion
+
+    // region Tests
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    // endregion
 
     // region Kotlin
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
@@ -65,5 +75,7 @@ dependencies {
     implementation("androidx.room:room-ktx:$roomVersion")
     // endregion
 
+    // region Core
     api("joda-time:joda-time:$jodaTimeVersion")
+    // endregion
 }
