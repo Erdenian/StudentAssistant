@@ -32,7 +32,6 @@ import ru.erdenian.studentassistant.utils.setColor
 
 class LessonInformationActivity : AppCompatActivity(R.layout.activity_lesson_information) {
 
-
     companion object {
         private const val LESSON_INTENT_KEY = "lesson_intent_key"
         fun start(context: Context, lesson: Lesson) {
