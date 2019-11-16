@@ -50,7 +50,7 @@ class TeacherView @JvmOverloads constructor(
                 LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT
             ).apply { gravity = Gravity.CENTER_VERTICAL }
-            setImageResource(R.drawable.ic_menu_account)
+            setImageResource(R.drawable.ic_account)
             imageTintList = ColorStateList.valueOf(
                 context.getColorCompat(R.color.secondary_text)
             )
