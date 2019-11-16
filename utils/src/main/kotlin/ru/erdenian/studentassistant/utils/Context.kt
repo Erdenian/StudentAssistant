@@ -5,7 +5,6 @@ import android.app.TimePickerDialog
 import android.content.Context
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 import java.io.File
@@ -19,16 +18,6 @@ import java.io.File
  * @since 0.0.0
  */
 fun Context.getColorCompat(@ColorRes id: Int) = ContextCompat.getColor(this, id)
-
-/**
- * Обертка над [ContextCompat.getColor]
- *
- * @param id id цвета
- * @return цвет
- * @author Ilya Solovyov
- * @since 0.0.0
- */
-fun Fragment.getColorCompat(@ColorRes id: Int) = ContextCompat.getColor(requireContext(), id)
 
 /**
  * Очищает данные приложения

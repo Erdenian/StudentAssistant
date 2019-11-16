@@ -25,7 +25,7 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
             }
         }
         view.requireViewByIdCompat<PagerTabStrip>(R.id.fh_pager_tab_strip).apply {
-            setTextColor(getColorCompat(R.color.primary))
+            setTextColor(requireContext().getColorCompat(R.color.primary))
             setTabIndicatorColorResource(R.color.primary)
         }
 

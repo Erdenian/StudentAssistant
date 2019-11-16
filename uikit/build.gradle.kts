@@ -45,21 +45,16 @@ android {
 }
 
 dependencies {
+    // region Versions
     val kotlinVersion: String by project
+    // endregion
 
-    val appcompatVersion: String by project
-    val cardviewVersion: String by project
-
+    // region Private
     implementation(project(":utils"))
+    // endregion
 
     // region Kotlin
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
-    // endregion
-
-    // region AndroidX
-    api("androidx.appcompat:appcompat:$appcompatVersion")
-    api("androidx.cardview:cardview:$cardviewVersion")
-    api("androidx.recyclerview:recyclerview:1.1.0-rc01")
     // endregion
 
     // region UI

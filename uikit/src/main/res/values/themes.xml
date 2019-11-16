@@ -44,10 +44,6 @@
 
         <!-- region Component styles -->
         <item name="toolbarStyle">@style/ToolbarStyle</item>
-
-        <item name="materialAlertDialogTheme">
-            @style/ThemeOverlay.MaterialComponents.Dialog.Alert
-        </item>
         <!-- endregion -->
 
         <!-- region Remap legacy AppCompat attributes to MaterialComponent attributes -->
