@@ -10,26 +10,20 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.google.android.material.appbar.AppBarLayout
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/alse_toolbar"
+            style="?toolbarStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="?attr/actionBarSize">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/alse_toolbar"
-                style="?toolbarStyle"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize">
+            <Spinner
+                android:id="@+id/alse_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/lesson_repeat_types"
+                tools:listitem="@layout/spinner_item_semesters" />
 
-                <Spinner
-                    android:id="@+id/alse_spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/lesson_repeat_types"
-                    tools:listitem="@layout/spinner_item_semesters" />
-
-            </com.google.android.material.appbar.MaterialToolbar>
-
-        </com.google.android.material.appbar.AppBarLayout>
+        </com.google.android.material.appbar.MaterialToolbar>
 
         <ViewFlipper
             android:id="@+id/alse_flipper"
