@@ -88,7 +88,7 @@
             android:text="@string/lia_no_homeworks"
             android:textSize="40sp" />
 
-        <ru.erdenian.studentassistant.customviews.ContextMenuRecyclerView
+        <ru.erdenian.studentassistant.uikit.ContextMenuRecyclerView
             android:id="@+id/ali_homeworks"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

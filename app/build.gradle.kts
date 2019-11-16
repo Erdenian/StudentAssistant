@@ -66,10 +66,11 @@ dependencies {
     val navigationVersion: String by project
     val kodeinVersion: String by project
 
+    // region Private
     implementation(project(":repository"))
-    implementation(project(":entity"))
+    implementation(project(":uikit"))
     implementation(project(":utils"))
-    implementation(project(":customviews"))
+    // endregion
 
     // region Kotlin
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
