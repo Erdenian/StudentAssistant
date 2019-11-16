@@ -3,6 +3,8 @@ package ru.erdenian.studentassistant.utils
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.util.TypedValue
+import androidx.annotation.AttrRes
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import org.joda.time.LocalDate
@@ -18,6 +20,16 @@ import java.io.File
  * @since 0.0.0
  */
 fun Context.getColorCompat(@ColorRes id: Int) = ContextCompat.getColor(this, id)
+
+/**
+ * @author Ilya Solovyov
+ * @since 0.4.0
+ */
+fun Context.getResId(@AttrRes attribute: Int) = TypedValue().also { typedValue ->
+    require(theme.resolveAttribute(attribute, typedValue, true)) {
+        "Failed to resolve attribute: $attribute"
+    }
+}.resourceId
 
 /**
  * Очищает данные приложения

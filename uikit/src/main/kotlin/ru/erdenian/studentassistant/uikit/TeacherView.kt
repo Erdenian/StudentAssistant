@@ -8,9 +8,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.widget.TextViewCompat.setTextAppearance
-import org.jetbrains.anko.attr
 import ru.erdenian.studentassistant.utils.getColorCompat
+import ru.erdenian.studentassistant.utils.getResId
 
 /**
  * Иконка и имя преподавателя
@@ -29,8 +28,10 @@ class TeacherView @JvmOverloads constructor(
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     private val textView = AppCompatTextView(context).apply {
-        setTextAppearance(this, attr(R.attr.textAppearanceBody1).resourceId)
-        setTextColor(context.getColorCompat(attr(android.R.attr.textColorSecondary).resourceId))
+        with(context) {
+            setTextAppearance(this, getResId(R.attr.textAppearanceBody1))
+            setTextColor(getColorCompat(getResId(android.R.attr.textColorSecondary)))
+        }
     }
 
     var name: CharSequence?

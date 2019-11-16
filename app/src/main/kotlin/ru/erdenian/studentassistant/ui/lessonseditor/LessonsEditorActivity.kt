@@ -22,6 +22,7 @@ import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
 import ru.erdenian.studentassistant.utils.getColorCompat
+import ru.erdenian.studentassistant.utils.getResId
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 
@@ -70,8 +71,8 @@ class LessonsEditorActivity : AppCompatActivity(R.layout.activity_lessons_editor
             adapter = LessonsEditorPagerAdapter(supportFragmentManager)
         }
         requireViewByIdCompat<PagerTabStrip>(R.id.alse_by_weekdays_pager_tab_strip).apply {
-            setTextColor(getColorCompat(R.color.primary))
-            setTabIndicatorColorResource(R.color.primary)
+            setTextColor(getColorCompat(getResId(R.attr.colorPrimary)))
+            setTabIndicatorColorResource(getResId(R.attr.colorPrimary))
         }
 
         // TODO: 13.11.2016 добавить заполнение списка пар по датам

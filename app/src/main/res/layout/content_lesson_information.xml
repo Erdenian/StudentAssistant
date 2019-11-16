@@ -86,7 +86,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/lia_no_homeworks"
-            android:textSize="40sp" />
+            android:textAppearance="?textAppearanceHeadline3" />
 
         <ru.erdenian.studentassistant.uikit.ContextMenuRecyclerView
             android:id="@+id/ali_homeworks"
