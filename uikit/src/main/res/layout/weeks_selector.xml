@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <ru.erdenian.studentassistant.customviews.CheckBoxWithText
+                <ru.erdenian.studentassistant.uikit.CheckBoxWithText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:checked="true"
