@@ -20,7 +20,7 @@ import ru.erdenian.studentassistant.utils.id
 class HomeworkCard @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int = R.attr.materialCardViewStyle
 ) : MaterialCardView(context, attrs, defStyleAttr) {
 
     companion object {
