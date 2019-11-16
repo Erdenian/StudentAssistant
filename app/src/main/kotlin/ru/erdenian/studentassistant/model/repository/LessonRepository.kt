@@ -2,9 +2,9 @@ package ru.erdenian.studentassistant.model.repository
 
 import com.shopify.livedataktx.toNullableKtx
 import org.joda.time.LocalDate
+import ru.erdenian.studentassistant.entity.Lesson
+import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.model.dao.LessonDao
-import ru.erdenian.studentassistant.model.entity.Lesson
-import ru.erdenian.studentassistant.model.entity.Semester
 
 @Suppress("TooManyFunctions")
 class LessonRepository(private val lessonDao: LessonDao) : BaseRepository() {

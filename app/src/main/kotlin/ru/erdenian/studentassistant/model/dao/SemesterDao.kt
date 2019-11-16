@@ -6,7 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import ru.erdenian.studentassistant.model.entity.Semester
+import ru.erdenian.studentassistant.entity.Semester
 
 @Dao
 interface SemesterDao {

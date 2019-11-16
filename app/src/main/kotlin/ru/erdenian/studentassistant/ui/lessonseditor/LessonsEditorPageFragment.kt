@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.dimen
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.model.entity.Lesson
+import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.ui.adapter.LessonsListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity

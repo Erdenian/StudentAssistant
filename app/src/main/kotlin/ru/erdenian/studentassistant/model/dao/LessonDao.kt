@@ -13,10 +13,10 @@ import kotlinx.coroutines.withContext
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 import org.joda.time.Period
-import ru.erdenian.studentassistant.model.Converters
-import ru.erdenian.studentassistant.model.entity.Lesson
-import ru.erdenian.studentassistant.model.entity.LessonRepeat
-import ru.erdenian.studentassistant.model.entity.Semester
+import ru.erdenian.studentassistant.entity.Converters
+import ru.erdenian.studentassistant.entity.Lesson
+import ru.erdenian.studentassistant.entity.LessonRepeat
+import ru.erdenian.studentassistant.entity.Semester
 
 @Suppress("TooManyFunctions", "MaxLineLength")
 @Dao
@@ -78,8 +78,9 @@ abstract class LessonDao {
 
     fun get(semesterId: Long, weekday: Int) = get(semesterId).map { lessons ->
         lessons.filter { lesson ->
-            if (lesson.lessonRepeat !is LessonRepeat.ByWeekday) false
-            else lesson.lessonRepeat.repeatsOnWeekday(weekday)
+            val lessonRepeat = lesson.lessonRepeat
+            if (lessonRepeat !is LessonRepeat.ByWeekday) false
+            else lessonRepeat.repeatsOnWeekday(weekday)
         }
     }
 

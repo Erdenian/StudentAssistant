@@ -13,11 +13,11 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.di.databaseKodein
+import ru.erdenian.studentassistant.entity.Lesson
+import ru.erdenian.studentassistant.entity.LessonRepeat
+import ru.erdenian.studentassistant.entity.Semester
+import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 import ru.erdenian.studentassistant.model.ScheduleDatabase
-import ru.erdenian.studentassistant.model.entity.Lesson
-import ru.erdenian.studentassistant.model.entity.LessonRepeat
-import ru.erdenian.studentassistant.model.entity.Semester
-import ru.erdenian.studentassistant.model.immutableSortedSetOf
 import ru.erdenian.studentassistant.utils.waitValue
 
 internal class LessonDaoAndroidTest {

@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.model.entity
+package ru.erdenian.studentassistant.entity
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
@@ -8,8 +8,6 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.LocalTime
-import ru.erdenian.studentassistant.model.ImmutableSortedSet
-import ru.erdenian.studentassistant.model.immutableSortedSetOf
 
 /**
  * Класс пары (урока)

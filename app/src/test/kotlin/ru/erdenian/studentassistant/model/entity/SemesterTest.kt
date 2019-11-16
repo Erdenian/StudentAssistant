@@ -4,6 +4,7 @@ import org.joda.time.LocalDate
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import ru.erdenian.studentassistant.entity.Semester
 
 internal class SemesterTest {
 

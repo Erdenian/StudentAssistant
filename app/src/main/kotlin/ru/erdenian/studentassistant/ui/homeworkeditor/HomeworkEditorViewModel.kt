@@ -13,7 +13,7 @@ import org.joda.time.LocalDate
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
-import ru.erdenian.studentassistant.model.entity.Homework
+import ru.erdenian.studentassistant.entity.Homework
 import ru.erdenian.studentassistant.model.repository.HomeworkRepository
 import ru.erdenian.studentassistant.model.repository.LessonRepository
 import ru.erdenian.studentassistant.model.repository.SemesterRepository
