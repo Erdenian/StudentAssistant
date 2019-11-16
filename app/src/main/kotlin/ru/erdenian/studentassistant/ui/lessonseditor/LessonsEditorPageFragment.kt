@@ -12,8 +12,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.alert
 import org.jetbrains.anko.dimen
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.entity.Lesson
@@ -89,22 +89,22 @@ class LessonsEditorPageFragment : Fragment(R.layout.page_fragment_lessons_editor
             R.id.cle_delete -> {
                 viewModel.viewModelScope.launch {
                     if (viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson)) {
-                        requireContext().alert(
-                            R.string.lea_delete_homeworks_message,
-                            R.string.lea_delete_homeworks_title
-                        ) {
-                            positiveButton(R.string.lea_delete_homeworks_yes) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(R.string.lea_delete_homeworks_title)
+                            .setMessage(R.string.lea_delete_homeworks_message)
+                            .setPositiveButton(R.string.lea_delete_homeworks_yes) { _, _ ->
                                 viewModel.viewModelScope.launch { viewModel.delete(lesson) }
                             }
-                            negativeButton(R.string.lea_delete_homeworks_cancel) {}
-                        }.show()
+                            .setNegativeButton(R.string.lea_delete_homeworks_cancel, null)
+                            .show()
                     } else {
-                        requireContext().alert(R.string.lea_delete_message) {
-                            positiveButton(R.string.lea_delete_yes) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setMessage(R.string.lea_delete_message)
+                            .setPositiveButton(R.string.lea_delete_yes) { _, _ ->
                                 viewModel.viewModelScope.launch { viewModel.delete(lesson) }
                             }
-                            negativeButton(R.string.lea_delete_no) {}
-                        }.show()
+                            .setNegativeButton(R.string.lea_delete_no, null)
+                            .show()
                     }
                 }
                 true

@@ -14,9 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.alert
 import org.jetbrains.anko.dimen
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
@@ -133,14 +133,13 @@ class LessonInformationActivity : AppCompatActivity(R.layout.activity_lesson_inf
         val homework = homeworksAdapter.homeworks[info.position]
         return when (item.itemId) {
             R.id.ch_delete -> {
-                viewModel.viewModelScope.launch {
-                    alert(R.string.lia_delete_message) {
-                        positiveButton(R.string.lia_delete_yes) {
-                            viewModel.viewModelScope.launch { viewModel.delete(homework) }
-                        }
-                        negativeButton(R.string.lia_delete_no) {}
-                    }.show()
-                }
+                MaterialAlertDialogBuilder(this)
+                    .setMessage(R.string.lia_delete_message)
+                    .setPositiveButton(R.string.lia_delete_yes) { _, _ ->
+                        viewModel.viewModelScope.launch { viewModel.delete(homework) }
+                    }
+                    .setNegativeButton(R.string.lia_delete_no, null)
+                    .show()
                 true
             }
             else -> false
