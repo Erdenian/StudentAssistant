@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:paddingStart="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingEnd="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin">
+    android:orientation="horizontal">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:layout_weight="1"
         app:cardBackgroundColor="?colorPrimarySurface">
 
@@ -26,8 +25,8 @@
                 android:id="@+id/ali_subject_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textAppearance="?textAppearanceBody1"
                 android:textColor="?colorOnPrimarySurface"
-                android:textSize="23sp"
                 tools:text="Военная кафедра" />
 
             <LinearLayout
@@ -40,8 +39,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textAppearance="?textAppearanceBody1"
                     android:textColor="?colorOnPrimarySurface"
-                    android:textSize="20sp"
                     tools:text="09:00" />
 
                 <TextView
@@ -49,8 +48,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text=" - "
+                    android:textAppearance="?textAppearanceBody1"
                     android:textColor="?colorOnPrimarySurface"
-                    android:textSize="20sp"
                     tools:ignore="HardcodedText" />
 
                 <TextView
@@ -58,8 +57,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textAppearance="?textAppearanceBody1"
                     android:textColor="?colorOnPrimarySurface"
-                    android:textSize="20sp"
                     tools:text="17:10" />
 
             </LinearLayout>
@@ -68,8 +67,8 @@
                 android:id="@+id/ali_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textAppearance="?textAppearanceBody1"
                 android:textColor="?colorOnPrimarySurface"
-                android:textSize="20sp"
                 tools:text="Лекция" />
 
         </LinearLayout>
@@ -95,7 +94,12 @@
         <ru.erdenian.studentassistant.uikit.ContextMenuRecyclerView
             android:id="@+id/ali_homeworks"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin" />
 
     </ViewFlipper>
 
