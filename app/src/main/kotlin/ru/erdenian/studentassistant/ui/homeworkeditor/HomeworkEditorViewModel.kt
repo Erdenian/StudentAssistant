@@ -64,10 +64,7 @@ class HomeworkEditorViewModel(
 
     val error: LiveDataKtx<Error?> = MediatorLiveDataKtx<Error?>().apply {
         val onChanged = Observer<Any?> {
-            value = when {
-                description.safeValue?.isBlank() ?: true -> Error.EMPTY_DESCRIPTION
-                else -> null
-            }
+            value = if (description.safeValue?.isBlank() != false) Error.EMPTY_DESCRIPTION else null
         }
 
         addSource(description, onChanged)

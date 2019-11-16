@@ -1,5 +1,5 @@
 build:
-  maxIssues: 10
+  maxIssues: 15
   weights:
     UnsafeCallOnNullableType: 100500
     # complexity: 2
