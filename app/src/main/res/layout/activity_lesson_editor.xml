@@ -125,7 +125,7 @@
                     android:layout_height="wrap_content"
                     app:sunday_first_day="false" />
 
-                <ru.erdenian.studentassistant.customviews.WeeksSelector
+                <ru.erdenian.studentassistant.uikit.WeeksSelector
                     android:id="@+id/ale_weeks_selector"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />

@@ -1,2 +1,2 @@
-include(":app", "repository", "entity", ":customviews", ":utils")
+include(":app", "repository", "entity", ":uikit", ":utils")
 rootProject.name = "StudentAssistant"
