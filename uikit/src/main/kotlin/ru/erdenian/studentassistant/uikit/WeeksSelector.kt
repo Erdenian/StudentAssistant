@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.customviews
+package ru.erdenian.studentassistant.uikit
 
 import android.content.Context
 import android.util.AttributeSet

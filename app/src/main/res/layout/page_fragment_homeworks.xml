@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ru.erdenian.studentassistant.customviews.ContextMenuRecyclerView
+    <ru.erdenian.studentassistant.uikit.ContextMenuRecyclerView
         android:id="@+id/pfh_homeworks"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
