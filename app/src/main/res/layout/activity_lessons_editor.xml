@@ -14,9 +14,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/alse_toolbar"
-                style="@style/ToolbarStyle"
+                style="?toolbarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize">
 
@@ -27,7 +27,7 @@
                     android:entries="@array/lesson_repeat_types"
                     tools:listitem="@layout/spinner_item_semesters" />
 
-            </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -65,6 +65,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_plus"
-        android:tint="@android:color/white" />
+        android:tint="?colorOnPrimary" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

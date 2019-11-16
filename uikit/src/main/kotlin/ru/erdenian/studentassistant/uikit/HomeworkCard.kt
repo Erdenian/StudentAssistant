@@ -4,14 +4,14 @@ import android.content.Context
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.widget.TextView
-import androidx.cardview.widget.CardView
+import com.google.android.material.card.MaterialCardView
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.utils.id
 
 /**
  * Карточка домашнего задания
  *
- * @see CardView
+ * @see MaterialCardView
  *
  * @version 1.0.0
  * @author Ilya Solovyov
@@ -21,7 +21,7 @@ class HomeworkCard @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : CardView(context, attrs, defStyleAttr) {
+) : MaterialCardView(context, attrs, defStyleAttr) {
 
     companion object {
         private const val DATE_FORMATTER = "dd.MM.yyyy"

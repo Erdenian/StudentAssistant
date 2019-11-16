@@ -2,7 +2,8 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:layout_height="wrap_content"
-    tools:parentTag="androidx.cardview.widget.CardView">
+    tools:parentTag="com.google.android.material.card.MaterialCardView"
+    tools:theme="@style/AppTheme">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,7 +15,7 @@
             android:id="@+id/ch_subject_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/primary_text"
+            android:textColor="?android:textColorPrimary"
             android:textSize="@dimen/card_primary_text_size"
             tools:text="Матлогика" />
 
@@ -24,7 +25,7 @@
             android:id="@+id/ch_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/primary_text"
+            android:textColor="?android:textColorPrimary"
             android:textSize="@dimen/card_secondary_text_size"
             tools:text="Сделать лабы" />
 
@@ -38,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/hc_deadline"
-                android:textColor="@color/secondary_text"
+                android:textColor="?android:textColorSecondary"
                 android:textSize="@dimen/card_secondary_text_size" />
 
             <TextView
@@ -52,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:textColor="@color/secondary_text"
+                android:textColor="?android:textColorSecondary"
                 android:textSize="@dimen/card_secondary_text_size"
                 tools:text="05.06.2019" />
 

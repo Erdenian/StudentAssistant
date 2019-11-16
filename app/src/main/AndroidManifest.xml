@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="ru.erdenian.studentassistant">
 
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
     <application
         android:name=".SaApplication"
         android:allowBackup="false"
@@ -27,7 +25,7 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:label="@string/ma_title"
-            android:theme="@style/AppTheme.NoActionBar.TransparentStatusBar" />
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".ui.lessoninformation.LessonInformationActivity"

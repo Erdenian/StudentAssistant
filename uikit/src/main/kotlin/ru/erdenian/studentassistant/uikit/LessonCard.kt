@@ -6,7 +6,7 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.cardview.widget.CardView
+import com.google.android.material.card.MaterialCardView
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.utils.id
 import ru.erdenian.studentassistant.utils.setViewCount
@@ -14,7 +14,7 @@ import ru.erdenian.studentassistant.utils.setViewCount
 /**
  * Карточка пары
  *
- * @see CardView
+ * @see MaterialCardView
  *
  * @version 1.0.0
  * @author Ilya Solovyov
@@ -24,7 +24,7 @@ class LessonCard @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : CardView(context, attrs, defStyleAttr) {
+) : MaterialCardView(context, attrs, defStyleAttr) {
 
     companion object {
         private const val TIME_FORMATTER = "HH:mm"
