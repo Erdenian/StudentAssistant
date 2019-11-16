@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_menu_plus"
-        android:tint="@android:color/white" />
+        android:src="@drawable/ic_plus"
+        android:tint="?colorOnSecondary" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

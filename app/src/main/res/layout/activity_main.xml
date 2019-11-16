@@ -14,25 +14,19 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.google.android.material.appbar.AppBarLayout
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/am_toolbar"
+            style="?toolbarStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="?attr/actionBarSize">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/am_toolbar"
-                style="@style/Toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize">
+            <Spinner
+                android:id="@+id/am_toolbar_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/spinner_item_semesters" />
 
-                <Spinner
-                    android:id="@+id/am_toolbar_spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:listitem="@layout/spinner_item_semesters" />
-
-            </androidx.appcompat.widget.Toolbar>
-
-        </com.google.android.material.appbar.AppBarLayout>
+        </com.google.android.material.appbar.MaterialToolbar>
 
         <fragment
             android:id="@+id/am_nav_host_fragment"

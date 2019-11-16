@@ -3,13 +3,13 @@ package ru.erdenian.studentassistant.uikit
 import android.content.Context
 import android.content.res.ColorStateList
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.Gravity
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import ru.erdenian.studentassistant.utils.getColorCompat
+import ru.erdenian.studentassistant.utils.getResId
 
 /**
  * Иконка и имя преподавателя
@@ -28,11 +28,10 @@ class TeacherView @JvmOverloads constructor(
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     private val textView = AppCompatTextView(context).apply {
-        setTextSize(
-            TypedValue.COMPLEX_UNIT_PX,
-            resources.getDimension(R.dimen.card_secondary_text_size)
-        )
-        setTextColor(context.getColorCompat(R.color.secondary_text))
+        with(context) {
+            setTextAppearance(this, getResId(R.attr.textAppearanceBody1))
+            setTextColor(getColorCompat(getResId(android.R.attr.textColorSecondary)))
+        }
     }
 
     var name: CharSequence?

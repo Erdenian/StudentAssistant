@@ -1,9 +1,11 @@
 package ru.erdenian.studentassistant.uikit
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.AdapterView
+import androidx.recyclerview.R
 import androidx.recyclerview.widget.RecyclerView
 
 /**
@@ -15,7 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 class ContextMenuRecyclerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    @SuppressLint("PrivateResource")
+    defStyleAttr: Int = R.attr.recyclerViewStyle
 ) : RecyclerView(context, attrs, defStyleAttr) {
 
     private var contextMenuInfo: AdapterView.AdapterContextMenuInfo? = null

@@ -12,8 +12,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.alert
 import org.jetbrains.anko.dimen
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.entity.Homework
@@ -83,14 +83,13 @@ class HomeworksPageFragment : Fragment(R.layout.page_fragment_homeworks) {
         val homework = adapter.homeworks[info.position]
         return when (item.itemId) {
             R.id.ch_delete -> {
-                viewModel.viewModelScope.launch {
-                    requireContext().alert(R.string.hf_delete_message) {
-                        positiveButton(R.string.hf_delete_yes) {
-                            viewModel.viewModelScope.launch { viewModel.delete(homework) }
-                        }
-                        negativeButton(R.string.hf_delete_no) {}
-                    }.show()
-                }
+                MaterialAlertDialogBuilder(requireContext())
+                    .setMessage(R.string.hf_delete_message)
+                    .setPositiveButton(R.string.hf_delete_yes) { _, _ ->
+                        viewModel.viewModelScope.launch { viewModel.delete(homework) }
+                    }
+                    .setNegativeButton(R.string.hf_delete_no, null)
+                    .show()
                 true
             }
             else -> false
