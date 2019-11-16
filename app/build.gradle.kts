@@ -6,7 +6,6 @@ plugins {
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
-    id("kotlinx-serialization")
     id("androidx.navigation.safeargs.kotlin")
     id("de.mannodermaus.android-junit5")
 }
@@ -98,7 +97,6 @@ dependencies {
     val roomVersion: String by project
 
     val kodeinVersion: String by project
-    //val retrofit_version: String by project
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
@@ -115,7 +113,6 @@ dependencies {
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
-    //implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.13.0")
     // endregion
 
     // region AndroidX
