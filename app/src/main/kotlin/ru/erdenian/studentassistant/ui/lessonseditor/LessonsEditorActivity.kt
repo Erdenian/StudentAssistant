@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
 import android.widget.ViewFlipper
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.viewModelScope
 import androidx.viewpager.widget.PagerTabStrip
@@ -21,11 +22,10 @@ import ru.erdenian.studentassistant.model.entity.Semester
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
 import ru.erdenian.studentassistant.utils.getColorCompat
-import ru.erdenian.studentassistant.utils.lazyViewModel
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 
-class LessonsEditorActivity : AppCompatActivity() {
+class LessonsEditorActivity : AppCompatActivity(R.layout.activity_lessons_editor) {
 
     companion object {
         private const val SEMESTER_INTENT_KEY = "semester_intent_key"
@@ -34,11 +34,10 @@ class LessonsEditorActivity : AppCompatActivity() {
         }
     }
 
-    private val viewModel by lazyViewModel<LessonsEditorViewModel>()
+    private val viewModel by viewModels<LessonsEditorViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_lessons_editor)
 
         viewModel.init(checkNotNull(intent.getParcelableExtra(SEMESTER_INTENT_KEY)))
 

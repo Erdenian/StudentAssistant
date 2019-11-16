@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.MultiAutoCompleteTextView
 import android.widget.Spinner
 import android.widget.ViewFlipper
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.viewModelScope
@@ -30,13 +31,12 @@ import ru.erdenian.studentassistant.model.entity.LessonRepeat
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorViewModel.Error
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
-import ru.erdenian.studentassistant.utils.lazyViewModel
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showTimePicker
 import java.util.Calendar
 
-class LessonEditorActivity : AppCompatActivity() {
+class LessonEditorActivity : AppCompatActivity(R.layout.activity_lesson_editor) {
 
     companion object {
         private const val SEMESTER_ID_INTENT_KEY = "semester_id_intent_key"
@@ -69,14 +69,13 @@ class LessonEditorActivity : AppCompatActivity() {
         private const val TIME_FORMAT = "HH:mm"
     }
 
-    private val viewModel by lazyViewModel<LessonEditorViewModel>()
+    private val viewModel by viewModels<LessonEditorViewModel>()
 
     private val lesson by lazy { intent.getParcelableExtra<Lesson?>(LESSON_INTENT_KEY) }
 
     @Suppress("ComplexMethod", "LongMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_lesson_editor)
 
         intent.apply {
             val l = lesson

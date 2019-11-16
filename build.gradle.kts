@@ -1,5 +1,7 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
-    id("io.gitlab.arturbosch.detekt") version ("1.0.1")
+    id("io.gitlab.arturbosch.detekt") version ("1.1.1")
 }
 
 buildscript {
@@ -8,15 +10,14 @@ buildscript {
         jcenter()
     }
     dependencies {
-        val gradle_plugin_version: String by project
-        val kotlin_version: String by project
-        val navigation_version: String by project
+        val gradlePluginVersion: String by project
+        val kotlinVersion: String by project
+        val navigationVersion: String by project
 
-        classpath("com.android.tools.build:gradle:$gradle_plugin_version")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
-        classpath("org.jetbrains.kotlin:kotlin-serialization:$kotlin_version")
-        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navigation_version")
-        classpath("de.mannodermaus.gradle.plugins:android-junit5:1.5.1.0")
+        classpath("com.android.tools.build:gradle:$gradlePluginVersion")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion")
+        classpath("de.mannodermaus.gradle.plugins:android-junit5:1.5.2.0")
     }
 }
 
@@ -24,7 +25,6 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven("https://kotlin.bintray.com/kotlinx")
         maven("https://jitpack.io")
     }
 }
@@ -33,17 +33,26 @@ tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
 
+subprojects.forEach { module ->
+    module.tasks.withType<KotlinCompile> {
+        kotlinOptions {
+            jvmTarget = "1.8"
+            @Suppress("SuspiciousCollectionReassignment")
+            freeCompilerArgs += listOf(
+                //"-XXLanguage:+InlineClasses",
+                "-Xnew-inference"
+            )
+        }
+    }
+}
+
 detekt {
     config = files("detekt-config.yml")
+    input = files(*subprojects.map { "${it.name}/src" }.toTypedArray())
     reports { xml { enabled = false } }
     failFast = false
-
-    val sourceSets = listOf("main", "test", "androidTest")
-    input = files(*subprojects.flatMap { project ->
-        sourceSets.map { "${project.name}/src/$it/kotlin" }
-    }.toTypedArray())
 }
 
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.0.1")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.1.1")
 }
