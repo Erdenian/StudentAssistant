@@ -1,10 +1,8 @@
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
-import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsFeature
 
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("android.extensions")
     kotlin("kapt")
     id("androidx.navigation.safeargs.kotlin")
     id("de.mannodermaus.android-junit5")
@@ -80,11 +78,6 @@ android {
     }
 }
 
-androidExtensions {
-    features = setOf(AndroidExtensionsFeature.PARCELIZE.featureName)
-    isExperimental = true
-}
-
 dependencies {
     val junitVersion = "5.5.2"
     val androidTestVersion = "1.1.0"
@@ -106,6 +99,7 @@ dependencies {
     androidTestImplementation("de.mannodermaus.junit5:android-test-core:$androidTestVersion")
     androidTestRuntimeOnly("de.mannodermaus.junit5:android-test-runner:$androidTestVersion")
 
+    implementation(project(":entity"))
     implementation(project(":utils"))
     implementation(project(":customviews"))
 

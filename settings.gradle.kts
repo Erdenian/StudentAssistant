@@ -1,2 +1,2 @@
-include(":app", ":customviews", ":utils")
+include(":app", "entity", ":customviews", ":utils")
 rootProject.name = "StudentAssistant"

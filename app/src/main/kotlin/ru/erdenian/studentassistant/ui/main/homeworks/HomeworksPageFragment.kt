@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.dimen
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.model.entity.Homework
+import ru.erdenian.studentassistant.entity.Homework
 import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity

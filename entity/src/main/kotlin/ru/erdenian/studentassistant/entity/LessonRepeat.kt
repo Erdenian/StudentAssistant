@@ -1,10 +1,9 @@
-package ru.erdenian.studentassistant.model.entity
+package ru.erdenian.studentassistant.entity
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
-import ru.erdenian.studentassistant.model.ImmutableSortedSet
 
 /**
  * Класс повторений пары

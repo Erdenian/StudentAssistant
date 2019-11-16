@@ -12,9 +12,9 @@ import kotlinx.coroutines.withContext
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
-import ru.erdenian.studentassistant.model.entity.Lesson
-import ru.erdenian.studentassistant.model.entity.Semester
-import ru.erdenian.studentassistant.model.immutableSortedSetOf
+import ru.erdenian.studentassistant.entity.Lesson
+import ru.erdenian.studentassistant.entity.Semester
+import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 import ru.erdenian.studentassistant.model.repository.HomeworkRepository
 import ru.erdenian.studentassistant.model.repository.LessonRepository
 import ru.erdenian.studentassistant.model.repository.SemesterRepository

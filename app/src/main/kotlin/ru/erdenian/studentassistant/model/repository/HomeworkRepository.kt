@@ -1,9 +1,9 @@
 package ru.erdenian.studentassistant.model.repository
 
 import com.shopify.livedataktx.toNullableKtx
+import ru.erdenian.studentassistant.entity.Homework
+import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.model.dao.HomeworkDao
-import ru.erdenian.studentassistant.model.entity.Homework
-import ru.erdenian.studentassistant.model.entity.Lesson
 
 @Suppress("TooManyFunctions")
 class HomeworkRepository(private val homeworkDao: HomeworkDao) : BaseRepository() {

@@ -4,7 +4,9 @@ import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import ru.erdenian.studentassistant.model.immutableSortedSetOf
+import ru.erdenian.studentassistant.entity.Lesson
+import ru.erdenian.studentassistant.entity.LessonRepeat
+import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 
 internal class LessonTest {
 
