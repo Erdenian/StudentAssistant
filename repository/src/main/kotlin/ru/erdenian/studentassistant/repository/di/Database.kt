@@ -7,7 +7,7 @@ import org.kodein.di.generic.bind
 import org.kodein.di.generic.instance
 import org.kodein.di.generic.provider
 import org.kodein.di.generic.singleton
-import ru.erdenian.studentassistant.repository.ScheduleDatabase
+import ru.erdenian.studentassistant.repository.database.ScheduleDatabase
 
 fun databaseKodein(application: Application) = Kodein.direct {
     bind() from singleton {
