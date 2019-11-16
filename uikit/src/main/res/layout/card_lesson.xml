@@ -27,24 +27,24 @@
                     android:id="@+id/lc_start_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textAppearance="?textAppearanceBody1"
                     android:textColor="?android:textColorPrimary"
-                    android:textSize="@dimen/card_primary_text_size"
                     tools:text="09:00" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" - "
+                    android:textAppearance="?textAppearanceBody1"
                     android:textColor="?android:textColorSecondary"
-                    android:textSize="@dimen/card_primary_text_size"
                     tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/lc_end_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textAppearance="?textAppearanceBody1"
                     android:textColor="?android:textColorSecondary"
-                    android:textSize="@dimen/card_primary_text_size"
                     tools:text="10:30" />
 
             </LinearLayout>
@@ -63,8 +63,8 @@
                     android:id="@+id/lc_classrooms"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textAppearance="?textAppearanceBody2"
                     android:textColor="?android:textColorSecondary"
-                    android:textSize="@dimen/card_secondary_text_size"
                     tools:text="4212а, 4212б" />
 
                 <ImageView
@@ -90,16 +90,16 @@
                 android:id="@+id/lc_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textAppearance="?textAppearanceBody2"
                 android:textColor="?android:textColorSecondary"
-                android:textSize="@dimen/card_secondary_text_size"
                 tools:text="Лабораторная работа" />
 
             <TextView
                 android:id="@+id/lc_subject_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textAppearance="?textAppearanceBody1"
                 android:textColor="?android:textColorPrimary"
-                android:textSize="@dimen/card_primary_text_size"
                 tools:text="Интернет программирование" />
 
             <LinearLayout
@@ -132,8 +132,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:textAppearance="?textAppearanceBody2"
                 android:textColor="?android:textColorSecondary"
-                android:textSize="@dimen/card_secondary_text_size"
                 tools:text="Каждую неделю" />
 
         </LinearLayout>

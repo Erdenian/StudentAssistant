@@ -15,8 +15,8 @@
             android:id="@+id/ch_subject_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textAppearance="?textAppearanceBody1"
             android:textColor="?android:textColorPrimary"
-            android:textSize="@dimen/card_primary_text_size"
             tools:text="Матлогика" />
 
         <include layout="@layout/divider_horizontal" />
@@ -25,8 +25,8 @@
             android:id="@+id/ch_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textAppearance="?textAppearanceBody2"
             android:textColor="?android:textColorPrimary"
-            android:textSize="@dimen/card_secondary_text_size"
             tools:text="Сделать лабы" />
 
         <LinearLayout
@@ -39,8 +39,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/hc_deadline"
-                android:textColor="?android:textColorSecondary"
-                android:textSize="@dimen/card_secondary_text_size" />
+                android:textAppearance="?textAppearanceBody2"
+                android:textColor="?android:textColorSecondary" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -53,8 +53,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:textAppearance="?textAppearanceBody2"
                 android:textColor="?android:textColorSecondary"
-                android:textSize="@dimen/card_secondary_text_size"
                 tools:text="05.06.2019" />
 
         </LinearLayout>
