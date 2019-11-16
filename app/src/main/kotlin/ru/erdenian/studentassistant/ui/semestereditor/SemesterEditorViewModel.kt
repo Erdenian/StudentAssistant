@@ -12,7 +12,7 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.entity.Semester
-import ru.erdenian.studentassistant.model.repository.SemesterRepository
+import ru.erdenian.studentassistant.repository.SemesterRepository
 
 class SemesterEditorViewModel(
     application: Application
