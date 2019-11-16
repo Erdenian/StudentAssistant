@@ -1,22 +1,20 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("com.android.library")
     kotlin("android")
 }
 
 android {
-    val compile_sdk_version: String by project
-    val target_sdk_version: String by project
+    val compileSdkVersion: String by project
+    val targetSdkVersion: String by project
 
-    compileSdkVersion(compile_sdk_version.toInt())
+    compileSdkVersion(compileSdkVersion.toInt())
 
     defaultConfig {
         versionCode = 1
         versionName = "1.0"
 
         minSdkVersion(21)
-        targetSdkVersion(target_sdk_version.toInt())
+        targetSdkVersion(targetSdkVersion.toInt())
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -37,30 +35,30 @@ android {
         getByName("main").java.srcDirs("src/main/kotlin")
         getByName("test").java.srcDirs("src/test/kotlin")
         getByName("androidTest").java.srcDirs("src/androidTest/kotlin")
-    }
-}
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "1.8"
+        productFlavors.forEach { flavor ->
+            getByName(flavor.name).java.srcDirs("src/${flavor.name}/kotlin")
+            "test${flavor.name.capitalize()}".let { getByName(it).java.srcDirs("src/$it/kotlin") }
+            "androidTest${flavor.name.capitalize()}".let { getByName(it).java.srcDirs("src/$it/kotlin") }
+        }
     }
 }
 
 dependencies {
-    val kotlin_version: String by project
+    val kotlinVersion: String by project
 
-    val appcompat_version: String by project
-    val cardview_version: String by project
+    val appcompatVersion: String by project
+    val cardviewVersion: String by project
 
     implementation(project(":utils"))
 
     // region Kotlin
-    implementation(kotlin("stdlib-jdk8", kotlin_version))
+    implementation(kotlin("stdlib-jdk8", kotlinVersion))
     // endregion
 
     // region AndroidX
-    api("androidx.appcompat:appcompat:$appcompat_version")
-    api("androidx.cardview:cardview:$cardview_version")
-    api("androidx.recyclerview:recyclerview:1.1.0-beta04")
+    api("androidx.appcompat:appcompat:$appcompatVersion")
+    api("androidx.cardview:cardview:$cardviewVersion")
+    api("androidx.recyclerview:recyclerview:1.1.0-rc01")
     // endregion
 }

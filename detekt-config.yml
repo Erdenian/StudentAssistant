@@ -1,5 +1,5 @@
 build:
-  maxIssues: 10
+  maxIssues: 15
   weights:
     UnsafeCallOnNullableType: 100500
     # complexity: 2
@@ -20,11 +20,12 @@ processors:
 console-reports:
   active: true
   exclude:
-  # - 'ProjectStatisticsReport'
-  # - 'ComplexityReport'
-  # - 'NotificationReport'
-  # - 'FindingsReport'
-  # - 'BuildFailureReport'
+    # - 'ProjectStatisticsReport'
+    # - 'ComplexityReport'
+    # - 'NotificationReport'
+    # - 'FindingsReport'
+    - 'FileBasedFindingsReport'
+    # - 'BuildFailureReport'
 
 comments:
   active: true
@@ -146,6 +147,7 @@ exceptions:
     active: true
   ReturnFromFinally:
     active: true
+    ignoreLabeled: false
   SwallowedException:
     active: true
     ignoredExceptionTypes: 'InterruptedException,NumberFormatException,ParseException,MalformedURLException'
@@ -208,7 +210,7 @@ formatting:
     continuationIndentSize: 4
   MaximumLineLength:
     active: false
-    maxLineLength: 120
+    maxLineLength: 130
   ModifierOrdering:
     active: true
     autoCorrect: true
@@ -377,6 +379,8 @@ performance:
 
 potential-bugs:
   active: true
+  Deprecation:
+    active: true
   DuplicateCaseInWhenExpression:
     active: true
   EqualsAlwaysReturnsTrueOrFalse:
@@ -384,6 +388,8 @@ potential-bugs:
   EqualsWithHashCodeExist:
     active: true
   ExplicitGarbageCollectionCall:
+    active: true
+  HasPlatformType:
     active: true
   InvalidRange:
     active: true
@@ -434,9 +440,11 @@ style:
   ForbiddenComment:
     active: true
     values: 'TODO:,FIXME:,STOPSHIP:'
+    allowedPatterns: ""
   ForbiddenImport:
     active: false
     imports: ''
+    forbiddenPatterns: ""
   ForbiddenVoid:
     active: true
     ignoreOverridden: false
@@ -445,6 +453,7 @@ style:
     active: true
     ignoreOverridableFunction: true
     excludedFunctions: 'describeContents'
+    excludeAnnotatedFunction: "dagger.Provides"
   LibraryCodeMustSpecifyReturnType:
     active: true
   LoopWithTooManyJumpStatements:
@@ -466,7 +475,7 @@ style:
     active: false
   MaxLineLength:
     active: true
-    maxLineLength: 120
+    maxLineLength: 130
     excludePackageStatements: true
     excludeImportStatements: true
     excludeCommentStatements: false
@@ -490,6 +499,8 @@ style:
     active: true
   ProtectedMemberInFinalClass:
     active: true
+  RedundantExplicitType:
+    active: true
   RedundantVisibilityModifierRule:
     active: true
   ReturnCount:
@@ -498,6 +509,7 @@ style:
     excludedFunctions: "equals"
     excludeLabeled: false
     excludeReturnFromLambda: true
+    excludeGuardClauses: false
   SafeCast:
     active: true
   SerialVersionUIDInSerializableClass:
@@ -532,11 +544,16 @@ style:
   UnusedPrivateMember:
     active: true
     allowedNames: "(_|ignored|expected|serialVersionUID)"
+  UseArrayLiteralsInAnnotations:
+    active: true
   UseCheckOrError:
     active: false
   UseDataClass:
     active: true
     excludeAnnotatedClasses: ""
+    allowVars: false
+  UseIfInsteadOfWhen:
+    active: true
   UseRequire:
     active: true
   UselessCallOnNotNull:

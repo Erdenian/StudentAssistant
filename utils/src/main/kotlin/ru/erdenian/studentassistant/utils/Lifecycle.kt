@@ -2,39 +2,16 @@
 
 package ru.erdenian.studentassistant.utils
 
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.shopify.livedataktx.LiveDataKtx
 import com.shopify.livedataktx.MediatorLiveDataKtx
 import com.shopify.livedataktx.MutableLiveDataKtx
-
-// region ViewModelProviders
-
-inline fun <reified T : ViewModel> Fragment.getViewModel() =
-    ViewModelProvider(this).get(T::class.java)
-
-inline fun <reified T : ViewModel> Fragment.getActivityViewModel() =
-    ViewModelProvider(requireActivity()).get(T::class.java)
-
-inline fun <reified T : ViewModel> FragmentActivity.getViewModel() =
-    ViewModelProvider(this).get(T::class.java)
-
-inline fun <reified T : ViewModel> Fragment.lazyViewModel() = lazy { getViewModel<T>() }
-inline fun <reified T : ViewModel> Fragment.lazyActivityViewModel() = lazy {
-    requireActivity().getViewModel<T>()
-}
-
-inline fun <reified T : ViewModel> FragmentActivity.lazyViewModel() = lazy { getViewModel<T>() }
-
-// endregion
 
 // region distinctUntilChanged
 

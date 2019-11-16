@@ -1,13 +1,12 @@
 package ru.erdenian.studentassistant.ui.main.schedule
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.viewpager.widget.PagerTabStrip
 import androidx.viewpager.widget.ViewPager
 import org.joda.time.LocalDate
@@ -15,18 +14,17 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.ui.main.MainViewModel
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.id
-import ru.erdenian.studentassistant.utils.lazyActivityViewModel
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
 
-class ScheduleFragment : Fragment() {
+class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
     companion object {
         private const val PAGE_DATE = "page_date"
     }
 
-    private val viewModel by lazyActivityViewModel<MainViewModel>()
+    private val viewModel by activityViewModels<MainViewModel>()
 
     private val pager: ViewPager by id(R.id.fs_view_pager)
 
@@ -43,12 +41,6 @@ class ScheduleFragment : Fragment() {
             }
         }
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_schedule, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)

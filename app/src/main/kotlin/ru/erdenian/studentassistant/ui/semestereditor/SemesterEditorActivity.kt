@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.viewModelScope
@@ -22,12 +23,11 @@ import ru.erdenian.studentassistant.ui.lessonseditor.LessonsEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorViewModel.Error
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
-import ru.erdenian.studentassistant.utils.lazyViewModel
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
 
-class SemesterEditorActivity : AppCompatActivity() {
+class SemesterEditorActivity : AppCompatActivity(R.layout.activity_semester_editor) {
 
     companion object {
         const val SEMESTER_RESULT_EXTRA = "semester_result_extra"
@@ -44,21 +44,18 @@ class SemesterEditorActivity : AppCompatActivity() {
         private const val DATE_FORMAT = "dd.MM.yyyy"
     }
 
-    private val viewModel by lazyViewModel<SemesterEditorViewModel>()
+    private val viewModel by viewModels<SemesterEditorViewModel>()
 
     @Suppress("ComplexMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_semester_editor)
 
         val semester = intent.getParcelableExtra<Semester?>(SEMESTER_INTENT_KEY)
         viewModel.init(semester)
 
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
-            if (semester == null) title = getString(
-                R.string.sea_title_new
-            )
+            if (semester == null) title = getString(R.string.sea_title_new)
         }
 
         val owner = this

@@ -2,14 +2,13 @@ package ru.erdenian.studentassistant.ui.main.homeworks
 
 import android.os.Bundle
 import android.view.ContextMenu
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ViewFlipper
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,10 +21,9 @@ import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.ui.main.MainViewModel
-import ru.erdenian.studentassistant.utils.lazyActivityViewModel
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 
-class HomeworksPageFragment : Fragment() {
+class HomeworksPageFragment : Fragment(R.layout.page_fragment_homeworks) {
 
     companion object {
         private const val IS_ACTUAL = "is_actual"
@@ -35,7 +33,7 @@ class HomeworksPageFragment : Fragment() {
         }
     }
 
-    private val viewModel by lazyActivityViewModel<MainViewModel>()
+    private val viewModel by activityViewModels<MainViewModel>()
 
     private val adapter = HomeworksListAdapter().apply {
         onHomeworkClickListener = object : HomeworksListAdapter.OnHomeworkClickListener {
@@ -45,20 +43,14 @@ class HomeworksPageFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.page_fragment_homeworks, container, false).apply {
-        with(requireViewByIdCompat<RecyclerView>(R.id.pfh_homeworks)) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        view.requireViewByIdCompat<RecyclerView>(R.id.pfh_homeworks).apply {
             adapter = this@HomeworksPageFragment.adapter
-            layoutManager = LinearLayoutManager(inflater.context)
+            layoutManager = LinearLayoutManager(view.context)
             addItemDecoration(SpacingItemDecoration(dimen(R.dimen.cards_spacing)))
             registerForContextMenu(this)
         }
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val isActual = requireArguments().getBoolean(IS_ACTUAL)
         val homeworks = viewModel.run { if (isActual) getActualHomeworks() else getPastHomeworks() }
 
@@ -70,7 +62,7 @@ class HomeworksPageFragment : Fragment() {
             }
         }
 
-        homeworks.observe(this) { adapter.homeworks = it.list }
+        homeworks.observe(viewLifecycleOwner) { adapter.homeworks = it.list }
     }
 
     override fun onCreateContextMenu(
