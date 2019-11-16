@@ -16,7 +16,7 @@
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/alse_toolbar"
-                style="@style/Toolbar"
+                style="@style/ToolbarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize">
 
@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_menu_plus"
+        android:src="@drawable/ic_plus"
         android:tint="@android:color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
