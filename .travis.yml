@@ -24,4 +24,4 @@ install:
   - ./gradlew init
 
 script:
-  - ./gradlew detekt lintDebug testDebugUnitTest
+  - ./gradlew detekt lintDebug testDebugUnitTest assembleDebug
