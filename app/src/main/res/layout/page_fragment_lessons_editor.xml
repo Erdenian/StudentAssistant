@@ -20,6 +20,6 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/lsea_free_day"
-        android:textSize="40sp" />
+        android:textAppearance="?textAppearanceHeadline3" />
 
 </ViewFlipper>
