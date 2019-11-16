@@ -18,9 +18,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/am_toolbar"
-                style="@style/ToolbarStyle"
+                style="?toolbarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize">
 
@@ -30,7 +30,7 @@
                     android:layout_height="wrap_content"
                     tools:listitem="@layout/spinner_item_semesters" />
 
-            </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
 

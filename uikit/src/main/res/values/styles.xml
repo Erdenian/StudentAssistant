@@ -2,9 +2,8 @@
 <resources>
 
     <style name="ToolbarStyle" parent="Widget.MaterialComponents.Toolbar">
-        <item name="android:theme">@style/ToolbarChildStyle</item>
+        <item name="android:theme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
+        <item name="popupTheme">@style/ThemeOverlay.MaterialComponents.Light</item>
     </style>
-
-    <style name="ToolbarChildStyle"></style>
 
 </resources>

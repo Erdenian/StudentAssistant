@@ -89,11 +89,11 @@
     <string name="lea_rename_others_cancel">Отмена</string>
     <string name="lea_delete">Удалить занятие</string>
     <string name="lea_delete_message">Удалить занятие?</string>
-    <string name="lea_delete_yes">Да</string>
+    <string name="lea_delete_yes">Удалить</string>
     <string name="lea_delete_no">Нет</string>
     <string name="lea_delete_homeworks_title">Задания будут удалены</string>
     <string name="lea_delete_homeworks_message">Для данного предмета есть домашние задания, они будут удалены вместе с ним</string>
-    <string name="lea_delete_homeworks_yes">Да</string>
+    <string name="lea_delete_homeworks_yes">Удалить</string>
     <string name="lea_delete_homeworks_cancel">Отмена</string>
     <!-- endregion -->
 
@@ -106,7 +106,7 @@
     <string name="hea_error_empty_description">Введите описание домашнего задания</string>
     <string name="hea_delete">Удалить задание</string>
     <string name="hea_delete_message">Удалить задание?</string>
-    <string name="hea_delete_yes">Да</string>
+    <string name="hea_delete_yes">Удалить</string>
     <string name="hea_delete_no">Нет</string>
     <!-- endregion -->
 
