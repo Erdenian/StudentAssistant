@@ -61,4 +61,8 @@ dependencies {
     api("androidx.cardview:cardview:$cardviewVersion")
     api("androidx.recyclerview:recyclerview:1.1.0-rc01")
     // endregion
+
+    // region UI
+    api("com.google.android.material:material:1.2.0-alpha01")
+    // endregion
 }

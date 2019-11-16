@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            app:srcCompat="@drawable/minus"
+            app:srcCompat="@drawable/ic_minus"
             tools:ignore="ContentDescription" />
 
         <HorizontalScrollView
@@ -67,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            app:srcCompat="@drawable/ic_menu_plus"
+            app:srcCompat="@drawable/ic_plus"
             tools:ignore="ContentDescription" />
 
     </LinearLayout>
