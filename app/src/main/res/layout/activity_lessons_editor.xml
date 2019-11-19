@@ -21,6 +21,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:entries="@array/lesson_repeat_types"
+                android:theme="@style/ToolbarSpinnerTheme"
                 tools:listitem="@layout/spinner_item_semesters" />
 
         </com.google.android.material.appbar.MaterialToolbar>
