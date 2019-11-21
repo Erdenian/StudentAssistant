@@ -7,11 +7,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.viewpager.widget.PagerTabStrip
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.jetbrains.anko.colorAttr
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.ui.main.MainViewModel
-import ru.erdenian.studentassistant.utils.getColorCompat
-import ru.erdenian.studentassistant.utils.getResId
 import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 
 class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
@@ -26,10 +25,9 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
             }
         }
         view.requireViewByIdCompat<PagerTabStrip>(R.id.fh_pager_tab_strip).apply {
-            with(requireContext()) {
-                setTextColor(getColorCompat(getResId(R.attr.colorPrimary)))
-                setTabIndicatorColorResource(getResId(R.attr.colorPrimary))
-            }
+            val color = colorAttr(R.attr.colorPrimary)
+            setTextColor(color)
+            tabIndicatorColor = color
         }
 
         view.requireViewByIdCompat<FloatingActionButton>(R.id.fh_add_homework)
