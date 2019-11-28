@@ -9,7 +9,7 @@ import androidx.recyclerview.R
 import androidx.recyclerview.widget.RecyclerView
 
 /**
- * [RecyclerView] с возможностью отображать контекстное меню для элементов списка
+ * [RecyclerView] с возможностью отображать контекстное меню для элементов списка.
  *
  * @author Ilya Solovyov
  * @since 0.3.0

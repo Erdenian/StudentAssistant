@@ -19,7 +19,9 @@ internal suspend fun <T> LiveData<T>.async() = coroutineScope {
                 }
             }
             launch(Dispatchers.Main) { observeForever(observer) }
-            continuation.invokeOnCancellation { launch(Dispatchers.Main) { removeObserver(observer) } }
+            continuation.invokeOnCancellation {
+                launch(Dispatchers.Main) { removeObserver(observer) }
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.utils.id
 
 /**
- * Карточка домашнего задания
+ * Карточка домашнего задания.
  *
  * @see MaterialCardView
  *
@@ -40,7 +40,7 @@ class HomeworkCard @JvmOverloads constructor(
     }
 
     /**
-     * Заполняет элементы интерфейса в соответствии с переданными данными
+     * Заполняет элементы интерфейса в соответствии с переданными данными.
      *
      * @since 0.3.0
      */
