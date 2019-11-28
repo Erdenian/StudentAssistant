@@ -7,7 +7,7 @@ import androidx.annotation.ColorInt
 import androidx.core.view.forEach
 
 /**
- * Перекрашивает иконки меню в заданный цвет
+ * Перекрашивает иконки меню в заданный цвет.
  *
  * @param color цвет, в который нужно покрасить иконки
  * @author Ilya Solovyov

@@ -12,7 +12,7 @@ import org.joda.time.LocalDate
 import org.joda.time.Weeks
 
 /**
- * Класс семестра (четверти)
+ * Класс семестра (четверти).
  *
  * @property name название семестра
  * @property firstDay первый день семестра
@@ -41,7 +41,7 @@ data class Semester(
 ) : Comparable<Semester>, Parcelable {
 
     /**
-     * Длина семестра в днях
+     * Длина семестра в днях.
      *
      * @author Ilya Solovyov
      * @since 0.0.0
@@ -55,7 +55,7 @@ data class Semester(
     val range = firstDay..lastDay
 
     /**
-     * Дата понедельника в неделе, содержащей [firstDay]
+     * Дата понедельника в неделе, содержащей [firstDay].
      *
      * @author Ilya Solovyov
      * @since 0.2.6
@@ -70,7 +70,7 @@ data class Semester(
     }
 
     /**
-     * Позволяет получить номер недели с начала семестра, содержащей определенную дату
+     * Позволяет получить номер недели с начала семестра, содержащей определенную дату.
      *
      * Начинается с 0.
      *

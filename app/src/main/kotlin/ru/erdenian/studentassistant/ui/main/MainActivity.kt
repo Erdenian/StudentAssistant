@@ -106,10 +106,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             }
 
             viewModel.selectedSemester.observe(owner) { selectedSemester ->
-                val currentId = navController.currentDestination?.id
-                if ((currentId == R.id.nav_fragment_no_schedule) && (selectedSemester != null)) {
+                val id = navController.currentDestination?.id
+                if ((id == R.id.nav_fragment_no_schedule) && (selectedSemester != null)) {
                     navController.navigate(R.id.nav_action_schedule)
-                } else if ((currentId != R.id.nav_fragment_no_schedule) && (selectedSemester == null)) {
+                } else if ((id != R.id.nav_fragment_no_schedule) && (selectedSemester == null)) {
                     navController.navigate(R.id.nav_action_no_schedule)
                 }
             }

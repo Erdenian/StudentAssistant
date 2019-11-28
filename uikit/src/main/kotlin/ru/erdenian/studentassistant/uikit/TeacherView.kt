@@ -13,7 +13,7 @@ import org.jetbrains.anko.colorAttr
 import ru.erdenian.studentassistant.utils.getColorCompat
 
 /**
- * Иконка и имя преподавателя
+ * Иконка и имя преподавателя.
  *
  * @see android.widget.ImageView
  * @see TextView

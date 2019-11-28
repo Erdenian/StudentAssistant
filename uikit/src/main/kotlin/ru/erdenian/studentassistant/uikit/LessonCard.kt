@@ -12,7 +12,7 @@ import ru.erdenian.studentassistant.utils.id
 import ru.erdenian.studentassistant.utils.setViewCount
 
 /**
- * Карточка пары
+ * Карточка пары.
  *
  * @see MaterialCardView
  *
@@ -49,11 +49,10 @@ class LessonCard @JvmOverloads constructor(
     }
 
     /**
-     * Заполняет элементы интерфейса в соответствии с переданными данными
+     * Заполняет элементы интерфейса в соответствии с переданными данными.
      *
      * @since 0.3.0
      */
-    @Suppress("LongParameterList")
     fun setLesson(
         subjectName: String,
         type: String?,

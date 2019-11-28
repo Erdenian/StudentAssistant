@@ -95,7 +95,9 @@ class HomeworkEditorActivity : AppCompatActivity(R.layout.activity_homework_edit
             }
 
             viewModel.subjectName.distinctUntilChanged().observe(owner) { subjectName ->
-                viewModel.existingSubjects.safeValue?.run { setSelection(list.indexOf(subjectName)) }
+                viewModel.existingSubjects.safeValue?.run {
+                    setSelection(list.indexOf(subjectName))
+                }
             }
 
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
