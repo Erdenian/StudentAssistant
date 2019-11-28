@@ -10,7 +10,7 @@ import kotlinx.android.parcel.Parcelize
 import org.joda.time.LocalDate
 
 /**
- * Класс домашнего задания
+ * Класс домашнего задания.
  *
  * @property subjectName название предмета, по которому задано задание
  * @property description описание задания

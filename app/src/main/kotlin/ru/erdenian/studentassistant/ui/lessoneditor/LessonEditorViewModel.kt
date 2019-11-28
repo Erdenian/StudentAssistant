@@ -108,7 +108,8 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
             val endTime = endTime.safeValue
             value = when {
                 subjectName?.isBlank() == true -> Error.EMPTY_SUBJECT_NAME
-                (startTime != null) && (endTime != null) && (startTime > endTime) -> Error.WRONG_TIMES
+                (startTime != null) && (endTime != null) &&
+                        (startTime > endTime) -> Error.WRONG_TIMES
                 ((lessonRepeat.value == LessonRepeat.ByWeekday::class) &&
                         !weeks.value.contains(true)) -> Error.EMPTY_REPEAT
                 ((lessonRepeat.value == LessonRepeat.ByDates::class) &&

@@ -1,11 +1,16 @@
 build:
-  maxIssues: 15
+  maxIssues: 30
   weights:
-    UnsafeCallOnNullableType: 100500
+  # UnsafeCallOnNullableType: 100500
     # complexity: 2
     # LongParameterList: 1
     # style: 1
     # comments: 1
+
+config:
+  validation: true
+  # when writing own rules with new properties, exclude the property path e.g.: "my_rule_set,.*>.*>[my_property]"
+  excludes: ""
 
 processors:
   active: true
@@ -35,7 +40,7 @@ comments:
   CommentOverPrivateProperty:
     active: false
   EndOfSentenceFormat:
-    active: false
+    active: true
     endOfSentenceFormat: ([.?!][ \t\n\r\f<])|([.?!:]$)
   UndocumentedPublicClass:
     active: false
@@ -45,6 +50,8 @@ comments:
     searchInInnerInterface: true
   UndocumentedPublicFunction:
     active: false
+  UndocumentedPublicProperty:
+    active: false
 
 complexity:
   active: true
@@ -52,16 +59,18 @@ complexity:
     active: true
     threshold: 4
   ComplexInterface:
-    active: false
-    threshold: 10
-    includeStaticDeclarations: false
-  ComplexMethod:
     active: true
     threshold: 10
+    includeStaticDeclarations: true
+  ComplexMethod:
+    active: true
+    threshold: 15
     ignoreSingleWhenExpression: false
     ignoreSimpleWhenEntries: false
+    ignoreNestingFunctions: false
+    nestingFunctions: run,let,apply,with,also,use,forEach,isNotNull,ifNull
   LabeledExpression:
-    active: false
+    active: true
     ignoredLabels: ""
   LargeClass:
     active: true
@@ -74,17 +83,17 @@ complexity:
     threshold: 6
     ignoreDefaultParameters: false
   MethodOverloading:
-    active: false
+    active: true
     threshold: 6
   NestedBlockDepth:
     active: true
     threshold: 4
   StringLiteralDuplication:
-    active: false
+    active: true
     excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
     threshold: 3
     ignoreAnnotation: true
-    excludeStringsWithLessThan5Characters: true
+    excludeStringsWithLessThan5Characters: false
     ignoreStringsRegex: '$^'
   TooManyFunctions:
     active: true
@@ -210,7 +219,7 @@ formatting:
     continuationIndentSize: 4
   MaximumLineLength:
     active: false
-    maxLineLength: 130
+    maxLineLength: 100
   ModifierOrdering:
     active: true
     autoCorrect: true
@@ -305,11 +314,11 @@ naming:
     excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
     forbiddenName: ''
   FunctionMaxLength:
-    active: false
+    active: true
     excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
     maximumFunctionNameLength: 30
   FunctionMinLength:
-    active: false
+    active: true
     excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
     minimumFunctionNameLength: 3
   FunctionNaming:
@@ -330,7 +339,7 @@ naming:
   MatchingDeclarationName:
     active: true
   MemberNameEqualsClassName:
-    active: false
+    active: true
     ignoreOverriddenFunction: true
   ObjectPropertyNaming:
     active: true
@@ -349,7 +358,7 @@ naming:
     propertyPattern: '[A-Za-z][_A-Za-z0-9]*'
     privatePropertyPattern: '_?[A-Za-z][_A-Za-z0-9]*'
   VariableMaxLength:
-    active: false
+    active: true
     excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
     maximumVariableNameLength: 64
   VariableMinLength:
@@ -391,6 +400,8 @@ potential-bugs:
     active: true
   HasPlatformType:
     active: true
+  ImplicitDefaultLocale:
+    active: true
   InvalidRange:
     active: true
   IteratorHasNextCallsNextMethod:
@@ -398,7 +409,7 @@ potential-bugs:
   IteratorNotThrowingNoSuchElementException:
     active: true
   LateinitUsage:
-    active: false
+    active: true
     excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
     excludeAnnotatedProperties: ""
     ignoreOnClassesPattern: ""
@@ -407,15 +418,15 @@ potential-bugs:
   RedundantElseInWhen:
     active: true
   UnconditionalJumpStatementInLoop:
-    active: false
+    active: true
   UnreachableCode:
     active: true
   UnsafeCallOnNullableType:
     active: true
   UnsafeCast:
-    active: true
+    active: false
   UselessPostfixExpression:
-    active: true
+    active: false
   WrongEqualsTypeParameter:
     active: true
 
@@ -424,7 +435,7 @@ style:
   CollapsibleIfStatements:
     active: true
   DataClassContainsFunctions:
-    active: false
+    active: true
     conversionFunctionPrefix: 'to'
   DataClassShouldBeImmutable:
     active: true
@@ -475,7 +486,7 @@ style:
     active: false
   MaxLineLength:
     active: true
-    maxLineLength: 130
+    maxLineLength: 100
     excludePackageStatements: true
     excludeImportStatements: true
     excludeCommentStatements: false
@@ -505,7 +516,7 @@ style:
     active: true
   ReturnCount:
     active: true
-    max: 3
+    max: 2
     excludedFunctions: "equals"
     excludeLabeled: false
     excludeReturnFromLambda: true

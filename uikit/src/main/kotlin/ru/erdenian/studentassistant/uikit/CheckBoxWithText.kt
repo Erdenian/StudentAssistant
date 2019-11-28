@@ -11,7 +11,7 @@ import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatTextView
 
 /**
- * Чекбокс с текстом под ним
+ * Чекбокс с текстом под ним.
  *
  * @see CheckBox
  * @see TextView

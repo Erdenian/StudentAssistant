@@ -3,8 +3,6 @@ package ru.erdenian.studentassistant.utils
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import android.util.TypedValue
-import androidx.annotation.AttrRes
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import org.joda.time.LocalDate
@@ -12,7 +10,7 @@ import org.joda.time.LocalTime
 import java.io.File
 
 /**
- * Обертка над [ContextCompat.getColor]
+ * Обертка над [ContextCompat.getColor].
  *
  * @param id id цвета
  * @return цвет
@@ -22,17 +20,7 @@ import java.io.File
 fun Context.getColorCompat(@ColorRes id: Int) = ContextCompat.getColor(this, id)
 
 /**
- * @author Ilya Solovyov
- * @since 0.4.0
- */
-fun Context.getResId(@AttrRes attribute: Int) = TypedValue().also { typedValue ->
-    require(theme.resolveAttribute(attribute, typedValue, true)) {
-        "Failed to resolve attribute: $attribute"
-    }
-}.resourceId
-
-/**
- * Очищает данные приложения
+ * Очищает данные приложения.
  *
  * @author Ilya Solovyov
  * @since 0.2.6
@@ -53,7 +41,7 @@ fun Context.clearApplicationData() {
 }
 
 /**
- * Отображает [DatePickerDialog]
+ * Отображает [DatePickerDialog].
  *
  * Выбор даты будет возможен в заданном промежутке дат ([minDate] - [maxDate]).
  *
@@ -87,7 +75,7 @@ fun Context.showDatePicker(
 }
 
 /**
- * Отображает [TimePickerDialog]
+ * Отображает [TimePickerDialog].
  *
  * @param preselectedTime изначально выбранное время (если null, используется текущее время)
  * @param onTimeSet обработчик результата выбора

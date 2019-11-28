@@ -23,5 +23,6 @@
     <color name="divider">#C4C4C4</color>
 
     <color name="splash_background">@color/surface</color>
+    <color name="menu">@color/on_surface</color>
 
 </resources>

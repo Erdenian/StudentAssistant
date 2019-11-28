@@ -56,7 +56,7 @@ dependencies {
     // endregion
 
     // region AndroidX
-    api("androidx.core:core-ktx:1.2.0-beta02")
+    api("androidx.core:core-ktx:1.2.0-rc01")
 
     api("androidx.fragment:fragment-ktx:1.2.0-rc02")
 

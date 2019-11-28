@@ -1,7 +1,7 @@
 package ru.erdenian.studentassistant.entity
 
 /**
- * Возвращает long, который можно использовать как id
+ * Возвращает long, который можно использовать как id.
  *
  * @return id
  * @author Ilya Solovyov

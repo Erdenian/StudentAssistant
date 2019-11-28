@@ -94,7 +94,6 @@ dependencies {
 
     // region Kotlin
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
     // endregion
 
