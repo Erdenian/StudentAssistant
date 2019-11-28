@@ -10,7 +10,7 @@ import kotlinx.android.parcel.Parcelize
 import org.joda.time.LocalTime
 
 /**
- * Класс пары (урока)
+ * Класс пары (урока).
  *
  * @param subjectName название предмета
  * @param type тип пары (лекция, семинар, ...)

@@ -6,7 +6,7 @@ import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
 
 /**
- * Класс повторений пары
+ * Класс повторений пары.
  *
  * @author Ilya Solovyov
  * @since 0.0.0
@@ -14,7 +14,7 @@ import org.joda.time.LocalDate
 sealed class LessonRepeat : Parcelable {
 
     /**
-     * Показывает, повторяется ли пара в заданный день
+     * Показывает, повторяется ли пара в заданный день.
      *
      * @param day день
      * @param weekNumber номер недели, содержащей этот день (начинается с 0)
@@ -25,12 +25,13 @@ sealed class LessonRepeat : Parcelable {
     abstract fun repeatsOnDay(day: LocalDate, weekNumber: Int): Boolean
 
     /**
-     * Повторение по дням недели
+     * Повторение по дням недели.
      *
      * Для хранения списка недель используется List, так как массивы изменяемы.
      *
      * @param weekday день недели (1 - понедельник, 7 - воскресенье)
-     * @param weeks список boolean значений, где i-е значение показывает повторять ли пару каждую i-ю неделю
+     * @param weeks список boolean значений, где i-е значение показывает
+     *              повторять ли пару каждую i-ю неделю
      * @throws IllegalArgumentException если [weekday] задан некорректно или [weeks] пуст
      * @author Ilya Solovyov
      * @since 0.0.0
@@ -50,10 +51,11 @@ sealed class LessonRepeat : Parcelable {
             (day.dayOfWeek == weekday) && (weeks[weekNumber % weeks.size])
 
         /**
-         * Показывает, повторяется ли пара в заданный день недели без учета номера недели
+         * Показывает, повторяется ли пара в заданный день недели без учета номера недели.
          *
          * @param weekday день недели (1 - понедельник, 7 - воскресенье)
-         * @return true, если пара повторяется в этот день недели, хотя бы на одной неделе, false в противном случае
+         * @return true, если пара повторяется в этот день недели, хотя бы на одной неделе,
+         *               false в противном случае
          * @throws IllegalArgumentException если [weekday] задан некорректно
          * @author Ilya Solovyov
          * @since 0.0.0
@@ -67,7 +69,7 @@ sealed class LessonRepeat : Parcelable {
     }
 
     /**
-     * Повторение по датам
+     * Повторение по датам.
      *
      * @param dates список дат, по которым повторяется пара
      * @throws IllegalArgumentException если [dates] пуст
@@ -84,7 +86,7 @@ sealed class LessonRepeat : Parcelable {
         override fun repeatsOnDay(day: LocalDate, weekNumber: Int) = day in dates
 
         /**
-         * То же, что и [repeatsOnDay], но без ненужного второго параметра
+         * То же, что и [repeatsOnDay], но без ненужного второго параметра.
          *
          * @param date день
          * @return true, если пара повторяется в заданный день, в противном случае false

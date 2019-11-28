@@ -3,7 +3,7 @@ package ru.erdenian.studentassistant.utils
 import android.widget.ListView
 
 /**
- * Позиция скролла
+ * Позиция скролла.
  *
  * @author Ilya Solovyov
  * @since 0.0.0

@@ -10,7 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.children
 
 /**
- * Обертка над [ViewCompat.requireViewById]
+ * Обертка над [ViewCompat.requireViewById].
  *
  * @param id id View
  * @return View
@@ -21,7 +21,7 @@ fun <T : View> View.requireViewByIdCompat(@IdRes id: Int) =
     ViewCompat.requireViewById<T>(this, id)
 
 /**
- * Установить курсор в [EditText] и показать клавиатуру
+ * Установить курсор в [EditText] и показать клавиатуру.
  *
  * Может не срабатывать при вызове в ***onCreate***,
  * тогда можно обернуть вызов в **post** или аналогичный метод.
@@ -36,7 +36,7 @@ fun EditText.showKeyboard() {
 }
 
 /**
- * Установить количество дочерних [View] у [ViewGroup]
+ * Установить количество дочерних [View] у [ViewGroup].
  *
  * Если [count] больше, чем текущее количество дочерних [View], лишние будут удалены с конца списка,
  * если же меньше, то недостающие будут созданы с помощью [creator].
