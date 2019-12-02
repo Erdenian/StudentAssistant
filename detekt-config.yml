@@ -1,7 +1,7 @@
 build:
   maxIssues: 30
   weights:
-  # UnsafeCallOnNullableType: 100500
+    UnsafeCallOnNullableType: 100500
     # complexity: 2
     # LongParameterList: 1
     # style: 1
@@ -305,6 +305,7 @@ naming:
     parameterPattern: '[a-z][A-Za-z0-9]*'
     privateParameterPattern: '[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'
+    ignoreOverridden: true
   EnumNaming:
     active: true
     excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
@@ -476,6 +477,7 @@ style:
     ignoreNumbers: '-1,0,1,2'
     ignoreHashCodeFunction: true
     ignorePropertyDeclaration: false
+    ignoreLocalVariableDeclaration: false
     ignoreConstantDeclaration: true
     ignoreCompanionObjectPropertyDeclaration: true
     ignoreAnnotation: false
