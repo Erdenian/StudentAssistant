@@ -45,7 +45,6 @@
             </androidx.viewpager.widget.ViewPager>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/alse_by_dates"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
