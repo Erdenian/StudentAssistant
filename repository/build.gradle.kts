@@ -65,7 +65,7 @@ android {
 
 dependencies {
     // region Versions
-    val coroutinesVersion = "1.3.2"
+    val coroutinesVersion = "1.3.3"
 
     val junitVersion: String by project
     val testRunnerVersion: String by project
