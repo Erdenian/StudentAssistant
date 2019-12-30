@@ -17,12 +17,16 @@ android {
         targetSdkVersion(targetSdkVersion.toInt())
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            )
         }
     }
 
@@ -58,7 +62,7 @@ dependencies {
     // region AndroidX
     api("androidx.core:core-ktx:1.2.0-rc01")
 
-    api("androidx.fragment:fragment-ktx:1.2.0-rc02")
+    api("androidx.fragment:fragment-ktx:1.2.0-rc04")
 
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     api("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")

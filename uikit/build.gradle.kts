@@ -17,12 +17,16 @@ android {
         targetSdkVersion(targetSdkVersion.toInt())
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            )
         }
     }
 
@@ -62,6 +66,6 @@ dependencies {
     // endregion
 
     // region UI
-    api("com.google.android.material:material:1.2.0-alpha02")
+    api("com.google.android.material:material:1.2.0-alpha03")
     // endregion
 }
