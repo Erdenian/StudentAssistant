@@ -1,5 +1,6 @@
 build:
   maxIssues: 30
+  excludeCorrectable: false
   weights:
     UnsafeCallOnNullableType: 100500
     # complexity: 2
@@ -415,6 +416,8 @@ potential-bugs:
     excludes: "**/test*/**,**/androidTest*/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
     excludeAnnotatedProperties: ""
     ignoreOnClassesPattern: ""
+  MapGetWithNotNullAssertionOperator:
+    active: true
   MissingWhenCase:
     active: true
   RedundantElseInWhen:
@@ -458,6 +461,12 @@ style:
     active: false
     imports: ''
     forbiddenPatterns: ""
+  ForbiddenMethodCall:
+    active: true
+    methods: ''
+  ForbiddenPublicDataClass:
+    active: true
+    ignorePackages: '*.internal,*.internal.*'
   ForbiddenVoid:
     active: true
     ignoreOverridden: false
@@ -542,6 +551,8 @@ style:
   UnnecessaryAbstractClass:
     active: true
     excludeAnnotatedClasses: "dagger.Module"
+  UnnecessaryAnnotationUseSiteTarget:
+    active: true
   UnnecessaryApply:
     active: true
   UnnecessaryInheritance:
