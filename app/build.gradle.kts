@@ -1,5 +1,3 @@
-import com.android.build.gradle.internal.api.BaseVariantOutputImpl
-
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -21,12 +19,16 @@ android {
         targetSdkVersion(targetSdkVersion.toInt())
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        setProperty("archivesBaseName", "${rootProject.name}-$versionName")
     }
 
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            )
         }
     }
 
@@ -46,22 +48,11 @@ android {
             "androidTest${flavor.name.capitalize()}".let { getByName(it).java.srcDirs("src/$it/kotlin") }
         }
     }
-
-    applicationVariants.all {
-        outputs.forEach { output ->
-            output as BaseVariantOutputImpl
-            output.apply {
-                outputFileName = outputFileName.replace(
-                    project.name, "${rootProject.name}-${defaultConfig.versionName}"
-                )
-            }
-        }
-    }
 }
 
 dependencies {
     // region Versions
-    val navigationVersion = "2.2.0-rc02"
+    val navigationVersion = "2.2.0-rc04"
 
     val kotlinVersion: String by project
     val kodeinVersion: String by project
