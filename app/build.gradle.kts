@@ -51,13 +51,6 @@ android {
 }
 
 dependencies {
-    // region Versions
-    val navigationVersion = "2.2.0-rc04"
-
-    val kotlinVersion: String by project
-    val kodeinVersion: String by project
-    // endregion
-
     // region Private
     implementation(project(":repository"))
     implementation(project(":uikit"))
@@ -65,10 +58,12 @@ dependencies {
     // endregion
 
     // region Kotlin
+    val kotlinVersion: String by project
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
     // endregion
 
     // region AndroidX
+    val navigationVersion = "2.2.1"
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
 
@@ -77,6 +72,7 @@ dependencies {
     // endregion
 
     // region Core
+    val kodeinVersion: String by project
     implementation("org.kodein.di:kodein-di-generic-jvm:$kodeinVersion")
     implementation("org.kodein.di:kodein-di-framework-android-x:$kodeinVersion")
 
