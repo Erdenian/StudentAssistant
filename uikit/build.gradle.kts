@@ -49,15 +49,12 @@ android {
 }
 
 dependencies {
-    // region Versions
-    val kotlinVersion: String by project
-    // endregion
-
     // region Private
     implementation(project(":utils"))
     // endregion
 
     // region Kotlin
+    val kotlinVersion: String by project
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
     // endregion
 
@@ -66,6 +63,6 @@ dependencies {
     // endregion
 
     // region UI
-    api("com.google.android.material:material:1.2.0-alpha03")
+    api("com.google.android.material:material:1.2.0-alpha04")
     // endregion
 }
