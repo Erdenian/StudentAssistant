@@ -49,27 +49,24 @@ android {
 }
 
 dependencies {
-    // region Versions
-    val kotlinVersion: String by project
-    val lifecycleVersion: String by project
-    val jodaTimeVersion: String by project
-    // endregion
-
     // region Kotlin
+    val kotlinVersion: String by project
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
     // endregion
 
     // region AndroidX
-    api("androidx.core:core-ktx:1.2.0-rc01")
+    api("androidx.core:core-ktx:1.2.0")
 
-    api("androidx.fragment:fragment-ktx:1.2.0-rc04")
+    api("androidx.fragment:fragment-ktx:1.2.1")
 
+    val lifecycleVersion: String by project
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     api("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     api("com.shopify:livedata-ktx:3.0.0")
     // endregion
 
     // region Core
+    val jodaTimeVersion: String by project
     api("joda-time:joda-time:$jodaTimeVersion")
     // endregion
 }

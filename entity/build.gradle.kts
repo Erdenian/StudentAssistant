@@ -58,28 +58,24 @@ androidExtensions {
 }
 
 dependencies {
-    // region Versions
-    val junitVersion: String by project
-
-    val kotlinVersion: String by project
-    val roomVersion: String by project
-    val jodaTimeVersion: String by project
-    // endregion
-
     // region Tests
+    val junitVersion: String by project
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     // endregion
 
     // region Kotlin
+    val kotlinVersion: String by project
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
     // endregion
 
     // region AndroidX
+    val roomVersion: String by project
     implementation("androidx.room:room-ktx:$roomVersion")
     // endregion
 
     // region Core
+    val jodaTimeVersion: String by project
     api("joda-time:joda-time:$jodaTimeVersion")
     // endregion
 }

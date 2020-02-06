@@ -68,46 +68,41 @@ android {
 }
 
 dependencies {
-    // region Versions
-    val coroutinesVersion = "1.3.3"
-
-    val junitVersion: String by project
-    val testRunnerVersion: String by project
-    val androidTestVersion: String by project
-
-    val kotlinVersion: String by project
-    val lifecycleVersion: String by project
-    val roomVersion: String by project
-    val kodeinVersion: String by project
-    // endregion
-
     // region Private
     api(project(":entity"))
     implementation(project(":utils"))
     // endregion
 
     // region Tests
+    val junitVersion: String by project
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
-    androidTestImplementation("androidx.test:runner:$testRunnerVersion")
     androidTestImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    val testRunnerVersion: String by project
+    androidTestImplementation("androidx.test:runner:$testRunnerVersion")
+    val androidTestVersion: String by project
     androidTestImplementation("de.mannodermaus.junit5:android-test-core:$androidTestVersion")
     androidTestRuntimeOnly("de.mannodermaus.junit5:android-test-runner:$androidTestVersion")
     // endregion
 
     // region Kotlin
+    val kotlinVersion: String by project
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3")
     // endregion
 
     // region AndroidX
+    val lifecycleVersion: String by project
     api("androidx.lifecycle:lifecycle-livedata:$lifecycleVersion")
+
+    val roomVersion: String by project
     kapt("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     // endregion
 
     // region Core
+    val kodeinVersion: String by project
     implementation("org.kodein.di:kodein-di-generic-jvm:$kodeinVersion")
     implementation("org.kodein.di:kodein-di-framework-android-x:$kodeinVersion")
     // endregion
