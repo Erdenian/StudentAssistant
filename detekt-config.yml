@@ -605,4 +605,4 @@ style:
   WildcardImport:
     active: true
     excludes: ""
-    excludeImports: 'java.util.*,kotlinx.android.synthetic.*'
+    excludeImports: ''
