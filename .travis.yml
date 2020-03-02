@@ -7,7 +7,7 @@ env:
     - ANDROID_SDK_DIR: "android-sdk"
     - GRADLE_DIR: ".gradle"
     # links
-    - ANDROID_SDK_LINK: "https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip"
+    - ANDROID_SDK_LINK: "https://dl.google.com/android/repository/commandlinetools-linux-6200805_latest.zip"
 
 before_install:
   - if [[ ! -d ${ANDROID_SDK_DIR} ]] ; then wget -q -O android-sdk.zip ${ANDROID_SDK_LINK} ; fi
