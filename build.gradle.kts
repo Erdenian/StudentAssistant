@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("io.gitlab.arturbosch.detekt") version ("1.5.1")
+    id("io.gitlab.arturbosch.detekt") version ("1.6.0")
 }
 
 buildscript {
@@ -12,9 +12,9 @@ buildscript {
     dependencies {
         val kotlinVersion: String by project
 
-        classpath("com.android.tools.build:gradle:3.5.3")
+        classpath("com.android.tools.build:gradle:3.6.1")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-        classpath("de.mannodermaus.gradle.plugins:android-junit5:1.5.2.0")
+        classpath("de.mannodermaus.gradle.plugins:android-junit5:1.6.0.0")
     }
 }
 
@@ -51,5 +51,5 @@ detekt {
 }
 
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.5.1")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.6.0")
 }
