@@ -57,7 +57,7 @@ dependencies {
     // region AndroidX
     api("androidx.core:core-ktx:1.2.0")
 
-    api("androidx.fragment:fragment-ktx:1.2.1")
+    api("androidx.fragment:fragment-ktx:1.2.2")
 
     val lifecycleVersion: String by project
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")

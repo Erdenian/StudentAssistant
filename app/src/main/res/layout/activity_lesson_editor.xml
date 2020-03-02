@@ -20,12 +20,13 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ale_subject_name"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/text_input_layout_with_autocomplete_text_view_height">
+            android:layout_height="wrap_content">
 
             <AutoCompleteTextView
                 android:id="@+id/ale_subject_name_edit_text"
+                style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/autocomplete_text_view_height"
+                android:layout_height="wrap_content"
                 android:hint="@string/lea_subject_name"
                 android:inputType="text"
                 android:maxLines="1">
@@ -38,12 +39,14 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/text_input_layout_with_autocomplete_text_view_height">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
 
             <AutoCompleteTextView
                 android:id="@+id/ale_lesson_type_edit_text"
+                style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/autocomplete_text_view_height"
+                android:layout_height="wrap_content"
                 android:hint="@string/lea_type"
                 android:inputType="text"
                 android:maxLines="1" />
@@ -52,12 +55,14 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/text_input_layout_with_autocomplete_text_view_height">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
 
             <MultiAutoCompleteTextView
                 android:id="@+id/ale_teachers_edit_text"
+                style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/autocomplete_text_view_height"
+                android:layout_height="wrap_content"
                 android:hint="@string/lea_teachers"
                 android:inputType="text"
                 android:maxLines="1" />
@@ -66,12 +71,14 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/text_input_layout_with_autocomplete_text_view_height">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
 
             <MultiAutoCompleteTextView
                 android:id="@+id/ale_classrooms_edit_text"
+                style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/autocomplete_text_view_height"
+                android:layout_height="wrap_content"
                 android:hint="@string/lea_classrooms"
                 android:inputType="text"
                 android:maxLines="1" />
