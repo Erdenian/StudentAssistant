@@ -23,6 +23,8 @@ android {
         setProperty("archivesBaseName", "${rootProject.name}-$versionName")
     }
 
+    viewBinding { isEnabled = true }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
