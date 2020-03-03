@@ -6,28 +6,24 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Spinner
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.distinctUntilChanged
 import androidx.navigation.findNavController
-import com.google.android.material.navigation.NavigationView
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.databinding.ActivityMainBinding
 import ru.erdenian.studentassistant.ui.adapter.SemestersSpinnerAdapter
 import ru.erdenian.studentassistant.ui.help.HelpActivity
 import ru.erdenian.studentassistant.ui.lessonseditor.LessonsEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
 import ru.erdenian.studentassistant.utils.getColorCompat
-import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val SEMESTER_EDITOR_REQUEST_CODE = 1
@@ -35,35 +31,37 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private val viewModel by viewModels<MainViewModel>()
 
-    private val drawer by lazy { requireViewByIdCompat<DrawerLayout>(R.id.am_drawer) }
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     @Suppress("LongMethod", "ComplexMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(binding.root)
 
         val owner = this
 
-        requireViewByIdCompat<Toolbar>(R.id.am_toolbar).also { toolbar ->
+        binding.toolbar.also { toolbar ->
             setSupportActionBar(toolbar)
 
-            val navigationView = requireViewByIdCompat<NavigationView>(R.id.am_navigation_view)
-            val navController = findNavController(R.id.am_nav_host_fragment)
+            val navController = findNavController(R.id.nav_host_fragment)
 
             ActionBarDrawerToggle(
-                this, drawer, toolbar,
+                this, binding.drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close
             ).apply {
-                drawer.addDrawerListener(this)
+                binding.drawer.addDrawerListener(this)
                 syncState()
             }
 
             viewModel.selectedSemester.observe(owner) { semester ->
-                navigationView.menu.findItem(R.id.dm_homeworks).isEnabled = (semester != null)
-                navigationView.menu.findItem(R.id.dm_alarm).isEnabled = (semester != null)
+                binding.navigationView.menu.run {
+                    findItem(R.id.dm_homeworks).isEnabled = (semester != null)
+                    findItem(R.id.dm_alarm).isEnabled = (semester != null)
+                }
             }
 
-            navigationView.setNavigationItemSelectedListener { menuItem ->
-                drawer.closeDrawer(GravityCompat.START)
+            binding.navigationView.setNavigationItemSelectedListener { menuItem ->
+                binding.drawer.closeDrawer(GravityCompat.START)
                 when (menuItem.itemId) {
                     R.id.dm_schedule -> {
                         navController.navigate(
@@ -100,8 +98,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             navController.addOnDestinationChangedListener { _, destination, _ ->
                 when (destination.id) {
                     R.id.nav_fragment_no_schedule, R.id.nav_fragment_schedule ->
-                        navigationView.setCheckedItem(R.id.dm_schedule)
-                    R.id.nav_fragment_homeworks -> navigationView.setCheckedItem(R.id.dm_homeworks)
+                        binding.navigationView.setCheckedItem(R.id.dm_schedule)
+                    R.id.nav_fragment_homeworks ->
+                        binding.navigationView.setCheckedItem(R.id.dm_homeworks)
                 }
             }
 
@@ -132,7 +131,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             }
         }
 
-        requireViewByIdCompat<Spinner>(R.id.am_toolbar_spinner).apply {
+        binding.toolbarSpinner.apply {
             viewModel.allSemesters.observe(owner) { semesters ->
                 visibility = if (semesters.size > 1) View.VISIBLE else View.GONE
             }
@@ -197,8 +196,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) drawer.closeDrawer(GravityCompat.START)
+    override fun onBackPressed() = binding.drawer.run {
+        if (isDrawerOpen(GravityCompat.START)) closeDrawer(GravityCompat.START)
         else super.onBackPressed()
     }
 }
