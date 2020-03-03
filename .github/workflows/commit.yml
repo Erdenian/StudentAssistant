@@ -1,12 +1,11 @@
-name: Debug
+name: Commit
 
 on:
   push:
-    branches:
+    branches-ignore:
+      - 'master'
       - 'develop'
-      - '!master'
-      - '!develop'
-      - '!release/*'
+      - 'release/*'
 
 jobs:
 
