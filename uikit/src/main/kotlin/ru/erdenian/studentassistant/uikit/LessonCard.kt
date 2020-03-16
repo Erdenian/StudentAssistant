@@ -4,11 +4,10 @@ import android.content.Context
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.TextView
+import androidx.core.content.getSystemService
 import com.google.android.material.card.MaterialCardView
 import org.joda.time.LocalTime
-import ru.erdenian.studentassistant.utils.id
+import ru.erdenian.studentassistant.uikit.databinding.CardLessonBinding
 import ru.erdenian.studentassistant.utils.setViewCount
 
 /**
@@ -30,18 +29,9 @@ class LessonCard @JvmOverloads constructor(
         private const val TIME_FORMATTER = "HH:mm"
     }
 
-    private val tvStartTime: TextView by id(R.id.lc_start_time)
-    private val tvEndTime: TextView by id(R.id.lc_end_time)
-    private val llClassroomsParent: LinearLayout by id(R.id.lc_classrooms_parent)
-    private val tvClassrooms: TextView by id(R.id.lc_classrooms)
-    private val tvType: TextView by id(R.id.lc_type)
-    private val tvSubjectName: TextView by id(R.id.lc_subject_name)
-    private val llTeachersParent: LinearLayout by id(R.id.lc_teachers_parent)
-    private val llRepeatsParent: LinearLayout by id(R.id.lc_repeats_parent)
-    private val tvRepeatsText: TextView by id(R.id.lc_repeats_text)
+    private val binding = CardLessonBinding.inflate(context.getSystemService(), this)
 
     init {
-        inflate(context, R.layout.card_lesson, this)
         TypedValue().also { outValue ->
             context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
             foreground = context.getDrawable(outValue.resourceId)
@@ -61,19 +51,20 @@ class LessonCard @JvmOverloads constructor(
         startTime: LocalTime,
         endTime: LocalTime
     ) {
-        tvStartTime.text = startTime.toString(TIME_FORMATTER)
-        tvEndTime.text = endTime.toString(TIME_FORMATTER)
+        binding.startTime.text = startTime.toString(TIME_FORMATTER)
+        binding.endTime.text = endTime.toString(TIME_FORMATTER)
 
-        llClassroomsParent.visibility = if (classrooms.isNotEmpty()) View.VISIBLE else View.GONE
-        tvClassrooms.text = classrooms.joinToString()
+        binding.classroomsParent.visibility =
+            if (classrooms.isNotEmpty()) View.VISIBLE else View.GONE
+        binding.classrooms.text = classrooms.joinToString()
 
-        tvType.visibility = if (type?.isNotBlank() == true) View.VISIBLE else View.GONE
-        tvType.text = type
+        binding.type.visibility = if (type?.isNotBlank() == true) View.VISIBLE else View.GONE
+        binding.type.text = type
 
-        tvSubjectName.text = subjectName
+        binding.subjectName.text = subjectName
 
-        llTeachersParent.visibility = if (teachers.isNotEmpty()) View.VISIBLE else View.GONE
-        llTeachersParent.setViewCount(
+        binding.teachersParent.visibility = if (teachers.isNotEmpty()) View.VISIBLE else View.GONE
+        binding.teachersParent.setViewCount(
             teachers.size,
             { TeacherView(context) },
             { name = teachers[it] }
