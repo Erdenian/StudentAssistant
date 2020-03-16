@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.CompoundButton
 import android.widget.HorizontalScrollView
-import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Spinner
+import androidx.core.content.getSystemService
 import androidx.core.view.children
 import androidx.core.view.forEach
-import ru.erdenian.studentassistant.utils.id
+import ru.erdenian.studentassistant.uikit.databinding.WeeksSelectorBinding
 import ru.erdenian.studentassistant.utils.setViewCount
 
 /**
@@ -34,11 +34,7 @@ class WeeksSelector @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private val spVariants: Spinner by id(R.id.ws_variants)
-    private val ibRemove: ImageButton by id(R.id.ws_remove)
-    private val ibAdd: ImageButton by id(R.id.ws_add)
-    private val hsvWeeks: HorizontalScrollView by id(R.id.ws_scroll)
-    private val llWeeksParent: LinearLayout by id(R.id.ws_weeks_parent)
+    private val binding = WeeksSelectorBinding.inflate(context.getSystemService(), this)
 
     /**
      * Список предустановленных вариантов.
@@ -88,7 +84,7 @@ class WeeksSelector @JvmOverloads constructor(
      */
     var weeks: List<Boolean>
         get() {
-            val weeks = llWeeksParent.children.map { v ->
+            val weeks = binding.weeksParent.children.map { v ->
                 @Suppress("UnsafeCast")
                 (v as CheckBoxWithText).isChecked
             }.toList()
@@ -106,7 +102,7 @@ class WeeksSelector @JvmOverloads constructor(
         set(weeks) {
             val selection = getWeeksVariantIndex(weeks)
 
-            spVariants.apply {
+            binding.variants.apply {
                 val listener = onItemSelectedListener
                 onItemSelectedListener = null
                 // При использовании setSelection(int) вызывается обработчик. Хз почему.
@@ -114,7 +110,7 @@ class WeeksSelector @JvmOverloads constructor(
                 onItemSelectedListener = listener
             }
 
-            llWeeksParent.setViewCount(weeks.size, creator) { isChecked = weeks[it] }
+            binding.weeksParent.setViewCount(weeks.size, creator) { isChecked = weeks[it] }
 
             setCustomEnabled(selection == weeksVariants.size)
         }
@@ -127,15 +123,14 @@ class WeeksSelector @JvmOverloads constructor(
 
     init {
         orientation = VERTICAL
-        inflate(context, R.layout.weeks_selector, this)
 
-        check(spVariants.adapter.count == weeksVariants.size + 1) {
+        check(binding.variants.adapter.count == weeksVariants.size + 1) {
             "Несоответствие вариантов выбора и количества предустановок"
         }
 
         weeks = weeksVariants.first()
 
-        spVariants.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.variants.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,
                 view: View?,
@@ -148,18 +143,18 @@ class WeeksSelector @JvmOverloads constructor(
             override fun onNothingSelected(parent: AdapterView<*>) = Unit
         }
 
-        ibRemove.setOnClickListener {
-            llWeeksParent.setViewCount(llWeeksParent.childCount - 1, creator)
-            ibRemove.isEnabled = llWeeksParent.childCount > 1
+        binding.remove.setOnClickListener {
+            binding.weeksParent.setViewCount(binding.weeksParent.childCount - 1, creator)
+            binding.remove.isEnabled = binding.weeksParent.childCount > 1
             onWeeksChangeListener?.onWeeksChange(weeks)
         }
-        ibAdd.setOnClickListener {
-            llWeeksParent.setViewCount(llWeeksParent.childCount + 1, creator)
-            ibRemove.isEnabled = true
-            hsvWeeks.post { hsvWeeks.fullScroll(HorizontalScrollView.FOCUS_RIGHT) }
+        binding.add.setOnClickListener {
+            binding.weeksParent.setViewCount(binding.weeksParent.childCount + 1, creator)
+            binding.remove.isEnabled = true
+            binding.scroll.post { binding.scroll.fullScroll(HorizontalScrollView.FOCUS_RIGHT) }
             onWeeksChangeListener?.onWeeksChange(weeks)
         }
-        llWeeksParent.setViewCount(llWeeksParent.childCount, creator) { _ ->
+        binding.weeksParent.setViewCount(binding.weeksParent.childCount, creator) { _ ->
             setOnCheckedChangeListener(onCheckedChangeListener)
         }
     }
@@ -171,8 +166,8 @@ class WeeksSelector @JvmOverloads constructor(
      * @since 0.2.6
      */
     private fun setCustomEnabled(enabled: Boolean) {
-        ibRemove.isEnabled = enabled && llWeeksParent.childCount > 1
-        ibAdd.isEnabled = enabled
-        llWeeksParent.forEach { it.isEnabled = enabled }
+        binding.remove.isEnabled = enabled && binding.weeksParent.childCount > 1
+        binding.add.isEnabled = enabled
+        binding.weeksParent.forEach { it.isEnabled = enabled }
     }
 }
