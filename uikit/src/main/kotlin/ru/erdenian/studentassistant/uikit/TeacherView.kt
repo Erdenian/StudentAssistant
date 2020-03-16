@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.withStyledAttributes
 import org.jetbrains.anko.attr
 import org.jetbrains.anko.colorAttr
 import ru.erdenian.studentassistant.utils.getColorCompat
@@ -55,15 +56,8 @@ class TeacherView @JvmOverloads constructor(
         })
         addView(textView)
 
-        if (attrs != null) {
-            val typedArray = context.theme.obtainStyledAttributes(
-                attrs, R.styleable.TeacherView, defStyleAttr, 0
-            )
-            try {
-                name = typedArray.getString(R.styleable.TeacherView_name)
-            } finally {
-                typedArray.recycle()
-            }
+        context.withStyledAttributes(attrs, R.styleable.TeacherView, defStyleAttr) {
+            name = getString(R.styleable.TeacherView_name)
         }
     }
 }
