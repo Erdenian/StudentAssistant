@@ -14,8 +14,6 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.toast
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.R
@@ -28,6 +26,8 @@ import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showTimePicker
+import ru.erdenian.studentassistant.utils.startActivity
+import ru.erdenian.studentassistant.utils.toast
 import java.util.Calendar
 
 class LessonEditorActivity : AppCompatActivity() {

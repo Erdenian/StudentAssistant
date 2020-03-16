@@ -77,8 +77,6 @@ dependencies {
     val kodeinVersion: String by project
     implementation("org.kodein.di:kodein-di-generic-jvm:$kodeinVersion")
     implementation("org.kodein.di:kodein-di-framework-android-x:$kodeinVersion")
-
-    implementation("org.jetbrains.anko:anko-common:0.10.8")
     // endregion
 
     // region UI
