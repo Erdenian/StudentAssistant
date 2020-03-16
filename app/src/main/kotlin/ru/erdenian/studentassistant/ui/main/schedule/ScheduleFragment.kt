@@ -7,15 +7,13 @@ import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.viewpager.widget.PagerTabStrip
-import androidx.viewpager.widget.ViewPager
 import org.jetbrains.anko.colorAttr
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.databinding.FragmentScheduleBinding
 import ru.erdenian.studentassistant.ui.main.MainViewModel
+import ru.erdenian.studentassistant.utils.binding
 import ru.erdenian.studentassistant.utils.getColorCompat
-import ru.erdenian.studentassistant.utils.id
-import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
 
@@ -27,15 +25,15 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
     private val viewModel by activityViewModels<MainViewModel>()
 
-    private val pager: ViewPager by id(R.id.fs_view_pager)
+    private val binding by binding { FragmentScheduleBinding.bind(view) }
 
     private var selectedDate: LocalDate? = LocalDate.now()
     private val pagerAdapter by lazy {
         SchedulePagerAdapter(childFragmentManager).apply {
             viewModel.selectedSemester.observe(this@ScheduleFragment) { semester ->
-                if (count > 0) selectedDate = getDate(pager.currentItem)
+                if (count > 0) selectedDate = getDate(binding.viewPager.currentItem)
                 this.semester = semester
-                if (count > 0) pager.setCurrentItem(
+                if (count > 0) binding.viewPager.setCurrentItem(
                     getPosition(selectedDate ?: LocalDate.now()), false
                 )
                 selectedDate = null
@@ -46,8 +44,8 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
 
-        pager.adapter = pagerAdapter
-        view.requireViewByIdCompat<PagerTabStrip>(R.id.fs_pager_tab_strip).apply {
+        binding.viewPager.adapter = pagerAdapter
+        binding.pagerTabStrip.apply {
             val color = colorAttr(R.attr.colorPrimary)
             setTextColor(color)
             tabIndicatorColor = color
@@ -56,7 +54,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
     override fun onSaveInstanceState(outState: Bundle) {
         if ((view != null) && (pagerAdapter.semester != null)) {
-            outState.putSerializable(PAGE_DATE, pagerAdapter.getDate(pager.currentItem))
+            outState.putSerializable(PAGE_DATE, pagerAdapter.getDate(binding.viewPager.currentItem))
         }
     }
 
@@ -79,8 +77,8 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         R.id.ms_calendar -> {
             viewModel.selectedSemester.value?.run {
                 requireContext().showDatePicker(
-                    pagerAdapter.getDate(pager.currentItem), firstDay, lastDay
-                ) { pager.currentItem = pagerAdapter.getPosition(it) }
+                    pagerAdapter.getDate(binding.viewPager.currentItem), firstDay, lastDay
+                ) { binding.viewPager.currentItem = pagerAdapter.getPosition(it) }
             }
             true
         }
