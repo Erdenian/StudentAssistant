@@ -2,21 +2,7 @@ package ru.erdenian.studentassistant.utils
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.IdRes
-import androidx.core.view.ViewCompat
 import androidx.core.view.children
-
-/**
- * Обертка над [ViewCompat.requireViewById].
- *
- * @param id id View
- * @return View
- * @author Ilya Solovyov
- * @since 0.3.0
- */
-@Deprecated("Использовать ViewBinding")
-fun <T : View> View.requireViewByIdCompat(@IdRes id: Int) =
-    ViewCompat.requireViewById<T>(this, id)
 
 /**
  * Установить количество дочерних [View] у [ViewGroup].
@@ -69,6 +55,3 @@ fun <V : View> ViewGroup.setViewCount(
         }
     }
 }
-
-@Deprecated("Использовать ViewBinding")
-fun <T : View> View.id(@IdRes id: Int) = lazy { requireViewByIdCompat<T>(id) }
