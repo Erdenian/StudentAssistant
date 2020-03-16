@@ -7,36 +7,30 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.Button
 import android.widget.MultiAutoCompleteTextView
-import android.widget.Spinner
-import android.widget.ViewFlipper
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.viewModelScope
-import com.dpro.widgets.WeekdaysPicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.databinding.ActivityLessonEditorBinding
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.entity.LessonRepeat
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorViewModel.Error
 import ru.erdenian.studentassistant.uikit.WeeksSelector
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
-import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showTimePicker
 import java.util.Calendar
 
-class LessonEditorActivity : AppCompatActivity(R.layout.activity_lesson_editor) {
+class LessonEditorActivity : AppCompatActivity() {
 
     companion object {
         private const val SEMESTER_ID_INTENT_KEY = "semester_id_intent_key"
@@ -76,6 +70,8 @@ class LessonEditorActivity : AppCompatActivity(R.layout.activity_lesson_editor) 
     @Suppress("ComplexMethod", "LongMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val binding = ActivityLessonEditorBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         intent.apply {
             val l = lesson
@@ -101,7 +97,7 @@ class LessonEditorActivity : AppCompatActivity(R.layout.activity_lesson_editor) 
 
         val owner = this
 
-        requireViewByIdCompat<TextInputLayout>(R.id.ale_subject_name).apply {
+        binding.subjectNameLayout.apply {
             viewModel.error.observe(owner) { error ->
                 if (error == Error.EMPTY_SUBJECT_NAME) {
                     this.error = getText(
@@ -111,7 +107,7 @@ class LessonEditorActivity : AppCompatActivity(R.layout.activity_lesson_editor) 
             }
         }
 
-        requireViewByIdCompat<AutoCompleteTextView>(R.id.ale_subject_name_edit_text).apply {
+        binding.subjectName.apply {
             viewModel.subjectName.distinctUntilChanged { value ->
                 value == text?.toString() ?: ""
             }.observe(owner) { setText(it) }
@@ -129,7 +125,7 @@ class LessonEditorActivity : AppCompatActivity(R.layout.activity_lesson_editor) 
             }
         }
 
-        requireViewByIdCompat<AutoCompleteTextView>(R.id.ale_lesson_type_edit_text).apply {
+        binding.lessonType.apply {
             viewModel.type.distinctUntilChanged { value ->
                 value == text?.toString() ?: ""
             }.observe(owner) { setText(it) }
@@ -140,13 +136,13 @@ class LessonEditorActivity : AppCompatActivity(R.layout.activity_lesson_editor) 
                     ArrayAdapter(
                         context,
                         android.R.layout.simple_dropdown_item_1line,
-                        predefinedTypes + types.list
+                        (predefinedTypes + types.list).distinct()
                     )
                 )
             }
         }
 
-        requireViewByIdCompat<MultiAutoCompleteTextView>(R.id.ale_teachers_edit_text).apply {
+        binding.teachers.apply {
             viewModel.teachers.distinctUntilChanged { value ->
                 value == text?.toString() ?: ""
             }.observe(owner) { setText(it) }
@@ -163,7 +159,7 @@ class LessonEditorActivity : AppCompatActivity(R.layout.activity_lesson_editor) 
             setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
         }
 
-        requireViewByIdCompat<MultiAutoCompleteTextView>(R.id.ale_classrooms_edit_text).apply {
+        binding.classrooms.apply {
             viewModel.classrooms.distinctUntilChanged { value ->
                 value == text?.toString() ?: ""
             }.observe(owner) { setText(it) }
@@ -180,21 +176,21 @@ class LessonEditorActivity : AppCompatActivity(R.layout.activity_lesson_editor) 
             setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
         }
 
-        requireViewByIdCompat<Button>(R.id.ale_start_time).apply {
+        binding.startTime.apply {
             viewModel.startTime.observe(owner) { text = it.toString(TIME_FORMAT) }
             setOnClickListener {
                 showTimePicker(viewModel.startTime.value, viewModel.startTime::setValue)
             }
         }
 
-        requireViewByIdCompat<Button>(R.id.ale_end_time).apply {
+        binding.endTime.apply {
             viewModel.endTime.observe(owner) { text = it.toString(TIME_FORMAT) }
             setOnClickListener {
                 showTimePicker(viewModel.endTime.value, viewModel.endTime::setValue)
             }
         }
 
-        requireViewByIdCompat<Spinner>(R.id.ale_repeat_type).apply {
+        binding.repeatType.apply {
             val byWeekdayIndex = 0
             val byDatesIndex = 1
             viewModel.lessonRepeat.distinctUntilChanged { value ->
@@ -232,7 +228,7 @@ class LessonEditorActivity : AppCompatActivity(R.layout.activity_lesson_editor) 
             }
         }
 
-        requireViewByIdCompat<ViewFlipper>(R.id.ale_repeat_type_flipper).apply {
+        binding.repeatTypeFlipper.apply {
             val byWeekdayIndex = 0
             val byDatesIndex = 1
 
@@ -247,7 +243,7 @@ class LessonEditorActivity : AppCompatActivity(R.layout.activity_lesson_editor) 
             }
         }
 
-        requireViewByIdCompat<WeekdaysPicker>(R.id.ale_weekday).apply {
+        binding.weekday.apply {
             setSelectOnlyOne(true)
             val isoToUs = mapOf(
                 DateTimeConstants.MONDAY to Calendar.MONDAY,
@@ -275,7 +271,7 @@ class LessonEditorActivity : AppCompatActivity(R.layout.activity_lesson_editor) 
             }
         }
 
-        requireViewByIdCompat<WeeksSelector>(R.id.ale_weeks_selector).apply {
+        binding.weeksSelector.apply {
             viewModel.weeks.distinctUntilChanged { value ->
                 value == weeks
             }.observe(owner) { weeks = it }

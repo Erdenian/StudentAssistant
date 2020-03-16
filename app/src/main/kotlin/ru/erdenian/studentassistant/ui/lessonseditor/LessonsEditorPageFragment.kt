@@ -5,22 +5,20 @@ import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ViewFlipper
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.dimen
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.databinding.PageFragmentLessonsEditorBinding
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.ui.adapter.LessonsListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
-import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 
 class LessonsEditorPageFragment : Fragment(R.layout.page_fragment_lessons_editor) {
 
@@ -42,7 +40,9 @@ class LessonsEditorPageFragment : Fragment(R.layout.page_fragment_lessons_editor
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        view.requireViewByIdCompat<RecyclerView>(R.id.pfle_lessons).apply {
+        val binding = PageFragmentLessonsEditorBinding.bind(view)
+
+        binding.lessons.apply {
             adapter = this@LessonsEditorPageFragment.adapter
             layoutManager = LinearLayoutManager(view.context)
             addItemDecoration(SpacingItemDecoration(dimen(R.dimen.cards_spacing)))
@@ -52,7 +52,7 @@ class LessonsEditorPageFragment : Fragment(R.layout.page_fragment_lessons_editor
         val weekday = requireArguments().getInt(PAGE_WEEKDAY)
         val lessons = viewModel.getLessons(weekday)
 
-        view.requireViewByIdCompat<ViewFlipper>(R.id.pfle_flipper).apply {
+        binding.flipper.apply {
             val lessonsIndex = 0
             val freeDayIndex = 1
             lessons.observe(viewLifecycleOwner) { value ->

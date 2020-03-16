@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/ch_subject_name"
+            android:id="@+id/subject_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?textAppearanceBody1"
@@ -22,7 +22,7 @@
         <include layout="@layout/divider_horizontal" />
 
         <TextView
-            android:id="@+id/ch_description"
+            android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?textAppearanceBody2"
@@ -49,7 +49,7 @@
                 tools:ignore="HardcodedText" />
 
             <TextView
-                android:id="@+id/ch_deadline"
+                android:id="@+id/deadline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

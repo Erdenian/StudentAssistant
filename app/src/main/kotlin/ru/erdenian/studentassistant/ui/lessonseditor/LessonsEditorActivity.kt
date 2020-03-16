@@ -6,27 +6,22 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Spinner
-import android.widget.ViewFlipper
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.viewModelScope
-import androidx.viewpager.widget.PagerTabStrip
-import androidx.viewpager.widget.ViewPager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.colorAttr
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.databinding.ActivityLessonsEditorBinding
 import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
 import ru.erdenian.studentassistant.utils.getColorCompat
-import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 
-class LessonsEditorActivity : AppCompatActivity(R.layout.activity_lessons_editor) {
+class LessonsEditorActivity : AppCompatActivity() {
 
     companion object {
         private const val SEMESTER_INTENT_KEY = "semester_intent_key"
@@ -39,38 +34,36 @@ class LessonsEditorActivity : AppCompatActivity(R.layout.activity_lessons_editor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val binding = ActivityLessonsEditorBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         viewModel.init(checkNotNull(intent.getParcelableExtra(SEMESTER_INTENT_KEY)))
 
-        setSupportActionBar(requireViewByIdCompat(R.id.alse_toolbar))
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowTitleEnabled(false)
         }
 
-        requireViewByIdCompat<Spinner>(R.id.alse_spinner).apply {
+        binding.spinner.apply {
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                private val flipper = this@LessonsEditorActivity.requireViewByIdCompat<ViewFlipper>(
-                    R.id.alse_flipper
-                )
-
                 override fun onItemSelected(
                     parent: AdapterView<*>,
                     view: View?,
                     position: Int,
                     id: Long
                 ) {
-                    flipper.displayedChild = position
+                    binding.flipper.displayedChild = position
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) = Unit
             }
         }
 
-        val byWeekdaysPager = requireViewByIdCompat<ViewPager>(R.id.alse_by_weekdays_pager).apply {
+        val byWeekdaysPager = binding.byWeekdaysPager.apply {
             adapter = LessonsEditorPagerAdapter(supportFragmentManager)
         }
-        requireViewByIdCompat<PagerTabStrip>(R.id.alse_by_weekdays_pager_tab_strip).apply {
+        binding.byWeekdaysPagerTabStrip.apply {
             val color = colorAttr(R.attr.colorPrimary)
             setTextColor(color)
             tabIndicatorColor = color
@@ -78,7 +71,7 @@ class LessonsEditorActivity : AppCompatActivity(R.layout.activity_lessons_editor
 
         // TODO: 13.11.2016 добавить заполнение списка пар по датам
 
-        requireViewByIdCompat<FloatingActionButton>(R.id.alse_add_lesson).setOnClickListener {
+        binding.addLesson.setOnClickListener {
             viewModel.viewModelScope.launch {
                 val weekday = byWeekdaysPager.currentItem + 1
                 LessonEditorActivity.start(

@@ -6,28 +6,25 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.viewModelScope
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.databinding.ActivitySemesterEditorBinding
 import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.ui.lessonseditor.LessonsEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorViewModel.Error
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
-import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
 
-class SemesterEditorActivity : AppCompatActivity(R.layout.activity_semester_editor) {
+class SemesterEditorActivity : AppCompatActivity() {
 
     companion object {
         const val SEMESTER_RESULT_EXTRA = "semester_result_extra"
@@ -49,6 +46,8 @@ class SemesterEditorActivity : AppCompatActivity(R.layout.activity_semester_edit
     @Suppress("ComplexMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val binding = ActivitySemesterEditorBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val semester = intent.getParcelableExtra<Semester?>(SEMESTER_INTENT_KEY)
         viewModel.init(semester)
@@ -60,7 +59,7 @@ class SemesterEditorActivity : AppCompatActivity(R.layout.activity_semester_edit
 
         val owner = this
 
-        requireViewByIdCompat<TextInputLayout>(R.id.ase_name).apply {
+        binding.nameLayout.apply {
             viewModel.error.observe(owner) { error ->
                 when (error) {
                     Error.EMPTY_NAME -> this.error = getString(
@@ -74,21 +73,21 @@ class SemesterEditorActivity : AppCompatActivity(R.layout.activity_semester_edit
             }
         }
 
-        requireViewByIdCompat<TextInputEditText>(R.id.ase_name_edit_text).apply {
+        binding.name.apply {
             viewModel.name.distinctUntilChanged { value ->
                 value == text?.toString() ?: ""
             }.observe(owner) { setText(it) }
             addTextChangedListener { viewModel.name.value = it?.toString() ?: "" }
         }
 
-        requireViewByIdCompat<Button>(R.id.ase_first_day).apply {
+        binding.firstDay.apply {
             viewModel.firstDay.observe(owner) { text = it.toString(DATE_FORMAT) }
             setOnClickListener {
                 showDatePicker(viewModel.firstDay.value) { viewModel.firstDay.value = it }
             }
         }
 
-        requireViewByIdCompat<Button>(R.id.ase_last_day).apply {
+        binding.lastDay.apply {
             viewModel.lastDay.observe(owner) { text = it.toString(DATE_FORMAT) }
             setOnClickListener {
                 showDatePicker(viewModel.lastDay.value) { viewModel.lastDay.value = it }

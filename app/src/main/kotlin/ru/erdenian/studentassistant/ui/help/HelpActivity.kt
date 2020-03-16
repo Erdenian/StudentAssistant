@@ -2,20 +2,21 @@ package ru.erdenian.studentassistant.ui.help
 
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.utils.requireViewByIdCompat
+import ru.erdenian.studentassistant.databinding.ActivityHelpBinding
 
-class HelpActivity : AppCompatActivity(R.layout.activity_help) {
+class HelpActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val binding = ActivityHelpBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        requireViewByIdCompat<TextView>(R.id.ah_help).text = HtmlCompat.fromHtml(
+        binding.help.text = HtmlCompat.fromHtml(
             resources.openRawResource(R.raw.help).bufferedReader().readText(),
             HtmlCompat.FROM_HTML_MODE_LEGACY
         )

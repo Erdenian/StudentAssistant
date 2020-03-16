@@ -2,38 +2,7 @@ package ru.erdenian.studentassistant.utils
 
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import androidx.annotation.IdRes
-import androidx.core.content.getSystemService
-import androidx.core.view.ViewCompat
 import androidx.core.view.children
-
-/**
- * Обертка над [ViewCompat.requireViewById].
- *
- * @param id id View
- * @return View
- * @author Ilya Solovyov
- * @since 0.3.0
- */
-fun <T : View> View.requireViewByIdCompat(@IdRes id: Int) =
-    ViewCompat.requireViewById<T>(this, id)
-
-/**
- * Установить курсор в [EditText] и показать клавиатуру.
- *
- * Может не срабатывать при вызове в ***onCreate***,
- * тогда можно обернуть вызов в **post** или аналогичный метод.
- *
- * @author Ilya Solovyov
- * @since 0.3.0
- */
-fun EditText.showKeyboard() {
-    requestFocus()
-    val imm = context.getSystemService<InputMethodManager>()
-    imm?.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
-}
 
 /**
  * Установить количество дочерних [View] у [ViewGroup].
@@ -86,5 +55,3 @@ fun <V : View> ViewGroup.setViewCount(
         }
     }
 }
-
-fun <T : View> View.id(@IdRes id: Int) = lazy { requireViewByIdCompat<T>(id) }
