@@ -18,13 +18,14 @@
         android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ale_subject_name"
+            android:id="@+id/subject_name_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <AutoCompleteTextView
-                android:id="@+id/ale_subject_name_edit_text"
-                style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
+                android:id="@+id/subject_name"
+                style="@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/lea_subject_name"
@@ -38,13 +39,14 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp">
 
             <AutoCompleteTextView
-                android:id="@+id/ale_lesson_type_edit_text"
-                style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
+                android:id="@+id/lesson_type"
+                style="@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/lea_type"
@@ -54,13 +56,14 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp">
 
             <MultiAutoCompleteTextView
-                android:id="@+id/ale_teachers_edit_text"
-                style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
+                android:id="@+id/teachers"
+                style="@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/lea_teachers"
@@ -70,13 +73,14 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp">
 
             <MultiAutoCompleteTextView
-                android:id="@+id/ale_classrooms_edit_text"
-                style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
+                android:id="@+id/classrooms"
+                style="@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/lea_classrooms"
@@ -92,7 +96,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/ale_start_time"
+                android:id="@+id/start_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="09:00" />
@@ -104,7 +108,7 @@
                 tools:ignore="HardcodedText" />
 
             <Button
-                android:id="@+id/ale_end_time"
+                android:id="@+id/end_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="10:30" />
@@ -112,7 +116,7 @@
         </LinearLayout>
 
         <Spinner
-            android:id="@+id/ale_repeat_type"
+            android:id="@+id/repeat_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:entries="@array/lesson_repeat_types"
@@ -120,7 +124,7 @@
             tools:visibility="visible" />
 
         <ViewFlipper
-            android:id="@+id/ale_repeat_type_flipper"
+            android:id="@+id/repeat_type_flipper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -130,13 +134,13 @@
                 android:orientation="vertical">
 
                 <com.dpro.widgets.WeekdaysPicker
-                    android:id="@+id/ale_weekday"
+                    android:id="@+id/weekday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:sunday_first_day="false" />
 
                 <ru.erdenian.studentassistant.uikit.WeeksSelector
-                    android:id="@+id/ale_weeks_selector"
+                    android:id="@+id/weeks_selector"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
