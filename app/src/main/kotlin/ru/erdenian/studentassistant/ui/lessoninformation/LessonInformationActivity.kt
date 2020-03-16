@@ -13,8 +13,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.dimen
-import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.ActivityLessonInformationBinding
 import ru.erdenian.studentassistant.entity.Homework
@@ -25,6 +23,7 @@ import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.setColor
+import ru.erdenian.studentassistant.utils.startActivity
 
 class LessonInformationActivity : AppCompatActivity() {
 
@@ -96,7 +95,11 @@ class LessonInformationActivity : AppCompatActivity() {
         binding.content.homeworks.apply {
             adapter = homeworksAdapter
             layoutManager = LinearLayoutManager(context)
-            addItemDecoration(SpacingItemDecoration(dimen(R.dimen.cards_spacing)))
+            addItemDecoration(
+                SpacingItemDecoration(
+                    context.resources.getDimensionPixelSize(R.dimen.cards_spacing)
+                )
+            )
             registerForContextMenu(this)
         }
 

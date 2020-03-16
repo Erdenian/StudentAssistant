@@ -3,10 +3,10 @@ package ru.erdenian.studentassistant.ui.main.noschedule
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentNoScheduleBinding
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
+import ru.erdenian.studentassistant.utils.toast
 
 class NoScheduleFragment : Fragment(R.layout.fragment_no_schedule) {
 

@@ -3,9 +3,6 @@ package ru.erdenian.studentassistant.utils
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import android.util.TypedValue
-import androidx.annotation.AttrRes
-import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import org.joda.time.LocalDate
@@ -20,19 +17,6 @@ import org.joda.time.LocalTime
  * @since 0.0.0
  */
 fun Context.getColorCompat(@ColorRes id: Int) = ContextCompat.getColor(this, id)
-
-fun Context.attr(@AttrRes attribute: Int) = TypedValue().also { outValue ->
-    require(theme.resolveAttribute(attribute, outValue, true)) {
-        "Failed to resolve attribute: $attribute"
-    }
-}
-
-@ColorInt
-fun Context.colorAttr(@AttrRes attribute: Int) = attr(attribute).apply {
-    require(type in TypedValue.TYPE_FIRST_COLOR_INT..TypedValue.TYPE_LAST_COLOR_INT) {
-        "Attribute value type is not color: $attribute"
-    }
-}.data
 
 /**
  * Отображает [DatePickerDialog].

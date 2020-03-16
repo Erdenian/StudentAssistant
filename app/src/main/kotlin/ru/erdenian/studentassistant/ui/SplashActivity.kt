@@ -2,8 +2,8 @@ package ru.erdenian.studentassistant.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.ui.main.MainActivity
+import ru.erdenian.studentassistant.utils.startActivity
 
 class SplashActivity : AppCompatActivity() {
 

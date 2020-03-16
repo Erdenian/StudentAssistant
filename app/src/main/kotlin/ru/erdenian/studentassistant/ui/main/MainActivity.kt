@@ -12,8 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.distinctUntilChanged
 import androidx.navigation.findNavController
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.ActivityMainBinding
 import ru.erdenian.studentassistant.ui.adapter.SemestersSpinnerAdapter
@@ -22,6 +20,8 @@ import ru.erdenian.studentassistant.ui.lessonseditor.LessonsEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.setColor
+import ru.erdenian.studentassistant.utils.startActivity
+import ru.erdenian.studentassistant.utils.toast
 
 class MainActivity : AppCompatActivity() {
 
