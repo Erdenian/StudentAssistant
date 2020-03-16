@@ -11,12 +11,12 @@
     tools:context=".ui.semestereditor.SemesterEditorActivity">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/ase_name"
+        android:id="@+id/name_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/ase_name_edit_text"
+            android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/sea_name"
@@ -36,7 +36,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/ase_first_day"
+            android:id="@+id/first_day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="01.09.2014" />
@@ -48,7 +48,7 @@
             tools:ignore="HardcodedText" />
 
         <Button
-            android:id="@+id/ase_last_day"
+            android:id="@+id/last_day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="31.12.2014" />
