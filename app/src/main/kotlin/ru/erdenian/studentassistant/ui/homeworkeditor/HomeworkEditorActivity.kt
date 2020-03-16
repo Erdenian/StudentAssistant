@@ -7,9 +7,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
@@ -21,16 +18,16 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.databinding.ActivityHomeworkEditorBinding
 import ru.erdenian.studentassistant.entity.Homework
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorViewModel.Error
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
-import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
 
-class HomeworkEditorActivity : AppCompatActivity(R.layout.activity_homework_editor) {
+class HomeworkEditorActivity : AppCompatActivity() {
 
     companion object {
         private const val SEMESTER_ID_INTENT_KEY = "semester_id_intent_key"
@@ -67,6 +64,8 @@ class HomeworkEditorActivity : AppCompatActivity(R.layout.activity_homework_edit
     @Suppress("ComplexMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val binding = ActivityHomeworkEditorBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         intent.apply {
             val homework = homework
@@ -80,7 +79,7 @@ class HomeworkEditorActivity : AppCompatActivity(R.layout.activity_homework_edit
 
         val owner = this
 
-        requireViewByIdCompat<Spinner>(R.id.ahe_subject_name).apply {
+        binding.subjectName.apply {
             viewModel.existingSubjects.observe(owner) { subjects ->
                 @Suppress("UnsafeCast")
                 val selection = selectedItem as String?
@@ -115,14 +114,14 @@ class HomeworkEditorActivity : AppCompatActivity(R.layout.activity_homework_edit
             }
         }
 
-        requireViewByIdCompat<EditText>(R.id.ahe_description).apply {
+        binding.description.apply {
             viewModel.description.distinctUntilChanged { value ->
                 value == text?.toString() ?: ""
             }.observe(owner) { setText(it) }
             addTextChangedListener { viewModel.description.value = it?.toString() ?: "" }
         }
 
-        requireViewByIdCompat<Button>(R.id.ahe_deadline).apply {
+        binding.deadline.apply {
             viewModel.deadline.observe(owner) { deadline ->
                 text = deadline.toString(DATE_FORMAT)
             }
