@@ -7,19 +7,16 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
-import android.widget.TextView
-import android.widget.ViewFlipper
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.dimen
 import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.databinding.ActivityLessonInformationBinding
 import ru.erdenian.studentassistant.entity.Homework
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
@@ -27,10 +24,9 @@ import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.utils.getColorCompat
-import ru.erdenian.studentassistant.utils.requireViewByIdCompat
 import ru.erdenian.studentassistant.utils.setColor
 
-class LessonInformationActivity : AppCompatActivity(R.layout.activity_lesson_information) {
+class LessonInformationActivity : AppCompatActivity() {
 
     companion object {
         private const val LESSON_INTENT_KEY = "lesson_intent_key"
@@ -58,6 +54,8 @@ class LessonInformationActivity : AppCompatActivity(R.layout.activity_lesson_inf
     @Suppress("ComplexMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val binding = ActivityLessonInformationBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val owner = this
 
@@ -65,27 +63,27 @@ class LessonInformationActivity : AppCompatActivity(R.layout.activity_lesson_inf
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        requireViewByIdCompat<TextView>(R.id.ali_subject_name).apply {
+        binding.content.subjectName.apply {
             viewModel.lesson.observe(owner) { text = it?.subjectName }
         }
 
-        requireViewByIdCompat<TextView>(R.id.ali_start_time).apply {
+        binding.content.startTime.apply {
             viewModel.lesson.observe(owner) { lesson ->
                 text = lesson?.startTime?.toString(TIME_FORMAT)
             }
         }
 
-        requireViewByIdCompat<TextView>(R.id.ali_end_time).apply {
+        binding.content.endTime.apply {
             viewModel.lesson.observe(owner) { lesson ->
                 text = lesson?.endTime?.toString(TIME_FORMAT)
             }
         }
 
-        requireViewByIdCompat<TextView>(R.id.ali_type).apply {
+        binding.content.type.apply {
             viewModel.lesson.observe(owner) { text = it?.type }
         }
 
-        requireViewByIdCompat<ViewFlipper>(R.id.ali_homeworks_flipper).apply {
+        binding.content.homeworksFlipper.apply {
             val noHomeworksIndex = 0
             val containsHomeworksIndex = 1
             viewModel.homeworks.observe(owner) { homeworks ->
@@ -95,14 +93,14 @@ class LessonInformationActivity : AppCompatActivity(R.layout.activity_lesson_inf
             }
         }
 
-        requireViewByIdCompat<RecyclerView>(R.id.ali_homeworks).apply {
+        binding.content.homeworks.apply {
             adapter = homeworksAdapter
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(SpacingItemDecoration(dimen(R.dimen.cards_spacing)))
             registerForContextMenu(this)
         }
 
-        requireViewByIdCompat<FloatingActionButton>(R.id.ali_add_homework).setOnClickListener {
+        binding.addHomework.setOnClickListener {
             HomeworkEditorActivity.start(this, checkNotNull(viewModel.lesson.value))
         }
 

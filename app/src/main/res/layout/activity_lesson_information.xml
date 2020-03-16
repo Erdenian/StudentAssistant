@@ -5,10 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".ui.lessoninformation.LessonInformationActivity">
 
-    <include layout="@layout/content_lesson_information" />
+    <include
+        android:id="@+id/content"
+        layout="@layout/content_lesson_information" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/ali_add_homework"
+        android:id="@+id/add_homework"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
