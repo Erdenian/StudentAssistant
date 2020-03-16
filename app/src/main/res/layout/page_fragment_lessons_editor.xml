@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/pfle_flipper"
+    android:id="@+id/flipper"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ru.erdenian.studentassistant.uikit.ContextMenuRecyclerView
-        android:id="@+id/pfle_lessons"
+        android:id="@+id/lessons"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"

@@ -3,10 +3,10 @@ package ru.erdenian.studentassistant.uikit
 import android.content.Context
 import android.util.AttributeSet
 import android.util.TypedValue
-import android.widget.TextView
+import androidx.core.content.getSystemService
 import com.google.android.material.card.MaterialCardView
 import org.joda.time.LocalDate
-import ru.erdenian.studentassistant.utils.id
+import ru.erdenian.studentassistant.uikit.databinding.CardHomeworkBinding
 
 /**
  * Карточка домашнего задания.
@@ -27,12 +27,11 @@ class HomeworkCard @JvmOverloads constructor(
         private const val DATE_FORMATTER = "dd.MM.yyyy"
     }
 
-    private val subjectName: TextView by id(R.id.ch_subject_name)
-    private val description: TextView by id(R.id.ch_description)
-    private val deadline: TextView by id(R.id.ch_deadline)
+    private val binding = CardHomeworkBinding.inflate(
+        requireNotNull(context.getSystemService()), this
+    )
 
     init {
-        inflate(context, R.layout.card_homework, this)
         TypedValue().also { outValue ->
             context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
             foreground = context.getDrawable(outValue.resourceId)
@@ -45,8 +44,8 @@ class HomeworkCard @JvmOverloads constructor(
      * @since 0.3.0
      */
     fun setHomework(subjectName: String, description: String, deadline: LocalDate) {
-        this.subjectName.text = subjectName
-        this.description.text = description
-        this.deadline.text = deadline.toString(DATE_FORMATTER)
+        binding.subjectName.text = subjectName
+        binding.description.text = description
+        binding.deadline.text = deadline.toString(DATE_FORMATTER)
     }
 }

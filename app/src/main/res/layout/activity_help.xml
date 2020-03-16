@@ -7,7 +7,7 @@
     tools:context=".ui.help.HelpActivity">
 
     <TextView
-        android:id="@+id/ah_help"
+        android:id="@+id/help"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/activity_horizontal_margin"

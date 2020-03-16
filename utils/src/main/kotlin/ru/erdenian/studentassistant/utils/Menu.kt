@@ -1,9 +1,8 @@
 package ru.erdenian.studentassistant.utils
 
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.view.Menu
 import androidx.annotation.ColorInt
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.forEach
 
 /**
@@ -14,8 +13,5 @@ import androidx.core.view.forEach
  * @since 0.0.0
  */
 fun Menu.setColor(@ColorInt color: Int) = forEach { item ->
-    item.icon?.apply {
-        mutate()
-        colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
-    }
+    item.icon?.let { DrawableCompat.setTint(it, color) }
 }

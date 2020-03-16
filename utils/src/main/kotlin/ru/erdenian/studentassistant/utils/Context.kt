@@ -7,7 +7,6 @@ import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
-import java.io.File
 
 /**
  * Обертка над [ContextCompat.getColor].
@@ -18,27 +17,6 @@ import java.io.File
  * @since 0.0.0
  */
 fun Context.getColorCompat(@ColorRes id: Int) = ContextCompat.getColor(this, id)
-
-/**
- * Очищает данные приложения.
- *
- * @author Ilya Solovyov
- * @since 0.2.6
- */
-fun Context.clearApplicationData() {
-
-    fun deleteFile(file: File) {
-        if (file.isDirectory) file.list()?.forEach { deleteFile(File(file, it)) }
-        else file.delete()
-    }
-
-    val applicationDirectory = cacheDir.parent?.let { File(it) }
-    if (applicationDirectory?.exists() == true) {
-        applicationDirectory.list()?.filter { it != "lib" }?.forEach {
-            deleteFile(File(applicationDirectory, it))
-        }
-    }
-}
 
 /**
  * Отображает [DatePickerDialog].
