@@ -13,5 +13,6 @@ import androidx.core.app.ActivityCompat
  * @author Ilya Solovyov
  * @since 0.3.0
  */
+@Deprecated("Использовать ViewBinding")
 fun <T : View> Activity.requireViewByIdCompat(@IdRes id: Int) =
     ActivityCompat.requireViewById<T>(this, id)
