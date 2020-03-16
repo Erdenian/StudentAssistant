@@ -29,7 +29,9 @@ class LessonCard @JvmOverloads constructor(
         private const val TIME_FORMATTER = "HH:mm"
     }
 
-    private val binding = CardLessonBinding.inflate(context.getSystemService(), this)
+    private val binding = CardLessonBinding.inflate(
+        requireNotNull(context.getSystemService()), this
+    )
 
     init {
         TypedValue().also { outValue ->
