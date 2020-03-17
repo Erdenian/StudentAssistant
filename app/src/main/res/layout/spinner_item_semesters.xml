@@ -6,4 +6,5 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:maxLines="1"
-    tools:text="Семестр 1" />
+    tools:text="Семестр 1"
+    tools:viewBindingIgnore="true" />
