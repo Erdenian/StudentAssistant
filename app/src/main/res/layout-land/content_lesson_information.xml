@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    tools:viewBindingIgnore="true">
+    android:orientation="horizontal">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="0dp"
