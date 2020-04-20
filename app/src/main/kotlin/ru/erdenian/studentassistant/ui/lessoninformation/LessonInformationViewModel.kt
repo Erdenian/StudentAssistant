@@ -23,8 +23,8 @@ class LessonInformationViewModel(
 ) : AndroidViewModel(application), KodeinAware {
 
     override val kodein by kodein()
-    private val lessonRepository: LessonRepository by instance()
-    private val homeworkRepository: HomeworkRepository by instance()
+    private val lessonRepository by instance<LessonRepository>()
+    private val homeworkRepository by instance<HomeworkRepository>()
 
     private val privateLesson = MutableLiveDataKtx<Lesson>()
 

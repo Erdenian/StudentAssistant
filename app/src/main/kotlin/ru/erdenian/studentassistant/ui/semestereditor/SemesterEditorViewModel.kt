@@ -19,7 +19,7 @@ class SemesterEditorViewModel(
 ) : AndroidViewModel(application), KodeinAware {
 
     override val kodein by kodein()
-    private val semesterRepository: SemesterRepository by instance()
+    private val semesterRepository by instance<SemesterRepository>()
 
     enum class Error {
         EMPTY_NAME,

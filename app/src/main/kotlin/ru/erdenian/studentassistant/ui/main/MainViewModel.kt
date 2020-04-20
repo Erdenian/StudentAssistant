@@ -24,9 +24,9 @@ import ru.erdenian.studentassistant.utils.liveDataOf
 class MainViewModel(application: Application) : AndroidViewModel(application), KodeinAware {
 
     override val kodein by kodein()
-    private val semesterRepository: SemesterRepository by instance()
-    private val lessonRepository: LessonRepository by instance()
-    private val homeworkRepository: HomeworkRepository by instance()
+    private val semesterRepository by instance<SemesterRepository>()
+    private val lessonRepository by instance<LessonRepository>()
+    private val homeworkRepository by instance<HomeworkRepository>()
 
     val allSemesters = semesterRepository.getAll()
 
