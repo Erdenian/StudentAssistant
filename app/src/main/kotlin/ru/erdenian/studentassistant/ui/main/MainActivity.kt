@@ -7,9 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
 import androidx.lifecycle.distinctUntilChanged
 import androidx.navigation.findNavController
 import ru.erdenian.studentassistant.R
@@ -21,7 +19,6 @@ import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.startActivity
-import ru.erdenian.studentassistant.utils.toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,25 +42,15 @@ class MainActivity : AppCompatActivity() {
 
             val navController = findNavController(R.id.nav_host_fragment)
 
-            ActionBarDrawerToggle(
-                this, binding.drawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close
-            ).apply {
-                binding.drawer.addDrawerListener(this)
-                syncState()
-            }
-
             viewModel.selectedSemester.observe(owner) { semester ->
                 binding.navigationView.menu.run {
-                    findItem(R.id.dm_homeworks).isEnabled = (semester != null)
-                    findItem(R.id.dm_alarm).isEnabled = (semester != null)
+                    findItem(R.id.bm_homeworks).isEnabled = (semester != null)
                 }
             }
 
-            binding.navigationView.setNavigationItemSelectedListener { menuItem ->
-                binding.drawer.closeDrawer(GravityCompat.START)
+            binding.navigationView.setOnNavigationItemSelectedListener { menuItem ->
                 when (menuItem.itemId) {
-                    R.id.dm_schedule -> {
+                    R.id.bm_schedule -> {
                         navController.navigate(
                             if (viewModel.selectedSemester.value != null) {
                                 R.id.nav_action_schedule
@@ -71,7 +58,7 @@ class MainActivity : AppCompatActivity() {
                         )
                         true
                     }
-                    R.id.dm_homeworks -> {
+                    R.id.bm_homeworks -> {
                         navController.navigate(
                             if (viewModel.hasLessons.value == true) {
                                 R.id.nav_action_homeworks
@@ -79,15 +66,7 @@ class MainActivity : AppCompatActivity() {
                         )
                         true
                     }
-                    R.id.dm_alarm -> {
-                        toast("AlarmEditorActivity")
-                        true
-                    }
-                    R.id.dm_settings -> {
-                        toast(R.string.dm_settings)
-                        true
-                    }
-                    R.id.dm_help -> {
+                    R.id.bm_help -> {
                         startActivity<HelpActivity>()
                         true
                     }
@@ -98,9 +77,9 @@ class MainActivity : AppCompatActivity() {
             navController.addOnDestinationChangedListener { _, destination, _ ->
                 when (destination.id) {
                     R.id.nav_fragment_no_schedule, R.id.nav_fragment_schedule ->
-                        binding.navigationView.setCheckedItem(R.id.dm_schedule)
+                        binding.navigationView.selectedItemId = R.id.bm_schedule
                     R.id.nav_fragment_homeworks ->
-                        binding.navigationView.setCheckedItem(R.id.dm_homeworks)
+                        binding.navigationView.selectedItemId = R.id.bm_homeworks
                 }
             }
 
@@ -194,10 +173,5 @@ class MainActivity : AppCompatActivity() {
             )
         }
         super.onActivityResult(requestCode, resultCode, data)
-    }
-
-    override fun onBackPressed() = binding.drawer.run {
-        if (isDrawerOpen(GravityCompat.START)) closeDrawer(GravityCompat.START)
-        else super.onBackPressed()
     }
 }
