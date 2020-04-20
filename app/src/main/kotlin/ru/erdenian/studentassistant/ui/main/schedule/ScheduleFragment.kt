@@ -51,10 +51,12 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             tabIndicatorColor = color
         }
 
-        viewModel.selectedSemester.observe(viewLifecycleOwner) { semester ->
+        binding.flipper.apply {
             val scheduleIndex = 0
             val noScheduleIndex = 1
-            binding.flipper.displayedChild = if (semester != null) scheduleIndex else noScheduleIndex
+            viewModel.selectedSemester.observe(viewLifecycleOwner) { semester ->
+                displayedChild = if (semester != null) scheduleIndex else noScheduleIndex
+            }
         }
     }
 

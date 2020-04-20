@@ -59,11 +59,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application), K
         semester?.let { lessonRepository.get(it, day) } ?: liveDataOf(immutableSortedSetOf())
     }.toKtx()
 
-    fun getActualHomeworks() = selectedSemester.asLiveData.switchMap { semester ->
+    val actualHomeworks = selectedSemester.asLiveData.switchMap { semester ->
         semester?.let { homeworkRepository.getActual(it.id) } ?: liveDataOf(immutableSortedSetOf())
     }.toKtx()
 
-    fun getPastHomeworks() = selectedSemester.asLiveData.switchMap { semester ->
+    val pastHomeworks = selectedSemester.asLiveData.switchMap { semester ->
         semester?.let { homeworkRepository.getPast(it.id) } ?: liveDataOf(immutableSortedSetOf())
     }.toKtx()
 

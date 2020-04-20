@@ -13,15 +13,12 @@
     <!-- ScheduleFragment -->
     <string name="sf_title">Расписание</string>
     <string name="sf_calendar">Календарь</string>
-    <string name="sf_free_day">Выходной</string>
     <string name="sf_no_schedule">Здесь пока пусто</string>
-
-    <!-- NoLessonsFragment -->
-    <string name="nlf_title">Домашние задания</string>
-    <string name="nlf_create">Добавить занятие</string>
+    <string name="sf_free_day">Выходной</string>
 
     <!-- HomeworksFragment -->
     <string name="hf_title">Домашние задания</string>
+    <string name="hf_no_lessons">Еще не добавлено ни одного занятия</string>
     <string name="hf_no_homeworks">Нет заданий</string>
     <string name="hf_delete_homework">Удалить</string>
     <string name="hf_delete_message">Удалить задание?</string>

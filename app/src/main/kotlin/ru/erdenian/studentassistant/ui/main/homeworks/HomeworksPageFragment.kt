@@ -55,7 +55,7 @@ class HomeworksPageFragment : Fragment(R.layout.page_fragment_homeworks) {
         }
 
         val isActual = requireArguments().getBoolean(IS_ACTUAL)
-        val homeworks = viewModel.run { if (isActual) getActualHomeworks() else getPastHomeworks() }
+        val homeworks = viewModel.run { if (isActual) actualHomeworks else pastHomeworks }
 
         binding.flipper.apply {
             val homeworksIndex = 0
