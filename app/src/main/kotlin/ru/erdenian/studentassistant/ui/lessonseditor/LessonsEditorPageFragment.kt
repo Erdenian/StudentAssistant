@@ -12,7 +12,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.dimen
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.PageFragmentLessonsEditorBinding
 import ru.erdenian.studentassistant.entity.Lesson
@@ -45,7 +44,11 @@ class LessonsEditorPageFragment : Fragment(R.layout.page_fragment_lessons_editor
         binding.lessons.apply {
             adapter = this@LessonsEditorPageFragment.adapter
             layoutManager = LinearLayoutManager(view.context)
-            addItemDecoration(SpacingItemDecoration(dimen(R.dimen.cards_spacing)))
+            addItemDecoration(
+                SpacingItemDecoration(
+                    context.resources.getDimensionPixelSize(R.dimen.cards_spacing)
+                )
+            )
             registerForContextMenu(this)
         }
 

@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import org.jetbrains.anko.colorAttr
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentHomeworksBinding
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.ui.main.MainViewModel
+import ru.erdenian.studentassistant.utils.colorAttr
 
 class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
 
@@ -23,7 +23,7 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
             }
         }
         binding.pagerTabStrip.apply {
-            val color = colorAttr(R.attr.colorPrimary)
+            val color = requireContext().colorAttr(R.attr.colorPrimary)
             setTextColor(color)
             tabIndicatorColor = color
         }
@@ -32,6 +32,14 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
             HomeworkEditorActivity.start(
                 requireContext(), checkNotNull(viewModel.selectedSemester.value).id
             )
+        }
+
+        binding.flipper.apply {
+            val hasLessonsIndex = 0
+            val noLessonsIndex = 1
+            viewModel.hasLessons.observe(viewLifecycleOwner) { hasLessons ->
+                displayedChild = if (hasLessons != null) hasLessonsIndex else noLessonsIndex
+            }
         }
     }
 }

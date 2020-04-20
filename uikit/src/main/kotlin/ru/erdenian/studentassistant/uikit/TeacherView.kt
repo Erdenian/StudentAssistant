@@ -8,8 +8,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
-import org.jetbrains.anko.attr
-import org.jetbrains.anko.colorAttr
+import androidx.core.content.withStyledAttributes
+import ru.erdenian.studentassistant.utils.attr
+import ru.erdenian.studentassistant.utils.colorAttr
 import ru.erdenian.studentassistant.utils.getColorCompat
 
 /**
@@ -29,8 +30,8 @@ class TeacherView @JvmOverloads constructor(
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     private val textView = AppCompatTextView(context).apply {
-        setTextAppearance(context, attr(R.attr.textAppearanceBody1).resourceId)
-        setTextColor(colorAttr(android.R.attr.textColorSecondary))
+        setTextAppearance(context, context.attr(R.attr.textAppearanceBody1).resourceId)
+        setTextColor(context.colorAttr(android.R.attr.textColorSecondary))
     }
 
     var name: CharSequence?
@@ -55,15 +56,8 @@ class TeacherView @JvmOverloads constructor(
         })
         addView(textView)
 
-        if (attrs != null) {
-            val typedArray = context.theme.obtainStyledAttributes(
-                attrs, R.styleable.TeacherView, defStyleAttr, 0
-            )
-            try {
-                name = typedArray.getString(R.styleable.TeacherView_name)
-            } finally {
-                typedArray.recycle()
-            }
+        context.withStyledAttributes(attrs, R.styleable.TeacherView, defStyleAttr) {
+            name = getString(R.styleable.TeacherView_name)
         }
     }
 }

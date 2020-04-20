@@ -11,15 +11,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.colorAttr
-import org.jetbrains.anko.startActivity
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.ActivityLessonsEditorBinding
 import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
+import ru.erdenian.studentassistant.utils.colorAttr
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.setColor
+import ru.erdenian.studentassistant.utils.startActivity
 
 class LessonsEditorActivity : AppCompatActivity() {
 

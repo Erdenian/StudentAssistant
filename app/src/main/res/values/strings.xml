@@ -2,35 +2,23 @@
 
     <string name="app_name">Student Assistant</string>
 
-    <!-- DrawerMain -->
-    <string name="dm_schedule">Расписание</string>
-    <string name="dm_homeworks">Домашние задания</string>
-    <string name="dm_alarm">Будильник</string>
-    <string name="dm_tools">Инструменты</string>
-    <string name="dm_settings">Настройки</string>
-    <string name="dm_help">Справка</string>
-
     <!-- region MainActivity -->
     <string name="ma_title">Расписание</string>
     <string name="ma_add">Добавить расписание</string>
     <string name="ma_edit">Редактировать расписание</string>
-
-    <!-- NoScheduleFragment -->
-    <string name="nsf_title">Расписание</string>
-    <string name="nsf_download">Загрузить расписание с сервера</string>
-    <string name="nsf_create">Добавить расписание</string>
+    <string name="ma_schedule">Расписание</string>
+    <string name="ma_homeworks">Домашние задания</string>
+    <string name="ma_help">Справка</string>
 
     <!-- ScheduleFragment -->
     <string name="sf_title">Расписание</string>
     <string name="sf_calendar">Календарь</string>
+    <string name="sf_no_schedule">Здесь пока пусто</string>
     <string name="sf_free_day">Выходной</string>
-
-    <!-- NoLessonsFragment -->
-    <string name="nlf_title">Домашние задания</string>
-    <string name="nlf_create">Добавить занятие</string>
 
     <!-- HomeworksFragment -->
     <string name="hf_title">Домашние задания</string>
+    <string name="hf_no_lessons">Еще не добавлено ни одного занятия</string>
     <string name="hf_no_homeworks">Нет заданий</string>
     <string name="hf_delete_homework">Удалить</string>
     <string name="hf_delete_message">Удалить задание?</string>
@@ -113,8 +101,5 @@
     <!-- region HelpActivity -->
     <string name="ha_title">Справка</string>
     <!-- endregion -->
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
 
 </resources>
