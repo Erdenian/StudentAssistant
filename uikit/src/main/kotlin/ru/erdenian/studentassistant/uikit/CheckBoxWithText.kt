@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.withStyledAttributes
 
 /**
  * Чекбокс с текстом под ним.
@@ -48,16 +49,9 @@ class CheckBoxWithText @JvmOverloads constructor(
         addView(checkBox)
         addView(textView)
 
-        if (attrs != null) {
-            val typedArray = context.theme.obtainStyledAttributes(
-                attrs, R.styleable.CheckBoxWithText, defStyleAttr, 0
-            )
-            try {
-                isChecked = typedArray.getBoolean(R.styleable.CheckBoxWithText_checked, false)
-                text = typedArray.getString(R.styleable.CheckBoxWithText_text)
-            } finally {
-                typedArray.recycle()
-            }
+        context.withStyledAttributes(attrs, R.styleable.CheckBoxWithText, defStyleAttr) {
+            isChecked = getBoolean(R.styleable.CheckBoxWithText_checked, false)
+            text = getString(R.styleable.CheckBoxWithText_text)
         }
     }
 

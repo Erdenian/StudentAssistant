@@ -24,9 +24,9 @@ import ru.erdenian.studentassistant.utils.liveDataOf
 class MainViewModel(application: Application) : AndroidViewModel(application), KodeinAware {
 
     override val kodein by kodein()
-    private val semesterRepository: SemesterRepository by instance()
-    private val lessonRepository: LessonRepository by instance()
-    private val homeworkRepository: HomeworkRepository by instance()
+    private val semesterRepository by instance<SemesterRepository>()
+    private val lessonRepository by instance<LessonRepository>()
+    private val homeworkRepository by instance<HomeworkRepository>()
 
     val allSemesters = semesterRepository.getAll()
 
@@ -59,11 +59,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application), K
         semester?.let { lessonRepository.get(it, day) } ?: liveDataOf(immutableSortedSetOf())
     }.toKtx()
 
-    fun getActualHomeworks() = selectedSemester.asLiveData.switchMap { semester ->
+    val actualHomeworks = selectedSemester.asLiveData.switchMap { semester ->
         semester?.let { homeworkRepository.getActual(it.id) } ?: liveDataOf(immutableSortedSetOf())
     }.toKtx()
 
-    fun getPastHomeworks() = selectedSemester.asLiveData.switchMap { semester ->
+    val pastHomeworks = selectedSemester.asLiveData.switchMap { semester ->
         semester?.let { homeworkRepository.getPast(it.id) } ?: liveDataOf(immutableSortedSetOf())
     }.toKtx()
 

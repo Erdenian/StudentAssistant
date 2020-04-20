@@ -11,9 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.startActivityForResult
-import org.jetbrains.anko.toast
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.ActivitySemesterEditorBinding
 import ru.erdenian.studentassistant.entity.Semester
@@ -23,6 +20,9 @@ import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
+import ru.erdenian.studentassistant.utils.startActivity
+import ru.erdenian.studentassistant.utils.startActivityForResult
+import ru.erdenian.studentassistant.utils.toast
 
 class SemesterEditorActivity : AppCompatActivity() {
 

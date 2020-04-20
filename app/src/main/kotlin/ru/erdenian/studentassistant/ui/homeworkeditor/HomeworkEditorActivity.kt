@@ -14,8 +14,6 @@ import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.toast
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.ActivityHomeworkEditorBinding
@@ -26,6 +24,8 @@ import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
+import ru.erdenian.studentassistant.utils.startActivity
+import ru.erdenian.studentassistant.utils.toast
 
 class HomeworkEditorActivity : AppCompatActivity() {
 
@@ -153,9 +153,7 @@ class HomeworkEditorActivity : AppCompatActivity() {
             viewModel.error.value?.let { error ->
                 toast(
                     when (error) {
-                        Error.EMPTY_DESCRIPTION -> {
-                            R.string.hea_error_empty_description
-                        }
+                        Error.EMPTY_DESCRIPTION -> R.string.hea_error_empty_description
                     }
                 )
             } ?: run {

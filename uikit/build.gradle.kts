@@ -60,11 +60,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
     // endregion
 
-    // region Core
-    implementation("org.jetbrains.anko:anko-common:0.10.8")
-    // endregion
-
     // region UI
-    api("com.google.android.material:material:1.2.0-alpha05")
+    api("com.google.android.material:material:1.2.0-alpha06")
     // endregion
 }

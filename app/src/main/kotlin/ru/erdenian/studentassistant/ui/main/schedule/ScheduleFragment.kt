@@ -7,12 +7,12 @@ import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import org.jetbrains.anko.colorAttr
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentScheduleBinding
 import ru.erdenian.studentassistant.ui.main.MainViewModel
 import ru.erdenian.studentassistant.utils.binding
+import ru.erdenian.studentassistant.utils.colorAttr
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
@@ -46,9 +46,17 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
         binding.viewPager.adapter = pagerAdapter
         binding.pagerTabStrip.apply {
-            val color = colorAttr(R.attr.colorPrimary)
+            val color = requireContext().colorAttr(R.attr.colorPrimary)
             setTextColor(color)
             tabIndicatorColor = color
+        }
+
+        binding.flipper.apply {
+            val scheduleIndex = 0
+            val noScheduleIndex = 1
+            viewModel.selectedSemester.observe(viewLifecycleOwner) { semester ->
+                displayedChild = if (semester != null) scheduleIndex else noScheduleIndex
+            }
         }
     }
 

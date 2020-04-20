@@ -8,22 +8,10 @@
     <!-- region Fragments -->
 
     <fragment
-        android:id="@+id/nav_fragment_no_schedule"
-        android:name="ru.erdenian.studentassistant.ui.main.noschedule.NoScheduleFragment"
-        android:label="@string/nsf_title"
-        tools:layout="@layout/fragment_no_schedule" />
-
-    <fragment
         android:id="@+id/nav_fragment_schedule"
         android:name="ru.erdenian.studentassistant.ui.main.schedule.ScheduleFragment"
         android:label="@string/sf_title"
         tools:layout="@layout/fragment_schedule" />
-
-    <fragment
-        android:id="@+id/nav_fragment_no_lessons"
-        android:name="ru.erdenian.studentassistant.ui.main.nolessons.NoLessonsFragment"
-        android:label="@string/nlf_title"
-        tools:layout="@layout/fragment_no_lessons" />
 
     <fragment
         android:id="@+id/nav_fragment_homeworks"
@@ -36,19 +24,9 @@
     <!-- region Global actions -->
 
     <action
-        android:id="@+id/nav_action_no_schedule"
-        app:destination="@id/nav_fragment_no_schedule"
-        app:popUpTo="@id/main" />
-
-    <action
         android:id="@+id/nav_action_schedule"
         app:destination="@id/nav_fragment_schedule"
         app:popUpTo="@+id/main" />
-
-    <action
-        android:id="@+id/nav_action_no_lessons"
-        app:destination="@id/nav_fragment_no_lessons"
-        app:popUpTo="@id/main" />
 
     <action
         android:id="@+id/nav_action_homeworks"

@@ -6,7 +6,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import org.jetbrains.anko.dimen
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.PageFragmentScheduleBinding
@@ -40,7 +39,11 @@ class SchedulePageFragment : Fragment(R.layout.page_fragment_schedule) {
         binding.lessons.apply {
             adapter = this@SchedulePageFragment.adapter
             layoutManager = LinearLayoutManager(view.context)
-            addItemDecoration(SpacingItemDecoration(dimen(R.dimen.cards_spacing)))
+            addItemDecoration(
+                SpacingItemDecoration(
+                    requireContext().resources.getDimensionPixelSize(R.dimen.cards_spacing)
+                )
+            )
         }
 
         @Suppress("UnsafeCast")

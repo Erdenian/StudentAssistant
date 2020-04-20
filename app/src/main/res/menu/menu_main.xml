@@ -4,6 +4,7 @@
 
     <item
         android:id="@+id/mm_add_schedule"
+        android:icon="@drawable/ic_plus"
         android:title="@string/ma_add"
         app:showAsAction="never" />
 

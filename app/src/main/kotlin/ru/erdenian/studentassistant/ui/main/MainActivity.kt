@@ -7,17 +7,15 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
 import androidx.navigation.findNavController
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.toast
+import androidx.navigation.ui.setupWithNavController
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.ActivityMainBinding
+import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.ui.adapter.SemestersSpinnerAdapter
-import ru.erdenian.studentassistant.ui.help.HelpActivity
 import ru.erdenian.studentassistant.ui.lessonseditor.LessonsEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
 import ru.erdenian.studentassistant.utils.getColorCompat
@@ -39,93 +37,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val owner = this
+        val navController = findNavController(R.id.nav_host_fragment)
 
-        binding.toolbar.also { toolbar ->
-            setSupportActionBar(toolbar)
-
-            val navController = findNavController(R.id.nav_host_fragment)
-
-            ActionBarDrawerToggle(
-                this, binding.drawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close
-            ).apply {
-                binding.drawer.addDrawerListener(this)
-                syncState()
-            }
-
-            viewModel.selectedSemester.observe(owner) { semester ->
-                binding.navigationView.menu.run {
-                    findItem(R.id.dm_homeworks).isEnabled = (semester != null)
-                    findItem(R.id.dm_alarm).isEnabled = (semester != null)
-                }
-            }
-
-            binding.navigationView.setNavigationItemSelectedListener { menuItem ->
-                binding.drawer.closeDrawer(GravityCompat.START)
-                when (menuItem.itemId) {
-                    R.id.dm_schedule -> {
-                        navController.navigate(
-                            if (viewModel.selectedSemester.value != null) {
-                                R.id.nav_action_schedule
-                            } else R.id.nav_action_no_schedule
-                        )
-                        true
-                    }
-                    R.id.dm_homeworks -> {
-                        navController.navigate(
-                            if (viewModel.hasLessons.value == true) {
-                                R.id.nav_action_homeworks
-                            } else R.id.nav_action_no_lessons
-                        )
-                        true
-                    }
-                    R.id.dm_alarm -> {
-                        toast("AlarmEditorActivity")
-                        true
-                    }
-                    R.id.dm_settings -> {
-                        toast(R.string.dm_settings)
-                        true
-                    }
-                    R.id.dm_help -> {
-                        startActivity<HelpActivity>()
-                        true
-                    }
-                    else -> false
-                }
-            }
-
-            navController.addOnDestinationChangedListener { _, destination, _ ->
-                when (destination.id) {
-                    R.id.nav_fragment_no_schedule, R.id.nav_fragment_schedule ->
-                        binding.navigationView.setCheckedItem(R.id.dm_schedule)
-                    R.id.nav_fragment_homeworks ->
-                        binding.navigationView.setCheckedItem(R.id.dm_homeworks)
-                }
-            }
-
-            viewModel.selectedSemester.observe(owner) { selectedSemester ->
-                val id = navController.currentDestination?.id
-                if ((id == R.id.nav_fragment_no_schedule) && (selectedSemester != null)) {
-                    navController.navigate(R.id.nav_action_schedule)
-                } else if ((id != R.id.nav_fragment_no_schedule) && (selectedSemester == null)) {
-                    navController.navigate(R.id.nav_action_no_schedule)
-                }
-            }
-
-            viewModel.hasLessons.observe(owner) { hasLessons ->
-                val currentId = navController.currentDestination?.id
-                if ((currentId == R.id.nav_fragment_no_lessons) && (hasLessons == true)) {
-                    navController.navigate(R.id.nav_action_homeworks)
-                } else if ((currentId == R.id.nav_fragment_homeworks) && (hasLessons == false)) {
-                    navController.navigate(R.id.nav_action_no_lessons)
-                }
-            }
-        }
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
-            viewModel.selectedSemester.observe(owner) { semester ->
-                title = semester?.name ?: getString(R.string.nsf_title)
+            val semesterObserver = Observer<Semester?> { semester ->
+                title = semester?.name ?: navController.currentDestination?.label
             }
+            viewModel.selectedSemester.observe(owner, semesterObserver)
+            navController.addOnDestinationChangedListener { _, _, _ ->
+                semesterObserver.onChanged(viewModel.selectedSemester.value)
+            }
+
             viewModel.allSemesters.observe(owner) { semesters ->
                 setDisplayShowTitleEnabled(semesters.size <= 1)
             }
@@ -158,6 +81,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        binding.navigationView.setupWithNavController(navController)
+
         viewModel.allSemesters.observe(this) { invalidateOptionsMenu() }
     }
 
@@ -169,6 +94,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         val isNotEmpty = viewModel.allSemesters.safeValue?.isNotEmpty() ?: return false
+        menu.findItem(R.id.mm_add_schedule).setShowAsAction(
+            if (isNotEmpty) MenuItem.SHOW_AS_ACTION_NEVER else MenuItem.SHOW_AS_ACTION_IF_ROOM
+        )
         menu.findItem(R.id.mm_edit_schedule).isVisible = isNotEmpty
         return true
     }
@@ -194,10 +122,5 @@ class MainActivity : AppCompatActivity() {
             )
         }
         super.onActivityResult(requestCode, resultCode, data)
-    }
-
-    override fun onBackPressed() = binding.drawer.run {
-        if (isDrawerOpen(GravityCompat.START)) closeDrawer(GravityCompat.START)
-        else super.onBackPressed()
     }
 }

@@ -65,11 +65,10 @@ dependencies {
     // endregion
 
     // region AndroidX
-    val navigationVersion = "2.2.1"
+    val navigationVersion = "2.2.2"
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
 
-    implementation("androidx.drawerlayout:drawerlayout:1.0.0")
     implementation("androidx.viewpager:viewpager:1.0.0")
     // endregion
 
@@ -77,8 +76,6 @@ dependencies {
     val kodeinVersion: String by project
     implementation("org.kodein.di:kodein-di-generic-jvm:$kodeinVersion")
     implementation("org.kodein.di:kodein-di-framework-android-x:$kodeinVersion")
-
-    implementation("org.jetbrains.anko:anko-common:0.10.8")
     // endregion
 
     // region UI
