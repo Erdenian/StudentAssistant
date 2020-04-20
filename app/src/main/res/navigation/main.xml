@@ -14,12 +14,6 @@
         tools:layout="@layout/fragment_schedule" />
 
     <fragment
-        android:id="@+id/nav_fragment_no_lessons"
-        android:name="ru.erdenian.studentassistant.ui.main.nolessons.NoLessonsFragment"
-        android:label="@string/nlf_title"
-        tools:layout="@layout/fragment_no_lessons" />
-
-    <fragment
         android:id="@+id/nav_fragment_homeworks"
         android:name="ru.erdenian.studentassistant.ui.main.homeworks.HomeworksFragment"
         android:label="@string/hf_title"
@@ -33,11 +27,6 @@
         android:id="@+id/nav_action_schedule"
         app:destination="@id/nav_fragment_schedule"
         app:popUpTo="@+id/main" />
-
-    <action
-        android:id="@+id/nav_action_no_lessons"
-        app:destination="@id/nav_fragment_no_lessons"
-        app:popUpTo="@id/main" />
 
     <action
         android:id="@+id/nav_action_homeworks"

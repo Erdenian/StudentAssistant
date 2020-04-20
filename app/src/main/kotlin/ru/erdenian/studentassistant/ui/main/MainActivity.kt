@@ -81,13 +81,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
-        viewModel.selectedSemester.observe(owner) { semester ->
-            binding.navigationView.menu.run {
-                findItem(R.id.bm_homeworks).isEnabled = (semester != null)
-            }
-        }
-
         binding.navigationView.setupWithNavController(navController)
 
         viewModel.allSemesters.observe(this) { invalidateOptionsMenu() }

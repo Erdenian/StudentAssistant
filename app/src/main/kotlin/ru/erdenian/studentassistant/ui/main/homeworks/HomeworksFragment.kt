@@ -33,5 +33,13 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
                 requireContext(), checkNotNull(viewModel.selectedSemester.value).id
             )
         }
+
+        binding.flipper.apply {
+            val hasLessonsIndex = 0
+            val noLessonsIndex = 1
+            viewModel.hasLessons.observe(viewLifecycleOwner) { hasLessons ->
+                displayedChild = if (hasLessons != null) hasLessonsIndex else noLessonsIndex
+            }
+        }
     }
 }
