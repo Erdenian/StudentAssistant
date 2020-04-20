@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bm_schedule"
+        android:icon="@drawable/ic_clock"
+        android:title="@string/ma_schedule" />
+
+    <item
+        android:id="@+id/bm_homeworks"
+        android:icon="@drawable/ic_book_open_variant"
+        android:title="@string/ma_homeworks" />
+
+    <item
+        android:id="@+id/bm_help"
+        android:icon="@drawable/ic_help_circle"
+        android:title="@string/ma_help" />
+
+</menu>
