@@ -89,7 +89,7 @@ dependencies {
     // region Kotlin
     val kotlinVersion: String by project
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.4")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5")
     // endregion
 
     // region AndroidX
