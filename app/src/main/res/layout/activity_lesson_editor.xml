@@ -19,13 +19,11 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/subject_name_layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <AutoCompleteTextView
                 android:id="@+id/subject_name"
-                style="@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/lea_subject_name"
@@ -39,14 +37,12 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp">
 
             <AutoCompleteTextView
                 android:id="@+id/lesson_type"
-                style="@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/lea_type"
@@ -56,14 +52,12 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp">
 
             <MultiAutoCompleteTextView
                 android:id="@+id/teachers"
-                style="@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/lea_teachers"
@@ -73,14 +67,12 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp">
 
             <MultiAutoCompleteTextView
                 android:id="@+id/classrooms"
-                style="@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/lea_classrooms"
@@ -97,6 +89,7 @@
 
             <Button
                 android:id="@+id/start_time"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="09:00" />
@@ -109,6 +102,7 @@
 
             <Button
                 android:id="@+id/end_time"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="10:30" />

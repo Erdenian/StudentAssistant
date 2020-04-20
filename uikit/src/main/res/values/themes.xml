@@ -44,6 +44,8 @@
 
         <!-- region Component styles -->
         <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
+        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+        <item name="autoCompleteTextViewStyle">@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox</item>
         <!-- endregion -->
 
         <!-- region Remap legacy AppCompat attributes to MaterialComponent attributes -->
