@@ -10,15 +10,11 @@
     <string name="ma_homeworks">Домашние задания</string>
     <string name="ma_help">Справка</string>
 
-    <!-- NoScheduleFragment -->
-    <string name="nsf_title">Расписание</string>
-    <string name="nsf_download">Загрузить расписание с сервера</string>
-    <string name="nsf_create">Добавить расписание</string>
-
     <!-- ScheduleFragment -->
     <string name="sf_title">Расписание</string>
     <string name="sf_calendar">Календарь</string>
     <string name="sf_free_day">Выходной</string>
+    <string name="sf_no_schedule">Здесь пока пусто</string>
 
     <!-- NoLessonsFragment -->
     <string name="nlf_title">Домашние задания</string>

@@ -50,6 +50,12 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             setTextColor(color)
             tabIndicatorColor = color
         }
+
+        viewModel.selectedSemester.observe(viewLifecycleOwner) { semester ->
+            val scheduleIndex = 0
+            val noScheduleIndex = 1
+            binding.flipper.displayedChild = if (semester != null) scheduleIndex else noScheduleIndex
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
