@@ -247,7 +247,7 @@ formatting:
     continuationIndentSize: 4
   MaximumLineLength:
     active: false
-    maxLineLength: 100
+    maxLineLength: 130
   ModifierOrdering:
     active: true
     autoCorrect: true
@@ -535,7 +535,7 @@ style:
   MaxLineLength:
     active: true
     excludes: "**/*Dao.kt"
-    maxLineLength: 100
+    maxLineLength: 130
     excludePackageStatements: true
     excludeImportStatements: true
     excludeCommentStatements: false
