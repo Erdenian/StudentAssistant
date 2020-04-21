@@ -56,8 +56,7 @@ class LessonCard @JvmOverloads constructor(
         binding.startTime.text = startTime.toString(TIME_FORMATTER)
         binding.endTime.text = endTime.toString(TIME_FORMATTER)
 
-        binding.classroomsParent.visibility =
-            if (classrooms.isNotEmpty()) View.VISIBLE else View.GONE
+        binding.classroomsParent.visibility = if (classrooms.isNotEmpty()) View.VISIBLE else View.GONE
         binding.classrooms.text = classrooms.joinToString()
 
         binding.type.visibility = if (type?.isNotBlank() == true) View.VISIBLE else View.GONE
