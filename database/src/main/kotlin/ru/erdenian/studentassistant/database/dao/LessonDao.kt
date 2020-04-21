@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 import org.joda.time.Period
-import ru.erdenian.studentassistant.entity.Converters
+import ru.erdenian.studentassistant.database.Converters
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.entity.LessonRepeat
 import ru.erdenian.studentassistant.entity.Semester
