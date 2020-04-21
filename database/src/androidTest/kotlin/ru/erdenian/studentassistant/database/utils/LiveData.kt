@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.repository.utils
+package ru.erdenian.studentassistant.database.utils
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
