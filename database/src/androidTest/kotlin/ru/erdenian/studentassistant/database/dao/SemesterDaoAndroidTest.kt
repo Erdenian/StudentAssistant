@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.repository.database.dao
+package ru.erdenian.studentassistant.database.dao
 
 import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.runBlocking
@@ -8,10 +8,10 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.kodein.di.generic.instance
+import ru.erdenian.studentassistant.database.ScheduleDatabase
+import ru.erdenian.studentassistant.database.di.databaseKodein
+import ru.erdenian.studentassistant.database.utils.await
 import ru.erdenian.studentassistant.entity.Semester
-import ru.erdenian.studentassistant.repository.database.ScheduleDatabase
-import ru.erdenian.studentassistant.repository.di.databaseKodein
-import ru.erdenian.studentassistant.repository.utils.await
 
 internal class SemesterDaoAndroidTest {
 
