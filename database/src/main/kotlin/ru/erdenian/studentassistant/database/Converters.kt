@@ -1,10 +1,14 @@
-package ru.erdenian.studentassistant.entity
+package ru.erdenian.studentassistant.database
 
 import androidx.room.TypeConverter
 import org.joda.time.Days
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 import org.joda.time.Period
+import ru.erdenian.studentassistant.entity.ImmutableSortedSet
+import ru.erdenian.studentassistant.entity.LessonRepeat
+import ru.erdenian.studentassistant.entity.immutableSortedSetOf
+import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 
 class Converters {
 
@@ -54,10 +58,9 @@ class Converters {
     @TypeConverter
     fun stringToLessonRepeat(value: String?): LessonRepeat? =
         if (value == null) null else {
-            if (value.contains('-')) LessonRepeat.ByDates(
-                value.split(SEPARATOR).map { LocalDate.parse(it) }.toImmutableSortedSet()
-            )
-            else {
+            if (value.contains('-')) {
+                LessonRepeat.ByDates(value.split(SEPARATOR).map { LocalDate.parse(it) }.toImmutableSortedSet())
+            } else {
                 val separated = value.split(SEPARATOR)
                 LessonRepeat.ByWeekday(
                     separated[0].toInt(),
