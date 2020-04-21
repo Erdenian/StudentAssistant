@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="primary">#1976d2</color>
+    <color name="primary">#60B0FF</color>
     <color name="on_primary">#ffffff</color>
     <color name="primary_variant">@color/primary</color>
 
@@ -9,10 +9,10 @@
     <color name="on_secondary">#ffffff</color>
     <color name="secondary_variant">#a00037</color>
 
-    <color name="background">#252525</color>
+    <color name="background">#202124</color>
     <color name="on_background">#f6f6fb</color>
 
-    <color name="surface">#323232</color>
+    <color name="surface">#171819</color>
     <color name="on_surface">#ffffff</color>
 
     <color name="error">#d32f2f</color>

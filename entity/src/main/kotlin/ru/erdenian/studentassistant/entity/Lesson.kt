@@ -44,13 +44,13 @@ data class Lesson(
     val subjectName: String,
 
     @ColumnInfo(name = "type")
-    val type: String? = null,
+    val type: String,
 
     @ColumnInfo(name = "teachers")
-    val teachers: ImmutableSortedSet<String> = immutableSortedSetOf(),
+    val teachers: ImmutableSortedSet<String>,
 
     @ColumnInfo(name = "classrooms")
-    val classrooms: ImmutableSortedSet<String> = immutableSortedSetOf(),
+    val classrooms: ImmutableSortedSet<String>,
 
     @ColumnInfo(name = "start_time")
     val startTime: LocalTime,
@@ -71,7 +71,7 @@ data class Lesson(
 
     init {
         require(subjectName.isNotBlank()) { "Отсутствует название предмета" }
-        require(type?.isNotBlank() ?: true)
+        require(type.isEmpty() || type.isNotBlank())
         require(teachers.all { it.isNotBlank() })
         require(classrooms.all { it.isNotBlank() })
         require(startTime < endTime) { "Неверно заданы даты: $startTime - $endTime" }
