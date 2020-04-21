@@ -70,7 +70,6 @@ android {
 dependencies {
     // region Private
     api(project(":entity"))
-    implementation(project(":database"))
     implementation(project(":utils"))
     // endregion
 
@@ -96,6 +95,10 @@ dependencies {
     // region AndroidX
     val lifecycleVersion: String by project
     api("androidx.lifecycle:lifecycle-livedata:$lifecycleVersion")
+
+    val roomVersion: String by project
+    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
     // endregion
 
     // region Core

@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.repository.database.dao
+package ru.erdenian.studentassistant.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
