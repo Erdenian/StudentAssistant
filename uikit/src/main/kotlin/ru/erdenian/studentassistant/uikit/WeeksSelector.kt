@@ -34,9 +34,7 @@ class WeeksSelector @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private val binding = WeeksSelectorBinding.inflate(
-        requireNotNull(context.getSystemService()), this
-    )
+    private val binding = WeeksSelectorBinding.inflate(requireNotNull(context.getSystemService()), this)
 
     /**
      * Список предустановленных вариантов.
