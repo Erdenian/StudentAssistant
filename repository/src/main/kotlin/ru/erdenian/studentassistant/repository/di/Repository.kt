@@ -12,7 +12,7 @@ import ru.erdenian.studentassistant.repository.LessonRepository
 import ru.erdenian.studentassistant.repository.SemesterRepository
 
 fun repositoryModule(application: Application) = Kodein.Module(name = "Repository") {
-    val db = databaseKodein(application)
+    val db = databaseKodein(application, "schedule.db")
 
     bind() from singleton(ref = weakReference) { SemesterRepository(db.instance()) }
     bind() from singleton(ref = weakReference) { LessonRepository(db.instance()) }
