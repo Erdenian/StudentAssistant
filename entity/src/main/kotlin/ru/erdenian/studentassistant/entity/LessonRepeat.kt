@@ -40,9 +40,7 @@ sealed class LessonRepeat : Parcelable {
     data class ByWeekday(val weekday: Int, val weeks: List<Boolean>) : LessonRepeat() {
 
         init {
-            require(weekday in DateTimeConstants.MONDAY..DateTimeConstants.SUNDAY) {
-                "Неверный день недели: $weekday"
-            }
+            require(weekday in DateTimeConstants.MONDAY..DateTimeConstants.SUNDAY) { "Неверный день недели: $weekday" }
             require(weeks.isNotEmpty()) { "Список недель пуст" }
             require(weeks.contains(true)) { "Нет повторений ни на одной неделе" }
         }
@@ -61,9 +59,7 @@ sealed class LessonRepeat : Parcelable {
          * @since 0.0.0
          */
         fun repeatsOnWeekday(weekday: Int): Boolean {
-            require(weekday in DateTimeConstants.MONDAY..DateTimeConstants.SUNDAY) {
-                "Неверный день недели: $weekday"
-            }
+            require(weekday in DateTimeConstants.MONDAY..DateTimeConstants.SUNDAY) { "Неверный день недели: $weekday" }
             return (weekday == this.weekday)
         }
     }

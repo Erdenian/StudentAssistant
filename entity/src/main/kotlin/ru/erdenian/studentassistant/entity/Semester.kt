@@ -79,8 +79,7 @@ data class Semester(
      * @param day день
      * @return номер недели, содержащей этот день (< 0, если [day] < [firstDay])
      */
-    fun getWeekNumber(day: LocalDate) =
-        Weeks.weeksBetween(firstWeekMonday, day).weeks - if (day >= firstWeekMonday) 0 else 1
+    fun getWeekNumber(day: LocalDate) = Weeks.weeksBetween(firstWeekMonday, day).weeks - if (day >= firstWeekMonday) 0 else 1
 
     override fun compareTo(other: Semester) = compareValuesBy(
         this, other,
