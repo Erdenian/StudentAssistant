@@ -13,7 +13,7 @@
     <!-- ScheduleFragment -->
     <string name="sf_title">Расписание</string>
     <string name="sf_calendar">Календарь</string>
-    <string name="sf_no_schedule">Здесь пока пусто</string>
+    <string name="sf_no_schedule">Здесь пока пусто. Добавьте расписание своего университета или школы.</string>
     <string name="sf_free_day">Выходной</string>
 
     <!-- HomeworksFragment -->
