@@ -9,6 +9,5 @@ import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 abstract class BaseRepository {
 
     protected fun <T : Comparable<T>> List<T>.map() = toImmutableSortedSet()
-    protected fun <T : Comparable<T>> LiveData<List<T>>.map() =
-        map { it.toImmutableSortedSet() }.toKtx()
+    protected fun <T : Comparable<T>> LiveData<List<T>>.map() = map { it.toImmutableSortedSet() }.toKtx()
 }

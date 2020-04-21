@@ -70,12 +70,11 @@ internal class LessonDaoAndroidTest {
 
         lessonDao.insert(
             Lesson(
-                "name",
-                startTime = LocalTime.MIDNIGHT,
-                endTime = LocalTime.MIDNIGHT.plusHours(2),
-                lessonRepeat = LessonRepeat.ByDates(immutableSortedSetOf(LocalDate.now())),
-                semesterId = semesterId,
-                id = 1L
+                "name", "",
+                immutableSortedSetOf(), immutableSortedSetOf(),
+                LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(2),
+                LessonRepeat.ByDates(immutableSortedSetOf(LocalDate.now())),
+                semesterId, 1L
             )
         )
         assertEquals(
@@ -85,22 +84,20 @@ internal class LessonDaoAndroidTest {
 
         lessonDao.insert(
             Lesson(
-                "name",
-                startTime = LocalTime.MIDNIGHT,
-                endTime = LocalTime.MIDNIGHT.plusHours(3),
-                lessonRepeat = LessonRepeat.ByDates(immutableSortedSetOf(LocalDate.now())),
-                semesterId = semesterId,
-                id = 2L
+                "name", "",
+                immutableSortedSetOf(), immutableSortedSetOf(),
+                LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(3),
+                LessonRepeat.ByDates(immutableSortedSetOf(LocalDate.now())),
+                semesterId, 2L
             )
         )
         lessonDao.insert(
             Lesson(
-                "name",
-                startTime = LocalTime.MIDNIGHT,
-                endTime = LocalTime.MIDNIGHT.plusHours(3),
-                lessonRepeat = LessonRepeat.ByDates(immutableSortedSetOf(LocalDate.now())),
-                semesterId = semesterId,
-                id = 3L
+                "name", "",
+                immutableSortedSetOf(), immutableSortedSetOf(),
+                LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(3),
+                LessonRepeat.ByDates(immutableSortedSetOf(LocalDate.now())),
+                semesterId, 3L
             )
         )
         assertEquals(
@@ -121,12 +118,10 @@ internal class LessonDaoAndroidTest {
 
         lessonDao.insert(
             Lesson(
-                "name",
-                startTime = LocalTime(9, 0),
-                endTime = LocalTime(11, 30),
-                lessonRepeat = lessonRepeat,
-                semesterId = semesterId,
-                id = 1L
+                "name", "",
+                immutableSortedSetOf(), immutableSortedSetOf(),
+                LocalTime(9, 0), LocalTime(11, 30),
+                lessonRepeat, semesterId, 1L
             )
         )
         assertEquals(
@@ -136,12 +131,10 @@ internal class LessonDaoAndroidTest {
 
         lessonDao.insert(
             Lesson(
-                "name",
-                startTime = LocalTime(11, 50),
-                endTime = LocalTime(14, 20),
-                lessonRepeat = lessonRepeat,
-                semesterId = semesterId,
-                id = 2L
+                "name", "",
+                immutableSortedSetOf(), immutableSortedSetOf(),
+                LocalTime(11, 50), LocalTime(14, 20),
+                lessonRepeat, semesterId, 2L
             )
         )
         assertEquals(
@@ -151,12 +144,10 @@ internal class LessonDaoAndroidTest {
 
         lessonDao.insert(
             Lesson(
-                "name",
-                startTime = LocalTime(14, 40),
-                endTime = LocalTime(17, 10),
-                lessonRepeat = lessonRepeat,
-                semesterId = semesterId,
-                id = 3L
+                "name", "",
+                immutableSortedSetOf(), immutableSortedSetOf(),
+                LocalTime(14, 40), LocalTime(17, 10),
+                lessonRepeat, semesterId, 3L
             )
         )
         assertEquals(
@@ -166,12 +157,10 @@ internal class LessonDaoAndroidTest {
 
         lessonDao.insert(
             Lesson(
-                "name",
-                startTime = LocalTime(17, 20),
-                endTime = LocalTime(17, 50),
-                lessonRepeat = lessonRepeat,
-                semesterId = semesterId,
-                id = 4L
+                "name", "",
+                immutableSortedSetOf(), immutableSortedSetOf(),
+                LocalTime(17, 20), LocalTime(17, 50),
+                lessonRepeat, semesterId, 4L
             )
         )
         assertEquals(
@@ -181,22 +170,18 @@ internal class LessonDaoAndroidTest {
 
         lessonDao.insert(
             Lesson(
-                "name",
-                startTime = LocalTime(18, 0),
-                endTime = LocalTime(18, 30),
-                lessonRepeat = lessonRepeat,
-                semesterId = semesterId,
-                id = 5L
+                "name", "",
+                immutableSortedSetOf(), immutableSortedSetOf(),
+                LocalTime(18, 0), LocalTime(18, 30),
+                lessonRepeat, semesterId, 5L
             )
         )
         lessonDao.insert(
             Lesson(
-                "name",
-                startTime = LocalTime(18, 40),
-                endTime = LocalTime(19, 10),
-                lessonRepeat = lessonRepeat,
-                semesterId = semesterId,
-                id = 6L
+                "name", "",
+                immutableSortedSetOf(), immutableSortedSetOf(),
+                LocalTime(18, 40), LocalTime(19, 10),
+                lessonRepeat, semesterId, 6L
             )
         )
         assertEquals(
