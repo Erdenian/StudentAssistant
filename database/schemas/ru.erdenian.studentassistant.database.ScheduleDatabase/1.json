@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "f4add25471a8c41ee0a1f03dfaa773e0",
+    "identityHash": "cdafa11bdd1becb1609ba4ae69ea188a",
     "entities": [
       {
         "tableName": "semesters",
@@ -44,7 +44,7 @@
       },
       {
         "tableName": "lessons",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`subject_name` TEXT NOT NULL, `type` TEXT, `teachers` TEXT NOT NULL, `classrooms` TEXT NOT NULL, `start_time` INTEGER NOT NULL, `end_time` INTEGER NOT NULL, `lesson_repeat` TEXT NOT NULL, `semester_id` INTEGER NOT NULL, `_id` INTEGER NOT NULL, PRIMARY KEY(`_id`), FOREIGN KEY(`semester_id`) REFERENCES `semesters`(`_id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`subject_name` TEXT NOT NULL, `type` TEXT NOT NULL, `teachers` TEXT NOT NULL, `classrooms` TEXT NOT NULL, `start_time` INTEGER NOT NULL, `end_time` INTEGER NOT NULL, `lesson_repeat` TEXT NOT NULL, `semester_id` INTEGER NOT NULL, `_id` INTEGER NOT NULL, PRIMARY KEY(`_id`), FOREIGN KEY(`semester_id`) REFERENCES `semesters`(`_id`) ON UPDATE CASCADE ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "subjectName",
@@ -56,7 +56,7 @@
             "fieldPath": "type",
             "columnName": "type",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "teachers",
@@ -200,7 +200,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f4add25471a8c41ee0a1f03dfaa773e0')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cdafa11bdd1becb1609ba4ae69ea188a')"
     ]
   }
 }

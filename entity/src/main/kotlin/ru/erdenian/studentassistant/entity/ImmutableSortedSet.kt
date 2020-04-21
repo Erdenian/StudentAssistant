@@ -21,12 +21,10 @@ class ImmutableSortedSet<E : Comparable<E>>(
 
     @Suppress("UNCHECKED_CAST")
     private constructor(parcel: Parcel) : this(
-        (parcel.readArrayList(
-            ImmutableSortedSet<E>::value.javaClass.classLoader
-        ) as List<E>).toSortedSet()
+        (parcel.readArrayList(ImmutableSortedSet<E>::value.javaClass.classLoader) as List<E>).toSortedSet()
     )
 
-    val list: SortedList<E> by lazy { value.toSortedList() }
+    val list: List<E> by lazy { value.toList() }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeList(list)
@@ -63,25 +61,4 @@ fun <E : Comparable<E>> Collection<E>.toImmutableSortedSet() = ImmutableSortedSe
  */
 fun <E : Comparable<E>> Sequence<E>.toImmutableSortedSet() = ImmutableSortedSet(toSortedSet())
 
-fun <T : Comparable<T>> immutableSortedSetOf(vararg elements: T) =
-    ImmutableSortedSet(elements.toSortedSet())
-
-class SortedList<E : Comparable<E>>(private val value: List<E>) : List<E> by value.sorted()
-
-/**
- * Преобразовывает коллекцию в [SortedList].
- *
- * @return SortedList, содержащий те же элементы, что и коллекция
- * @author Ilya Solovyov
- * @since 0.3.0
- */
-fun <E : Comparable<E>> Collection<E>.toSortedList() = SortedList(toList())
-
-/**
- * Преобразовывает [Sequence] в [SortedList].
- *
- * @return SortedList, содержащий те же элементы, что и коллекция
- * @author Ilya Solovyov
- * @since 0.3.0
- */
-fun <E : Comparable<E>> Sequence<E>.toSortedList() = SortedList(toList())
+fun <T : Comparable<T>> immutableSortedSetOf(vararg elements: T) = ImmutableSortedSet(elements.toSortedSet())
