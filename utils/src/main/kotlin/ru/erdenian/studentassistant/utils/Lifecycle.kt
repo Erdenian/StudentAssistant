@@ -15,19 +15,13 @@ import com.shopify.livedataktx.MutableLiveDataKtx
 
 // region distinctUntilChanged
 
-fun <T> LiveData<T>.distinctUntilChanged(checker: (newValue: T) -> Boolean) =
-    MediatorLiveData<T>().apply {
-        addSource(this@distinctUntilChanged.distinctUntilChanged()) { newValue ->
-            if (!checker(newValue)) value = newValue
-        }
-    }
+fun <T> LiveData<T>.distinctUntilChanged(checker: (newValue: T) -> Boolean) = MediatorLiveData<T>().apply {
+    addSource(this@distinctUntilChanged.distinctUntilChanged()) { if (!checker(it)) value = it }
+}
 
-fun <T> LiveDataKtx<T>.distinctUntilChanged(checker: (newValue: T) -> Boolean) =
-    MediatorLiveDataKtx<T>().apply {
-        addSource(this@distinctUntilChanged.distinctUntilChanged(), Observer { newValue ->
-            if (!checker(newValue)) value = newValue
-        })
-    }
+fun <T> LiveDataKtx<T>.distinctUntilChanged(checker: (newValue: T) -> Boolean) = MediatorLiveDataKtx<T>().apply {
+    addSource(this@distinctUntilChanged.distinctUntilChanged(), Observer { if (!checker(it)) value = it })
+}
 
 // endregion
 
@@ -45,11 +39,10 @@ fun <T> T.toLiveData(): LiveDataKtx<T> = MutableLiveDataKtx<T>().apply { value =
 
 fun <T> liveDataOf(value: T): LiveDataKtx<T> = MutableLiveDataKtx<T>().also { it.value = value }
 
-fun <T> ViewModel.liveDataOf(value: T, source: LiveData<T>): LiveData<T> =
-    liveData(viewModelScope.coroutineContext) {
-        emit(value)
-        emitSource(source)
-    }
+fun <T> ViewModel.liveDataOf(value: T, source: LiveData<T>): LiveData<T> = liveData(viewModelScope.coroutineContext) {
+    emit(value)
+    emitSource(source)
+}
 
 @Suppress("UnsafeCast")
 val <T, L : LiveDataKtx<T>> L.asLiveData

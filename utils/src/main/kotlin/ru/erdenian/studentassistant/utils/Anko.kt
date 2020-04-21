@@ -33,8 +33,5 @@ inline fun <reified T : Activity> Activity.startActivityForResult(
     Intent(this, T::class.java).apply { putExtras(bundleOf(*params)) }, requestCode
 )
 
-fun Context.toast(@StringRes resId: Int, length: Int = Toast.LENGTH_SHORT) =
-    Toast.makeText(this, resId, length).show()
-
-fun Context.toast(text: CharSequence, length: Int = Toast.LENGTH_SHORT) =
-    Toast.makeText(this, text, length).show()
+fun Context.toast(@StringRes resId: Int, length: Int = Toast.LENGTH_SHORT) = Toast.makeText(this, resId, length).show()
+fun Context.toast(text: CharSequence, length: Int = Toast.LENGTH_SHORT) = Toast.makeText(this, text, length).show()

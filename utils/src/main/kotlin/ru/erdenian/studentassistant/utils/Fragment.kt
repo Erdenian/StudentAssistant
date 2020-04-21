@@ -17,9 +17,7 @@ private class BindingDelegate<T : ViewBinding>(
     private var value: T? = null
 
     init {
-        fragment.viewLifecycleOwnerLiveData.observe(fragment) { lifecycleOwner ->
-            lifecycleOwner.lifecycle.addObserver(this)
-        }
+        fragment.viewLifecycleOwnerLiveData.observe(fragment) { it.lifecycle.addObserver(this) }
     }
 
     @Suppress("unused")
