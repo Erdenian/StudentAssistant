@@ -104,25 +104,16 @@ abstract class LessonDao {
     abstract fun getSubjects(semesterId: Long): LiveData<List<String>>
 
     @Transaction
-    open suspend fun renameSubject(semesterId: Long, oldName: String, newName: String) =
-        withContext(Dispatchers.IO) {
-            renameLessonsSubject(semesterId, oldName, newName)
-            renameHomeworksSubject(semesterId, oldName, newName)
-        }
+    open suspend fun renameSubject(semesterId: Long, oldName: String, newName: String) = withContext(Dispatchers.IO) {
+        renameLessonsSubject(semesterId, oldName, newName)
+        renameHomeworksSubject(semesterId, oldName, newName)
+    }
 
     @Query("UPDATE lessons SET subject_name = :newName WHERE semester_id = :semesterId AND subject_name = :oldName")
-    protected abstract suspend fun renameLessonsSubject(
-        semesterId: Long,
-        oldName: String,
-        newName: String
-    )
+    protected abstract suspend fun renameLessonsSubject(semesterId: Long, oldName: String, newName: String)
 
     @Query("UPDATE homeworks SET subject_name = :newName WHERE semester_id = :semesterId AND subject_name = :oldName")
-    protected abstract suspend fun renameHomeworksSubject(
-        semesterId: Long,
-        oldName: String,
-        newName: String
-    )
+    protected abstract suspend fun renameHomeworksSubject(semesterId: Long, oldName: String, newName: String)
 
     // endregion
 
@@ -134,26 +125,24 @@ abstract class LessonDao {
     @Query("SELECT teachers FROM lessons WHERE semester_id = :semesterId")
     protected abstract fun getTeachersRaw(semesterId: Long): LiveData<List<String>>
 
-    fun getTeachers(semesterId: Long): LiveData<List<String>> =
-        getTeachersRaw(semesterId).map { rawTeachers ->
-            rawTeachers.asSequence()
-                .flatMap { it.splitToSequence(Converters.SEPARATOR) }
-                .distinct()
-                .sorted()
-                .toList()
-        }
+    fun getTeachers(semesterId: Long): LiveData<List<String>> = getTeachersRaw(semesterId).map { rawTeachers ->
+        rawTeachers.asSequence()
+            .flatMap { it.splitToSequence(Converters.SEPARATOR) }
+            .distinct()
+            .sorted()
+            .toList()
+    }
 
     @Query("SELECT classrooms FROM lessons WHERE semester_id = :semesterId")
     protected abstract fun getClassroomsRaw(semesterId: Long): LiveData<List<String>>
 
-    fun getClassrooms(semesterId: Long): LiveData<List<String>> =
-        getClassroomsRaw(semesterId).map { rawClassrooms ->
-            rawClassrooms.asSequence()
-                .flatMap { it.splitToSequence(Converters.SEPARATOR) }
-                .distinct()
-                .sorted()
-                .toList()
-        }
+    fun getClassrooms(semesterId: Long): LiveData<List<String>> = getClassroomsRaw(semesterId).map { rawClassrooms ->
+        rawClassrooms.asSequence()
+            .flatMap { it.splitToSequence(Converters.SEPARATOR) }
+            .distinct()
+            .sorted()
+            .toList()
+    }
 
     @Query("SELECT IFNULL((SELECT end_time - start_time as duration FROM lessons WHERE semester_id = :semesterId GROUP BY duration ORDER BY COUNT(duration) DESC LIMIT 1), $DEFAULT_DURATION_MILLIS)")
     abstract suspend fun getLessonLength(semesterId: Long): Period
@@ -161,17 +150,13 @@ abstract class LessonDao {
     @Transaction
     open suspend fun getNextStartTime(semesterId: Long, weekday: Int): LocalTime =
         withContext(Dispatchers.IO) {
-            val lessons = getNextStartTimeRaw(semesterId).filter { lesson ->
-                lesson.lessonRepeat is LessonRepeat.ByWeekday
-            }
+            val lessons = getNextStartTimeRaw(semesterId).filter { it.lessonRepeat is LessonRepeat.ByWeekday }
             if (lessons.isEmpty()) DEFAULT_START_TIME
             else {
                 val breakLength = lessons.asSequence()
                     .groupBy { it.lessonRepeat }
                     .flatMap { (_, lessons) ->
-                        lessons.zipWithNext().map { (a, b) ->
-                            Period.fieldDifference(a.endTime, b.startTime)
-                        }
+                        lessons.zipWithNext().map { (a, b) -> Period.fieldDifference(a.endTime, b.startTime) }
                     }.groupingBy { it.normalizedStandard() }
                     .eachCount()
                     .maxBy { it.value }?.key ?: DEFAULT_BREAK_LENGTH

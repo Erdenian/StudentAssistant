@@ -65,11 +65,7 @@ interface HomeworkDao {
     // region By subject name and deadline
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName AND deadline >= :today ORDER BY deadline, _id")
-    fun getActual(
-        semesterId: Long,
-        subjectName: String,
-        today: LocalDate = LocalDate.now()
-    ): LiveData<List<Homework>>
+    fun getActual(semesterId: Long, subjectName: String, today: LocalDate = LocalDate.now()): LiveData<List<Homework>>
 
     // endregion
 }
