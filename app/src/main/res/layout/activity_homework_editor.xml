@@ -17,7 +17,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:hint="@string/hea_subject"
-        app:editable="true" />
+        app:editable="true"
+        app:singleLine="true" />
 
     <EditText
         android:id="@+id/description"

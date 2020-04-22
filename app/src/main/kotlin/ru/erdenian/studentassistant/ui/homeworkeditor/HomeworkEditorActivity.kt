@@ -77,12 +77,13 @@ class HomeworkEditorActivity : AppCompatActivity() {
         val owner = this
 
         binding.subjectName.apply {
-            viewModel.existingSubjects.observe(owner) { subjects ->
-                setAdapter(object : ExposedDropdownMenu.Adapter<String> {
-                    override val items = subjects.list
-                    override val onTextChanged = { text: String, item: String? -> viewModel.subjectName.value = text }
-                })
+            val adapter = ExposedDropdownMenu.createAdapter(context).apply {
+                viewModel.existingSubjects.observe(owner) { items = it.list }
             }
+            setAdapter(adapter)
+
+            onTextChangedListener = { text, _ -> viewModel.subjectName.value = text }
+
             viewModel.subjectName.distinctUntilChanged { value ->
                 value == text?.toString() ?: ""
             }.observe(owner) { text = it }
