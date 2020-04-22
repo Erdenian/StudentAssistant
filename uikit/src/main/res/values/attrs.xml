@@ -3,6 +3,7 @@
 
     <declare-styleable name="ExposedDropdownMenu">
         <attr name="editable" format="boolean" />
+        <attr name="singleLine" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="CheckBoxWithText">
