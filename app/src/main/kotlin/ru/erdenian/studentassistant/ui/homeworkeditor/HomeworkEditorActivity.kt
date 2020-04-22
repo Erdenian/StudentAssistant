@@ -4,13 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
@@ -20,6 +16,7 @@ import ru.erdenian.studentassistant.databinding.ActivityHomeworkEditorBinding
 import ru.erdenian.studentassistant.entity.Homework
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorViewModel.Error
+import ru.erdenian.studentassistant.uikit.ExposedDropdownMenu
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.setColor
@@ -81,37 +78,14 @@ class HomeworkEditorActivity : AppCompatActivity() {
 
         binding.subjectName.apply {
             viewModel.existingSubjects.observe(owner) { subjects ->
-                @Suppress("UnsafeCast")
-                val selection = selectedItem as String?
-                adapter = ArrayAdapter(
-                    context,
-                    android.R.layout.simple_spinner_item,
-                    subjects.toTypedArray()
-                ).apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
-                (selection ?: viewModel.subjectName.safeValue)?.let { subjectName ->
-                    setSelection(subjects.list.indexOf(subjectName))
-                }
+                setAdapter(object : ExposedDropdownMenu.Adapter<String> {
+                    override val items = subjects.list
+                    override val onTextChanged = { text: String, item: String? -> viewModel.subjectName.value = text }
+                })
             }
-
-            viewModel.subjectName.distinctUntilChanged().observe(owner) { subjectName ->
-                viewModel.existingSubjects.safeValue?.run {
-                    setSelection(list.indexOf(subjectName))
-                }
-            }
-
-            onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>) = Unit
-
-                override fun onItemSelected(
-                    parent: AdapterView<*>,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    @Suppress("UnsafeCast")
-                    viewModel.subjectName.value = selectedItem as String
-                }
-            }
+            viewModel.subjectName.distinctUntilChanged { value ->
+                value == text?.toString() ?: ""
+            }.observe(owner) { text = it }
         }
 
         binding.description.apply {
