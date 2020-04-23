@@ -70,9 +70,10 @@ class HomeworkEditorViewModel(
         addSource(description, onChanged)
     }
 
+    val lessonExists get() = subjectName.value in existingSubjects.value
+
     suspend fun save(): Long {
         check(error.value == null)
-        check(subjectName.value in existingSubjects.value)
 
         val oldHomework = homework
         val newHomework = Homework(
