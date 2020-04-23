@@ -13,7 +13,7 @@
     <!-- ScheduleFragment -->
     <string name="sf_title">Расписание</string>
     <string name="sf_calendar">Календарь</string>
-    <string name="sf_no_schedule">Здесь пока пусто</string>
+    <string name="sf_no_schedule">Здесь пока пусто. Добавьте расписание своего университета или школы.</string>
     <string name="sf_free_day">Выходной</string>
 
     <!-- HomeworksFragment -->
@@ -87,11 +87,15 @@
 
     <!-- region HomeworkEditorActivity -->
     <string name="hea_title">Редактор задания</string>
-    <string name="hea_subject">Выберите занятие</string>
+    <string name="hea_subject">Выберите предмет</string>
     <string name="hea_description">Описание</string>
     <string name="hea_deadline">Выберите дату сдачи</string>
     <string name="hea_save">Сохранить</string>
     <string name="hea_error_empty_description">Введите описание домашнего задания</string>
+    <string name="hea_unknown_lesson">Неизвестный предмет</string>
+    <string name="hea_unknown_lesson_message">Введен неизвестный предмет. Сохранить задание?</string>
+    <string name="hea_unknown_lesson_yes">Сохранить</string>
+    <string name="hea_unknown_lesson_no">Нет</string>
     <string name="hea_delete">Удалить задание</string>
     <string name="hea_delete_message">Удалить задание?</string>
     <string name="hea_delete_yes">Удалить</string>
