@@ -132,8 +132,24 @@ class HomeworkEditorActivity : AppCompatActivity() {
                     }
                 )
             } ?: run {
-                viewModel.viewModelScope.launch { viewModel.save() }
-                finish()
+                if (viewModel.lessonExists) {
+                    viewModel.viewModelScope.launch {
+                        viewModel.save()
+                        finish()
+                    }
+                } else {
+                    MaterialAlertDialogBuilder(this)
+                        .setTitle(R.string.hea_unknown_lesson)
+                        .setMessage(R.string.hea_unknown_lesson_message)
+                        .setPositiveButton(R.string.hea_unknown_lesson_yes) { _, _ ->
+                            viewModel.viewModelScope.launch {
+                                viewModel.save()
+                                finish()
+                            }
+                        }
+                        .setNegativeButton(R.string.hea_unknown_lesson_no, null)
+                        .show()
+                }
             }
             true
         }
