@@ -46,6 +46,9 @@
         <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
         <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
         <item name="autoCompleteTextViewStyle">@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox</item>
+        <item name="exposedDropdownMenuStyle">
+            @style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu
+        </item>
         <!-- endregion -->
 
         <!-- region Remap legacy AppCompat attributes to MaterialComponent attributes -->

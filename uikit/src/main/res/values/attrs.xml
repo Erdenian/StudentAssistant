@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <declare-styleable name="ExposedDropdownMenu">
+        <attr name="editable" format="boolean" />
+        <attr name="singleLine" format="boolean" />
+    </declare-styleable>
+
     <declare-styleable name="CheckBoxWithText">
         <attr name="checked" format="boolean" />
         <attr name="text" format="string" />
@@ -8,6 +13,10 @@
 
     <declare-styleable name="TeacherView">
         <attr name="name" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="CustomStyles">
+        <attr name="exposedDropdownMenuStyle" format="reference" />
     </declare-styleable>
 
 </resources>

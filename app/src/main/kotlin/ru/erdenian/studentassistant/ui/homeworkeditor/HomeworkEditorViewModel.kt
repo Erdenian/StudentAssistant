@@ -57,7 +57,7 @@ class HomeworkEditorViewModel(
         .map { checkNotNull(it).lastDay }.toKtx()
 
     val subjectName: MutableLiveDataKtx<String> = MediatorLiveDataKtx<String>().apply {
-        addSource(existingSubjects, Observer { if (safeValue !in it) value = it.first() })
+        addSource(existingSubjects, Observer { if (safeValue !in it) value = it.firstOrNull() ?: "" })
     }
     val description = MutableLiveDataKtx<String>().apply { value = "" }
     val deadline = MutableLiveDataKtx<LocalDate>().apply { value = LocalDate.now() }
@@ -70,9 +70,10 @@ class HomeworkEditorViewModel(
         addSource(description, onChanged)
     }
 
+    val lessonExists get() = subjectName.value in existingSubjects.value
+
     suspend fun save(): Long {
         check(error.value == null)
-        check(subjectName.value in existingSubjects.value)
 
         val oldHomework = homework
         val newHomework = Homework(
