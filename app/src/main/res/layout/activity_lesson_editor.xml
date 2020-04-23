@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/lea_subject_name"
-                android:inputType="text"
+                android:inputType="text|textCapSentences"
                 android:maxLines="1">
 
                 <requestFocus />
@@ -46,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/lea_type"
-                android:inputType="text"
+                android:inputType="text|textCapSentences"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -61,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/lea_teachers"
-                android:inputType="text"
+                android:inputType="text|textCapWords"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
