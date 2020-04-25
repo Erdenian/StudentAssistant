@@ -23,21 +23,21 @@ internal class SemesterDaoAndroidTest {
 
     @Test
     fun insertTest() = runBlocking {
-        assertEquals(emptyList<SemesterEntity>(), semesterDao.getAll().await())
+        assertEquals(emptyList<SemesterEntity>(), semesterDao.getAllLiveData().await())
         val semester = SemesterEntity("name", LocalDate.now().minusDays(1), LocalDate.now().minusDays(0))
         val id = semesterDao.insert(semester)
-        assertEquals(semester.copy(id = id), semesterDao.getAll().await().single())
+        assertEquals(semester.copy(id = id), semesterDao.getAllLiveData().await().single())
     }
 
     @Test
     fun getNamesTest() = runBlocking {
-        assertEquals(emptyList<SemesterEntity>(), semesterDao.getAll().await())
+        assertEquals(emptyList<SemesterEntity>(), semesterDao.getAllLiveData().await())
         val semesters = listOf(
             SemesterEntity("name1", LocalDate.now().minusDays(500), LocalDate.now().minusDays(400), 1L),
             SemesterEntity("name3", LocalDate.now().minusDays(100), LocalDate.now().minusDays(0), 3L),
             SemesterEntity("name2", LocalDate.now().minusDays(300), LocalDate.now().minusDays(200), 2L)
         )
         semesters.forEach { semesterDao.insert(it) }
-        assertEquals(semesters.sorted().map { it.name }, semesterDao.getNames().await())
+        assertEquals(semesters.sorted().map { it.name }, semesterDao.getNamesLiveData().await())
     }
 }

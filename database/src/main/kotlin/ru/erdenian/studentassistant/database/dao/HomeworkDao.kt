@@ -31,10 +31,10 @@ interface HomeworkDao {
     suspend fun get(id: Long): HomeworkEntity?
 
     @Query("SELECT * FROM homeworks WHERE _id = :id")
-    fun getLive(id: Long): LiveData<HomeworkEntity?>
+    fun getLiveData(id: Long): LiveData<HomeworkEntity?>
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId ORDER BY deadline, _id")
-    fun getAll(semesterId: Long): LiveData<List<HomeworkEntity>>
+    fun getAllLiveData(semesterId: Long): LiveData<List<HomeworkEntity>>
 
     @Query("SELECT COUNT(_id) FROM homeworks WHERE semester_id = :semesterId")
     suspend fun getCount(semesterId: Long): Int
@@ -44,7 +44,7 @@ interface HomeworkDao {
     // region By subject name
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName ORDER BY deadline, _id")
-    fun get(semesterId: Long, subjectName: String): LiveData<List<HomeworkEntity>>
+    fun getAllLiveData(semesterId: Long, subjectName: String): LiveData<List<HomeworkEntity>>
 
     @Query("SELECT COUNT(_id) FROM homeworks WHERE subject_name = :subjectName AND semester_id = :semesterId")
     suspend fun getCount(semesterId: Long, subjectName: String): Int
@@ -57,13 +57,17 @@ interface HomeworkDao {
     // region By deadline
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline >= :today ORDER BY deadline, _id")
-    fun getActual(semesterId: Long, today: LocalDate = LocalDate.now()): LiveData<List<HomeworkEntity>>
+    fun getActualLiveData(semesterId: Long, today: LocalDate = LocalDate.now()): LiveData<List<HomeworkEntity>>
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline < :today ORDER BY deadline, _id")
-    fun getPast(semesterId: Long, today: LocalDate = LocalDate.now()): LiveData<List<HomeworkEntity>>
+    fun getPastLiveData(semesterId: Long, today: LocalDate = LocalDate.now()): LiveData<List<HomeworkEntity>>
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName AND deadline >= :today ORDER BY deadline, _id")
-    fun getActual(semesterId: Long, subjectName: String, today: LocalDate = LocalDate.now()): LiveData<List<HomeworkEntity>>
+    fun getActualLiveData(
+        semesterId: Long,
+        subjectName: String,
+        today: LocalDate = LocalDate.now()
+    ): LiveData<List<HomeworkEntity>>
 
     // endregion
 }
