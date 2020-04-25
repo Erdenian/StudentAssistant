@@ -32,7 +32,7 @@ internal class LessonDaoAndroidTest {
     private val semesterId = 1L
 
     @BeforeEach
-    fun setUp() = runBlocking {
+    fun setUp(): Unit = runBlocking {
         kodein.instance<SemesterDao>().insert(
             SemesterEntity(
                 "name",
@@ -70,10 +70,13 @@ internal class LessonDaoAndroidTest {
         )
         assertNotEquals(0, id)
 
-        lesson.lessonTeachers.forEach { it.lessonId = id }
-        lesson.lessonClassrooms.forEach { it.lessonId = id }
-        lesson.byDates.forEach { it.lessonId = id }
-        val expected = lesson.copy(lesson.lesson.copy(id = id))
+        val expected = FullLesson(
+            lesson.lesson.copy(id = id),
+            lesson.lessonTeachers.map { it.copy(lessonId = id, id = 1L) },
+            lesson.lessonClassrooms.map { it.copy(lessonId = id, id = 1L) },
+            null,
+            lesson.byDates.map { it.copy(lessonId = id) }
+        )
         assertEquals(listOf(expected), lessonDao.get(semesterId).await())
     }
 
@@ -87,8 +90,8 @@ internal class LessonDaoAndroidTest {
                 LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(2),
                 semesterId, 10L
             ),
-            listOf(TeacherEntity("teacher", 10L)),
-            listOf(ClassroomEntity("classroom", 10L)),
+            listOf(TeacherEntity("teacher", 10L, 20L)),
+            listOf(ClassroomEntity("classroom", 10L, 20L)),
             null,
             listOf(ByDateEntity(LocalDate(2020, 4, 25), 10L))
         )
@@ -149,7 +152,7 @@ internal class LessonDaoAndroidTest {
     @Test
     fun getNextStartTimeTest() = runBlocking {
         assertEquals(emptyList<SemesterEntity>(), lessonDao.get(semesterId).await())
-        assertEquals(null, lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY))
+        assertNull(lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY))
 
         lessonDao.insert(
             LessonEntity(
@@ -240,7 +243,7 @@ internal class LessonDaoAndroidTest {
             ByWeekdayEntity(DateTimeConstants.TUESDAY, listOf(true))
         )
         assertEquals(
-            LocalTime(18, 10),
+            LocalTime(19, 20),
             lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY)
         )
     }

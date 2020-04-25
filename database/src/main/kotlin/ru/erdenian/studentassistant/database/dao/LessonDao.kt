@@ -42,8 +42,7 @@ abstract class LessonDao {
         insert(
             teachers.apply { forEach { it.lessonId = id } },
             classrooms.apply { forEach { it.lessonId = id } },
-            byWeekday.apply { lessonId = id },
-            emptyList()
+            byWeekday.apply { lessonId = id }
         )
         id
     }
@@ -59,7 +58,6 @@ abstract class LessonDao {
         insert(
             teachers.apply { forEach { it.lessonId = id } },
             classrooms.apply { forEach { it.lessonId = id } },
-            null,
             byDates.apply { forEach { it.lessonId = id } }
         )
         id
@@ -72,7 +70,13 @@ abstract class LessonDao {
     protected abstract suspend fun insert(
         teachers: List<TeacherEntity>,
         classrooms: List<ClassroomEntity>,
-        byWeekday: ByWeekdayEntity?,
+        byWeekday: ByWeekdayEntity?
+    )
+
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    protected abstract suspend fun insert(
+        teachers: List<TeacherEntity>,
+        classrooms: List<ClassroomEntity>,
         byDates: List<ByDateEntity>
     )
 
@@ -172,17 +176,13 @@ abstract class LessonDao {
 
     @Transaction
     open suspend fun getNextStartTime(semesterId: Long, weekday: Int): LocalTime? = withContext(Dispatchers.IO) {
-        val lessons = getNextStartTimeRaw(semesterId).filter { lesson ->
-            (lesson.lessonRepeat as? ByWeekdayEntity)?.repeatsOnWeekday(weekday) ?: false
-        }
-
-        val breakLength = lessons.asSequence()
-            .groupBy { it.lessonRepeat }
-            .flatMap { (_, lessons) ->
-                lessons.asSequence()
+        val lessons = getNextStartTimeRaw(semesterId).filter { it.lessonRepeat is ByWeekdayEntity }
+        val breakLength = lessons
+            .groupBy { (it.lessonRepeat as ByWeekdayEntity).weekday }.values.asSequence()
+            .flatMap { list ->
+                list.asSequence()
                     .zipWithNext()
                     .map { (a, b) -> Period.fieldDifference(a.endTime, b.startTime) }
-                    .toList()
             }.groupingBy { it.normalizedStandard() }
             .eachCount()
             .maxBy { it.value }?.key ?: DEFAULT_BREAK_LENGTH
