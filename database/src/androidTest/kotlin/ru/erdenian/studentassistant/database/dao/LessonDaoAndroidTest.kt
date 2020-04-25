@@ -14,10 +14,9 @@ import org.junit.jupiter.api.Test
 import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.database.ScheduleDatabase
 import ru.erdenian.studentassistant.database.di.databaseKodein
+import ru.erdenian.studentassistant.database.entity.LessonEntity
+import ru.erdenian.studentassistant.database.entity.SemesterEntity
 import ru.erdenian.studentassistant.database.utils.await
-import ru.erdenian.studentassistant.entity.Lesson
-import ru.erdenian.studentassistant.entity.LessonRepeat
-import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 
 internal class LessonDaoAndroidTest {
@@ -31,7 +30,7 @@ internal class LessonDaoAndroidTest {
     @BeforeEach
     fun setUp() = runBlocking {
         kodein.instance<SemesterDao>().insert(
-            Semester(
+            SemesterEntity(
                 "name",
                 LocalDate.now().minusDays(500),
                 LocalDate.now().minusDays(400),
@@ -46,7 +45,7 @@ internal class LessonDaoAndroidTest {
     @Test
     fun insertTest() = runBlocking {
         assertTrue(lessonDao.get(semesterId).await().isEmpty())
-        val lesson = Lesson(
+        val lesson = LessonEntity(
             "name",
             "type",
             immutableSortedSetOf("teacher"),
@@ -69,9 +68,10 @@ internal class LessonDaoAndroidTest {
         )
 
         lessonDao.insert(
-            Lesson(
+            LessonEntity(
                 "name", "",
-                immutableSortedSetOf(), immutableSortedSetOf(),
+                immutableSortedSetOf(),
+                immutableSortedSetOf(),
                 LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(2),
                 LessonRepeat.ByDates(immutableSortedSetOf(LocalDate.now())),
                 semesterId, 1L
@@ -83,18 +83,20 @@ internal class LessonDaoAndroidTest {
         )
 
         lessonDao.insert(
-            Lesson(
+            LessonEntity(
                 "name", "",
-                immutableSortedSetOf(), immutableSortedSetOf(),
+                immutableSortedSetOf(),
+                immutableSortedSetOf(),
                 LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(3),
                 LessonRepeat.ByDates(immutableSortedSetOf(LocalDate.now())),
                 semesterId, 2L
             )
         )
         lessonDao.insert(
-            Lesson(
+            LessonEntity(
                 "name", "",
-                immutableSortedSetOf(), immutableSortedSetOf(),
+                immutableSortedSetOf(),
+                immutableSortedSetOf(),
                 LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(3),
                 LessonRepeat.ByDates(immutableSortedSetOf(LocalDate.now())),
                 semesterId, 3L
@@ -117,9 +119,10 @@ internal class LessonDaoAndroidTest {
         )
 
         lessonDao.insert(
-            Lesson(
+            LessonEntity(
                 "name", "",
-                immutableSortedSetOf(), immutableSortedSetOf(),
+                immutableSortedSetOf(),
+                immutableSortedSetOf(),
                 LocalTime(9, 0), LocalTime(11, 30),
                 lessonRepeat, semesterId, 1L
             )
@@ -130,9 +133,10 @@ internal class LessonDaoAndroidTest {
         )
 
         lessonDao.insert(
-            Lesson(
+            LessonEntity(
                 "name", "",
-                immutableSortedSetOf(), immutableSortedSetOf(),
+                immutableSortedSetOf(),
+                immutableSortedSetOf(),
                 LocalTime(11, 50), LocalTime(14, 20),
                 lessonRepeat, semesterId, 2L
             )
@@ -143,9 +147,10 @@ internal class LessonDaoAndroidTest {
         )
 
         lessonDao.insert(
-            Lesson(
+            LessonEntity(
                 "name", "",
-                immutableSortedSetOf(), immutableSortedSetOf(),
+                immutableSortedSetOf(),
+                immutableSortedSetOf(),
                 LocalTime(14, 40), LocalTime(17, 10),
                 lessonRepeat, semesterId, 3L
             )
@@ -156,9 +161,10 @@ internal class LessonDaoAndroidTest {
         )
 
         lessonDao.insert(
-            Lesson(
+            LessonEntity(
                 "name", "",
-                immutableSortedSetOf(), immutableSortedSetOf(),
+                immutableSortedSetOf(),
+                immutableSortedSetOf(),
                 LocalTime(17, 20), LocalTime(17, 50),
                 lessonRepeat, semesterId, 4L
             )
@@ -169,17 +175,19 @@ internal class LessonDaoAndroidTest {
         )
 
         lessonDao.insert(
-            Lesson(
+            LessonEntity(
                 "name", "",
-                immutableSortedSetOf(), immutableSortedSetOf(),
+                immutableSortedSetOf(),
+                immutableSortedSetOf(),
                 LocalTime(18, 0), LocalTime(18, 30),
                 lessonRepeat, semesterId, 5L
             )
         )
         lessonDao.insert(
-            Lesson(
+            LessonEntity(
                 "name", "",
-                immutableSortedSetOf(), immutableSortedSetOf(),
+                immutableSortedSetOf(),
+                immutableSortedSetOf(),
                 LocalTime(18, 40), LocalTime(19, 10),
                 lessonRepeat, semesterId, 6L
             )

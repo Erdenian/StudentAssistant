@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test
 import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.database.ScheduleDatabase
 import ru.erdenian.studentassistant.database.di.databaseKodein
+import ru.erdenian.studentassistant.database.entity.SemesterEntity
 import ru.erdenian.studentassistant.database.utils.await
-import ru.erdenian.studentassistant.entity.Semester
 
 internal class SemesterDaoAndroidTest {
 
@@ -25,7 +25,7 @@ internal class SemesterDaoAndroidTest {
     @Test
     fun insertTest() = runBlocking {
         assertTrue(semesterDao.getAll().await().isEmpty())
-        val semester = Semester("name", LocalDate.now().minusDays(1), LocalDate.now().minusDays(0))
+        val semester = SemesterEntity("name", LocalDate.now().minusDays(1), LocalDate.now().minusDays(0))
         semesterDao.insert(semester)
         assertEquals(semester, semesterDao.getAll().await().single())
     }
@@ -34,9 +34,9 @@ internal class SemesterDaoAndroidTest {
     fun getNamesTest() = runBlocking {
         assertTrue(semesterDao.getAll().await().isEmpty())
         val semesters = listOf(
-            Semester("name1", LocalDate.now().minusDays(500), LocalDate.now().minusDays(400), 1L),
-            Semester("name3", LocalDate.now().minusDays(100), LocalDate.now().minusDays(0), 3L),
-            Semester("name2", LocalDate.now().minusDays(300), LocalDate.now().minusDays(200), 2L)
+            SemesterEntity("name1", LocalDate.now().minusDays(500), LocalDate.now().minusDays(400), 1L),
+            SemesterEntity("name3", LocalDate.now().minusDays(100), LocalDate.now().minusDays(0), 3L),
+            SemesterEntity("name2", LocalDate.now().minusDays(300), LocalDate.now().minusDays(200), 2L)
         )
         semesters.forEach { semesterDao.insert(it) }
         assertEquals(semesters.sorted().map { it.name }, semesterDao.getNames().await())
