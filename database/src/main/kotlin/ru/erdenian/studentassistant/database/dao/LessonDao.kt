@@ -23,12 +23,6 @@ import ru.erdenian.studentassistant.database.entity.TeacherEntity
 @Dao
 abstract class LessonDao {
 
-    private companion object {
-        const val DEFAULT_DURATION_MILLIS = 5_400_000
-        val DEFAULT_BREAK_LENGTH: Period = Period.minutes(10)
-        val DEFAULT_START_TIME = LocalTime(9, 0)
-    }
-
     // region Primary actions
 
     @Transaction
@@ -166,16 +160,20 @@ abstract class LessonDao {
     abstract fun getTypes(semesterId: Long): LiveData<List<String>>
 
     @Query("SELECT DISTINCT t.name FROM teachers AS t INNER JOIN lessons AS l ON l._id = t.lesson_id WHERE l.semester_id = :semesterId ORDER BY t.name")
-    protected abstract fun getTeachers(semesterId: Long): LiveData<List<String>>
+    abstract fun getTeachers(semesterId: Long): LiveData<List<String>>
 
     @Query("SELECT DISTINCT c.name FROM classrooms AS c INNER JOIN lessons AS l ON l._id = c.lesson_id WHERE l.semester_id = :semesterId ORDER BY c.name")
-    protected abstract fun getClassrooms(semesterId: Long): LiveData<List<String>>
+    abstract fun getClassrooms(semesterId: Long): LiveData<List<String>>
 
     @Query("SELECT end_time - start_time as duration FROM lessons WHERE semester_id = :semesterId GROUP BY duration ORDER BY COUNT(duration) DESC LIMIT 1")
-    abstract suspend fun getLessonLength(semesterId: Long): Period?
+    abstract suspend fun getDuration(semesterId: Long): Period?
 
     @Transaction
-    open suspend fun getNextStartTime(semesterId: Long, weekday: Int): LocalTime? = withContext(Dispatchers.IO) {
+    open suspend fun getNextStartTime(
+        semesterId: Long,
+        weekday: Int,
+        defaultBreakLength: Period
+    ): LocalTime? = withContext(Dispatchers.IO) {
         val lessons = getNextStartTimeRaw(semesterId).filter { it.lessonRepeat is ByWeekdayEntity }
         val breakLength = lessons
             .groupBy { (it.lessonRepeat as ByWeekdayEntity).weekday }.values.asSequence()
@@ -185,7 +183,7 @@ abstract class LessonDao {
                     .map { (a, b) -> Period.fieldDifference(a.endTime, b.startTime) }
             }.groupingBy { it.normalizedStandard() }
             .eachCount()
-            .maxBy { it.value }?.key ?: DEFAULT_BREAK_LENGTH
+            .maxBy { it.value }?.key ?: defaultBreakLength
         lessons.lastOrNull()?.run { endTime + breakLength }
     }
 

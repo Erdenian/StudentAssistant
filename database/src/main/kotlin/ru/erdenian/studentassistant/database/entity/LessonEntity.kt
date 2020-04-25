@@ -20,7 +20,10 @@ import org.joda.time.LocalTime
             onUpdate = ForeignKey.CASCADE
         )
     ],
-    indices = [Index("semester_id")]
+    indices = [
+        Index("semester_id"),
+        Index("subject_name")
+    ]
 )
 @Parcelize
 data class LessonEntity(

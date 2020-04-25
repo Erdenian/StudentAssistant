@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "db2e0c98aad8879a05875b5be69ea4d2",
+    "identityHash": "489b22df2443b906d45e9c8e569daf6b",
     "entities": [
       {
         "tableName": "semesters",
@@ -97,6 +97,14 @@
               "semester_id"
             ],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_lessons_semester_id` ON `${TABLE_NAME}` (`semester_id`)"
+          },
+          {
+            "name": "index_lessons_subject_name",
+            "unique": false,
+            "columnNames": [
+              "subject_name"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_lessons_subject_name` ON `${TABLE_NAME}` (`subject_name`)"
           }
         ],
         "foreignKeys": [
@@ -397,7 +405,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'db2e0c98aad8879a05875b5be69ea4d2')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '489b22df2443b906d45e9c8e569daf6b')"
     ]
   }
 }
