@@ -64,7 +64,6 @@ dependencies {
     val lifecycleVersion: String by project
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     api("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
-    api("com.shopify:livedata-ktx:3.0.0")
     // endregion
 
     // region Core
