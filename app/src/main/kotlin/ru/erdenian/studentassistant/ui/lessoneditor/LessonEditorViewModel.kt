@@ -21,7 +21,6 @@ import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.entity.ImmutableSortedSet
 import ru.erdenian.studentassistant.entity.Lesson
-import ru.erdenian.studentassistant.entity.LessonRepeat
 import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 import ru.erdenian.studentassistant.repository.HomeworkRepository
@@ -67,14 +66,14 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
         startTime.value = lesson.startTime
         endTime.value = lesson.endTime
         lessonRepeat.value = when (val lessonRepeat = lesson.lessonRepeat) {
-            is LessonRepeat.ByWeekday -> {
+            is Lesson.Repeat.ByWeekday -> {
                 weekday.value = lessonRepeat.weekday
                 weeks.value = lessonRepeat.weeks
-                LessonRepeat.ByWeekday::class
+                Lesson.Repeat.ByWeekday::class
             }
-            is LessonRepeat.ByDates -> {
-                dates.value = lessonRepeat.dates
-                LessonRepeat.ByDates::class
+            is Lesson.Repeat.ByDates -> {
+                dates.value = lessonRepeat.dates.toImmutableSortedSet()
+                Lesson.Repeat.ByDates::class
             }
         }
     }
@@ -97,8 +96,8 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
         value = immutableSortedSetOf()
     }
 
-    val lessonRepeat = MutableLiveDataKtx<KClass<out LessonRepeat>>().apply {
-        value = LessonRepeat.ByWeekday::class
+    val lessonRepeat = MutableLiveDataKtx<KClass<out Lesson.Repeat>>().apply {
+        value = Lesson.Repeat.ByWeekday::class
     }
 
     val error: LiveDataKtx<Error?> = MediatorLiveDataKtx<Error?>().apply {
@@ -110,9 +109,9 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
                 subjectName?.isBlank() == true -> Error.EMPTY_SUBJECT_NAME
                 (startTime != null) && (endTime != null) &&
                         (startTime > endTime) -> Error.WRONG_TIMES
-                ((lessonRepeat.value == LessonRepeat.ByWeekday::class) &&
+                ((lessonRepeat.value == Lesson.Repeat.ByWeekday::class) &&
                         !weeks.value.contains(true)) -> Error.EMPTY_REPEAT
-                ((lessonRepeat.value == LessonRepeat.ByDates::class) &&
+                ((lessonRepeat.value == Lesson.Repeat.ByDates::class) &&
                         dates.value.isEmpty()) -> Error.EMPTY_REPEAT
                 else -> null
             }
@@ -169,10 +168,10 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
             startTime.value,
             endTime.value,
             when (lessonRepeat.value) {
-                LessonRepeat.ByWeekday::class ->
-                    LessonRepeat.ByWeekday(weekday.value, weeks.value)
-                LessonRepeat.ByDates::class ->
-                    LessonRepeat.ByDates(dates.value)
+                Lesson.Repeat.ByWeekday::class ->
+                    Lesson.Repeat.ByWeekday(weekday.value, weeks.value)
+                Lesson.Repeat.ByDates::class ->
+                    Lesson.Repeat.ByDates(dates.value)
                 else -> throw IllegalStateException(
                     "Неизвестный тип повторений: ${lessonRepeat.value}"
                 )

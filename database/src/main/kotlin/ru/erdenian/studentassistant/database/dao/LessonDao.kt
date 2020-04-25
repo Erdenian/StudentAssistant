@@ -14,9 +14,9 @@ import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 import org.joda.time.Period
 import ru.erdenian.studentassistant.database.Converters
-import ru.erdenian.studentassistant.entity.Lesson
-import ru.erdenian.studentassistant.entity.LessonRepeat
-import ru.erdenian.studentassistant.entity.Semester
+import ru.erdenian.studentassistant.database.entity.FullLesson
+import ru.erdenian.studentassistant.database.entity.LessonEntity
+import ru.erdenian.studentassistant.database.entity.SemesterEntity
 
 @Suppress("TooManyFunctions", "MaxLineLength")
 @Dao
@@ -31,7 +31,7 @@ abstract class LessonDao {
     // region Primary actions
 
     @Transaction
-    open suspend fun insert(lesson: Lesson) = withContext(Dispatchers.IO) {
+    open suspend fun insert(lesson: LessonEntity, teachers, classrooms, repeat) = withContext(Dispatchers.IO) {
         val oldLesson = get(lesson.semesterId, lesson.id)
         insertLesson(lesson)
         if (
@@ -42,16 +42,16 @@ abstract class LessonDao {
     }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    protected abstract suspend fun insertLesson(lesson: Lesson)
+    protected abstract suspend fun insertLesson(lesson: LessonEntity)
 
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId AND _id = :lessonId")
-    abstract suspend fun get(semesterId: Long, lessonId: Long): Lesson?
+    abstract suspend fun get(semesterId: Long, lessonId: Long): LessonEntity?
 
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId AND _id = :lessonId")
-    abstract fun getLive(semesterId: Long, lessonId: Long): LiveData<Lesson?>
+    abstract fun getLive(semesterId: Long, lessonId: Long): LiveData<LessonEntity?>
 
     @Transaction
-    open suspend fun delete(lesson: Lesson) = withContext(Dispatchers.IO) {
+    open suspend fun delete(lesson: LessonEntity) = withContext(Dispatchers.IO) {
         deleteLesson(lesson)
         if (!hasLessons(lesson.semesterId, lesson.subjectName)) {
             deleteHomeworks(lesson.semesterId, lesson.subjectName)
@@ -59,7 +59,7 @@ abstract class LessonDao {
     }
 
     @Delete
-    protected abstract suspend fun deleteLesson(lesson: Lesson)
+    protected abstract suspend fun deleteLesson(lesson: LessonEntity)
 
     @Query("DELETE FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName")
     protected abstract suspend fun deleteHomeworks(semesterId: Long, subjectName: String)
@@ -69,9 +69,9 @@ abstract class LessonDao {
     // region Lessons
 
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId ORDER BY start_time, end_time, _id")
-    abstract fun get(semesterId: Long): LiveData<List<Lesson>>
+    abstract fun get(semesterId: Long): LiveData<List<FullLesson>>
 
-    fun get(semester: Semester, day: LocalDate) = get(semester.id).map { lessons ->
+    fun get(semester: SemesterEntity, day: LocalDate) = get(semester.id).map { lessons ->
         val weekNumber = semester.getWeekNumber(day)
         lessons.filter { it.lessonRepeat.repeatsOnDay(day, weekNumber) }
     }
@@ -165,7 +165,7 @@ abstract class LessonDao {
         }
 
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId ORDER BY start_time, end_time, _id")
-    protected abstract suspend fun getNextStartTimeRaw(semesterId: Long): List<Lesson>
+    protected abstract suspend fun getNextStartTimeRaw(semesterId: Long): List<LessonEntity>
 
     // endregion
 }

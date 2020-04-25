@@ -19,7 +19,6 @@ import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.ActivityLessonEditorBinding
 import ru.erdenian.studentassistant.entity.Lesson
-import ru.erdenian.studentassistant.entity.LessonRepeat
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorViewModel.Error
 import ru.erdenian.studentassistant.uikit.WeeksSelector
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
@@ -195,15 +194,15 @@ class LessonEditorActivity : AppCompatActivity() {
             val byDatesIndex = 1
             viewModel.lessonRepeat.distinctUntilChanged { value ->
                 value == when (selectedItemPosition) {
-                    byWeekdayIndex -> LessonRepeat.ByWeekday::class
-                    byDatesIndex -> LessonRepeat.ByDates::class
+                    byWeekdayIndex -> Lesson.Repeat.ByWeekday::class
+                    byDatesIndex -> Lesson.Repeat.ByDates::class
                     else -> throw IllegalStateException("Неизвестный тип повторения")
                 }
             }.observe(owner) { lessonRepeat ->
                 setSelection(
                     when (lessonRepeat) {
-                        LessonRepeat.ByWeekday::class -> byWeekdayIndex
-                        LessonRepeat.ByDates::class -> byDatesIndex
+                        Lesson.Repeat.ByWeekday::class -> byWeekdayIndex
+                        Lesson.Repeat.ByDates::class -> byDatesIndex
                         else -> throw IllegalStateException(
                             "Неизвестный тип повторений: $lessonRepeat"
                         )
@@ -220,8 +219,8 @@ class LessonEditorActivity : AppCompatActivity() {
                     id: Long
                 ) {
                     viewModel.lessonRepeat.value = when (position) {
-                        byWeekdayIndex -> LessonRepeat.ByWeekday::class
-                        byDatesIndex -> LessonRepeat.ByDates::class
+                        byWeekdayIndex -> Lesson.Repeat.ByWeekday::class
+                        byDatesIndex -> Lesson.Repeat.ByDates::class
                         else -> throw IllegalStateException("Неизвестный тип повторения")
                     }
                 }
@@ -234,8 +233,8 @@ class LessonEditorActivity : AppCompatActivity() {
 
             viewModel.lessonRepeat.observe(owner) { lessonRepeat ->
                 displayedChild = when (lessonRepeat) {
-                    LessonRepeat.ByWeekday::class -> byWeekdayIndex
-                    LessonRepeat.ByDates::class -> byDatesIndex
+                    Lesson.Repeat.ByWeekday::class -> byWeekdayIndex
+                    Lesson.Repeat.ByDates::class -> byDatesIndex
                     else -> throw IllegalStateException(
                         "Неизвестный тип повторений: $lessonRepeat"
                     )

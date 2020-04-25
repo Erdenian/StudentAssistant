@@ -3,21 +3,21 @@ package ru.erdenian.studentassistant.repository
 import com.shopify.livedataktx.toNullableKtx
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.database.dao.LessonDao
-import ru.erdenian.studentassistant.entity.Lesson
-import ru.erdenian.studentassistant.entity.Semester
+import ru.erdenian.studentassistant.database.entity.LessonEntity
+import ru.erdenian.studentassistant.database.entity.SemesterEntity
 
 @Suppress("TooManyFunctions")
 class LessonRepository(private val lessonDao: LessonDao) : BaseRepository() {
 
-    suspend fun insert(lesson: Lesson) = lessonDao.insert(lesson)
+    suspend fun insert(lesson: LessonEntity) = lessonDao.insert(lesson)
 
     suspend fun get(semesterId: Long, lessonId: Long) = lessonDao.get(semesterId, lessonId)
-    fun get(lesson: Lesson) = lessonDao.getLive(lesson.semesterId, lesson.id).toNullableKtx()
+    fun get(lesson: LessonEntity) = lessonDao.getLive(lesson.semesterId, lesson.id).toNullableKtx()
     fun hasLessons(semesterId: Long) = lessonDao.hasLessons(semesterId)
-    suspend fun delete(lesson: Lesson) = lessonDao.delete(lesson)
+    suspend fun delete(lesson: LessonEntity) = lessonDao.delete(lesson)
 
     fun get(semesterId: Long) = lessonDao.get(semesterId).map()
-    fun get(semester: Semester, day: LocalDate) = lessonDao.get(semester, day).map()
+    fun get(semester: SemesterEntity, day: LocalDate) = lessonDao.get(semester, day).map()
     fun get(semesterId: Long, weekday: Int) = lessonDao.get(semesterId, weekday).map()
     suspend fun getCount(semesterId: Long) = lessonDao.getCount(semesterId)
     suspend fun getCount(semesterId: Long, subjectName: String) = lessonDao.getCount(semesterId, subjectName)
