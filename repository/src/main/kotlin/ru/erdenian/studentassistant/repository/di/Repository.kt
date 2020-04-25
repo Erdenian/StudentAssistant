@@ -1,6 +1,8 @@
 package ru.erdenian.studentassistant.repository.di
 
 import android.app.Application
+import org.joda.time.LocalTime
+import org.joda.time.Period
 import org.kodein.di.Kodein
 import org.kodein.di.generic.bind
 import org.kodein.di.generic.instance
@@ -15,6 +17,13 @@ fun repositoryModule(application: Application) = Kodein.Module(name = "Repositor
     val db = databaseKodein(application, "schedule.db")
 
     bind() from singleton(ref = weakReference) { SemesterRepository(db.instance()) }
-    bind() from singleton(ref = weakReference) { LessonRepository(db.instance()) }
+    bind() from singleton(ref = weakReference) {
+        LessonRepository(
+            db.instance(),
+            LocalTime(9, 0),
+            Period.minutes(90),
+            Period.minutes(10)
+        )
+    }
     bind() from singleton(ref = weakReference) { HomeworkRepository(db.instance()) }
 }

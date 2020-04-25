@@ -20,7 +20,10 @@ import ru.erdenian.studentassistant.entity.Homework
             onUpdate = ForeignKey.CASCADE
         )
     ],
-    indices = [Index("semester_id"), Index("subject_name")]
+    indices = [
+        Index("semester_id"),
+        Index("subject_name")
+    ]
 )
 @Parcelize
 data class HomeworkEntity(

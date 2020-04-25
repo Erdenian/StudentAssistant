@@ -109,7 +109,7 @@ internal class LessonDaoAndroidTest {
     @Test
     fun getLessonLengthTest() = runBlocking {
         assertEquals(emptyList<SemesterEntity>(), lessonDao.get(semesterId).await())
-        assertNull(lessonDao.getLessonLength(semesterId))
+        assertNull(lessonDao.getDuration(semesterId))
 
         lessonDao.insert(
             LessonEntity(
@@ -122,7 +122,7 @@ internal class LessonDaoAndroidTest {
         )
         assertEquals(
             Period.hours(2).normalizedStandard(),
-            lessonDao.getLessonLength(semesterId)?.normalizedStandard()
+            lessonDao.getDuration(semesterId)?.normalizedStandard()
         )
 
         lessonDao.insert(
@@ -145,14 +145,16 @@ internal class LessonDaoAndroidTest {
         )
         assertEquals(
             Period.hours(3).normalizedStandard(),
-            lessonDao.getLessonLength(semesterId)?.normalizedStandard()
+            lessonDao.getDuration(semesterId)?.normalizedStandard()
         )
     }
 
     @Test
     fun getNextStartTimeTest() = runBlocking {
+        val defaultBreakLength = Period.minutes(10)
+
         assertEquals(emptyList<SemesterEntity>(), lessonDao.get(semesterId).await())
-        assertNull(lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY))
+        assertNull(lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY, defaultBreakLength))
 
         lessonDao.insert(
             LessonEntity(
@@ -165,7 +167,7 @@ internal class LessonDaoAndroidTest {
         )
         assertEquals(
             LocalTime(11, 40),
-            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY)
+            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY, defaultBreakLength)
         )
 
         lessonDao.insert(
@@ -179,7 +181,7 @@ internal class LessonDaoAndroidTest {
         )
         assertEquals(
             LocalTime(14, 40),
-            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY)
+            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY, defaultBreakLength)
         )
 
         lessonDao.insert(
@@ -193,7 +195,7 @@ internal class LessonDaoAndroidTest {
         )
         assertEquals(
             LocalTime(17, 30),
-            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY)
+            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY, defaultBreakLength)
         )
 
         lessonDao.insert(
@@ -207,7 +209,7 @@ internal class LessonDaoAndroidTest {
         )
         assertEquals(
             LocalTime(18, 10),
-            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY)
+            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY, defaultBreakLength)
         )
 
         lessonDao.insert(
@@ -230,7 +232,7 @@ internal class LessonDaoAndroidTest {
         )
         assertEquals(
             LocalTime(19, 20),
-            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY)
+            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY, defaultBreakLength)
         )
 
         lessonDao.insert(
@@ -244,7 +246,7 @@ internal class LessonDaoAndroidTest {
         )
         assertEquals(
             LocalTime(19, 20),
-            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY)
+            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY, defaultBreakLength)
         )
     }
 }
