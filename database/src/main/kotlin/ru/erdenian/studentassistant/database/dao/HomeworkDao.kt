@@ -6,30 +6,33 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.database.entity.HomeworkEntity
 
-@Suppress("TooManyFunctions", "MaxLineLength")
 @Dao
 interface HomeworkDao {
 
     // region Primary actions
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(homework: HomeworkEntity)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    suspend fun insert(homework: HomeworkEntity): Long
 
-    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND _id = :homeworkId")
-    suspend fun get(semesterId: Long, homeworkId: Long): HomeworkEntity?
-
-    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND _id = :homeworkId")
-    fun getLive(semesterId: Long, homeworkId: Long): LiveData<HomeworkEntity?>
+    @Update
+    suspend fun update(homework: HomeworkEntity)
 
     @Delete
     suspend fun delete(homework: HomeworkEntity)
 
     // endregion
 
-    // region Homeworks list
+    // region Homeworks
+
+    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND _id = :homeworkId")
+    suspend fun get(semesterId: Long, homeworkId: Long): HomeworkEntity?
+
+    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND _id = :homeworkId")
+    fun getLive(semesterId: Long, homeworkId: Long): LiveData<HomeworkEntity?>
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId ORDER BY deadline, _id")
     fun get(semesterId: Long): LiveData<List<HomeworkEntity>>
@@ -47,7 +50,7 @@ interface HomeworkDao {
     @Query("SELECT COUNT(_id) FROM homeworks WHERE subject_name = :subjectName AND semester_id = :semesterId")
     suspend fun getCount(semesterId: Long, subjectName: String): Int
 
-    @Query("SELECT COUNT(_id) > 0 FROM homeworks WHERE subject_name = :subjectName AND semester_id = :semesterId")
+    @Query("SELECT EXISTS(SELECT _id FROM homeworks WHERE subject_name = :subjectName AND semester_id = :semesterId)")
     suspend fun hasHomeworks(semesterId: Long, subjectName: String): Boolean
 
     // endregion

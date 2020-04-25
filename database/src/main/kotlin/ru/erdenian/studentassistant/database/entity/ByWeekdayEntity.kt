@@ -33,7 +33,7 @@ data class ByWeekdayEntity(
 
     @PrimaryKey
     @ColumnInfo(name = "lesson_id")
-    private val lessonId: Long
+    var lessonId: Long = 0L
 ) : Lesson.Repeat.ByWeekday() {
 
     init {

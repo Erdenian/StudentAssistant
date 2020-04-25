@@ -28,11 +28,11 @@ data class TeacherEntity(
     val name: String,
 
     @ColumnInfo(name = "lesson_id")
-    val lessonId: Long,
+    var lessonId: Long = 0L,
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id")
-    val id: Long = 0
+    val id: Long = 0L
 ) : Parcelable {
     init {
         require(name.isNotBlank())

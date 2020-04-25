@@ -8,21 +8,25 @@ import org.joda.time.LocalTime
 import org.joda.time.Period
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.assertNotEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.database.ScheduleDatabase
 import ru.erdenian.studentassistant.database.di.databaseKodein
+import ru.erdenian.studentassistant.database.entity.ByDateEntity
+import ru.erdenian.studentassistant.database.entity.ByWeekdayEntity
+import ru.erdenian.studentassistant.database.entity.ClassroomEntity
+import ru.erdenian.studentassistant.database.entity.FullLesson
 import ru.erdenian.studentassistant.database.entity.LessonEntity
 import ru.erdenian.studentassistant.database.entity.SemesterEntity
+import ru.erdenian.studentassistant.database.entity.TeacherEntity
 import ru.erdenian.studentassistant.database.utils.await
-import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 
 internal class LessonDaoAndroidTest {
 
     private val kodein = databaseKodein(ApplicationProvider.getApplicationContext())
-    private val database: ScheduleDatabase = kodein.instance()
     private val lessonDao: LessonDao = kodein.instance()
 
     private val semesterId = 1L
@@ -32,169 +36,212 @@ internal class LessonDaoAndroidTest {
         kodein.instance<SemesterDao>().insert(
             SemesterEntity(
                 "name",
-                LocalDate.now().minusDays(500),
-                LocalDate.now().minusDays(400),
+                LocalDate(2020, 1, 1),
+                LocalDate(2020, 6, 1),
                 semesterId
             )
         )
     }
 
     @AfterEach
-    fun tearDown() = database.close()
+    fun tearDown() = kodein.instance<ScheduleDatabase>().close()
 
     @Test
     fun insertTest() = runBlocking {
-        assertTrue(lessonDao.get(semesterId).await().isEmpty())
-        val lesson = LessonEntity(
-            "name",
-            "type",
-            immutableSortedSetOf("teacher"),
-            immutableSortedSetOf("classroom"),
-            LocalTime.MIDNIGHT,
-            LocalTime.MIDNIGHT.plusHours(2),
-            LessonRepeat.ByDates(immutableSortedSetOf(LocalDate.now())),
-            semesterId
+        assertEquals(emptyList<SemesterEntity>(), lessonDao.get(semesterId).await())
+
+        val lesson = FullLesson(
+            LessonEntity(
+                "name", "type",
+                LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(2),
+                semesterId
+            ),
+            listOf(TeacherEntity("teacher")),
+            listOf(ClassroomEntity("classroom")),
+            null,
+            listOf(ByDateEntity(LocalDate(2020, 4, 25)))
         )
-        lessonDao.insert(lesson)
-        assertEquals(lesson, lessonDao.get(semesterId).await().single())
+
+        val id = lessonDao.insert(
+            lesson.lesson,
+            lesson.lessonTeachers,
+            lesson.lessonClassrooms,
+            lesson.byDates
+        )
+        assertNotEquals(0, id)
+
+        lesson.lessonTeachers.forEach { it.lessonId = id }
+        lesson.lessonClassrooms.forEach { it.lessonId = id }
+        lesson.byDates.forEach { it.lessonId = id }
+        val expected = lesson.copy(lesson.lesson.copy(id = id))
+        assertEquals(listOf(expected), lessonDao.get(semesterId).await())
+    }
+
+    @Test
+    fun insertNoAutoincrementTest() = runBlocking {
+        assertEquals(emptyList<SemesterEntity>(), lessonDao.get(semesterId).await())
+
+        val lesson = FullLesson(
+            LessonEntity(
+                "name", "type",
+                LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(2),
+                semesterId, 10L
+            ),
+            listOf(TeacherEntity("teacher", 10L)),
+            listOf(ClassroomEntity("classroom", 10L)),
+            null,
+            listOf(ByDateEntity(LocalDate(2020, 4, 25), 10L))
+        )
+        val id = lessonDao.insert(
+            lesson.lesson,
+            lesson.lessonTeachers,
+            lesson.lessonClassrooms,
+            lesson.byDates
+        )
+        assertEquals(10L, id)
+
+        assertEquals(listOf(lesson), lessonDao.get(semesterId).await())
     }
 
     @Test
     fun getLessonLengthTest() = runBlocking {
-        assertTrue(lessonDao.get(semesterId).await().isEmpty())
-        assertEquals(
-            Period.minutes(90).normalizedStandard(),
-            lessonDao.getLessonLength(semesterId).normalizedStandard()
-        )
+        assertEquals(emptyList<SemesterEntity>(), lessonDao.get(semesterId).await())
+        assertNull(lessonDao.getLessonLength(semesterId))
 
         lessonDao.insert(
             LessonEntity(
                 "name", "",
-                immutableSortedSetOf(),
-                immutableSortedSetOf(),
                 LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(2),
-                LessonRepeat.ByDates(immutableSortedSetOf(LocalDate.now())),
-                semesterId, 1L
-            )
+                semesterId
+            ),
+            emptyList(), emptyList(),
+            listOf(ByDateEntity(LocalDate(2020, 4, 25)))
         )
         assertEquals(
             Period.hours(2).normalizedStandard(),
-            lessonDao.getLessonLength(semesterId).normalizedStandard()
+            lessonDao.getLessonLength(semesterId)?.normalizedStandard()
         )
 
         lessonDao.insert(
             LessonEntity(
                 "name", "",
-                immutableSortedSetOf(),
-                immutableSortedSetOf(),
                 LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(3),
-                LessonRepeat.ByDates(immutableSortedSetOf(LocalDate.now())),
-                semesterId, 2L
-            )
+                semesterId
+            ),
+            emptyList(), emptyList(),
+            listOf(ByDateEntity(LocalDate(2020, 4, 26)))
         )
         lessonDao.insert(
             LessonEntity(
                 "name", "",
-                immutableSortedSetOf(),
-                immutableSortedSetOf(),
                 LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(3),
-                LessonRepeat.ByDates(immutableSortedSetOf(LocalDate.now())),
-                semesterId, 3L
-            )
+                semesterId
+            ),
+            emptyList(), emptyList(),
+            listOf(ByDateEntity(LocalDate(2020, 4, 27)))
         )
         assertEquals(
             Period.hours(3).normalizedStandard(),
-            lessonDao.getLessonLength(semesterId).normalizedStandard()
+            lessonDao.getLessonLength(semesterId)?.normalizedStandard()
         )
     }
 
     @Test
     fun getNextStartTimeTest() = runBlocking {
-        val weekday = DateTimeConstants.MONDAY
-        val lessonRepeat = LessonRepeat.ByWeekday(weekday, listOf(true))
-        assertTrue(lessonDao.get(semesterId).await().isEmpty())
-        assertEquals(
-            LocalTime(9, 0),
-            lessonDao.getNextStartTime(semesterId, weekday)
-        )
+        assertEquals(emptyList<SemesterEntity>(), lessonDao.get(semesterId).await())
+        assertEquals(null, lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY))
 
         lessonDao.insert(
             LessonEntity(
                 "name", "",
-                immutableSortedSetOf(),
-                immutableSortedSetOf(),
                 LocalTime(9, 0), LocalTime(11, 30),
-                lessonRepeat, semesterId, 1L
-            )
+                semesterId
+            ),
+            emptyList(), emptyList(),
+            ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
         )
         assertEquals(
             LocalTime(11, 40),
-            lessonDao.getNextStartTime(semesterId, weekday)
+            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY)
         )
 
         lessonDao.insert(
             LessonEntity(
                 "name", "",
-                immutableSortedSetOf(),
-                immutableSortedSetOf(),
                 LocalTime(11, 50), LocalTime(14, 20),
-                lessonRepeat, semesterId, 2L
-            )
+                semesterId
+            ),
+            emptyList(), emptyList(),
+            ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
         )
         assertEquals(
             LocalTime(14, 40),
-            lessonDao.getNextStartTime(semesterId, weekday)
+            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY)
         )
 
         lessonDao.insert(
             LessonEntity(
                 "name", "",
-                immutableSortedSetOf(),
-                immutableSortedSetOf(),
                 LocalTime(14, 40), LocalTime(17, 10),
-                lessonRepeat, semesterId, 3L
-            )
+                semesterId
+            ),
+            emptyList(), emptyList(),
+            ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
         )
         assertEquals(
             LocalTime(17, 30),
-            lessonDao.getNextStartTime(semesterId, weekday)
+            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY)
         )
 
         lessonDao.insert(
             LessonEntity(
                 "name", "",
-                immutableSortedSetOf(),
-                immutableSortedSetOf(),
                 LocalTime(17, 20), LocalTime(17, 50),
-                lessonRepeat, semesterId, 4L
-            )
+                semesterId
+            ),
+            emptyList(), emptyList(),
+            ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
         )
         assertEquals(
             LocalTime(18, 10),
-            lessonDao.getNextStartTime(semesterId, weekday)
+            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY)
         )
 
         lessonDao.insert(
             LessonEntity(
                 "name", "",
-                immutableSortedSetOf(),
-                immutableSortedSetOf(),
                 LocalTime(18, 0), LocalTime(18, 30),
-                lessonRepeat, semesterId, 5L
-            )
+                semesterId
+            ),
+            emptyList(), emptyList(),
+            ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
         )
         lessonDao.insert(
             LessonEntity(
                 "name", "",
-                immutableSortedSetOf(),
-                immutableSortedSetOf(),
                 LocalTime(18, 40), LocalTime(19, 10),
-                lessonRepeat, semesterId, 6L
-            )
+                semesterId
+            ),
+            emptyList(), emptyList(),
+            ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
         )
         assertEquals(
             LocalTime(19, 20),
-            lessonDao.getNextStartTime(semesterId, weekday)
+            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY)
+        )
+
+        lessonDao.insert(
+            LessonEntity(
+                "name", "",
+                LocalTime(17, 20), LocalTime(23, 59),
+                semesterId
+            ),
+            emptyList(), emptyList(),
+            ByWeekdayEntity(DateTimeConstants.TUESDAY, listOf(true))
+        )
+        assertEquals(
+            LocalTime(18, 10),
+            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY)
         )
     }
 }

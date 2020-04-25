@@ -12,31 +12,31 @@ import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 data class FullLesson(
 
     @Embedded
-    private val lesson: LessonEntity,
+    val lesson: LessonEntity,
 
     @Relation(
         parentColumn = "_id",
         entityColumn = "lesson_id"
     )
-    private val lessonTeachers: List<TeacherEntity>,
+    val lessonTeachers: List<TeacherEntity>,
 
     @Relation(
         parentColumn = "_id",
         entityColumn = "lesson_id"
     )
-    private val lessonClassrooms: List<TeacherEntity>,
+    val lessonClassrooms: List<ClassroomEntity>,
 
     @Relation(
         parentColumn = "_id",
         entityColumn = "lesson_id"
     )
-    private val byWeekday: ByWeekdayEntity?,
+    val byWeekday: ByWeekdayEntity?,
 
     @Relation(
         parentColumn = "_id",
         entityColumn = "lesson_id"
     )
-    private val byDates: List<ByDateEntity>
+    val byDates: List<ByDateEntity>
 ) : Lesson {
 
     override val subjectName get() = lesson.subjectName
@@ -57,7 +57,7 @@ data class FullLesson(
     override val lessonRepeat by lazy { byWeekday ?: ByDatesRepeat(byDates.asSequence().map { it.date }.toSet()) }
 
     init {
-        require((byWeekday != null) || byDates.isNotEmpty())
+        require((byWeekday != null) xor byDates.isNotEmpty())
     }
 
     @Parcelize
