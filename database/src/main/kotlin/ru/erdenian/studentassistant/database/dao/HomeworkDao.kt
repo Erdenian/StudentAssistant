@@ -2,7 +2,6 @@ package ru.erdenian.studentassistant.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -21,21 +20,21 @@ interface HomeworkDao {
     @Update
     suspend fun update(homework: HomeworkEntity)
 
-    @Delete
-    suspend fun delete(homework: HomeworkEntity)
+    @Query("DELETE FROM homeworks WHERE _id = :id")
+    suspend fun delete(id: Long)
 
     // endregion
 
     // region Homeworks
 
-    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND _id = :homeworkId")
-    suspend fun get(semesterId: Long, homeworkId: Long): HomeworkEntity?
+    @Query("SELECT * FROM homeworks WHERE _id = :id")
+    suspend fun get(id: Long): HomeworkEntity?
 
-    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND _id = :homeworkId")
-    fun getLive(semesterId: Long, homeworkId: Long): LiveData<HomeworkEntity?>
+    @Query("SELECT * FROM homeworks WHERE _id = :id")
+    fun getLive(id: Long): LiveData<HomeworkEntity?>
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId ORDER BY deadline, _id")
-    fun get(semesterId: Long): LiveData<List<HomeworkEntity>>
+    fun getAll(semesterId: Long): LiveData<List<HomeworkEntity>>
 
     @Query("SELECT COUNT(_id) FROM homeworks WHERE semester_id = :semesterId")
     suspend fun getCount(semesterId: Long): Int
@@ -62,10 +61,6 @@ interface HomeworkDao {
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline < :today ORDER BY deadline, _id")
     fun getPast(semesterId: Long, today: LocalDate = LocalDate.now()): LiveData<List<HomeworkEntity>>
-
-    // endregion
-
-    // region By subject name and deadline
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName AND deadline >= :today ORDER BY deadline, _id")
     fun getActual(semesterId: Long, subjectName: String, today: LocalDate = LocalDate.now()): LiveData<List<HomeworkEntity>>

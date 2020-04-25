@@ -1,7 +1,6 @@
 package ru.erdenian.studentassistant.database.dao
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -9,7 +8,6 @@ import androidx.room.Query
 import androidx.room.Transaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 import org.joda.time.Period
 import ru.erdenian.studentassistant.database.entity.ByDateEntity
@@ -17,7 +15,6 @@ import ru.erdenian.studentassistant.database.entity.ByWeekdayEntity
 import ru.erdenian.studentassistant.database.entity.ClassroomEntity
 import ru.erdenian.studentassistant.database.entity.FullLesson
 import ru.erdenian.studentassistant.database.entity.LessonEntity
-import ru.erdenian.studentassistant.database.entity.SemesterEntity
 import ru.erdenian.studentassistant.database.entity.TeacherEntity
 
 @Dao
@@ -104,25 +101,19 @@ abstract class LessonDao {
     // region Lessons
 
     @Transaction
-    @Query("SELECT * FROM lessons WHERE semester_id = :semesterId AND _id = :lessonId")
-    abstract suspend fun get(semesterId: Long, lessonId: Long): FullLesson?
+    @Query("SELECT * FROM lessons WHERE _id = :id")
+    abstract suspend fun get(id: Long): FullLesson?
 
     @Transaction
-    @Query("SELECT * FROM lessons WHERE semester_id = :semesterId AND _id = :lessonId")
-    abstract fun getLive(semesterId: Long, lessonId: Long): LiveData<FullLesson?>
+    @Query("SELECT * FROM lessons WHERE _id = :id")
+    abstract fun getLive(id: Long): LiveData<FullLesson?>
 
     @Transaction
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId ORDER BY start_time, end_time, _id")
-    abstract fun get(semesterId: Long): LiveData<List<FullLesson>>
+    abstract fun getAll(semesterId: Long): LiveData<List<FullLesson>>
 
-    fun get(semester: SemesterEntity, day: LocalDate): LiveData<List<FullLesson>> = get(semester.id).map { lessons ->
-        val weekNumber = semester.getWeekNumber(day)
-        lessons.filter { it.lessonRepeat.repeatsOnDay(day, weekNumber) }
-    }
-
-    fun get(semesterId: Long, weekday: Int): LiveData<List<FullLesson>> = get(semesterId).map { lessons ->
-        lessons.filter { (it.lessonRepeat as? ByWeekdayEntity)?.repeatsOnWeekday(weekday) ?: false }
-    }
+    @Query("SELECT * FROM lessons as l INNER JOIN by_weekday AS w ON w.lesson_id = l._id WHERE semester_id = :semesterId AND weekday = :weekday")
+    abstract fun getAll(semesterId: Long, weekday: Int): LiveData<List<FullLesson>>
 
     @Query("SELECT COUNT(_id) FROM lessons WHERE semester_id = :semesterId")
     abstract suspend fun getCount(semesterId: Long): Int
