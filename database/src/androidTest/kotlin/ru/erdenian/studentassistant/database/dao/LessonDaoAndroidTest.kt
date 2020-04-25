@@ -48,7 +48,7 @@ internal class LessonDaoAndroidTest {
 
     @Test
     fun insertTest() = runBlocking {
-        assertEquals(emptyList<SemesterEntity>(), lessonDao.getAll(semesterId).await())
+        assertEquals(emptyList<SemesterEntity>(), lessonDao.getAllLiveData(semesterId).await())
 
         val lesson = FullLesson(
             LessonEntity(
@@ -77,12 +77,12 @@ internal class LessonDaoAndroidTest {
             null,
             lesson.byDates.map { it.copy(lessonId = id) }
         )
-        assertEquals(listOf(expected), lessonDao.getAll(semesterId).await())
+        assertEquals(listOf(expected), lessonDao.getAllLiveData(semesterId).await())
     }
 
     @Test
     fun insertNoAutoincrementTest() = runBlocking {
-        assertEquals(emptyList<SemesterEntity>(), lessonDao.getAll(semesterId).await())
+        assertEquals(emptyList<SemesterEntity>(), lessonDao.getAllLiveData(semesterId).await())
 
         val lesson = FullLesson(
             LessonEntity(
@@ -103,12 +103,12 @@ internal class LessonDaoAndroidTest {
         )
         assertEquals(10L, id)
 
-        assertEquals(listOf(lesson), lessonDao.getAll(semesterId).await())
+        assertEquals(listOf(lesson), lessonDao.getAllLiveData(semesterId).await())
     }
 
     @Test
     fun getLessonLengthTest() = runBlocking {
-        assertEquals(emptyList<SemesterEntity>(), lessonDao.getAll(semesterId).await())
+        assertEquals(emptyList<SemesterEntity>(), lessonDao.getAllLiveData(semesterId).await())
         assertNull(lessonDao.getDuration(semesterId))
 
         lessonDao.insert(
@@ -153,7 +153,7 @@ internal class LessonDaoAndroidTest {
     fun getNextStartTimeTest() = runBlocking {
         val defaultBreakLength = Period.minutes(10)
 
-        assertEquals(emptyList<SemesterEntity>(), lessonDao.getAll(semesterId).await())
+        assertEquals(emptyList<SemesterEntity>(), lessonDao.getAllLiveData(semesterId).await())
         assertNull(lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY, defaultBreakLength))
 
         lessonDao.insert(

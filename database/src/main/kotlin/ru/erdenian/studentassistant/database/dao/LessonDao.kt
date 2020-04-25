@@ -106,20 +106,20 @@ abstract class LessonDao {
 
     @Transaction
     @Query("SELECT * FROM lessons WHERE _id = :id")
-    abstract fun getLive(id: Long): LiveData<FullLesson?>
+    abstract fun getLiveData(id: Long): LiveData<FullLesson?>
 
     @Transaction
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId ORDER BY start_time, end_time, _id")
-    abstract fun getAll(semesterId: Long): LiveData<List<FullLesson>>
+    abstract fun getAllLiveData(semesterId: Long): LiveData<List<FullLesson>>
 
     @Query("SELECT * FROM lessons as l INNER JOIN by_weekday AS w ON w.lesson_id = l._id WHERE semester_id = :semesterId AND weekday = :weekday")
-    abstract fun getAll(semesterId: Long, weekday: Int): LiveData<List<FullLesson>>
+    abstract fun getAllLiveData(semesterId: Long, weekday: Int): LiveData<List<FullLesson>>
 
     @Query("SELECT COUNT(_id) FROM lessons WHERE semester_id = :semesterId")
     abstract suspend fun getCount(semesterId: Long): Int
 
     @Query("SELECT EXISTS(SELECT _id FROM lessons WHERE semester_id = :semesterId)")
-    abstract fun hasLessons(semesterId: Long): LiveData<Boolean>
+    abstract fun hasLessonsLiveData(semesterId: Long): LiveData<Boolean>
 
     // endregion
 
@@ -129,7 +129,7 @@ abstract class LessonDao {
     abstract suspend fun getCount(semesterId: Long, subjectName: String): Int
 
     @Query("SELECT DISTINCT subject_name FROM lessons WHERE semester_id = :semesterId ORDER BY subject_name")
-    abstract fun getSubjects(semesterId: Long): LiveData<List<String>>
+    abstract fun getSubjectsLiveData(semesterId: Long): LiveData<List<String>>
 
     @Transaction
     open suspend fun renameSubject(semesterId: Long, oldName: String, newName: String) = withContext(Dispatchers.IO) {
@@ -148,13 +148,13 @@ abstract class LessonDao {
     // region Other fields
 
     @Query("SELECT DISTINCT type FROM lessons WHERE type IS NOT NULL AND semester_id = :semesterId ORDER BY type")
-    abstract fun getTypes(semesterId: Long): LiveData<List<String>>
+    abstract fun getTypesLiveData(semesterId: Long): LiveData<List<String>>
 
     @Query("SELECT DISTINCT t.name FROM teachers AS t INNER JOIN lessons AS l ON l._id = t.lesson_id WHERE l.semester_id = :semesterId ORDER BY t.name")
-    abstract fun getTeachers(semesterId: Long): LiveData<List<String>>
+    abstract fun getTeachersLiveData(semesterId: Long): LiveData<List<String>>
 
     @Query("SELECT DISTINCT c.name FROM classrooms AS c INNER JOIN lessons AS l ON l._id = c.lesson_id WHERE l.semester_id = :semesterId ORDER BY c.name")
-    abstract fun getClassrooms(semesterId: Long): LiveData<List<String>>
+    abstract fun getClassroomsLiveData(semesterId: Long): LiveData<List<String>>
 
     @Query("SELECT end_time - start_time as duration FROM lessons WHERE semester_id = :semesterId GROUP BY duration ORDER BY COUNT(duration) DESC LIMIT 1")
     abstract suspend fun getDuration(semesterId: Long): Period?

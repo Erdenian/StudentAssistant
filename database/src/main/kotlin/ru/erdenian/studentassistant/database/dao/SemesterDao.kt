@@ -25,11 +25,11 @@ interface SemesterDao {
     // endregion
 
     @Query("SELECT * FROM semesters ORDER BY first_day, last_day, name, _id")
-    fun getAll(): LiveData<List<SemesterEntity>>
+    fun getAllLiveData(): LiveData<List<SemesterEntity>>
 
     @Query("SELECT * FROM semesters WHERE _id = :id")
-    fun get(id: Long): LiveData<SemesterEntity?>
+    fun getLiveData(id: Long): LiveData<SemesterEntity?>
 
     @Query("SELECT name FROM semesters ORDER BY first_day, last_day, name, _id")
-    fun getNames(): LiveData<List<String>>
+    fun getNamesLiveData(): LiveData<List<String>>
 }

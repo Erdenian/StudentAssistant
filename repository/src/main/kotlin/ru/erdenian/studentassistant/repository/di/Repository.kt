@@ -11,19 +11,28 @@ import org.kodein.di.weakReference
 import ru.erdenian.studentassistant.database.di.databaseKodein
 import ru.erdenian.studentassistant.repository.HomeworkRepository
 import ru.erdenian.studentassistant.repository.LessonRepository
+import ru.erdenian.studentassistant.repository.SelectedSemesterRepository
 import ru.erdenian.studentassistant.repository.SemesterRepository
 
-fun repositoryModule(application: Application) = Kodein.Module(name = "Repository") {
-    val db = databaseKodein(application, "schedule.db")
+fun repositoryModule(
+    application: Application,
+    databaseName: String? = null,
+    defaultLessonStartTime: LocalTime,
+    defaultLessonDuration: Period,
+    defaultLessonBreakLength: Period
+) = Kodein.Module(name = "Repository") {
+    val db = databaseKodein(application, databaseName)
+
+    bind() from singleton { SelectedSemesterRepository(db.instance()) }
 
     bind() from singleton(ref = weakReference) { SemesterRepository(db.instance()) }
     bind() from singleton(ref = weakReference) {
         LessonRepository(
-            db.instance(),
-            LocalTime(9, 0),
-            Period.minutes(90),
-            Period.minutes(10)
+            db.instance(), instance(),
+            defaultLessonStartTime,
+            defaultLessonDuration,
+            defaultLessonBreakLength
         )
     }
-    bind() from singleton(ref = weakReference) { HomeworkRepository(db.instance()) }
+    bind() from singleton(ref = weakReference) { HomeworkRepository(db.instance(), instance()) }
 }
