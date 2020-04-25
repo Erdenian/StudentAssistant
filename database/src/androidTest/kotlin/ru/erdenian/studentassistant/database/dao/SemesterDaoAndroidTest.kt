@@ -25,8 +25,8 @@ internal class SemesterDaoAndroidTest {
     fun insertTest() = runBlocking {
         assertEquals(emptyList<SemesterEntity>(), semesterDao.getAll().await())
         val semester = SemesterEntity("name", LocalDate.now().minusDays(1), LocalDate.now().minusDays(0))
-        semesterDao.insert(semester)
-        assertEquals(semester, semesterDao.getAll().await().single())
+        val id = semesterDao.insert(semester)
+        assertEquals(semester.copy(id = id), semesterDao.getAll().await().single())
     }
 
     @Test
