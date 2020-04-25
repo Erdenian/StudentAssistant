@@ -5,7 +5,6 @@ import kotlinx.coroutines.runBlocking
 import org.joda.time.LocalDate
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.database.ScheduleDatabase
@@ -24,7 +23,7 @@ internal class SemesterDaoAndroidTest {
 
     @Test
     fun insertTest() = runBlocking {
-        assertTrue(semesterDao.getAll().await().isEmpty())
+        assertEquals(emptyList<SemesterEntity>(), semesterDao.getAll().await())
         val semester = SemesterEntity("name", LocalDate.now().minusDays(1), LocalDate.now().minusDays(0))
         semesterDao.insert(semester)
         assertEquals(semester, semesterDao.getAll().await().single())
@@ -32,7 +31,7 @@ internal class SemesterDaoAndroidTest {
 
     @Test
     fun getNamesTest() = runBlocking {
-        assertTrue(semesterDao.getAll().await().isEmpty())
+        assertEquals(emptyList<SemesterEntity>(), semesterDao.getAll().await())
         val semesters = listOf(
             SemesterEntity("name1", LocalDate.now().minusDays(500), LocalDate.now().minusDays(400), 1L),
             SemesterEntity("name3", LocalDate.now().minusDays(100), LocalDate.now().minusDays(0), 3L),

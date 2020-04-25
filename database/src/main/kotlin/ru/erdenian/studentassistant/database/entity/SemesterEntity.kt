@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.entity.Semester
-import ru.erdenian.studentassistant.entity.generateId
 
 @Entity(tableName = "semesters")
 @Parcelize
@@ -21,9 +20,9 @@ data class SemesterEntity(
     @ColumnInfo(name = "last_day")
     override val lastDay: LocalDate,
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id")
-    override val id: Long = generateId()
+    override val id: Long = 0L
 ) : Semester {
 
     init {

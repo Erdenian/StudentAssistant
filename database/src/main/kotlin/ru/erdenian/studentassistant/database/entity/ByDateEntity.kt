@@ -29,5 +29,5 @@ data class ByDateEntity(
     val date: LocalDate,
 
     @ColumnInfo(name = "lesson_id")
-    val lessonId: Long
+    var lessonId: Long = 0L
 ) : Parcelable

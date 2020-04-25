@@ -8,7 +8,6 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.LocalTime
-import ru.erdenian.studentassistant.entity.generateId
 
 @Entity(
     tableName = "lessons",
@@ -41,9 +40,9 @@ data class LessonEntity(
     @ColumnInfo(name = "semester_id")
     val semesterId: Long,
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id")
-    val id: Long = generateId()
+    val id: Long = 0L
 ) : Parcelable {
 
     init {

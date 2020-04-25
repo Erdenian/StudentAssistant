@@ -8,7 +8,6 @@ import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.entity.Homework
-import ru.erdenian.studentassistant.entity.generateId
 
 @Entity(
     tableName = "homeworks",
@@ -38,9 +37,9 @@ data class HomeworkEntity(
     @ColumnInfo(name = "semester_id")
     override val semesterId: Long,
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id")
-    override val id: Long = generateId()
+    override val id: Long = 0L
 ) : Homework {
 
     init {
