@@ -28,5 +28,13 @@ object Converters {
 
     @TypeConverter
     @JvmStatic
+    fun booleanListToString(value: List<Boolean>?): String? = value?.joinToString("") { if (it) "1" else "0" }
+
+    @TypeConverter
+    @JvmStatic
+    fun stringToBooleanList(value: String?): List<Boolean>? = value?.map { it == '1' }
+
+    @TypeConverter
+    @JvmStatic
     fun intToPeriod(value: Int?): Period? = value?.let { Period.millis(it) }
 }

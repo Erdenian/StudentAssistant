@@ -45,6 +45,7 @@ abstract class LessonDao {
             byWeekday.apply { lessonId = id },
             emptyList()
         )
+        id
     }
 
     @Transaction
@@ -61,6 +62,7 @@ abstract class LessonDao {
             null,
             byDates.apply { forEach { it.lessonId = id } }
         )
+        id
     }
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
@@ -72,7 +74,7 @@ abstract class LessonDao {
         classrooms: List<ClassroomEntity>,
         byWeekday: ByWeekdayEntity?,
         byDates: List<ByDateEntity>
-    ): Long
+    )
 
     @Transaction
     open suspend fun update(
@@ -80,7 +82,7 @@ abstract class LessonDao {
         teachers: List<TeacherEntity>,
         classrooms: List<ClassroomEntity>,
         byWeekday: ByWeekdayEntity
-    ) = withContext(Dispatchers.IO) {
+    ): Unit = withContext(Dispatchers.IO) {
         delete(lesson.id)
         insert(lesson, teachers, classrooms, byWeekday)
     }
@@ -91,7 +93,7 @@ abstract class LessonDao {
         teachers: List<TeacherEntity>,
         classrooms: List<ClassroomEntity>,
         byDates: List<ByDateEntity>
-    ) = withContext(Dispatchers.IO) {
+    ): Unit = withContext(Dispatchers.IO) {
         delete(lesson.id)
         insert(lesson, teachers, classrooms, byDates)
     }
@@ -115,13 +117,11 @@ abstract class LessonDao {
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId ORDER BY start_time, end_time, _id")
     abstract fun get(semesterId: Long): LiveData<List<FullLesson>>
 
-    @Transaction
     fun get(semester: SemesterEntity, day: LocalDate): LiveData<List<FullLesson>> = get(semester.id).map { lessons ->
         val weekNumber = semester.getWeekNumber(day)
         lessons.filter { it.lessonRepeat.repeatsOnDay(day, weekNumber) }
     }
 
-    @Transaction
     fun get(semesterId: Long, weekday: Int): LiveData<List<FullLesson>> = get(semesterId).map { lessons ->
         lessons.filter { (it.lessonRepeat as? ByWeekdayEntity)?.repeatsOnWeekday(weekday) ?: false }
     }

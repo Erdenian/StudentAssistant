@@ -1,6 +1,7 @@
 package ru.erdenian.studentassistant.database.entity
 
 import androidx.room.Embedded
+import androidx.room.Ignore
 import androidx.room.Relation
 import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
@@ -47,12 +48,15 @@ data class FullLesson(
     override val semesterId get() = lesson.semesterId
     override val id get() = lesson.id
 
+    @delegate:Ignore
     @IgnoredOnParcel
     override val teachers by lazy { lessonTeachers.asSequence().map { it.name }.toImmutableSortedSet() }
 
+    @delegate:Ignore
     @IgnoredOnParcel
     override val classrooms by lazy { lessonClassrooms.asSequence().map { it.name }.toImmutableSortedSet() }
 
+    @delegate:Ignore
     @IgnoredOnParcel
     override val lessonRepeat by lazy { byWeekday ?: ByDatesRepeat(byDates.asSequence().map { it.date }.toSet()) }
 
