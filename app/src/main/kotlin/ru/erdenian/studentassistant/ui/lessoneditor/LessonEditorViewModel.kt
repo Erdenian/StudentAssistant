@@ -78,7 +78,7 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
         this.subjectName.setIfEmpty(subjectName)
     }
 
-    val subjectName = MutableLiveData("")
+    val subjectName = MutableLiveData<String>()
     val type = MutableLiveData("")
     val teachers = MutableLiveData("")
     val classrooms = MutableLiveData("")

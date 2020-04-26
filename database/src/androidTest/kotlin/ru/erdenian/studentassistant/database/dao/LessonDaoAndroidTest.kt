@@ -169,6 +169,7 @@ internal class LessonDaoAndroidTest {
             LocalTime(11, 40),
             lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY, defaultBreakLength)
         )
+        assertNull(lessonDao.getNextStartTime(semesterId, DateTimeConstants.TUESDAY, defaultBreakLength))
 
         lessonDao.insert(
             LessonEntity(
@@ -238,7 +239,7 @@ internal class LessonDaoAndroidTest {
         lessonDao.insert(
             LessonEntity(
                 "name", "",
-                LocalTime(17, 20), LocalTime(23, 59),
+                LocalTime(17, 20), LocalTime(22, 0),
                 semesterId
             ),
             emptyList(), emptyList(),
@@ -247,6 +248,10 @@ internal class LessonDaoAndroidTest {
         assertEquals(
             LocalTime(19, 20),
             lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY, defaultBreakLength)
+        )
+        assertEquals(
+            LocalTime(22, 30),
+            lessonDao.getNextStartTime(semesterId, DateTimeConstants.TUESDAY, defaultBreakLength)
         )
     }
 }

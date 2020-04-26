@@ -119,6 +119,7 @@ class HomeworkEditorActivity : AppCompatActivity() {
             viewModel.error.value?.let { error ->
                 toast(
                     when (error) {
+                        Error.EMPTY_SUBJECT -> R.string.hea_error_empty_subject_name
                         Error.EMPTY_DESCRIPTION -> R.string.hea_error_empty_description
                     }
                 )
