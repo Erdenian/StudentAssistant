@@ -14,13 +14,10 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val viewModel by activityViewModels<MainViewModel>()
-        val owner = viewLifecycleOwner
         val binding = FragmentHomeworksBinding.bind(view)
 
         binding.viewPager.apply {
-            adapter = HomeworksPagerAdapter(context, childFragmentManager).apply {
-                viewModel.selectedSemester.observe(owner) { semester = it }
-            }
+            adapter = HomeworksPagerAdapter(context, childFragmentManager)
         }
         binding.pagerTabStrip.apply {
             val color = requireContext().colorAttr(R.attr.colorPrimary)
@@ -29,9 +26,7 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
         }
 
         binding.addHomework.setOnClickListener {
-            HomeworkEditorActivity.start(
-                requireContext(), checkNotNull(viewModel.selectedSemester.value).id
-            )
+            HomeworkEditorActivity.start(requireContext(), checkNotNull(viewModel.selectedSemester.value).id)
         }
 
         binding.flipper.apply {
