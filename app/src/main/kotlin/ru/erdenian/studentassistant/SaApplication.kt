@@ -11,6 +11,7 @@ import ru.erdenian.studentassistant.repository.di.repositoryModule
 
 class SaApplication : Application(), KodeinAware {
 
+    @Suppress("MagicNumber")
     override val kodein by Kodein.lazy {
         val app = this@SaApplication
         import(

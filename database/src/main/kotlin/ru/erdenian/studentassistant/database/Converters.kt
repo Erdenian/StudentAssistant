@@ -8,6 +8,7 @@ import org.joda.time.Period
 
 object Converters {
 
+    @Suppress("MagicNumber")
     private val epoch = LocalDate(1970, 1, 1)
 
     @TypeConverter

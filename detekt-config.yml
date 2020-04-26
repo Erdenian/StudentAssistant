@@ -75,7 +75,7 @@ complexity:
     ignoreNestingFunctions: false
     nestingFunctions: [run, let, apply, with, also, use, forEach, isNotNull, ifNull]
   LabeledExpression:
-    active: true
+    active: false
     ignoredLabels: []
   LargeClass:
     active: true
