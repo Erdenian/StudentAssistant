@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.ui.main
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -85,7 +84,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.mm_add_schedule -> {
-            SemesterEditorActivity.startForResult(this, SEMESTER_EDITOR_REQUEST_CODE)
+            SemesterEditorActivity.start(this)
             true
         }
         R.id.mm_edit_schedule -> {
@@ -93,12 +92,5 @@ class MainActivity : AppCompatActivity() {
             true
         }
         else -> false
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if ((requestCode == SEMESTER_EDITOR_REQUEST_CODE) && (resultCode == RESULT_OK)) {
-            viewModel.selectSemester(requireNotNull(data?.getParcelableExtra(SemesterEditorActivity.SEMESTER_RESULT_EXTRA)))
-        }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 }

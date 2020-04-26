@@ -44,31 +44,38 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
 
     fun init(semesterId: Long, startTime: LocalTime, weekday: Int) {
         this.semesterId.setIfEmpty(semesterId)
-        this.startTime.value = startTime
-        this.weekday.value = weekday
+        this.startTime.setIfEmpty(startTime)
+        this.weekday.setIfEmpty(weekday)
     }
 
     fun init(lesson: Lesson, copy: Boolean) {
         this.semesterId.setIfEmpty(lesson.semesterId)
 
         if (!copy) this.lesson = lesson
-        subjectName.value = lesson.subjectName
-        type.value = lesson.type
-        teachers.value = lesson.teachers.joinToString()
-        classrooms.value = lesson.classrooms.joinToString()
-        startTime.value = lesson.startTime
-        endTime.value = lesson.endTime
-        lessonRepeat.value = when (val lessonRepeat = lesson.lessonRepeat) {
-            is Lesson.Repeat.ByWeekday -> {
-                weekday.value = lessonRepeat.weekday
-                weeks.value = lessonRepeat.weeks
-                Lesson.Repeat.ByWeekday::class
+        subjectName.setIfEmpty(lesson.subjectName)
+        type.setIfEmpty(lesson.type)
+        teachers.setIfEmpty(lesson.teachers.joinToString())
+        classrooms.setIfEmpty(lesson.classrooms.joinToString())
+        startTime.setIfEmpty(lesson.startTime)
+        endTime.setIfEmpty(lesson.endTime)
+        lessonRepeat.setIfEmpty(
+            when (val lessonRepeat = lesson.lessonRepeat) {
+                is Lesson.Repeat.ByWeekday -> {
+                    weekday.value = lessonRepeat.weekday
+                    weeks.value = lessonRepeat.weeks
+                    Lesson.Repeat.ByWeekday::class
+                }
+                is Lesson.Repeat.ByDates -> {
+                    dates.value = lessonRepeat.dates.toImmutableSortedSet()
+                    Lesson.Repeat.ByDates::class
+                }
             }
-            is Lesson.Repeat.ByDates -> {
-                dates.value = lessonRepeat.dates.toImmutableSortedSet()
-                Lesson.Repeat.ByDates::class
-            }
-        }
+        )
+    }
+
+    fun init(semesterId: Long, subjectName: String) {
+        this.semesterId.setIfEmpty(semesterId)
+        this.subjectName.setIfEmpty(subjectName)
     }
 
     val subjectName = MutableLiveData("")

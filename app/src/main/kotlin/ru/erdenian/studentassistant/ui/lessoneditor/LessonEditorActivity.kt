@@ -36,6 +36,7 @@ class LessonEditorActivity : AppCompatActivity() {
         private const val START_TIME_INTENT_KEY = "start_time_intent_key"
         private const val WEEKDAY_INTENT_KEY = "weekday_intent_key"
         private const val LESSON_INTENT_KEY = "lesson_intent_key"
+        private const val SUBJECT_NAME_INTENT_KEY = "subject_name_intent_key"
         private const val COPY_INTENT_KEY = "copy_intent_key"
 
         fun start(
@@ -59,6 +60,15 @@ class LessonEditorActivity : AppCompatActivity() {
             COPY_INTENT_KEY to copy
         )
 
+        fun start(
+            context: Context,
+            semesterId: Long,
+            subjectName: String
+        ) = context.startActivity<LessonEditorActivity>(
+            SEMESTER_ID_INTENT_KEY to semesterId,
+            SUBJECT_NAME_INTENT_KEY to subjectName
+        )
+
         private const val TIME_FORMAT = "HH:mm"
     }
 
@@ -80,7 +90,11 @@ class LessonEditorActivity : AppCompatActivity() {
                 semesterId,
                 getSerializableExtra(START_TIME_INTENT_KEY) as LocalTime,
                 getIntExtra(WEEKDAY_INTENT_KEY, DateTimeConstants.MONDAY)
-            ) else viewModel.init(l, intent.getBooleanExtra(COPY_INTENT_KEY, false))
+            ) else {
+                val subjectName = intent.getStringExtra(SUBJECT_NAME_INTENT_KEY)
+                if (subjectName == null) viewModel.init(l, intent.getBooleanExtra(COPY_INTENT_KEY, false))
+                else viewModel.init(semesterId, subjectName)
+            }
         }
 
         supportActionBar?.apply {
