@@ -30,6 +30,7 @@ class HomeworkEditorViewModel(
     private val homeworkRepository by instance<HomeworkRepository>()
 
     enum class Error {
+        EMPTY_SUBJECT,
         EMPTY_DESCRIPTION
     }
 
@@ -65,9 +66,14 @@ class HomeworkEditorViewModel(
 
     val error: LiveData<Error?> = MediatorLiveData<Error?>().apply {
         val observer = Observer<Any?> {
-            value = if (description.value?.isBlank() != false) Error.EMPTY_DESCRIPTION else null
+            value = when {
+                subjectName.value.isNullOrBlank() -> Error.EMPTY_SUBJECT
+                description.value.isNullOrBlank() -> Error.EMPTY_DESCRIPTION
+                else -> null
+            }
         }
 
+        addSource(subjectName, observer)
         addSource(description, observer)
     }
 
@@ -96,6 +102,7 @@ class HomeworkEditorViewModel(
                     checkNotNull(semesterId.value)
                 )
             }
+            donePrivate.value = true
         }
     }
 

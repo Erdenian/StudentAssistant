@@ -92,6 +92,7 @@
     <string name="hea_description">Описание</string>
     <string name="hea_deadline">Выберите дату сдачи</string>
     <string name="hea_save">Сохранить</string>
+    <string name="hea_error_empty_subject_name">Введите или выберите предмет</string>
     <string name="hea_error_empty_description">Введите описание домашнего задания</string>
     <string name="hea_unknown_lesson">Неизвестный предмет</string>
     <string name="hea_unknown_lesson_message">Введен неизвестный предмет. Сохранить задание?</string>

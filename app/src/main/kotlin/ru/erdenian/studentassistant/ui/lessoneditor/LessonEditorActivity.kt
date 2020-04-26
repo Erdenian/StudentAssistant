@@ -84,14 +84,14 @@ class LessonEditorActivity : AppCompatActivity() {
 
         intent.apply {
             val l = lesson
+            val subjectName = intent.getStringExtra(SUBJECT_NAME_INTENT_KEY)
             val semesterId = getLongExtra(SEMESTER_ID_INTENT_KEY, -1)
             @Suppress("UnsafeCast")
-            if (l == null) viewModel.init(
+            if ((l == null) && (subjectName == null)) viewModel.init(
                 semesterId,
                 getSerializableExtra(START_TIME_INTENT_KEY) as LocalTime,
                 getIntExtra(WEEKDAY_INTENT_KEY, DateTimeConstants.MONDAY)
             ) else {
-                val subjectName = intent.getStringExtra(SUBJECT_NAME_INTENT_KEY)
                 if (subjectName == null) viewModel.init(l, intent.getBooleanExtra(COPY_INTENT_KEY, false))
                 else viewModel.init(semesterId, subjectName)
             }
@@ -248,6 +248,8 @@ class LessonEditorActivity : AppCompatActivity() {
                 .observe(owner) { weeks = it }
             onWeeksChangeListener = { viewModel.weeks.value = it }
         }
+
+        viewModel.done.observe(owner) { if (it) finish() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
