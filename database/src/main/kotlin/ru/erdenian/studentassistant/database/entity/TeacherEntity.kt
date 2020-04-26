@@ -25,6 +25,7 @@ data class TeacherEntity(
     @ColumnInfo(name = "name")
     val name: String,
 
+    @Suppress("DataClassShouldBeImmutable")
     @ColumnInfo(name = "lesson_id", index = true)
     var lessonId: Long = 0L,
 

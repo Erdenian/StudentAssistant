@@ -29,6 +29,7 @@ data class ByWeekdayEntity(
     @ColumnInfo(name = "weeks")
     override val weeks: List<Boolean>,
 
+    @Suppress("DataClassShouldBeImmutable")
     @PrimaryKey
     @ColumnInfo(name = "lesson_id", index = true)
     var lessonId: Long = 0L

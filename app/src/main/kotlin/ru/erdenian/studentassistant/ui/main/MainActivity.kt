@@ -22,10 +22,6 @@ import ru.erdenian.studentassistant.utils.setColor
 
 class MainActivity : AppCompatActivity() {
 
-    companion object {
-        private const val SEMESTER_EDITOR_REQUEST_CODE = 1
-    }
-
     private val viewModel by viewModels<MainViewModel>()
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }

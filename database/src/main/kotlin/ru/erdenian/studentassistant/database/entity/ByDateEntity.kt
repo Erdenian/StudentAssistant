@@ -26,6 +26,7 @@ data class ByDateEntity(
     @ColumnInfo(name = "date")
     val date: LocalDate,
 
+    @Suppress("DataClassShouldBeImmutable")
     @ColumnInfo(name = "lesson_id", index = true)
     var lessonId: Long = 0L
 ) : Parcelable

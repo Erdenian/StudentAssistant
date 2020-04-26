@@ -12,7 +12,6 @@ import ru.erdenian.studentassistant.entity.ImmutableSortedSet
 import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 
-@Suppress("TooManyFunctions")
 class HomeworkRepository(
     private val homeworkDao: HomeworkDao,
     private val selectedSemesterRepository: SelectedSemesterRepository
