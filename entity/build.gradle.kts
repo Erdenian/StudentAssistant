@@ -1,9 +1,6 @@
-import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsFeature
-
 plugins {
     id("com.android.library")
     kotlin("android")
-    kotlin("android.extensions")
     id("de.mannodermaus.android-junit5")
 }
 
@@ -52,11 +49,6 @@ android {
     }
 }
 
-androidExtensions {
-    features = setOf(AndroidExtensionsFeature.PARCELIZE.featureName)
-    isExperimental = true
-}
-
 dependencies {
     // region Tests
     val junitVersion: String by project
@@ -67,11 +59,6 @@ dependencies {
     // region Kotlin
     val kotlinVersion: String by project
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
-    // endregion
-
-    // region AndroidX
-    val roomVersion: String by project
-    implementation("androidx.room:room-ktx:$roomVersion")
     // endregion
 
     // region Core

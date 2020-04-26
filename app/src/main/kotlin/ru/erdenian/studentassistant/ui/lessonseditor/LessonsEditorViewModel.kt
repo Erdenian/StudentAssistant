@@ -2,12 +2,12 @@ package ru.erdenian.studentassistant.ui.lessonseditor
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.switchMap
-import com.shopify.livedataktx.MutableLiveDataKtx
-import com.shopify.livedataktx.toKtx
-import com.shopify.livedataktx.toNullableKtx
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
@@ -18,44 +18,39 @@ import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 import ru.erdenian.studentassistant.repository.HomeworkRepository
 import ru.erdenian.studentassistant.repository.LessonRepository
 import ru.erdenian.studentassistant.repository.SemesterRepository
-import ru.erdenian.studentassistant.utils.asLiveData
 import ru.erdenian.studentassistant.utils.liveDataOf
 import ru.erdenian.studentassistant.utils.setIfEmpty
 
-class LessonsEditorViewModel(
-    application: Application
-) : AndroidViewModel(application), KodeinAware {
+class LessonsEditorViewModel(application: Application) : AndroidViewModel(application), KodeinAware {
 
     override val kodein by kodein()
     private val semesterRepository by instance<SemesterRepository>()
     private val lessonRepository by instance<LessonRepository>()
     private val homeworkRepository by instance<HomeworkRepository>()
 
-    private val privateSemester = MutableLiveDataKtx<Semester>()
+    private val privateSemester = MutableLiveData<Semester>()
 
     fun init(semester: Semester) {
         privateSemester.setIfEmpty(semester)
     }
 
-    val semester = privateSemester.asLiveData.switchMap { semester ->
-        liveDataOf(semester, semesterRepository.get(semester.id))
-    }.toNullableKtx()
+    val semester = privateSemester.switchMap { liveDataOf(it, semesterRepository.getLiveData(it.id)) }
 
     fun getLessons(weekday: Int) = semester.switchMap { semester ->
         semester
-            ?.let { lessonRepository.get(it.id, weekday) }
-            ?: liveDataOf(immutableSortedSetOf())
-    }.toKtx()
+            ?.let { lessonRepository.getAllLiveData(it.id, weekday) }
+            ?: MutableLiveData(immutableSortedSetOf())
+    }
 
-    suspend fun getNextStartTime(weekday: Int) = lessonRepository.getNextStartTime(
-        checkNotNull(semester.value).id, weekday
-    )
+    suspend fun getNextStartTime(weekday: Int) = lessonRepository.getNextStartTime(checkNotNull(semester.value).id, weekday)
 
-    suspend fun deleteSemester() = semesterRepository.delete(checkNotNull(semester.value))
+    fun deleteSemester() {
+        viewModelScope.launch {
+            semesterRepository.delete(checkNotNull(semester.value).id)
+        }
+    }
 
-    suspend fun isLastLessonOfSubjectsAndHasHomeworks(
-        lesson: Lesson
-    ): Boolean = withContext(Dispatchers.IO) {
+    suspend fun isLastLessonOfSubjectsAndHasHomeworks(lesson: Lesson): Boolean = withContext(Dispatchers.IO) {
         val semesterId = checkNotNull(semester.value).id
         val subjectName = lesson.subjectName
         val isLastLesson = async { lessonRepository.getCount(semesterId, subjectName) == 1 }
@@ -63,5 +58,10 @@ class LessonsEditorViewModel(
         isLastLesson.await() && hasHomeworks.await()
     }
 
-    suspend fun delete(lesson: Lesson) = lessonRepository.delete(lesson)
+    fun deleteLesson(lesson: Lesson, withHomeworks: Boolean = false) {
+        viewModelScope.launch {
+            lessonRepository.delete(lesson.id)
+            if (withHomeworks) homeworkRepository.delete(lesson.subjectName)
+        }
+    }
 }

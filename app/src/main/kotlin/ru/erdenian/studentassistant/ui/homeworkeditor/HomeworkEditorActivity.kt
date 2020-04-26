@@ -11,11 +11,13 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.joda.time.LocalDate
+import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.ActivityHomeworkEditorBinding
 import ru.erdenian.studentassistant.entity.Homework
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorViewModel.Error
+import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.uikit.ExposedDropdownMenu
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
@@ -31,25 +33,19 @@ class HomeworkEditorActivity : AppCompatActivity() {
         private const val SUBJECT_NAME_INTENT_KEY = "subject_name_intent_key"
         private const val HOMEWORK_INTENT_KEY = "homework_intent_key"
 
-        fun start(context: Context, semesterId: Long) {
-            context.startActivity<HomeworkEditorActivity>(
-                SEMESTER_ID_INTENT_KEY to semesterId
-            )
-        }
+        fun start(context: Context, semesterId: Long) = context.startActivity<HomeworkEditorActivity>(
+            SEMESTER_ID_INTENT_KEY to semesterId
+        )
 
-        fun start(context: Context, lesson: Lesson) {
-            context.startActivity<HomeworkEditorActivity>(
-                SEMESTER_ID_INTENT_KEY to lesson.semesterId,
-                SUBJECT_NAME_INTENT_KEY to lesson.subjectName
-            )
-        }
+        fun start(context: Context, lesson: Lesson) = context.startActivity<HomeworkEditorActivity>(
+            SEMESTER_ID_INTENT_KEY to lesson.semesterId,
+            SUBJECT_NAME_INTENT_KEY to lesson.subjectName
+        )
 
-        fun start(context: Context, homework: Homework) {
-            context.startActivity<HomeworkEditorActivity>(
-                SEMESTER_ID_INTENT_KEY to homework.semesterId,
-                HOMEWORK_INTENT_KEY to homework
-            )
-        }
+        fun start(context: Context, homework: Homework) = context.startActivity<HomeworkEditorActivity>(
+            SEMESTER_ID_INTENT_KEY to homework.semesterId,
+            HOMEWORK_INTENT_KEY to homework
+        )
 
         private const val DATE_FORMAT = "dd.MM.yyyy"
     }
@@ -67,9 +63,8 @@ class HomeworkEditorActivity : AppCompatActivity() {
         intent.apply {
             val homework = homework
             val semesterId = getLongExtra(SEMESTER_ID_INTENT_KEY, -1)
-            if (homework == null) viewModel.init(
-                semesterId, intent.getStringExtra(SUBJECT_NAME_INTENT_KEY)
-            ) else viewModel.init(semesterId, homework)
+            if (homework != null) viewModel.init(semesterId, homework)
+            else viewModel.init(semesterId, intent.getStringExtra(SUBJECT_NAME_INTENT_KEY))
         }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -77,39 +72,35 @@ class HomeworkEditorActivity : AppCompatActivity() {
         val owner = this
 
         binding.subjectName.apply {
-            val adapter = ExposedDropdownMenu.createAdapter(context).apply {
+            setAdapter(ExposedDropdownMenu.createAdapter(context).apply {
                 viewModel.existingSubjects.observe(owner) { items = it.list }
-            }
-            setAdapter(adapter)
+            })
 
+            viewModel.subjectName
+                .distinctUntilChanged { it == text?.toString() ?: "" }
+                .observe(owner) { text = it }
             onTextChangedListener = { text, _ -> viewModel.subjectName.value = text }
-
-            viewModel.subjectName.distinctUntilChanged { value ->
-                value == text?.toString() ?: ""
-            }.observe(owner) { text = it }
         }
 
         binding.description.apply {
-            viewModel.description.distinctUntilChanged { value ->
-                value == text?.toString() ?: ""
-            }.observe(owner) { setText(it) }
+            viewModel.description
+                .distinctUntilChanged { it == text?.toString() ?: "" }
+                .observe(owner) { setText(it) }
             addTextChangedListener { viewModel.description.value = it?.toString() ?: "" }
         }
 
         binding.deadline.apply {
-            viewModel.deadline.observe(owner) { deadline ->
-                text = deadline.toString(DATE_FORMAT)
-            }
+            val dateFormatter = DateTimeFormat.forPattern(DATE_FORMAT)
+            viewModel.deadline.observe(owner) { text = it.toString(dateFormatter) }
             setOnClickListener {
                 showDatePicker(
-                    viewModel.deadline.value,
-                    LocalDate.now(),
-                    viewModel.semesterLastDay.value
+                    viewModel.deadline.value, LocalDate.now(), viewModel.semesterLastDay.value
                 ) { viewModel.deadline.value = it }
             }
         }
 
         viewModel.error.observe(owner) {}
+        viewModel.done.observe(owner) { if (it) finish() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -128,26 +119,26 @@ class HomeworkEditorActivity : AppCompatActivity() {
             viewModel.error.value?.let { error ->
                 toast(
                     when (error) {
+                        Error.EMPTY_SUBJECT -> R.string.hea_error_empty_subject_name
                         Error.EMPTY_DESCRIPTION -> R.string.hea_error_empty_description
                     }
                 )
             } ?: run {
-                if (viewModel.lessonExists) {
-                    viewModel.viewModelScope.launch {
-                        viewModel.save()
-                        finish()
-                    }
-                } else {
+                if (viewModel.lessonExists) viewModel.save()
+                else {
                     MaterialAlertDialogBuilder(this)
                         .setTitle(R.string.hea_unknown_lesson)
                         .setMessage(R.string.hea_unknown_lesson_message)
-                        .setPositiveButton(R.string.hea_unknown_lesson_yes) { _, _ ->
-                            viewModel.viewModelScope.launch {
-                                viewModel.save()
-                                finish()
-                            }
-                        }
+                        .setPositiveButton(R.string.hea_unknown_lesson_yes) { _, _ -> viewModel.save() }
                         .setNegativeButton(R.string.hea_unknown_lesson_no, null)
+                        .setNeutralButton(R.string.hea_unknown_lesson_yes_and_create) { _, _ ->
+                            viewModel.save()
+                            LessonEditorActivity.start(
+                                this,
+                                checkNotNull(viewModel.semesterId.value),
+                                checkNotNull(viewModel.subjectName.value)
+                            )
+                        }
                         .show()
                 }
             }

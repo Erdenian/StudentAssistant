@@ -8,185 +8,250 @@ import org.joda.time.LocalTime
 import org.joda.time.Period
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.assertNotEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.database.ScheduleDatabase
 import ru.erdenian.studentassistant.database.di.databaseKodein
+import ru.erdenian.studentassistant.database.entity.ByDateEntity
+import ru.erdenian.studentassistant.database.entity.ByWeekdayEntity
+import ru.erdenian.studentassistant.database.entity.ClassroomEntity
+import ru.erdenian.studentassistant.database.entity.FullLesson
+import ru.erdenian.studentassistant.database.entity.LessonEntity
+import ru.erdenian.studentassistant.database.entity.SemesterEntity
+import ru.erdenian.studentassistant.database.entity.TeacherEntity
 import ru.erdenian.studentassistant.database.utils.await
-import ru.erdenian.studentassistant.entity.Lesson
-import ru.erdenian.studentassistant.entity.LessonRepeat
-import ru.erdenian.studentassistant.entity.Semester
-import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 
 internal class LessonDaoAndroidTest {
 
     private val kodein = databaseKodein(ApplicationProvider.getApplicationContext())
-    private val database: ScheduleDatabase = kodein.instance()
     private val lessonDao: LessonDao = kodein.instance()
 
     private val semesterId = 1L
 
     @BeforeEach
-    fun setUp() = runBlocking {
+    fun setUp(): Unit = runBlocking {
         kodein.instance<SemesterDao>().insert(
-            Semester(
+            SemesterEntity(
                 "name",
-                LocalDate.now().minusDays(500),
-                LocalDate.now().minusDays(400),
+                LocalDate(2020, 1, 1),
+                LocalDate(2020, 6, 1),
                 semesterId
             )
         )
     }
 
     @AfterEach
-    fun tearDown() = database.close()
+    fun tearDown() = kodein.instance<ScheduleDatabase>().close()
 
     @Test
     fun insertTest() = runBlocking {
-        assertTrue(lessonDao.get(semesterId).await().isEmpty())
-        val lesson = Lesson(
-            "name",
-            "type",
-            immutableSortedSetOf("teacher"),
-            immutableSortedSetOf("classroom"),
-            LocalTime.MIDNIGHT,
-            LocalTime.MIDNIGHT.plusHours(2),
-            LessonRepeat.ByDates(immutableSortedSetOf(LocalDate.now())),
-            semesterId
+        assertEquals(emptyList<SemesterEntity>(), lessonDao.getAllLiveData(semesterId).await())
+
+        val lesson = FullLesson(
+            LessonEntity(
+                "name", "type",
+                LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(2),
+                semesterId
+            ),
+            listOf(TeacherEntity("teacher")),
+            listOf(ClassroomEntity("classroom")),
+            null,
+            listOf(ByDateEntity(LocalDate(2020, 4, 25)))
         )
-        lessonDao.insert(lesson)
-        assertEquals(lesson, lessonDao.get(semesterId).await().single())
+
+        val id = lessonDao.insert(
+            lesson.lesson,
+            lesson.lessonTeachers,
+            lesson.lessonClassrooms,
+            lesson.byDates
+        )
+        assertNotEquals(0, id)
+
+        val expected = FullLesson(
+            lesson.lesson.copy(id = id),
+            lesson.lessonTeachers.map { it.copy(lessonId = id, id = 1L) },
+            lesson.lessonClassrooms.map { it.copy(lessonId = id, id = 1L) },
+            null,
+            lesson.byDates.map { it.copy(lessonId = id) }
+        )
+        assertEquals(listOf(expected), lessonDao.getAllLiveData(semesterId).await())
+    }
+
+    @Test
+    fun insertNoAutoincrementTest() = runBlocking {
+        assertEquals(emptyList<SemesterEntity>(), lessonDao.getAllLiveData(semesterId).await())
+
+        val lesson = FullLesson(
+            LessonEntity(
+                "name", "type",
+                LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(2),
+                semesterId, 10L
+            ),
+            listOf(TeacherEntity("teacher", 10L, 20L)),
+            listOf(ClassroomEntity("classroom", 10L, 20L)),
+            null,
+            listOf(ByDateEntity(LocalDate(2020, 4, 25), 10L))
+        )
+        val id = lessonDao.insert(
+            lesson.lesson,
+            lesson.lessonTeachers,
+            lesson.lessonClassrooms,
+            lesson.byDates
+        )
+        assertEquals(10L, id)
+
+        assertEquals(listOf(lesson), lessonDao.getAllLiveData(semesterId).await())
     }
 
     @Test
     fun getLessonLengthTest() = runBlocking {
-        assertTrue(lessonDao.get(semesterId).await().isEmpty())
-        assertEquals(
-            Period.minutes(90).normalizedStandard(),
-            lessonDao.getLessonLength(semesterId).normalizedStandard()
-        )
+        assertEquals(emptyList<SemesterEntity>(), lessonDao.getAllLiveData(semesterId).await())
+        assertNull(lessonDao.getDuration(semesterId))
 
         lessonDao.insert(
-            Lesson(
+            LessonEntity(
                 "name", "",
-                immutableSortedSetOf(), immutableSortedSetOf(),
                 LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(2),
-                LessonRepeat.ByDates(immutableSortedSetOf(LocalDate.now())),
-                semesterId, 1L
-            )
+                semesterId
+            ),
+            emptyList(), emptyList(),
+            listOf(ByDateEntity(LocalDate(2020, 4, 25)))
         )
         assertEquals(
             Period.hours(2).normalizedStandard(),
-            lessonDao.getLessonLength(semesterId).normalizedStandard()
+            lessonDao.getDuration(semesterId)?.normalizedStandard()
         )
 
         lessonDao.insert(
-            Lesson(
+            LessonEntity(
                 "name", "",
-                immutableSortedSetOf(), immutableSortedSetOf(),
                 LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(3),
-                LessonRepeat.ByDates(immutableSortedSetOf(LocalDate.now())),
-                semesterId, 2L
-            )
+                semesterId
+            ),
+            emptyList(), emptyList(),
+            listOf(ByDateEntity(LocalDate(2020, 4, 26)))
         )
         lessonDao.insert(
-            Lesson(
+            LessonEntity(
                 "name", "",
-                immutableSortedSetOf(), immutableSortedSetOf(),
                 LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(3),
-                LessonRepeat.ByDates(immutableSortedSetOf(LocalDate.now())),
-                semesterId, 3L
-            )
+                semesterId
+            ),
+            emptyList(), emptyList(),
+            listOf(ByDateEntity(LocalDate(2020, 4, 27)))
         )
         assertEquals(
             Period.hours(3).normalizedStandard(),
-            lessonDao.getLessonLength(semesterId).normalizedStandard()
+            lessonDao.getDuration(semesterId)?.normalizedStandard()
         )
     }
 
     @Test
     fun getNextStartTimeTest() = runBlocking {
-        val weekday = DateTimeConstants.MONDAY
-        val lessonRepeat = LessonRepeat.ByWeekday(weekday, listOf(true))
-        assertTrue(lessonDao.get(semesterId).await().isEmpty())
-        assertEquals(
-            LocalTime(9, 0),
-            lessonDao.getNextStartTime(semesterId, weekday)
-        )
+        val defaultBreakLength = Period.minutes(10)
+
+        assertEquals(emptyList<SemesterEntity>(), lessonDao.getAllLiveData(semesterId).await())
+        assertNull(lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY, defaultBreakLength))
 
         lessonDao.insert(
-            Lesson(
+            LessonEntity(
                 "name", "",
-                immutableSortedSetOf(), immutableSortedSetOf(),
                 LocalTime(9, 0), LocalTime(11, 30),
-                lessonRepeat, semesterId, 1L
-            )
+                semesterId
+            ),
+            emptyList(), emptyList(),
+            ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
         )
         assertEquals(
             LocalTime(11, 40),
-            lessonDao.getNextStartTime(semesterId, weekday)
+            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY, defaultBreakLength)
         )
+        assertNull(lessonDao.getNextStartTime(semesterId, DateTimeConstants.TUESDAY, defaultBreakLength))
 
         lessonDao.insert(
-            Lesson(
+            LessonEntity(
                 "name", "",
-                immutableSortedSetOf(), immutableSortedSetOf(),
                 LocalTime(11, 50), LocalTime(14, 20),
-                lessonRepeat, semesterId, 2L
-            )
+                semesterId
+            ),
+            emptyList(), emptyList(),
+            ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
         )
         assertEquals(
             LocalTime(14, 40),
-            lessonDao.getNextStartTime(semesterId, weekday)
+            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY, defaultBreakLength)
         )
 
         lessonDao.insert(
-            Lesson(
+            LessonEntity(
                 "name", "",
-                immutableSortedSetOf(), immutableSortedSetOf(),
                 LocalTime(14, 40), LocalTime(17, 10),
-                lessonRepeat, semesterId, 3L
-            )
+                semesterId
+            ),
+            emptyList(), emptyList(),
+            ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
         )
         assertEquals(
             LocalTime(17, 30),
-            lessonDao.getNextStartTime(semesterId, weekday)
+            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY, defaultBreakLength)
         )
 
         lessonDao.insert(
-            Lesson(
+            LessonEntity(
                 "name", "",
-                immutableSortedSetOf(), immutableSortedSetOf(),
                 LocalTime(17, 20), LocalTime(17, 50),
-                lessonRepeat, semesterId, 4L
-            )
+                semesterId
+            ),
+            emptyList(), emptyList(),
+            ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
         )
         assertEquals(
             LocalTime(18, 10),
-            lessonDao.getNextStartTime(semesterId, weekday)
+            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY, defaultBreakLength)
         )
 
         lessonDao.insert(
-            Lesson(
+            LessonEntity(
                 "name", "",
-                immutableSortedSetOf(), immutableSortedSetOf(),
                 LocalTime(18, 0), LocalTime(18, 30),
-                lessonRepeat, semesterId, 5L
-            )
+                semesterId
+            ),
+            emptyList(), emptyList(),
+            ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
         )
         lessonDao.insert(
-            Lesson(
+            LessonEntity(
                 "name", "",
-                immutableSortedSetOf(), immutableSortedSetOf(),
                 LocalTime(18, 40), LocalTime(19, 10),
-                lessonRepeat, semesterId, 6L
-            )
+                semesterId
+            ),
+            emptyList(), emptyList(),
+            ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
         )
         assertEquals(
             LocalTime(19, 20),
-            lessonDao.getNextStartTime(semesterId, weekday)
+            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY, defaultBreakLength)
+        )
+
+        lessonDao.insert(
+            LessonEntity(
+                "name", "",
+                LocalTime(17, 20), LocalTime(22, 0),
+                semesterId
+            ),
+            emptyList(), emptyList(),
+            ByWeekdayEntity(DateTimeConstants.TUESDAY, listOf(true))
+        )
+        assertEquals(
+            LocalTime(19, 20),
+            lessonDao.getNextStartTime(semesterId, DateTimeConstants.MONDAY, defaultBreakLength)
+        )
+        assertEquals(
+            LocalTime(22, 30),
+            lessonDao.getNextStartTime(semesterId, DateTimeConstants.TUESDAY, defaultBreakLength)
         )
     }
 }

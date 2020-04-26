@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/sea_name"
             android:imeOptions="flagNoExtractUi"
-            android:inputType="text"
+            android:inputType="text|textCapSentences"
             android:maxLines="1">
 
             <requestFocus />

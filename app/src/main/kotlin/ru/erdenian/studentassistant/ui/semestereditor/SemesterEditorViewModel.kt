@@ -2,10 +2,12 @@ package ru.erdenian.studentassistant.ui.semestereditor
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.shopify.livedataktx.LiveDataKtx
-import com.shopify.livedataktx.MediatorLiveDataKtx
-import com.shopify.livedataktx.MutableLiveDataKtx
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
 import org.kodein.di.KodeinAware
@@ -14,9 +16,7 @@ import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.repository.SemesterRepository
 
-class SemesterEditorViewModel(
-    application: Application
-) : AndroidViewModel(application), KodeinAware {
+class SemesterEditorViewModel(application: Application) : AndroidViewModel(application), KodeinAware {
 
     override val kodein by kodein()
     private val semesterRepository by instance<SemesterRepository>()
@@ -42,21 +42,30 @@ class SemesterEditorViewModel(
         }
     }
 
-    val name = MutableLiveDataKtx<String>().apply { value = "" }
-    val firstDay = MutableLiveDataKtx<LocalDate>()
-    val lastDay = MutableLiveDataKtx<LocalDate>()
+    val name = MutableLiveData("")
+    val firstDay = MutableLiveData<LocalDate>()
+    val lastDay = MutableLiveData<LocalDate>()
 
-    private val semestersNames = semesterRepository.getNames()
+    init {
+        val today = LocalDate.now().withDayOfMonth(1)
+        val range = ranges.find { today.monthOfYear <= it.last } ?: ranges.first()
+        firstDay.value = today.withMonthOfYear(range.first)
+        lastDay.value = today.withMonthOfYear(range.last).dayOfMonth().withMaximumValue()
+    }
 
-    val error: LiveDataKtx<Error?> = MediatorLiveDataKtx<Error?>().apply {
+    private val semestersNames = semesterRepository.namesLiveData
+
+    val error: LiveData<Error?> = MediatorLiveData<Error?>().apply {
         val onChanged = Observer<Any?> {
-            val semestersNames = semestersNames.safeValue
-            val firstDay = firstDay.safeValue
-            val lastDay = lastDay.safeValue
+            val semester = semester
+            val name = name.value ?: ""
+            val names = semestersNames.value ?: emptyList()
+            val firstDay = firstDay.value
+            val lastDay = lastDay.value
             value = when {
-                name.value.isBlank() -> Error.EMPTY_NAME
-                semestersNames?.run { semester?.let { minus(it.name) } ?: this }
-                    ?.contains(name.value) == true -> Error.SEMESTER_EXISTS
+                name.isBlank() -> Error.EMPTY_NAME
+                (semester == null) && names.contains(name) -> Error.SEMESTER_EXISTS
+                (semester != null) && (name != semester.name) && names.contains(name) -> Error.SEMESTER_EXISTS
                 (firstDay != null) && (lastDay != null) && (firstDay > lastDay) -> Error.WRONG_DATES
                 else -> null
             }
@@ -68,25 +77,20 @@ class SemesterEditorViewModel(
         addSource(semestersNames, onChanged)
     }
 
-    suspend fun save(): Semester {
+    private val savedPrivate = MutableLiveData(false)
+    val saved: LiveData<Boolean> get() = savedPrivate
+
+    fun save() {
         check(error.value == null)
-
-        val oldSemester = semester
-        val newSemester = Semester(
-            name.value,
-            firstDay.value,
-            lastDay.value
-        ).run { oldSemester?.let { copy(id = it.id) } ?: this }
-
-        semesterRepository.insert(newSemester)
-        semester = newSemester
-        return newSemester
-    }
-
-    init {
-        val today = LocalDate.now().withDayOfMonth(1)
-        val range = ranges.find { today.monthOfYear <= it.last } ?: ranges.first()
-        firstDay.value = today.withMonthOfYear(range.first)
-        lastDay.value = today.withMonthOfYear(range.last)
+        viewModelScope.launch {
+            semester?.let {
+                semesterRepository.update(
+                    it.id, checkNotNull(name.value), checkNotNull(firstDay.value), checkNotNull(lastDay.value)
+                )
+            } ?: semesterRepository.insert(
+                checkNotNull(name.value), checkNotNull(firstDay.value), checkNotNull(lastDay.value)
+            )
+            savedPrivate.value = true
+        }
     }
 }

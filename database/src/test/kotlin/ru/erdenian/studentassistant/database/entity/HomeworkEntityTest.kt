@@ -1,17 +1,17 @@
-package ru.erdenian.studentassistant.entity
+package ru.erdenian.studentassistant.database.entity
 
 import org.joda.time.LocalDate
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class HomeworkTest {
+internal class HomeworkEntityTest {
 
     private val semesterId = 1L
 
     @Test
     fun subjectNameTest() {
         assertThrows<IllegalArgumentException> {
-            Homework(
+            HomeworkEntity(
                 "",
                 "description",
                 LocalDate.now(),
@@ -19,7 +19,7 @@ internal class HomeworkTest {
             )
         }
         assertThrows<IllegalArgumentException> {
-            Homework(
+            HomeworkEntity(
                 "    ",
                 "description",
                 LocalDate.now(),
@@ -31,7 +31,7 @@ internal class HomeworkTest {
     @Test
     fun descriptionTest() {
         assertThrows<IllegalArgumentException> {
-            Homework(
+            HomeworkEntity(
                 "name",
                 "",
                 LocalDate.now(),
@@ -39,7 +39,7 @@ internal class HomeworkTest {
             )
         }
         assertThrows<IllegalArgumentException> {
-            Homework(
+            HomeworkEntity(
                 "name",
                 "     ",
                 LocalDate.now(),
