@@ -2,13 +2,12 @@ package ru.erdenian.studentassistant.ui.lessoneditor
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
-import com.shopify.livedataktx.LiveDataKtx
-import com.shopify.livedataktx.MediatorLiveDataKtx
-import com.shopify.livedataktx.MutableLiveDataKtx
-import com.shopify.livedataktx.toKtx
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -19,13 +18,11 @@ import org.joda.time.LocalTime
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
-import ru.erdenian.studentassistant.entity.ImmutableSortedSet
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 import ru.erdenian.studentassistant.repository.HomeworkRepository
 import ru.erdenian.studentassistant.repository.LessonRepository
-import ru.erdenian.studentassistant.utils.asLiveData
 import ru.erdenian.studentassistant.utils.setIfEmpty
 import ru.erdenian.studentassistant.utils.toSingleLine
 import kotlin.reflect.KClass
@@ -42,21 +39,17 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
         EMPTY_REPEAT
     }
 
-    private val semesterId = MutableLiveDataKtx<Long>()
+    private val semesterId = MutableLiveData<Long>()
     private var lesson: Lesson? = null
 
-    fun init(
-        semesterId: Long,
-        startTime: LocalTime = this.startTime.value,
-        weekday: Int = this.weekday.value
-    ) {
+    fun init(semesterId: Long, startTime: LocalTime, weekday: Int) {
         this.semesterId.setIfEmpty(semesterId)
         this.startTime.value = startTime
         this.weekday.value = weekday
     }
 
-    fun init(semesterId: Long, lesson: Lesson, copy: Boolean) {
-        this.semesterId.setIfEmpty(semesterId)
+    fun init(lesson: Lesson, copy: Boolean) {
+        this.semesterId.setIfEmpty(lesson.semesterId)
 
         if (!copy) this.lesson = lesson
         subjectName.value = lesson.subjectName
@@ -78,41 +71,38 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
         }
     }
 
-    val subjectName = MutableLiveDataKtx<String>().apply { value = "" }
-    val type = MutableLiveDataKtx<String>().apply { value = "" }
-    val teachers = MutableLiveDataKtx<String>().apply { value = "" }
-    val classrooms = MutableLiveDataKtx<String>().apply { value = "" }
-    val startTime = MutableLiveDataKtx<LocalTime>().apply { value = LocalTime(9, 0) }
-    val endTime: MutableLiveDataKtx<LocalTime> = MediatorLiveDataKtx<LocalTime>().apply {
-        addSource(startTime, Observer { startTime ->
-            viewModelScope.launch {
-                value = startTime + lessonRepository.getLessonLength(semesterId.value)
-            }
-        })
+    val subjectName = MutableLiveData("")
+    val type = MutableLiveData("")
+    val teachers = MutableLiveData("")
+    val classrooms = MutableLiveData("")
+    val startTime = MutableLiveData<LocalTime>()
+    val endTime: MutableLiveData<LocalTime> = MediatorLiveData<LocalTime>().apply {
+        val observer = Observer<Any?> {
+            val semesterId = semesterId.value ?: return@Observer
+            val startTime = startTime.value ?: return@Observer
+            viewModelScope.launch { value = startTime + lessonRepository.getDuration(semesterId) }
+        }
+        addSource(semesterId, observer)
+        addSource(startTime, observer)
     }
-    val weekday = MutableLiveDataKtx<Int>().apply { value = DateTimeConstants.MONDAY }
-    val weeks = MutableLiveDataKtx<List<Boolean>>().apply { value = listOf(true) }
-    val dates = MutableLiveDataKtx<ImmutableSortedSet<LocalDate>>().apply {
-        value = immutableSortedSetOf()
-    }
+    val weekday = MutableLiveData(DateTimeConstants.MONDAY)
+    val weeks = MutableLiveData(listOf(true))
+    val dates = MutableLiveData(immutableSortedSetOf<LocalDate>())
 
-    val lessonRepeat = MutableLiveDataKtx<KClass<out Lesson.Repeat>>().apply {
-        value = Lesson.Repeat.ByWeekday::class
-    }
+    val lessonRepeat = MutableLiveData<KClass<out Lesson.Repeat>>(Lesson.Repeat.ByWeekday::class)
 
-    val error: LiveDataKtx<Error?> = MediatorLiveDataKtx<Error?>().apply {
+    val error: LiveData<Error?> = MediatorLiveData<Error?>().apply {
         val onChanged = Observer<Any?> {
-            val subjectName = subjectName.safeValue
-            val startTime = startTime.safeValue
-            val endTime = endTime.safeValue
+            val subjectName = subjectName.value
+            val startTime = startTime.value
+            val endTime = endTime.value
+            val weeks = weeks.value ?: emptyList()
+            val dates = dates.value ?: emptyList()
             value = when {
-                subjectName?.isBlank() == true -> Error.EMPTY_SUBJECT_NAME
-                (startTime != null) && (endTime != null) &&
-                        (startTime > endTime) -> Error.WRONG_TIMES
-                ((lessonRepeat.value == Lesson.Repeat.ByWeekday::class) &&
-                        !weeks.value.contains(true)) -> Error.EMPTY_REPEAT
-                ((lessonRepeat.value == Lesson.Repeat.ByDates::class) &&
-                        dates.value.isEmpty()) -> Error.EMPTY_REPEAT
+                subjectName.isNullOrBlank() -> Error.EMPTY_SUBJECT_NAME
+                (startTime == null) || (endTime == null) || (startTime > endTime) -> Error.WRONG_TIMES
+                ((lessonRepeat.value == Lesson.Repeat.ByWeekday::class) && !weeks.contains(true)) -> Error.EMPTY_REPEAT
+                ((lessonRepeat.value == Lesson.Repeat.ByDates::class) && dates.isEmpty()) -> Error.EMPTY_REPEAT
                 else -> null
             }
         }
@@ -125,78 +115,95 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
         addSource(dates, onChanged)
     }
 
-    val existingSubjects =
-        semesterId.asLiveData.switchMap { lessonRepository.getSubjects(it) }.toKtx()
-    val existingTypes =
-        semesterId.asLiveData.switchMap { lessonRepository.getTypes(it) }.toKtx()
-    val existingTeachers =
-        semesterId.asLiveData.switchMap { lessonRepository.getTeachers(it) }.toKtx()
-    val existingClassrooms =
-        semesterId.asLiveData.switchMap { lessonRepository.getClassrooms(it) }.toKtx()
+    val existingSubjects = semesterId.switchMap { lessonRepository.getSubjects(it) }
+    val existingTypes = semesterId.switchMap { lessonRepository.getTypes(it) }
+    val existingTeachers = semesterId.switchMap { lessonRepository.getTeachers(it) }
+    val existingClassrooms = semesterId.switchMap { lessonRepository.getClassrooms(it) }
 
     private val isSubjectNameChanged
         get() = lesson?.let { it.subjectName != subjectName.value } ?: false
 
     suspend fun isSubjectNameChangedAndNotLast() = withContext(Dispatchers.IO) {
         isSubjectNameChanged && lessonRepository.getCount(
-            semesterId.value, (lesson ?: return@withContext false).subjectName
+            checkNotNull(semesterId.value), (lesson ?: return@withContext false).subjectName
         ) > 1
     }
 
-    @Suppress("ComplexMethod")
-    suspend fun save(forceRenameOther: Boolean = false): Long {
+    private val donePrivate = MutableLiveData(false)
+    val done: LiveData<Boolean> get() = donePrivate
+
+    fun save(forceRenameOther: Boolean = false) {
         check(error.value == null)
 
-        val oldLesson = lesson
-        val newLesson = Lesson(
-            subjectName.value,
-            type.value.trim(),
-            teachers.value
-                .toSingleLine()
-                .split(',')
-                .asSequence()
-                .map(String::trim)
-                .filter(String::isNotBlank)
-                .toImmutableSortedSet(),
-            classrooms.value
-                .toSingleLine()
-                .split(',')
-                .asSequence()
-                .map(String::trim)
-                .filter(String::isNotBlank)
-                .toImmutableSortedSet(),
-            startTime.value,
-            endTime.value,
-            when (lessonRepeat.value) {
-                Lesson.Repeat.ByWeekday::class ->
-                    Lesson.Repeat.ByWeekday(weekday.value, weeks.value)
-                Lesson.Repeat.ByDates::class ->
-                    Lesson.Repeat.ByDates(dates.value)
-                else -> throw IllegalStateException(
-                    "Неизвестный тип повторений: ${lessonRepeat.value}"
-                )
-            },
-            semesterId.value
-        ).run { oldLesson?.let { copy(id = it.id) } ?: this }
+        viewModelScope.launch {
+            val oldLesson = lesson
 
-        lessonRepository.insert(newLesson)
-        if (forceRenameOther && oldLesson != null) lessonRepository.renameSubject(
-            oldLesson.semesterId,
-            oldLesson.subjectName,
-            newLesson.subjectName
-        )
-        return newLesson.id
+            val subjectName = checkNotNull(subjectName.value)
+            val type = checkNotNull(type.value)
+            val teachers = checkNotNull(teachers.value)
+                .toSingleLine()
+                .split(',')
+                .asSequence()
+                .map(String::trim)
+                .filter(String::isNotBlank)
+                .toImmutableSortedSet()
+            val classrooms = checkNotNull(classrooms.value)
+                .toSingleLine()
+                .split(',')
+                .asSequence()
+                .map(String::trim)
+                .filter(String::isNotBlank)
+                .toImmutableSortedSet()
+            val startTime = checkNotNull(startTime.value)
+            val endTime = checkNotNull(endTime.value)
+            val semesterId = checkNotNull(semesterId.value)
+
+            when (checkNotNull(lessonRepeat.value)) {
+                Lesson.Repeat.ByWeekday::class -> {
+                    oldLesson?.let {
+                        lessonRepository.update(
+                            it.id, subjectName, type, teachers, classrooms, startTime, endTime, semesterId,
+                            checkNotNull(weekday.value), checkNotNull(weeks.value)
+                        )
+                    } ?: lessonRepository.insert(
+                        subjectName, type, teachers, classrooms, startTime, endTime, semesterId,
+                        checkNotNull(weekday.value), checkNotNull(weeks.value)
+                    )
+                }
+                Lesson.Repeat.ByDates::class -> {
+                    oldLesson?.let {
+                        lessonRepository.update(
+                            it.id, subjectName, type, teachers, classrooms, startTime, endTime, semesterId,
+                            checkNotNull(dates.value).list
+                        )
+                    } ?: lessonRepository.insert(
+                        subjectName, type, teachers, classrooms, startTime, endTime, semesterId,
+                        checkNotNull(dates.value).list
+                    )
+                }
+            }
+
+            if (forceRenameOther && (oldLesson != null)) lessonRepository.renameSubject(
+                oldLesson.semesterId, oldLesson.subjectName, subjectName
+            )
+
+            donePrivate.value = true
+        }
     }
 
     suspend fun isLastLessonOfSubjectsAndHasHomeworks(): Boolean = withContext(Dispatchers.IO) {
+        val semesterId = checkNotNull(semesterId.value)
         val subjectName = lesson?.subjectName ?: return@withContext false
-        val isLastLesson =
-            async { lessonRepository.getCount(semesterId.value, subjectName) == 1 }
-        val hasHomeworks = async { homeworkRepository.hasHomeworks(semesterId.value, subjectName) }
+        val isLastLesson = async { lessonRepository.getCount(semesterId, subjectName) == 1 }
+        val hasHomeworks = async { homeworkRepository.hasHomeworks(semesterId, subjectName) }
         isLastLesson.await() && hasHomeworks.await()
     }
 
-    suspend fun delete() {
-        lesson?.let { lessonRepository.delete(it) }
+    fun delete(withHomeworks: Boolean = false) {
+        viewModelScope.launch {
+            val lesson = checkNotNull(lesson)
+            lessonRepository.delete(lesson.id)
+            if (withHomeworks) homeworkRepository.delete(lesson.subjectName)
+        }
     }
 }

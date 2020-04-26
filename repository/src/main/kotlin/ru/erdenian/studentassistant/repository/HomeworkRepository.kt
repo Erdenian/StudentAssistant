@@ -29,6 +29,8 @@ class HomeworkRepository(
 
     suspend fun delete(id: Long): Unit = homeworkDao.delete(id)
 
+    suspend fun delete(subjectName: String): Unit = homeworkDao.delete(subjectName)
+
     // endregion
 
     // region Homeworks
@@ -55,8 +57,8 @@ class HomeworkRepository(
 
     suspend fun getCount(subjectName: String): Int = homeworkDao.getCount(selectedSemesterRepository.selected.id, subjectName)
 
-    suspend fun hasHomeworks(subjectName: String): Boolean =
-        homeworkDao.hasHomeworks(selectedSemesterRepository.selected.id, subjectName)
+    suspend fun hasHomeworks(semesterId: Long, subjectName: String): Boolean =
+        homeworkDao.hasHomeworks(semesterId, subjectName)
 
     // endregion
 

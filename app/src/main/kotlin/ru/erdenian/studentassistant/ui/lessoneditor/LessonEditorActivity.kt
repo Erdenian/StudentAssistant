@@ -11,16 +11,16 @@ import android.widget.MultiAutoCompleteTextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalTime
+import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.ActivityLessonEditorBinding
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorViewModel.Error
-import ru.erdenian.studentassistant.uikit.WeeksSelector
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.setColor
@@ -43,21 +43,21 @@ class LessonEditorActivity : AppCompatActivity() {
             semesterId: Long,
             startTime: LocalTime = LocalTime(9, 0),
             weekday: Int = DateTimeConstants.MONDAY
-        ) {
-            context.startActivity<LessonEditorActivity>(
-                SEMESTER_ID_INTENT_KEY to semesterId,
-                START_TIME_INTENT_KEY to startTime,
-                WEEKDAY_INTENT_KEY to weekday
-            )
-        }
+        ) = context.startActivity<LessonEditorActivity>(
+            SEMESTER_ID_INTENT_KEY to semesterId,
+            START_TIME_INTENT_KEY to startTime,
+            WEEKDAY_INTENT_KEY to weekday
+        )
 
-        fun start(context: Context, lesson: Lesson, copy: Boolean = false) {
-            context.startActivity<LessonEditorActivity>(
-                SEMESTER_ID_INTENT_KEY to lesson.semesterId,
-                LESSON_INTENT_KEY to lesson,
-                COPY_INTENT_KEY to copy
-            )
-        }
+        fun start(
+            context: Context,
+            lesson: Lesson,
+            copy: Boolean = false
+        ) = context.startActivity<LessonEditorActivity>(
+            SEMESTER_ID_INTENT_KEY to lesson.semesterId,
+            LESSON_INTENT_KEY to lesson,
+            COPY_INTENT_KEY to copy
+        )
 
         private const val TIME_FORMAT = "HH:mm"
     }
@@ -80,11 +80,7 @@ class LessonEditorActivity : AppCompatActivity() {
                 semesterId,
                 getSerializableExtra(START_TIME_INTENT_KEY) as LocalTime,
                 getIntExtra(WEEKDAY_INTENT_KEY, DateTimeConstants.MONDAY)
-            ) else viewModel.init(
-                semesterId,
-                l,
-                intent.getBooleanExtra(COPY_INTENT_KEY, false)
-            )
+            ) else viewModel.init(l, intent.getBooleanExtra(COPY_INTENT_KEY, false))
         }
 
         supportActionBar?.apply {
@@ -99,42 +95,31 @@ class LessonEditorActivity : AppCompatActivity() {
         binding.subjectNameLayout.apply {
             viewModel.error.observe(owner) { error ->
                 if (error == Error.EMPTY_SUBJECT_NAME) {
-                    this.error = getText(
-                        R.string.lea_error_empty_subject_name
-                    )
+                    this.error = getText(R.string.lea_error_empty_subject_name)
                 } else isErrorEnabled = false
             }
         }
 
         binding.subjectName.apply {
-            viewModel.subjectName.distinctUntilChanged { value ->
-                value == text?.toString() ?: ""
-            }.observe(owner) { setText(it) }
-            addTextChangedListener { editable ->
-                viewModel.subjectName.value = editable?.toString() ?: ""
-            }
+            viewModel.subjectName
+                .distinctUntilChanged { it == text?.toString() ?: "" }
+                .observe(owner) { setText(it) }
+            addTextChangedListener { viewModel.subjectName.value = it?.toString() ?: "" }
             viewModel.existingSubjects.observe(owner) { subjects ->
-                setAdapter(
-                    ArrayAdapter(
-                        context,
-                        android.R.layout.simple_dropdown_item_1line,
-                        subjects.list
-                    )
-                )
+                setAdapter(ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, subjects.list))
             }
         }
 
         binding.lessonType.apply {
-            viewModel.type.distinctUntilChanged { value ->
-                value == text?.toString() ?: ""
-            }.observe(owner) { setText(it) }
+            viewModel.type
+                .distinctUntilChanged { it == text?.toString() ?: "" }
+                .observe(owner) { setText(it) }
             addTextChangedListener { viewModel.type.value = it?.toString() ?: "" }
             val predefinedTypes = resources.getStringArray(R.array.lesson_types)
             viewModel.existingTypes.observe(owner) { types ->
                 setAdapter(
                     ArrayAdapter(
-                        context,
-                        android.R.layout.simple_dropdown_item_1line,
+                        context, android.R.layout.simple_dropdown_item_1line,
                         (predefinedTypes + types.list).distinct()
                     )
                 )
@@ -142,51 +127,37 @@ class LessonEditorActivity : AppCompatActivity() {
         }
 
         binding.teachers.apply {
-            viewModel.teachers.distinctUntilChanged { value ->
-                value == text?.toString() ?: ""
-            }.observe(owner) { setText(it) }
+            viewModel.teachers
+                .distinctUntilChanged { it == text?.toString() ?: "" }
+                .observe(owner) { setText(it) }
             addTextChangedListener { viewModel.teachers.value = it?.toString() ?: "" }
             viewModel.existingTeachers.observe(owner) { teachers ->
-                setAdapter(
-                    ArrayAdapter(
-                        context,
-                        android.R.layout.simple_dropdown_item_1line,
-                        teachers.list
-                    )
-                )
+                setAdapter(ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, teachers.list))
             }
             setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
         }
 
         binding.classrooms.apply {
-            viewModel.classrooms.distinctUntilChanged { value ->
-                value == text?.toString() ?: ""
-            }.observe(owner) { setText(it) }
+            viewModel.classrooms
+                .distinctUntilChanged { it == text?.toString() ?: "" }
+                .observe(owner) { setText(it) }
             addTextChangedListener { viewModel.classrooms.value = it?.toString() ?: "" }
             viewModel.existingClassrooms.observe(owner) { classrooms ->
-                setAdapter(
-                    ArrayAdapter(
-                        context,
-                        android.R.layout.simple_dropdown_item_1line,
-                        classrooms.list
-                    )
-                )
+                setAdapter(ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, classrooms.list))
             }
             setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
         }
 
+        val timeFormatter = DateTimeFormat.forPattern(TIME_FORMAT)
+
         binding.startTime.apply {
-            viewModel.startTime.observe(owner) { text = it.toString(TIME_FORMAT) }
-            setOnClickListener {
-                showTimePicker(viewModel.startTime.value, viewModel.startTime::setValue)
-            }
+            viewModel.startTime.observe(owner) { text = it.toString(timeFormatter) }
+            setOnClickListener { showTimePicker(viewModel.startTime.value, viewModel.startTime::setValue) }
         }
 
         binding.endTime.apply {
-            viewModel.endTime.observe(owner) { text = it.toString(TIME_FORMAT) }
-            setOnClickListener {
-                showTimePicker(viewModel.endTime.value, viewModel.endTime::setValue)
-            }
+            viewModel.endTime.observe(owner) { text = it.toString(timeFormatter) }
+            setOnClickListener { showTimePicker(viewModel.endTime.value, viewModel.endTime::setValue) }
         }
 
         binding.repeatType.apply {
@@ -203,27 +174,20 @@ class LessonEditorActivity : AppCompatActivity() {
                     when (lessonRepeat) {
                         Lesson.Repeat.ByWeekday::class -> byWeekdayIndex
                         Lesson.Repeat.ByDates::class -> byDatesIndex
-                        else -> throw IllegalStateException(
-                            "Неизвестный тип повторений: $lessonRepeat"
-                        )
+                        else -> throw IllegalStateException("Неизвестный тип повторений: $lessonRepeat")
                     }
                 )
             }
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>) = Unit
-
-                override fun onItemSelected(
-                    parent: AdapterView<*>,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
+                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                     viewModel.lessonRepeat.value = when (position) {
                         byWeekdayIndex -> Lesson.Repeat.ByWeekday::class
                         byDatesIndex -> Lesson.Repeat.ByDates::class
                         else -> throw IllegalStateException("Неизвестный тип повторения")
                     }
                 }
+
+                override fun onNothingSelected(parent: AdapterView<*>) = Unit
             }
         }
 
@@ -235,9 +199,7 @@ class LessonEditorActivity : AppCompatActivity() {
                 displayedChild = when (lessonRepeat) {
                     Lesson.Repeat.ByWeekday::class -> byWeekdayIndex
                     Lesson.Repeat.ByDates::class -> byDatesIndex
-                    else -> throw IllegalStateException(
-                        "Неизвестный тип повторений: $lessonRepeat"
-                    )
+                    else -> throw IllegalStateException("Неизвестный тип повторений: $lessonRepeat")
                 }
             }
         }
@@ -254,16 +216,12 @@ class LessonEditorActivity : AppCompatActivity() {
                 DateTimeConstants.SUNDAY to Calendar.SUNDAY
             )
 
-            viewModel.weekday.distinctUntilChanged { value ->
-                value == selectedDays.single()
-            }.observe(owner) { weekday ->
-                selectDay(checkNotNull(isoToUs[weekday]))
-            }
+            viewModel.weekday
+                .distinctUntilChanged { it == selectedDays.single() }
+                .observe(owner) { selectDay(checkNotNull(isoToUs[it])) }
             setOnWeekdaysChangeListener { _, _, weekdays ->
                 if (weekdays.isNotEmpty()) {
-                    viewModel.weekday.value = checkNotNull(
-                        isoToUs.entries.find { it.value == weekdays.single() }?.key
-                    )
+                    viewModel.weekday.value = checkNotNull(isoToUs.entries.find { it.value == weekdays.single() }?.key)
                 } else {
                     selectDay(checkNotNull(isoToUs[viewModel.weekday.value]))
                 }
@@ -271,14 +229,10 @@ class LessonEditorActivity : AppCompatActivity() {
         }
 
         binding.weeksSelector.apply {
-            viewModel.weeks.distinctUntilChanged { value ->
-                value == weeks
-            }.observe(owner) { weeks = it }
-            onWeeksChangeListener = object : WeeksSelector.OnWeeksChangeListener {
-                override fun onWeeksChange(weeks: List<Boolean>) {
-                    viewModel.weeks.value = weeks
-                }
-            }
+            viewModel.weeks
+                .distinctUntilChanged { it == weeks }
+                .observe(owner) { weeks = it }
+            onWeeksChangeListener = { viewModel.weeks.value = it }
         }
     }
 
@@ -305,56 +259,34 @@ class LessonEditorActivity : AppCompatActivity() {
                     }
                 )
             } ?: run {
-                viewModel.viewModelScope.launch {
+                lifecycleScope.launch {
                     if (viewModel.isSubjectNameChangedAndNotLast()) {
                         MaterialAlertDialogBuilder(this@LessonEditorActivity)
                             .setTitle(R.string.lea_rename_others_title)
                             .setMessage(R.string.lea_rename_others_message)
-                            .setPositiveButton(R.string.lea_rename_others_yes) { _, _ ->
-                                viewModel.viewModelScope.launch {
-                                    viewModel.save(true)
-                                    finish()
-                                }
-                            }
-                            .setNegativeButton(R.string.lea_rename_others_no) { _, _ ->
-                                viewModel.viewModelScope.launch {
-                                    viewModel.save(false)
-                                    finish()
-                                }
-                            }
+                            .setPositiveButton(R.string.lea_rename_others_yes) { _, _ -> viewModel.save(true) }
+                            .setNegativeButton(R.string.lea_rename_others_no) { _, _ -> viewModel.save(false) }
                             .setNeutralButton(R.string.lea_rename_others_cancel, null)
                             .show()
-                    } else {
-                        viewModel.save()
-                        finish()
-                    }
+                    } else viewModel.save()
                 }
             }
             true
         }
         R.id.mle_delete -> {
-            viewModel.viewModelScope.launch {
+            lifecycleScope.launch {
                 if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) {
                     MaterialAlertDialogBuilder(this@LessonEditorActivity)
                         .setTitle(R.string.lea_delete_homeworks_title)
                         .setMessage(R.string.lea_delete_homeworks_message)
-                        .setPositiveButton(R.string.lea_delete_homeworks_yes) { _, _ ->
-                            viewModel.viewModelScope.launch {
-                                viewModel.delete()
-                                finish()
-                            }
-                        }
-                        .setNegativeButton(R.string.lea_delete_homeworks_cancel, null)
+                        .setPositiveButton(R.string.lea_delete_homeworks_yes) { _, _ -> viewModel.delete(true) }
+                        .setNegativeButton(R.string.lea_delete_homeworks_no) { _, _ -> viewModel.delete(false) }
+                        .setNeutralButton(R.string.lea_delete_homeworks_cancel, null)
                         .show()
                 } else {
                     MaterialAlertDialogBuilder(this@LessonEditorActivity)
                         .setMessage(R.string.lea_delete_message)
-                        .setPositiveButton(R.string.lea_delete_yes) { _, _ ->
-                            viewModel.viewModelScope.launch {
-                                viewModel.delete()
-                                finish()
-                            }
-                        }
+                        .setPositiveButton(R.string.lea_delete_yes) { _, _ -> viewModel.delete() }
                         .setNegativeButton(R.string.lea_delete_no, null)
                         .show()
                 }
