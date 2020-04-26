@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.PageFragmentHomeworksBinding
-import ru.erdenian.studentassistant.entity.Homework
 import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
@@ -31,11 +30,7 @@ class HomeworksPageFragment : Fragment(R.layout.page_fragment_homeworks) {
     private val viewModel by activityViewModels<MainViewModel>()
 
     private val adapter = HomeworksListAdapter().apply {
-        onHomeworkClickListener = object : HomeworksListAdapter.OnHomeworkClickListener {
-            override fun onHomeworkClick(homework: Homework) {
-                HomeworkEditorActivity.start(requireContext(), homework)
-            }
-        }
+        onHomeworkClickListener = { HomeworkEditorActivity.start(requireContext(), it) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,11 +39,7 @@ class HomeworksPageFragment : Fragment(R.layout.page_fragment_homeworks) {
         binding.homeworks.apply {
             adapter = this@HomeworksPageFragment.adapter
             layoutManager = LinearLayoutManager(view.context)
-            addItemDecoration(
-                SpacingItemDecoration(
-                    context.resources.getDimensionPixelSize(R.dimen.cards_spacing)
-                )
-            )
+            addItemDecoration(SpacingItemDecoration(context.resources.getDimensionPixelSize(R.dimen.cards_spacing)))
             registerForContextMenu(this)
         }
 
@@ -58,22 +49,16 @@ class HomeworksPageFragment : Fragment(R.layout.page_fragment_homeworks) {
         binding.flipper.apply {
             val homeworksIndex = 0
             val noHomeworksIndex = 1
-            homeworks.observe(viewLifecycleOwner) { value ->
-                displayedChild = if (value.isNotEmpty()) homeworksIndex else noHomeworksIndex
-            }
+            homeworks.observe(viewLifecycleOwner) { displayedChild = if (it.isNotEmpty()) homeworksIndex else noHomeworksIndex }
         }
 
         homeworks.observe(viewLifecycleOwner) { adapter.homeworks = it.list }
     }
 
-    override fun onCreateContextMenu(
-        menu: ContextMenu,
-        v: View,
-        menuInfo: ContextMenu.ContextMenuInfo?
-    ) {
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
         requireActivity().menuInflater.inflate(R.menu.context_homeworks, menu)
         @Suppress("UnsafeCast")
-        (menuInfo as AdapterView.AdapterContextMenuInfo?)?.run {
+        (menuInfo as AdapterView.AdapterContextMenuInfo).run {
             menu.setHeaderTitle(adapter.homeworks[position].subjectName)
         }
     }
