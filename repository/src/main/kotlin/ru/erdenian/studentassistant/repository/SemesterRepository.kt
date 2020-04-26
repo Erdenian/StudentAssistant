@@ -20,9 +20,9 @@ class SemesterRepository(private val semesterDao: SemesterDao) {
 
     suspend fun delete(id: Long): Unit = semesterDao.delete(id)
 
-    fun getAllLiveData(): LiveData<ImmutableSortedSet<Semester>> = semesterDao.getAllLiveData().map()
+    val allLiveData: LiveData<ImmutableSortedSet<Semester>> = semesterDao.getAllLiveData().map()
     fun getLiveData(semesterId: Long): LiveData<Semester?> = semesterDao.getLiveData(semesterId).map { it }
-    fun getNamesLiveData(): LiveData<List<String>> = semesterDao.getNamesLiveData()
+    val namesLiveData: LiveData<List<String>> = semesterDao.getNamesLiveData()
 
     private fun LiveData<List<SemesterEntity>>.map() = map { it.toImmutableSortedSet<Semester>() }
 }

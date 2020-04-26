@@ -41,41 +41,23 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
-            val semesterObserver = Observer<Semester?> { semester ->
-                title = semester?.name ?: navController.currentDestination?.label
-            }
-            viewModel.selectedSemester.observe(owner, semesterObserver)
-            navController.addOnDestinationChangedListener { _, _, _ ->
-                semesterObserver.onChanged(viewModel.selectedSemester.value)
-            }
+            val observer = Observer<Semester?> { title = it?.name ?: navController.currentDestination?.label }
+            viewModel.selectedSemester.observe(owner, observer)
+            navController.addOnDestinationChangedListener { _, _, _ -> observer.onChanged(viewModel.selectedSemester.value) }
 
-            viewModel.allSemesters.observe(owner) { semesters ->
-                setDisplayShowTitleEnabled(semesters.size <= 1)
-            }
+            viewModel.allSemesters.observe(owner) { setDisplayShowTitleEnabled(it.size <= 1) }
         }
 
         binding.toolbarSpinner.apply {
-            viewModel.allSemesters.observe(owner) { semesters ->
-                visibility = if (semesters.size > 1) View.VISIBLE else View.GONE
-            }
-            val adapter = SemestersSpinnerAdapter().apply {
-                viewModel.allSemesters.observe(owner) { semesters = it.list }
-            }
+            viewModel.allSemesters.observe(owner) { visibility = if (it.size > 1) View.VISIBLE else View.GONE }
+            val adapter = SemestersSpinnerAdapter().apply { viewModel.allSemesters.observe(owner) { semesters = it.list } }
             this.adapter = adapter
             viewModel.selectedSemester.distinctUntilChanged().observe(owner) { semester ->
-                viewModel.allSemesters.value.indexOf(semester)
-                    .takeIf { it >= 0 }
-                    ?.let { setSelection(it) }
+                viewModel.allSemesters.value?.indexOf(semester)?.takeIf { it >= 0 }?.let { setSelection(it) }
             }
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
+                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) =
                     viewModel.selectSemester(adapter.getItem(position))
-                }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) = Unit
             }
@@ -93,7 +75,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        val isNotEmpty = viewModel.allSemesters.safeValue?.isNotEmpty() ?: return false
+        val isNotEmpty = viewModel.allSemesters.value?.isNotEmpty() ?: return false
         menu.findItem(R.id.mm_add_schedule).setShowAsAction(
             if (isNotEmpty) MenuItem.SHOW_AS_ACTION_NEVER else MenuItem.SHOW_AS_ACTION_IF_ROOM
         )
@@ -115,11 +97,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if ((requestCode == SEMESTER_EDITOR_REQUEST_CODE) && (resultCode == RESULT_OK)) {
-            viewModel.selectSemester(
-                requireNotNull(
-                    data?.getParcelableExtra(SemesterEditorActivity.SEMESTER_RESULT_EXTRA)
-                )
-            )
+            viewModel.selectSemester(requireNotNull(data?.getParcelableExtra(SemesterEditorActivity.SEMESTER_RESULT_EXTRA)))
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
