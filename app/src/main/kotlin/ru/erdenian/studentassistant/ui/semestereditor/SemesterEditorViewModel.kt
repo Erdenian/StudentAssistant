@@ -16,9 +16,7 @@ import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.repository.SemesterRepository
 
-class SemesterEditorViewModel(
-    application: Application
-) : AndroidViewModel(application), KodeinAware {
+class SemesterEditorViewModel(application: Application) : AndroidViewModel(application), KodeinAware {
 
     override val kodein by kodein()
     private val semesterRepository by instance<SemesterRepository>()

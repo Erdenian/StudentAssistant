@@ -9,13 +9,10 @@ import android.view.View
 import android.widget.AdapterView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.ActivityLessonInformationBinding
-import ru.erdenian.studentassistant.entity.Homework
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
@@ -39,14 +36,8 @@ class LessonInformationActivity : AppCompatActivity() {
     private val viewModel by viewModels<LessonInformationViewModel>()
     private val homeworksAdapter by lazy {
         HomeworksListAdapter().apply {
-            onHomeworkClickListener = object : HomeworksListAdapter.OnHomeworkClickListener {
-                override fun onHomeworkClick(homework: Homework) {
-                    HomeworkEditorActivity.start(this@LessonInformationActivity, homework)
-                }
-            }
-            viewModel.homeworks.observe(this@LessonInformationActivity) { homeworks ->
-                this.homeworks = homeworks.list
-            }
+            onHomeworkClickListener = { HomeworkEditorActivity.start(this@LessonInformationActivity, it) }
+            viewModel.homeworks.observe(this@LessonInformationActivity) { homeworks = it.list }
         }
     }
 
@@ -67,15 +58,11 @@ class LessonInformationActivity : AppCompatActivity() {
         }
 
         binding.content.startTime.apply {
-            viewModel.lesson.observe(owner) { lesson ->
-                text = lesson?.startTime?.toString(TIME_FORMAT)
-            }
+            viewModel.lesson.observe(owner) { text = it?.startTime?.toString(TIME_FORMAT) }
         }
 
         binding.content.endTime.apply {
-            viewModel.lesson.observe(owner) { lesson ->
-                text = lesson?.endTime?.toString(TIME_FORMAT)
-            }
+            viewModel.lesson.observe(owner) { text = it?.endTime?.toString(TIME_FORMAT) }
         }
 
         binding.content.type.apply {
@@ -86,20 +73,14 @@ class LessonInformationActivity : AppCompatActivity() {
             val noHomeworksIndex = 0
             val containsHomeworksIndex = 1
             viewModel.homeworks.observe(owner) { homeworks ->
-                displayedChild =
-                    if (homeworks.isEmpty()) noHomeworksIndex
-                    else containsHomeworksIndex
+                displayedChild = if (homeworks.isEmpty()) noHomeworksIndex else containsHomeworksIndex
             }
         }
 
         binding.content.homeworks.apply {
             adapter = homeworksAdapter
             layoutManager = LinearLayoutManager(context)
-            addItemDecoration(
-                SpacingItemDecoration(
-                    context.resources.getDimensionPixelSize(R.dimen.cards_spacing)
-                )
-            )
+            addItemDecoration(SpacingItemDecoration(context.resources.getDimensionPixelSize(R.dimen.cards_spacing)))
             registerForContextMenu(this)
         }
 
@@ -116,11 +97,7 @@ class LessonInformationActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onCreateContextMenu(
-        menu: ContextMenu,
-        v: View,
-        menuInfo: ContextMenu.ContextMenuInfo?
-    ) {
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
         menuInflater.inflate(R.menu.context_homeworks, menu)
         @Suppress("UnsafeCast")
         (menuInfo as AdapterView.AdapterContextMenuInfo?)?.run {
@@ -136,9 +113,7 @@ class LessonInformationActivity : AppCompatActivity() {
             R.id.ch_delete -> {
                 MaterialAlertDialogBuilder(this)
                     .setMessage(R.string.lia_delete_message)
-                    .setPositiveButton(R.string.lia_delete_yes) { _, _ ->
-                        viewModel.viewModelScope.launch { viewModel.delete(homework) }
-                    }
+                    .setPositiveButton(R.string.lia_delete_yes) { _, _ -> viewModel.deleteHomework(homework.id) }
                     .setNegativeButton(R.string.lia_delete_no, null)
                     .show()
                 true
@@ -153,10 +128,7 @@ class LessonInformationActivity : AppCompatActivity() {
             true
         }
         R.id.mli_edit -> {
-            LessonEditorActivity.start(
-                this,
-                checkNotNull(viewModel.lesson.value)
-            )
+            LessonEditorActivity.start(this, checkNotNull(viewModel.lesson.value))
             true
         }
         else -> false
