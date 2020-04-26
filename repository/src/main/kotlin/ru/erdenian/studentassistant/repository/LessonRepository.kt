@@ -37,22 +37,30 @@ class LessonRepository(
         classrooms: ImmutableSortedSet<String>,
         startTime: LocalTime,
         endTime: LocalTime,
-        lessonRepeat: Lesson.Repeat,
-        semesterId: Long
+        semesterId: Long,
+        weekday: Int,
+        weeks: List<Boolean>
     ) {
         val lessonEntity = LessonEntity(subjectName, type, startTime, endTime, semesterId)
         val teachersEntity = teachers.map { TeacherEntity(it) }
         val classroomsEntity = classrooms.map { ClassroomEntity(it) }
-        when (lessonRepeat) {
-            is Lesson.Repeat.ByWeekday -> lessonDao.insert(
-                lessonEntity, teachersEntity, classroomsEntity,
-                ByWeekdayEntity(lessonRepeat.weekday, lessonRepeat.weeks)
-            )
-            is Lesson.Repeat.ByDates -> lessonDao.insert(
-                lessonEntity, teachersEntity, classroomsEntity,
-                lessonRepeat.dates.map { ByDateEntity(it) }
-            )
-        }.let {}
+        lessonDao.insert(lessonEntity, teachersEntity, classroomsEntity, ByWeekdayEntity(weekday, weeks))
+    }
+
+    suspend fun insert(
+        subjectName: String,
+        type: String,
+        teachers: ImmutableSortedSet<String>,
+        classrooms: ImmutableSortedSet<String>,
+        startTime: LocalTime,
+        endTime: LocalTime,
+        semesterId: Long,
+        dates: List<LocalDate>
+    ) {
+        val lessonEntity = LessonEntity(subjectName, type, startTime, endTime, semesterId)
+        val teachersEntity = teachers.map { TeacherEntity(it) }
+        val classroomsEntity = classrooms.map { ClassroomEntity(it) }
+        lessonDao.insert(lessonEntity, teachersEntity, classroomsEntity, dates.map { ByDateEntity(it) })
     }
 
     suspend fun update(
@@ -63,22 +71,31 @@ class LessonRepository(
         classrooms: ImmutableSortedSet<String>,
         startTime: LocalTime,
         endTime: LocalTime,
-        lessonRepeat: Lesson.Repeat,
-        semesterId: Long
+        semesterId: Long,
+        weekday: Int,
+        weeks: List<Boolean>
     ) {
         val lessonEntity = LessonEntity(subjectName, type, startTime, endTime, semesterId, id)
         val teachersEntity = teachers.map { TeacherEntity(it, id) }
         val classroomsEntity = classrooms.map { ClassroomEntity(it, id) }
-        when (lessonRepeat) {
-            is Lesson.Repeat.ByWeekday -> lessonDao.insert(
-                lessonEntity, teachersEntity, classroomsEntity,
-                ByWeekdayEntity(lessonRepeat.weekday, lessonRepeat.weeks, id)
-            )
-            is Lesson.Repeat.ByDates -> lessonDao.insert(
-                lessonEntity, teachersEntity, classroomsEntity,
-                lessonRepeat.dates.map { ByDateEntity(it, id) }
-            )
-        }.let {}
+        lessonDao.update(lessonEntity, teachersEntity, classroomsEntity, ByWeekdayEntity(weekday, weeks, id))
+    }
+
+    suspend fun update(
+        id: Long,
+        subjectName: String,
+        type: String,
+        teachers: ImmutableSortedSet<String>,
+        classrooms: ImmutableSortedSet<String>,
+        startTime: LocalTime,
+        endTime: LocalTime,
+        semesterId: Long,
+        dates: List<LocalDate>
+    ) {
+        val lessonEntity = LessonEntity(subjectName, type, startTime, endTime, semesterId, id)
+        val teachersEntity = teachers.map { TeacherEntity(it, id) }
+        val classroomsEntity = classrooms.map { ClassroomEntity(it, id) }
+        lessonDao.update(lessonEntity, teachersEntity, classroomsEntity, dates.map { ByDateEntity(it) })
     }
 
     suspend fun delete(id: Long): Unit = lessonDao.delete(id)
@@ -118,13 +135,9 @@ class LessonRepository(
 
     // region Subjects
 
-    suspend fun getCount(subjectName: String): Int = lessonDao.getCount(
-        selectedSemesterRepository.selected.id, subjectName
-    )
+    suspend fun getCount(semesterId: Long, subjectName: String): Int = lessonDao.getCount(semesterId, subjectName)
 
-    val subjects: LiveData<ImmutableSortedSet<String>> = selectedSemesterRepository.selectedLiveData.switchMap { semester ->
-        semester?.id?.let { lessonDao.getSubjectsLiveData(it).map() } ?: MutableLiveData(immutableSortedSetOf())
-    }
+    fun getSubjects(semesterId: Long): LiveData<ImmutableSortedSet<String>> = lessonDao.getSubjectsLiveData(semesterId).map()
 
     suspend fun renameSubject(semesterId: Long, oldName: String, newName: String): Unit =
         lessonDao.renameSubject(semesterId, oldName, newName)
@@ -133,22 +146,16 @@ class LessonRepository(
 
     // region Other fields
 
-    val types: LiveData<ImmutableSortedSet<String>> = selectedSemesterRepository.selectedLiveData.switchMap { semester ->
-        semester?.id?.let { lessonDao.getTypesLiveData(it).map() } ?: MutableLiveData(immutableSortedSetOf())
-    }
+    fun getTypes(semesterId: Long): LiveData<ImmutableSortedSet<String>> = lessonDao.getTypesLiveData(semesterId).map()
 
-    val teachers: LiveData<ImmutableSortedSet<String>> = selectedSemesterRepository.selectedLiveData.switchMap { semester ->
-        semester?.id?.let { lessonDao.getTeachersLiveData(it).map() } ?: MutableLiveData(immutableSortedSetOf())
-    }
+    fun getTeachers(semesterId: Long): LiveData<ImmutableSortedSet<String>> = lessonDao.getTeachersLiveData(semesterId).map()
 
-    val classrooms: LiveData<ImmutableSortedSet<String>> = selectedSemesterRepository.selectedLiveData.switchMap { semester ->
-        semester?.id?.let { lessonDao.getClassroomsLiveData(it).map() } ?: MutableLiveData(immutableSortedSetOf())
-    }
+    fun getClassrooms(semesterId: Long): LiveData<ImmutableSortedSet<String>> = lessonDao.getClassroomsLiveData(semesterId).map()
 
-    suspend fun getDuration(): Period = lessonDao.getDuration(selectedSemesterRepository.selected.id) ?: defaultDuration
+    suspend fun getDuration(semesterId: Long): Period = lessonDao.getDuration(semesterId) ?: defaultDuration
 
-    suspend fun getNextStartTime(weekday: Int): LocalTime =
-        lessonDao.getNextStartTime(selectedSemesterRepository.selected.id, weekday, defaultBreakLength) ?: defaultStartTime
+    suspend fun getNextStartTime(semesterId: Long, weekday: Int): LocalTime =
+        lessonDao.getNextStartTime(semesterId, weekday, defaultBreakLength) ?: defaultStartTime
 
     // endregion
 

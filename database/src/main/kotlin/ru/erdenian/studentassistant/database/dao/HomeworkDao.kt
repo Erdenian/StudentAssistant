@@ -23,6 +23,9 @@ interface HomeworkDao {
     @Query("DELETE FROM homeworks WHERE _id = :id")
     suspend fun delete(id: Long)
 
+    @Query("DELETE FROM homeworks WHERE subject_name = :subjectName")
+    suspend fun delete(subjectName: String)
+
     // endregion
 
     // region Homeworks
