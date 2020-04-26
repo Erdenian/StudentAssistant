@@ -1,41 +1,30 @@
 package ru.erdenian.studentassistant.ui.semestereditor
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
+import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.ActivitySemesterEditorBinding
 import ru.erdenian.studentassistant.entity.Semester
-import ru.erdenian.studentassistant.ui.lessonseditor.LessonsEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorViewModel.Error
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
 import ru.erdenian.studentassistant.utils.startActivity
-import ru.erdenian.studentassistant.utils.startActivityForResult
 import ru.erdenian.studentassistant.utils.toast
 
 class SemesterEditorActivity : AppCompatActivity() {
 
     companion object {
-        const val SEMESTER_RESULT_EXTRA = "semester_result_extra"
-
         private const val SEMESTER_INTENT_KEY = "semester_intent_key"
         fun start(context: Context, semester: Semester? = null) {
             context.startActivity<SemesterEditorActivity>(SEMESTER_INTENT_KEY to semester)
-        }
-
-        fun startForResult(activity: Activity, requestCode: Int) {
-            activity.startActivityForResult<SemesterEditorActivity>(requestCode)
         }
 
         private const val DATE_FORMAT = "dd.MM.yyyy"
@@ -62,37 +51,33 @@ class SemesterEditorActivity : AppCompatActivity() {
         binding.nameLayout.apply {
             viewModel.error.observe(owner) { error ->
                 when (error) {
-                    Error.EMPTY_NAME -> this.error = getString(
-                        R.string.sea_error_empty_name
-                    )
-                    Error.SEMESTER_EXISTS -> this.error = getString(
-                        R.string.sea_error_name_not_available
-                    )
+                    Error.EMPTY_NAME -> this.error = getString(R.string.sea_error_empty_name)
+                    Error.SEMESTER_EXISTS -> this.error = getString(R.string.sea_error_name_not_available)
                     else -> isErrorEnabled = false
                 }
             }
         }
 
         binding.name.apply {
-            viewModel.name.distinctUntilChanged { value ->
-                value == text?.toString() ?: ""
-            }.observe(owner) { setText(it) }
+            viewModel.name
+                .distinctUntilChanged { it == text?.toString() ?: "" }
+                .observe(owner) { setText(it) }
             addTextChangedListener { viewModel.name.value = it?.toString() ?: "" }
         }
 
+        val dateFormatter = DateTimeFormat.forPattern(DATE_FORMAT)
+
         binding.firstDay.apply {
-            viewModel.firstDay.observe(owner) { text = it.toString(DATE_FORMAT) }
-            setOnClickListener {
-                showDatePicker(viewModel.firstDay.value) { viewModel.firstDay.value = it }
-            }
+            viewModel.firstDay.observe(owner) { text = it.toString(dateFormatter) }
+            setOnClickListener { showDatePicker(viewModel.firstDay.value) { viewModel.firstDay.value = it } }
         }
 
         binding.lastDay.apply {
-            viewModel.lastDay.observe(owner) { text = it.toString(DATE_FORMAT) }
-            setOnClickListener {
-                showDatePicker(viewModel.lastDay.value) { viewModel.lastDay.value = it }
-            }
+            viewModel.lastDay.observe(owner) { text = it.toString(dateFormatter) }
+            setOnClickListener { showDatePicker(viewModel.lastDay.value) { viewModel.lastDay.value = it } }
         }
+
+        viewModel.saved.observe(owner) { if (it) finish() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -115,18 +100,7 @@ class SemesterEditorActivity : AppCompatActivity() {
                         Error.WRONG_DATES -> R.string.sea_error_wrong_dates
                     }
                 )
-            } ?: run {
-                viewModel.viewModelScope.launch {
-                    viewModel.save().let { semester ->
-                        setResult(
-                            RESULT_OK,
-                            Intent().apply { putExtra(SEMESTER_RESULT_EXTRA, semester) }
-                        )
-                        LessonsEditorActivity.start(this@SemesterEditorActivity, semester)
-                    }
-                    finish()
-                }
-            }
+            } ?: viewModel.save()
             true
         }
         else -> super.onOptionsItemSelected(item)
