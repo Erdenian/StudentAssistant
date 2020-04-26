@@ -1,12 +1,6 @@
 package ru.erdenian.studentassistant.entity
 
 import android.os.Parcelable
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
-import androidx.room.PrimaryKey
-import kotlinx.android.parcel.Parcelize
 import org.joda.time.LocalDate
 
 /**
@@ -20,43 +14,13 @@ import org.joda.time.LocalDate
  * @author Ilya Solovyov
  * @since 0.0.0
  */
-@Parcelize
-@Entity(
-    tableName = "homeworks",
-    foreignKeys = [
-        ForeignKey(
-            entity = Semester::class,
-            parentColumns = ["_id"],
-            childColumns = ["semester_id"],
-            onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE
-        )
-    ],
-    indices = [Index("semester_id")]
-)
-data class Homework(
+interface Homework : Comparable<Homework>, Parcelable {
 
-    @ColumnInfo(name = "subject_name")
-    val subjectName: String,
-
-    @ColumnInfo(name = "description")
-    val description: String,
-
-    @ColumnInfo(name = "deadline")
-    val deadline: LocalDate,
-
-    @ColumnInfo(name = "semester_id")
-    val semesterId: Long,
-
-    @PrimaryKey
-    @ColumnInfo(name = "_id")
-    val id: Long = generateId()
-) : Comparable<Homework>, Parcelable {
-
-    init {
-        require(subjectName.isNotBlank()) { "Пустое название предмета" }
-        require(description.isNotBlank()) { "Пустое описание" }
-    }
+    val subjectName: String
+    val description: String
+    val deadline: LocalDate
+    val semesterId: Long
+    val id: Long
 
     override fun compareTo(other: Homework) = compareValuesBy(
         this, other,

@@ -8,7 +8,7 @@ import android.view.View
 import android.widget.AdapterView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.R
@@ -25,9 +25,9 @@ class LessonsEditorActivity : AppCompatActivity() {
 
     companion object {
         private const val SEMESTER_INTENT_KEY = "semester_intent_key"
-        fun start(context: Context, semester: Semester) {
-            context.startActivity<LessonsEditorActivity>(SEMESTER_INTENT_KEY to semester)
-        }
+        fun start(context: Context, semester: Semester) = context.startActivity<LessonsEditorActivity>(
+            SEMESTER_INTENT_KEY to semester
+        )
     }
 
     private val viewModel by viewModels<LessonsEditorViewModel>()
@@ -47,12 +47,7 @@ class LessonsEditorActivity : AppCompatActivity() {
 
         binding.spinner.apply {
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
+                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                     binding.flipper.displayedChild = position
                 }
 
@@ -60,7 +55,7 @@ class LessonsEditorActivity : AppCompatActivity() {
             }
         }
 
-        val byWeekdaysPager = binding.byWeekdaysPager.apply {
+        binding.byWeekdaysPager.apply {
             adapter = LessonsEditorPagerAdapter(supportFragmentManager)
         }
         binding.byWeekdaysPagerTabStrip.apply {
@@ -72,8 +67,8 @@ class LessonsEditorActivity : AppCompatActivity() {
         // TODO: 13.11.2016 добавить заполнение списка пар по датам
 
         binding.addLesson.setOnClickListener {
-            viewModel.viewModelScope.launch {
-                val weekday = byWeekdaysPager.currentItem + 1
+            lifecycleScope.launch {
+                val weekday = binding.byWeekdaysPager.currentItem + 1
                 LessonEditorActivity.start(
                     this@LessonsEditorActivity,
                     checkNotNull(viewModel.semester.value).id,
@@ -104,9 +99,7 @@ class LessonsEditorActivity : AppCompatActivity() {
         R.id.mlse_delete_semester -> {
             MaterialAlertDialogBuilder(this)
                 .setMessage(R.string.lsea_delete_message)
-                .setPositiveButton(R.string.lsea_delete_yes) { _, _ ->
-                    viewModel.viewModelScope.launch { viewModel.deleteSemester() }
-                }
+                .setPositiveButton(R.string.lsea_delete_yes) { _, _ -> viewModel.deleteSemester() }
                 .setNegativeButton(R.string.lsea_delete_no, null)
                 .show()
             true

@@ -62,7 +62,7 @@ class WeeksSelector @JvmOverloads constructor(
         weeksVariants.indexOf(weeks).takeIf { it >= 0 } ?: weeksVariants.size
 
     private val onCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, _ ->
-        onWeeksChangeListener?.onWeeksChange(weeks)
+        onWeeksChangeListener?.invoke(weeks)
     }
 
     private val creator: ViewGroup.(position: Int) -> CheckBoxWithText = { position ->
@@ -115,11 +115,7 @@ class WeeksSelector @JvmOverloads constructor(
             setCustomEnabled(selection == weeksVariants.size)
         }
 
-    interface OnWeeksChangeListener {
-        fun onWeeksChange(weeks: List<Boolean>)
-    }
-
-    var onWeeksChangeListener: OnWeeksChangeListener? = null
+    var onWeeksChangeListener: ((weeks: List<Boolean>) -> Unit)? = null
 
     init {
         orientation = VERTICAL
@@ -146,13 +142,13 @@ class WeeksSelector @JvmOverloads constructor(
         binding.remove.setOnClickListener {
             binding.weeksParent.setViewCount(binding.weeksParent.childCount - 1, creator)
             binding.remove.isEnabled = binding.weeksParent.childCount > 1
-            onWeeksChangeListener?.onWeeksChange(weeks)
+            onWeeksChangeListener?.invoke(weeks)
         }
         binding.add.setOnClickListener {
             binding.weeksParent.setViewCount(binding.weeksParent.childCount + 1, creator)
             binding.remove.isEnabled = true
             binding.scroll.post { binding.scroll.fullScroll(HorizontalScrollView.FOCUS_RIGHT) }
-            onWeeksChangeListener?.onWeeksChange(weeks)
+            onWeeksChangeListener?.invoke(weeks)
         }
         binding.weeksParent.setViewCount(binding.weeksParent.childCount, creator) { _ ->
             setOnCheckedChangeListener(onCheckedChangeListener)

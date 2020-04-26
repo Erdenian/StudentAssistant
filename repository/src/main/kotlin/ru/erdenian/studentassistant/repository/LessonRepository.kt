@@ -1,34 +1,163 @@
 package ru.erdenian.studentassistant.repository
 
-import com.shopify.livedataktx.toNullableKtx
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
 import org.joda.time.LocalDate
+import org.joda.time.LocalTime
+import org.joda.time.Period
 import ru.erdenian.studentassistant.database.dao.LessonDao
+import ru.erdenian.studentassistant.database.entity.ByDateEntity
+import ru.erdenian.studentassistant.database.entity.ByWeekdayEntity
+import ru.erdenian.studentassistant.database.entity.ClassroomEntity
+import ru.erdenian.studentassistant.database.entity.FullLesson
+import ru.erdenian.studentassistant.database.entity.LessonEntity
+import ru.erdenian.studentassistant.database.entity.TeacherEntity
+import ru.erdenian.studentassistant.entity.ImmutableSortedSet
 import ru.erdenian.studentassistant.entity.Lesson
-import ru.erdenian.studentassistant.entity.Semester
+import ru.erdenian.studentassistant.entity.immutableSortedSetOf
+import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 
-@Suppress("TooManyFunctions")
-class LessonRepository(private val lessonDao: LessonDao) : BaseRepository() {
+class LessonRepository(
+    private val lessonDao: LessonDao,
+    private val selectedSemesterRepository: SelectedSemesterRepository,
+    private val defaultStartTime: LocalTime,
+    private val defaultDuration: Period,
+    private val defaultBreakLength: Period
+) {
 
-    suspend fun insert(lesson: Lesson) = lessonDao.insert(lesson)
+    // region Primary actions
 
-    suspend fun get(semesterId: Long, lessonId: Long) = lessonDao.get(semesterId, lessonId)
-    fun get(lesson: Lesson) = lessonDao.getLive(lesson.semesterId, lesson.id).toNullableKtx()
-    fun hasLessons(semesterId: Long) = lessonDao.hasLessons(semesterId)
-    suspend fun delete(lesson: Lesson) = lessonDao.delete(lesson)
+    suspend fun insert(
+        subjectName: String,
+        type: String,
+        teachers: ImmutableSortedSet<String>,
+        classrooms: ImmutableSortedSet<String>,
+        startTime: LocalTime,
+        endTime: LocalTime,
+        semesterId: Long,
+        weekday: Int,
+        weeks: List<Boolean>
+    ) {
+        val lessonEntity = LessonEntity(subjectName, type, startTime, endTime, semesterId)
+        val teachersEntity = teachers.map { TeacherEntity(it) }
+        val classroomsEntity = classrooms.map { ClassroomEntity(it) }
+        lessonDao.insert(lessonEntity, teachersEntity, classroomsEntity, ByWeekdayEntity(weekday, weeks))
+    }
 
-    fun get(semesterId: Long) = lessonDao.get(semesterId).map()
-    fun get(semester: Semester, day: LocalDate) = lessonDao.get(semester, day).map()
-    fun get(semesterId: Long, weekday: Int) = lessonDao.get(semesterId, weekday).map()
-    suspend fun getCount(semesterId: Long) = lessonDao.getCount(semesterId)
-    suspend fun getCount(semesterId: Long, subjectName: String) = lessonDao.getCount(semesterId, subjectName)
+    suspend fun insert(
+        subjectName: String,
+        type: String,
+        teachers: ImmutableSortedSet<String>,
+        classrooms: ImmutableSortedSet<String>,
+        startTime: LocalTime,
+        endTime: LocalTime,
+        semesterId: Long,
+        dates: List<LocalDate>
+    ) {
+        val lessonEntity = LessonEntity(subjectName, type, startTime, endTime, semesterId)
+        val teachersEntity = teachers.map { TeacherEntity(it) }
+        val classroomsEntity = classrooms.map { ClassroomEntity(it) }
+        lessonDao.insert(lessonEntity, teachersEntity, classroomsEntity, dates.map { ByDateEntity(it) })
+    }
 
-    fun getSubjects(semesterId: Long) = lessonDao.getSubjects(semesterId).map()
-    suspend fun renameSubject(semesterId: Long, oldName: String, newName: String) =
+    suspend fun update(
+        id: Long,
+        subjectName: String,
+        type: String,
+        teachers: ImmutableSortedSet<String>,
+        classrooms: ImmutableSortedSet<String>,
+        startTime: LocalTime,
+        endTime: LocalTime,
+        semesterId: Long,
+        weekday: Int,
+        weeks: List<Boolean>
+    ) {
+        val lessonEntity = LessonEntity(subjectName, type, startTime, endTime, semesterId, id)
+        val teachersEntity = teachers.map { TeacherEntity(it, id) }
+        val classroomsEntity = classrooms.map { ClassroomEntity(it, id) }
+        lessonDao.update(lessonEntity, teachersEntity, classroomsEntity, ByWeekdayEntity(weekday, weeks, id))
+    }
+
+    suspend fun update(
+        id: Long,
+        subjectName: String,
+        type: String,
+        teachers: ImmutableSortedSet<String>,
+        classrooms: ImmutableSortedSet<String>,
+        startTime: LocalTime,
+        endTime: LocalTime,
+        semesterId: Long,
+        dates: List<LocalDate>
+    ) {
+        val lessonEntity = LessonEntity(subjectName, type, startTime, endTime, semesterId, id)
+        val teachersEntity = teachers.map { TeacherEntity(it, id) }
+        val classroomsEntity = classrooms.map { ClassroomEntity(it, id) }
+        lessonDao.update(lessonEntity, teachersEntity, classroomsEntity, dates.map { ByDateEntity(it) })
+    }
+
+    suspend fun delete(id: Long): Unit = lessonDao.delete(id)
+
+    // endregion
+
+    // region Lessons
+
+    suspend fun get(id: Long): Lesson? = lessonDao.get(id)
+
+    fun getLiveData(id: Long): LiveData<Lesson?> = lessonDao.getLiveData(id).map { it }
+
+    val allLiveData: LiveData<ImmutableSortedSet<Lesson>> = selectedSemesterRepository.selectedLiveData.switchMap { semester ->
+        semester?.id?.let { lessonDao.getAllLiveData(it).map() } ?: MutableLiveData(immutableSortedSetOf())
+    }
+
+    fun getAllLiveData(day: LocalDate): LiveData<ImmutableSortedSet<Lesson>> =
+        selectedSemesterRepository.selectedLiveData.switchMap { semester ->
+            (semester?.id?.let { lessonDao.getAllLiveData(it) } ?: MutableLiveData(emptyList())).map { lessons ->
+                val weekNumber = semester?.getWeekNumber(day) ?: return@map immutableSortedSetOf()
+                lessons.filter { it.lessonRepeat.repeatsOnDay(day, weekNumber) }.toImmutableSortedSet()
+            }
+        }
+
+    fun getAllLiveData(semesterId: Long, weekday: Int): LiveData<ImmutableSortedSet<Lesson>> =
+        lessonDao.getAllLiveData(semesterId, weekday).map()
+
+    suspend fun getCount(semesterId: Long): Int = lessonDao.getCount(semesterId)
+
+    val hasLessonsLiveData: LiveData<Boolean> = selectedSemesterRepository.selectedLiveData.switchMap { semester ->
+        semester?.id?.let { lessonDao.hasLessonsLiveData(it) } ?: MutableLiveData(false)
+    }
+
+    // endregion
+
+    // region Subjects
+
+    suspend fun getCount(semesterId: Long, subjectName: String): Int = lessonDao.getCount(semesterId, subjectName)
+
+    fun getSubjects(semesterId: Long): LiveData<ImmutableSortedSet<String>> = lessonDao.getSubjectsLiveData(semesterId).map()
+
+    suspend fun renameSubject(semesterId: Long, oldName: String, newName: String): Unit =
         lessonDao.renameSubject(semesterId, oldName, newName)
 
-    fun getTypes(semesterId: Long) = lessonDao.getTypes(semesterId).map()
-    fun getTeachers(semesterId: Long) = lessonDao.getTeachers(semesterId).map()
-    fun getClassrooms(semesterId: Long) = lessonDao.getClassrooms(semesterId).map()
-    suspend fun getLessonLength(semesterId: Long) = lessonDao.getLessonLength(semesterId)
-    suspend fun getNextStartTime(semesterId: Long, weekday: Int) = lessonDao.getNextStartTime(semesterId, weekday)
+    // endregion
+
+    // region Other fields
+
+    fun getTypes(semesterId: Long): LiveData<ImmutableSortedSet<String>> = lessonDao.getTypesLiveData(semesterId).map()
+
+    fun getTeachers(semesterId: Long): LiveData<ImmutableSortedSet<String>> = lessonDao.getTeachersLiveData(semesterId).map()
+
+    fun getClassrooms(semesterId: Long): LiveData<ImmutableSortedSet<String>> = lessonDao.getClassroomsLiveData(semesterId).map()
+
+    suspend fun getDuration(semesterId: Long): Period = lessonDao.getDuration(semesterId) ?: defaultDuration
+
+    suspend fun getNextStartTime(semesterId: Long, weekday: Int): LocalTime =
+        lessonDao.getNextStartTime(semesterId, weekday, defaultBreakLength) ?: defaultStartTime
+
+    // endregion
+
+    private fun LiveData<List<FullLesson>>.map() = map { it.toImmutableSortedSet<Lesson>() }
+
+    @JvmName("mapString")
+    private fun LiveData<List<String>>.map() = map { it.toImmutableSortedSet() }
 }

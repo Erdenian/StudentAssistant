@@ -80,8 +80,9 @@
     <string name="lea_delete_yes">Удалить</string>
     <string name="lea_delete_no">Нет</string>
     <string name="lea_delete_homeworks_title">Задания будут удалены</string>
-    <string name="lea_delete_homeworks_message">Для данного предмета есть домашние задания, они будут удалены вместе с ним</string>
+    <string name="lea_delete_homeworks_message">Для данного предмета есть домашние задания, удалить их вместе с ним?</string>
     <string name="lea_delete_homeworks_yes">Удалить</string>
+    <string name="lea_delete_homeworks_no">Оставить</string>
     <string name="lea_delete_homeworks_cancel">Отмена</string>
     <!-- endregion -->
 
@@ -91,11 +92,13 @@
     <string name="hea_description">Описание</string>
     <string name="hea_deadline">Выберите дату сдачи</string>
     <string name="hea_save">Сохранить</string>
+    <string name="hea_error_empty_subject_name">Введите или выберите предмет</string>
     <string name="hea_error_empty_description">Введите описание домашнего задания</string>
     <string name="hea_unknown_lesson">Неизвестный предмет</string>
     <string name="hea_unknown_lesson_message">Введен неизвестный предмет. Сохранить задание?</string>
     <string name="hea_unknown_lesson_yes">Сохранить</string>
     <string name="hea_unknown_lesson_no">Нет</string>
+    <string name="hea_unknown_lesson_yes_and_create">Сохранить и создать занятие</string>
     <string name="hea_delete">Удалить задание</string>
     <string name="hea_delete_message">Удалить задание?</string>
     <string name="hea_delete_yes">Удалить</string>

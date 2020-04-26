@@ -13,11 +13,7 @@ class LessonsListAdapter : RecyclerView.Adapter<LessonsListAdapter.ItemViewHolde
             notifyDataSetChanged()
         }
 
-    interface OnLessonClickListener {
-        fun onLessonClick(lesson: Lesson)
-    }
-
-    var onLessonClickListener: OnLessonClickListener? = null
+    var onLessonClickListener: ((Lesson) -> Unit)? = null
 
     override fun getItemCount() = lessons.size
 
@@ -30,7 +26,7 @@ class LessonsListAdapter : RecyclerView.Adapter<LessonsListAdapter.ItemViewHolde
             setOnLongClickListener { it.showContextMenu() }
         }
     ).apply {
-        card.setOnClickListener { onLessonClickListener?.onLessonClick(lessons[adapterPosition]) }
+        card.setOnClickListener { onLessonClickListener?.invoke(lessons[adapterPosition]) }
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {

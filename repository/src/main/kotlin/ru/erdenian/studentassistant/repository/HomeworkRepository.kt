@@ -1,30 +1,84 @@
 package ru.erdenian.studentassistant.repository
 
-import com.shopify.livedataktx.toNullableKtx
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
+import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.database.dao.HomeworkDao
+import ru.erdenian.studentassistant.database.entity.HomeworkEntity
 import ru.erdenian.studentassistant.entity.Homework
-import ru.erdenian.studentassistant.entity.Lesson
+import ru.erdenian.studentassistant.entity.ImmutableSortedSet
+import ru.erdenian.studentassistant.entity.immutableSortedSetOf
+import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 
-@Suppress("TooManyFunctions")
-class HomeworkRepository(private val homeworkDao: HomeworkDao) : BaseRepository() {
+class HomeworkRepository(
+    private val homeworkDao: HomeworkDao,
+    private val selectedSemesterRepository: SelectedSemesterRepository
+) {
 
-    suspend fun insert(homework: Homework) = homeworkDao.insert(homework)
+    // region Primary actions
 
-    suspend fun get(semesterId: Long, homeworkId: Long) = homeworkDao.get(semesterId, homeworkId)
-    fun get(homework: Homework) = homeworkDao.getLive(homework.semesterId, homework.id).toNullableKtx()
+    suspend fun insert(subjectName: String, description: String, deadline: LocalDate, semesterId: Long) {
+        homeworkDao.insert(HomeworkEntity(subjectName, description, deadline, semesterId))
+    }
 
-    suspend fun delete(homework: Homework) = homeworkDao.delete(homework)
+    suspend fun update(id: Long, subjectName: String, description: String, deadline: LocalDate, semesterId: Long) =
+        homeworkDao.update(HomeworkEntity(subjectName, description, deadline, semesterId, id))
 
-    fun get(semesterId: Long) = homeworkDao.get(semesterId).map()
-    suspend fun getCount(semesterId: Long) = homeworkDao.getCount(semesterId)
+    suspend fun delete(id: Long): Unit = homeworkDao.delete(id)
 
-    fun get(semesterId: Long, subjectName: String) = homeworkDao.get(semesterId, subjectName).map()
-    fun get(lesson: Lesson) = homeworkDao.get(lesson.semesterId, lesson.subjectName).map()
-    suspend fun getCount(semesterId: Long, subjectName: String) = homeworkDao.getCount(semesterId, subjectName)
+    suspend fun delete(subjectName: String): Unit = homeworkDao.delete(subjectName)
 
-    suspend fun hasHomeworks(semesterId: Long, subjectName: String) = homeworkDao.hasHomeworks(semesterId, subjectName)
+    // endregion
 
-    fun getActual(semesterId: Long) = homeworkDao.getActual(semesterId).map()
-    fun getActual(lesson: Lesson) = homeworkDao.getActual(lesson.semesterId, lesson.subjectName).map()
-    fun getPast(semesterId: Long) = homeworkDao.getPast(semesterId).map()
+    // region Homeworks
+
+    suspend fun get(id: Long): Homework? = homeworkDao.get(id)
+
+    fun getLiveData(id: Long): LiveData<Homework?> = homeworkDao.getLiveData(id).map { it }
+
+    val allLiveData: LiveData<ImmutableSortedSet<Homework>> =
+        selectedSemesterRepository.selectedLiveData.switchMap { semester ->
+            semester?.id?.let { homeworkDao.getAllLiveData(it).map() } ?: MutableLiveData(immutableSortedSetOf())
+        }
+
+    suspend fun getCount(): Int = homeworkDao.getCount(selectedSemesterRepository.selected.id)
+
+    // endregion
+
+    // region By subject name
+
+    fun getAllLiveData(subjectName: String): LiveData<ImmutableSortedSet<Homework>> =
+        selectedSemesterRepository.selectedLiveData.switchMap { semester ->
+            semester?.id?.let { homeworkDao.getAllLiveData(it, subjectName).map() } ?: MutableLiveData(immutableSortedSetOf())
+        }
+
+    suspend fun getCount(subjectName: String): Int = homeworkDao.getCount(selectedSemesterRepository.selected.id, subjectName)
+
+    suspend fun hasHomeworks(semesterId: Long, subjectName: String): Boolean =
+        homeworkDao.hasHomeworks(semesterId, subjectName)
+
+    // endregion
+
+    // region By deadline
+
+    val actualLiveData: LiveData<ImmutableSortedSet<Homework>> =
+        selectedSemesterRepository.selectedLiveData.switchMap { semester ->
+            semester?.id?.let { homeworkDao.getActualLiveData(it).map() } ?: MutableLiveData(immutableSortedSetOf())
+        }
+
+    val pastLiveData: LiveData<ImmutableSortedSet<Homework>> =
+        selectedSemesterRepository.selectedLiveData.switchMap { semester ->
+            semester?.id?.let { homeworkDao.getPastLiveData(it).map() } ?: MutableLiveData(immutableSortedSetOf())
+        }
+
+    fun getActualLiveData(subjectName: String): LiveData<ImmutableSortedSet<Homework>> =
+        selectedSemesterRepository.selectedLiveData.switchMap { semester ->
+            semester?.id?.let { homeworkDao.getActualLiveData(it, subjectName).map() } ?: MutableLiveData(immutableSortedSetOf())
+        }
+
+    // endregion
+
+    private fun LiveData<List<HomeworkEntity>>.map() = map { it.toImmutableSortedSet<Homework>() }
 }

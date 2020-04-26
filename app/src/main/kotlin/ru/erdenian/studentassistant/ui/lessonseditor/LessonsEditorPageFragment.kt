@@ -8,13 +8,13 @@ import android.widget.AdapterView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.PageFragmentLessonsEditorBinding
-import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.ui.adapter.LessonsListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
@@ -31,11 +31,7 @@ class LessonsEditorPageFragment : Fragment(R.layout.page_fragment_lessons_editor
 
     private val viewModel by activityViewModels<LessonsEditorViewModel>()
     private val adapter = LessonsListAdapter().apply {
-        onLessonClickListener = object : LessonsListAdapter.OnLessonClickListener {
-            override fun onLessonClick(lesson: Lesson) {
-                LessonEditorActivity.start(requireContext(), lesson)
-            }
-        }
+        onLessonClickListener = { LessonEditorActivity.start(requireContext(), it) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,11 +40,7 @@ class LessonsEditorPageFragment : Fragment(R.layout.page_fragment_lessons_editor
         binding.lessons.apply {
             adapter = this@LessonsEditorPageFragment.adapter
             layoutManager = LinearLayoutManager(view.context)
-            addItemDecoration(
-                SpacingItemDecoration(
-                    context.resources.getDimensionPixelSize(R.dimen.cards_spacing)
-                )
-            )
+            addItemDecoration(SpacingItemDecoration(context.resources.getDimensionPixelSize(R.dimen.cards_spacing)))
             registerForContextMenu(this)
         }
 
@@ -58,21 +50,13 @@ class LessonsEditorPageFragment : Fragment(R.layout.page_fragment_lessons_editor
         binding.flipper.apply {
             val lessonsIndex = 0
             val freeDayIndex = 1
-            lessons.observe(viewLifecycleOwner) { value ->
-                displayedChild = if (value.isNotEmpty()) lessonsIndex else freeDayIndex
-            }
+            lessons.observe(viewLifecycleOwner) { displayedChild = if (it.isNotEmpty()) lessonsIndex else freeDayIndex }
         }
 
-        lessons.observe(viewLifecycleOwner) { value ->
-            adapter.lessons = value.list
-        }
+        lessons.observe(viewLifecycleOwner) { adapter.lessons = it.list }
     }
 
-    override fun onCreateContextMenu(
-        menu: ContextMenu,
-        v: View,
-        menuInfo: ContextMenu.ContextMenuInfo?
-    ) {
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
         requireActivity().menuInflater.inflate(R.menu.context_lessons_editor, menu)
         @Suppress("UnsafeCast")
         (menuInfo as AdapterView.AdapterContextMenuInfo?)?.run {
@@ -90,21 +74,24 @@ class LessonsEditorPageFragment : Fragment(R.layout.page_fragment_lessons_editor
                 true
             }
             R.id.cle_delete -> {
-                viewModel.viewModelScope.launch {
+                lifecycleScope.launch {
                     if (viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson)) {
                         MaterialAlertDialogBuilder(requireContext())
                             .setTitle(R.string.lea_delete_homeworks_title)
                             .setMessage(R.string.lea_delete_homeworks_message)
                             .setPositiveButton(R.string.lea_delete_homeworks_yes) { _, _ ->
-                                viewModel.viewModelScope.launch { viewModel.delete(lesson) }
+                                viewModel.deleteLesson(lesson, true)
                             }
-                            .setNegativeButton(R.string.lea_delete_homeworks_cancel, null)
+                            .setNegativeButton(R.string.lea_delete_homeworks_no) { _, _ ->
+                                viewModel.deleteLesson(lesson, false)
+                            }
+                            .setNeutralButton(R.string.lea_delete_homeworks_cancel, null)
                             .show()
                     } else {
                         MaterialAlertDialogBuilder(requireContext())
                             .setMessage(R.string.lea_delete_message)
                             .setPositiveButton(R.string.lea_delete_yes) { _, _ ->
-                                viewModel.viewModelScope.launch { viewModel.delete(lesson) }
+                                viewModel.viewModelScope.launch { viewModel.deleteLesson(lesson) }
                             }
                             .setNegativeButton(R.string.lea_delete_no, null)
                             .show()

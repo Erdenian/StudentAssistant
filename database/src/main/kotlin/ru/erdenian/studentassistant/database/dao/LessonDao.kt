@@ -1,94 +1,125 @@
 package ru.erdenian.studentassistant.database.dao
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 import org.joda.time.Period
-import ru.erdenian.studentassistant.database.Converters
-import ru.erdenian.studentassistant.entity.Lesson
-import ru.erdenian.studentassistant.entity.LessonRepeat
-import ru.erdenian.studentassistant.entity.Semester
+import ru.erdenian.studentassistant.database.entity.ByDateEntity
+import ru.erdenian.studentassistant.database.entity.ByWeekdayEntity
+import ru.erdenian.studentassistant.database.entity.ClassroomEntity
+import ru.erdenian.studentassistant.database.entity.FullLesson
+import ru.erdenian.studentassistant.database.entity.LessonEntity
+import ru.erdenian.studentassistant.database.entity.TeacherEntity
 
-@Suppress("TooManyFunctions", "MaxLineLength")
 @Dao
 abstract class LessonDao {
-
-    private companion object {
-        const val DEFAULT_DURATION_MILLIS = 5_400_000
-        val DEFAULT_BREAK_LENGTH: Period = Period.minutes(10)
-        val DEFAULT_START_TIME = LocalTime(9, 0)
-    }
 
     // region Primary actions
 
     @Transaction
-    open suspend fun insert(lesson: Lesson) = withContext(Dispatchers.IO) {
-        val oldLesson = get(lesson.semesterId, lesson.id)
-        insertLesson(lesson)
-        if (
-            (oldLesson != null) &&
-            (oldLesson.subjectName != lesson.subjectName) &&
-            !hasLessons(lesson.semesterId, oldLesson.subjectName)
-        ) renameSubject(lesson.semesterId, oldLesson.subjectName, lesson.subjectName)
+    open suspend fun insert(
+        lesson: LessonEntity,
+        teachers: List<TeacherEntity>,
+        classrooms: List<ClassroomEntity>,
+        byWeekday: ByWeekdayEntity
+    ): Long = withContext(Dispatchers.IO) {
+        val id = insert(lesson)
+        insert(
+            teachers.apply { forEach { it.lessonId = id } },
+            classrooms.apply { forEach { it.lessonId = id } },
+            byWeekday.apply { lessonId = id }
+        )
+        id
     }
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    protected abstract suspend fun insertLesson(lesson: Lesson)
-
-    @Query("SELECT * FROM lessons WHERE semester_id = :semesterId AND _id = :lessonId")
-    abstract suspend fun get(semesterId: Long, lessonId: Long): Lesson?
-
-    @Query("SELECT * FROM lessons WHERE semester_id = :semesterId AND _id = :lessonId")
-    abstract fun getLive(semesterId: Long, lessonId: Long): LiveData<Lesson?>
 
     @Transaction
-    open suspend fun delete(lesson: Lesson) = withContext(Dispatchers.IO) {
-        deleteLesson(lesson)
-        if (!hasLessons(lesson.semesterId, lesson.subjectName)) {
-            deleteHomeworks(lesson.semesterId, lesson.subjectName)
-        }
+    open suspend fun insert(
+        lesson: LessonEntity,
+        teachers: List<TeacherEntity>,
+        classrooms: List<ClassroomEntity>,
+        byDates: List<ByDateEntity>
+    ): Long = withContext(Dispatchers.IO) {
+        val id = insert(lesson)
+        insert(
+            teachers.apply { forEach { it.lessonId = id } },
+            classrooms.apply { forEach { it.lessonId = id } },
+            byDates.apply { forEach { it.lessonId = id } }
+        )
+        id
     }
 
-    @Delete
-    protected abstract suspend fun deleteLesson(lesson: Lesson)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    protected abstract suspend fun insert(lesson: LessonEntity): Long
 
-    @Query("DELETE FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName")
-    protected abstract suspend fun deleteHomeworks(semesterId: Long, subjectName: String)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    protected abstract suspend fun insert(
+        teachers: List<TeacherEntity>,
+        classrooms: List<ClassroomEntity>,
+        byWeekday: ByWeekdayEntity?
+    )
+
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    protected abstract suspend fun insert(
+        teachers: List<TeacherEntity>,
+        classrooms: List<ClassroomEntity>,
+        byDates: List<ByDateEntity>
+    )
+
+    @Transaction
+    open suspend fun update(
+        lesson: LessonEntity,
+        teachers: List<TeacherEntity>,
+        classrooms: List<ClassroomEntity>,
+        byWeekday: ByWeekdayEntity
+    ): Unit = withContext(Dispatchers.IO) {
+        delete(lesson.id)
+        insert(lesson, teachers, classrooms, byWeekday)
+    }
+
+    @Transaction
+    open suspend fun update(
+        lesson: LessonEntity,
+        teachers: List<TeacherEntity>,
+        classrooms: List<ClassroomEntity>,
+        byDates: List<ByDateEntity>
+    ): Unit = withContext(Dispatchers.IO) {
+        delete(lesson.id)
+        insert(lesson, teachers, classrooms, byDates)
+    }
+
+    @Query("DELETE FROM lessons WHERE _id = :id")
+    abstract suspend fun delete(id: Long)
 
     // endregion
 
     // region Lessons
 
+    @Transaction
+    @Query("SELECT * FROM lessons WHERE _id = :id")
+    abstract suspend fun get(id: Long): FullLesson?
+
+    @Transaction
+    @Query("SELECT * FROM lessons WHERE _id = :id")
+    abstract fun getLiveData(id: Long): LiveData<FullLesson?>
+
+    @Transaction
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId ORDER BY start_time, end_time, _id")
-    abstract fun get(semesterId: Long): LiveData<List<Lesson>>
+    abstract fun getAllLiveData(semesterId: Long): LiveData<List<FullLesson>>
 
-    fun get(semester: Semester, day: LocalDate) = get(semester.id).map { lessons ->
-        val weekNumber = semester.getWeekNumber(day)
-        lessons.filter { it.lessonRepeat.repeatsOnDay(day, weekNumber) }
-    }
-
-    fun get(semesterId: Long, weekday: Int) = get(semesterId).map { lessons ->
-        lessons.filter { lesson ->
-            val lessonRepeat = lesson.lessonRepeat
-            if (lessonRepeat !is LessonRepeat.ByWeekday) false
-            else lessonRepeat.repeatsOnWeekday(weekday)
-        }
-    }
+    @Query("SELECT * FROM lessons as l INNER JOIN by_weekday AS w ON w.lesson_id = l._id WHERE semester_id = :semesterId AND weekday = :weekday")
+    abstract fun getAllLiveData(semesterId: Long, weekday: Int): LiveData<List<FullLesson>>
 
     @Query("SELECT COUNT(_id) FROM lessons WHERE semester_id = :semesterId")
     abstract suspend fun getCount(semesterId: Long): Int
 
     @Query("SELECT EXISTS(SELECT _id FROM lessons WHERE semester_id = :semesterId)")
-    abstract fun hasLessons(semesterId: Long): LiveData<Boolean>
+    abstract fun hasLessonsLiveData(semesterId: Long): LiveData<Boolean>
 
     // endregion
 
@@ -97,11 +128,8 @@ abstract class LessonDao {
     @Query("SELECT COUNT(_id) FROM lessons WHERE semester_id = :semesterId AND subject_name = :subjectName")
     abstract suspend fun getCount(semesterId: Long, subjectName: String): Int
 
-    @Query("SELECT COUNT(_id) > 0 FROM lessons WHERE semester_id = :semesterId AND subject_name = :subjectName")
-    protected abstract suspend fun hasLessons(semesterId: Long, subjectName: String): Boolean
-
     @Query("SELECT DISTINCT subject_name FROM lessons WHERE semester_id = :semesterId ORDER BY subject_name")
-    abstract fun getSubjects(semesterId: Long): LiveData<List<String>>
+    abstract fun getSubjectsLiveData(semesterId: Long): LiveData<List<String>>
 
     @Transaction
     open suspend fun renameSubject(semesterId: Long, oldName: String, newName: String) = withContext(Dispatchers.IO) {
@@ -120,52 +148,39 @@ abstract class LessonDao {
     // region Other fields
 
     @Query("SELECT DISTINCT type FROM lessons WHERE type IS NOT NULL AND semester_id = :semesterId ORDER BY type")
-    abstract fun getTypes(semesterId: Long): LiveData<List<String>>
+    abstract fun getTypesLiveData(semesterId: Long): LiveData<List<String>>
 
-    @Query("SELECT teachers FROM lessons WHERE semester_id = :semesterId")
-    protected abstract fun getTeachersRaw(semesterId: Long): LiveData<List<String>>
+    @Query("SELECT DISTINCT t.name FROM teachers AS t INNER JOIN lessons AS l ON l._id = t.lesson_id WHERE l.semester_id = :semesterId ORDER BY t.name")
+    abstract fun getTeachersLiveData(semesterId: Long): LiveData<List<String>>
 
-    fun getTeachers(semesterId: Long): LiveData<List<String>> = getTeachersRaw(semesterId).map { rawTeachers ->
-        rawTeachers.asSequence()
-            .flatMap { it.splitToSequence(Converters.SEPARATOR) }
-            .distinct()
-            .sorted()
-            .toList()
-    }
+    @Query("SELECT DISTINCT c.name FROM classrooms AS c INNER JOIN lessons AS l ON l._id = c.lesson_id WHERE l.semester_id = :semesterId ORDER BY c.name")
+    abstract fun getClassroomsLiveData(semesterId: Long): LiveData<List<String>>
 
-    @Query("SELECT classrooms FROM lessons WHERE semester_id = :semesterId")
-    protected abstract fun getClassroomsRaw(semesterId: Long): LiveData<List<String>>
-
-    fun getClassrooms(semesterId: Long): LiveData<List<String>> = getClassroomsRaw(semesterId).map { rawClassrooms ->
-        rawClassrooms.asSequence()
-            .flatMap { it.splitToSequence(Converters.SEPARATOR) }
-            .distinct()
-            .sorted()
-            .toList()
-    }
-
-    @Query("SELECT IFNULL((SELECT end_time - start_time as duration FROM lessons WHERE semester_id = :semesterId GROUP BY duration ORDER BY COUNT(duration) DESC LIMIT 1), $DEFAULT_DURATION_MILLIS)")
-    abstract suspend fun getLessonLength(semesterId: Long): Period
+    @Query("SELECT end_time - start_time as duration FROM lessons WHERE semester_id = :semesterId GROUP BY duration ORDER BY COUNT(duration) DESC LIMIT 1")
+    abstract suspend fun getDuration(semesterId: Long): Period?
 
     @Transaction
-    open suspend fun getNextStartTime(semesterId: Long, weekday: Int): LocalTime =
-        withContext(Dispatchers.IO) {
-            val lessons = getNextStartTimeRaw(semesterId).filter { it.lessonRepeat is LessonRepeat.ByWeekday }
-            if (lessons.isEmpty()) DEFAULT_START_TIME
-            else {
-                val breakLength = lessons.asSequence()
-                    .groupBy { it.lessonRepeat }
-                    .flatMap { (_, lessons) ->
-                        lessons.zipWithNext().map { (a, b) -> Period.fieldDifference(a.endTime, b.startTime) }
-                    }.groupingBy { it.normalizedStandard() }
-                    .eachCount()
-                    .maxBy { it.value }?.key ?: DEFAULT_BREAK_LENGTH
-                lessons.last().endTime + breakLength
-            }
-        }
+    open suspend fun getNextStartTime(
+        semesterId: Long,
+        weekday: Int,
+        defaultBreakLength: Period
+    ): LocalTime? = withContext(Dispatchers.IO) {
+        val lessons = getNextStartTimeRaw(semesterId).filter { it.lessonRepeat is ByWeekdayEntity }
+        val breakLength = lessons
+            .groupBy { (it.lessonRepeat as ByWeekdayEntity).weekday }.values.asSequence()
+            .flatMap { list ->
+                list.asSequence()
+                    .zipWithNext()
+                    .map { (a, b) -> Period.fieldDifference(a.endTime, b.startTime) }
+            }.groupingBy { it.normalizedStandard() }
+            .eachCount()
+            .maxBy { it.value }?.key ?: defaultBreakLength
+        lessons.lastOrNull()?.run { endTime + breakLength }
+    }
 
+    @Transaction
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId ORDER BY start_time, end_time, _id")
-    protected abstract suspend fun getNextStartTimeRaw(semesterId: Long): List<Lesson>
+    protected abstract suspend fun getNextStartTimeRaw(semesterId: Long): List<FullLesson>
 
     // endregion
 }

@@ -13,11 +13,7 @@ class HomeworksListAdapter : RecyclerView.Adapter<HomeworksListAdapter.ItemViewH
             notifyDataSetChanged()
         }
 
-    interface OnHomeworkClickListener {
-        fun onHomeworkClick(homework: Homework)
-    }
-
-    var onHomeworkClickListener: OnHomeworkClickListener? = null
+    var onHomeworkClickListener: ((Homework) -> Unit)? = null
 
     override fun getItemCount() = homeworks.size
 
@@ -30,9 +26,7 @@ class HomeworksListAdapter : RecyclerView.Adapter<HomeworksListAdapter.ItemViewH
             setOnLongClickListener { it.showContextMenu() }
         }
     ).apply {
-        card.setOnClickListener {
-            onHomeworkClickListener?.onHomeworkClick(homeworks[adapterPosition])
-        }
+        card.setOnClickListener { onHomeworkClickListener?.invoke(homeworks[adapterPosition]) }
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {

@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.PageFragmentScheduleBinding
-import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.ui.adapter.LessonsListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.lessoninformation.LessonInformationActivity
@@ -25,42 +24,26 @@ class SchedulePageFragment : Fragment(R.layout.page_fragment_schedule) {
         }
     }
 
-    private val adapter = LessonsListAdapter().apply {
-        onLessonClickListener = object : LessonsListAdapter.OnLessonClickListener {
-            override fun onLessonClick(lesson: Lesson) {
-                LessonInformationActivity.start(requireContext(), lesson)
-            }
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val binding = PageFragmentScheduleBinding.bind(view)
-
-        binding.lessons.apply {
-            adapter = this@SchedulePageFragment.adapter
-            layoutManager = LinearLayoutManager(view.context)
-            addItemDecoration(
-                SpacingItemDecoration(
-                    requireContext().resources.getDimensionPixelSize(R.dimen.cards_spacing)
-                )
-            )
-        }
-
         @Suppress("UnsafeCast")
         val date = requireArguments().get(PAGE_DATE) as LocalDate
+        val binding = PageFragmentScheduleBinding.bind(view)
         val viewModel by activityViewModels<MainViewModel>()
         val lessons = viewModel.getLessons(date)
+
+        binding.lessons.apply {
+            adapter = LessonsListAdapter().apply {
+                onLessonClickListener = { LessonInformationActivity.start(requireContext(), it) }
+                lessons.observe(viewLifecycleOwner) { this.lessons = it.list }
+            }
+            layoutManager = LinearLayoutManager(view.context)
+            addItemDecoration(SpacingItemDecoration(requireContext().resources.getDimensionPixelSize(R.dimen.cards_spacing)))
+        }
 
         binding.flipper.apply {
             val lessonsIndex = 0
             val freeDayIndex = 1
-            lessons.observe(viewLifecycleOwner) { value ->
-                displayedChild = if (value.isNotEmpty()) lessonsIndex else freeDayIndex
-            }
-        }
-
-        lessons.observe(viewLifecycleOwner) {
-            adapter.lessons = it.list
+            lessons.observe(viewLifecycleOwner) { displayedChild = if (it.isNotEmpty()) lessonsIndex else freeDayIndex }
         }
     }
 }

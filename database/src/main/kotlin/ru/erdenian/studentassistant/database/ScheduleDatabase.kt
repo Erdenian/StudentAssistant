@@ -6,15 +6,23 @@ import androidx.room.TypeConverters
 import ru.erdenian.studentassistant.database.dao.HomeworkDao
 import ru.erdenian.studentassistant.database.dao.LessonDao
 import ru.erdenian.studentassistant.database.dao.SemesterDao
-import ru.erdenian.studentassistant.entity.Homework
-import ru.erdenian.studentassistant.entity.Lesson
-import ru.erdenian.studentassistant.entity.Semester
+import ru.erdenian.studentassistant.database.entity.ByDateEntity
+import ru.erdenian.studentassistant.database.entity.ByWeekdayEntity
+import ru.erdenian.studentassistant.database.entity.ClassroomEntity
+import ru.erdenian.studentassistant.database.entity.HomeworkEntity
+import ru.erdenian.studentassistant.database.entity.LessonEntity
+import ru.erdenian.studentassistant.database.entity.SemesterEntity
+import ru.erdenian.studentassistant.database.entity.TeacherEntity
 
 @Database(
     entities = [
-        Semester::class,
-        Lesson::class,
-        Homework::class
+        SemesterEntity::class,
+        LessonEntity::class,
+        TeacherEntity::class,
+        ClassroomEntity::class,
+        ByWeekdayEntity::class,
+        ByDateEntity::class,
+        HomeworkEntity::class
     ],
     version = 1
 )
