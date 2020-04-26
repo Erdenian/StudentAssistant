@@ -4,7 +4,6 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
@@ -18,8 +17,7 @@ import kotlinx.android.parcel.Parcelize
             onDelete = ForeignKey.CASCADE,
             onUpdate = ForeignKey.CASCADE
         )
-    ],
-    indices = [Index("lesson_id")]
+    ]
 )
 @Parcelize
 data class ClassroomEntity(
@@ -27,7 +25,7 @@ data class ClassroomEntity(
     @ColumnInfo(name = "name")
     val name: String,
 
-    @ColumnInfo(name = "lesson_id")
+    @ColumnInfo(name = "lesson_id", index = true)
     var lessonId: Long = 0L,
 
     @PrimaryKey(autoGenerate = true)

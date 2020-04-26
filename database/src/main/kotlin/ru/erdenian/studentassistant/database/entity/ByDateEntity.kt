@@ -4,7 +4,6 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.Index
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.LocalDate
 
@@ -19,8 +18,7 @@ import org.joda.time.LocalDate
             onDelete = ForeignKey.CASCADE,
             onUpdate = ForeignKey.CASCADE
         )
-    ],
-    indices = [Index("lesson_id")]
+    ]
 )
 @Parcelize
 data class ByDateEntity(
@@ -28,6 +26,6 @@ data class ByDateEntity(
     @ColumnInfo(name = "date")
     val date: LocalDate,
 
-    @ColumnInfo(name = "lesson_id")
+    @ColumnInfo(name = "lesson_id", index = true)
     var lessonId: Long = 0L
 ) : Parcelable
