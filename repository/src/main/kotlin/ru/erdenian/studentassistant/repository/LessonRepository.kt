@@ -120,10 +120,8 @@ class LessonRepository(
             }
         }
 
-    fun getAllLiveData(weekday: Int): LiveData<ImmutableSortedSet<Lesson>> =
-        selectedSemesterRepository.selectedLiveData.switchMap { semester ->
-            semester?.id?.let { lessonDao.getAllLiveData(it, weekday).map() } ?: MutableLiveData(immutableSortedSetOf())
-        }
+    fun getAllLiveData(semesterId: Long, weekday: Int): LiveData<ImmutableSortedSet<Lesson>> =
+        lessonDao.getAllLiveData(semesterId, weekday).map()
 
     suspend fun getCount(semesterId: Long): Int = lessonDao.getCount(semesterId)
 
