@@ -3,7 +3,6 @@ package ru.erdenian.studentassistant.database.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.DateTimeConstants
@@ -19,8 +18,7 @@ import ru.erdenian.studentassistant.entity.Lesson
             onDelete = ForeignKey.CASCADE,
             onUpdate = ForeignKey.CASCADE
         )
-    ],
-    indices = [Index("lesson_id")]
+    ]
 )
 @Parcelize
 data class ByWeekdayEntity(
@@ -32,7 +30,7 @@ data class ByWeekdayEntity(
     override val weeks: List<Boolean>,
 
     @PrimaryKey
-    @ColumnInfo(name = "lesson_id")
+    @ColumnInfo(name = "lesson_id", index = true)
     var lessonId: Long = 0L
 ) : Lesson.Repeat.ByWeekday() {
 

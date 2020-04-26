@@ -4,7 +4,6 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.LocalTime
@@ -19,16 +18,12 @@ import org.joda.time.LocalTime
             onDelete = ForeignKey.CASCADE,
             onUpdate = ForeignKey.CASCADE
         )
-    ],
-    indices = [
-        Index("semester_id"),
-        Index("subject_name")
     ]
 )
 @Parcelize
 data class LessonEntity(
 
-    @ColumnInfo(name = "subject_name")
+    @ColumnInfo(name = "subject_name", index = true)
     val subjectName: String,
 
     @ColumnInfo(name = "type")
@@ -40,7 +35,7 @@ data class LessonEntity(
     @ColumnInfo(name = "end_time")
     val endTime: LocalTime,
 
-    @ColumnInfo(name = "semester_id")
+    @ColumnInfo(name = "semester_id", index = true)
     val semesterId: Long,
 
     @PrimaryKey(autoGenerate = true)
