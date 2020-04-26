@@ -8,10 +8,8 @@ import android.widget.AdapterView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.PageFragmentHomeworksBinding
 import ru.erdenian.studentassistant.entity.Homework
@@ -88,9 +86,7 @@ class HomeworksPageFragment : Fragment(R.layout.page_fragment_homeworks) {
             R.id.ch_delete -> {
                 MaterialAlertDialogBuilder(requireContext())
                     .setMessage(R.string.hf_delete_message)
-                    .setPositiveButton(R.string.hf_delete_yes) { _, _ ->
-                        viewModel.viewModelScope.launch { viewModel.delete(homework) }
-                    }
+                    .setPositiveButton(R.string.hf_delete_yes) { _, _ -> viewModel.deleteHomework(homework.id) }
                     .setNegativeButton(R.string.hf_delete_no, null)
                     .show()
                 true

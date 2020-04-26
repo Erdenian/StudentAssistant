@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.repository
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -10,7 +11,7 @@ import ru.erdenian.studentassistant.entity.Semester
 
 class SelectedSemesterRepository(semesterDao: SemesterDao) {
 
-    val selectedLiveData: MutableLiveData<Semester?> = MediatorLiveData<Semester?>().apply {
+    private val selectedLiveDataPrivate: MutableLiveData<Semester?> = MediatorLiveData<Semester?>().apply {
         var previousSemesters = emptyList<SemesterEntity>()
 
         addSource(semesterDao.getAllLiveData()) { semesters ->
@@ -24,8 +25,13 @@ class SelectedSemesterRepository(semesterDao: SemesterDao) {
             previousSemesters = semesters
         }
     }
+    val selectedLiveData: LiveData<Semester?> get() = selectedLiveDataPrivate
 
     val selected: Semester get() = checkNotNull(selectedLiveData.value)
+
+    fun selectSemester(semester: Semester) {
+        selectedLiveDataPrivate.value = semester
+    }
 
     private val observer = Observer<Any?> {}
 
