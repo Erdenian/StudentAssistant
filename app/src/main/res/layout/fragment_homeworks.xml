@@ -4,32 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
+    <ru.erdenian.studentassistant.uikit.ContextMenuRecyclerView
+        android:id="@+id/homeworks"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/view_pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.viewpager.widget.PagerTabStrip
-                android:id="@+id/pager_tab_strip"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top" />
-
-        </androidx.viewpager.widget.ViewPager>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_homework"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/ic_plus" />
-
-    </FrameLayout>
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -37,6 +20,14 @@
         android:layout_gravity="center"
         android:layout_margin="64dp"
         android:gravity="center"
-        android:text="@string/hf_no_lessons" />
+        android:text="@string/hf_no_schedule" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="64dp"
+        android:gravity="center"
+        android:text="@string/hf_no_homeworks" />
 
 </ViewFlipper>
