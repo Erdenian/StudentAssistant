@@ -68,6 +68,11 @@ class HomeworkRepository(
             semester?.id?.let { homeworkDao.getActualLiveData(it).map() } ?: MutableLiveData(immutableSortedSetOf())
         }
 
+    val overdueLiveData: LiveData<ImmutableSortedSet<Homework>> =
+        selectedSemesterRepository.selectedLiveData.switchMap { semester ->
+            semester?.id?.let { homeworkDao.getOverdueLiveData(it).map() } ?: MutableLiveData(immutableSortedSetOf())
+        }
+
     val pastLiveData: LiveData<ImmutableSortedSet<Homework>> =
         selectedSemesterRepository.selectedLiveData.switchMap { semester ->
             semester?.id?.let { homeworkDao.getPastLiveData(it).map() } ?: MutableLiveData(immutableSortedSetOf())
