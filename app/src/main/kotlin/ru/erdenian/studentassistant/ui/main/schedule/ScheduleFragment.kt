@@ -42,7 +42,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setHasOptionsMenu(true)
+        viewModel.selectedSemester.observe(viewLifecycleOwner) { setHasOptionsMenu(true) }
 
         binding.viewPager.adapter = pagerAdapter
         binding.pagerTabStrip.apply {
@@ -77,8 +77,8 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        val isNotEmpty = viewModel.allSemesters.value?.isNotEmpty() ?: false
-        menu.findItem(R.id.ms_calendar).isVisible = isNotEmpty
+        val hasSchedule = (viewModel.selectedSemester.value != null)
+        menu.findItem(R.id.ms_calendar).isVisible = hasSchedule
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {

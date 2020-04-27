@@ -7,13 +7,11 @@ import android.view.View
 import android.widget.AdapterView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.ActivityMainBinding
-import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.ui.adapter.SemestersSpinnerAdapter
 import ru.erdenian.studentassistant.ui.lessonseditor.LessonsEditorActivity
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
@@ -36,10 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
-            val observer = Observer<Semester?> { title = it?.name ?: navController.currentDestination?.label }
-            viewModel.selectedSemester.observe(owner, observer)
-            navController.addOnDestinationChangedListener { _, _, _ -> observer.onChanged(viewModel.selectedSemester.value) }
-
+            navController.addOnDestinationChangedListener { _, destination, _ -> title = destination.label }
             viewModel.allSemesters.observe(owner) { setDisplayShowTitleEnabled(it.size <= 1) }
         }
 
