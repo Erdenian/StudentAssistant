@@ -62,7 +62,10 @@ interface HomeworkDao {
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline >= :today ORDER BY deadline, _id")
     fun getActualLiveData(semesterId: Long, today: LocalDate = LocalDate.now()): LiveData<List<HomeworkEntity>>
 
-    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline < :today ORDER BY deadline, _id")
+    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline < :today AND is_done = 0 ORDER BY deadline, _id")
+    fun getOverdueLiveData(semesterId: Long, today: LocalDate = LocalDate.now()): LiveData<List<HomeworkEntity>>
+
+    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline < :today AND is_done = 1 ORDER BY deadline, _id")
     fun getPastLiveData(semesterId: Long, today: LocalDate = LocalDate.now()): LiveData<List<HomeworkEntity>>
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName AND deadline >= :today ORDER BY deadline, _id")

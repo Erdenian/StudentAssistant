@@ -19,6 +19,7 @@ interface Homework : Comparable<Homework>, Parcelable {
     val subjectName: String
     val description: String
     val deadline: LocalDate
+    val isDone: Boolean
     val semesterId: Long
     val id: Long
 
