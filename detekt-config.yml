@@ -63,7 +63,7 @@ complexity:
     threshold: 4
   ComplexInterface:
     active: true
-    excludes: "**/*Dao.kt"
+    excludes: []
     threshold: 10
     includeStaticDeclarations: true
     includePrivateDeclarations: true
