@@ -10,7 +10,9 @@ import androidx.fragment.app.activityViewModels
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentScheduleBinding
+import ru.erdenian.studentassistant.ui.lessonseditor.LessonsEditorActivity
 import ru.erdenian.studentassistant.ui.main.MainViewModel
+import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
 import ru.erdenian.studentassistant.utils.binding
 import ru.erdenian.studentassistant.utils.colorAttr
 import ru.erdenian.studentassistant.utils.getColorCompat
@@ -79,6 +81,10 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     override fun onPrepareOptionsMenu(menu: Menu) {
         val hasSchedule = (viewModel.selectedSemester.value != null)
         menu.findItem(R.id.ms_calendar).isVisible = hasSchedule
+        menu.findItem(R.id.ms_add_schedule).setShowAsAction(
+            if (hasSchedule) MenuItem.SHOW_AS_ACTION_NEVER else MenuItem.SHOW_AS_ACTION_IF_ROOM
+        )
+        menu.findItem(R.id.ms_edit_schedule).isVisible = hasSchedule
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
@@ -88,6 +94,14 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                     binding.viewPager.currentItem = pagerAdapter.getPosition(it)
                 }
             }
+            true
+        }
+        R.id.ms_add_schedule -> {
+            SemesterEditorActivity.start(requireContext())
+            true
+        }
+        R.id.ms_edit_schedule -> {
+            LessonsEditorActivity.start(requireContext(), checkNotNull(viewModel.selectedSemester.value))
             true
         }
         else -> false
