@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
@@ -12,7 +12,6 @@ import ru.erdenian.studentassistant.databinding.PageFragmentScheduleBinding
 import ru.erdenian.studentassistant.ui.adapter.LessonsListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.lessoninformation.LessonInformationActivity
-import ru.erdenian.studentassistant.ui.main.MainViewModel
 
 class SchedulePageFragment : Fragment(R.layout.page_fragment_schedule) {
 
@@ -28,7 +27,7 @@ class SchedulePageFragment : Fragment(R.layout.page_fragment_schedule) {
         @Suppress("UnsafeCast")
         val date = requireArguments().get(PAGE_DATE) as LocalDate
         val binding = PageFragmentScheduleBinding.bind(view)
-        val viewModel by activityViewModels<MainViewModel>()
+        val viewModel by requireParentFragment().viewModels<ScheduleViewModel>()
         val lessons = viewModel.getLessons(date)
 
         binding.lessons.apply {

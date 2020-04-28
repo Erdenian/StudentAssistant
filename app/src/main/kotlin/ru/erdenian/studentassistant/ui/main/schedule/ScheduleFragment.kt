@@ -6,12 +6,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentScheduleBinding
 import ru.erdenian.studentassistant.ui.lessonseditor.LessonsEditorActivity
-import ru.erdenian.studentassistant.ui.main.MainViewModel
 import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
 import ru.erdenian.studentassistant.utils.binding
 import ru.erdenian.studentassistant.utils.colorAttr
@@ -25,7 +24,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         private const val PAGE_DATE = "page_date"
     }
 
-    private val viewModel by activityViewModels<MainViewModel>()
+    private val viewModel by viewModels<ScheduleViewModel>()
 
     private val binding by binding { FragmentScheduleBinding.bind(requireView()) }
 

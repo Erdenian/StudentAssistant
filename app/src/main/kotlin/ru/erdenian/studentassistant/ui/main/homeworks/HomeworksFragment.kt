@@ -8,7 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ru.erdenian.studentassistant.R
@@ -21,7 +21,7 @@ import ru.erdenian.studentassistant.utils.setColor
 
 class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
 
-    private val viewModel by activityViewModels<HomeworksViewModel>()
+    private val viewModel by viewModels<HomeworksViewModel>()
 
     private val adapter = HomeworksListAdapter().apply {
         onHomeworkClickListener = { HomeworkEditorActivity.start(requireContext(), it) }
