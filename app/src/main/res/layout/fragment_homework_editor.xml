@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:hint="@string/hea_subject"
+        android:hint="@string/hef_subject"
         app:editable="true"
         app:singleLine="true" />
 
@@ -28,7 +28,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="top"
-        android:hint="@string/hea_description"
+        android:hint="@string/hef_description"
         android:inputType="textMultiLine"
         tools:ignore="Autofill" />
 
@@ -36,6 +36,6 @@
         android:id="@+id/deadline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hea_deadline" />
+        android:text="@string/hef_deadline" />
 
 </LinearLayout>
