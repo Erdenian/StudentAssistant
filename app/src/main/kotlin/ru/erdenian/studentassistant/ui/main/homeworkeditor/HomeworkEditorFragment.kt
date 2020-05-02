@@ -99,19 +99,19 @@ class HomeworkEditorFragment : Fragment(R.layout.fragment_homework_editor) {
             viewModel.error.value?.let { error ->
                 requireContext().toast(
                     when (error) {
-                        Error.EMPTY_SUBJECT -> R.string.hea_error_empty_subject_name
-                        Error.EMPTY_DESCRIPTION -> R.string.hea_error_empty_description
+                        Error.EMPTY_SUBJECT -> R.string.hef_error_empty_subject_name
+                        Error.EMPTY_DESCRIPTION -> R.string.hef_error_empty_description
                     }
                 )
             } ?: run {
                 if (viewModel.lessonExists) viewModel.save()
                 else {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(R.string.hea_unknown_lesson)
-                        .setMessage(R.string.hea_unknown_lesson_message)
-                        .setPositiveButton(R.string.hea_unknown_lesson_yes) { _, _ -> viewModel.save() }
-                        .setNegativeButton(R.string.hea_unknown_lesson_no, null)
-                        .setNeutralButton(R.string.hea_unknown_lesson_yes_and_create) { _, _ ->
+                        .setTitle(R.string.hef_unknown_lesson)
+                        .setMessage(R.string.hef_unknown_lesson_message)
+                        .setPositiveButton(R.string.hef_unknown_lesson_yes) { _, _ -> viewModel.save() }
+                        .setNegativeButton(R.string.hef_unknown_lesson_no, null)
+                        .setNeutralButton(R.string.hef_unknown_lesson_yes_and_create) { _, _ ->
                             viewModel.save()
                             findNavController().navigate(
                                 HomeworkEditorFragmentDirections.addLesson(
@@ -127,9 +127,9 @@ class HomeworkEditorFragment : Fragment(R.layout.fragment_homework_editor) {
         }
         R.id.mhe_delete -> {
             MaterialAlertDialogBuilder(requireContext())
-                .setMessage(R.string.hea_delete_message)
-                .setPositiveButton(R.string.hea_delete_yes) { _, _ -> viewModel.delete() }
-                .setNegativeButton(R.string.hea_delete_no, null)
+                .setMessage(R.string.hef_delete_message)
+                .setPositiveButton(R.string.hef_delete_yes) { _, _ -> viewModel.delete() }
+                .setNegativeButton(R.string.hef_delete_no, null)
                 .show()
             true
         }
