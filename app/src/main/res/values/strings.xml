@@ -26,16 +26,13 @@
     <string name="hf_delete_yes">Да</string>
     <string name="hf_delete_no">Нет</string>
 
-    <!-- endregion -->
-
-    <!-- region LessonInformationActivity -->
-    <string name="lia_title">Данные занятия</string>
-    <string name="lia_no_homeworks">Нет заданий</string>
-    <string name="lia_edit">Редактировать</string>
-    <string name="lia_delete_message">Удалить задание?</string>
-    <string name="lia_delete_yes">Да</string>
-    <string name="lia_delete_no">Нет</string>
-    <!-- endregion -->
+    <!-- LessonInformationFragment -->
+    <string name="lif_title">Данные занятия</string>
+    <string name="lif_no_homeworks">Нет заданий</string>
+    <string name="lif_edit">Редактировать</string>
+    <string name="lif_delete_message">Удалить задание?</string>
+    <string name="lif_delete_yes">Да</string>
+    <string name="lif_delete_no">Нет</string>
 
     <!-- region SemesterEditorActivity -->
     <string name="sea_title_new">Добавление расписания</string>
@@ -45,6 +42,7 @@
     <string name="sea_error_empty_name">Имя не может быть пустым</string>
     <string name="sea_error_name_not_available">Такое имя уже занято</string>
     <string name="sea_error_wrong_dates">Даты первого и последнего дня введены некорректно</string>
+
     <!-- endregion -->
 
     <!-- region LessonsEditorActivity -->
