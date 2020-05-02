@@ -359,7 +359,9 @@
 
         <action
             android:id="@id/add_lesson"
-            app:destination="@id/nav_fragment_lesson_editor">
+            app:destination="@id/nav_fragment_lesson_editor"
+            app:popUpTo="@id/nav_fragment_homework_editor"
+            app:popUpToInclusive="true">
 
             <argument
                 android:name="semester_id"
