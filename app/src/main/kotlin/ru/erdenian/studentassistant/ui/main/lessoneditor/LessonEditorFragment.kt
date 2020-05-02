@@ -12,11 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.joda.time.DateTimeConstants
@@ -27,6 +24,7 @@ import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.ui.main.lessoneditor.LessonEditorViewModel.Error
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
+import ru.erdenian.studentassistant.utils.navArgsFactory
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showTimePicker
 import ru.erdenian.studentassistant.utils.toast
@@ -39,18 +37,12 @@ class LessonEditorFragment : Fragment(R.layout.fragment_lesson_editor) {
     }
 
     private val viewModel by viewModels<LessonEditorViewModel> {
-        object : ViewModelProvider.Factory {
-            private val application = requireActivity().application
-            private val args by navArgs<LessonEditorFragmentArgs>()
-
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T = args.run {
-                when {
-                    (semesterId >= 0) && (weekday >= 0) -> LessonEditorViewModel(application, semesterId, weekday)
-                    (semesterId >= 0) && (subjectName != null) -> LessonEditorViewModel(application, semesterId, subjectName)
-                    (lesson != null) -> LessonEditorViewModel(application, lesson, copy)
-                    else -> throw IllegalArgumentException("Wrong fragment arguments: $args")
-                } as T
+        navArgsFactory<LessonEditorFragmentArgs> { application ->
+            when {
+                (semesterId >= 0) && (weekday >= 0) -> LessonEditorViewModel(application, semesterId, weekday)
+                (semesterId >= 0) && (subjectName != null) -> LessonEditorViewModel(application, semesterId, subjectName)
+                (lesson != null) -> LessonEditorViewModel(application, lesson, copy)
+                else -> throw IllegalArgumentException("Wrong fragment arguments: $this")
             }
         }
     }
