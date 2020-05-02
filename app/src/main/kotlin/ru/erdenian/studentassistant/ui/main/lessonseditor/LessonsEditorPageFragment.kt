@@ -79,23 +79,23 @@ class LessonsEditorPageFragment : Fragment(R.layout.page_fragment_lessons_editor
                 lifecycleScope.launch {
                     if (viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson)) {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(R.string.lea_delete_homeworks_title)
-                            .setMessage(R.string.lea_delete_homeworks_message)
-                            .setPositiveButton(R.string.lea_delete_homeworks_yes) { _, _ ->
+                            .setTitle(R.string.lef_delete_homeworks_title)
+                            .setMessage(R.string.lef_delete_homeworks_message)
+                            .setPositiveButton(R.string.lef_delete_homeworks_yes) { _, _ ->
                                 viewModel.deleteLesson(lesson, true)
                             }
-                            .setNegativeButton(R.string.lea_delete_homeworks_no) { _, _ ->
+                            .setNegativeButton(R.string.lef_delete_homeworks_no) { _, _ ->
                                 viewModel.deleteLesson(lesson, false)
                             }
-                            .setNeutralButton(R.string.lea_delete_homeworks_cancel, null)
+                            .setNeutralButton(R.string.lef_delete_homeworks_cancel, null)
                             .show()
                     } else {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setMessage(R.string.lea_delete_message)
-                            .setPositiveButton(R.string.lea_delete_yes) { _, _ ->
+                            .setMessage(R.string.lef_delete_message)
+                            .setPositiveButton(R.string.lef_delete_yes) { _, _ ->
                                 viewModel.viewModelScope.launch { viewModel.deleteLesson(lesson) }
                             }
-                            .setNegativeButton(R.string.lea_delete_no, null)
+                            .setNegativeButton(R.string.lef_delete_no, null)
                             .show()
                     }
                 }
