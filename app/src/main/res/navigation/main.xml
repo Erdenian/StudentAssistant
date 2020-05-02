@@ -88,6 +88,12 @@
     </fragment>
 
     <fragment
+        android:id="@+id/nav_fragment_help"
+        android:name="ru.erdenian.studentassistant.ui.help.HelpFragment"
+        android:label="@string/ha_title"
+        tools:layout="@layout/fragment_help" />
+
+    <fragment
         android:id="@+id/nav_fragment_lesson_information"
         android:name="ru.erdenian.studentassistant.ui.main.lessoninformation.LessonInformationFragment"
         android:label="@string/lia_title"
@@ -395,6 +401,11 @@
     <action
         android:id="@+id/nav_action_homeworks"
         app:destination="@id/nav_fragment_homeworks"
+        app:popUpTo="@id/main" />
+
+    <action
+        android:id="@+id/nav_action_help"
+        app:destination="@id/nav_fragment_help"
         app:popUpTo="@id/main" />
 
     <!-- endregion -->
