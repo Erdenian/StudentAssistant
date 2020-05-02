@@ -27,13 +27,103 @@
     <fragment
         android:id="@+id/nav_fragment_homeworks"
         android:name="ru.erdenian.studentassistant.ui.main.homeworks.HomeworksFragment"
-        tools:layout="@layout/fragment_homeworks" />
+        tools:layout="@layout/fragment_homeworks">
+
+        <action
+            android:id="@+id/nav_action_create_homework"
+            app:destination="@id/nav_fragment_homework_editor">
+
+            <argument
+                android:name="semester_id"
+                app:argType="long" />
+
+            <argument
+                android:name="lesson"
+                android:defaultValue="@null"
+                app:argType="ru.erdenian.studentassistant.entity.Lesson"
+                app:nullable="true" />
+
+            <argument
+                android:name="homework"
+                android:defaultValue="@null"
+                app:argType="ru.erdenian.studentassistant.entity.Homework"
+                app:nullable="true" />
+
+        </action>
+
+        <action
+            android:id="@+id/nav_action_edit_homework"
+            app:destination="@id/nav_fragment_homework_editor">
+
+            <argument
+                android:name="homework"
+                app:argType="ru.erdenian.studentassistant.entity.Homework"
+                app:nullable="false" />
+
+            <argument
+                android:name="semester_id"
+                android:defaultValue="-1L"
+                app:argType="long" />
+
+            <argument
+                android:name="lesson"
+                android:defaultValue="@null"
+                app:argType="ru.erdenian.studentassistant.entity.Lesson"
+                app:nullable="true" />
+
+        </action>
+
+    </fragment>
 
     <fragment
         android:id="@+id/nav_fragment_lesson_information"
         android:name="ru.erdenian.studentassistant.ui.main.lessoninformation.LessonInformationFragment"
         android:label="@string/lia_title"
         tools:layout="@layout/fragment_lesson_information">
+
+        <action
+            android:id="@+id/nav_action_edit_homework"
+            app:destination="@id/nav_fragment_homework_editor">
+
+            <argument
+                android:name="homework"
+                app:argType="ru.erdenian.studentassistant.entity.Homework"
+                app:nullable="false" />
+
+            <argument
+                android:name="semester_id"
+                android:defaultValue="-1L"
+                app:argType="long" />
+
+            <argument
+                android:name="lesson"
+                android:defaultValue="@null"
+                app:argType="ru.erdenian.studentassistant.entity.Lesson"
+                app:nullable="true" />
+
+        </action>
+
+        <action
+            android:id="@+id/nav_action_create_homework"
+            app:destination="@id/nav_fragment_homework_editor">
+
+            <argument
+                android:name="lesson"
+                app:argType="ru.erdenian.studentassistant.entity.Lesson"
+                app:nullable="false" />
+
+            <argument
+                android:name="semester_id"
+                android:defaultValue="-1L"
+                app:argType="long" />
+
+            <argument
+                android:name="homework"
+                android:defaultValue="@null"
+                app:argType="ru.erdenian.studentassistant.entity.Homework"
+                app:nullable="true" />
+
+        </action>
 
         <argument
             android:name="lesson"
@@ -52,6 +142,28 @@
             android:name="semester"
             android:defaultValue="@null"
             app:argType="ru.erdenian.studentassistant.entity.Semester"
+            app:nullable="true" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_fragment_homework_editor"
+        android:name="ru.erdenian.studentassistant.ui.main.homeworkeditor.HomeworkEditorFragment"
+        android:label="@string/hea_title"
+        tools:layout="@layout/fragment_homework_editor">
+
+        <argument
+            android:name="semester_id"
+            app:argType="long" />
+
+        <argument
+            android:name="lesson"
+            app:argType="ru.erdenian.studentassistant.entity.Lesson"
+            app:nullable="true" />
+
+        <argument
+            android:name="homework"
+            app:argType="ru.erdenian.studentassistant.entity.Homework"
             app:nullable="true" />
 
     </fragment>

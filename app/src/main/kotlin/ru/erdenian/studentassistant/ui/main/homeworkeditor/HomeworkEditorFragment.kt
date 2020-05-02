@@ -1,75 +1,65 @@
-package ru.erdenian.studentassistant.ui.homeworkeditor
+package ru.erdenian.studentassistant.ui.main.homeworkeditor
 
-import android.content.Context
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.activity.viewModels
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.viewModelScope
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.launch
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.databinding.ActivityHomeworkEditorBinding
-import ru.erdenian.studentassistant.entity.Homework
-import ru.erdenian.studentassistant.entity.Lesson
-import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorViewModel.Error
+import ru.erdenian.studentassistant.databinding.FragmentHomeworkEditorBinding
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
+import ru.erdenian.studentassistant.ui.main.homeworkeditor.HomeworkEditorViewModel.Error
 import ru.erdenian.studentassistant.uikit.ExposedDropdownMenu
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
-import ru.erdenian.studentassistant.utils.startActivity
 import ru.erdenian.studentassistant.utils.toast
 
-class HomeworkEditorActivity : AppCompatActivity() {
+class HomeworkEditorFragment : Fragment(R.layout.fragment_homework_editor) {
 
     companion object {
-        private const val SEMESTER_ID_INTENT_KEY = "semester_id_intent_key"
-        private const val SUBJECT_NAME_INTENT_KEY = "subject_name_intent_key"
-        private const val HOMEWORK_INTENT_KEY = "homework_intent_key"
-
-        fun start(context: Context, semesterId: Long) = context.startActivity<HomeworkEditorActivity>(
-            SEMESTER_ID_INTENT_KEY to semesterId
-        )
-
-        fun start(context: Context, lesson: Lesson) = context.startActivity<HomeworkEditorActivity>(
-            SEMESTER_ID_INTENT_KEY to lesson.semesterId,
-            SUBJECT_NAME_INTENT_KEY to lesson.subjectName
-        )
-
-        fun start(context: Context, homework: Homework) = context.startActivity<HomeworkEditorActivity>(
-            SEMESTER_ID_INTENT_KEY to homework.semesterId,
-            HOMEWORK_INTENT_KEY to homework
-        )
-
         private const val DATE_FORMAT = "dd.MM.yyyy"
     }
 
-    private val viewModel by viewModels<HomeworkEditorViewModel>()
+    private val viewModel by viewModels<HomeworkEditorViewModel> {
+        object : ViewModelProvider.Factory {
+            private val application = requireActivity().application
+            private val args by navArgs<HomeworkEditorFragmentArgs>()
 
-    private val homework by lazy { intent.getParcelableExtra<Homework>(HOMEWORK_INTENT_KEY) }
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T = args.run {
+                when {
+                    (semesterId > 0) -> HomeworkEditorViewModel(application, semesterId)
+                    (lesson != null) -> HomeworkEditorViewModel(application, lesson)
+                    (homework != null) -> HomeworkEditorViewModel(application, homework)
+                    else -> throw IllegalArgumentException("Wrong fragment arguments: $args")
+                } as T
+            }
+        }
+    }
 
     @Suppress("ComplexMethod")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val binding = ActivityHomeworkEditorBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val binding = FragmentHomeworkEditorBinding.bind(view)
+        val owner = viewLifecycleOwner
+        setHasOptionsMenu(true)
 
-        intent.apply {
-            val homework = homework
-            val semesterId = getLongExtra(SEMESTER_ID_INTENT_KEY, -1)
-            if (homework != null) viewModel.init(semesterId, homework)
-            else viewModel.init(semesterId, intent.getStringExtra(SUBJECT_NAME_INTENT_KEY))
+        (requireActivity() as AppCompatActivity).apply {
+            setSupportActionBar(binding.toolbar)
+            checkNotNull(supportActionBar).setDisplayHomeAsUpEnabled(true)
         }
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        val owner = this
 
         binding.subjectName.apply {
             setAdapter(ExposedDropdownMenu.createAdapter(context).apply {
@@ -93,31 +83,30 @@ class HomeworkEditorActivity : AppCompatActivity() {
             val dateFormatter = DateTimeFormat.forPattern(DATE_FORMAT)
             viewModel.deadline.observe(owner) { text = it.toString(dateFormatter) }
             setOnClickListener {
-                showDatePicker(
+                requireContext().showDatePicker(
                     viewModel.deadline.value, LocalDate.now(), viewModel.semesterLastDay.value
                 ) { viewModel.deadline.value = it }
             }
         }
 
         viewModel.error.observe(owner) {}
-        viewModel.done.observe(owner) { if (it) finish() }
+        viewModel.done.observe(owner) { if (it) findNavController().popBackStack() }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_homework_editor, menu)
-        menu.findItem(R.id.mhe_delete).isVisible = (homework != null)
-        menu.setColor(getColorCompat(R.color.menu))
-        return super.onCreateOptionsMenu(menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_homework_editor, menu)
+        menu.findItem(R.id.mhe_delete).isVisible = viewModel.isEditing
+        menu.setColor(requireContext().getColorCompat(R.color.menu))
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home -> {
-            finish()
+            findNavController().popBackStack()
             true
         }
         R.id.mhe_save -> {
             viewModel.error.value?.let { error ->
-                toast(
+                requireContext().toast(
                     when (error) {
                         Error.EMPTY_SUBJECT -> R.string.hea_error_empty_subject_name
                         Error.EMPTY_DESCRIPTION -> R.string.hea_error_empty_description
@@ -126,7 +115,7 @@ class HomeworkEditorActivity : AppCompatActivity() {
             } ?: run {
                 if (viewModel.lessonExists) viewModel.save()
                 else {
-                    MaterialAlertDialogBuilder(this)
+                    MaterialAlertDialogBuilder(requireContext())
                         .setTitle(R.string.hea_unknown_lesson)
                         .setMessage(R.string.hea_unknown_lesson_message)
                         .setPositiveButton(R.string.hea_unknown_lesson_yes) { _, _ -> viewModel.save() }
@@ -134,8 +123,8 @@ class HomeworkEditorActivity : AppCompatActivity() {
                         .setNeutralButton(R.string.hea_unknown_lesson_yes_and_create) { _, _ ->
                             viewModel.save()
                             LessonEditorActivity.start(
-                                this,
-                                checkNotNull(viewModel.semesterId.value),
+                                requireContext(),
+                                checkNotNull(viewModel.semesterId),
                                 checkNotNull(viewModel.subjectName.value)
                             )
                         }
@@ -145,14 +134,9 @@ class HomeworkEditorActivity : AppCompatActivity() {
             true
         }
         R.id.mhe_delete -> {
-            MaterialAlertDialogBuilder(this)
+            MaterialAlertDialogBuilder(requireContext())
                 .setMessage(R.string.hea_delete_message)
-                .setPositiveButton(R.string.hea_delete_yes) { _, _ ->
-                    viewModel.viewModelScope.launch {
-                        viewModel.delete()
-                        finish()
-                    }
-                }
+                .setPositiveButton(R.string.hea_delete_yes) { _, _ -> viewModel.delete() }
                 .setNegativeButton(R.string.hea_delete_no, null)
                 .show()
             true

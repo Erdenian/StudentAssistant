@@ -18,7 +18,7 @@ import ru.erdenian.studentassistant.repository.SemesterRepository
 
 class SemesterEditorViewModel(
     application: Application,
-    val semester: Semester?
+    private val semester: Semester?
 ) : AndroidViewModel(application), KodeinAware {
 
     override val kodein by kodein()
@@ -74,6 +74,8 @@ class SemesterEditorViewModel(
         addSource(lastDay, onChanged)
         addSource(semestersNames, onChanged)
     }
+
+    val isEditing get() = (semester != null)
 
     private val savedPrivate = MutableLiveData(false)
     val saved: LiveData<Boolean> get() = savedPrivate

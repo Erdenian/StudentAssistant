@@ -37,11 +37,6 @@
             android:label="@string/lea_title_edit" />
 
         <activity
-            android:name=".ui.homeworkeditor.HomeworkEditorActivity"
-            android:label="@string/hea_title"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity
             android:name=".ui.help.HelpActivity"
             android:label="@string/ha_title" />
 

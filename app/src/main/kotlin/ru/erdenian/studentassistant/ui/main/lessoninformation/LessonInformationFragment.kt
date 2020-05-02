@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.ui.main.lessoninformation
 
-import android.app.Application
 import android.os.Bundle
 import android.view.ContextMenu
 import android.view.Menu
@@ -19,10 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentLessonInformationBinding
-import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
-import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.setColor
@@ -34,16 +31,20 @@ class LessonInformationFragment : Fragment(R.layout.fragment_lesson_information)
     }
 
     private val viewModel by viewModels<LessonInformationViewModel> {
-        val args by navArgs<LessonInformationFragmentArgs>()
         object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T = modelClass
-                .getConstructor(Application::class.java, Lesson::class.java)
-                .newInstance(requireActivity().application, args.lesson)
+            private val application = requireActivity().application
+            private val args by navArgs<LessonInformationFragmentArgs>()
+
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+                LessonInformationViewModel(application, args.lesson) as T
         }
     }
     private val homeworksAdapter by lazy {
         HomeworksListAdapter().apply {
-            onHomeworkClickListener = { HomeworkEditorActivity.start(requireContext(), it) }
+            onHomeworkClickListener = { homework ->
+                findNavController().navigate(LessonInformationFragmentDirections.navActionEditHomework(homework))
+            }
             viewModel.homeworks.observe(this@LessonInformationFragment) { homeworks = it.list }
         }
     }
@@ -91,7 +92,7 @@ class LessonInformationFragment : Fragment(R.layout.fragment_lesson_information)
         }
 
         binding.addHomework.setOnClickListener {
-            HomeworkEditorActivity.start(requireContext(), checkNotNull(viewModel.lesson.value))
+            LessonInformationFragmentDirections.navActionCreateHomework(checkNotNull(viewModel.lesson.value))
         }
 
         viewModel.lesson.observe(owner) { if (it == null) findNavController().popBackStack() }
