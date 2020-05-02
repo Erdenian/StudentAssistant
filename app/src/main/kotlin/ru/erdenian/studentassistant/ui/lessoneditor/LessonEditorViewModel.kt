@@ -211,6 +211,8 @@ class LessonEditorViewModel(application: Application) : AndroidViewModel(applica
             val lesson = checkNotNull(lesson)
             lessonRepository.delete(lesson.id)
             if (withHomeworks) homeworkRepository.delete(lesson.subjectName)
+
+            donePrivate.value = true
         }
     }
 }
