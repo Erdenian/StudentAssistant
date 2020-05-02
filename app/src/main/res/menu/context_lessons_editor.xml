@@ -3,10 +3,10 @@
 
     <item
         android:id="@+id/cle_copy"
-        android:title="@string/lsea_copy_lesson" />
+        android:title="@string/lsef_copy_lesson" />
 
     <item
         android:id="@+id/cle_delete"
-        android:title="@string/lsea_delete_lesson" />
+        android:title="@string/lsef_delete_lesson" />
 
 </menu>
