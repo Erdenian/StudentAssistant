@@ -58,9 +58,7 @@ class HomeworkEditorViewModel(
         .switchMap { semesterRepository.getLiveData(it) }
         .map { checkNotNull(it).lastDay }
 
-    val subjectName: MutableLiveData<String> = MediatorLiveData<String>().apply {
-        addSource(existingSubjects) { if (value !in it) value = it.firstOrNull() ?: "" }
-    }
+    val subjectName = MutableLiveData<String>()
     val description = MutableLiveData("")
     val deadline = MutableLiveData(LocalDate.now())
 
