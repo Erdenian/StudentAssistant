@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.ui.main.semestereditor
 
-import android.app.Application
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -17,7 +16,6 @@ import androidx.navigation.fragment.navArgs
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentSemesterEditorBinding
-import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.ui.main.semestereditor.SemesterEditorViewModel.Error
 import ru.erdenian.studentassistant.utils.binding
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
@@ -33,11 +31,13 @@ class SemesterEditorFragment : Fragment(R.layout.fragment_semester_editor) {
     }
 
     private val viewModel by viewModels<SemesterEditorViewModel> {
-        val args by navArgs<SemesterEditorFragmentArgs>()
         object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T = modelClass
-                .getConstructor(Application::class.java, Semester::class.java)
-                .newInstance(requireActivity().application, args.semester)
+            private val application = requireActivity().application
+            private val args by navArgs<SemesterEditorFragmentArgs>()
+
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+                SemesterEditorViewModel(application, args.semester) as T
         }
     }
 
@@ -51,7 +51,7 @@ class SemesterEditorFragment : Fragment(R.layout.fragment_semester_editor) {
         (requireActivity() as AppCompatActivity).apply {
             setSupportActionBar(binding.toolbar)
             checkNotNull(supportActionBar).setDisplayHomeAsUpEnabled(true)
-            if (viewModel.semester == null) title = getString(R.string.sea_title_new)
+            if (!viewModel.isEditing) title = getString(R.string.sea_title_new)
         }
 
         binding.nameLayout.apply {

@@ -19,7 +19,6 @@ import ru.erdenian.studentassistant.databinding.FragmentHomeworksBinding
 import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SemestersSpinnerAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
-import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.setColor
 
@@ -28,7 +27,9 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
     private val viewModel by viewModels<HomeworksViewModel>()
 
     private val adapter = HomeworksListAdapter().apply {
-        onHomeworkClickListener = { HomeworkEditorActivity.start(requireContext(), it) }
+        onHomeworkClickListener = { homework ->
+            findNavController().navigate(HomeworksFragmentDirections.navActionEditHomework(homework))
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -119,7 +120,9 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.mh_add_homework -> {
-            HomeworkEditorActivity.start(requireContext(), checkNotNull(viewModel.selectedSemester.value).id)
+            findNavController().navigate(
+                HomeworksFragmentDirections.navActionCreateHomework(checkNotNull(viewModel.selectedSemester.value).id)
+            )
             true
         }
         else -> false
