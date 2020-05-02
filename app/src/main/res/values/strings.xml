@@ -99,10 +99,10 @@
     <string name="hef_delete_yes">Удалить</string>
     <string name="hef_delete_no">Нет</string>
 
+    <!-- HelpFragment -->
+    <string name="hlpf_title">Справка</string>
     <!-- endregion -->
 
-    <!-- region HelpActivity -->
-    <string name="ha_title">Справка</string>
     <!-- endregion -->
 
 </resources>
