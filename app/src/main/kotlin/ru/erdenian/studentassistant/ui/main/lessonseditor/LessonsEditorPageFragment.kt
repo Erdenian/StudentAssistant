@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.lessonseditor
+package ru.erdenian.studentassistant.ui.main.lessonseditor
 
 import android.os.Bundle
 import android.view.ContextMenu
@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.AdapterView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,13 +29,14 @@ class LessonsEditorPageFragment : Fragment(R.layout.page_fragment_lessons_editor
         }
     }
 
-    private val viewModel by activityViewModels<LessonsEditorViewModel>()
+    private val viewModel by viewModels<LessonsEditorViewModel>({ requireParentFragment() })
     private val adapter = LessonsListAdapter().apply {
         onLessonClickListener = { LessonEditorActivity.start(requireContext(), it) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = PageFragmentLessonsEditorBinding.bind(view)
+        val owner = viewLifecycleOwner
 
         binding.lessons.apply {
             adapter = this@LessonsEditorPageFragment.adapter
@@ -50,10 +51,10 @@ class LessonsEditorPageFragment : Fragment(R.layout.page_fragment_lessons_editor
         binding.flipper.apply {
             val lessonsIndex = 0
             val freeDayIndex = 1
-            lessons.observe(viewLifecycleOwner) { displayedChild = if (it.isNotEmpty()) lessonsIndex else freeDayIndex }
+            lessons.observe(owner) { displayedChild = if (it.isNotEmpty()) lessonsIndex else freeDayIndex }
         }
 
-        lessons.observe(viewLifecycleOwner) { adapter.lessons = it.list }
+        lessons.observe(owner) { adapter.lessons = it.list }
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {

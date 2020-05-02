@@ -15,7 +15,6 @@ import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentScheduleBinding
 import ru.erdenian.studentassistant.ui.adapter.SemestersSpinnerAdapter
-import ru.erdenian.studentassistant.ui.lessonseditor.LessonsEditorActivity
 import ru.erdenian.studentassistant.utils.binding
 import ru.erdenian.studentassistant.utils.colorAttr
 import ru.erdenian.studentassistant.utils.getColorCompat
@@ -127,7 +126,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             true
         }
         R.id.ms_edit_schedule -> {
-            LessonsEditorActivity.start(requireContext(), checkNotNull(viewModel.selectedSemester.value))
+            findNavController().navigate(ScheduleFragmentDirections.editSchedule(checkNotNull(viewModel.selectedSemester.value)))
             true
         }
         else -> false
