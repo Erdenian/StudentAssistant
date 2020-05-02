@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/nav_fragment_semester_editor"
-        android:name="ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorFragment"
+        android:name="ru.erdenian.studentassistant.ui.main.semestereditor.SemesterEditorFragment"
         android:label="@string/hf_title"
         tools:layout="@layout/fragment_semester_editor">
 
