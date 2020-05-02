@@ -28,10 +28,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".ui.lessoninformation.LessonInformationActivity"
-            android:label="@string/lia_title" />
-
-        <activity
             android:name=".ui.lessonseditor.LessonsEditorActivity"
             android:label="@string/lsea_title"
             android:theme="@style/AppTheme.NoActionBar" />

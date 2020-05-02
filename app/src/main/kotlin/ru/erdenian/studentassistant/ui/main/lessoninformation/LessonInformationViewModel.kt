@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.lessoninformation
+package ru.erdenian.studentassistant.ui.main.lessoninformation
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

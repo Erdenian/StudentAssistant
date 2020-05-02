@@ -5,13 +5,13 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.PageFragmentScheduleBinding
 import ru.erdenian.studentassistant.ui.adapter.LessonsListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
-import ru.erdenian.studentassistant.ui.lessoninformation.LessonInformationActivity
 
 class SchedulePageFragment : Fragment(R.layout.page_fragment_schedule) {
 
@@ -32,7 +32,9 @@ class SchedulePageFragment : Fragment(R.layout.page_fragment_schedule) {
 
         binding.lessons.apply {
             adapter = LessonsListAdapter().apply {
-                onLessonClickListener = { LessonInformationActivity.start(requireContext(), it) }
+                onLessonClickListener = { lesson ->
+                    findNavController().navigate(ScheduleFragmentDirections.navActionLessonInformation(lesson))
+                }
                 lessons.observe(viewLifecycleOwner) { this.lessons = it.list }
             }
             layoutManager = LinearLayoutManager(view.context)
