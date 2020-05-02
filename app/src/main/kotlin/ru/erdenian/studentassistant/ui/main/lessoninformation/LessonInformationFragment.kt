@@ -106,9 +106,9 @@ class LessonInformationFragment : Fragment(R.layout.fragment_lesson_information)
         return when (item.itemId) {
             R.id.ch_delete -> {
                 MaterialAlertDialogBuilder(requireContext())
-                    .setMessage(R.string.lia_delete_message)
-                    .setPositiveButton(R.string.lia_delete_yes) { _, _ -> viewModel.deleteHomework(homework.id) }
-                    .setNegativeButton(R.string.lia_delete_no, null)
+                    .setMessage(R.string.lif_delete_message)
+                    .setPositiveButton(R.string.lif_delete_yes) { _, _ -> viewModel.deleteHomework(homework.id) }
+                    .setNegativeButton(R.string.lif_delete_no, null)
                     .show()
                 true
             }
