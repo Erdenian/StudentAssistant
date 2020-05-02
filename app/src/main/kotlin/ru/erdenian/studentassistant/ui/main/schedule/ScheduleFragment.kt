@@ -123,7 +123,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             true
         }
         R.id.ms_add_schedule -> {
-            findNavController().navigate(ScheduleFragmentDirections.navActionSemesterEditor())
+            findNavController().navigate(ScheduleFragmentDirections.addSemester())
             true
         }
         R.id.ms_edit_schedule -> {
