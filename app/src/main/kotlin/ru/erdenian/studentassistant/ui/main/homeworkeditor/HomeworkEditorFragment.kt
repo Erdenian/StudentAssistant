@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.joda.time.LocalDate
@@ -40,6 +41,8 @@ class HomeworkEditorFragment : Fragment(R.layout.fragment_homework_editor) {
             }
         }
     }
+
+    private val backObserver = Observer<Boolean> { if (it) findNavController().popBackStack() }
 
     @Suppress("ComplexMethod")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -81,7 +84,7 @@ class HomeworkEditorFragment : Fragment(R.layout.fragment_homework_editor) {
         }
 
         viewModel.error.observe(owner) {}
-        viewModel.done.observe(owner) { if (it) findNavController().popBackStack() }
+        viewModel.done.observe(owner, backObserver)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -112,13 +115,13 @@ class HomeworkEditorFragment : Fragment(R.layout.fragment_homework_editor) {
                         .setPositiveButton(R.string.hef_unknown_lesson_yes) { _, _ -> viewModel.save() }
                         .setNegativeButton(R.string.hef_unknown_lesson_no, null)
                         .setNeutralButton(R.string.hef_unknown_lesson_yes_and_create) { _, _ ->
-                            viewModel.save()
-                            findNavController().navigate(
-                                HomeworkEditorFragmentDirections.addLesson(
-                                    checkNotNull(viewModel.semesterId),
-                                    checkNotNull(viewModel.subjectName.value)
+                            viewModel.run {
+                                done.removeObserver(backObserver)
+                                save()
+                                findNavController().navigate(
+                                    HomeworkEditorFragmentDirections.addLesson(semesterId, checkNotNull(subjectName.value))
                                 )
-                            )
+                            }
                         }
                         .show()
                 }
