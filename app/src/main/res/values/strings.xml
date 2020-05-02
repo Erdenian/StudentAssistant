@@ -35,13 +35,13 @@
     <string name="lif_delete_no">Нет</string>
 
     <!-- region SemesterEditorActivity -->
-    <string name="sea_title_new">Добавление расписания</string>
-    <string name="sea_title_edit">Данные расписания</string>
-    <string name="sea_name">Название</string>
-    <string name="sea_save">Сохранить</string>
-    <string name="sea_error_empty_name">Имя не может быть пустым</string>
-    <string name="sea_error_name_not_available">Такое имя уже занято</string>
-    <string name="sea_error_wrong_dates">Даты первого и последнего дня введены некорректно</string>
+    <string name="sef_title_new">Добавление расписания</string>
+    <string name="sef_title_edit">Данные расписания</string>
+    <string name="sef_name">Название</string>
+    <string name="sef_save">Сохранить</string>
+    <string name="sef_error_empty_name">Имя не может быть пустым</string>
+    <string name="sef_error_name_not_available">Такое имя уже занято</string>
+    <string name="sef_error_wrong_dates">Даты первого и последнего дня введены некорректно</string>
 
     <!-- endregion -->
 

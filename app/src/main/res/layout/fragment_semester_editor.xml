@@ -24,7 +24,7 @@
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/sea_name"
+            android:hint="@string/sef_name"
             android:imeOptions="flagNoExtractUi"
             android:inputType="text|textCapSentences"
             android:maxLines="1">
