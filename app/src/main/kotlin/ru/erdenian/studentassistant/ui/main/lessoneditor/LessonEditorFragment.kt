@@ -184,7 +184,7 @@ class LessonEditorFragment : Fragment(R.layout.fragment_lesson_editor) {
             )
 
             viewModel.weekday
-                .distinctUntilChanged { it == selectedDays.single() }
+                .distinctUntilChanged { jodaToCalendar[it] == selectedDays.single() }
                 .observe(owner) { selectDay(checkNotNull(jodaToCalendar[it])) }
             setOnWeekdaysChangeListener { _, _, weekdays ->
                 if (weekdays.isNotEmpty()) {
