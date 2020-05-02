@@ -66,6 +66,7 @@ class LessonsEditorPageFragment : Fragment(R.layout.page_fragment_lessons_editor
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
+        if (!isResumed) return super.onContextItemSelected(item)
         @Suppress("UnsafeCast")
         val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
         val lesson = adapter.lessons[info.position]
