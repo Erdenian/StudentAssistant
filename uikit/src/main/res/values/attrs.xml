@@ -4,6 +4,7 @@
     <declare-styleable name="ExposedDropdownMenu">
         <attr name="editable" format="boolean" />
         <attr name="singleLine" format="boolean" />
+        <attr name="android:inputType" />
     </declare-styleable>
 
     <declare-styleable name="CheckBoxWithText">

@@ -34,6 +34,7 @@ class ExposedDropdownMenu @JvmOverloads constructor(
             val editable = getBoolean(R.styleable.ExposedDropdownMenu_editable, false)
             if (!editable) autoCompleteTextView.inputType = InputType.TYPE_NULL
             autoCompleteTextView.isSingleLine = getBoolean(R.styleable.ExposedDropdownMenu_singleLine, false)
+            autoCompleteTextView.inputType = getInt(R.styleable.ExposedDropdownMenu_android_inputType, 0)
         }
 
         autoCompleteTextView.addTextChangedListener { text ->
