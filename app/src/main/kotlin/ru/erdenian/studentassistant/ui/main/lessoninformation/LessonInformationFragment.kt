@@ -42,9 +42,7 @@ class LessonInformationFragment : Fragment(R.layout.fragment_lesson_information)
     }
     private val homeworksAdapter by lazy {
         HomeworksListAdapter().apply {
-            onHomeworkClickListener = { homework ->
-                findNavController().navigate(LessonInformationFragmentDirections.navActionEditHomework(homework))
-            }
+            onHomeworkClickListener = { findNavController().navigate(LessonInformationFragmentDirections.editHomework(it)) }
             viewModel.homeworks.observe(this@LessonInformationFragment) { homeworks = it.list }
         }
     }
@@ -92,7 +90,7 @@ class LessonInformationFragment : Fragment(R.layout.fragment_lesson_information)
         }
 
         binding.addHomework.setOnClickListener {
-            LessonInformationFragmentDirections.navActionCreateHomework(checkNotNull(viewModel.lesson.value))
+            LessonInformationFragmentDirections.createHomework(checkNotNull(viewModel.lesson.value))
         }
 
         viewModel.lesson.observe(owner) { if (it == null) findNavController().popBackStack() }

@@ -15,11 +15,11 @@
         tools:layout="@layout/fragment_schedule">
 
         <action
-            android:id="@+id/nav_action_lesson_information"
+            android:id="@+id/show_lesson_information"
             app:destination="@id/nav_fragment_lesson_information" />
 
         <action
-            android:id="@+id/nav_action_semester_editor"
+            android:id="@+id/add_semester"
             app:destination="@id/nav_fragment_semester_editor" />
 
     </fragment>
@@ -30,7 +30,7 @@
         tools:layout="@layout/fragment_homeworks">
 
         <action
-            android:id="@+id/nav_action_create_homework"
+            android:id="@+id/create_homework"
             app:destination="@id/nav_fragment_homework_editor">
 
             <argument
@@ -52,7 +52,7 @@
         </action>
 
         <action
-            android:id="@+id/nav_action_edit_homework"
+            android:id="@+id/edit_homework"
             app:destination="@id/nav_fragment_homework_editor">
 
             <argument
@@ -81,54 +81,54 @@
         android:label="@string/lia_title"
         tools:layout="@layout/fragment_lesson_information">
 
-        <action
-            android:id="@+id/nav_action_edit_homework"
-            app:destination="@id/nav_fragment_homework_editor">
-
-            <argument
-                android:name="homework"
-                app:argType="ru.erdenian.studentassistant.entity.Homework"
-                app:nullable="false" />
-
-            <argument
-                android:name="semester_id"
-                android:defaultValue="-1L"
-                app:argType="long" />
-
-            <argument
-                android:name="lesson"
-                android:defaultValue="@null"
-                app:argType="ru.erdenian.studentassistant.entity.Lesson"
-                app:nullable="true" />
-
-        </action>
-
-        <action
-            android:id="@+id/nav_action_create_homework"
-            app:destination="@id/nav_fragment_homework_editor">
-
-            <argument
-                android:name="lesson"
-                app:argType="ru.erdenian.studentassistant.entity.Lesson"
-                app:nullable="false" />
-
-            <argument
-                android:name="semester_id"
-                android:defaultValue="-1L"
-                app:argType="long" />
-
-            <argument
-                android:name="homework"
-                android:defaultValue="@null"
-                app:argType="ru.erdenian.studentassistant.entity.Homework"
-                app:nullable="true" />
-
-        </action>
-
         <argument
             android:name="lesson"
             app:argType="ru.erdenian.studentassistant.entity.Lesson"
             app:nullable="false" />
+
+        <action
+            android:id="@+id/create_homework"
+            app:destination="@id/nav_fragment_homework_editor">
+
+            <argument
+                android:name="lesson"
+                app:argType="ru.erdenian.studentassistant.entity.Lesson"
+                app:nullable="false" />
+
+            <argument
+                android:name="semester_id"
+                android:defaultValue="-1L"
+                app:argType="long" />
+
+            <argument
+                android:name="homework"
+                android:defaultValue="@null"
+                app:argType="ru.erdenian.studentassistant.entity.Homework"
+                app:nullable="true" />
+
+        </action>
+
+        <action
+            android:id="@+id/edit_homework"
+            app:destination="@id/nav_fragment_homework_editor">
+
+            <argument
+                android:name="homework"
+                app:argType="ru.erdenian.studentassistant.entity.Homework"
+                app:nullable="false" />
+
+            <argument
+                android:name="semester_id"
+                android:defaultValue="-1L"
+                app:argType="long" />
+
+            <argument
+                android:name="lesson"
+                android:defaultValue="@null"
+                app:argType="ru.erdenian.studentassistant.entity.Lesson"
+                app:nullable="true" />
+
+        </action>
 
     </fragment>
 

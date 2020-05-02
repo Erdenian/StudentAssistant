@@ -27,9 +27,7 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
     private val viewModel by viewModels<HomeworksViewModel>()
 
     private val adapter = HomeworksListAdapter().apply {
-        onHomeworkClickListener = { homework ->
-            findNavController().navigate(HomeworksFragmentDirections.navActionEditHomework(homework))
-        }
+        onHomeworkClickListener = { findNavController().navigate(HomeworksFragmentDirections.editHomework(it)) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -121,7 +119,7 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.mh_add_homework -> {
             findNavController().navigate(
-                HomeworksFragmentDirections.navActionCreateHomework(checkNotNull(viewModel.selectedSemester.value).id)
+                HomeworksFragmentDirections.createHomework(checkNotNull(viewModel.selectedSemester.value).id)
             )
             true
         }

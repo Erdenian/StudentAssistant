@@ -32,9 +32,7 @@ class SchedulePageFragment : Fragment(R.layout.page_fragment_schedule) {
 
         binding.lessons.apply {
             adapter = LessonsListAdapter().apply {
-                onLessonClickListener = { lesson ->
-                    findNavController().navigate(ScheduleFragmentDirections.navActionLessonInformation(lesson))
-                }
+                onLessonClickListener = { findNavController().navigate(ScheduleFragmentDirections.showLessonInformation(it)) }
                 lessons.observe(viewLifecycleOwner) { this.lessons = it.list }
             }
             layoutManager = LinearLayoutManager(view.context)
