@@ -42,14 +42,14 @@ class SemesterEditorFragment : Fragment(R.layout.fragment_semester_editor) {
         (requireActivity() as AppCompatActivity).apply {
             setSupportActionBar(binding.toolbar)
             checkNotNull(supportActionBar).setDisplayHomeAsUpEnabled(true)
-            if (!viewModel.isEditing) title = getString(R.string.sea_title_new)
+            if (!viewModel.isEditing) title = getString(R.string.sef_title_new)
         }
 
         binding.nameLayout.apply {
             viewModel.error.observe(owner) { error ->
                 when (error) {
-                    Error.EMPTY_NAME -> this.error = getString(R.string.sea_error_empty_name)
-                    Error.SEMESTER_EXISTS -> this.error = getString(R.string.sea_error_name_not_available)
+                    Error.EMPTY_NAME -> this.error = getString(R.string.sef_error_empty_name)
+                    Error.SEMESTER_EXISTS -> this.error = getString(R.string.sef_error_name_not_available)
                     else -> isErrorEnabled = false
                 }
             }
@@ -91,9 +91,9 @@ class SemesterEditorFragment : Fragment(R.layout.fragment_semester_editor) {
             viewModel.error.value?.let { error ->
                 requireContext().toast(
                     when (error) {
-                        Error.EMPTY_NAME -> R.string.sea_error_empty_name
-                        Error.SEMESTER_EXISTS -> R.string.sea_error_name_not_available
-                        Error.WRONG_DATES -> R.string.sea_error_wrong_dates
+                        Error.EMPTY_NAME -> R.string.sef_error_empty_name
+                        Error.SEMESTER_EXISTS -> R.string.sef_error_name_not_available
+                        Error.WRONG_DATES -> R.string.sef_error_wrong_dates
                     }
                 )
             } ?: viewModel.save()
