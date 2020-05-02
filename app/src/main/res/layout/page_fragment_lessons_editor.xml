@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="@string/lsea_free_day"
+        android:text="@string/lsef_free_day"
         android:textAppearance="?textAppearanceHeadline3" />
 
 </ViewFlipper>

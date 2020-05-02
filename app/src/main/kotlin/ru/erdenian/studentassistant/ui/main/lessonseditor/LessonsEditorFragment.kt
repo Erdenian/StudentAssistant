@@ -88,9 +88,9 @@ class LessonsEditorFragment : Fragment(R.layout.fragment_lessons_editor) {
         }
         R.id.mlse_delete_semester -> {
             MaterialAlertDialogBuilder(requireContext())
-                .setMessage(R.string.lsea_delete_message)
-                .setPositiveButton(R.string.lsea_delete_yes) { _, _ -> viewModel.deleteSemester() }
-                .setNegativeButton(R.string.lsea_delete_no, null)
+                .setMessage(R.string.lsef_delete_message)
+                .setPositiveButton(R.string.lsef_delete_yes) { _, _ -> viewModel.deleteSemester() }
+                .setNegativeButton(R.string.lsef_delete_no, null)
                 .show()
             true
         }

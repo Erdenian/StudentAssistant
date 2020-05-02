@@ -43,18 +43,17 @@
     <string name="sef_error_name_not_available">Такое имя уже занято</string>
     <string name="sef_error_wrong_dates">Даты первого и последнего дня введены некорректно</string>
 
-    <!-- endregion -->
-
     <!-- region LessonsEditorActivity -->
-    <string name="lsea_title">Редактор расписания</string>
-    <string name="lsea_free_day">Выходной</string>
-    <string name="lsea_edit">Изменить данные расписания</string>
-    <string name="lsea_delete">Удалить расписание</string>
-    <string name="lsea_delete_message">Удалить расписание?</string>
-    <string name="lsea_delete_yes">Да</string>
-    <string name="lsea_delete_no">Нет</string>
-    <string name="lsea_copy_lesson">Копировать</string>
-    <string name="lsea_delete_lesson">Удалить</string>
+    <string name="lsef_title">Редактор расписания</string>
+    <string name="lsef_free_day">Выходной</string>
+    <string name="lsef_edit">Изменить данные расписания</string>
+    <string name="lsef_delete">Удалить расписание</string>
+    <string name="lsef_delete_message">Удалить расписание?</string>
+    <string name="lsef_delete_yes">Да</string>
+    <string name="lsef_delete_no">Нет</string>
+    <string name="lsef_copy_lesson">Копировать</string>
+    <string name="lsef_delete_lesson">Удалить</string>
+
     <!-- endregion -->
 
     <!-- region LessonEditorActivity -->
