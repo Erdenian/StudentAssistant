@@ -8,12 +8,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
+import org.joda.time.Period
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
@@ -75,17 +77,46 @@ class LessonEditorViewModel private constructor(
     val type = MutableLiveData("")
     val teachers = MutableLiveData("")
     val classrooms = MutableLiveData("")
-    val startTime = MutableLiveData<LocalTime>()
-    val endTime: MutableLiveData<LocalTime> = MediatorLiveData<LocalTime>().apply {
-        val observer = Observer<Any?> {
-            val startTime = startTime.value ?: return@Observer
-            viewModelScope.launch { value = startTime + lessonRepository.getDuration(semesterId) }
-        }
-        addSource(startTime, observer)
-    }
+
     val weekday = MutableLiveData(DateTimeConstants.MONDAY)
     val weeks = MutableLiveData(listOf(true))
     val dates = MutableLiveData(immutableSortedSetOf<LocalDate>())
+
+    val startTime: MutableLiveData<LocalTime> = MediatorLiveData<LocalTime>().apply {
+        var job: Job? = null
+        val observer = Observer<Any?> {
+            if (job == null) {
+                job = viewModelScope.launch {
+                    value = lessonRepository.getNextStartTime(semesterId, checkNotNull(weekday.value))
+                    removeSource(weekday)
+                    removeSource(this@apply)
+                }
+            } else {
+                job?.cancel()
+                job = null
+                removeSource(weekday)
+                removeSource(this@apply)
+            }
+        }
+        addSource(weekday, observer)
+        addSource(this) {
+            job?.cancel()
+            removeSource(weekday)
+            removeSource(this)
+        }
+    }
+    val endTime: MutableLiveData<LocalTime> = MediatorLiveData<LocalTime>().apply {
+        var previousStartTime: LocalTime? = startTime.value
+        val observer = Observer { startTime: LocalTime ->
+            val previous = previousStartTime
+            val endTime = value
+            if ((previous == null) || (endTime == null)) viewModelScope.launch {
+                value = startTime + lessonRepository.getDuration(semesterId)
+            } else value = startTime + Period.fieldDifference(previous, endTime)
+            previousStartTime = startTime
+        }
+        addSource(startTime, observer)
+    }
 
     val lessonRepeat = MutableLiveData<KClass<out Lesson.Repeat>>(Lesson.Repeat.ByWeekday::class)
 

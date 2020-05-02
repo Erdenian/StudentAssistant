@@ -38,8 +38,6 @@ class LessonsEditorViewModel(
             ?: MutableLiveData(immutableSortedSetOf())
     }
 
-    suspend fun getNextStartTime(weekday: Int) = lessonRepository.getNextStartTime(checkNotNull(semester.value).id, weekday)
-
     fun deleteSemester() {
         viewModelScope.launch {
             semesterRepository.delete(checkNotNull(semester.value).id)
