@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.semestereditor
+package ru.erdenian.studentassistant.ui.main.semestereditor
 
 import android.os.Bundle
 import android.view.Menu
@@ -14,7 +14,7 @@ import androidx.navigation.fragment.navArgs
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentSemesterEditorBinding
-import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorViewModel.Error
+import ru.erdenian.studentassistant.ui.main.semestereditor.SemesterEditorViewModel.Error
 import ru.erdenian.studentassistant.utils.binding
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat

@@ -32,11 +32,6 @@
             android:label="@string/lia_title" />
 
         <activity
-            android:name=".ui.semestereditor.SemesterEditorActivity"
-            android:label="@string/sea_title_edit"
-            android:windowSoftInputMode="stateAlwaysVisible" />
-
-        <activity
             android:name=".ui.lessonseditor.LessonsEditorActivity"
             android:label="@string/lsea_title"
             android:theme="@style/AppTheme.NoActionBar" />

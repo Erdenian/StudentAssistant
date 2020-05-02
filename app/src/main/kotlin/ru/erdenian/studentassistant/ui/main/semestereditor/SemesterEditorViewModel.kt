@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.semestereditor
+package ru.erdenian.studentassistant.ui.main.semestereditor
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
