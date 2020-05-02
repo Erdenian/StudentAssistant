@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
@@ -17,7 +18,6 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.PageFragmentLessonsEditorBinding
 import ru.erdenian.studentassistant.ui.adapter.LessonsListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
-import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 
 class LessonsEditorPageFragment : Fragment(R.layout.page_fragment_lessons_editor) {
 
@@ -31,7 +31,7 @@ class LessonsEditorPageFragment : Fragment(R.layout.page_fragment_lessons_editor
 
     private val viewModel by viewModels<LessonsEditorViewModel>({ requireParentFragment() })
     private val adapter = LessonsListAdapter().apply {
-        onLessonClickListener = { LessonEditorActivity.start(requireContext(), it) }
+        onLessonClickListener = { findNavController().navigate(LessonsEditorFragmentDirections.editLesson(it)) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -71,7 +71,7 @@ class LessonsEditorPageFragment : Fragment(R.layout.page_fragment_lessons_editor
         val lesson = adapter.lessons[info.position]
         return when (item.itemId) {
             R.id.cle_copy -> {
-                LessonEditorActivity.start(requireContext(), lesson, true)
+                findNavController().navigate(LessonsEditorFragmentDirections.copyLesson(lesson))
                 true
             }
             R.id.cle_delete -> {

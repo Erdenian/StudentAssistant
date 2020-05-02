@@ -20,7 +20,15 @@
 
         <action
             android:id="@+id/add_semester"
-            app:destination="@id/nav_fragment_semester_editor" />
+            app:destination="@id/nav_fragment_semester_editor">
+
+            <argument
+                android:name="semester"
+                android:defaultValue="@null"
+                app:argType="ru.erdenian.studentassistant.entity.Semester"
+                app:nullable="true" />
+
+        </action>
 
         <action
             android:id="@+id/edit_schedule"
@@ -91,6 +99,38 @@
             app:nullable="false" />
 
         <action
+            android:id="@+id/edit_lesson"
+            app:destination="@id/nav_fragment_lesson_editor">
+
+            <argument
+                android:name="lesson"
+                app:argType="ru.erdenian.studentassistant.entity.Lesson"
+                app:nullable="false" />
+
+            <argument
+                android:name="copy"
+                android:defaultValue="false"
+                app:argType="boolean" />
+
+            <argument
+                android:name="semester_id"
+                android:defaultValue="-1L"
+                app:argType="long" />
+
+            <argument
+                android:name="weekday"
+                android:defaultValue="-1"
+                app:argType="integer" />
+
+            <argument
+                android:name="subject_name"
+                android:defaultValue="@null"
+                app:argType="string"
+                app:nullable="true" />
+
+        </action>
+
+        <action
             android:id="@+id/create_homework"
             app:destination="@id/nav_fragment_homework_editor">
 
@@ -144,7 +184,6 @@
 
         <argument
             android:name="semester"
-            android:defaultValue="@null"
             app:argType="ru.erdenian.studentassistant.entity.Semester"
             app:nullable="true" />
 
@@ -162,14 +201,132 @@
 
         <action
             android:id="@+id/edit_semester"
-            app:destination="@id/nav_fragment_semester_editor">
+            app:destination="@id/nav_fragment_semester_editor" />
+
+        <action
+            android:id="@+id/add_lesson"
+            app:destination="@id/nav_fragment_lesson_editor">
 
             <argument
-                android:name="semester"
-                app:argType="ru.erdenian.studentassistant.entity.Semester"
-                app:nullable="false" />
+                android:name="semester_id"
+                app:argType="long" />
+
+            <argument
+                android:name="weekday"
+                app:argType="integer" />
+
+            <argument
+                android:name="subject_name"
+                android:defaultValue="@null"
+                app:argType="string"
+                app:nullable="true" />
+
+            <argument
+                android:name="lesson"
+                android:defaultValue="@null"
+                app:argType="ru.erdenian.studentassistant.entity.Lesson"
+                app:nullable="true" />
+
+            <argument
+                android:name="copy"
+                android:defaultValue="false"
+                app:argType="boolean" />
 
         </action>
+
+        <action
+            android:id="@+id/copy_lesson"
+            app:destination="@id/nav_fragment_lesson_editor">
+
+            <argument
+                android:name="lesson"
+                app:argType="ru.erdenian.studentassistant.entity.Lesson"
+                app:nullable="false" />
+
+            <argument
+                android:name="copy"
+                android:defaultValue="true"
+                app:argType="boolean" />
+
+            <argument
+                android:name="semester_id"
+                android:defaultValue="-1L"
+                app:argType="long" />
+
+            <argument
+                android:name="weekday"
+                android:defaultValue="-1"
+                app:argType="integer" />
+
+            <argument
+                android:name="subject_name"
+                android:defaultValue="@null"
+                app:argType="string"
+                app:nullable="true" />
+
+        </action>
+
+        <action
+            android:id="@+id/edit_lesson"
+            app:destination="@id/nav_fragment_lesson_editor">
+
+            <argument
+                android:name="lesson"
+                app:argType="ru.erdenian.studentassistant.entity.Lesson"
+                app:nullable="false" />
+
+            <argument
+                android:name="copy"
+                android:defaultValue="false"
+                app:argType="boolean" />
+
+            <argument
+                android:name="semester_id"
+                android:defaultValue="-1L"
+                app:argType="long" />
+
+            <argument
+                android:name="weekday"
+                android:defaultValue="-1"
+                app:argType="integer" />
+
+            <argument
+                android:name="subject_name"
+                android:defaultValue="@null"
+                app:argType="string"
+                app:nullable="true" />
+
+        </action>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_fragment_lesson_editor"
+        android:name="ru.erdenian.studentassistant.ui.main.lessoneditor.LessonEditorFragment"
+        android:label="@string/lea_title_edit"
+        tools:layout="@layout/fragment_homework_editor">
+
+        <argument
+            android:name="semester_id"
+            app:argType="long" />
+
+        <argument
+            android:name="weekday"
+            app:argType="integer" />
+
+        <argument
+            android:name="subject_name"
+            app:argType="string"
+            app:nullable="true" />
+
+        <argument
+            android:name="lesson"
+            app:argType="ru.erdenian.studentassistant.entity.Lesson"
+            app:nullable="true" />
+
+        <argument
+            android:name="copy"
+            app:argType="boolean" />
 
     </fragment>
 
@@ -192,6 +349,37 @@
             android:name="homework"
             app:argType="ru.erdenian.studentassistant.entity.Homework"
             app:nullable="true" />
+
+        <action
+            android:id="@id/add_lesson"
+            app:destination="@id/nav_fragment_lesson_editor">
+
+            <argument
+                android:name="semester_id"
+                app:argType="long" />
+
+            <argument
+                android:name="subject_name"
+                app:argType="string"
+                app:nullable="false" />
+
+            <argument
+                android:name="weekday"
+                android:defaultValue="-1"
+                app:argType="integer" />
+
+            <argument
+                android:name="lesson"
+                android:defaultValue="@null"
+                app:argType="ru.erdenian.studentassistant.entity.Lesson"
+                app:nullable="true" />
+
+            <argument
+                android:name="copy"
+                android:defaultValue="false"
+                app:argType="boolean" />
+
+        </action>
 
     </fragment>
 

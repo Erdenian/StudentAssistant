@@ -18,7 +18,6 @@ import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentHomeworkEditorBinding
-import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.ui.main.homeworkeditor.HomeworkEditorViewModel.Error
 import ru.erdenian.studentassistant.uikit.ExposedDropdownMenu
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
@@ -41,7 +40,7 @@ class HomeworkEditorFragment : Fragment(R.layout.fragment_homework_editor) {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel?> create(modelClass: Class<T>): T = args.run {
                 when {
-                    (semesterId > 0) -> HomeworkEditorViewModel(application, semesterId)
+                    (semesterId >= 0) -> HomeworkEditorViewModel(application, semesterId)
                     (lesson != null) -> HomeworkEditorViewModel(application, lesson)
                     (homework != null) -> HomeworkEditorViewModel(application, homework)
                     else -> throw IllegalArgumentException("Wrong fragment arguments: $args")
@@ -122,10 +121,11 @@ class HomeworkEditorFragment : Fragment(R.layout.fragment_homework_editor) {
                         .setNegativeButton(R.string.hea_unknown_lesson_no, null)
                         .setNeutralButton(R.string.hea_unknown_lesson_yes_and_create) { _, _ ->
                             viewModel.save()
-                            LessonEditorActivity.start(
-                                requireContext(),
-                                checkNotNull(viewModel.semesterId),
-                                checkNotNull(viewModel.subjectName.value)
+                            findNavController().navigate(
+                                HomeworkEditorFragmentDirections.addLesson(
+                                    checkNotNull(viewModel.semesterId),
+                                    checkNotNull(viewModel.subjectName.value)
+                                )
                             )
                         }
                         .show()

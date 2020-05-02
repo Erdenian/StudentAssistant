@@ -18,7 +18,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentLessonsEditorBinding
-import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.utils.colorAttr
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.setColor
@@ -73,11 +72,8 @@ class LessonsEditorFragment : Fragment(R.layout.fragment_lessons_editor) {
         binding.addLesson.setOnClickListener {
             lifecycleScope.launch {
                 val weekday = binding.byWeekdaysPager.currentItem + 1
-                LessonEditorActivity.start(
-                    requireContext(),
-                    checkNotNull(viewModel.semester.value).id,
-                    viewModel.getNextStartTime(weekday),
-                    weekday
+                findNavController().navigate(
+                    LessonsEditorFragmentDirections.addLesson(checkNotNull(viewModel.semester.value).id, weekday)
                 )
             }
         }
