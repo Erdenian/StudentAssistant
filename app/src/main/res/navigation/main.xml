@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    app:startDestination="@id/nav_fragment_schedule">
+    app:startDestination="@id/nav_fragment_schedule"
+    tools:ignore="UnusedNavigation">
 
     <!-- region Fragments -->
 
@@ -11,13 +12,32 @@
         android:id="@+id/nav_fragment_schedule"
         android:name="ru.erdenian.studentassistant.ui.main.schedule.ScheduleFragment"
         android:label="@string/sf_title"
-        tools:layout="@layout/fragment_schedule" />
+        tools:layout="@layout/fragment_schedule">
+
+        <action
+            android:id="@+id/nav_action_semester_editor"
+            app:destination="@id/nav_fragment_semester_editor" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/nav_fragment_homeworks"
         android:name="ru.erdenian.studentassistant.ui.main.homeworks.HomeworksFragment"
-        android:label="@string/hf_title"
         tools:layout="@layout/fragment_homeworks" />
+
+    <fragment
+        android:id="@+id/nav_fragment_semester_editor"
+        android:name="ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorFragment"
+        android:label="@string/hf_title"
+        tools:layout="@layout/fragment_semester_editor">
+
+        <argument
+            android:name="semester"
+            android:defaultValue="@null"
+            app:argType="ru.erdenian.studentassistant.entity.Semester"
+            app:nullable="true" />
+
+    </fragment>
 
     <!-- endregion -->
 
@@ -26,7 +46,7 @@
     <action
         android:id="@+id/nav_action_schedule"
         app:destination="@id/nav_fragment_schedule"
-        app:popUpTo="@+id/main" />
+        app:popUpTo="@id/main" />
 
     <action
         android:id="@+id/nav_action_homeworks"
