@@ -15,7 +15,6 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.ActivityLessonsEditorBinding
 import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
-import ru.erdenian.studentassistant.ui.semestereditor.SemesterEditorActivity
 import ru.erdenian.studentassistant.utils.colorAttr
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.setColor
@@ -40,7 +39,7 @@ class LessonsEditorActivity : AppCompatActivity() {
         viewModel.init(checkNotNull(intent.getParcelableExtra(SEMESTER_INTENT_KEY)))
 
         setSupportActionBar(binding.toolbar)
-        supportActionBar?.apply {
+        checkNotNull(supportActionBar).apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowTitleEnabled(false)
         }
@@ -93,7 +92,7 @@ class LessonsEditorActivity : AppCompatActivity() {
             true
         }
         R.id.mlse_edit_semester -> {
-            SemesterEditorActivity.start(this, viewModel.semester.value)
+            //SemesterEditorActivity.start(this, viewModel.semester.value)
             true
         }
         R.id.mlse_delete_semester -> {

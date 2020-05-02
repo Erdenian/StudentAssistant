@@ -7,13 +7,17 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.distinctUntilChanged
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentHomeworksBinding
 import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
+import ru.erdenian.studentassistant.ui.adapter.SemestersSpinnerAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
 import ru.erdenian.studentassistant.utils.getColorCompat
@@ -32,6 +36,27 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
         val owner = viewLifecycleOwner
 
         viewModel.selectedSemester.observe(owner) { setHasOptionsMenu(true) }
+
+        (requireActivity() as AppCompatActivity).apply {
+            setSupportActionBar(binding.toolbar)
+            findNavController().addOnDestinationChangedListener { _, destination, _ -> title = destination.label }
+            viewModel.allSemesters.observe(owner) { checkNotNull(supportActionBar).setDisplayShowTitleEnabled(it.size <= 1) }
+        }
+
+        binding.semesters.apply {
+            viewModel.allSemesters.observe(owner) { visibility = if (it.size > 1) View.VISIBLE else View.GONE }
+            val adapter = SemestersSpinnerAdapter().apply { viewModel.allSemesters.observe(owner) { semesters = it.list } }
+            this.adapter = adapter
+            viewModel.selectedSemester.distinctUntilChanged().observe(owner) { semester ->
+                viewModel.allSemesters.value?.indexOf(semester)?.takeIf { it >= 0 }?.let { setSelection(it) }
+            }
+            onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) =
+                    viewModel.selectSemester(adapter.getItem(position))
+
+                override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+            }
+        }
 
         binding.flipper.apply {
             val hasHomeworksIndex = 0
