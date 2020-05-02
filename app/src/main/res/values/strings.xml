@@ -54,34 +54,33 @@
     <string name="lsef_copy_lesson">Копировать</string>
     <string name="lsef_delete_lesson">Удалить</string>
 
-    <!-- endregion -->
-
     <!-- region LessonEditorActivity -->
-    <string name="lea_title_new">Добавление занятия</string>
-    <string name="lea_title_edit">Данные занятия</string>
-    <string name="lea_subject_name">Название занятия</string>
-    <string name="lea_type">Тип занятия</string>
-    <string name="lea_teachers">Преподаватели</string>
-    <string name="lea_classrooms">Аудитории</string>
-    <string name="lea_repeat_type">Когда повторять</string>
-    <string name="lea_save">Сохранить</string>
-    <string name="lea_error_empty_subject_name">Введите название занятия</string>
-    <string name="lea_error_wrong_time">Время начала и конца введено некорректно</string>
-    <string name="lea_error_empty_repeat">Не выбраны дни для повторения</string>
-    <string name="lea_rename_others_title">Изменить занятия?</string>
-    <string name="lea_rename_others_message">Предмет был изменен. Изменить его у остальных занятий?</string>
-    <string name="lea_rename_others_yes">Да</string>
-    <string name="lea_rename_others_no">Нет</string>
-    <string name="lea_rename_others_cancel">Отмена</string>
-    <string name="lea_delete">Удалить занятие</string>
-    <string name="lea_delete_message">Удалить занятие?</string>
-    <string name="lea_delete_yes">Удалить</string>
-    <string name="lea_delete_no">Нет</string>
-    <string name="lea_delete_homeworks_title">Задания будут удалены</string>
-    <string name="lea_delete_homeworks_message">Для данного предмета есть домашние задания, удалить их вместе с ним?</string>
-    <string name="lea_delete_homeworks_yes">Удалить</string>
-    <string name="lea_delete_homeworks_no">Оставить</string>
-    <string name="lea_delete_homeworks_cancel">Отмена</string>
+    <string name="lef_title_new">Добавление занятия</string>
+    <string name="lef_title_edit">Данные занятия</string>
+    <string name="lef_subject_name">Название занятия</string>
+    <string name="lef_type">Тип занятия</string>
+    <string name="lef_teachers">Преподаватели</string>
+    <string name="lef_classrooms">Аудитории</string>
+    <string name="lef_repeat_type">Когда повторять</string>
+    <string name="lef_save">Сохранить</string>
+    <string name="lef_error_empty_subject_name">Введите название занятия</string>
+    <string name="lef_error_wrong_time">Время начала и конца введено некорректно</string>
+    <string name="lef_error_empty_repeat">Не выбраны дни для повторения</string>
+    <string name="lef_rename_others_title">Изменить занятия?</string>
+    <string name="lef_rename_others_message">Предмет был изменен. Изменить его у остальных занятий?</string>
+    <string name="lef_rename_others_yes">Да</string>
+    <string name="lef_rename_others_no">Нет</string>
+    <string name="lef_rename_others_cancel">Отмена</string>
+    <string name="lef_delete">Удалить занятие</string>
+    <string name="lef_delete_message">Удалить занятие?</string>
+    <string name="lef_delete_yes">Удалить</string>
+    <string name="lef_delete_no">Нет</string>
+    <string name="lef_delete_homeworks_title">Задания будут удалены</string>
+    <string name="lef_delete_homeworks_message">Для данного предмета есть домашние задания, удалить их вместе с ним?</string>
+    <string name="lef_delete_homeworks_yes">Удалить</string>
+    <string name="lef_delete_homeworks_no">Оставить</string>
+    <string name="lef_delete_homeworks_cancel">Отмена</string>
+
     <!-- endregion -->
 
     <!-- region HomeworkEditorActivity -->

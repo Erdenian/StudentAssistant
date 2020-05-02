@@ -310,7 +310,7 @@
     <fragment
         android:id="@+id/nav_fragment_lesson_editor"
         android:name="ru.erdenian.studentassistant.ui.main.lessoneditor.LessonEditorFragment"
-        android:label="@string/lea_title_edit"
+        android:label="@string/lef_title_edit"
         tools:layout="@layout/fragment_homework_editor">
 
         <argument

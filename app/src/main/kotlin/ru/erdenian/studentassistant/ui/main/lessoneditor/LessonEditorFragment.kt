@@ -56,13 +56,13 @@ class LessonEditorFragment : Fragment(R.layout.fragment_lesson_editor) {
         (requireActivity() as AppCompatActivity).apply {
             setSupportActionBar(binding.toolbar)
             checkNotNull(supportActionBar).setDisplayHomeAsUpEnabled(true)
-            if (viewModel.isEditing) title = getString(R.string.lea_title_new)
+            if (viewModel.isEditing) title = getString(R.string.lef_title_new)
         }
 
         binding.subjectNameLayout.apply {
             viewModel.error.observe(owner) { error ->
                 if (error == Error.EMPTY_SUBJECT_NAME) {
-                    this.error = getText(R.string.lea_error_empty_subject_name)
+                    this.error = getText(R.string.lef_error_empty_subject_name)
                 } else isErrorEnabled = false
             }
         }
@@ -221,20 +221,20 @@ class LessonEditorFragment : Fragment(R.layout.fragment_lesson_editor) {
             viewModel.error.value?.let { error ->
                 requireContext().toast(
                     when (error) {
-                        Error.EMPTY_SUBJECT_NAME -> R.string.lea_error_empty_subject_name
-                        Error.WRONG_TIMES -> R.string.lea_error_wrong_time
-                        Error.EMPTY_REPEAT -> R.string.lea_error_empty_repeat
+                        Error.EMPTY_SUBJECT_NAME -> R.string.lef_error_empty_subject_name
+                        Error.WRONG_TIMES -> R.string.lef_error_wrong_time
+                        Error.EMPTY_REPEAT -> R.string.lef_error_empty_repeat
                     }
                 )
             } ?: run {
                 lifecycleScope.launch {
                     if (viewModel.isSubjectNameChangedAndNotLast()) {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(R.string.lea_rename_others_title)
-                            .setMessage(R.string.lea_rename_others_message)
-                            .setPositiveButton(R.string.lea_rename_others_yes) { _, _ -> viewModel.save(true) }
-                            .setNegativeButton(R.string.lea_rename_others_no) { _, _ -> viewModel.save(false) }
-                            .setNeutralButton(R.string.lea_rename_others_cancel, null)
+                            .setTitle(R.string.lef_rename_others_title)
+                            .setMessage(R.string.lef_rename_others_message)
+                            .setPositiveButton(R.string.lef_rename_others_yes) { _, _ -> viewModel.save(true) }
+                            .setNegativeButton(R.string.lef_rename_others_no) { _, _ -> viewModel.save(false) }
+                            .setNeutralButton(R.string.lef_rename_others_cancel, null)
                             .show()
                     } else viewModel.save()
                 }
@@ -245,17 +245,17 @@ class LessonEditorFragment : Fragment(R.layout.fragment_lesson_editor) {
             lifecycleScope.launch {
                 if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(R.string.lea_delete_homeworks_title)
-                        .setMessage(R.string.lea_delete_homeworks_message)
-                        .setPositiveButton(R.string.lea_delete_homeworks_yes) { _, _ -> viewModel.delete(true) }
-                        .setNegativeButton(R.string.lea_delete_homeworks_no) { _, _ -> viewModel.delete(false) }
-                        .setNeutralButton(R.string.lea_delete_homeworks_cancel, null)
+                        .setTitle(R.string.lef_delete_homeworks_title)
+                        .setMessage(R.string.lef_delete_homeworks_message)
+                        .setPositiveButton(R.string.lef_delete_homeworks_yes) { _, _ -> viewModel.delete(true) }
+                        .setNegativeButton(R.string.lef_delete_homeworks_no) { _, _ -> viewModel.delete(false) }
+                        .setNeutralButton(R.string.lef_delete_homeworks_cancel, null)
                         .show()
                 } else {
                     MaterialAlertDialogBuilder(requireContext())
-                        .setMessage(R.string.lea_delete_message)
-                        .setPositiveButton(R.string.lea_delete_yes) { _, _ -> viewModel.delete() }
-                        .setNegativeButton(R.string.lea_delete_no, null)
+                        .setMessage(R.string.lef_delete_message)
+                        .setPositiveButton(R.string.lef_delete_yes) { _, _ -> viewModel.delete() }
+                        .setNegativeButton(R.string.lef_delete_no, null)
                         .show()
                 }
             }
