@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.ui.main.semestereditor
 
+import android.app.Application
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -9,11 +10,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentSemesterEditorBinding
+import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.ui.main.semestereditor.SemesterEditorViewModel.Error
 import ru.erdenian.studentassistant.utils.binding
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
@@ -28,21 +32,26 @@ class SemesterEditorFragment : Fragment(R.layout.fragment_semester_editor) {
         private const val DATE_FORMAT = "dd.MM.yyyy"
     }
 
-    private val viewModel by viewModels<SemesterEditorViewModel>()
+    private val viewModel by viewModels<SemesterEditorViewModel> {
+        val args by navArgs<SemesterEditorFragmentArgs>()
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T = modelClass
+                .getConstructor(Application::class.java, Semester::class.java)
+                .newInstance(requireActivity().application, args.semester)
+        }
+    }
 
     private val binding by binding { FragmentSemesterEditorBinding.bind(requireView()) }
 
     @Suppress("ComplexMethod")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val args by navArgs<SemesterEditorFragmentArgs>()
-        viewModel.init(args.semester)
         setHasOptionsMenu(true)
         val owner = viewLifecycleOwner
 
         (requireActivity() as AppCompatActivity).apply {
             setSupportActionBar(binding.toolbar)
             checkNotNull(supportActionBar).setDisplayHomeAsUpEnabled(true)
-            if (args.semester == null) title = getString(R.string.sea_title_new)
+            if (viewModel.semester == null) title = getString(R.string.sea_title_new)
         }
 
         binding.nameLayout.apply {
