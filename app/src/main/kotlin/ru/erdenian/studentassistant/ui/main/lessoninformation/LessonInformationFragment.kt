@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.ui.main.lessoninformation
 
+import android.app.Application
 import android.os.Bundle
 import android.view.ContextMenu
 import android.view.Menu
@@ -10,12 +11,15 @@ import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentLessonInformationBinding
+import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
@@ -29,7 +33,14 @@ class LessonInformationFragment : Fragment(R.layout.fragment_lesson_information)
         private const val TIME_FORMAT = "HH:mm"
     }
 
-    private val viewModel by viewModels<LessonInformationViewModel>()
+    private val viewModel by viewModels<LessonInformationViewModel> {
+        val args by navArgs<LessonInformationFragmentArgs>()
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T = modelClass
+                .getConstructor(Application::class.java, Lesson::class.java)
+                .newInstance(requireActivity().application, args.lesson)
+        }
+    }
     private val homeworksAdapter by lazy {
         HomeworksListAdapter().apply {
             onHomeworkClickListener = { HomeworkEditorActivity.start(requireContext(), it) }
@@ -40,11 +51,8 @@ class LessonInformationFragment : Fragment(R.layout.fragment_lesson_information)
     @Suppress("ComplexMethod")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = FragmentLessonInformationBinding.bind(view)
-        val args by navArgs<LessonInformationFragmentArgs>()
         val owner = viewLifecycleOwner
         setHasOptionsMenu(true)
-
-        viewModel.init(args.lesson)
 
         (requireActivity() as AppCompatActivity).apply {
             setSupportActionBar(binding.toolbar)
