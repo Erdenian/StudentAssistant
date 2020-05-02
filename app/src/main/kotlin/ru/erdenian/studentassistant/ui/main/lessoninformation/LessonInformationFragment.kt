@@ -20,7 +20,6 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentLessonInformationBinding
 import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
-import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.setColor
 
@@ -132,7 +131,7 @@ class LessonInformationFragment : Fragment(R.layout.fragment_lesson_information)
             true
         }
         R.id.mli_edit -> {
-            LessonEditorActivity.start(requireContext(), checkNotNull(viewModel.lesson.value))
+            findNavController().navigate(LessonInformationFragmentDirections.editLesson(checkNotNull(viewModel.lesson.value)))
             true
         }
         else -> false
