@@ -9,10 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentSemesterEditorBinding
@@ -20,6 +17,7 @@ import ru.erdenian.studentassistant.ui.main.semestereditor.SemesterEditorViewMod
 import ru.erdenian.studentassistant.utils.binding
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
+import ru.erdenian.studentassistant.utils.navArgsFactory
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
 import ru.erdenian.studentassistant.utils.toast
@@ -31,14 +29,7 @@ class SemesterEditorFragment : Fragment(R.layout.fragment_semester_editor) {
     }
 
     private val viewModel by viewModels<SemesterEditorViewModel> {
-        object : ViewModelProvider.Factory {
-            private val application = requireActivity().application
-            private val args by navArgs<SemesterEditorFragmentArgs>()
-
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-                SemesterEditorViewModel(application, args.semester) as T
-        }
+        navArgsFactory<SemesterEditorFragmentArgs> { SemesterEditorViewModel(it, semester) }
     }
 
     private val binding by binding { FragmentSemesterEditorBinding.bind(requireView()) }

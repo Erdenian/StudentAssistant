@@ -112,6 +112,7 @@ abstract class LessonDao {
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId ORDER BY start_time, end_time, _id")
     abstract fun getAllLiveData(semesterId: Long): LiveData<List<FullLesson>>
 
+    @Transaction
     @Query("SELECT * FROM lessons as l INNER JOIN by_weekday AS w ON w.lesson_id = l._id WHERE semester_id = :semesterId AND weekday = :weekday")
     abstract fun getAllLiveData(semesterId: Long, weekday: Int): LiveData<List<FullLesson>>
 

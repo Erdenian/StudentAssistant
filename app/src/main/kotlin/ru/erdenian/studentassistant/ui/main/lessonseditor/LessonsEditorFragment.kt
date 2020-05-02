@@ -9,30 +9,21 @@ import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentLessonsEditorBinding
 import ru.erdenian.studentassistant.utils.colorAttr
 import ru.erdenian.studentassistant.utils.getColorCompat
+import ru.erdenian.studentassistant.utils.navArgsFactory
 import ru.erdenian.studentassistant.utils.setColor
 
 class LessonsEditorFragment : Fragment(R.layout.fragment_lessons_editor) {
 
     private val viewModel by viewModels<LessonsEditorViewModel> {
-        object : ViewModelProvider.Factory {
-            private val application = requireActivity().application
-            private val args by navArgs<LessonsEditorFragmentArgs>()
-
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-                LessonsEditorViewModel(application, args.semester) as T
-        }
+        navArgsFactory<LessonsEditorFragmentArgs> { LessonsEditorViewModel(it, semester) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

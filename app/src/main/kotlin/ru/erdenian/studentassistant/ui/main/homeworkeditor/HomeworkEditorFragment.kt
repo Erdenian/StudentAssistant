@@ -9,10 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
@@ -22,6 +19,7 @@ import ru.erdenian.studentassistant.ui.main.homeworkeditor.HomeworkEditorViewMod
 import ru.erdenian.studentassistant.uikit.ExposedDropdownMenu
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
+import ru.erdenian.studentassistant.utils.navArgsFactory
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showDatePicker
 import ru.erdenian.studentassistant.utils.toast
@@ -33,18 +31,12 @@ class HomeworkEditorFragment : Fragment(R.layout.fragment_homework_editor) {
     }
 
     private val viewModel by viewModels<HomeworkEditorViewModel> {
-        object : ViewModelProvider.Factory {
-            private val application = requireActivity().application
-            private val args by navArgs<HomeworkEditorFragmentArgs>()
-
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T = args.run {
-                when {
-                    (semesterId >= 0) -> HomeworkEditorViewModel(application, semesterId)
-                    (lesson != null) -> HomeworkEditorViewModel(application, lesson)
-                    (homework != null) -> HomeworkEditorViewModel(application, homework)
-                    else -> throw IllegalArgumentException("Wrong fragment arguments: $args")
-                } as T
+        navArgsFactory<HomeworkEditorFragmentArgs> { application ->
+            when {
+                (semesterId >= 0) -> HomeworkEditorViewModel(application, semesterId)
+                (lesson != null) -> HomeworkEditorViewModel(application, lesson)
+                (homework != null) -> HomeworkEditorViewModel(application, homework)
+                else -> throw IllegalArgumentException("Wrong fragment arguments: $this")
             }
         }
     }

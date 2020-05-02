@@ -66,7 +66,7 @@ dependencies {
     // endregion
 
     // region AndroidX
-    val navigationVersion = "2.2.2"
+    val navigationVersion: String by project
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
 

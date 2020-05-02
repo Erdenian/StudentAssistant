@@ -10,10 +10,7 @@ import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ru.erdenian.studentassistant.R
@@ -21,6 +18,7 @@ import ru.erdenian.studentassistant.databinding.FragmentLessonInformationBinding
 import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
 import ru.erdenian.studentassistant.utils.getColorCompat
+import ru.erdenian.studentassistant.utils.navArgsFactory
 import ru.erdenian.studentassistant.utils.setColor
 
 class LessonInformationFragment : Fragment(R.layout.fragment_lesson_information) {
@@ -30,14 +28,7 @@ class LessonInformationFragment : Fragment(R.layout.fragment_lesson_information)
     }
 
     private val viewModel by viewModels<LessonInformationViewModel> {
-        object : ViewModelProvider.Factory {
-            private val application = requireActivity().application
-            private val args by navArgs<LessonInformationFragmentArgs>()
-
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-                LessonInformationViewModel(application, args.lesson) as T
-        }
+        navArgsFactory<LessonInformationFragmentArgs> { LessonInformationViewModel(it, lesson) }
     }
     private val homeworksAdapter by lazy {
         HomeworksListAdapter().apply {
