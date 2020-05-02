@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.lessonseditor
+package ru.erdenian.studentassistant.ui.main.lessonseditor
 
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter

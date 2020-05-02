@@ -1,47 +1,52 @@
-package ru.erdenian.studentassistant.ui.lessonseditor
+package ru.erdenian.studentassistant.ui.main.lessonseditor
 
-import android.content.Context
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.databinding.ActivityLessonsEditorBinding
-import ru.erdenian.studentassistant.entity.Semester
+import ru.erdenian.studentassistant.databinding.FragmentLessonsEditorBinding
 import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.utils.colorAttr
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.setColor
-import ru.erdenian.studentassistant.utils.startActivity
 
-class LessonsEditorActivity : AppCompatActivity() {
+class LessonsEditorFragment : Fragment(R.layout.fragment_lessons_editor) {
 
-    companion object {
-        private const val SEMESTER_INTENT_KEY = "semester_intent_key"
-        fun start(context: Context, semester: Semester) = context.startActivity<LessonsEditorActivity>(
-            SEMESTER_INTENT_KEY to semester
-        )
+    private val viewModel by viewModels<LessonsEditorViewModel> {
+        object : ViewModelProvider.Factory {
+            private val application = requireActivity().application
+            private val args by navArgs<LessonsEditorFragmentArgs>()
+
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+                LessonsEditorViewModel(application, args.semester) as T
+        }
     }
 
-    private val viewModel by viewModels<LessonsEditorViewModel>()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val binding = FragmentLessonsEditorBinding.bind(view)
+        val owner = viewLifecycleOwner
+        setHasOptionsMenu(true)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val binding = ActivityLessonsEditorBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        viewModel.init(checkNotNull(intent.getParcelableExtra(SEMESTER_INTENT_KEY)))
-
-        setSupportActionBar(binding.toolbar)
-        checkNotNull(supportActionBar).apply {
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowTitleEnabled(false)
+        (requireActivity() as AppCompatActivity).apply {
+            setSupportActionBar(binding.toolbar)
+            checkNotNull(supportActionBar).apply {
+                setDisplayHomeAsUpEnabled(true)
+                setDisplayShowTitleEnabled(false)
+            }
         }
 
         binding.spinner.apply {
@@ -55,10 +60,10 @@ class LessonsEditorActivity : AppCompatActivity() {
         }
 
         binding.byWeekdaysPager.apply {
-            adapter = LessonsEditorPagerAdapter(supportFragmentManager)
+            adapter = LessonsEditorPagerAdapter(childFragmentManager)
         }
         binding.byWeekdaysPagerTabStrip.apply {
-            val color = colorAttr(R.attr.colorPrimary)
+            val color = context.colorAttr(R.attr.colorPrimary)
             setTextColor(color)
             tabIndicatorColor = color
         }
@@ -69,7 +74,7 @@ class LessonsEditorActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 val weekday = binding.byWeekdaysPager.currentItem + 1
                 LessonEditorActivity.start(
-                    this@LessonsEditorActivity,
+                    requireContext(),
                     checkNotNull(viewModel.semester.value).id,
                     viewModel.getNextStartTime(weekday),
                     weekday
@@ -77,26 +82,25 @@ class LessonsEditorActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.semester.observe(this) { if (it == null) finish() }
+        viewModel.semester.observe(owner) { if (it == null) findNavController().popBackStack() }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_lessons_editor, menu)
-        menu.setColor(getColorCompat(R.color.menu))
-        return true
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_lessons_editor, menu)
+        menu.setColor(requireContext().getColorCompat(R.color.menu))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         android.R.id.home -> {
-            finish()
+            findNavController().popBackStack()
             true
         }
         R.id.mlse_edit_semester -> {
-            //SemesterEditorActivity.start(this, viewModel.semester.value)
+            findNavController().navigate(LessonsEditorFragmentDirections.editSemester(checkNotNull(viewModel.semester.value)))
             true
         }
         R.id.mlse_delete_semester -> {
-            MaterialAlertDialogBuilder(this)
+            MaterialAlertDialogBuilder(requireContext())
                 .setMessage(R.string.lsea_delete_message)
                 .setPositiveButton(R.string.lsea_delete_yes) { _, _ -> viewModel.deleteSemester() }
                 .setNegativeButton(R.string.lsea_delete_no, null)
