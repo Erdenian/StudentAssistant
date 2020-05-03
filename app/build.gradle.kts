@@ -80,6 +80,7 @@ dependencies {
     // endregion
 
     // region UI
+    implementation("net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC2")
     implementation("com.github.DavidProdinger:weekdays-selector:1.1.0")
     // endregion
 }
