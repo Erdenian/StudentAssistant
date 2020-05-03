@@ -13,8 +13,8 @@ android {
 
     defaultConfig {
         applicationId = "ru.erdenian.studentassistant"
-        versionCode = 12
-        versionName = "0.3.1"
+        versionCode = 13
+        versionName = "0.4.0"
 
         minSdkVersion(21)
         targetSdkVersion(targetSdkVersion.toInt())
