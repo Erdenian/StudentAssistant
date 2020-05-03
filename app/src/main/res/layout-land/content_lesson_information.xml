@@ -99,8 +99,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="@string/lif_no_homeworks"
-            android:textAppearance="?textAppearanceHeadline3" />
+            android:text="@string/lif_no_homeworks" />
 
     </ViewFlipper>
 
