@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.lessonseditor.LessonsEditorActivity">
+    tools:context=".ui.main.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,8 +21,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:entries="@array/lesson_repeat_types"
-                android:theme="@style/ToolbarSpinnerTheme"
-                tools:listitem="@layout/spinner_item_semesters" />
+                android:theme="@style/ToolbarSpinnerTheme" />
 
         </com.google.android.material.appbar.MaterialToolbar>
 

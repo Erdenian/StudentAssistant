@@ -1,115 +1,68 @@
-package ru.erdenian.studentassistant.ui.lessoneditor
+package ru.erdenian.studentassistant.ui.main.lessoneditor
 
-import android.content.Context
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.MultiAutoCompleteTextView
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.joda.time.DateTimeConstants
-import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.databinding.ActivityLessonEditorBinding
+import ru.erdenian.studentassistant.databinding.FragmentLessonEditorBinding
 import ru.erdenian.studentassistant.entity.Lesson
-import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorViewModel.Error
+import ru.erdenian.studentassistant.ui.main.lessoneditor.LessonEditorViewModel.Error
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
+import ru.erdenian.studentassistant.utils.navArgsFactory
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showTimePicker
-import ru.erdenian.studentassistant.utils.startActivity
 import ru.erdenian.studentassistant.utils.toast
 import java.util.Calendar
 
-class LessonEditorActivity : AppCompatActivity() {
+class LessonEditorFragment : Fragment(R.layout.fragment_lesson_editor) {
 
     companion object {
-        private const val SEMESTER_ID_INTENT_KEY = "semester_id_intent_key"
-        private const val START_TIME_INTENT_KEY = "start_time_intent_key"
-        private const val WEEKDAY_INTENT_KEY = "weekday_intent_key"
-        private const val LESSON_INTENT_KEY = "lesson_intent_key"
-        private const val SUBJECT_NAME_INTENT_KEY = "subject_name_intent_key"
-        private const val COPY_INTENT_KEY = "copy_intent_key"
-
-        fun start(
-            context: Context,
-            semesterId: Long,
-            startTime: LocalTime = LocalTime(9, 0),
-            weekday: Int = DateTimeConstants.MONDAY
-        ) = context.startActivity<LessonEditorActivity>(
-            SEMESTER_ID_INTENT_KEY to semesterId,
-            START_TIME_INTENT_KEY to startTime,
-            WEEKDAY_INTENT_KEY to weekday
-        )
-
-        fun start(
-            context: Context,
-            lesson: Lesson,
-            copy: Boolean = false
-        ) = context.startActivity<LessonEditorActivity>(
-            SEMESTER_ID_INTENT_KEY to lesson.semesterId,
-            LESSON_INTENT_KEY to lesson,
-            COPY_INTENT_KEY to copy
-        )
-
-        fun start(
-            context: Context,
-            semesterId: Long,
-            subjectName: String
-        ) = context.startActivity<LessonEditorActivity>(
-            SEMESTER_ID_INTENT_KEY to semesterId,
-            SUBJECT_NAME_INTENT_KEY to subjectName
-        )
-
         private const val TIME_FORMAT = "HH:mm"
     }
 
-    private val viewModel by viewModels<LessonEditorViewModel>()
-
-    private val lesson by lazy { intent.getParcelableExtra<Lesson?>(LESSON_INTENT_KEY) }
+    private val viewModel by viewModels<LessonEditorViewModel> {
+        navArgsFactory<LessonEditorFragmentArgs> { application ->
+            when {
+                (semesterId >= 0) && (weekday >= 0) -> LessonEditorViewModel(application, semesterId, weekday)
+                (semesterId >= 0) && (subjectName != null) -> LessonEditorViewModel(application, semesterId, subjectName)
+                (lesson != null) -> LessonEditorViewModel(application, lesson, copy)
+                else -> throw IllegalArgumentException("Wrong fragment arguments: $this")
+            }
+        }
+    }
 
     @Suppress("ComplexMethod", "LongMethod")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val binding = ActivityLessonEditorBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val binding = FragmentLessonEditorBinding.bind(view)
+        setHasOptionsMenu(true)
+        val owner = viewLifecycleOwner
 
-        intent.apply {
-            val l = lesson
-            val subjectName = intent.getStringExtra(SUBJECT_NAME_INTENT_KEY)
-            val semesterId = getLongExtra(SEMESTER_ID_INTENT_KEY, -1)
-            @Suppress("UnsafeCast")
-            if ((l == null) && (subjectName == null)) viewModel.init(
-                semesterId,
-                getSerializableExtra(START_TIME_INTENT_KEY) as LocalTime,
-                getIntExtra(WEEKDAY_INTENT_KEY, DateTimeConstants.MONDAY)
-            ) else {
-                if (subjectName == null) viewModel.init(l, intent.getBooleanExtra(COPY_INTENT_KEY, false))
-                else viewModel.init(semesterId, subjectName)
-            }
+        (requireActivity() as AppCompatActivity).apply {
+            setSupportActionBar(binding.toolbar)
+            checkNotNull(supportActionBar).setDisplayHomeAsUpEnabled(true)
+            if (viewModel.isEditing) title = getString(R.string.lef_title_new)
         }
-
-        supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            if (lesson == null) {
-                title = getString(R.string.lea_title_new)
-            }
-        }
-
-        val owner = this
 
         binding.subjectNameLayout.apply {
             viewModel.error.observe(owner) { error ->
                 if (error == Error.EMPTY_SUBJECT_NAME) {
-                    this.error = getText(R.string.lea_error_empty_subject_name)
+                    this.error = getText(R.string.lef_error_empty_subject_name)
                 } else isErrorEnabled = false
             }
         }
@@ -166,12 +119,12 @@ class LessonEditorActivity : AppCompatActivity() {
 
         binding.startTime.apply {
             viewModel.startTime.observe(owner) { text = it.toString(timeFormatter) }
-            setOnClickListener { showTimePicker(viewModel.startTime.value, viewModel.startTime::setValue) }
+            setOnClickListener { requireContext().showTimePicker(viewModel.startTime.value, viewModel.startTime::setValue) }
         }
 
         binding.endTime.apply {
             viewModel.endTime.observe(owner) { text = it.toString(timeFormatter) }
-            setOnClickListener { showTimePicker(viewModel.endTime.value, viewModel.endTime::setValue) }
+            setOnClickListener { requireContext().showTimePicker(viewModel.endTime.value, viewModel.endTime::setValue) }
         }
 
         binding.repeatType.apply {
@@ -220,7 +173,7 @@ class LessonEditorActivity : AppCompatActivity() {
 
         binding.weekday.apply {
             setSelectOnlyOne(true)
-            val isoToUs = mapOf(
+            val jodaToCalendar = mapOf(
                 DateTimeConstants.MONDAY to Calendar.MONDAY,
                 DateTimeConstants.TUESDAY to Calendar.TUESDAY,
                 DateTimeConstants.WEDNESDAY to Calendar.WEDNESDAY,
@@ -231,13 +184,13 @@ class LessonEditorActivity : AppCompatActivity() {
             )
 
             viewModel.weekday
-                .distinctUntilChanged { it == selectedDays.single() }
-                .observe(owner) { selectDay(checkNotNull(isoToUs[it])) }
+                .distinctUntilChanged { jodaToCalendar[it] == selectedDays.single() }
+                .observe(owner) { selectDay(checkNotNull(jodaToCalendar[it])) }
             setOnWeekdaysChangeListener { _, _, weekdays ->
                 if (weekdays.isNotEmpty()) {
-                    viewModel.weekday.value = checkNotNull(isoToUs.entries.find { it.value == weekdays.single() }?.key)
+                    viewModel.weekday.value = checkNotNull(jodaToCalendar.entries.find { it.value == weekdays.single() }?.key)
                 } else {
-                    selectDay(checkNotNull(isoToUs[viewModel.weekday.value]))
+                    selectDay(checkNotNull(jodaToCalendar[viewModel.weekday.value]))
                 }
             }
         }
@@ -249,40 +202,39 @@ class LessonEditorActivity : AppCompatActivity() {
             onWeeksChangeListener = { viewModel.weeks.value = it }
         }
 
-        viewModel.done.observe(owner) { if (it) finish() }
+        viewModel.done.observe(owner) { if (it) findNavController().popBackStack() }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_lesson_editor, menu)
-        menu.findItem(R.id.mle_delete).isVisible = (lesson != null)
-        menu.setColor(getColorCompat(R.color.menu))
-        return true
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_lesson_editor, menu)
+        menu.findItem(R.id.mle_delete).isVisible = viewModel.isEditing
+        menu.setColor(requireContext().getColorCompat(R.color.menu))
     }
 
     @Suppress("ComplexMethod", "LongMethod")
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home -> {
-            finish()
+            findNavController().popBackStack()
             true
         }
         R.id.mle_save -> {
             viewModel.error.value?.let { error ->
-                toast(
+                requireContext().toast(
                     when (error) {
-                        Error.EMPTY_SUBJECT_NAME -> R.string.lea_error_empty_subject_name
-                        Error.WRONG_TIMES -> R.string.lea_error_wrong_time
-                        Error.EMPTY_REPEAT -> R.string.lea_error_empty_repeat
+                        Error.EMPTY_SUBJECT_NAME -> R.string.lef_error_empty_subject_name
+                        Error.WRONG_TIMES -> R.string.lef_error_wrong_time
+                        Error.EMPTY_REPEAT -> R.string.lef_error_empty_repeat
                     }
                 )
             } ?: run {
                 lifecycleScope.launch {
                     if (viewModel.isSubjectNameChangedAndNotLast()) {
-                        MaterialAlertDialogBuilder(this@LessonEditorActivity)
-                            .setTitle(R.string.lea_rename_others_title)
-                            .setMessage(R.string.lea_rename_others_message)
-                            .setPositiveButton(R.string.lea_rename_others_yes) { _, _ -> viewModel.save(true) }
-                            .setNegativeButton(R.string.lea_rename_others_no) { _, _ -> viewModel.save(false) }
-                            .setNeutralButton(R.string.lea_rename_others_cancel, null)
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(R.string.lef_rename_others_title)
+                            .setMessage(R.string.lef_rename_others_message)
+                            .setPositiveButton(R.string.lef_rename_others_yes) { _, _ -> viewModel.save(true) }
+                            .setNegativeButton(R.string.lef_rename_others_no) { _, _ -> viewModel.save(false) }
+                            .setNeutralButton(R.string.lef_rename_others_cancel, null)
                             .show()
                     } else viewModel.save()
                 }
@@ -292,18 +244,18 @@ class LessonEditorActivity : AppCompatActivity() {
         R.id.mle_delete -> {
             lifecycleScope.launch {
                 if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) {
-                    MaterialAlertDialogBuilder(this@LessonEditorActivity)
-                        .setTitle(R.string.lea_delete_homeworks_title)
-                        .setMessage(R.string.lea_delete_homeworks_message)
-                        .setPositiveButton(R.string.lea_delete_homeworks_yes) { _, _ -> viewModel.delete(true) }
-                        .setNegativeButton(R.string.lea_delete_homeworks_no) { _, _ -> viewModel.delete(false) }
-                        .setNeutralButton(R.string.lea_delete_homeworks_cancel, null)
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(R.string.lef_delete_homeworks_title)
+                        .setMessage(R.string.lef_delete_homeworks_message)
+                        .setPositiveButton(R.string.lef_delete_homeworks_yes) { _, _ -> viewModel.delete(true) }
+                        .setNegativeButton(R.string.lef_delete_homeworks_no) { _, _ -> viewModel.delete(false) }
+                        .setNeutralButton(R.string.lef_delete_homeworks_cancel, null)
                         .show()
                 } else {
-                    MaterialAlertDialogBuilder(this@LessonEditorActivity)
-                        .setMessage(R.string.lea_delete_message)
-                        .setPositiveButton(R.string.lea_delete_yes) { _, _ -> viewModel.delete() }
-                        .setNegativeButton(R.string.lea_delete_no, null)
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setMessage(R.string.lef_delete_message)
+                        .setPositiveButton(R.string.lef_delete_yes) { _, _ -> viewModel.delete() }
+                        .setNegativeButton(R.string.lef_delete_no, null)
                         .show()
                 }
             }

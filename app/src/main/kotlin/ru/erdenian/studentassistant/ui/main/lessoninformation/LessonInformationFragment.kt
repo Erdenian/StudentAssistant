@@ -1,57 +1,52 @@
-package ru.erdenian.studentassistant.ui.lessoninformation
+package ru.erdenian.studentassistant.ui.main.lessoninformation
 
-import android.content.Context
 import android.os.Bundle
 import android.view.ContextMenu
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.databinding.ActivityLessonInformationBinding
-import ru.erdenian.studentassistant.entity.Lesson
+import ru.erdenian.studentassistant.databinding.FragmentLessonInformationBinding
 import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
 import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
-import ru.erdenian.studentassistant.ui.homeworkeditor.HomeworkEditorActivity
-import ru.erdenian.studentassistant.ui.lessoneditor.LessonEditorActivity
 import ru.erdenian.studentassistant.utils.getColorCompat
+import ru.erdenian.studentassistant.utils.navArgsFactory
 import ru.erdenian.studentassistant.utils.setColor
-import ru.erdenian.studentassistant.utils.startActivity
 
-class LessonInformationActivity : AppCompatActivity() {
+class LessonInformationFragment : Fragment(R.layout.fragment_lesson_information) {
 
     companion object {
-        private const val LESSON_INTENT_KEY = "lesson_intent_key"
-        fun start(context: Context, lesson: Lesson) {
-            context.startActivity<LessonInformationActivity>(LESSON_INTENT_KEY to lesson)
-        }
-
         private const val TIME_FORMAT = "HH:mm"
     }
 
-    private val viewModel by viewModels<LessonInformationViewModel>()
+    private val viewModel by viewModels<LessonInformationViewModel> {
+        navArgsFactory<LessonInformationFragmentArgs> { LessonInformationViewModel(it, lesson) }
+    }
     private val homeworksAdapter by lazy {
         HomeworksListAdapter().apply {
-            onHomeworkClickListener = { HomeworkEditorActivity.start(this@LessonInformationActivity, it) }
-            viewModel.homeworks.observe(this@LessonInformationActivity) { homeworks = it.list }
+            onHomeworkClickListener = { findNavController().navigate(LessonInformationFragmentDirections.editHomework(it)) }
+            viewModel.homeworks.observe(this@LessonInformationFragment) { homeworks = it.list }
         }
     }
 
     @Suppress("ComplexMethod")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val binding = ActivityLessonInformationBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val binding = FragmentLessonInformationBinding.bind(view)
+        val owner = viewLifecycleOwner
+        setHasOptionsMenu(true)
 
-        val owner = this
-
-        viewModel.init(checkNotNull(intent.getParcelableExtra(LESSON_INTENT_KEY)))
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (requireActivity() as AppCompatActivity).apply {
+            setSupportActionBar(binding.toolbar)
+            checkNotNull(supportActionBar).setDisplayHomeAsUpEnabled(true)
+        }
 
         binding.content.subjectName.apply {
             viewModel.lesson.observe(owner) { text = it?.subjectName }
@@ -70,8 +65,8 @@ class LessonInformationActivity : AppCompatActivity() {
         }
 
         binding.content.homeworksFlipper.apply {
-            val noHomeworksIndex = 0
-            val containsHomeworksIndex = 1
+            val containsHomeworksIndex = 0
+            val noHomeworksIndex = 1
             viewModel.homeworks.observe(owner) { homeworks ->
                 displayedChild = if (homeworks.isEmpty()) noHomeworksIndex else containsHomeworksIndex
             }
@@ -85,20 +80,19 @@ class LessonInformationActivity : AppCompatActivity() {
         }
 
         binding.addHomework.setOnClickListener {
-            HomeworkEditorActivity.start(this, checkNotNull(viewModel.lesson.value))
+            LessonInformationFragmentDirections.createHomework(checkNotNull(viewModel.lesson.value))
         }
 
-        viewModel.lesson.observe(this) { if (it == null) finish() }
+        viewModel.lesson.observe(owner) { if (it == null) findNavController().popBackStack() }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_lesson_information, menu)
-        menu.setColor(getColorCompat(R.color.menu))
-        return true
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_lesson_information, menu)
+        menu.setColor(requireContext().getColorCompat(R.color.menu))
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
-        menuInflater.inflate(R.menu.context_homeworks, menu)
+        requireActivity().menuInflater.inflate(R.menu.context_homeworks, menu)
         @Suppress("UnsafeCast")
         (menuInfo as AdapterView.AdapterContextMenuInfo?)?.run {
             menu.setHeaderTitle(homeworksAdapter.homeworks[position].subjectName)
@@ -111,10 +105,10 @@ class LessonInformationActivity : AppCompatActivity() {
         val homework = homeworksAdapter.homeworks[info.position]
         return when (item.itemId) {
             R.id.ch_delete -> {
-                MaterialAlertDialogBuilder(this)
-                    .setMessage(R.string.lia_delete_message)
-                    .setPositiveButton(R.string.lia_delete_yes) { _, _ -> viewModel.deleteHomework(homework.id) }
-                    .setNegativeButton(R.string.lia_delete_no, null)
+                MaterialAlertDialogBuilder(requireContext())
+                    .setMessage(R.string.lif_delete_message)
+                    .setPositiveButton(R.string.lif_delete_yes) { _, _ -> viewModel.deleteHomework(homework.id) }
+                    .setNegativeButton(R.string.lif_delete_no, null)
                     .show()
                 true
             }
@@ -124,11 +118,11 @@ class LessonInformationActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home -> {
-            finish()
+            findNavController().popBackStack()
             true
         }
         R.id.mli_edit -> {
-            LessonEditorActivity.start(this, checkNotNull(viewModel.lesson.value))
+            findNavController().navigate(LessonInformationFragmentDirections.editLesson(checkNotNull(viewModel.lesson.value)))
             true
         }
         else -> false

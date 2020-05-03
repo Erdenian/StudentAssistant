@@ -4,22 +4,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingStart="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingEnd="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".ui.semestereditor.SemesterEditorActivity">
+    tools:context=".ui.main.MainActivity">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="?toolbarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/name_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/sea_name"
+            android:hint="@string/sef_name"
             android:imeOptions="flagNoExtractUi"
             android:inputType="text|textCapSentences"
             android:maxLines="1">
@@ -33,7 +38,11 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin">
 
         <Button
             android:id="@+id/first_day"

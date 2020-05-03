@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/mse_save"
-        android:icon="@drawable/ic_check"
-        android:title="@string/sef_save"
+        android:id="@+id/mh_add_homework"
+        android:icon="@drawable/ic_plus"
+        android:title="@string/hf_add"
         app:showAsAction="ifRoom" />
 
 </menu>

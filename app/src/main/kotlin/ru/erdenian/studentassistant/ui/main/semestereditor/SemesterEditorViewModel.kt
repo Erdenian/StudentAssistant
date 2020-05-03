@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.semestereditor
+package ru.erdenian.studentassistant.ui.main.semestereditor
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -16,7 +16,10 @@ import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.repository.SemesterRepository
 
-class SemesterEditorViewModel(application: Application) : AndroidViewModel(application), KodeinAware {
+class SemesterEditorViewModel(
+    application: Application,
+    private val semester: Semester?
+) : AndroidViewModel(application), KodeinAware {
 
     override val kodein by kodein()
     private val semesterRepository by instance<SemesterRepository>()
@@ -32,21 +35,17 @@ class SemesterEditorViewModel(application: Application) : AndroidViewModel(appli
         DateTimeConstants.SEPTEMBER..DateTimeConstants.DECEMBER
     )
 
-    private var semester: Semester? = null
-
-    fun init(semester: Semester?) {
-        this.semester = semester?.also { s ->
-            name.value = s.name
-            firstDay.value = s.firstDay
-            lastDay.value = s.lastDay
-        }
-    }
-
     val name = MutableLiveData("")
     val firstDay = MutableLiveData<LocalDate>()
     val lastDay = MutableLiveData<LocalDate>()
 
     init {
+        semester?.also { s ->
+            name.value = s.name
+            firstDay.value = s.firstDay
+            lastDay.value = s.lastDay
+        }
+
         val today = LocalDate.now().withDayOfMonth(1)
         val range = ranges.find { today.monthOfYear <= it.last } ?: ranges.first()
         firstDay.value = today.withMonthOfYear(range.first)
@@ -57,7 +56,6 @@ class SemesterEditorViewModel(application: Application) : AndroidViewModel(appli
 
     val error: LiveData<Error?> = MediatorLiveData<Error?>().apply {
         val onChanged = Observer<Any?> {
-            val semester = semester
             val name = name.value ?: ""
             val names = semestersNames.value ?: emptyList()
             val firstDay = firstDay.value
@@ -76,6 +74,8 @@ class SemesterEditorViewModel(application: Application) : AndroidViewModel(appli
         addSource(lastDay, onChanged)
         addSource(semestersNames, onChanged)
     }
+
+    val isEditing get() = (semester != null)
 
     private val savedPrivate = MutableLiveData(false)
     val saved: LiveData<Boolean> get() = savedPrivate

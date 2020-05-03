@@ -56,7 +56,7 @@
         <item name="colorAccent">?colorSecondary</item>
         <!-- endregion -->
 
-        <item name="android:navigationBarColor">?android:colorBackground</item>
+        <item name="android:navigationBarColor">?colorSurface</item>
     </style>
 
     <style name="AppTheme" parent="Base.AppTheme">

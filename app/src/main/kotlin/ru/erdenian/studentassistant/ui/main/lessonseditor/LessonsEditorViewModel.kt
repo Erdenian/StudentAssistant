@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.lessonseditor
+package ru.erdenian.studentassistant.ui.main.lessonseditor
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -19,30 +19,24 @@ import ru.erdenian.studentassistant.repository.HomeworkRepository
 import ru.erdenian.studentassistant.repository.LessonRepository
 import ru.erdenian.studentassistant.repository.SemesterRepository
 import ru.erdenian.studentassistant.utils.liveDataOf
-import ru.erdenian.studentassistant.utils.setIfEmpty
 
-class LessonsEditorViewModel(application: Application) : AndroidViewModel(application), KodeinAware {
+class LessonsEditorViewModel(
+    application: Application,
+    semester: Semester
+) : AndroidViewModel(application), KodeinAware {
 
     override val kodein by kodein()
     private val semesterRepository by instance<SemesterRepository>()
     private val lessonRepository by instance<LessonRepository>()
     private val homeworkRepository by instance<HomeworkRepository>()
 
-    private val privateSemester = MutableLiveData<Semester>()
-
-    fun init(semester: Semester) {
-        privateSemester.setIfEmpty(semester)
-    }
-
-    val semester = privateSemester.switchMap { liveDataOf(it, semesterRepository.getLiveData(it.id)) }
+    val semester = liveDataOf(semester, semesterRepository.getLiveData(semester.id))
 
     fun getLessons(weekday: Int) = semester.switchMap { semester ->
         semester
             ?.let { lessonRepository.getAllLiveData(it.id, weekday) }
             ?: MutableLiveData(immutableSortedSetOf())
     }
-
-    suspend fun getNextStartTime(weekday: Int) = lessonRepository.getNextStartTime(checkNotNull(semester.value).id, weekday)
 
     fun deleteSemester() {
         viewModelScope.launch {
