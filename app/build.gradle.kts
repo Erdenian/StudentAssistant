@@ -1,48 +1,88 @@
-import com.android.build.gradle.internal.api.BaseVariantOutputImpl
-import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsFeature
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.util.Properties
 
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("android.extensions")
     kotlin("kapt")
-    id("kotlinx-serialization")
     id("androidx.navigation.safeargs.kotlin")
-    id("de.mannodermaus.android-junit5")
 }
 
 android {
-    val compile_sdk_version: String by project
-    val target_sdk_version: String by project
+    val compileSdkVersion: String by project
+    val targetSdkVersion: String by project
 
-    compileSdkVersion(compile_sdk_version.toInt())
+    compileSdkVersion(compileSdkVersion.toInt())
 
     defaultConfig {
         applicationId = "ru.erdenian.studentassistant"
-        versionCode = 12
-        versionName = "0.3.1"
+        versionCode = 13
+        versionName = "0.4.0"
 
         minSdkVersion(21)
-        targetSdkVersion(target_sdk_version.toInt())
+        targetSdkVersion(targetSdkVersion.toInt())
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArgument(
-            "runnerBuilder",
-            "de.mannodermaus.junit5.AndroidJUnit5Builder"
-        )
 
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments["room.schemaLocation"] = "$projectDir/schemas"
+        setProperty("archivesBaseName", "${rootProject.name}-$versionName")
+    }
+
+    viewBinding { isEnabled = true }
+
+    signingConfigs {
+        val localProperties = File("${rootDir.path}/local.properties").run {
+            if (exists()) Properties().apply { load(inputStream()) } else null
+        }
+        val environment = System.getenv()
+        fun get(env: String, local: String) = environment[env] ?: run {
+            project.logger.warn("WARNING: No $env environmental variable")
+            localProperties?.getProperty(local) ?: run {
+                project.logger.warn("WARNING: No $local local property")
+                null
             }
         }
+
+        data class Keystore(
+            val storeFile: File,
+            val storePassword: String,
+            val keyAlias: String,
+            val keyPassword: String
+        )
+
+        fun getReleaseKeystore(): Keystore? {
+            return Keystore(
+                rootProject.file("signing/release.jks"),
+                get("ANDROID_KEYSTORE_PASSWORD", "signing.keystorePassword") ?: return null,
+                get("ANDROID_KEY_ALIAS", "signing.keyAlias") ?: return null,
+                get("ANDROID_KEY_PASSWORD", "signing.keyPassword") ?: return null
+            )
+        }
+
+        getByName("debug") {
+            storeFile = rootProject.file("signing/debug.jks")
+            storePassword = "debugdebug"
+            keyAlias = "debug"
+            keyPassword = "debugdebug"
+        }
+
+        getReleaseKeystore()?.let { keystore ->
+            create("release") {
+                storeFile = keystore.storeFile
+                storePassword = keystore.storePassword
+                keyAlias = keystore.keyAlias
+                keyPassword = keystore.keyPassword
+            }
+        } ?: project.logger.warn("WARNING: Can't create release signing config")
     }
 
     buildTypes {
+        getByName("debug") {
+            signingConfig = checkNotNull(signingConfigs.findByName("debug"))
+        }
         getByName("release") {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.findByName("release")
         }
     }
 
@@ -51,99 +91,47 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    packagingOptions {
-        exclude("META-INF/LICENSE*")
-    }
-
     sourceSets {
         getByName("main").java.srcDirs("src/main/kotlin")
         getByName("test").java.srcDirs("src/test/kotlin")
         getByName("androidTest").java.srcDirs("src/androidTest/kotlin")
-    }
 
-    val app_name: String by project
-    applicationVariants.configureEach {
-        outputs.forEach { output ->
-            (output as BaseVariantOutputImpl).apply {
-                outputFileName = outputFileName.replace(
-                    project.name, "$app_name-${defaultConfig.versionName}"
-                )
-            }
+        productFlavors.forEach { flavor ->
+            getByName(flavor.name).java.srcDirs("src/${flavor.name}/kotlin")
+            "test${flavor.name.capitalize()}".let { getByName(it).java.srcDirs("src/$it/kotlin") }
+            "androidTest${flavor.name.capitalize()}".let { getByName(it).java.srcDirs("src/$it/kotlin") }
         }
     }
 }
 
-androidExtensions {
-    features = setOf(AndroidExtensionsFeature.PARCELIZE.featureName)
-    isExperimental = true
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "1.8"
-        @Suppress("SuspiciousCollectionReassignment")
-        freeCompilerArgs += listOf(
-            "-XXLanguage:+InlineClasses",
-            "-Xnew-inference"
-        )
-    }
-}
-
 dependencies {
-    val junit_version = "5.5.1"
-    val android_test_version = "1.1.0"
-
-    val kotlin_version: String by project
-    val coroutines_version: String by project
-
-    val lifecycle_version: String by project
-    val navigation_version: String by project
-    val room_version: String by project
-
-    val kodein_version: String by project
-    //val retrofit_version: String by project
-
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_version")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit_version")
-
-    androidTestImplementation("androidx.test:runner:1.2.0")
-    androidTestImplementation("org.junit.jupiter:junit-jupiter-api:$junit_version")
-    androidTestImplementation("de.mannodermaus.junit5:android-test-core:$android_test_version")
-    androidTestRuntimeOnly("de.mannodermaus.junit5:android-test-runner:$android_test_version")
-
+    // region Private
+    implementation(project(":repository"))
+    implementation(project(":uikit"))
     implementation(project(":utils"))
-    implementation(project(":customviews"))
+    // endregion
 
     // region Kotlin
-    implementation(kotlin("stdlib-jdk8", kotlin_version))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
-    //implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.11.1")
+    val kotlinVersion: String by project
+    implementation(kotlin("stdlib-jdk8", kotlinVersion))
     // endregion
 
     // region AndroidX
-    implementation("androidx.fragment:fragment-ktx:1.2.0-alpha02")
-    implementation("androidx.drawerlayout:drawerlayout:1.1.0-alpha03")
+    val navigationVersion: String by project
+    implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
+    implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
+
     implementation("androidx.viewpager:viewpager:1.0.0")
-
-    kapt("androidx.lifecycle:lifecycle-compiler:$lifecycle_version")
-
-    implementation("androidx.navigation:navigation-fragment-ktx:$navigation_version")
-    implementation("androidx.navigation:navigation-ui-ktx:$navigation_version")
-
-    kapt("androidx.room:room-compiler:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
     // endregion
 
-    // region DI
-    implementation("org.kodein.di:kodein-di-generic-jvm:$kodein_version")
-    implementation("org.kodein.di:kodein-di-framework-android-x:$kodein_version")
+    // region Core
+    val kodeinVersion: String by project
+    implementation("org.kodein.di:kodein-di-generic-jvm:$kodeinVersion")
+    implementation("org.kodein.di:kodein-di-framework-android-x:$kodeinVersion")
     // endregion
-
-    implementation("org.jetbrains.anko:anko-common:0.10.8")
 
     // region UI
-    implementation("com.google.android.material:material:1.1.0-alpha09")
+    implementation("net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC2")
     implementation("com.github.DavidProdinger:weekdays-selector:1.1.0")
     // endregion
 }

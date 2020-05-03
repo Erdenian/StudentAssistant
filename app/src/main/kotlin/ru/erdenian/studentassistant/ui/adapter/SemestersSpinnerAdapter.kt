@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.model.entity.Semester
+import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.utils.GenericBaseAdapter
 
 class SemestersSpinnerAdapter : GenericBaseAdapter<Semester>() {

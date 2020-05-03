@@ -2,8 +2,8 @@ package ru.erdenian.studentassistant.ui.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ru.erdenian.studentassistant.customviews.HomeworkCard
-import ru.erdenian.studentassistant.model.entity.Homework
+import ru.erdenian.studentassistant.entity.Homework
+import ru.erdenian.studentassistant.uikit.HomeworkCard
 
 class HomeworksListAdapter : RecyclerView.Adapter<HomeworksListAdapter.ItemViewHolder>() {
 
@@ -13,11 +13,7 @@ class HomeworksListAdapter : RecyclerView.Adapter<HomeworksListAdapter.ItemViewH
             notifyDataSetChanged()
         }
 
-    interface OnHomeworkClickListener {
-        fun onHomeworkClick(homework: Homework)
-    }
-
-    var onHomeworkClickListener: OnHomeworkClickListener? = null
+    var onHomeworkClickListener: ((Homework) -> Unit)? = null
 
     override fun getItemCount() = homeworks.size
 
@@ -30,9 +26,7 @@ class HomeworksListAdapter : RecyclerView.Adapter<HomeworksListAdapter.ItemViewH
             setOnLongClickListener { it.showContextMenu() }
         }
     ).apply {
-        card.setOnClickListener {
-            onHomeworkClickListener?.onHomeworkClick(homeworks[adapterPosition])
-        }
+        card.setOnClickListener { onHomeworkClickListener?.invoke(homeworks[adapterPosition]) }
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {

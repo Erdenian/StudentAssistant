@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="ru.erdenian.studentassistant">
 
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
     <application
         android:name=".SaApplication"
         android:allowBackup="false"
@@ -27,34 +25,8 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:label="@string/ma_title"
-            android:theme="@style/AppTheme.NoActionBar.TransparentStatusBar" />
-
-        <activity
-            android:name=".ui.lessoninformation.LessonInformationActivity"
-            android:label="@string/lia_title" />
-
-        <activity
-            android:name=".ui.semestereditor.SemesterEditorActivity"
-            android:label="@string/sea_title_edit"
-            android:windowSoftInputMode="stateAlwaysVisible" />
-
-        <activity
-            android:name=".ui.lessonseditor.LessonsEditorActivity"
-            android:label="@string/lsea_title"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
-            android:name=".ui.lessoneditor.LessonEditorActivity"
-            android:label="@string/lea_title_edit" />
-
-        <activity
-            android:name=".ui.homeworkeditor.HomeworkEditorActivity"
-            android:label="@string/hea_title"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
-
-        <activity
-            android:name=".ui.help.HelpActivity"
-            android:label="@string/ha_title" />
 
     </application>
 

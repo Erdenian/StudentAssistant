@@ -4,13 +4,13 @@
 
     <item
         android:id="@+id/mhe_save"
-        android:icon="@drawable/check"
-        android:title="@string/hea_save"
+        android:icon="@drawable/ic_check"
+        android:title="@string/hef_save"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/mhe_delete"
-        android:title="@string/hea_delete"
+        android:title="@string/hef_delete"
         app:showAsAction="never" />
 
 </menu>

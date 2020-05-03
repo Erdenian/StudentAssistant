@@ -1,26 +1,23 @@
 package ru.erdenian.studentassistant.utils
 
 import android.view.View
-import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.observe
+import androidx.viewbinding.ViewBinding
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-private class IdDelegate<T : View>(
+private class BindingDelegate<T : ViewBinding>(
     private val fragment: Fragment,
-    @IdRes private val id: Int
+    private val binder: (View) -> T
 ) : ReadOnlyProperty<Any?, T>, LifecycleObserver {
 
     private var value: T? = null
 
     init {
-        fragment.viewLifecycleOwnerLiveData.observe(fragment) { lifecycleOwner ->
-            lifecycleOwner.lifecycle.addObserver(this)
-        }
+        fragment.viewLifecycleOwnerLiveData.observe(fragment) { it.lifecycle.addObserver(this) }
     }
 
     @Suppress("unused")
@@ -30,20 +27,20 @@ private class IdDelegate<T : View>(
     }
 
     override fun getValue(thisRef: Any?, property: KProperty<*>) = checkNotNull(
-        value ?: fragment.requireView().requireViewByIdCompat<T>(id).also { value = it }
+        value ?: binder(fragment.requireView()).also { value = it }
     )
 }
 
 /**
- * Создает делегат, поддерживающий актуальность ссылки на [View] при его пересоздании
+ * Создает делегат, поддерживающий актуальность ссылки на [ViewBinding] при его пересоздании.
  *
  * Если [View] в момент обращения находится в состоянии [Lifecycle.State.DESTROYED],
  * то будет выброшено исключение.
  *
  * @receiver фрагмент, содержащий View
- * @param T тип нужного View
- * @param id id нужного View
- * @author Ilya Solovyov
- * @since 0.3.0
+ * @param T тип нужного ViewBinding
+ * @param binder лямбда для биндинга View
  */
-fun <T : View> Fragment.id(@IdRes id: Int): ReadOnlyProperty<Any?, T> = IdDelegate(this, id)
+fun <T : ViewBinding> Fragment.binding(
+    binder: (View) -> T
+): ReadOnlyProperty<Any?, T> = BindingDelegate(this, binder)
