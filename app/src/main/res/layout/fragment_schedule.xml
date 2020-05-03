@@ -1,28 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/flipper"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.main.MainActivity">
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager"
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="?toolbarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+        <Spinner
+            android:id="@+id/semesters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/ToolbarSpinnerTheme"
+            tools:listitem="@layout/spinner_item_semesters" />
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <ViewFlipper
+        android:id="@+id/flipper"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.viewpager.widget.PagerTabStrip
-            android:id="@+id/pager_tab_strip"
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/view_pager"
             android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.viewpager.widget.PagerTabStrip
+                android:id="@+id/pager_tab_strip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top" />
+
+        </androidx.viewpager.widget.ViewPager>
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="top" />
+            android:layout_gravity="center"
+            android:layout_margin="64dp"
+            android:gravity="center"
+            android:text="@string/sf_no_schedule" />
 
-    </androidx.viewpager.widget.ViewPager>
+    </ViewFlipper>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="64dp"
-        android:gravity="center"
-        android:text="@string/sf_no_schedule" />
-
-</ViewFlipper>
+</LinearLayout>

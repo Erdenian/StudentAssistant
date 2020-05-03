@@ -4,12 +4,12 @@
 
     <item
         android:id="@+id/mlse_edit_semester"
-        android:title="@string/lsea_edit"
+        android:title="@string/lsef_edit"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/mlse_delete_semester"
-        android:title="@string/lsea_delete"
+        android:title="@string/lsef_delete"
         app:showAsAction="never" />
 
 </menu>

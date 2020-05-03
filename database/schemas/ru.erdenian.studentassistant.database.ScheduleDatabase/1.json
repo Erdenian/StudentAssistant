@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "015ee5c8b712331d40de0cf87c85f5ef",
+    "identityHash": "0fea0765b0365687d2b443f0a6c42da0",
     "entities": [
       {
         "tableName": "semesters",
@@ -339,7 +339,7 @@
       },
       {
         "tableName": "homeworks",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`subject_name` TEXT NOT NULL, `description` TEXT NOT NULL, `deadline` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(`semester_id`) REFERENCES `semesters`(`_id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`subject_name` TEXT NOT NULL, `description` TEXT NOT NULL, `deadline` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_done` INTEGER NOT NULL, FOREIGN KEY(`semester_id`) REFERENCES `semesters`(`_id`) ON UPDATE CASCADE ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "subjectName",
@@ -368,6 +368,12 @@
           {
             "fieldPath": "id",
             "columnName": "_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isDone",
+            "columnName": "is_done",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -414,7 +420,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '015ee5c8b712331d40de0cf87c85f5ef')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0fea0765b0365687d2b443f0a6c42da0')"
     ]
   }
 }

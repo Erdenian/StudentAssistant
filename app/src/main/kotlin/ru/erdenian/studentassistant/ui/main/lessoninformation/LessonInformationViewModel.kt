@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.lessoninformation
+package ru.erdenian.studentassistant.ui.main.lessoninformation
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -14,25 +14,19 @@ import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 import ru.erdenian.studentassistant.repository.HomeworkRepository
 import ru.erdenian.studentassistant.repository.LessonRepository
 import ru.erdenian.studentassistant.utils.liveDataOf
-import ru.erdenian.studentassistant.utils.setIfEmpty
 
-class LessonInformationViewModel(application: Application) : AndroidViewModel(application), KodeinAware {
+class LessonInformationViewModel(
+    application: Application,
+    lesson: Lesson
+) : AndroidViewModel(application), KodeinAware {
 
     override val kodein by kodein()
     private val lessonRepository by instance<LessonRepository>()
     private val homeworkRepository by instance<HomeworkRepository>()
 
-    private val privateLesson = MutableLiveData<Lesson>()
+    val lesson = liveDataOf(lesson, lessonRepository.getLiveData(lesson.id))
 
-    fun init(lesson: Lesson) {
-        privateLesson.setIfEmpty(lesson)
-    }
-
-    val lesson = privateLesson.switchMap { lesson ->
-        liveDataOf(lesson, lessonRepository.getLiveData(lesson.id))
-    }
-
-    val homeworks = lesson.switchMap { lesson ->
+    val homeworks = this.lesson.switchMap { lesson ->
         lesson?.let { homeworkRepository.getActualLiveData(it.subjectName) } ?: MutableLiveData(immutableSortedSetOf())
     }
 

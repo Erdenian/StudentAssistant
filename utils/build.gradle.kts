@@ -64,6 +64,9 @@ dependencies {
     val lifecycleVersion: String by project
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     api("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+
+    val navigationVersion: String by project
+    implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
     // endregion
 
     // region Core

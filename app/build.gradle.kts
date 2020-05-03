@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -65,7 +66,7 @@ dependencies {
     // endregion
 
     // region AndroidX
-    val navigationVersion = "2.2.2"
+    val navigationVersion: String by project
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
 
@@ -79,6 +80,7 @@ dependencies {
     // endregion
 
     // region UI
+    implementation("net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC2")
     implementation("com.github.DavidProdinger:weekdays-selector:1.1.0")
     // endregion
 }

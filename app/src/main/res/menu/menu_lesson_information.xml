@@ -5,7 +5,7 @@
     <item
         android:id="@+id/mli_edit"
         android:icon="@drawable/ic_edit_pencil"
-        android:title="@string/lia_edit"
+        android:title="@string/lif_edit"
         app:showAsAction="ifRoom" />
 
 </menu>

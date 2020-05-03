@@ -7,22 +7,7 @@
     android:orientation="vertical"
     tools:context=".ui.main.MainActivity">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        style="?toolbarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
-
-        <Spinner
-            android:id="@+id/toolbar_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:theme="@style/ToolbarSpinnerTheme"
-            tools:listitem="@layout/spinner_item_semesters" />
-
-    </com.google.android.material.appbar.MaterialToolbar>
-
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"

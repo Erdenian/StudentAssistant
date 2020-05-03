@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.homeworkeditor
+package ru.erdenian.studentassistant.ui.main.homeworkeditor
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -7,7 +7,6 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.map
-import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.joda.time.LocalDate
@@ -15,13 +14,16 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 import ru.erdenian.studentassistant.entity.Homework
+import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.repository.HomeworkRepository
 import ru.erdenian.studentassistant.repository.LessonRepository
 import ru.erdenian.studentassistant.repository.SemesterRepository
-import ru.erdenian.studentassistant.utils.setIfEmpty
 
-class HomeworkEditorViewModel(
-    application: Application
+class HomeworkEditorViewModel private constructor(
+    application: Application,
+    val semesterId: Long,
+    private val homework: Homework?,
+    lesson: Lesson?
 ) : AndroidViewModel(application), KodeinAware {
 
     override val kodein by kodein()
@@ -34,35 +36,16 @@ class HomeworkEditorViewModel(
         EMPTY_DESCRIPTION
     }
 
-    private val semesterIdPrivate = MutableLiveData<Long>()
-    val semesterId: LiveData<Long> get() = semesterIdPrivate
-    private var homework: Homework? = null
+    constructor(application: Application, semesterId: Long) : this(application, semesterId, null, null)
+    constructor(application: Application, lesson: Lesson) : this(application, lesson.semesterId, null, lesson)
+    constructor(application: Application, homework: Homework) : this(application, homework.semesterId, homework, null)
 
-    fun init(semesterId: Long, subjectName: String?) {
-        this.semesterIdPrivate.setIfEmpty(semesterId)
-        subjectName?.let { this.subjectName.value = it }
-    }
+    val existingSubjects = lessonRepository.getSubjects(semesterId)
+    val semesterLastDay = semesterRepository.getLiveData(semesterId).map { checkNotNull(it).lastDay }
 
-    fun init(semesterId: Long, homework: Homework?) {
-        this.semesterIdPrivate.setIfEmpty(semesterId)
-
-        this.homework = homework?.also { h ->
-            subjectName.value = h.subjectName
-            description.value = h.description
-            deadline.value = h.deadline
-        }
-    }
-
-    val existingSubjects = semesterId.switchMap { lessonRepository.getSubjects(it) }
-    val semesterLastDay = semesterId
-        .switchMap { semesterRepository.getLiveData(it) }
-        .map { checkNotNull(it).lastDay }
-
-    val subjectName: MutableLiveData<String> = MediatorLiveData<String>().apply {
-        addSource(existingSubjects) { if (value !in it) value = it.firstOrNull() ?: "" }
-    }
-    val description = MutableLiveData("")
-    val deadline = MutableLiveData(LocalDate.now())
+    val subjectName = MutableLiveData(lesson?.subjectName ?: homework?.subjectName ?: "")
+    val description = MutableLiveData(homework?.description ?: "")
+    val deadline = MutableLiveData(homework?.deadline ?: LocalDate.now())
 
     val error: LiveData<Error?> = MediatorLiveData<Error?>().apply {
         val observer = Observer<Any?> {
@@ -76,6 +59,8 @@ class HomeworkEditorViewModel(
         addSource(subjectName, observer)
         addSource(description, observer)
     }
+
+    val isEditing get() = (homework != null)
 
     val lessonExists get() = checkNotNull(subjectName.value) in checkNotNull(existingSubjects.value)
 
@@ -92,14 +77,14 @@ class HomeworkEditorViewModel(
                     checkNotNull(subjectName.value),
                     checkNotNull(description.value),
                     checkNotNull(deadline.value),
-                    checkNotNull(semesterId.value)
+                    semesterId
                 )
             } ?: run {
                 homeworkRepository.insert(
                     checkNotNull(subjectName.value),
                     checkNotNull(description.value),
                     checkNotNull(deadline.value),
-                    checkNotNull(semesterId.value)
+                    semesterId
                 )
             }
             donePrivate.value = true
@@ -107,6 +92,9 @@ class HomeworkEditorViewModel(
     }
 
     fun delete() {
-        viewModelScope.launch { homeworkRepository.delete(checkNotNull(homework).id) }
+        viewModelScope.launch {
+            homeworkRepository.delete(checkNotNull(homework).id)
+            donePrivate.value = true
+        }
     }
 }
