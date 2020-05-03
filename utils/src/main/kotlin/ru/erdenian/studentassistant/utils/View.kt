@@ -2,50 +2,17 @@ package ru.erdenian.studentassistant.utils
 
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import androidx.annotation.IdRes
-import androidx.core.app.ActivityCompat
-import androidx.core.content.getSystemService
-import androidx.core.view.ViewCompat
 import androidx.core.view.children
 
 /**
- * Обертка над [ActivityCompat.requireViewById]
- *
- * @param id id View
- * @return View
- * @author Ilya Solovyov
- * @since 0.3.0
- */
-fun <T : View> View.requireViewByIdCompat(@IdRes id: Int) =
-    ViewCompat.requireViewById<T>(this, id)
-
-/**
- * Установить курсор в [EditText] и показать клавиатуру
- *
- * Может не срабатывать при вызове в ***onCreate***,
- * тогда можно обернуть вызов в **post** или аналогичный метод.
- *
- * @author Ilya Solovyov
- * @since 0.3.0
- */
-fun EditText.showKeyboard() {
-    requestFocus()
-    val imm = context.getSystemService<InputMethodManager>()
-    imm?.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
-}
-
-/**
- * Установить количество дочерних [View] у [ViewGroup]
+ * Установить количество дочерних [View] у [ViewGroup].
  *
  * Если [count] больше, чем текущее количество дочерних [View], лишние будут удалены с конца списка,
  * если же меньше, то недостающие будут созданы с помощью [creator].
  *
  * @param count необходимое количество дочерних [View]
  * @param creator создает новые [View], при этом можно как просто вернуть созданный [View]
- *        ([ViewGroup.addView] вызовется автоматически), так и вручную добавить его в дочерние
- *        (такое происходит, если создавать [View], используя функции Anko),
+ *        ([ViewGroup.addView] вызовется автоматически), так и вручную добавить его в дочерние,
  *        но если добавить его в дочерние [View] любого другого [ViewGroup],
  *        будет выброшено [IllegalStateException]
  * @param transformation вызовется для преобразования дочерних [View],
@@ -87,5 +54,3 @@ fun <V : View> ViewGroup.setViewCount(
         }
     }
 }
-
-fun <T : View> View.id(@IdRes id: Int) = lazy { requireViewByIdCompat<T>(id) }

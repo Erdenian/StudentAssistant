@@ -1,30 +1,34 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("com.android.library")
     kotlin("android")
 }
 
 android {
-    val compile_sdk_version: String by project
-    val target_sdk_version: String by project
+    val compileSdkVersion: String by project
+    val targetSdkVersion: String by project
 
-    compileSdkVersion(compile_sdk_version.toInt())
+    compileSdkVersion(compileSdkVersion.toInt())
 
     defaultConfig {
         versionCode = 1
         versionName = "1.0"
 
         minSdkVersion(16)
-        targetSdkVersion(target_sdk_version.toInt())
+        targetSdkVersion(targetSdkVersion.toInt())
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        consumerProguardFiles("consumer-rules.pro")
     }
+
+    viewBinding { isEnabled = true }
 
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            )
         }
     }
 
@@ -37,36 +41,36 @@ android {
         getByName("main").java.srcDirs("src/main/kotlin")
         getByName("test").java.srcDirs("src/test/kotlin")
         getByName("androidTest").java.srcDirs("src/androidTest/kotlin")
-    }
-}
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "1.8"
+        productFlavors.forEach { flavor ->
+            getByName(flavor.name).java.srcDirs("src/${flavor.name}/kotlin")
+            "test${flavor.name.capitalize()}".let { getByName(it).java.srcDirs("src/$it/kotlin") }
+            "androidTest${flavor.name.capitalize()}".let { getByName(it).java.srcDirs("src/$it/kotlin") }
+        }
     }
 }
 
 dependencies {
-    val kotlin_version: String by project
-
-    val core_ktx_version: String by project
-
-    val lifecycle_version: String by project
-
-    val joda_time_version: String by project
-
     // region Kotlin
-    implementation(kotlin("stdlib-jdk8", kotlin_version))
+    val kotlinVersion: String by project
+    implementation(kotlin("stdlib-jdk8", kotlinVersion))
     // endregion
 
     // region AndroidX
-    api("androidx.core:core-ktx:$core_ktx_version")
+    api("androidx.core:core-ktx:1.2.0")
 
-    api("androidx.lifecycle:lifecycle-extensions:$lifecycle_version")
-    api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
-    api("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
-    api("com.shopify:livedata-ktx:3.0.0")
+    api("androidx.fragment:fragment-ktx:1.2.4")
+
+    val lifecycleVersion: String by project
+    api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    api("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+
+    val navigationVersion: String by project
+    implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
     // endregion
 
-    api("joda-time:joda-time:$joda_time_version")
+    // region Core
+    val jodaTimeVersion: String by project
+    api("joda-time:joda-time:$jodaTimeVersion")
+    // endregion
 }

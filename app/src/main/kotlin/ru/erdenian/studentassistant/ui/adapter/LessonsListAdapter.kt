@@ -2,8 +2,8 @@ package ru.erdenian.studentassistant.ui.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ru.erdenian.studentassistant.customviews.LessonCard
-import ru.erdenian.studentassistant.model.entity.Lesson
+import ru.erdenian.studentassistant.entity.Lesson
+import ru.erdenian.studentassistant.uikit.LessonCard
 
 class LessonsListAdapter : RecyclerView.Adapter<LessonsListAdapter.ItemViewHolder>() {
 
@@ -13,11 +13,7 @@ class LessonsListAdapter : RecyclerView.Adapter<LessonsListAdapter.ItemViewHolde
             notifyDataSetChanged()
         }
 
-    interface OnLessonClickListener {
-        fun onLessonClick(lesson: Lesson)
-    }
-
-    var onLessonClickListener: OnLessonClickListener? = null
+    var onLessonClickListener: ((Lesson) -> Unit)? = null
 
     override fun getItemCount() = lessons.size
 
@@ -30,7 +26,7 @@ class LessonsListAdapter : RecyclerView.Adapter<LessonsListAdapter.ItemViewHolde
             setOnLongClickListener { it.showContextMenu() }
         }
     ).apply {
-        card.setOnClickListener { onLessonClickListener?.onLessonClick(lessons[adapterPosition]) }
+        card.setOnClickListener { onLessonClickListener?.invoke(lessons[adapterPosition]) }
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
