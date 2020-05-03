@@ -19,8 +19,18 @@ jobs:
           java-version: 1.8
       - name: Detekt
         run: ./gradlew detekt
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: Detekt
+          path: build/reports/detekt/detekt.html
       - name: Lint Debug
         run: ./gradlew lintDebug
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: Lint
+          path: "*/build/reports/lint-results*.html"
 
   test:
     runs-on: ubuntu-latest
@@ -31,6 +41,11 @@ jobs:
           java-version: 1.8
       - name: Unit Test
         run: ./gradlew testDebugUnitTest
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: Unit Test
+          path: "*/build/reports/tests/"
 
   build:
     runs-on: ubuntu-latest
@@ -41,3 +56,15 @@ jobs:
           java-version: 1.8
       - name: Assemble Debug
         run: ./gradlew assembleDebug
+      - uses: actions/upload-artifact@v2
+        if: success()
+        with:
+          name: Assemble
+          path: app/build/outputs/apk/debug/*.apk
+      - name: Bundle Debug
+        run: ./gradlew bundleDebug
+      - uses: actions/upload-artifact@v2
+        if: success()
+        with:
+          name: Bundle
+          path: app/build/outputs/bundle/debug/*.aab
