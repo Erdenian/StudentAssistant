@@ -90,7 +90,7 @@
 
     <fragment
         android:id="@+id/nav_fragment_help"
-        android:name="ru.erdenian.studentassistant.ui.help.HelpFragment"
+        android:name="ru.erdenian.studentassistant.ui.main.help.HelpFragment"
         android:label="@string/hlpf_title"
         tools:layout="@layout/fragment_help" />
 
