@@ -19,3 +19,11 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# region AndroidX Navigation
+-keepnames class androidx.navigation.fragment.NavHostFragment
+
+-keepnames class ru.erdenian.studentassistant.entity.Semester
+-keepnames class ru.erdenian.studentassistant.entity.Lesson
+-keepnames class ru.erdenian.studentassistant.entity.Homework
+# endregion
