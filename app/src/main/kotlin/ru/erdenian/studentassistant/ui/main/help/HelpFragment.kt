@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.help
+package ru.erdenian.studentassistant.ui.main.help
 
 import android.os.Bundle
 import android.view.View
