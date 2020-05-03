@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -26,12 +28,61 @@ android {
 
     viewBinding { isEnabled = true }
 
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+    signingConfigs {
+        val localProperties = File("${rootDir.path}/local.properties").run {
+            if (exists()) Properties().apply { load(inputStream()) } else null
+        }
+        val environment = System.getenv()
+        fun get(env: String, local: String) = environment[env] ?: run {
+            project.logger.warn("WARNING: No $env environmental variable")
+            localProperties?.getProperty(local) ?: run {
+                project.logger.warn("WARNING: No $local local property")
+                null
+            }
+        }
+
+        data class Keystore(
+            val storeFile: File,
+            val storePassword: String,
+            val keyAlias: String,
+            val keyPassword: String
+        )
+
+        fun getReleaseKeystore(): Keystore? {
+            return Keystore(
+                rootProject.file("signing/release.jks"),
+                get("ANDROID_KEYSTORE_PASSWORD", "signing.keystorePassword") ?: return null,
+                get("ANDROID_KEY_ALIAS", "signing.keyAlias") ?: return null,
+                get("ANDROID_KEY_PASSWORD", "signing.keyPassword") ?: return null
             )
+        }
+
+        getByName("debug") {
+            storeFile = rootProject.file("signing/debug.jks")
+            storePassword = "debugdebug"
+            keyAlias = "debug"
+            keyPassword = "debugdebug"
+        }
+
+        getReleaseKeystore()?.let { keystore ->
+            create("release") {
+                storeFile = keystore.storeFile
+                storePassword = keystore.storePassword
+                keyAlias = keystore.keyAlias
+                keyPassword = keystore.keyPassword
+            }
+        } ?: project.logger.warn("WARNING: Can't create release signing config")
+    }
+
+    buildTypes {
+        getByName("debug") {
+            signingConfig = checkNotNull(signingConfigs.findByName("debug"))
+        }
+        getByName("release") {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.findByName("release")
         }
     }
 
