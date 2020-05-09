@@ -80,7 +80,9 @@ class LessonInformationFragment : Fragment(R.layout.fragment_lesson_information)
         }
 
         binding.addHomework.setOnClickListener {
-            LessonInformationFragmentDirections.createHomework(checkNotNull(viewModel.lesson.value))
+            findNavController().navigate(
+                LessonInformationFragmentDirections.createHomework(checkNotNull(viewModel.lesson.value))
+            )
         }
 
         viewModel.lesson.observe(owner) { if (it == null) findNavController().popBackStack() }
