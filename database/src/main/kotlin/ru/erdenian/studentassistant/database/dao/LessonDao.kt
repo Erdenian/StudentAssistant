@@ -9,7 +9,6 @@ import androidx.room.Transaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.joda.time.LocalTime
-import org.joda.time.Period
 import ru.erdenian.studentassistant.database.entity.ByDateEntity
 import ru.erdenian.studentassistant.database.entity.ByWeekdayEntity
 import ru.erdenian.studentassistant.database.entity.ClassroomEntity
@@ -157,31 +156,8 @@ abstract class LessonDao {
     @Query("SELECT DISTINCT c.name FROM classrooms AS c INNER JOIN lessons AS l ON l._id = c.lesson_id WHERE l.semester_id = :semesterId ORDER BY c.name")
     abstract fun getClassroomsLiveData(semesterId: Long): LiveData<List<String>>
 
-    @Query("SELECT end_time - start_time as duration FROM lessons WHERE semester_id = :semesterId GROUP BY duration ORDER BY COUNT(duration) DESC LIMIT 1")
-    abstract suspend fun getDuration(semesterId: Long): Period?
-
-    @Transaction
-    open suspend fun getNextStartTime(
-        semesterId: Long,
-        weekday: Int,
-        defaultBreakLength: Period
-    ): LocalTime? = withContext(Dispatchers.IO) {
-        val lessons = getNextStartTimeRaw(semesterId).filter { it.lessonRepeat is ByWeekdayEntity }
-        val breakLength = lessons
-            .groupBy { (it.lessonRepeat as ByWeekdayEntity).weekday }.values.asSequence()
-            .flatMap { list ->
-                list.asSequence()
-                    .zipWithNext()
-                    .map { (a, b) -> Period.fieldDifference(a.endTime, b.startTime) }
-            }.groupingBy { it.normalizedStandard() }
-            .eachCount()
-            .maxBy { it.value }?.key ?: defaultBreakLength
-        lessons.lastOrNull()?.run { endTime + breakLength }
-    }
-
-    @Transaction
-    @Query("SELECT * FROM lessons WHERE semester_id = :semesterId ORDER BY start_time, end_time, _id")
-    protected abstract suspend fun getNextStartTimeRaw(semesterId: Long): List<FullLesson>
+    @Query("SELECT l.end_time FROM lessons AS l INNER JOIN by_weekday AS w ON w.lesson_id = l._id WHERE l.semester_id = :semesterId AND w.weekday = :weekday ORDER BY end_time DESC LIMIT 1")
+    abstract suspend fun getLastEndTime(semesterId: Long, weekday: Int): LocalTime?
 
     // endregion
 }
