@@ -21,7 +21,7 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
-    viewBinding { isEnabled = true }
+    buildFeatures.viewBinding = true
 
     buildTypes {
         getByName("release") {
@@ -57,7 +57,7 @@ dependencies {
     // endregion
 
     // region AndroidX
-    api("androidx.core:core-ktx:1.2.0")
+    api("androidx.core:core-ktx:1.3.0")
 
     api("androidx.fragment:fragment-ktx:1.2.4")
 

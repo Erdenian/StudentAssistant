@@ -26,7 +26,7 @@ android {
         setProperty("archivesBaseName", "${rootProject.name}-$versionName")
     }
 
-    viewBinding { isEnabled = true }
+    buildFeatures.viewBinding = true
 
     signingConfigs {
         val localProperties = File("${rootDir.path}/local.properties").run {
@@ -132,6 +132,6 @@ dependencies {
 
     // region UI
     implementation("net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC2")
-    implementation("com.github.DavidProdinger:weekdays-selector:1.1.0")
+    implementation("com.github.DavidProdinger:weekdays-selector:1.1.1")
     // endregion
 }
