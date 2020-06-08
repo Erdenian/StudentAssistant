@@ -24,6 +24,7 @@ import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 import ru.erdenian.studentassistant.repository.HomeworkRepository
 import ru.erdenian.studentassistant.repository.LessonRepository
+import ru.erdenian.studentassistant.repository.SettingsRepository
 import ru.erdenian.studentassistant.utils.toSingleLine
 import kotlin.reflect.KClass
 
@@ -36,6 +37,7 @@ class LessonEditorViewModel private constructor(
     override val kodein by kodein()
     private val lessonRepository by instance<LessonRepository>()
     private val homeworkRepository by instance<HomeworkRepository>()
+    private val settingsRepository by instance<SettingsRepository>()
 
     enum class Error {
         EMPTY_SUBJECT_NAME,
@@ -111,7 +113,7 @@ class LessonEditorViewModel private constructor(
             val previous = previousStartTime
             val endTime = value
             if ((previous == null) || (endTime == null)) viewModelScope.launch {
-                value = startTime + lessonRepository.getDuration(semesterId)
+                value = startTime + settingsRepository.defaultLessonDuration
             } else value = startTime + Period.fieldDifference(previous, endTime)
             previousStartTime = startTime
         }
