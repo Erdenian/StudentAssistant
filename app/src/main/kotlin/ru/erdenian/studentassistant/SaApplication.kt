@@ -2,7 +2,6 @@ package ru.erdenian.studentassistant
 
 import android.app.Application
 import org.joda.time.LocalTime
-import org.joda.time.Period
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
@@ -18,9 +17,7 @@ class SaApplication : Application(), KodeinAware {
             repositoryModule(
                 app,
                 "schedule.db",
-                LocalTime(9, 0),
-                Period.minutes(90),
-                Period.minutes(10)
+                LocalTime(9, 0)
             )
         )
     }
