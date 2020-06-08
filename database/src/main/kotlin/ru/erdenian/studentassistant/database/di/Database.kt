@@ -2,14 +2,14 @@ package ru.erdenian.studentassistant.database.di
 
 import android.app.Application
 import androidx.room.Room
-import org.kodein.di.Kodein
-import org.kodein.di.generic.bind
-import org.kodein.di.generic.instance
-import org.kodein.di.generic.provider
-import org.kodein.di.generic.singleton
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.instance
+import org.kodein.di.provider
+import org.kodein.di.singleton
 import ru.erdenian.studentassistant.database.ScheduleDatabase
 
-fun databaseKodein(application: Application, databaseName: String? = null) = Kodein.direct {
+fun databaseKodein(application: Application, databaseName: String? = null) = DI.direct {
     bind() from singleton {
         val builder =
             if (databaseName == null) Room.inMemoryDatabaseBuilder(application, ScheduleDatabase::class.java)

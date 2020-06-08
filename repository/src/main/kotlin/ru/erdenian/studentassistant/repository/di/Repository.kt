@@ -3,10 +3,10 @@ package ru.erdenian.studentassistant.repository.di
 import android.app.Application
 import android.content.Context
 import org.joda.time.LocalTime
-import org.kodein.di.Kodein
-import org.kodein.di.generic.bind
-import org.kodein.di.generic.instance
-import org.kodein.di.generic.singleton
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.instance
+import org.kodein.di.singleton
 import org.kodein.di.softReference
 import ru.erdenian.studentassistant.database.di.databaseKodein
 import ru.erdenian.studentassistant.repository.HomeworkRepository
@@ -19,7 +19,7 @@ fun repositoryModule(
     application: Application,
     databaseName: String? = null,
     defaultLessonStartTime: LocalTime
-) = Kodein.Module(name = "Repository") {
+) = DI.Module(name = "Repository") {
     val db = databaseKodein(application, databaseName)
 
     bind() from singleton { SelectedSemesterRepository(db.instance()) }
