@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("io.gitlab.arturbosch.detekt") version ("1.8.0")
+    id("io.gitlab.arturbosch.detekt") version ("1.9.1")
 }
 
 buildscript {
@@ -53,5 +53,5 @@ detekt {
 }
 
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.8.0")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.9.1")
 }
