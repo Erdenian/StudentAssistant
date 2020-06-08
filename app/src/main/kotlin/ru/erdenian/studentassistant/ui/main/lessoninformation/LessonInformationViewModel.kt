@@ -6,9 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.x.kodein
-import org.kodein.di.generic.instance
+import org.kodein.di.DIAware
+import org.kodein.di.android.x.di
+import org.kodein.di.instance
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 import ru.erdenian.studentassistant.repository.HomeworkRepository
@@ -18,9 +18,9 @@ import ru.erdenian.studentassistant.utils.liveDataOf
 class LessonInformationViewModel(
     application: Application,
     lesson: Lesson
-) : AndroidViewModel(application), KodeinAware {
+) : AndroidViewModel(application), DIAware {
 
-    override val kodein by kodein()
+    override val di by di()
     private val lessonRepository by instance<LessonRepository>()
     private val homeworkRepository by instance<HomeworkRepository>()
 

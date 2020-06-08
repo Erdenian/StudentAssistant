@@ -16,9 +16,9 @@ import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 import org.joda.time.Period
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.x.kodein
-import org.kodein.di.generic.instance
+import org.kodein.di.DIAware
+import org.kodein.di.android.x.di
+import org.kodein.di.instance
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 import ru.erdenian.studentassistant.entity.toImmutableSortedSet
@@ -32,9 +32,9 @@ class LessonEditorViewModel private constructor(
     application: Application,
     private val semesterId: Long,
     private val lesson: Lesson?
-) : AndroidViewModel(application), KodeinAware {
+) : AndroidViewModel(application), DIAware {
 
-    override val kodein by kodein()
+    override val di by di()
     private val lessonRepository by instance<LessonRepository>()
     private val homeworkRepository by instance<HomeworkRepository>()
     private val settingsRepository by instance<SettingsRepository>()

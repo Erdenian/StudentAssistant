@@ -2,16 +2,16 @@ package ru.erdenian.studentassistant
 
 import android.app.Application
 import org.joda.time.LocalTime
-import org.kodein.di.Kodein
-import org.kodein.di.KodeinAware
-import org.kodein.di.generic.instance
+import org.kodein.di.DI
+import org.kodein.di.DIAware
+import org.kodein.di.instance
 import ru.erdenian.studentassistant.repository.SelectedSemesterRepository
 import ru.erdenian.studentassistant.repository.di.repositoryModule
 
-class SaApplication : Application(), KodeinAware {
+class SaApplication : Application(), DIAware {
 
     @Suppress("MagicNumber")
-    override val kodein by Kodein.lazy {
+    override val di by DI.lazy {
         val app = this@SaApplication
         import(
             repositoryModule(
@@ -25,7 +25,7 @@ class SaApplication : Application(), KodeinAware {
     override fun onCreate() {
         super.onCreate()
 
-        val selectedSemesterRepository by kodein.instance<SelectedSemesterRepository>()
+        val selectedSemesterRepository by di.instance<SelectedSemesterRepository>()
         selectedSemesterRepository.activate()
     }
 }
