@@ -6,7 +6,7 @@ import org.joda.time.LocalDate
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.kodein.di.generic.instance
+import org.kodein.di.instance
 import ru.erdenian.studentassistant.database.ScheduleDatabase
 import ru.erdenian.studentassistant.database.di.databaseKodein
 import ru.erdenian.studentassistant.database.entity.SemesterEntity
@@ -14,9 +14,9 @@ import ru.erdenian.studentassistant.database.utils.await
 
 internal class SemesterDaoAndroidTest {
 
-    private val kodein = databaseKodein(ApplicationProvider.getApplicationContext())
-    private val database: ScheduleDatabase = kodein.instance()
-    private val semesterDao: SemesterDao = kodein.instance()
+    private val di = databaseKodein(ApplicationProvider.getApplicationContext())
+    private val database: ScheduleDatabase = di.instance()
+    private val semesterDao: SemesterDao = di.instance()
 
     @AfterEach
     fun tearDown() = database.close()

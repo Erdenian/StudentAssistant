@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.kodein.di.generic.instance
+import org.kodein.di.instance
 import ru.erdenian.studentassistant.database.ScheduleDatabase
 import ru.erdenian.studentassistant.database.di.databaseKodein
 import ru.erdenian.studentassistant.database.entity.ByDateEntity
@@ -25,14 +25,14 @@ import ru.erdenian.studentassistant.database.utils.await
 
 internal class LessonDaoAndroidTest {
 
-    private val kodein = databaseKodein(ApplicationProvider.getApplicationContext())
-    private val lessonDao: LessonDao = kodein.instance()
+    private val di = databaseKodein(ApplicationProvider.getApplicationContext())
+    private val lessonDao: LessonDao = di.instance()
 
     private val semesterId = 1L
 
     @BeforeEach
     fun setUp(): Unit = runBlocking {
-        kodein.instance<SemesterDao>().insert(
+        di.instance<SemesterDao>().insert(
             SemesterEntity(
                 "name",
                 LocalDate(2020, 1, 1),
@@ -43,7 +43,7 @@ internal class LessonDaoAndroidTest {
     }
 
     @AfterEach
-    fun tearDown() = kodein.instance<ScheduleDatabase>().close()
+    fun tearDown() = di.instance<ScheduleDatabase>().close()
 
     @Test
     fun insertTest() = runBlocking {
