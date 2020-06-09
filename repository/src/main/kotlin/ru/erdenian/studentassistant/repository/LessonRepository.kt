@@ -21,8 +21,7 @@ import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 class LessonRepository(
     private val lessonDao: LessonDao,
     private val selectedSemesterRepository: SelectedSemesterRepository,
-    private val settingsRepository: SettingsRepository,
-    private val defaultStartTime: LocalTime
+    private val settingsRepository: SettingsRepository
 ) {
 
     // region Primary actions
@@ -147,8 +146,9 @@ class LessonRepository(
 
     fun getClassrooms(semesterId: Long): LiveData<ImmutableSortedSet<String>> = lessonDao.getClassroomsLiveData(semesterId).map()
 
-    suspend fun getNextStartTime(semesterId: Long, weekday: Int): LocalTime =
-        lessonDao.getLastEndTime(semesterId, weekday)?.let { it + settingsRepository.defaultBreakDuration } ?: defaultStartTime
+    suspend fun getNextStartTime(semesterId: Long, weekday: Int): LocalTime = lessonDao.getLastEndTime(semesterId, weekday)
+        ?.let { it + settingsRepository.defaultBreakDuration }
+        ?: settingsRepository.defaultStartTime
 
     // endregion
 
