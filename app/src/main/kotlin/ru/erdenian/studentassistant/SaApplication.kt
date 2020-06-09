@@ -1,7 +1,6 @@
 package ru.erdenian.studentassistant
 
 import android.app.Application
-import org.joda.time.LocalTime
 import org.kodein.di.DI
 import org.kodein.di.DIAware
 import org.kodein.di.instance
@@ -13,13 +12,7 @@ class SaApplication : Application(), DIAware {
     @Suppress("MagicNumber")
     override val di by DI.lazy {
         val app = this@SaApplication
-        import(
-            repositoryModule(
-                app,
-                "schedule.db",
-                LocalTime(9, 0)
-            )
-        )
+        import(repositoryModule(app, "schedule.db"))
     }
 
     override fun onCreate() {
