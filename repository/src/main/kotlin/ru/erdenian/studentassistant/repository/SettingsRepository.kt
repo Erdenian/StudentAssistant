@@ -21,20 +21,22 @@ class SettingsRepository(private val sharedPreferences: SharedPreferences) {
     }
 
     var defaultLessonDuration: Period
-        get() = Period.millis(sharedPreferences.getInt(DEFAULT_LESSON_DURATION, DEFAULT_LESSON_DURATION_MILLIS))
+        get() = sharedPreferences.getInt(DEFAULT_LESSON_DURATION, DEFAULT_LESSON_DURATION_MILLIS).let(Period::millis)
         set(value) = sharedPreferences.edit { putInt(DEFAULT_LESSON_DURATION, value.millis) }
 
     val defaultLessonDurationLiveData: LiveData<Period> = sharedPreferences
         .getIntLiveData(DEFAULT_LESSON_DURATION)
-        .map { Period.millis(it ?: DEFAULT_LESSON_DURATION_MILLIS) }
+        .map { it ?: DEFAULT_LESSON_DURATION_MILLIS }
+        .map(Period::millis)
 
     var defaultBreakDuration: Period
-        get() = Period.millis(sharedPreferences.getInt(DEFAULT_BREAK_DURATION, DEFAULT_BREAK_DURATION_MILLIS))
+        get() = sharedPreferences.getInt(DEFAULT_BREAK_DURATION, DEFAULT_BREAK_DURATION_MILLIS).let(Period::millis)
         set(value) = sharedPreferences.edit { putInt(DEFAULT_BREAK_DURATION, value.millis) }
 
     val defaultBreakDurationLiveData: LiveData<Period> = sharedPreferences
         .getIntLiveData(DEFAULT_BREAK_DURATION)
-        .map { Period.millis(it ?: DEFAULT_BREAK_DURATION_MILLIS) }
+        .map { it ?: DEFAULT_BREAK_DURATION_MILLIS }
+        .map(Period::millis)
 
     var defaultStartTime: LocalTime
         get() = sharedPreferences.getInt(DEFAULT_START_TIME, DEFAULT_START_TIME_MILLIS).let(LocalTime.MIDNIGHT::plusMillis)
@@ -42,5 +44,6 @@ class SettingsRepository(private val sharedPreferences: SharedPreferences) {
 
     val defaultStartTimeLiveData: LiveData<LocalTime> = sharedPreferences
         .getIntLiveData(DEFAULT_START_TIME)
-        .map { LocalTime.MIDNIGHT.plusMillis(it ?: DEFAULT_START_TIME_MILLIS) }
+        .map { it ?: DEFAULT_START_TIME_MILLIS }
+        .map(LocalTime.MIDNIGHT::plusMillis)
 }
