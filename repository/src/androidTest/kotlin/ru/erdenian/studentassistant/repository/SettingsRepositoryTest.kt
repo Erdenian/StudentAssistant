@@ -5,8 +5,8 @@ import androidx.core.content.edit
 import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import org.joda.time.Duration
 import org.joda.time.LocalTime
-import org.joda.time.Period
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -23,24 +23,18 @@ class SettingsRepositoryTest {
 
     @Test
     fun defaultLessonDurationTest() = runBlocking(Dispatchers.Main) {
-        assertEquals(
-            Period.minutes(90).normalizedStandard(),
-            settingsRepository.defaultLessonDuration.normalizedStandard()
-        )
-        val newDuration = Period.hours(2)
+        assertEquals(Duration.standardMinutes(90), settingsRepository.defaultLessonDuration)
+        val newDuration = Duration.standardMinutes(120)
         settingsRepository.defaultLessonDuration = newDuration
-        assertEquals(newDuration.normalizedStandard(), settingsRepository.defaultLessonDuration.normalizedStandard())
+        assertEquals(newDuration, settingsRepository.defaultLessonDuration)
     }
 
     @Test
     fun defaultBreakDurationTest() = runBlocking(Dispatchers.Main) {
-        assertEquals(
-            Period.minutes(10).normalizedStandard(),
-            settingsRepository.defaultBreakDuration.normalizedStandard()
-        )
-        val newDuration = Period.hours(1)
+        assertEquals(Duration.standardMinutes(10), settingsRepository.defaultBreakDuration)
+        val newDuration = Duration.standardMinutes(20)
         settingsRepository.defaultBreakDuration = newDuration
-        assertEquals(newDuration.normalizedStandard(), settingsRepository.defaultBreakDuration.normalizedStandard())
+        assertEquals(newDuration, settingsRepository.defaultBreakDuration)
     }
 
     @Test
