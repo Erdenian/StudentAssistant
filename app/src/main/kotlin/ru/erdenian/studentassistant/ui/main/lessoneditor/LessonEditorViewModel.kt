@@ -113,7 +113,7 @@ class LessonEditorViewModel private constructor(
             val previous = previousStartTime
             val endTime = value
             if ((previous == null) || (endTime == null)) viewModelScope.launch {
-                value = startTime + settingsRepository.defaultLessonDuration
+                value = startTime + settingsRepository.defaultLessonDuration.toPeriod()
             } else value = startTime + Period.fieldDifference(previous, endTime)
             previousStartTime = startTime
         }

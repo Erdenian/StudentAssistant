@@ -4,7 +4,6 @@ import androidx.room.TypeConverter
 import org.joda.time.Days
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
-import org.joda.time.Period
 
 object Converters {
 
@@ -34,8 +33,4 @@ object Converters {
     @TypeConverter
     @JvmStatic
     fun stringToBooleanList(value: String?): List<Boolean>? = value?.map { it == '1' }
-
-    @TypeConverter
-    @JvmStatic
-    fun intToPeriod(value: Int?): Period? = value?.let { Period.millis(it) }
 }
