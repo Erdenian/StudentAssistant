@@ -6,7 +6,6 @@ import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
-import org.joda.time.Period
 import ru.erdenian.studentassistant.database.dao.LessonDao
 import ru.erdenian.studentassistant.database.entity.ByDateEntity
 import ru.erdenian.studentassistant.database.entity.ByWeekdayEntity
@@ -22,9 +21,7 @@ import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 class LessonRepository(
     private val lessonDao: LessonDao,
     private val selectedSemesterRepository: SelectedSemesterRepository,
-    private val defaultStartTime: LocalTime,
-    private val defaultDuration: Period,
-    private val defaultBreakLength: Period
+    private val settingsRepository: SettingsRepository
 ) {
 
     // region Primary actions
@@ -149,10 +146,9 @@ class LessonRepository(
 
     fun getClassrooms(semesterId: Long): LiveData<ImmutableSortedSet<String>> = lessonDao.getClassroomsLiveData(semesterId).map()
 
-    suspend fun getDuration(semesterId: Long): Period = lessonDao.getDuration(semesterId) ?: defaultDuration
-
-    suspend fun getNextStartTime(semesterId: Long, weekday: Int): LocalTime =
-        lessonDao.getNextStartTime(semesterId, weekday, defaultBreakLength) ?: defaultStartTime
+    suspend fun getNextStartTime(semesterId: Long, weekday: Int): LocalTime = lessonDao.getLastEndTime(semesterId, weekday)
+        ?.plusMillis(settingsRepository.defaultBreakDuration.millis.toInt())
+        ?: settingsRepository.defaultStartTime
 
     // endregion
 

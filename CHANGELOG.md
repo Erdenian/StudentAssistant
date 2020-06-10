@@ -6,11 +6,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - 2020-06-10
+
+### Fixed
+- Создание домашнего задания из LessonInformationFragment
+- Обновление меню на некоторых фрагментах
+- Пустое пространство в CheckBoxWithText
+- Переход к следующему полю в LessonEditorFragment
+
+### Changed
+- Верстка SemesterEditorFragment
+- Верстка LessonEditorFragment
+- Верстка HomeworkEditorFragment
+
 ## [0.4.0] - 2020-05-03
 
 Первый релиз в Google Play
 
-[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/0.4.0...develop
+[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/0.4.1...develop
+[0.4.1]: https://github.com/Erdenian/StudentAssistant/compare/0.4.0...0.4.1
 [0.4.0]: https://github.com/Erdenian/StudentAssistant/compare/0.3.1...0.4.0
 [0.3.1]: https://github.com/Erdenian/StudentAssistant/compare/0.3.0...0.3.1
 [0.3.0]: https://github.com/Erdenian/StudentAssistant/compare/0.2.9...0.3.0

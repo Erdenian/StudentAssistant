@@ -12,4 +12,6 @@
     <dimen name="divider_margin">4dp</dimen>
     <dimen name="divider_margin_top_bottom">4dp</dimen>
 
+    <dimen name="weeks_selector_checkbox_padding">6dp</dimen>
+
 </resources>
