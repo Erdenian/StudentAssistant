@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
-- Исправлено создание домашнего задания из LessonInformationFragment
+- Создание домашнего задания из LessonInformationFragment
+- Обновление меню на некоторых фрагментах
 
 ### Changed
 - Верстка SemesterEditorFragment

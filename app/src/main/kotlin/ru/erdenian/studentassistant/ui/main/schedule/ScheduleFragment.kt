@@ -47,8 +47,9 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val owner = viewLifecycleOwner
+        setHasOptionsMenu(true)
 
-        viewModel.selectedSemester.observe(owner) { setHasOptionsMenu(true) }
+        viewModel.selectedSemester.observe(owner) { requireActivity().invalidateOptionsMenu() }
 
         (requireActivity() as AppCompatActivity).apply {
             setSupportActionBar(binding.toolbar)
