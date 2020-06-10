@@ -10,18 +10,18 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.x.kodein
-import org.kodein.di.generic.instance
+import org.kodein.di.DIAware
+import org.kodein.di.android.x.di
+import org.kodein.di.instance
 import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.repository.SemesterRepository
 
 class SemesterEditorViewModel(
     application: Application,
     private val semester: Semester?
-) : AndroidViewModel(application), KodeinAware {
+) : AndroidViewModel(application), DIAware {
 
-    override val kodein by kodein()
+    override val di by di()
     private val semesterRepository by instance<SemesterRepository>()
 
     enum class Error {

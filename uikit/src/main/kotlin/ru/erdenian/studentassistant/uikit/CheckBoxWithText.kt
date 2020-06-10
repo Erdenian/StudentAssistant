@@ -2,6 +2,7 @@ package ru.erdenian.studentassistant.uikit
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.Gravity
 import android.widget.CheckBox
 import android.widget.CompoundButton
@@ -27,8 +28,19 @@ class CheckBoxWithText @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private val checkBox = AppCompatCheckBox(context)
-    private val textView = AppCompatTextView(context).apply { gravity = Gravity.CENTER_HORIZONTAL }
+    private val checkBox = AppCompatCheckBox(context).apply {
+        // Костыль для того, чтобы убрать пустое пространство под текст
+        val size = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            @Suppress("MagicNumber") 32.0f,
+            context.resources.displayMetrics
+        ).toInt()
+        layoutParams = LayoutParams(size, size)
+    }
+    private val textView = AppCompatTextView(context).apply {
+        gravity = Gravity.CENTER_HORIZONTAL
+        setOnClickListener { checkBox.toggle() }
+    }
 
     var isChecked: Boolean
         get() = checkBox.isChecked

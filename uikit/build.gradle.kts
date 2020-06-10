@@ -21,7 +21,7 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
-    viewBinding { isEnabled = true }
+    buildFeatures.viewBinding = true
 
     buildTypes {
         getByName("release") {
@@ -61,6 +61,6 @@ dependencies {
     // endregion
 
     // region UI
-    api("com.google.android.material:material:1.2.0-alpha06")
+    api("com.google.android.material:material:1.2.0-beta01")
     // endregion
 }

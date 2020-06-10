@@ -38,6 +38,8 @@
     <string name="sef_title_new">Добавление расписания</string>
     <string name="sef_title_edit">Данные расписания</string>
     <string name="sef_name">Название</string>
+    <string name="sef_first_day">Первый день</string>
+    <string name="sef_last_day">Последний день</string>
     <string name="sef_save">Сохранить</string>
     <string name="sef_error_empty_name">Имя не может быть пустым</string>
     <string name="sef_error_name_not_available">Такое имя уже занято</string>
@@ -61,6 +63,8 @@
     <string name="lef_type">Тип занятия</string>
     <string name="lef_teachers">Преподаватели</string>
     <string name="lef_classrooms">Аудитории</string>
+    <string name="lef_start_time">Время начала</string>
+    <string name="lef_end_time">Время конца</string>
     <string name="lef_repeat_type">Когда повторять</string>
     <string name="lef_save">Сохранить</string>
     <string name="lef_error_empty_subject_name">Введите название занятия</string>
@@ -83,9 +87,9 @@
 
     <!-- HomeworkEditorFragment -->
     <string name="hef_title">Редактор задания</string>
-    <string name="hef_subject">Выберите предмет</string>
+    <string name="hef_subject">Предмет</string>
     <string name="hef_description">Описание</string>
-    <string name="hef_deadline">Выберите дату сдачи</string>
+    <string name="hef_deadline_label">Дата сдачи</string>
     <string name="hef_save">Сохранить</string>
     <string name="hef_error_empty_subject_name">Введите или выберите предмет</string>
     <string name="hef_error_empty_description">Введите описание домашнего задания</string>

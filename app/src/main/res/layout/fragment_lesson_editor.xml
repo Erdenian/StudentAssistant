@@ -38,12 +38,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/lef_subject_name"
+                    android:imeOptions="actionNext"
                     android:inputType="text|textCapSentences"
-                    android:maxLines="1">
-
-                    <requestFocus />
-
-                </AutoCompleteTextView>
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -57,6 +54,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/lef_type"
+                    android:imeOptions="actionNext"
                     android:inputType="text|textCapSentences"
                     android:maxLines="1" />
 
@@ -72,6 +70,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/lef_teachers"
+                    android:imeOptions="actionNext"
                     android:inputType="text|textCapWords"
                     android:maxLines="1" />
 
@@ -87,16 +86,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/lef_classrooms"
+                    android:imeOptions="actionDone"
                     android:inputType="text"
                     android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <GridLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:orientation="horizontal">
+                android:columnCount="2">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:text="@string/lef_start_time" />
 
                 <Button
                     android:id="@+id/start_time"
@@ -106,10 +113,10 @@
                     tools:text="09:00" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text=" - "
-                    tools:ignore="HardcodedText" />
+                    android:layout_columnWeight="1"
+                    android:text="@string/lef_end_time" />
 
                 <Button
                     android:id="@+id/end_time"
@@ -118,7 +125,7 @@
                     android:layout_height="wrap_content"
                     tools:text="10:30" />
 
-            </LinearLayout>
+            </GridLayout>
 
             <Spinner
                 android:id="@+id/repeat_type"
@@ -128,10 +135,13 @@
                 android:visibility="gone"
                 tools:visibility="visible" />
 
+            <include layout="@layout/divider_horizontal" />
+
             <ViewFlipper
                 android:id="@+id/repeat_type_flipper"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -142,12 +152,16 @@
                         android:id="@+id/weekday"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
                         app:sunday_first_day="false" />
+
+                    <include layout="@layout/divider_horizontal" />
 
                     <ru.erdenian.studentassistant.uikit.WeeksSelector
                         android:id="@+id/weeks_selector"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp" />
 
                 </LinearLayout>
 

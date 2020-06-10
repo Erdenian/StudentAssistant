@@ -16,14 +16,15 @@ import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 import org.joda.time.Period
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.x.kodein
-import org.kodein.di.generic.instance
+import org.kodein.di.DIAware
+import org.kodein.di.android.x.di
+import org.kodein.di.instance
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 import ru.erdenian.studentassistant.repository.HomeworkRepository
 import ru.erdenian.studentassistant.repository.LessonRepository
+import ru.erdenian.studentassistant.repository.SettingsRepository
 import ru.erdenian.studentassistant.utils.toSingleLine
 import kotlin.reflect.KClass
 
@@ -31,11 +32,12 @@ class LessonEditorViewModel private constructor(
     application: Application,
     private val semesterId: Long,
     private val lesson: Lesson?
-) : AndroidViewModel(application), KodeinAware {
+) : AndroidViewModel(application), DIAware {
 
-    override val kodein by kodein()
+    override val di by di()
     private val lessonRepository by instance<LessonRepository>()
     private val homeworkRepository by instance<HomeworkRepository>()
+    private val settingsRepository by instance<SettingsRepository>()
 
     enum class Error {
         EMPTY_SUBJECT_NAME,
@@ -111,7 +113,7 @@ class LessonEditorViewModel private constructor(
             val previous = previousStartTime
             val endTime = value
             if ((previous == null) || (endTime == null)) viewModelScope.launch {
-                value = startTime + lessonRepository.getDuration(semesterId)
+                value = startTime + settingsRepository.defaultLessonDuration.toPeriod()
             } else value = startTime + Period.fieldDifference(previous, endTime)
             previousStartTime = startTime
         }

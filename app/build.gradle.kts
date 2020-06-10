@@ -15,8 +15,8 @@ android {
 
     defaultConfig {
         applicationId = "ru.erdenian.studentassistant"
-        versionCode = 13
-        versionName = "0.4.0"
+        versionCode = 14
+        versionName = "0.4.1"
 
         minSdkVersion(21)
         targetSdkVersion(targetSdkVersion.toInt())
@@ -26,7 +26,7 @@ android {
         setProperty("archivesBaseName", "${rootProject.name}-$versionName")
     }
 
-    viewBinding { isEnabled = true }
+    buildFeatures.viewBinding = true
 
     signingConfigs {
         val localProperties = File("${rootDir.path}/local.properties").run {
@@ -121,17 +121,18 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
 
+    implementation("androidx.constraintlayout:constraintlayout:1.1.3")
     implementation("androidx.viewpager:viewpager:1.0.0")
     // endregion
 
     // region Core
     val kodeinVersion: String by project
-    implementation("org.kodein.di:kodein-di-generic-jvm:$kodeinVersion")
+    implementation("org.kodein.di:kodein-di-jvm:$kodeinVersion")
     implementation("org.kodein.di:kodein-di-framework-android-x:$kodeinVersion")
     // endregion
 
     // region UI
     implementation("net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC2")
-    implementation("com.github.DavidProdinger:weekdays-selector:1.1.0")
+    implementation("com.github.DavidProdinger:weekdays-selector:1.1.1")
     // endregion
 }
