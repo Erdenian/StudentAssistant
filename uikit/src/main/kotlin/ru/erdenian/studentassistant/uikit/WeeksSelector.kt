@@ -2,6 +2,7 @@ package ru.erdenian.studentassistant.uikit
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -12,6 +13,7 @@ import android.widget.Spinner
 import androidx.core.content.getSystemService
 import androidx.core.view.children
 import androidx.core.view.forEach
+import androidx.core.view.setPadding
 import ru.erdenian.studentassistant.uikit.databinding.WeeksSelectorBinding
 import ru.erdenian.studentassistant.utils.setViewCount
 
@@ -65,9 +67,13 @@ class WeeksSelector @JvmOverloads constructor(
         onWeeksChangeListener?.invoke(weeks)
     }
 
+    private val checkboxPadding = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP, 6.0f, context.resources.displayMetrics
+    ).toInt()
     private val creator: ViewGroup.(position: Int) -> CheckBoxWithText = { position ->
         CheckBoxWithText(context).apply {
             text = (position + 1).toString()
+            setPadding(checkboxPadding)
             setOnCheckedChangeListener(onCheckedChangeListener)
         }
     }
@@ -117,6 +123,9 @@ class WeeksSelector @JvmOverloads constructor(
 
     var onWeeksChangeListener: ((weeks: List<Boolean>) -> Unit)? = null
 
+    private val enabledTint = binding.remove.imageTintList
+    private val disabledTint = binding.add.imageTintList
+
     init {
         orientation = VERTICAL
 
@@ -141,12 +150,12 @@ class WeeksSelector @JvmOverloads constructor(
 
         binding.remove.setOnClickListener {
             binding.weeksParent.setViewCount(binding.weeksParent.childCount - 1, creator)
-            binding.remove.isEnabled = binding.weeksParent.childCount > 1
+            setCustomEnabled(true)
             onWeeksChangeListener?.invoke(weeks)
         }
         binding.add.setOnClickListener {
             binding.weeksParent.setViewCount(binding.weeksParent.childCount + 1, creator)
-            binding.remove.isEnabled = true
+            setCustomEnabled(true)
             binding.scroll.post { binding.scroll.fullScroll(HorizontalScrollView.FOCUS_RIGHT) }
             onWeeksChangeListener?.invoke(weeks)
         }
@@ -162,8 +171,14 @@ class WeeksSelector @JvmOverloads constructor(
      * @since 0.2.6
      */
     private fun setCustomEnabled(enabled: Boolean) {
-        binding.remove.isEnabled = enabled && binding.weeksParent.childCount > 1
-        binding.add.isEnabled = enabled
+        binding.remove.apply {
+            isEnabled = (enabled && binding.weeksParent.childCount > 1)
+            imageTintList = (if (isEnabled) enabledTint else disabledTint)
+        }
+        binding.add.apply {
+            isEnabled = enabled
+            imageTintList = (if (isEnabled) enabledTint else disabledTint)
+        }
         binding.weeksParent.forEach { it.isEnabled = enabled }
     }
 }

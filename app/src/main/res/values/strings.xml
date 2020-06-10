@@ -63,6 +63,8 @@
     <string name="lef_type">Тип занятия</string>
     <string name="lef_teachers">Преподаватели</string>
     <string name="lef_classrooms">Аудитории</string>
+    <string name="lef_start_time">Время начала</string>
+    <string name="lef_end_time">Время конца</string>
     <string name="lef_repeat_type">Когда повторять</string>
     <string name="lef_save">Сохранить</string>
     <string name="lef_error_empty_subject_name">Введите название занятия</string>
