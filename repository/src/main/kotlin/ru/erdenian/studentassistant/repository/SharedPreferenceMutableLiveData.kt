@@ -1,6 +1,7 @@
 package ru.erdenian.studentassistant.repository
 
 import android.content.SharedPreferences
+import android.os.Looper
 import androidx.core.content.edit
 import androidx.lifecycle.MutableLiveData
 
@@ -23,7 +24,12 @@ private abstract class SharedPreferenceMutableLiveData<T>(
 
     protected abstract var sharedValue: T
 
-    private val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, k -> if (k == key) value = sharedValue }
+    private val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, k ->
+        if (k != key) return@OnSharedPreferenceChangeListener
+
+        if (Looper.myLooper() == Looper.getMainLooper()) value = sharedValue
+        else postValue(sharedValue)
+    }
 
     init {
         listener.onSharedPreferenceChanged(sharedPreferences, key)
