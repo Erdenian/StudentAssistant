@@ -22,7 +22,7 @@ class SettingsRepository(private val sharedPreferences: SharedPreferences) {
 
     var defaultLessonDuration: Period
         get() = sharedPreferences.getInt(DEFAULT_LESSON_DURATION, DEFAULT_LESSON_DURATION_MILLIS).let(Period::millis)
-        set(value) = sharedPreferences.edit { putInt(DEFAULT_LESSON_DURATION, value.millis) }
+        set(value) = sharedPreferences.edit { putInt(DEFAULT_LESSON_DURATION, value.toStandardDuration().millis.toInt()) }
 
     val defaultLessonDurationLiveData: LiveData<Period> = sharedPreferences
         .getIntLiveData(DEFAULT_LESSON_DURATION)
@@ -31,7 +31,7 @@ class SettingsRepository(private val sharedPreferences: SharedPreferences) {
 
     var defaultBreakDuration: Period
         get() = sharedPreferences.getInt(DEFAULT_BREAK_DURATION, DEFAULT_BREAK_DURATION_MILLIS).let(Period::millis)
-        set(value) = sharedPreferences.edit { putInt(DEFAULT_BREAK_DURATION, value.millis) }
+        set(value) = sharedPreferences.edit { putInt(DEFAULT_BREAK_DURATION, value.toStandardDuration().millis.toInt()) }
 
     val defaultBreakDurationLiveData: LiveData<Period> = sharedPreferences
         .getIntLiveData(DEFAULT_BREAK_DURATION)
