@@ -15,7 +15,8 @@ class SelectedSemesterRepository(semesterDao: SemesterDao) {
         var previousSemesters = emptyList<SemesterEntity>()
 
         addSource(semesterDao.getAllLiveData()) { semesters ->
-            fun List<Semester>.default() = find { LocalDate.now() in it.firstDay..it.lastDay } ?: semesters.lastOrNull()
+            val now = LocalDate.now()
+            fun List<Semester>.default() = find { now in it.firstDay..it.lastDay } ?: lastOrNull()
 
             value = when {
                 (value == null) -> semesters.default()

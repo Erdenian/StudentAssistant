@@ -35,11 +35,20 @@
 
         <ImageButton
             android:id="@+id/remove"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_weight="0"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:tint="?colorSecondary"
             app:srcCompat="@drawable/ic_minus"
             tools:ignore="ContentDescription" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@color/divider" />
 
         <HorizontalScrollView
             android:id="@+id/scroll"
@@ -56,6 +65,7 @@
                 <ru.erdenian.studentassistant.uikit.CheckBoxWithText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/weeks_selector_checkbox_padding"
                     app:checked="true"
                     app:text="1" />
 
@@ -63,11 +73,20 @@
 
         </HorizontalScrollView>
 
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@color/divider" />
+
         <ImageButton
             android:id="@+id/add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_weight="0"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:tint="?colorButtonNormal"
             app:srcCompat="@drawable/ic_plus"
             tools:ignore="ContentDescription" />
 

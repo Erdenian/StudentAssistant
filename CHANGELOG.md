@@ -6,7 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Исправлено создание домашнего задания из LessonInformationFragment
+### Fixed
+- Создание домашнего задания из LessonInformationFragment
+- Обновление меню на некоторых фрагментах
+- Пустое пространство в CheckBoxWithText
+- Переход к следующему полю в LessonEditorFragment
+
+### Changed
+- Верстка SemesterEditorFragment
+- Верстка LessonEditorFragment
+- Верстка HomeworkEditorFragment
 
 ## [0.4.0] - 2020-05-03
 
