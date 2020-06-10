@@ -30,7 +30,11 @@ class CheckBoxWithText @JvmOverloads constructor(
 
     private val checkBox = AppCompatCheckBox(context).apply {
         // Костыль для того, чтобы убрать пустое пространство под текст
-        val size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32.0f, context.resources.displayMetrics).toInt()
+        val size = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            @Suppress("MagicNumber") 32.0f,
+            context.resources.displayMetrics
+        ).toInt()
         layoutParams = LayoutParams(size, size)
     }
     private val textView = AppCompatTextView(context).apply {
