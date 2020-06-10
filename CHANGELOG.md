@@ -6,7 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
 - Исправлено создание домашнего задания из LessonInformationFragment
+
+### Changed
+- Верстка SemesterEditorFragment
 
 ## [0.4.0] - 2020-05-03
 
