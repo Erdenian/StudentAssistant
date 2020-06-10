@@ -45,7 +45,7 @@ class HomeworkEditorViewModel private constructor(
 
     val subjectName = MutableLiveData(lesson?.subjectName ?: homework?.subjectName ?: "")
     val description = MutableLiveData(homework?.description ?: "")
-    val deadline = MutableLiveData(homework?.deadline ?: LocalDate.now())
+    val deadline = MutableLiveData(homework?.deadline ?: LocalDate.now().plusWeeks(1))
 
     val error: LiveData<Error?> = MediatorLiveData<Error?>().apply {
         val observer = Observer<Any?> {
