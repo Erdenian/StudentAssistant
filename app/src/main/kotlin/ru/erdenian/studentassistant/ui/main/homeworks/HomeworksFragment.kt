@@ -33,8 +33,9 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = FragmentHomeworksBinding.bind(view)
         val owner = viewLifecycleOwner
+        setHasOptionsMenu(true)
 
-        viewModel.selectedSemester.observe(owner) { setHasOptionsMenu(true) }
+        viewModel.selectedSemester.observe(owner) { requireActivity().invalidateOptionsMenu() }
 
         (requireActivity() as AppCompatActivity).apply {
             setSupportActionBar(binding.toolbar)
