@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Создание домашнего задания из LessonInformationFragment
 - Обновление меню на некоторых фрагментах
 - Пустое пространство в CheckBoxWithText
+- Переход к следующему полю в LessonEditorFragment
 
 ### Changed
 - Верстка SemesterEditorFragment
