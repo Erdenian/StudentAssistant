@@ -2,7 +2,6 @@ package ru.erdenian.studentassistant.uikit
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -67,9 +66,7 @@ class WeeksSelector @JvmOverloads constructor(
         onWeeksChangeListener?.invoke(weeks)
     }
 
-    private val checkboxPadding = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP, 6.0f, context.resources.displayMetrics
-    ).toInt()
+    private val checkboxPadding = context.resources.getDimensionPixelSize(R.dimen.weeks_selector_checkbox_padding)
     private val creator: ViewGroup.(position: Int) -> CheckBoxWithText = { position ->
         CheckBoxWithText(context).apply {
             text = (position + 1).toString()
