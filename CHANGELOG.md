@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Верстка SemesterEditorFragment
 - Верстка LessonEditorFragment
+- Верстка HomeworkEditorFragment
 
 ## [0.4.0] - 2020-05-03
 
