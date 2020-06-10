@@ -87,9 +87,9 @@
 
     <!-- HomeworkEditorFragment -->
     <string name="hef_title">Редактор задания</string>
-    <string name="hef_subject">Выберите предмет</string>
+    <string name="hef_subject">Предмет</string>
     <string name="hef_description">Описание</string>
-    <string name="hef_deadline">Выберите дату сдачи</string>
+    <string name="hef_deadline_label">Дата сдачи</string>
     <string name="hef_save">Сохранить</string>
     <string name="hef_error_empty_subject_name">Введите или выберите предмет</string>
     <string name="hef_error_empty_description">Введите описание домашнего задания</string>

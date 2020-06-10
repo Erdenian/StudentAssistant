@@ -121,6 +121,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
 
+    implementation("androidx.constraintlayout:constraintlayout:1.1.3")
     implementation("androidx.viewpager:viewpager:1.0.0")
     // endregion
 
