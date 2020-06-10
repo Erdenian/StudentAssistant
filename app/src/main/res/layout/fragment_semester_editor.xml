@@ -26,11 +26,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/sef_name"
             android:inputType="text|textCapSentences"
-            android:maxLines="1">
-
-            <requestFocus />
-
-        </com.google.android.material.textfield.TextInputEditText>
+            android:maxLines="1" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
