@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <item
         android:id="@id/nav_action_schedule"
@@ -14,6 +15,8 @@
     <item
         android:id="@id/nav_action_help"
         android:icon="@drawable/ic_help_circle"
-        android:title="@string/ma_help" />
+        android:title="@string/ma_help"
+        android:visible="false"
+        tools:visible="true" />
 
 </menu>
