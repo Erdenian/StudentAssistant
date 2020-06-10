@@ -38,6 +38,8 @@
     <string name="sef_title_new">Добавление расписания</string>
     <string name="sef_title_edit">Данные расписания</string>
     <string name="sef_name">Название</string>
+    <string name="sef_first_day">Первый день</string>
+    <string name="sef_last_day">Последний день</string>
     <string name="sef_save">Сохранить</string>
     <string name="sef_error_empty_name">Имя не может быть пустым</string>
     <string name="sef_error_name_not_available">Такое имя уже занято</string>
