@@ -35,11 +35,17 @@ class LessonsEditorFragment : Fragment(R.layout.fragment_lessons_editor) {
             setSupportActionBar(binding.toolbar)
             checkNotNull(supportActionBar).apply {
                 setDisplayHomeAsUpEnabled(true)
-                setDisplayShowTitleEnabled(false)
+
+                // Todo: редактирование по датам
+                // setDisplayShowTitleEnabled(false)
+                viewModel.semester.observe(owner) { title = it?.name }
             }
         }
 
         binding.spinner.apply {
+            // Todo: редактирование по датам
+            visibility = View.GONE
+
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                     binding.flipper.displayedChild = position

@@ -13,9 +13,7 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = FragmentHelpBinding.bind(view)
 
-        (requireActivity() as AppCompatActivity).apply {
-            setSupportActionBar(binding.toolbar)
-        }
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
 
         binding.help.text = HtmlCompat.fromHtml(
             resources.openRawResource(R.raw.help).bufferedReader().readText(),
