@@ -147,7 +147,7 @@ class LessonRepository(
     fun getClassrooms(semesterId: Long): LiveData<ImmutableSortedSet<String>> = lessonDao.getClassroomsLiveData(semesterId).map()
 
     suspend fun getNextStartTime(semesterId: Long, weekday: Int): LocalTime = lessonDao.getLastEndTime(semesterId, weekday)
-        ?.let { it + settingsRepository.defaultBreakDuration }
+        ?.plusMillis(settingsRepository.defaultBreakDuration.millis.toInt())
         ?: settingsRepository.defaultStartTime
 
     // endregion
