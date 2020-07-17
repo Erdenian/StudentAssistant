@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("io.gitlab.arturbosch.detekt") version ("1.9.1")
+    id("io.gitlab.arturbosch.detekt") version ("1.10.0")
 }
 
 buildscript {
@@ -13,7 +13,7 @@ buildscript {
         val kotlinVersion: String by project
         val navigationVersion: String by project
 
-        classpath("com.android.tools.build:gradle:4.0.0")
+        classpath("com.android.tools.build:gradle:4.0.1")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion")
         classpath("de.mannodermaus.gradle.plugins:android-junit5:1.6.2.0")
@@ -53,5 +53,5 @@ detekt {
 }
 
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.9.1")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.10.0")
 }
