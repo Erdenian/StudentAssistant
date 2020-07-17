@@ -56,9 +56,11 @@ class HomeworkEditorFragment : Fragment(R.layout.fragment_homework_editor) {
         }
 
         binding.subjectName.apply {
-            setAdapter(ExposedDropdownMenu.createAdapter(context).apply {
-                viewModel.existingSubjects.observe(owner) { items = it.list }
-            })
+            setAdapter(
+                ExposedDropdownMenu.createAdapter(context).apply {
+                    viewModel.existingSubjects.observe(owner) { items = it.list }
+                }
+            )
 
             viewModel.subjectName
                 .distinctUntilChanged { it == text?.toString() ?: "" }
