@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("io.gitlab.arturbosch.detekt") version ("1.10.0")
+    id("io.gitlab.arturbosch.detekt") version ("1.11.0")
 }
 
 buildscript {
@@ -48,10 +48,8 @@ subprojects.forEach { module ->
 detekt {
     config = files("detekt-config.yml")
     input = files(*subprojects.map { "${it.name}/src" }.toTypedArray())
-    reports { xml { enabled = false } }
-    failFast = false
 }
 
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.10.0")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.11.0")
 }
