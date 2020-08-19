@@ -140,4 +140,5 @@ play {
 
     track = "beta"
     releaseStatus = "draft"
+    defaultToAppBundles = true
 }
