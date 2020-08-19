@@ -1,5 +1,5 @@
 build:
-  maxIssues: 30
+  maxIssues: 35
   excludeCorrectable: false
   weights:
     UnsafeCallOnNullableType: 100500
@@ -31,6 +31,13 @@ console-reports:
     # - 'NotificationReport'
     - 'FindingsReport'
     - 'FileBasedFindingsReport'
+
+output-reports:
+  active: true
+  exclude:
+    - 'TxtOutputReport'
+    - 'XmlOutputReport'
+    # - 'HtmlOutputReport'
 
 comments:
   active: true
@@ -187,6 +194,7 @@ exceptions:
     active: true
   ThrowingExceptionsWithoutMessageOrCause:
     active: true
+    excludes: []
     exceptions:
       - IllegalArgumentException
       - IllegalStateException
@@ -239,6 +247,7 @@ formatting:
   ImportOrdering:
     active: false
     autoCorrect: true
+    layout: 'idea'
   Indentation:
     active: true
     autoCorrect: true
@@ -307,6 +316,9 @@ formatting:
   SpacingAroundDot:
     active: true
     autoCorrect: true
+  SpacingAroundDoubleColon:
+    active: true
+    autoCorrect: true
   SpacingAroundKeyword:
     active: true
     autoCorrect: true
@@ -317,6 +329,12 @@ formatting:
     active: true
     autoCorrect: true
   SpacingAroundRangeOperator:
+    active: true
+    autoCorrect: true
+  SpacingBetweenDeclarationsWithAnnotations:
+    active: true
+    autoCorrect: true
+  SpacingBetweenDeclarationsWithComments:
     active: true
     autoCorrect: true
   StringTemplate:
@@ -358,6 +376,7 @@ naming:
     functionPattern: '([a-z][a-zA-Z0-9]*)|(`.*`)'
     excludeClassPattern: '$^'
     ignoreOverridden: true
+    ignoreAnnotated: ['Composable']
   FunctionParameterNaming:
     active: true
     excludes: []
@@ -432,8 +451,15 @@ potential-bugs:
     active: true
   HasPlatformType:
     active: true
+  IgnoredReturnValue:
+    active: true
+    restrictToAnnotatedMethods: true
+    returnValueAnnotations: ['*.CheckReturnValue', '*.CheckResult']
   ImplicitDefaultLocale:
     active: true
+  ImplicitUnitReturnType:
+    active: true
+    allowExplicitReturnType: true
   InvalidRange:
     active: true
   IteratorHasNextCallsNextMethod:
@@ -448,6 +474,8 @@ potential-bugs:
   MapGetWithNotNullAssertionOperator:
     active: true
   MissingWhenCase:
+    active: true
+  NullableToStringCall:
     active: true
   RedundantElseInWhen:
     active: true
@@ -498,7 +526,7 @@ style:
     forbiddenPatterns: ''
   ForbiddenMethodCall:
     active: true
-    methods: []
+    methods: ['kotlin.io.println', 'kotlin.io.print']
   ForbiddenPublicDataClass:
     active: true
     ignorePackages: ['*.internal', '*.internal.*']
@@ -512,6 +540,8 @@ style:
     excludedFunctions: 'describeContents'
     excludeAnnotatedFunction: ['dagger.Provides']
   LibraryCodeMustSpecifyReturnType:
+    active: true
+  LibraryEntitiesShouldNotBePublic:
     active: true
   LoopWithTooManyJumpStatements:
     active: true
@@ -615,6 +645,8 @@ style:
     active: true
     excludeAnnotatedClasses: []
     allowVars: false
+  UseEmptyCounterpart:
+    active: true
   UseIfInsteadOfWhen:
     active: true
   UseRequire:

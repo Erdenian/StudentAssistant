@@ -5,7 +5,7 @@ import org.joda.time.Days
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 
-object Converters {
+internal object Converters {
 
     @Suppress("MagicNumber")
     private val epoch = LocalDate(1970, 1, 1)

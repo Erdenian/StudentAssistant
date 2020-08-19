@@ -44,16 +44,18 @@ class TeacherView @JvmOverloads constructor(
         orientation = HORIZONTAL
         gravity = Gravity.BOTTOM
 
-        addView(AppCompatImageView(context).apply {
-            layoutParams = LayoutParams(
-                LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT
-            ).apply { gravity = Gravity.CENTER_VERTICAL }
-            setImageResource(R.drawable.ic_account)
-            imageTintList = ColorStateList.valueOf(
-                context.getColorCompat(R.color.secondary_text)
-            )
-        })
+        addView(
+            AppCompatImageView(context).apply {
+                layoutParams = LayoutParams(
+                    LayoutParams.WRAP_CONTENT,
+                    LayoutParams.WRAP_CONTENT
+                ).apply { gravity = Gravity.CENTER_VERTICAL }
+                setImageResource(R.drawable.ic_account)
+                imageTintList = ColorStateList.valueOf(
+                    context.getColorCompat(R.color.secondary_text)
+                )
+            }
+        )
         addView(textView)
 
         context.withStyledAttributes(attrs, R.styleable.TeacherView, defStyleAttr) {

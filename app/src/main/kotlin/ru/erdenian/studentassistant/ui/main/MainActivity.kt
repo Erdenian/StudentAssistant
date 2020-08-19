@@ -22,11 +22,14 @@ class MainActivity : AppCompatActivity() {
                 findNavController(R.id.nav_host_fragment).navigate(item.itemId)
                 true
             }
-            KeyboardVisibilityEvent.setEventListener(this@MainActivity, object : KeyboardVisibilityEventListener {
-                override fun onVisibilityChanged(isOpen: Boolean) {
-                    visibility = if (isOpen) View.GONE else View.VISIBLE
+            KeyboardVisibilityEvent.setEventListener(
+                this@MainActivity,
+                object : KeyboardVisibilityEventListener {
+                    override fun onVisibilityChanged(isOpen: Boolean) {
+                        visibility = if (isOpen) View.GONE else View.VISIBLE
+                    }
                 }
-            })
+            )
         }
     }
 }

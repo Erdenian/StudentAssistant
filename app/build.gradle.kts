@@ -3,8 +3,8 @@ import java.util.Properties
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("kapt")
     id("androidx.navigation.safeargs.kotlin")
+    id("com.github.triplet.play") version "2.8.0"
 }
 
 android {
@@ -15,8 +15,8 @@ android {
 
     defaultConfig {
         applicationId = "ru.erdenian.studentassistant"
-        versionCode = 14
-        versionName = "0.4.1"
+        versionCode = 15
+        versionName = "0.4.2"
 
         minSdkVersion(21)
         targetSdkVersion(targetSdkVersion.toInt())
@@ -111,11 +111,6 @@ dependencies {
     implementation(project(":utils"))
     // endregion
 
-    // region Kotlin
-    val kotlinVersion: String by project
-    implementation(kotlin("stdlib-jdk8", kotlinVersion))
-    // endregion
-
     // region AndroidX
     val navigationVersion: String by project
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
@@ -135,4 +130,15 @@ dependencies {
     implementation("net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC2")
     implementation("com.github.DavidProdinger:weekdays-selector:1.1.1")
     // endregion
+}
+
+play {
+    if (System.getenv("ANDROID_PUBLISHER_CREDENTIALS") == null) {
+        // To allow Gradle to successfully sync project
+        serviceAccountCredentials = file("null.json")
+    }
+
+    track = "beta"
+    releaseStatus = "draft"
+    defaultToAppBundles = true
 }

@@ -56,11 +56,6 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     // endregion
 
-    // region Kotlin
-    val kotlinVersion: String by project
-    implementation(kotlin("stdlib-jdk8", kotlinVersion))
-    // endregion
-
     // region Core
     val jodaTimeVersion: String by project
     api("joda-time:joda-time:$jodaTimeVersion")
