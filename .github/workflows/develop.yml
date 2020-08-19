@@ -19,13 +19,12 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}-${{ github.job }}
       - uses: actions/cache@v2
         with:
           path: |
-            **/build
-            !**/build/outputs
-            !**/build/reports
+            ${{ github.workspace }}/.gradle
+            ${{ github.workspace }}/**/build
           key: ${{ github.sha }}-${{ github.job }}
           restore-keys: ${{ github.sha }}-
       - uses: actions/setup-java@v1
@@ -58,13 +57,12 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}-${{ github.job }}
       - uses: actions/cache@v2
         with:
           path: |
-            **/build
-            !**/build/outputs
-            !**/build/reports
+            ${{ github.workspace }}/.gradle
+            ${{ github.workspace }}/**/build
           key: ${{ github.sha }}-${{ github.job }}
           restore-keys: ${{ github.sha }}-
       - uses: actions/setup-java@v1
@@ -89,13 +87,12 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}-${{ github.job }}
       - uses: actions/cache@v2
         with:
           path: |
-            **/build
-            !**/build/outputs
-            !**/build/reports
+            ${{ github.workspace }}/.gradle
+            ${{ github.workspace }}/**/build
           key: ${{ github.sha }}-${{ github.job }}
           restore-keys: ${{ github.sha }}-
       - uses: actions/setup-java@v1
