@@ -79,8 +79,6 @@ dependencies {
     // endregion
 
     // region Kotlin
-    val kotlinVersion: String by project
-    implementation(kotlin("stdlib-jdk8", kotlinVersion))
     val coroutinesVersion: String by project
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
     // endregion

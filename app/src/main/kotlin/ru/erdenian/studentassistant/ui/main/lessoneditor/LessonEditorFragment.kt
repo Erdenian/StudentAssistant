@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.util.Calendar
 import kotlinx.coroutines.launch
 import org.joda.time.DateTimeConstants
 import org.joda.time.format.DateTimeFormat
@@ -28,7 +29,6 @@ import ru.erdenian.studentassistant.utils.navArgsFactory
 import ru.erdenian.studentassistant.utils.setColor
 import ru.erdenian.studentassistant.utils.showTimePicker
 import ru.erdenian.studentassistant.utils.toast
-import java.util.Calendar
 
 class LessonEditorFragment : Fragment(R.layout.fragment_lesson_editor) {
 

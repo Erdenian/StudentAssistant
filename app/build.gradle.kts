@@ -110,11 +110,6 @@ dependencies {
     implementation(project(":utils"))
     // endregion
 
-    // region Kotlin
-    val kotlinVersion: String by project
-    implementation(kotlin("stdlib-jdk8", kotlinVersion))
-    // endregion
-
     // region AndroidX
     val navigationVersion: String by project
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")

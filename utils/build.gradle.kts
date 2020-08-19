@@ -51,11 +51,6 @@ android {
 }
 
 dependencies {
-    // region Kotlin
-    val kotlinVersion: String by project
-    implementation(kotlin("stdlib-jdk8", kotlinVersion))
-    // endregion
-
     // region AndroidX
     api("androidx.core:core-ktx:1.3.1")
 
