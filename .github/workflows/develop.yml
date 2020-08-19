@@ -1,12 +1,12 @@
-name: Release
+name: Develop
 
 on:
   push:
     branches:
-      - 'release/*'
+      - 'develop'
   pull_request:
     branches:
-      - 'master'
+      - 'develop'
 
 jobs:
 
@@ -39,8 +39,8 @@ jobs:
           name: Detekt
           path: "build/reports/detekt/detekt.html"
           if-no-files-found: error
-      - name: Lint Release
-        run: ./gradlew lintRelease
+      - name: Lint Debug
+        run: ./gradlew lintDebug
       - uses: actions/upload-artifact@v2
         if: always()
         with:
@@ -71,7 +71,7 @@ jobs:
         with:
           java-version: 14
       - name: Unit Test
-        run: ./gradlew testReleaseUnitTest
+        run: ./gradlew testDebugUnitTest
       - uses: actions/upload-artifact@v2
         if: always()
         with:
@@ -82,10 +82,6 @@ jobs:
   build:
     needs: test
     runs-on: ubuntu-latest
-    env:
-      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
     steps:
       - uses: actions/checkout@v1
       - uses: actions/cache@v2
@@ -105,25 +101,19 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 14
-      - name: Assemble Release
-        run: ./gradlew assembleRelease
+      - name: Assemble Debug
+        run: ./gradlew assembleDebug
       - uses: actions/upload-artifact@v2
         if: success()
         with:
           name: Assemble
-          path: "app/build/outputs/apk/release/*.apk"
+          path: "app/build/outputs/apk/debug/*.apk"
           if-no-files-found: error
-      - name: Bundle Release
-        run: ./gradlew bundleRelease
+      - name: Bundle Debug
+        run: ./gradlew bundleDebug
       - uses: actions/upload-artifact@v2
         if: success()
         with:
           name: Bundle
-          path: "app/build/outputs/bundle/release/*.aab"
-          if-no-files-found: error
-      - uses: actions/upload-artifact@v2
-        if: success()
-        with:
-          name: Mappings
-          path: "app/build/outputs/mapping/release/*.txt"
+          path: "app/build/outputs/bundle/debug/*.aab"
           if-no-files-found: error
