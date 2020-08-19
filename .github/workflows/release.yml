@@ -14,16 +14,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
+      - uses: actions/cache@v2
+        with:
+          path: |
+            **/build
+            !**/build/outputs
+            !**/build/reports
+          key: ${{ github.sha }}-${{ github.job }}
+          restore-keys: ${{ github.sha }}-
       - uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: 14
       - name: Detekt
         run: ./gradlew detekt
       - uses: actions/upload-artifact@v2
         if: always()
         with:
           name: Detekt
-          path: build/reports/detekt/detekt.html
+          path: "build/reports/detekt/detekt.html"
+          if-no-files-found: error
       - name: Lint Release
         run: ./gradlew lintRelease
       - uses: actions/upload-artifact@v2
@@ -31,14 +46,30 @@ jobs:
         with:
           name: Lint
           path: "*/build/reports/lint-results*.html"
+          if-no-files-found: error
 
   test:
+    needs: analysis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
+      - uses: actions/cache@v2
+        with:
+          path: |
+            **/build
+            !**/build/outputs
+            !**/build/reports
+          key: ${{ github.sha }}-${{ github.job }}
+          restore-keys: ${{ github.sha }}-
       - uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: 14
       - name: Unit Test
         run: ./gradlew testReleaseUnitTest
       - uses: actions/upload-artifact@v2
@@ -46,38 +77,53 @@ jobs:
         with:
           name: Unit Test
           path: "*/build/reports/tests/"
+          if-no-files-found: error
 
   build:
+    needs: test
     runs-on: ubuntu-latest
+    env:
+      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
     steps:
       - uses: actions/checkout@v1
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
+      - uses: actions/cache@v2
+        with:
+          path: |
+            **/build
+            !**/build/outputs
+            !**/build/reports
+          key: ${{ github.sha }}-${{ github.job }}
+          restore-keys: ${{ github.sha }}-
       - uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: 14
       - name: Assemble Release
         run: ./gradlew assembleRelease
-        env:
-          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
       - uses: actions/upload-artifact@v2
         if: success()
         with:
           name: Assemble
-          path: app/build/outputs/apk/release/*.apk
+          path: "app/build/outputs/apk/release/*.apk"
+          if-no-files-found: error
       - name: Bundle Release
         run: ./gradlew bundleRelease
-        env:
-          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
       - uses: actions/upload-artifact@v2
         if: success()
         with:
           name: Bundle
-          path: app/build/outputs/bundle/release/*.aab
+          path: "app/build/outputs/bundle/release/*.aab"
+          if-no-files-found: error
       - uses: actions/upload-artifact@v2
         if: success()
         with:
           name: Mappings
-          path: app/build/outputs/mapping/release/*.txt
+          path: "app/build/outputs/mapping/release/*.txt"
+          if-no-files-found: error
