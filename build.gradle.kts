@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("io.gitlab.arturbosch.detekt") version ("1.11.0")
+    id("io.gitlab.arturbosch.detekt") version ("1.11.1")
 }
 
 buildscript {
@@ -10,11 +10,10 @@ buildscript {
         jcenter()
     }
     dependencies {
-        val kotlinVersion: String by project
         val navigationVersion: String by project
 
         classpath("com.android.tools.build:gradle:4.0.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.0")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion")
         classpath("de.mannodermaus.gradle.plugins:android-junit5:1.6.2.0")
     }
@@ -35,11 +34,10 @@ tasks.register("clean", Delete::class) {
 subprojects.forEach { module ->
     module.tasks.withType<KotlinCompile> {
         kotlinOptions {
-            jvmTarget = "1.8"
+            jvmTarget = JavaVersion.VERSION_1_8.toString()
             @Suppress("SuspiciousCollectionReassignment")
             freeCompilerArgs += listOf(
-                //"-XXLanguage:+InlineClasses",
-                "-Xnew-inference"
+                "-Xjvm-default=all"
             )
         }
     }
@@ -51,5 +49,5 @@ detekt {
 }
 
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.11.0")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.11.1")
 }

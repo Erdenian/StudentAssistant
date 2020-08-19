@@ -2,12 +2,12 @@ package ru.erdenian.studentassistant.database.utils
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import kotlin.coroutines.resume
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.resume
 
 internal suspend fun <T> LiveData<T>.async() = coroutineScope {
     async {
