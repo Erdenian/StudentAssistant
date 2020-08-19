@@ -13,13 +13,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
+      - uses: actions/cache@v2
+        with:
+          path: |
+            **/build
+            !**/build/outputs
+            !**/build/reports
+          key: ${{ github.sha }}-${{ github.job }}
+          restore-keys: ${{ github.sha }}-
       - uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: 14
       - name: Detekt
         run: ./gradlew detekt
       - uses: actions/upload-artifact@v2
         if: always()
         with:
           name: Detekt
-          path: build/reports/detekt/detekt.html
+          path: "build/reports/detekt/detekt.html"
+          if-no-files-found: error
