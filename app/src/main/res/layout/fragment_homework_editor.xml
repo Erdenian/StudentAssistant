@@ -78,6 +78,7 @@
         android:id="@+id/description"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@android:color/transparent"
         android:gravity="top"
         android:hint="@string/hef_description"
         android:inputType="textMultiLine"

@@ -1,10 +1,7 @@
-name: Release
+name: Master
 
 on:
   push:
-    branches:
-      - 'release/*'
-  pull_request:
     branches:
       - 'master'
 
@@ -127,3 +124,33 @@ jobs:
           name: Mappings
           path: "app/build/outputs/mapping/release/*.txt"
           if-no-files-found: error
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      ANDROID_PUBLISHER_CREDENTIALS: ${{ secrets.ANDROID_PUBLISHER_CREDENTIALS }}
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
+      - uses: actions/cache@v2
+        with:
+          path: |
+            **/build
+            !**/build/outputs
+            !**/build/reports
+          key: ${{ github.sha }}-${{ github.job }}
+          restore-keys: ${{ github.sha }}-
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 14
+      - name: Publish
+        run: ./gradlew publishReleaseBundle
