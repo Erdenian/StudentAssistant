@@ -17,14 +17,6 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/cache@v2
-        with:
-          path: |
-            **/build
-            !**/build/outputs
-            !**/build/reports
-          key: ${{ github.sha }}-${{ github.job }}
-          restore-keys: ${{ github.sha }}-
       - uses: actions/setup-java@v1
         with:
           java-version: 14
@@ -46,7 +38,6 @@ jobs:
           if-no-files-found: error
 
   test:
-    needs: analysis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -56,14 +47,6 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/cache@v2
-        with:
-          path: |
-            **/build
-            !**/build/outputs
-            !**/build/reports
-          key: ${{ github.sha }}-${{ github.job }}
-          restore-keys: ${{ github.sha }}-
       - uses: actions/setup-java@v1
         with:
           java-version: 14
@@ -76,8 +59,31 @@ jobs:
           path: "*/build/reports/tests/"
           if-no-files-found: error
 
+  androidTest:
+    runs-on: macos-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
+      - name: Android Test
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          script: ./gradlew connectedAndroidTest
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: Android Test
+          path: "*/build/reports/androidTests/"
+          if-no-files-found: error
+
   build:
-    needs: test
+    needs: [analysis, test, androidTest]
     runs-on: ubuntu-latest
     env:
       ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
@@ -91,14 +97,6 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/cache@v2
-        with:
-          path: |
-            **/build
-            !**/build/outputs
-            !**/build/reports
-          key: ${{ github.sha }}-${{ github.job }}
-          restore-keys: ${{ github.sha }}-
       - uses: actions/setup-java@v1
         with:
           java-version: 14
@@ -126,7 +124,7 @@ jobs:
           if-no-files-found: error
 
   publish:
-    needs: build
+    needs: [analysis, test, androidTest]
     runs-on: ubuntu-latest
     env:
       ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
@@ -141,14 +139,6 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/cache@v2
-        with:
-          path: |
-            **/build
-            !**/build/outputs
-            !**/build/reports
-          key: ${{ github.sha }}-${{ github.job }}
-          restore-keys: ${{ github.sha }}-
       - uses: actions/setup-java@v1
         with:
           java-version: 14
