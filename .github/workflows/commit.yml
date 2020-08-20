@@ -18,14 +18,7 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}-${{ github.job }}
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ${{ github.workspace }}/.gradle
-            ${{ github.workspace }}/**/build
-          key: ${{ github.sha }}-${{ github.job }}
-          restore-keys: ${{ github.sha }}-
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
       - uses: actions/setup-java@v1
         with:
           java-version: 14
