@@ -40,13 +40,17 @@ internal class SemesterEntityTest {
         assertEquals(
             2,
             SemesterEntity(
-                "name", LocalDate(2019, 7, 12), LocalDate(2019, 7, 31)
+                "name",
+                LocalDate(2019, 7, 12),
+                LocalDate(2019, 7, 31)
             ).getWeekNumber(LocalDate(2019, 7, 22))
         )
         assertEquals(
             2,
             SemesterEntity(
-                "name", LocalDate(2019, 7, 12), LocalDate(2019, 7, 31)
+                "name",
+                LocalDate(2019, 7, 12),
+                LocalDate(2019, 7, 31)
             ).getWeekNumber(LocalDate(2019, 7, 28))
         )
     }

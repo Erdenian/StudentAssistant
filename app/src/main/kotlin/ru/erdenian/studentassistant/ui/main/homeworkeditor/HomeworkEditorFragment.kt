@@ -80,7 +80,9 @@ class HomeworkEditorFragment : Fragment(R.layout.fragment_homework_editor) {
             viewModel.deadline.observe(owner) { text = it.toString(dateFormatter) }
             setOnClickListener {
                 requireContext().showDatePicker(
-                    viewModel.deadline.value, LocalDate.now(), viewModel.semesterLastDay.value
+                    viewModel.deadline.value,
+                    LocalDate.now(),
+                    viewModel.semesterLastDay.value
                 ) { viewModel.deadline.value = it }
             }
         }

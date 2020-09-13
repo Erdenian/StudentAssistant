@@ -83,12 +83,17 @@ class SemesterEditorViewModel(
     fun save() {
         check(error.value == null)
         viewModelScope.launch {
-            semester?.let {
+            semester?.id?.let { id ->
                 semesterRepository.update(
-                    it.id, checkNotNull(name.value), checkNotNull(firstDay.value), checkNotNull(lastDay.value)
+                    id,
+                    checkNotNull(name.value),
+                    checkNotNull(firstDay.value),
+                    checkNotNull(lastDay.value)
                 )
             } ?: semesterRepository.insert(
-                checkNotNull(name.value), checkNotNull(firstDay.value), checkNotNull(lastDay.value)
+                checkNotNull(name.value),
+                checkNotNull(firstDay.value),
+                checkNotNull(lastDay.value)
             )
             savedPrivate.value = true
         }

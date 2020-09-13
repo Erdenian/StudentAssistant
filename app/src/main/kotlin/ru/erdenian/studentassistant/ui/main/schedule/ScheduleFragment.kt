@@ -38,7 +38,8 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 if (count > 0) selectedDate = getDate(binding.viewPager.currentItem)
                 this.semester = semester
                 if (count > 0) binding.viewPager.setCurrentItem(
-                    getPosition(selectedDate ?: LocalDate.now()), false
+                    getPosition(selectedDate ?: LocalDate.now()),
+                    false
                 )
                 selectedDate = null
             }
