@@ -54,7 +54,8 @@ interface Semester : Comparable<Semester>, Parcelable {
     fun getWeekNumber(day: LocalDate): Int = Weeks.weeksBetween(firstWeekMonday, day).weeks - if (day >= firstWeekMonday) 0 else 1
 
     override fun compareTo(other: Semester) = compareValuesBy(
-        this, other,
+        this,
+        other,
         Semester::lastDay,
         Semester::firstDay,
         Semester::name,

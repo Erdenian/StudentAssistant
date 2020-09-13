@@ -27,9 +27,7 @@ class HomeworkCard @JvmOverloads constructor(
         private const val DATE_FORMATTER = "dd.MM.yyyy"
     }
 
-    private val binding = CardHomeworkBinding.inflate(
-        requireNotNull(context.getSystemService()), this
-    )
+    private val binding = CardHomeworkBinding.inflate(requireNotNull(context.getSystemService()), this)
 
     init {
         TypedValue().also { outValue ->
