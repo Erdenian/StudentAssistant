@@ -5,6 +5,7 @@ plugins {
     kotlin("android")
     id("androidx.navigation.safeargs.kotlin")
     id("com.github.triplet.play") version "2.8.0"
+    id("ru.erdenian.shrinkometer")
 }
 
 android {

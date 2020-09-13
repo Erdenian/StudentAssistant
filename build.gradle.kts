@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("io.gitlab.arturbosch.detekt") version ("1.11.1")
+    id("ru.erdenian.shrinkometer") version "0.3.1" apply false
 }
 
 buildscript {
