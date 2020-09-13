@@ -35,7 +35,8 @@ interface Lesson : Comparable<Lesson>, Parcelable {
     val id: Long
 
     override fun compareTo(other: Lesson) = compareValuesBy(
-        this, other,
+        this,
+        other,
         Lesson::startTime,
         Lesson::endTime,
         Lesson::id
@@ -99,7 +100,7 @@ interface Lesson : Comparable<Lesson>, Parcelable {
         /**
          * Повторение по датам.
          *
-         * @param dates список дат, по которым повторяется пара
+         * @property dates список дат, по которым повторяется пара
          * @throws IllegalArgumentException если [dates] пуст
          * @author Ilya Solovyov
          * @since 0.0.0

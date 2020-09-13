@@ -51,8 +51,10 @@ internal class LessonDaoAndroidTest {
 
         val lesson = FullLesson(
             LessonEntity(
-                "name", "type",
-                LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(2),
+                "name",
+                "type",
+                LocalTime.MIDNIGHT,
+                LocalTime.MIDNIGHT.plusHours(2),
                 semesterId
             ),
             listOf(TeacherEntity("teacher")),
@@ -85,9 +87,12 @@ internal class LessonDaoAndroidTest {
 
         val lesson = FullLesson(
             LessonEntity(
-                "name", "type",
-                LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(2),
-                semesterId, 10L
+                "name",
+                "type",
+                LocalTime.MIDNIGHT,
+                LocalTime.MIDNIGHT.plusHours(2),
+                semesterId,
+                10L
             ),
             listOf(TeacherEntity("teacher", 10L, 20L)),
             listOf(ClassroomEntity("classroom", 10L, 20L)),
@@ -112,11 +117,14 @@ internal class LessonDaoAndroidTest {
 
         lessonDao.insert(
             LessonEntity(
-                "name", "",
-                LocalTime(9, 0), LocalTime(11, 30),
+                "name",
+                "",
+                LocalTime(9, 0),
+                LocalTime(11, 30),
                 semesterId
             ),
-            emptyList(), emptyList(),
+            emptyList(),
+            emptyList(),
             ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
         )
         assertEquals(
@@ -127,11 +135,14 @@ internal class LessonDaoAndroidTest {
 
         lessonDao.insert(
             LessonEntity(
-                "name", "",
-                LocalTime(11, 50), LocalTime(14, 20),
+                "name",
+                "",
+                LocalTime(11, 50),
+                LocalTime(14, 20),
                 semesterId
             ),
-            emptyList(), emptyList(),
+            emptyList(),
+            emptyList(),
             ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
         )
         assertEquals(
@@ -141,11 +152,14 @@ internal class LessonDaoAndroidTest {
 
         lessonDao.insert(
             LessonEntity(
-                "name", "",
-                LocalTime(14, 40), LocalTime(17, 10),
+                "name",
+                "",
+                LocalTime(14, 40),
+                LocalTime(17, 10),
                 semesterId
             ),
-            emptyList(), emptyList(),
+            emptyList(),
+            emptyList(),
             ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
         )
         assertEquals(
@@ -155,11 +169,14 @@ internal class LessonDaoAndroidTest {
 
         lessonDao.insert(
             LessonEntity(
-                "name", "",
-                LocalTime(17, 20), LocalTime(17, 50),
+                "name",
+                "",
+                LocalTime(17, 20),
+                LocalTime(17, 50),
                 semesterId
             ),
-            emptyList(), emptyList(),
+            emptyList(),
+            emptyList(),
             ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
         )
         assertEquals(
@@ -169,20 +186,26 @@ internal class LessonDaoAndroidTest {
 
         lessonDao.insert(
             LessonEntity(
-                "name", "",
-                LocalTime(18, 0), LocalTime(18, 30),
+                "name",
+                "",
+                LocalTime(18, 0),
+                LocalTime(18, 30),
                 semesterId
             ),
-            emptyList(), emptyList(),
+            emptyList(),
+            emptyList(),
             ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
         )
         lessonDao.insert(
             LessonEntity(
-                "name", "",
-                LocalTime(18, 40), LocalTime(19, 10),
+                "name",
+                "",
+                LocalTime(18, 40),
+                LocalTime(19, 10),
                 semesterId
             ),
-            emptyList(), emptyList(),
+            emptyList(),
+            emptyList(),
             ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
         )
         assertEquals(
@@ -192,11 +215,14 @@ internal class LessonDaoAndroidTest {
 
         lessonDao.insert(
             LessonEntity(
-                "name", "",
-                LocalTime(17, 20), LocalTime(22, 0),
+                "name",
+                "",
+                LocalTime(17, 20),
+                LocalTime(22, 0),
                 semesterId
             ),
-            emptyList(), emptyList(),
+            emptyList(),
+            emptyList(),
             ByWeekdayEntity(DateTimeConstants.TUESDAY, listOf(true))
         )
         assertEquals(
