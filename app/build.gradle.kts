@@ -5,6 +5,7 @@ plugins {
     kotlin("android")
     id("androidx.navigation.safeargs.kotlin")
     id("com.github.triplet.play") version "2.8.0"
+    id("ru.erdenian.shrinkometer")
 }
 
 android {
@@ -116,7 +117,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
 
-    implementation("androidx.constraintlayout:constraintlayout:1.1.3")
+    implementation("androidx.constraintlayout:constraintlayout:2.0.1")
     implementation("androidx.viewpager:viewpager:1.0.0")
     // endregion
 

@@ -50,7 +50,9 @@ class LessonEditorViewModel private constructor(
     }
 
     constructor(application: Application, lesson: Lesson, copy: Boolean) : this(
-        application, lesson.semesterId, if (copy) null else lesson
+        application,
+        lesson.semesterId,
+        if (copy) null else lesson
     ) {
         subjectName.value = lesson.subjectName
         type.value = lesson.type
@@ -207,14 +209,22 @@ class LessonEditorViewModel private constructor(
                             checkNotNull(dates.value).list
                         )
                     } ?: lessonRepository.insert(
-                        subjectName, type, teachers, classrooms, startTime, endTime, semesterId,
+                        subjectName,
+                        type,
+                        teachers,
+                        classrooms,
+                        startTime,
+                        endTime,
+                        semesterId,
                         checkNotNull(dates.value).list
                     )
                 }
             }
 
             if (forceRenameOther && (oldLesson != null)) lessonRepository.renameSubject(
-                oldLesson.semesterId, oldLesson.subjectName, subjectName
+                oldLesson.semesterId,
+                oldLesson.subjectName,
+                subjectName
             )
 
             donePrivate.value = true
