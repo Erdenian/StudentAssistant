@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("io.gitlab.arturbosch.detekt") version ("1.11.1")
+    id("io.gitlab.arturbosch.detekt") version ("1.13.1")
     id("ru.erdenian.shrinkometer") version "0.3.1" apply false
 }
 
@@ -32,8 +32,8 @@ tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
 
-subprojects.forEach { module ->
-    module.tasks.withType<KotlinCompile> {
+subprojects {
+    tasks.withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = JavaVersion.VERSION_1_8.toString()
             @Suppress("SuspiciousCollectionReassignment")
@@ -50,5 +50,5 @@ detekt {
 }
 
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.11.1")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.13.1")
 }
