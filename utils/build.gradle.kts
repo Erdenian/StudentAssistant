@@ -52,7 +52,7 @@ android {
 
 dependencies {
     // region AndroidX
-    api("androidx.core:core-ktx:1.3.1")
+    api("androidx.core:core-ktx:1.3.2")
 
     api("androidx.fragment:fragment-ktx:1.2.5")
 
