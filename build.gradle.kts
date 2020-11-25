@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("io.gitlab.arturbosch.detekt") version "1.14.2"
     id("ru.erdenian.shrinkometer") version "0.3.1" apply false
@@ -33,7 +31,7 @@ tasks.register("clean", Delete::class) {
 }
 
 subprojects {
-    tasks.withType<KotlinCompile> {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions {
             jvmTarget = JavaVersion.VERSION_1_8.toString()
             @Suppress("SuspiciousCollectionReassignment")

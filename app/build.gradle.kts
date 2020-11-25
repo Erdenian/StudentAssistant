@@ -1,10 +1,8 @@
-import java.util.Properties
-
 plugins {
     id("com.android.application")
     kotlin("android")
     id("androidx.navigation.safeargs.kotlin")
-    id("com.github.triplet.play") version "2.8.0"
+    id("com.github.triplet.play") version "3.0.0"
     id("ru.erdenian.shrinkometer")
 }
 
@@ -16,8 +14,8 @@ android {
 
     defaultConfig {
         applicationId = "ru.erdenian.studentassistant"
-        versionCode = 15
-        versionName = "0.4.2"
+        versionCode = 16
+        versionName = "0.4.3"
 
         minSdkVersion(21)
         targetSdkVersion(targetSdkVersion.toInt())
@@ -31,7 +29,7 @@ android {
 
     signingConfigs {
         val localProperties = File("${rootDir.path}/local.properties").run {
-            if (exists()) Properties().apply { load(inputStream()) } else null
+            if (exists()) `java.util`.Properties().apply { load(inputStream()) } else null
         }
         val environment = System.getenv()
         fun get(env: String, local: String) = environment[env] ?: run {
@@ -136,10 +134,10 @@ dependencies {
 play {
     if (System.getenv("ANDROID_PUBLISHER_CREDENTIALS") == null) {
         // To allow Gradle to successfully sync project
-        serviceAccountCredentials = file("null.json")
+        serviceAccountCredentials.set(file("null.json"))
     }
 
-    track = "beta"
-    releaseStatus = "draft"
-    defaultToAppBundles = true
+    track.set("beta")
+    releaseStatus.set(com.github.triplet.gradle.androidpublisher.ReleaseStatus.DRAFT)
+    defaultToAppBundles.set(true)
 }
