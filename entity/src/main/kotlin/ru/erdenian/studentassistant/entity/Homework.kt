@@ -24,7 +24,8 @@ interface Homework : Comparable<Homework>, Parcelable {
     val id: Long
 
     override fun compareTo(other: Homework) = compareValuesBy(
-        this, other,
+        this,
+        other,
         Homework::deadline,
         Homework::id
     )

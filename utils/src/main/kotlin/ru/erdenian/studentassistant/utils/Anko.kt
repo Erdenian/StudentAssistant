@@ -30,7 +30,8 @@ inline fun <reified T : Activity> Activity.startActivityForResult(
     requestCode: Int,
     vararg params: Pair<String, Any?>
 ) = startActivityForResult(
-    Intent(this, T::class.java).apply { putExtras(bundleOf(*params)) }, requestCode
+    Intent(this, T::class.java).apply { putExtras(bundleOf(*params)) },
+    requestCode
 )
 
 fun Context.toast(@StringRes resId: Int, length: Int = Toast.LENGTH_SHORT) = Toast.makeText(this, resId, length).show()

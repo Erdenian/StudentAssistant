@@ -1,5 +1,5 @@
 build:
-  maxIssues: 35
+  maxIssues: 30
   excludeCorrectable: false
   weights:
     UnsafeCallOnNullableType: 100500
@@ -10,6 +10,7 @@ build:
 
 config:
   validation: true
+  warningsAsErrors: false
   # when writing own rules with new properties, exclude the property path e.g.: 'my_rule_set,.*>.*>[my_property]'
   excludes: ''
 
@@ -102,6 +103,8 @@ complexity:
   NestedBlockDepth:
     active: true
     threshold: 4
+  ReplaceSafeCallChainWithRun:
+    active: false
   StringLiteralDuplication:
     active: true
     excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
@@ -126,6 +129,8 @@ coroutines:
   GlobalCoroutineUsage:
     active: true
   RedundantSuspendModifier:
+    active: true
+  SuspendFunWithFlowReturnType:
     active: true
 
 empty-blocks:
@@ -228,6 +233,12 @@ formatting:
   autoCorrect: false
   AnnotationOnSeparateLine:
     active: false
+    autoCorrect: true
+  AnnotationSpacing:
+    active: true
+    autoCorrect: true
+  ArgumentListWrapping:
+    active: true
     autoCorrect: true
   ChainWrapping:
     active: true
@@ -392,6 +403,9 @@ naming:
   MemberNameEqualsClassName:
     active: true
     ignoreOverridden: true
+  NonBooleanPropertyPrefixedWithIs:
+    active: true
+    excludes: []
   ObjectPropertyNaming:
     active: true
     excludes: []
@@ -498,6 +512,8 @@ potential-bugs:
 
 style:
   active: true
+  ClassOrdering:
+    active: false
   CollapsibleIfStatements:
     active: true
   DataClassContainsFunctions:
@@ -639,6 +655,8 @@ style:
     allowedNames: '(_|ignored|expected|serialVersionUID)'
   UseArrayLiteralsInAnnotations:
     active: true
+  UseCheckNotNull:
+    active: true
   UseCheckOrError:
     active: false
   UseDataClass:
@@ -650,6 +668,8 @@ style:
   UseIfInsteadOfWhen:
     active: true
   UseRequire:
+    active: true
+  UseRequireNotNull:
     active: true
   UselessCallOnNotNull:
     active: true
