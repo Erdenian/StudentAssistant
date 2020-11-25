@@ -12,9 +12,12 @@ internal class FullLessonTest {
     fun byWeekdayTest() {
         FullLesson(
             LessonEntity(
-                "name", "type",
-                LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(2),
-                1L, 10L
+                "name",
+                "type",
+                LocalTime.MIDNIGHT,
+                LocalTime.MIDNIGHT.plusHours(2),
+                1L,
+                10L
             ),
             listOf(TeacherEntity("teacher", 10L)),
             listOf(ClassroomEntity("classroom", 10L)),
@@ -27,9 +30,12 @@ internal class FullLessonTest {
     fun byDatesTest() {
         FullLesson(
             LessonEntity(
-                "name", "type",
-                LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(2),
-                1L, 10L
+                "name",
+                "type",
+                LocalTime.MIDNIGHT,
+                LocalTime.MIDNIGHT.plusHours(2),
+                1L,
+                10L
             ),
             listOf(TeacherEntity("teacher", 10L)),
             listOf(ClassroomEntity("classroom", 10L)),
@@ -43,9 +49,12 @@ internal class FullLessonTest {
         assertThrows<IllegalArgumentException> {
             FullLesson(
                 LessonEntity(
-                    "name", "type",
-                    LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(2),
-                    1L, 10L
+                    "name",
+                    "type",
+                    LocalTime.MIDNIGHT,
+                    LocalTime.MIDNIGHT.plusHours(2),
+                    1L,
+                    10L
                 ),
                 listOf(TeacherEntity("teacher", 10L)),
                 listOf(ClassroomEntity("classroom", 10L)),
@@ -60,9 +69,12 @@ internal class FullLessonTest {
         assertThrows<IllegalArgumentException> {
             FullLesson(
                 LessonEntity(
-                    "name", "type",
-                    LocalTime.MIDNIGHT, LocalTime.MIDNIGHT.plusHours(2),
-                    1L, 10L
+                    "name",
+                    "type",
+                    LocalTime.MIDNIGHT,
+                    LocalTime.MIDNIGHT.plusHours(2),
+                    1L,
+                    10L
                 ),
                 listOf(TeacherEntity("teacher", 10L)),
                 listOf(ClassroomEntity("classroom", 10L)),

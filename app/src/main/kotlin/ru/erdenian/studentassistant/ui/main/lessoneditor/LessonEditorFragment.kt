@@ -86,7 +86,8 @@ class LessonEditorFragment : Fragment(R.layout.fragment_lesson_editor) {
             viewModel.existingTypes.observe(owner) { types ->
                 setAdapter(
                     ArrayAdapter(
-                        context, android.R.layout.simple_dropdown_item_1line,
+                        context,
+                        android.R.layout.simple_dropdown_item_1line,
                         (predefinedTypes + types.list).distinct()
                     )
                 )
