@@ -156,7 +156,7 @@ class WeeksSelector @JvmOverloads constructor(
             binding.scroll.post { binding.scroll.fullScroll(HorizontalScrollView.FOCUS_RIGHT) }
             onWeeksChangeListener?.invoke(weeks)
         }
-        binding.weeksParent.setViewCount(binding.weeksParent.childCount, creator) { _ ->
+        binding.weeksParent.setViewCount(binding.weeksParent.childCount, creator) {
             setOnCheckedChangeListener(onCheckedChangeListener)
         }
     }

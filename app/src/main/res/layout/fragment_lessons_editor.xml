@@ -58,6 +58,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_plus"
-        android:tint="?colorOnPrimary" />
+        android:tint="?colorOnPrimary"
+        tools:ignore="ContentDescription" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

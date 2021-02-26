@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     id("androidx.navigation.safeargs.kotlin")
-    id("com.github.triplet.play") version "3.0.0"
+    id("com.github.triplet.play") version "3.3.0"
     id("ru.erdenian.shrinkometer")
 }
 
@@ -14,8 +14,8 @@ android {
 
     defaultConfig {
         applicationId = "ru.erdenian.studentassistant"
-        versionCode = 16
-        versionName = "0.4.3"
+        versionCode = 17
+        versionName = "0.4.4"
 
         minSdkVersion(21)
         targetSdkVersion(targetSdkVersion.toInt())
@@ -126,7 +126,7 @@ dependencies {
     // endregion
 
     // region UI
-    implementation("net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC2")
+    implementation("net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC3")
     implementation("com.github.DavidProdinger:weekdays-selector:1.1.1")
     // endregion
 }

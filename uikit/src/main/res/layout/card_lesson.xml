@@ -71,8 +71,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:tint="?android:textColorSecondary"
                     app:srcCompat="@drawable/ic_map_marker"
+                    app:tint="?android:textColorSecondary"
                     tools:ignore="ContentDescription" />
 
             </LinearLayout>
@@ -123,8 +123,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:tint="?android:textColorSecondary"
                 app:srcCompat="@drawable/ic_calendar_range"
+                app:tint="?android:textColorSecondary"
                 tools:ignore="ContentDescription" />
 
             <TextView
