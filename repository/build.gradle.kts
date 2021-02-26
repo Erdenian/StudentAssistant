@@ -72,7 +72,6 @@ dependencies {
 
     androidTestImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     val testRunnerVersion: String by project
-    androidTestImplementation("androidx.test:core:$testRunnerVersion")
     androidTestImplementation("androidx.test:runner:$testRunnerVersion")
     val androidTestVersion: String by project
     androidTestImplementation("de.mannodermaus.junit5:android-test-core:$androidTestVersion")
