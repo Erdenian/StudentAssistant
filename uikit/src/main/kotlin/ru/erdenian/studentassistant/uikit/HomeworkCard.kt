@@ -7,6 +7,7 @@ import androidx.core.content.getSystemService
 import com.google.android.material.card.MaterialCardView
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.uikit.databinding.CardHomeworkBinding
+import ru.erdenian.studentassistant.utils.getDrawableCompat
 
 /**
  * Карточка домашнего задания.
@@ -32,7 +33,7 @@ class HomeworkCard @JvmOverloads constructor(
     init {
         TypedValue().also { outValue ->
             context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
-            foreground = context.getDrawable(outValue.resourceId)
+            foreground = context.getDrawableCompat(outValue.resourceId)
         }
     }
 

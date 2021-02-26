@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Цвет кнопок в навбаре для API < 27
+
 ## [0.4.3] - 2020-11-25
 
 Нет видимых изменений
