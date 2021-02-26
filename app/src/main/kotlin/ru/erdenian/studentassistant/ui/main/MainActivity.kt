@@ -5,7 +5,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.ActivityMainBinding
 
@@ -22,14 +21,9 @@ class MainActivity : AppCompatActivity() {
                 findNavController(R.id.nav_host_fragment).navigate(item.itemId)
                 true
             }
-            KeyboardVisibilityEvent.setEventListener(
-                this@MainActivity,
-                object : KeyboardVisibilityEventListener {
-                    override fun onVisibilityChanged(isOpen: Boolean) {
-                        visibility = if (isOpen) View.GONE else View.VISIBLE
-                    }
-                }
-            )
+            KeyboardVisibilityEvent.setEventListener(this@MainActivity) { isOpen ->
+                visibility = if (isOpen) View.GONE else View.VISIBLE
+            }
         }
     }
 }

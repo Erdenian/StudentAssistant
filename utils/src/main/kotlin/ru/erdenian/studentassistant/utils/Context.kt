@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
@@ -17,6 +18,16 @@ import org.joda.time.LocalTime
  * @since 0.0.0
  */
 fun Context.getColorCompat(@ColorRes id: Int) = ContextCompat.getColor(this, id)
+
+/**
+ * Обертка над [ContextCompat.getDrawable].
+ *
+ * @param id id ресурса
+ * @return иконка
+ * @author Ilya Solovyov
+ * @since 0.4.3
+ */
+fun Context.getDrawableCompat(@DrawableRes id: Int) = ContextCompat.getDrawable(this, id)
 
 /**
  * Отображает [DatePickerDialog].
@@ -40,9 +51,7 @@ fun Context.showDatePicker(
 
     DatePickerDialog(
         this,
-        DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-            onDateSet.invoke(LocalDate(year, month + 1, dayOfMonth))
-        },
+        { _, year, month, dayOfMonth -> onDateSet.invoke(LocalDate(year, month + 1, dayOfMonth)) },
         preselected.year,
         preselected.monthOfYear - 1,
         preselected.dayOfMonth
@@ -68,9 +77,7 @@ fun Context.showTimePicker(
 
     TimePickerDialog(
         this,
-        TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-            onTimeSet.invoke(LocalTime(hourOfDay, minute))
-        },
+        { _, hourOfDay, minute -> onTimeSet.invoke(LocalTime(hourOfDay, minute)) },
         preselected.hourOfDay,
         preselected.minuteOfHour,
         true
