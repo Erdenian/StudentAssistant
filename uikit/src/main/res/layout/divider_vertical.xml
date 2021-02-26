@@ -5,4 +5,5 @@
     android:layout_height="match_parent"
     android:layout_margin="@dimen/divider_margin"
     android:background="@color/divider"
+    tools:ignore="Overdraw"
     tools:viewBindingIgnore="true" />
