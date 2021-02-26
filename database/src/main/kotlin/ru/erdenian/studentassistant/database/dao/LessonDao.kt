@@ -30,8 +30,8 @@ abstract class LessonDao {
     ): Long = withContext(Dispatchers.IO) {
         val id = insert(lesson)
         insert(
-            teachers.apply { forEach { it.lessonId = id } },
-            classrooms.apply { forEach { it.lessonId = id } },
+            teachers.onEach { it.lessonId = id },
+            classrooms.onEach { it.lessonId = id },
             byWeekday.apply { lessonId = id }
         )
         id
@@ -46,9 +46,9 @@ abstract class LessonDao {
     ): Long = withContext(Dispatchers.IO) {
         val id = insert(lesson)
         insert(
-            teachers.apply { forEach { it.lessonId = id } },
-            classrooms.apply { forEach { it.lessonId = id } },
-            byDates.apply { forEach { it.lessonId = id } }
+            teachers.onEach { it.lessonId = id },
+            classrooms.onEach { it.lessonId = id },
+            byDates.onEach { it.lessonId = id }
         )
         id
     }
