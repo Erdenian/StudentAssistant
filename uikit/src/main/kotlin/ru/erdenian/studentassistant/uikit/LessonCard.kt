@@ -8,6 +8,7 @@ import androidx.core.content.getSystemService
 import com.google.android.material.card.MaterialCardView
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.uikit.databinding.CardLessonBinding
+import ru.erdenian.studentassistant.utils.getDrawableCompat
 import ru.erdenian.studentassistant.utils.setViewCount
 
 /**
@@ -34,7 +35,7 @@ class LessonCard @JvmOverloads constructor(
     init {
         TypedValue().also { outValue ->
             context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
-            foreground = context.getDrawable(outValue.resourceId)
+            foreground = context.getDrawableCompat(outValue.resourceId)
         }
     }
 
