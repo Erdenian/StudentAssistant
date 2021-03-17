@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Отображение длинных домашних заданий в карточке домашнего задания
+
 ## [0.4.4] - 2021-02-27
 
 ### Fixed
