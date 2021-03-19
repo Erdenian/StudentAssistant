@@ -8,6 +8,7 @@
     <string name="ma_edit">Редактировать расписание</string>
     <string name="ma_schedule">Расписание</string>
     <string name="ma_homeworks">Домашние задания</string>
+    <string name="ma_settings">Настройки</string>
     <string name="ma_help">Справка</string>
 
     <!-- ScheduleFragment -->
@@ -25,6 +26,9 @@
     <string name="hf_delete_message">Удалить задание?</string>
     <string name="hf_delete_yes">Да</string>
     <string name="hf_delete_no">Нет</string>
+
+    <!-- SettingsFragment -->
+    <string name="stf_title">Настройки</string>
 
     <!-- LessonInformationFragment -->
     <string name="lif_title">Данные занятия</string>
