@@ -16,7 +16,7 @@ internal object Converters {
 
     @TypeConverter
     @JvmStatic
-    fun intToLocalDate(value: Int?): LocalDate? = value?.let { epoch.plusDays(it) }
+    fun intToLocalDate(value: Int?): LocalDate? = value?.let(epoch::plusDays)
 
     @TypeConverter
     @JvmStatic
@@ -24,7 +24,7 @@ internal object Converters {
 
     @TypeConverter
     @JvmStatic
-    fun intToLocalTime(value: Int?): LocalTime? = value?.let { LocalTime.MIDNIGHT.plusMillis(it) }
+    fun intToLocalTime(value: Int?): LocalTime? = value?.let(LocalTime.MIDNIGHT::plusMillis)
 
     @TypeConverter
     @JvmStatic
