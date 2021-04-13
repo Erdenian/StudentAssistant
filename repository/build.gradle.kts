@@ -71,11 +71,12 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
     androidTestImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    val testRunnerVersion: String by project
-    androidTestImplementation("androidx.test:runner:$testRunnerVersion")
-    val androidTestVersion: String by project
-    androidTestImplementation("de.mannodermaus.junit5:android-test-core:$androidTestVersion")
-    androidTestRuntimeOnly("de.mannodermaus.junit5:android-test-runner:$androidTestVersion")
+    val androidxTestVersion: String by project
+    androidTestImplementation("androidx.test:core:$androidxTestVersion")
+    androidTestImplementation("androidx.test:runner:$androidxTestVersion")
+    val junit5TestVersion: String by project
+    androidTestImplementation("de.mannodermaus.junit5:android-test-core:$junit5TestVersion")
+    androidTestRuntimeOnly("de.mannodermaus.junit5:android-test-runner:$junit5TestVersion")
     // endregion
 
     // region Kotlin
