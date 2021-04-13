@@ -19,6 +19,15 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings, rootKey)
+
+        fun <T : Preference> requirePreference(key: CharSequence) = checkNotNull(findPreference<T>(key))
+        val context = requireContext()
+
+        requirePreference<TimePreference>(context.getString(R.string.pk_default_start_time)).apply {
+            setOnPreferenceChangeListener { _, newValue ->
+                true
+            }
+        }
     }
 
     override fun onDisplayPreferenceDialog(preference: Preference) {
@@ -26,6 +35,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             is TimePreference -> TimePreferenceDialog.newInstance(preference.key)
             else -> return super.onDisplayPreferenceDialog(preference)
         }
+        @Suppress("DEPRECATION")
         fragment.setTargetFragment(this@SettingsFragment, 0)
         fragment.show(parentFragmentManager, null)
     }

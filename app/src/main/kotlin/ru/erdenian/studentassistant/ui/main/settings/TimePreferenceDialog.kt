@@ -18,16 +18,17 @@ class TimePreferenceDialog : PreferenceDialogFragmentCompat() {
     override fun onBindDialogView(view: View?) {
         super.onBindDialogView(view)
         timepicker.setIs24HourView(true)
-        timepicker.time = preference.getPersistedTime()
+        timepicker.time = preference.time
     }
 
     override fun onDialogClosed(positiveResult: Boolean) {
         if (!positiveResult) return
+        val timePreference = preference
         val time = timepicker.time
-        preference.persistTime(time)
-        preference.summary = time.toString("HH:mm")
+        if (timePreference.callChangeListener(time)) preference.time = time
     }
 
+    @Suppress("DEPRECATION")
     private var TimePicker.time: LocalTime
         get() =
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) LocalTime(hour, minute)
