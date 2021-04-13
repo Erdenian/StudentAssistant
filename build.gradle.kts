@@ -1,5 +1,5 @@
 plugins {
-    id("io.gitlab.arturbosch.detekt") version "1.16.0-RC2"
+    id("io.gitlab.arturbosch.detekt") version "1.16.0"
     id("ru.erdenian.shrinkometer") version "0.3.1" apply false
 }
 
@@ -11,8 +11,8 @@ buildscript {
     dependencies {
         val navigationVersion: String by project
 
-        classpath("com.android.tools.build:gradle:4.1.2")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.31")
+        classpath("com.android.tools.build:gradle:4.1.3")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.32")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion")
         classpath("de.mannodermaus.gradle.plugins:android-junit5:1.7.1.1")
     }
@@ -48,5 +48,5 @@ detekt {
 }
 
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.16.0-RC2")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.16.0")
 }
