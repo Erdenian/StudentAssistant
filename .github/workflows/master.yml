@@ -20,7 +20,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: 15
+          java-version: 16
       - name: Detekt
         run: ./gradlew detekt
       - uses: actions/upload-artifact@v2
@@ -51,7 +51,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: 15
+          java-version: 16
       - name: Unit Test
         run: ./gradlew testReleaseUnitTest
       - uses: actions/upload-artifact@v2
@@ -102,7 +102,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: 15
+          java-version: 16
       - name: Assemble Release
         run: ./gradlew assembleRelease
       - uses: actions/upload-artifact@v2
@@ -145,6 +145,6 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: 15
+          java-version: 16
       - name: Publish
         run: ./gradlew publishReleaseBundle
