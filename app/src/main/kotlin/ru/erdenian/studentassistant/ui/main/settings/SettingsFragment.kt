@@ -22,13 +22,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     override fun onDisplayPreferenceDialog(preference: Preference) {
-        when (preference) {
-            is TimePreference -> {
-                TimePreferenceDialog.newInstance(preference.key).apply {
-                    setTargetFragment(this@SettingsFragment, 0)
-                }.show(parentFragmentManager, null)
-            }
-            else -> super.onDisplayPreferenceDialog(preference)
+        val fragment = when (preference) {
+            is TimePreference -> TimePreferenceDialog.newInstance(preference.key)
+            else -> return super.onDisplayPreferenceDialog(preference)
         }
+        fragment.setTargetFragment(this@SettingsFragment, 0)
+        fragment.show(parentFragmentManager, null)
     }
 }

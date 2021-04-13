@@ -11,25 +11,21 @@ class TimePreferenceDialog : PreferenceDialogFragmentCompat() {
 
     private lateinit var timepicker: TimePicker
 
-    override fun onCreateDialogView(context: Context?): View {
-        timepicker = TimePicker(context)
-        return timepicker
-    }
+    override fun onCreateDialogView(context: Context?) = TimePicker(context).also { timepicker = it }
+
+    override fun getPreference() = super.getPreference() as TimePreference
 
     override fun onBindDialogView(view: View?) {
         super.onBindDialogView(view)
-
-        val time = (preference as TimePreference).getPersistedTime()
         timepicker.setIs24HourView(true)
-        timepicker.time = time
+        timepicker.time = preference.getPersistedTime()
     }
 
     override fun onDialogClosed(positiveResult: Boolean) {
-        if (positiveResult) {
-            val time = timepicker.time
-            (preference as TimePreference).persistTime(time)
-            preference.summary = time.toString("HH:mm")
-        }
+        if (!positiveResult) return
+        val time = timepicker.time
+        preference.persistTime(time)
+        preference.summary = time.toString("HH:mm")
     }
 
     private var TimePicker.time: LocalTime
