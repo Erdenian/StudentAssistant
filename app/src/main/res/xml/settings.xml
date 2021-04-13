@@ -7,6 +7,7 @@
 
     <ru.erdenian.studentassistant.ui.main.settings.TimePreference
         app:key="time"
+        app:defaultValue="600000"
         app:title="time" />
 
 </PreferenceScreen>
