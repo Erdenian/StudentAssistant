@@ -1,46 +1,43 @@
 package ru.erdenian.studentassistant.ui.main.settings
 
-import android.content.Context
-import android.view.View
-import android.widget.TimePicker
+import android.app.Dialog
+import android.app.TimePickerDialog
+import android.content.DialogInterface
+import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.preference.PreferenceDialogFragmentCompat
 import org.joda.time.LocalTime
 
 class TimePreferenceDialog : PreferenceDialogFragmentCompat() {
 
-    private lateinit var timepicker: TimePicker
-
-    override fun onCreateDialogView(context: Context?) = TimePicker(context).also { timepicker = it }
+    private lateinit var selectedTime: LocalTime
 
     override fun getPreference() = super.getPreference() as TimePreference
 
-    override fun onBindDialogView(view: View?) {
-        super.onBindDialogView(view)
-        timepicker.setIs24HourView(true)
-        timepicker.time = preference.time
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val timePreference = preference
+        val time = timePreference.time
+
+        return TimePickerDialog(
+            requireContext(),
+            { _, hourOfDay, minute ->
+                selectedTime = LocalTime(hourOfDay, minute)
+                onClick(dialog, DialogInterface.BUTTON_POSITIVE)
+            },
+            time.hourOfDay,
+            time.minuteOfHour,
+            true
+        ).apply {
+            setButton(DialogInterface.BUTTON_NEGATIVE, timePreference.negativeButtonText, this@TimePreferenceDialog)
+            setButton(DialogInterface.BUTTON_POSITIVE, timePreference.positiveButtonText, this@TimePreferenceDialog)
+        }
     }
 
     override fun onDialogClosed(positiveResult: Boolean) {
         if (!positiveResult) return
         val timePreference = preference
-        val time = timepicker.time
-        if (timePreference.callChangeListener(time)) preference.time = time
+        if (timePreference.callChangeListener(selectedTime)) preference.time = selectedTime
     }
-
-    @Suppress("DEPRECATION")
-    private var TimePicker.time: LocalTime
-        get() =
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) LocalTime(hour, minute)
-            else LocalTime(currentHour, currentMinute)
-        set(value) =
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                hour = value.hourOfDay
-                minute = value.minuteOfHour
-            } else {
-                currentHour = value.hourOfDay
-                currentMinute = value.minuteOfHour
-            }
 
     companion object {
         fun newInstance(key: String) = TimePreferenceDialog().apply {
