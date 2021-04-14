@@ -3,8 +3,10 @@ package ru.erdenian.studentassistant.ui.main.settings
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.uikit.databinding.FragmentSettingsBinding
 
@@ -21,10 +23,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.settings, rootKey)
 
         fun <T : Preference> requirePreference(key: CharSequence) = checkNotNull(findPreference<T>(key))
-        val context = requireContext()
+        val owner = this
+        val viewModel by viewModels<SettingsViewModel>()
 
-        requirePreference<TimePreference>(context.getString(R.string.pk_default_start_time)).apply {
+        requirePreference<TimePreference>(getString(R.string.pk_default_start_time)).apply {
+            viewModel.defaultStartTimeLiveData.observe(owner) { time = it }
             setOnPreferenceChangeListener { _, newValue ->
+                viewModel.setDefaultStartTime(newValue as LocalTime)
                 true
             }
         }
