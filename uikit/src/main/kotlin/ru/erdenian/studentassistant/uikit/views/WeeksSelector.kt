@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.uikit
+package ru.erdenian.studentassistant.uikit.views
 
 import android.content.Context
 import android.util.AttributeSet
@@ -13,6 +13,7 @@ import androidx.core.content.getSystemService
 import androidx.core.view.children
 import androidx.core.view.forEach
 import androidx.core.view.setPadding
+import ru.erdenian.studentassistant.uikit.R
 import ru.erdenian.studentassistant.uikit.databinding.WeeksSelectorBinding
 import ru.erdenian.studentassistant.utils.setViewCount
 
