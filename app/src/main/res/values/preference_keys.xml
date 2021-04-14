@@ -2,5 +2,7 @@
 <resources>
 
     <string name="pk_default_start_time">default_start_time</string>
+    <string name="pk_default_lesson_duration">default_lesson_duration</string>
+    <string name="pk_default_break_duration">default_break_duration</string>
 
 </resources>

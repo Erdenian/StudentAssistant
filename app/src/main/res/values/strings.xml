@@ -30,6 +30,8 @@
     <!-- SettingsFragment -->
     <string name="stf_title">Настройки</string>
     <string name="stf_default_start_time">Время начала первого занятия</string>
+    <string name="stf_default_lesson_duration">Длительность занятия</string>
+    <string name="stf_default_break_duration">Длительность перемены</string>
 
     <!-- LessonInformationFragment -->
     <string name="lif_title">Данные занятия</string>
