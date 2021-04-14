@@ -2,8 +2,8 @@ plugins {
     id("com.android.application")
     kotlin("android")
     id("androidx.navigation.safeargs.kotlin")
-    id("com.github.triplet.play") version "3.5.0"
-    id("ru.erdenian.shrinkometer")
+    id("com.github.triplet.play") version "3.5.0-agp7.0"
+    //id("ru.erdenian.shrinkometer")
 }
 
 android {
@@ -25,7 +25,14 @@ android {
         setProperty("archivesBaseName", "${rootProject.name}-$versionName")
     }
 
-    buildFeatures.viewBinding = true
+    buildFeatures {
+        viewBinding = true
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.0.0-rc02"
+    }
 
     signingConfigs {
         val localProperties = File("${rootDir.path}/local.properties").run {
@@ -121,6 +128,8 @@ dependencies {
     // endregion
 
     // region AndroidX
+    implementation("androidx.appcompat:appcompat:1.4.0-alpha03")
+
     val navigationVersion: String by project
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
@@ -128,6 +137,25 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
     implementation("androidx.viewpager:viewpager:1.0.0")
     // endregion
+
+    // region Compose
+    implementation("androidx.compose.ui:ui:1.0.0-rc02")
+    // Tooling support (Previews, etc.)
+    implementation("androidx.compose.ui:ui-tooling:1.0.0-rc02")
+    // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
+    implementation("androidx.compose.foundation:foundation:1.0.0-rc02")
+    // Material Design
+    implementation("androidx.compose.material:material:1.0.0-rc02")
+    // Material design icons
+    implementation("androidx.compose.material:material-icons-core:1.0.0-rc02")
+    implementation("androidx.compose.material:material-icons-extended:1.0.0-rc02")
+    // Integration with activities
+    implementation("androidx.activity:activity-compose:1.3.0-rc02")
+    // Integration with ViewModels
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
+    // Integration with observables
+    implementation("androidx.compose.runtime:runtime-livedata:1.0.0-rc02")
+    //endregion
 
     // region Core
     val kodeinVersion: String by project

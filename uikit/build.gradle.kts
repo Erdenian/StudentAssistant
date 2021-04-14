@@ -7,21 +7,25 @@ android {
     val compileSdkVersion: String by project
     val targetSdkVersion: String by project
 
-    compileSdkVersion(compileSdkVersion.toInt())
+    compileSdk = compileSdkVersion.toInt()
 
     defaultConfig {
-        versionCode = 1
-        versionName = "1.0"
-
-        minSdkVersion(21)
-        targetSdkVersion(targetSdkVersion.toInt())
+        minSdk = 21
+        targetSdk = targetSdkVersion.toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         consumerProguardFiles("consumer-rules.pro")
     }
 
-    buildFeatures.viewBinding = true
+    buildFeatures {
+        viewBinding = true
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.0.0-rc02"
+    }
 
     buildTypes {
         getByName("release") {
@@ -54,6 +58,26 @@ dependencies {
     // region Private
     implementation(project(":utils"))
     // endregion
+
+    // region Compose
+    implementation("androidx.compose.ui:ui:1.0.0-rc02")
+    // Tooling support (Previews, etc.)
+    implementation("androidx.compose.ui:ui-tooling:1.0.0-rc02")
+    // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
+    implementation("androidx.compose.foundation:foundation:1.0.0-rc02")
+    // Material Design
+    implementation("androidx.compose.material:material:1.0.0-rc02")
+    // Material design icons
+    implementation("androidx.compose.material:material-icons-core:1.0.0-rc02")
+    implementation("androidx.compose.material:material-icons-extended:1.0.0-rc02")
+    // Integration with activities
+    implementation("androidx.activity:activity-compose:1.3.0-rc02")
+    // Integration with ViewModels
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
+    // Integration with observables
+    implementation("androidx.compose.runtime:runtime-livedata:1.0.0-rc02")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha08")
+    //endregion
 
     // region UI
     api("com.google.android.material:material:1.4.0")
