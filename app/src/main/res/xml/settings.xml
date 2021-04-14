@@ -6,4 +6,14 @@
         app:persistent="false"
         app:title="@string/stf_default_start_time" />
 
+    <ru.erdenian.studentassistant.ui.main.settings.TimeDurationPreference
+        app:key="@string/pk_default_lesson_duration"
+        app:persistent="false"
+        app:title="@string/stf_default_lesson_duration" />
+
+    <ru.erdenian.studentassistant.ui.main.settings.TimeDurationPreference
+        app:key="@string/pk_default_break_duration"
+        app:persistent="false"
+        app:title="@string/stf_default_break_duration" />
+
 </PreferenceScreen>

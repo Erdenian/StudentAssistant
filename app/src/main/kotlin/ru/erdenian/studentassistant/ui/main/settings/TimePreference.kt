@@ -17,8 +17,8 @@ class TimePreference @JvmOverloads constructor(
 ) : DialogPreference(context, attrs, defStyleAttr, defStyleRes) {
 
     init {
-        val timeFormatter = DateTimeFormat.shortTime()
-        summaryProvider = SummaryProvider<TimePreference> { preference -> preference.time.toString(timeFormatter) }
+        val formatter = DateTimeFormat.shortTime()
+        summaryProvider = SummaryProvider<TimePreference> { it.time.toString(formatter) }
     }
 
     var time = getPersistedInt(DEFAULT_TIME_MILLIS).toLocalTime()
