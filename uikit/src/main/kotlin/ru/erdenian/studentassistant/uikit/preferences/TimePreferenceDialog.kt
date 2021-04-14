@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.main.settings
+package ru.erdenian.studentassistant.uikit.preferences
 
 import android.app.Dialog
 import android.app.TimePickerDialog

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ru.erdenian.studentassistant.ui.main.settings.TimePreference
+    <ru.erdenian.studentassistant.uikit.preferences.TimePreference
         app:key="@string/pk_default_start_time"
         app:persistent="false"
         app:title="@string/stf_default_start_time" />
 
-    <ru.erdenian.studentassistant.ui.main.settings.TimeDurationPreference
+    <ru.erdenian.studentassistant.uikit.preferences.TimeDurationPreference
         app:key="@string/pk_default_lesson_duration"
         app:persistent="false"
         app:title="@string/stf_default_lesson_duration" />
 
-    <ru.erdenian.studentassistant.ui.main.settings.TimeDurationPreference
+    <ru.erdenian.studentassistant.uikit.preferences.TimeDurationPreference
         app:key="@string/pk_default_break_duration"
         app:persistent="false"
         app:title="@string/stf_default_break_duration" />

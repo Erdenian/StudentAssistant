@@ -10,6 +10,10 @@ import org.joda.time.Duration
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.uikit.databinding.FragmentSettingsBinding
+import ru.erdenian.studentassistant.uikit.preferences.TimeDurationPreference
+import ru.erdenian.studentassistant.uikit.preferences.TimeDurationPreferenceDialog
+import ru.erdenian.studentassistant.uikit.preferences.TimePreference
+import ru.erdenian.studentassistant.uikit.preferences.TimePreferenceDialog
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
