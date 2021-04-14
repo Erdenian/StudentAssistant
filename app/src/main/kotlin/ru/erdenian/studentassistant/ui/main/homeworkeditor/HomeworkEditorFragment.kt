@@ -17,7 +17,7 @@ import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentHomeworkEditorBinding
 import ru.erdenian.studentassistant.ui.main.homeworkeditor.HomeworkEditorViewModel.Error
-import ru.erdenian.studentassistant.uikit.ExposedDropdownMenu
+import ru.erdenian.studentassistant.uikit.views.ExposedDropdownMenu
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.navArgsFactory
