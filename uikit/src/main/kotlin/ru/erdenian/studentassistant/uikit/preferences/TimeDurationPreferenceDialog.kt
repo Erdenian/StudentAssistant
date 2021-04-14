@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.main.settings
+package ru.erdenian.studentassistant.uikit.preferences
 
 import android.content.Context
 import android.view.View
@@ -7,7 +7,7 @@ import androidx.core.os.bundleOf
 import androidx.preference.PreferenceDialogFragmentCompat
 import org.joda.time.Duration
 import org.joda.time.Period
-import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.uikit.R
 
 class TimeDurationPreferenceDialog : PreferenceDialogFragmentCompat() {
 

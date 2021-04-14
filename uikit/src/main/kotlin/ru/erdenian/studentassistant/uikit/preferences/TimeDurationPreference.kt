@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.main.settings
+package ru.erdenian.studentassistant.uikit.preferences
 
 import android.content.Context
 import android.content.res.TypedArray
@@ -7,7 +7,7 @@ import androidx.preference.DialogPreference
 import androidx.preference.Preference.SummaryProvider
 import org.joda.time.Duration
 import org.joda.time.format.PeriodFormatterBuilder
-import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.uikit.R
 
 class TimeDurationPreference @JvmOverloads constructor(
     context: Context,
