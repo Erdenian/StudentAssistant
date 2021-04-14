@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.uikit
+package ru.erdenian.studentassistant.uikit.views
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.withStyledAttributes
+import ru.erdenian.studentassistant.uikit.R
 import ru.erdenian.studentassistant.utils.attr
 import ru.erdenian.studentassistant.utils.colorAttr
 import ru.erdenian.studentassistant.utils.getColorCompat

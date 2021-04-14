@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.uikit
+package ru.erdenian.studentassistant.uikit.views
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,6 +6,7 @@ import android.util.TypedValue
 import androidx.core.content.getSystemService
 import com.google.android.material.card.MaterialCardView
 import org.joda.time.LocalDate
+import ru.erdenian.studentassistant.uikit.R
 import ru.erdenian.studentassistant.uikit.databinding.CardHomeworkBinding
 import ru.erdenian.studentassistant.utils.getDrawableCompat
 

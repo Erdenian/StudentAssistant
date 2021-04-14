@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.uikit
+package ru.erdenian.studentassistant.uikit.views
 
 import android.content.Context
 import android.util.AttributeSet
@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.withStyledAttributes
+import ru.erdenian.studentassistant.uikit.R
 
 /**
  * Чекбокс с текстом под ним.
