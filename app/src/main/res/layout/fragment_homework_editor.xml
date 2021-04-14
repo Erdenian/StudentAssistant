@@ -33,7 +33,7 @@
 
         app:layout_constraintGuide_end="@dimen/activity_horizontal_margin" />
 
-    <ru.erdenian.studentassistant.uikit.ExposedDropdownMenu
+    <ru.erdenian.studentassistant.uikit.views.ExposedDropdownMenu
         android:id="@+id/subject_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

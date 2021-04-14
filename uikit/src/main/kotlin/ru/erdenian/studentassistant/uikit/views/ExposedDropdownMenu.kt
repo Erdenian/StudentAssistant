@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.uikit
+package ru.erdenian.studentassistant.uikit.views
 
 import android.content.Context
 import android.text.InputType
@@ -8,6 +8,7 @@ import androidx.core.content.withStyledAttributes
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
+import ru.erdenian.studentassistant.uikit.R
 
 class ExposedDropdownMenu @JvmOverloads constructor(
     context: Context,

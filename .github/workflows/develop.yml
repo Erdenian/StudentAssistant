@@ -23,7 +23,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: 15
+          java-version: 16
       - name: Detekt
         run: ./gradlew detekt
       - uses: actions/upload-artifact@v2
@@ -54,7 +54,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: 15
+          java-version: 16
       - name: Unit Test
         run: ./gradlew testDebugUnitTest
       - uses: actions/upload-artifact@v2
@@ -101,7 +101,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: 15
+          java-version: 16
       - name: Assemble Debug
         run: ./gradlew assembleDebug
       - uses: actions/upload-artifact@v2

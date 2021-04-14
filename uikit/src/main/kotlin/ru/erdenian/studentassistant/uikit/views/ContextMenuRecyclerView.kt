@@ -1,12 +1,12 @@
-package ru.erdenian.studentassistant.uikit
+package ru.erdenian.studentassistant.uikit.views
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.AdapterView
-import androidx.recyclerview.R
 import androidx.recyclerview.widget.RecyclerView
+import ru.erdenian.studentassistant.uikit.R
 
 /**
  * [RecyclerView] с возможностью отображать контекстное меню для элементов списка.
