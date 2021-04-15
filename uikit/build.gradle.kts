@@ -57,5 +57,6 @@ dependencies {
 
     // region UI
     api("com.google.android.material:material:1.3.0")
+    api("androidx.preference:preference:1.1.1")
     // endregion
 }

@@ -1,5 +1,5 @@
 build:
-  maxIssues: 35
+  maxIssues: 40
   excludeCorrectable: false
   weights:
     UnsafeCallOnNullableType: 100500
@@ -53,6 +53,7 @@ comments:
   AbsentOrWrongFileLicense:
     active: false
     licenseTemplateFile: 'license.template'
+    licenseTemplateIsRegex: false
   CommentOverPrivateFunction:
     active: false
   CommentOverPrivateProperty:
@@ -424,6 +425,8 @@ naming:
   MemberNameEqualsClassName:
     active: true
     ignoreOverridden: true
+  NoNameShadowing:
+    active: true
   NonBooleanPropertyPrefixedWithIs:
     active: true
     excludes: []
@@ -474,6 +477,8 @@ performance:
 
 potential-bugs:
   active: true
+  CastToNullableType:
+    active: true
   Deprecation:
     active: true
   DontDowncastCollectionTypes:
@@ -532,6 +537,8 @@ potential-bugs:
   UnsafeCallOnNullableType:
     active: true
   UnsafeCast:
+    active: true
+  UnusedUnaryOperator:
     active: true
   UselessPostfixExpression:
     active: true
@@ -712,6 +719,8 @@ style:
   UseIfInsteadOfWhen:
     active: true
   UseIsNullOrEmpty:
+    active: true
+  UseOrEmpty:
     active: true
   UseRequire:
     active: true

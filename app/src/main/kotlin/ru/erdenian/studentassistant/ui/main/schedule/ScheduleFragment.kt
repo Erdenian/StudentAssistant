@@ -29,7 +29,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
     private val viewModel by viewModels<ScheduleViewModel>()
 
-    private val binding by binding { FragmentScheduleBinding.bind(requireView()) }
+    private val binding by binding { FragmentScheduleBinding.bind(it) }
 
     private var selectedDate: LocalDate? = LocalDate.now()
     private val pagerAdapter by lazy {
