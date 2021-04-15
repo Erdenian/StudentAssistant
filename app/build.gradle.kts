@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     id("androidx.navigation.safeargs.kotlin")
-    id("com.github.triplet.play") version "3.3.0"
+    id("com.github.triplet.play") version "3.4.0"
     id("ru.erdenian.shrinkometer")
 }
 
@@ -14,8 +14,8 @@ android {
 
     defaultConfig {
         applicationId = "ru.erdenian.studentassistant"
-        versionCode = 17
-        versionName = "0.4.4"
+        versionCode = 18
+        versionName = "0.4.5"
 
         minSdkVersion(21)
         targetSdkVersion(targetSdkVersion.toInt())
@@ -132,11 +132,6 @@ dependencies {
 }
 
 play {
-    if (System.getenv("ANDROID_PUBLISHER_CREDENTIALS") == null) {
-        // To allow Gradle to successfully sync project
-        serviceAccountCredentials.set(file("null.json"))
-    }
-
     track.set("beta")
     releaseStatus.set(com.github.triplet.gradle.androidpublisher.ReleaseStatus.DRAFT)
     defaultToAppBundles.set(true)
