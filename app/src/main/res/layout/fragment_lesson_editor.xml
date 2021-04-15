@@ -40,7 +40,11 @@
                     android:hint="@string/lef_subject_name"
                     android:imeOptions="actionNext"
                     android:inputType="text|textCapSentences"
-                    android:maxLines="1" />
+                    android:maxLines="1">
+
+                    <requestFocus />
+
+                </AutoCompleteTextView>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -141,7 +145,7 @@
                 android:id="@+id/repeat_type_flipper"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -152,16 +156,19 @@
                         android:id="@+id/weekday"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginBottom="8dp"
+                        app:background_color="@color/divider"
+                        app:highlight_color="?colorPrimary"
+                        app:text_unselected_color="@color/on_divider"
                         app:sunday_first_day="false" />
 
                     <include layout="@layout/divider_horizontal" />
 
-                    <ru.erdenian.studentassistant.uikit.WeeksSelector
+                    <ru.erdenian.studentassistant.uikit.views.WeeksSelector
                         android:id="@+id/weeks_selector"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp" />
+                        android:layout_marginTop="8dp" />
 
                 </LinearLayout>
 

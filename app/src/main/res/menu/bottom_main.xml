@@ -13,6 +13,11 @@
         android:title="@string/ma_homeworks" />
 
     <item
+        android:id="@id/nav_action_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/ma_settings" />
+
+    <item
         android:id="@id/nav_action_help"
         android:icon="@drawable/ic_help_circle"
         android:title="@string/ma_help"

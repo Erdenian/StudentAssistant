@@ -32,7 +32,7 @@ class SemesterEditorFragment : Fragment(R.layout.fragment_semester_editor) {
         navArgsFactory<SemesterEditorFragmentArgs> { SemesterEditorViewModel(it, semester) }
     }
 
-    private val binding by binding { FragmentSemesterEditorBinding.bind(requireView()) }
+    private val binding by binding { FragmentSemesterEditorBinding.bind(it) }
 
     @Suppress("ComplexMethod")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

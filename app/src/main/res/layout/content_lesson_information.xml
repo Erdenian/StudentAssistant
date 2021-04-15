@@ -80,7 +80,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ru.erdenian.studentassistant.uikit.ContextMenuRecyclerView
+        <ru.erdenian.studentassistant.uikit.views.ContextMenuRecyclerView
             android:id="@+id/homeworks"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

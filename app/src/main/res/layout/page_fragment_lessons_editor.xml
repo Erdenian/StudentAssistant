@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.MainActivity">
 
-    <ru.erdenian.studentassistant.uikit.ContextMenuRecyclerView
+    <ru.erdenian.studentassistant.uikit.views.ContextMenuRecyclerView
         android:id="@+id/lessons"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

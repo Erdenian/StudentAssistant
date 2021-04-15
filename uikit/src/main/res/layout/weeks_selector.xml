@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <ru.erdenian.studentassistant.uikit.CheckBoxWithText
+                <ru.erdenian.studentassistant.uikit.views.CheckBoxWithText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/weeks_selector_checkbox_padding"
