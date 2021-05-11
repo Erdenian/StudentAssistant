@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import org.kodein.di.DI
 import org.kodein.di.bind
+import org.kodein.di.bindSingleton
 import org.kodein.di.instance
 import org.kodein.di.singleton
 import org.kodein.di.softReference
@@ -20,13 +21,15 @@ fun repositoryModule(
 ) = DI.Module(name = "Repository") {
     val db = databaseKodein(application, databaseName)
 
-    bind() from singleton { SelectedSemesterRepository(db.instance()) }
+    bindSingleton { SelectedSemesterRepository(db.instance()) }
 
-    bind() from singleton(ref = softReference) {
-        SettingsRepository(application.getSharedPreferences("settings", Context.MODE_PRIVATE))
+    bind {
+        singleton(ref = softReference) {
+            SettingsRepository(application.getSharedPreferences("settings", Context.MODE_PRIVATE))
+        }
     }
 
-    bind() from singleton(ref = softReference) { SemesterRepository(db.instance()) }
-    bind() from singleton(ref = softReference) { LessonRepository(db.instance(), instance(), instance()) }
-    bind() from singleton(ref = softReference) { HomeworkRepository(db.instance(), instance()) }
+    bind { singleton(ref = softReference) { SemesterRepository(db.instance()) } }
+    bind { singleton(ref = softReference) { LessonRepository(db.instance(), instance(), instance()) } }
+    bind { singleton(ref = softReference) { HomeworkRepository(db.instance(), instance()) } }
 }
