@@ -1,18 +1,18 @@
 plugins {
-    id("io.gitlab.arturbosch.detekt") version "1.16.0"
+    id("io.gitlab.arturbosch.detekt") version "1.17.1"
     id("ru.erdenian.shrinkometer") version "0.3.1" apply false
 }
 
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         val navigationVersion: String by project
 
-        classpath("com.android.tools.build:gradle:4.1.3")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.32")
+        classpath("com.android.tools.build:gradle:4.2.1")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion")
         classpath("de.mannodermaus.gradle.plugins:android-junit5:1.7.1.1")
     }
@@ -35,9 +35,7 @@ subprojects {
         kotlinOptions {
             jvmTarget = JavaVersion.VERSION_1_8.toString()
             @Suppress("SuspiciousCollectionReassignment")
-            freeCompilerArgs += listOf(
-                "-Xjvm-default=all"
-            )
+            freeCompilerArgs += listOf("-Xjvm-default=all")
         }
     }
 }
@@ -48,5 +46,5 @@ detekt {
 }
 
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.16.0")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.17.1")
 }

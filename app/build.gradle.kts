@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     id("androidx.navigation.safeargs.kotlin")
-    id("com.github.triplet.play") version "3.4.0"
+    id("com.github.triplet.play") version "3.4.0-agp4.2"
     id("ru.erdenian.shrinkometer")
 }
 
@@ -33,9 +33,9 @@ android {
         }
         val environment = System.getenv()
         fun get(env: String, local: String) = environment[env] ?: run {
-            project.logger.warn("WARNING: No $env environmental variable")
+            project.logger.info("No $env environmental variable")
             localProperties?.getProperty(local) ?: run {
-                project.logger.warn("WARNING: No $local local property")
+                project.logger.info("No $local local property")
                 null
             }
         }
@@ -61,6 +61,11 @@ android {
             storePassword = "debugdebug"
             keyAlias = "debug"
             keyPassword = "debugdebug"
+
+            enableV1Signing = true
+            enableV2Signing = true
+            enableV3Signing = true
+            enableV4Signing = true
         }
 
         getReleaseKeystore()?.let { keystore ->
@@ -69,13 +74,18 @@ android {
                 storePassword = keystore.storePassword
                 keyAlias = keystore.keyAlias
                 keyPassword = keystore.keyPassword
+
+                enableV1Signing = true
+                enableV2Signing = true
+                enableV3Signing = true
+                enableV4Signing = true
             }
         } ?: project.logger.warn("WARNING: Can't create release signing config")
     }
 
     buildTypes {
         getByName("debug") {
-            signingConfig = checkNotNull(signingConfigs.findByName("debug"))
+            signingConfig = signingConfigs.getByName("debug")
         }
         getByName("release") {
             isMinifyEnabled = true
