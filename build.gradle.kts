@@ -11,8 +11,8 @@ buildscript {
     dependencies {
         val navigationVersion: String by project
 
-        classpath("com.android.tools.build:gradle:4.2.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10")
+        classpath("com.android.tools.build:gradle:4.2.2")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion")
         classpath("de.mannodermaus.gradle.plugins:android-junit5:1.7.1.1")
     }

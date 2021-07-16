@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     id("androidx.navigation.safeargs.kotlin")
-    id("com.github.triplet.play") version "3.4.0-agp4.2"
+    id("com.github.triplet.play") version "3.5.0"
     id("ru.erdenian.shrinkometer")
 }
 
