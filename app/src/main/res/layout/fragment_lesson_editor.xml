@@ -159,12 +159,12 @@
                         android:layout_marginBottom="8dp"
                         app:background_color="@color/divider"
                         app:highlight_color="?colorPrimary"
-                        app:text_unselected_color="@color/on_divider"
-                        app:sunday_first_day="false" />
+                        app:sunday_first_day="false"
+                        app:text_unselected_color="@color/on_divider" />
 
                     <include layout="@layout/divider_horizontal" />
 
-                    <ru.erdenian.studentassistant.uikit.views.WeeksSelector
+                    <androidx.compose.ui.platform.ComposeView
                         android:id="@+id/weeks_selector"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

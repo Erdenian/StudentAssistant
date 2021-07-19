@@ -1,80 +1,46 @@
 package ru.erdenian.studentassistant.uikit.views
 
-import android.content.Context
-import android.util.AttributeSet
-import android.util.TypedValue
-import android.view.Gravity
-import android.widget.CheckBox
-import android.widget.CompoundButton
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.appcompat.widget.AppCompatCheckBox
-import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.content.withStyledAttributes
-import ru.erdenian.studentassistant.uikit.R
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Checkbox
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 
-/**
- * Чекбокс с текстом под ним.
- *
- * @see CheckBox
- * @see TextView
- *
- * @version 1.0.0
- * @author Ilya Solovyov
- * @since 0.2.6
- */
-class CheckBoxWithText @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr) {
-
-    private val checkBox = AppCompatCheckBox(context).apply {
-        // Костыль для того, чтобы убрать пустое пространство под текст
-        val size = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            @Suppress("MagicNumber") 32.0f,
-            context.resources.displayMetrics
-        ).toInt()
-        layoutParams = LayoutParams(size, size)
-    }
-    private val textView = AppCompatTextView(context).apply {
-        gravity = Gravity.CENTER_HORIZONTAL
-        setOnClickListener { checkBox.toggle() }
-    }
-
-    var isChecked: Boolean
-        get() = checkBox.isChecked
-        set(checked) {
-            checkBox.isChecked = checked
-        }
-
-    var text: CharSequence?
-        get() = textView.text
-        set(text) {
-            textView.text = text
-        }
-
-    init {
-        orientation = VERTICAL
-        gravity = Gravity.CENTER_HORIZONTAL
-
-        addView(checkBox)
-        addView(textView)
-
-        context.withStyledAttributes(attrs, R.styleable.CheckBoxWithText, defStyleAttr) {
-            isChecked = getBoolean(R.styleable.CheckBoxWithText_checked, false)
-            text = getString(R.styleable.CheckBoxWithText_text)
-        }
-    }
-
-    fun setOnCheckedChangeListener(listener: CompoundButton.OnCheckedChangeListener?) {
-        checkBox.setOnCheckedChangeListener(listener)
-    }
-
-    override fun setEnabled(enabled: Boolean) {
-        super.setEnabled(enabled)
-        checkBox.isEnabled = enabled
-        textView.isEnabled = enabled
-    }
+@Composable
+internal fun CheckBoxWithText(
+    checked: Boolean,
+    text: String,
+    onCheckedChange: ((Boolean) -> Unit)?,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
+) = Column(
+    horizontalAlignment = Alignment.CenterHorizontally,
+    modifier = Modifier
+        .padding(4.dp)
+        .clickable { if (enabled) onCheckedChange?.invoke(!checked) }
+        .then(modifier)
+) {
+    Checkbox(checked = checked, onCheckedChange = null, enabled = enabled)
+    Text(text = text, maxLines = 1)
 }
+
+@Preview(name = "Short text")
+@Composable
+private fun CheckBoxWithTextPreviewShort() = CheckBoxWithText(true, "1", null)
+
+@Preview(name = "Medium text")
+@Composable
+private fun CheckBoxWithTextPreviewMedium() = CheckBoxWithText(true, "Text", null)
+
+@Preview(name = "Long text")
+@Composable
+private fun CheckBoxWithTextPreviewLong() = CheckBoxWithText(true, "Long text", null)
+
+@Preview(name = "Disabled")
+@Composable
+private fun CheckBoxWithTextPreviewDisabled() = CheckBoxWithText(true, "Disabled", null, enabled = false)
