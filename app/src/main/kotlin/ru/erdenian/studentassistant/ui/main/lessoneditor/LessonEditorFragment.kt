@@ -9,9 +9,14 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.MultiAutoCompleteTextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -23,6 +28,7 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentLessonEditorBinding
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.ui.main.lessoneditor.LessonEditorViewModel.Error
+import ru.erdenian.studentassistant.uikit.views.WeeksSelector
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.navArgsFactory
@@ -197,10 +203,16 @@ class LessonEditorFragment : Fragment(R.layout.fragment_lesson_editor) {
         }
 
         binding.weeksSelector.apply {
-            viewModel.weeks
-                .distinctUntilChanged { it == weeks }
-                .observe(owner) { weeks = it }
-            onWeeksChangeListener = { viewModel.weeks.value = it }
+            setContent {
+                @Composable
+                fun <T : Any> LiveData<T>.observeAsStateNonNull(): State<T> = observeAsState(checkNotNull(value))
+
+                val weeks by viewModel.weeks.observeAsStateNonNull()
+                WeeksSelector(
+                    weeks = weeks,
+                    onWeeksChange = { viewModel.weeks.value = it }
+                )
+            }
         }
 
         viewModel.done.observe(owner) { if (it) findNavController().popBackStack() }
