@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.MultiAutoCompleteTextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -208,10 +209,12 @@ class LessonEditorFragment : Fragment(R.layout.fragment_lesson_editor) {
                 fun <T : Any> LiveData<T>.observeAsStateNonNull(): State<T> = observeAsState(checkNotNull(value))
 
                 val weeks by viewModel.weeks.observeAsStateNonNull()
-                WeeksSelector(
-                    weeks = weeks,
-                    onWeeksChange = { viewModel.weeks.value = it }
-                )
+                MaterialTheme {
+                    WeeksSelector(
+                        weeks = weeks,
+                        onWeeksChange = { viewModel.weeks.value = it }
+                    )
+                }
             }
         }
 

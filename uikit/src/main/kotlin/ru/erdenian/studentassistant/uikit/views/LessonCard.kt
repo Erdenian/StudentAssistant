@@ -1,74 +1,114 @@
 package ru.erdenian.studentassistant.uikit.views
 
-import android.content.Context
-import android.util.AttributeSet
-import android.util.TypedValue
-import android.view.View
-import androidx.core.content.getSystemService
-import com.google.android.material.card.MaterialCardView
-import org.joda.time.LocalTime
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Card
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import ru.erdenian.studentassistant.uikit.R
-import ru.erdenian.studentassistant.uikit.databinding.CardLessonBinding
-import ru.erdenian.studentassistant.utils.getDrawableCompat
-import ru.erdenian.studentassistant.utils.setViewCount
 
 /**
  * Карточка пары.
- *
- * @see MaterialCardView
- *
- * @version 1.0.0
- * @author Ilya Solovyov
- * @since 0.2.6
  */
-class LessonCard @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = R.attr.materialCardViewStyle
-) : MaterialCardView(context, attrs, defStyleAttr) {
+@Composable
+fun LessonCard(
+    subjectName: String,
+    type: String,
+    teachers: List<String>,
+    classrooms: List<String>,
+    startTime: String,
+    endTime: String,
+    modifier: Modifier = Modifier
+) = Card(
+    modifier = modifier
+) {
+    Column(
+        modifier = Modifier.padding(dimensionResource(R.dimen.card_margin_inside))
+    ) {
+        Row(
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Text(
+                text = startTime,
+                style = MaterialTheme.typography.body1
+            )
+            Text(
+                text = " - ",
+                color = colorResource(R.color.secondary_text)
+            )
+            Text(
+                text = endTime,
+                color = colorResource(R.color.secondary_text),
+                style = MaterialTheme.typography.body1
+            )
 
-    companion object {
-        private const val TIME_FORMATTER = "HH:mm"
-    }
+            Spacer(modifier = Modifier.weight(1.0f))
 
-    private val binding = CardLessonBinding.inflate(requireNotNull(context.getSystemService()), this)
+            if (classrooms.isNotEmpty()) {
+                Text(
+                    text = classrooms.joinToString(),
+                    color = colorResource(R.color.secondary_text),
+                    style = MaterialTheme.typography.body1
+                )
+                Icon(
+                    painter = painterResource(R.drawable.ic_map_marker),
+                    contentDescription = null,
+                    tint = colorResource(R.color.secondary_text)
+                )
+            }
+        }
 
-    init {
-        TypedValue().also { outValue ->
-            context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
-            foreground = context.getDrawableCompat(outValue.resourceId)
+        Divider(modifier = Modifier.padding(vertical = dimensionResource(R.dimen.divider_margin_top_bottom)))
+
+        if (type.isNotBlank()) Text(
+            text = type,
+            color = colorResource(R.color.secondary_text),
+            style = MaterialTheme.typography.body2
+        )
+        Text(
+            text = subjectName,
+            style = MaterialTheme.typography.body1
+        )
+
+        teachers.forEach { teacher ->
+            Row(
+                verticalAlignment = Alignment.Bottom,
+                modifier = modifier
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_account),
+                    contentDescription = null,
+                    tint = colorResource(R.color.secondary_text)
+                )
+
+                Text(
+                    text = teacher,
+                    color = colorResource(R.color.secondary_text),
+                    style = MaterialTheme.typography.body1
+                )
+            }
         }
     }
-
-    /**
-     * Заполняет элементы интерфейса в соответствии с переданными данными.
-     *
-     * @since 0.3.0
-     */
-    fun setLesson(
-        subjectName: String,
-        type: String?,
-        teachers: List<String>,
-        classrooms: List<String>,
-        startTime: LocalTime,
-        endTime: LocalTime
-    ) {
-        binding.startTime.text = startTime.toString(TIME_FORMATTER)
-        binding.endTime.text = endTime.toString(TIME_FORMATTER)
-
-        binding.classroomsParent.visibility = if (classrooms.isNotEmpty()) View.VISIBLE else View.GONE
-        binding.classrooms.text = classrooms.joinToString()
-
-        binding.type.visibility = if (type?.isNotBlank() == true) View.VISIBLE else View.GONE
-        binding.type.text = type
-
-        binding.subjectName.text = subjectName
-
-        binding.teachersParent.visibility = if (teachers.isNotEmpty()) View.VISIBLE else View.GONE
-        binding.teachersParent.setViewCount(
-            teachers.size,
-            { TeacherView(context) },
-            { name = teachers[it] }
-        )
-    }
 }
+
+@Preview
+@Composable
+private fun LessonCardPreview() = LessonCard(
+    subjectName = "Интернет программирование",
+    type = "Лабораторная работа",
+    teachers = listOf("Кожухов Игорь Борисович"),
+    classrooms = listOf("4212а", "4212б"),
+    startTime = "09:00",
+    endTime = "10:30"
+)
