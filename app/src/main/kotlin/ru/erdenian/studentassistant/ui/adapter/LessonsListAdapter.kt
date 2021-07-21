@@ -4,12 +4,12 @@ import android.view.ViewGroup
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.recyclerview.widget.RecyclerView
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.entity.Lesson
+import ru.erdenian.studentassistant.uikit.style.AppTheme
 import ru.erdenian.studentassistant.uikit.views.LessonCard
 
 class LessonsListAdapter : RecyclerView.Adapter<LessonsListAdapter.ItemViewHolder>() {
@@ -32,7 +32,7 @@ class LessonsListAdapter : RecyclerView.Adapter<LessonsListAdapter.ItemViewHolde
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val lesson = lessons[position]
         holder.view.setContent {
-            MaterialTheme {
+            AppTheme {
                 LessonCard(
                     lesson.subjectName,
                     lesson.type,

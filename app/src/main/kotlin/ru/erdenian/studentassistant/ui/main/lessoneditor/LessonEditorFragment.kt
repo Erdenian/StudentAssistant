@@ -9,11 +9,15 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.MultiAutoCompleteTextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.background
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -29,6 +33,7 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentLessonEditorBinding
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.ui.main.lessoneditor.LessonEditorViewModel.Error
+import ru.erdenian.studentassistant.uikit.style.AppTheme
 import ru.erdenian.studentassistant.uikit.views.WeeksSelector
 import ru.erdenian.studentassistant.utils.distinctUntilChanged
 import ru.erdenian.studentassistant.utils.getColorCompat
@@ -209,11 +214,14 @@ class LessonEditorFragment : Fragment(R.layout.fragment_lesson_editor) {
                 fun <T : Any> LiveData<T>.observeAsStateNonNull(): State<T> = observeAsState(checkNotNull(value))
 
                 val weeks by viewModel.weeks.observeAsStateNonNull()
-                MaterialTheme {
-                    WeeksSelector(
-                        weeks = weeks,
-                        onWeeksChange = { viewModel.weeks.value = it }
-                    )
+                AppTheme {
+                    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.onBackground) {
+                        WeeksSelector(
+                            weeks = weeks,
+                            onWeeksChange = { viewModel.weeks.value = it },
+                            modifier = Modifier.background(MaterialTheme.colors.background)
+                        )
+                    }
                 }
             }
         }

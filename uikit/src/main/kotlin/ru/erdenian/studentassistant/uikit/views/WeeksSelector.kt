@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.uikit.views
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,8 +15,11 @@ import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +38,7 @@ import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import ru.erdenian.studentassistant.uikit.R
+import ru.erdenian.studentassistant.uikit.style.AppTheme
 
 /**
  * View для выбора недель для повторения пары.
@@ -259,41 +264,70 @@ private fun WeeksSelectorView(
 
 @Preview
 @Composable
-private fun WeeksSelectorPreview() = WeeksSelectorView(
-    repeatVariants = listOf("По чётным", "По нечётным", "Своё"),
-    selectedRepeatVariantIndex = 2,
-    repeatVariantsExpanded = false,
-    onSelectedRepeatVariantClick = {},
-    onRepeatVariantsDismissRequest = {},
-    onRepeatVariantClick = {},
-    weeks = listOf(true, false, true),
-    onWeekClick = { _, _ -> },
-    onMinusClick = {},
-    onPlusClick = {},
-    isMinusEnabled = true,
-    isPlusEnabled = true,
-    isCustomEnabled = true,
-    modifier = Modifier.fillMaxWidth()
-)
+private fun WeeksSelectorPreview() = AppTheme {
+    WeeksSelectorView(
+        repeatVariants = listOf("По чётным", "По нечётным", "Своё"),
+        selectedRepeatVariantIndex = 2,
+        repeatVariantsExpanded = false,
+        onSelectedRepeatVariantClick = {},
+        onRepeatVariantsDismissRequest = {},
+        onRepeatVariantClick = {},
+        weeks = listOf(true, false, true),
+        onWeekClick = { _, _ -> },
+        onMinusClick = {},
+        onPlusClick = {},
+        isMinusEnabled = true,
+        isPlusEnabled = true,
+        isCustomEnabled = true,
+        modifier = Modifier.fillMaxWidth()
+    )
+}
 
 @Preview
 @Composable
-private fun WeeksSelectorPreviewLongRepeatVariant() = WeeksSelectorView(
-    repeatVariants = listOf("По чётным чётным чётным чётным чётным чётным чётным"),
-    selectedRepeatVariantIndex = 0,
-    repeatVariantsExpanded = false,
-    onSelectedRepeatVariantClick = {},
-    onRepeatVariantsDismissRequest = {},
-    onRepeatVariantClick = {},
-    weeks = listOf(true, false, true),
-    onWeekClick = { _, _ -> },
-    onMinusClick = {},
-    onPlusClick = {},
-    isMinusEnabled = true,
-    isPlusEnabled = true,
-    isCustomEnabled = true,
-    modifier = Modifier.fillMaxWidth()
-)
+private fun WeeksSelectorPreviewLongRepeatVariant() = AppTheme {
+    WeeksSelectorView(
+        repeatVariants = listOf("По чётным чётным чётным чётным чётным чётным чётным"),
+        selectedRepeatVariantIndex = 0,
+        repeatVariantsExpanded = false,
+        onSelectedRepeatVariantClick = {},
+        onRepeatVariantsDismissRequest = {},
+        onRepeatVariantClick = {},
+        weeks = listOf(true, false, true, false, true, false, true, false, true, false, true, false),
+        onWeekClick = { _, _ -> },
+        onMinusClick = {},
+        onPlusClick = {},
+        isMinusEnabled = true,
+        isPlusEnabled = true,
+        isCustomEnabled = true,
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+@Preview
+@Composable
+private fun WeeksSelectorPreviewDark() = AppTheme(isDarkTheme = true) {
+    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.onBackground) {
+        WeeksSelectorView(
+            repeatVariants = listOf("По чётным", "По нечётным", "Своё"),
+            selectedRepeatVariantIndex = 2,
+            repeatVariantsExpanded = false,
+            onSelectedRepeatVariantClick = {},
+            onRepeatVariantsDismissRequest = {},
+            onRepeatVariantClick = {},
+            weeks = listOf(true, false, true),
+            onWeekClick = { _, _ -> },
+            onMinusClick = {},
+            onPlusClick = {},
+            isMinusEnabled = true,
+            isPlusEnabled = true,
+            isCustomEnabled = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colors.background)
+        )
+    }
+}
 
 @Composable
 private fun CheckBoxWithText(
@@ -304,10 +338,9 @@ private fun CheckBoxWithText(
     enabled: Boolean = true
 ) = Column(
     horizontalAlignment = Alignment.CenterHorizontally,
-    modifier = Modifier
+    modifier = modifier
+        .run { if (enabled) clickable { onCheckedChange?.invoke(!checked) } else this }
         .padding(4.dp)
-        .clickable { if (enabled) onCheckedChange?.invoke(!checked) }
-        .then(modifier)
 ) {
     Checkbox(checked = checked, onCheckedChange = null, enabled = enabled)
     Text(text = text, maxLines = 1)
@@ -315,16 +348,37 @@ private fun CheckBoxWithText(
 
 @Preview(name = "Short text")
 @Composable
-private fun CheckBoxWithTextPreviewShort() = CheckBoxWithText(true, "1", null)
+private fun CheckBoxWithTextPreviewShort() = AppTheme {
+    CheckBoxWithText(true, "1", null)
+}
 
 @Preview(name = "Medium text")
 @Composable
-private fun CheckBoxWithTextPreviewMedium() = CheckBoxWithText(true, "Text", null)
+private fun CheckBoxWithTextPreviewMedium() = AppTheme {
+    CheckBoxWithText(true, "Text", null)
+}
 
 @Preview(name = "Long text")
 @Composable
-private fun CheckBoxWithTextPreviewLong() = CheckBoxWithText(true, "Long text", null)
+private fun CheckBoxWithTextPreviewLong() = AppTheme {
+    CheckBoxWithText(true, "Long text", null)
+}
 
 @Preview(name = "Disabled")
 @Composable
-private fun CheckBoxWithTextPreviewDisabled() = CheckBoxWithText(true, "Disabled", null, enabled = false)
+private fun CheckBoxWithTextPreviewDisabled() = AppTheme {
+    CheckBoxWithText(true, "Disabled", null, enabled = false)
+}
+
+@Preview(name = "Dark theme")
+@Composable
+private fun CheckBoxWithTextPreviewDark() = AppTheme(isDarkTheme = true) {
+    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.onBackground) {
+        CheckBoxWithText(
+            true,
+            "Dark",
+            null,
+            modifier = Modifier.background(MaterialTheme.colors.background)
+        )
+    }
+}
