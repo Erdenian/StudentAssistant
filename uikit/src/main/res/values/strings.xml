@@ -2,7 +2,7 @@
 <resources>
 
     <!--HomeworkCard -->
-    <string name="hc_deadline">До</string>
+    <string name="hc_deadline">До %1$s</string>
 
     <!-- WeeksSelector -->
     <string name="ws_variants_title">Повторять</string>
