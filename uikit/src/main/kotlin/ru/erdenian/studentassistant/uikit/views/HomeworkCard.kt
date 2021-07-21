@@ -1,51 +1,52 @@
 package ru.erdenian.studentassistant.uikit.views
 
-import android.content.Context
-import android.util.AttributeSet
-import android.util.TypedValue
-import androidx.core.content.getSystemService
-import com.google.android.material.card.MaterialCardView
-import org.joda.time.LocalDate
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Card
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import ru.erdenian.studentassistant.uikit.R
-import ru.erdenian.studentassistant.uikit.databinding.CardHomeworkBinding
-import ru.erdenian.studentassistant.utils.getDrawableCompat
 
 /**
  * Карточка домашнего задания.
- *
- * @see MaterialCardView
- *
- * @version 1.0.0
- * @author Ilya Solovyov
- * @since 0.3.0
  */
-class HomeworkCard @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = R.attr.materialCardViewStyle
-) : MaterialCardView(context, attrs, defStyleAttr) {
+@Composable
+fun HomeworkCard(
+    subjectName: String,
+    description: String,
+    deadline: String,
+    modifier: Modifier = Modifier
+) = Card(
+    modifier = modifier
+) {
+    Column(
+        modifier = Modifier.padding(dimensionResource(R.dimen.card_margin_inside))
+    ) {
+        Text(
+            text = subjectName,
+            style = MaterialTheme.typography.body1
+        )
 
-    companion object {
-        private const val DATE_FORMATTER = "dd.MM.yyyy"
-    }
+        Divider(modifier = Modifier.padding(vertical = dimensionResource(R.dimen.divider_margin_top_bottom)))
 
-    private val binding = CardHomeworkBinding.inflate(requireNotNull(context.getSystemService()), this)
+        Text(
+            text = description,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 3,
+            style = MaterialTheme.typography.body2
+        )
 
-    init {
-        TypedValue().also { outValue ->
-            context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
-            foreground = context.getDrawableCompat(outValue.resourceId)
-        }
-    }
-
-    /**
-     * Заполняет элементы интерфейса в соответствии с переданными данными.
-     *
-     * @since 0.3.0
-     */
-    fun setHomework(subjectName: String, description: String, deadline: LocalDate) {
-        binding.subjectName.text = subjectName
-        binding.description.text = description
-        binding.deadline.text = deadline.toString(DATE_FORMATTER)
+        Text(
+            text = stringResource(R.string.hc_deadline, deadline),
+            color = colorResource(R.color.secondary_text),
+            style = MaterialTheme.typography.body2
+        )
     }
 }
