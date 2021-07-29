@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
 import org.kodein.di.DIAware
-import org.kodein.di.android.x.di
+import org.kodein.di.android.x.closestDI
 import org.kodein.di.instance
 import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.repository.SemesterRepository
@@ -21,7 +21,7 @@ class SemesterEditorViewModel(
     private val semester: Semester?
 ) : AndroidViewModel(application), DIAware {
 
-    override val di by di()
+    override val di by closestDI()
     private val semesterRepository by instance<SemesterRepository>()
 
     enum class Error {
