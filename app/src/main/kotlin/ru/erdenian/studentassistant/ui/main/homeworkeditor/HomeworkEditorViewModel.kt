@@ -11,7 +11,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.joda.time.LocalDate
 import org.kodein.di.DIAware
-import org.kodein.di.android.x.di
+import org.kodein.di.android.x.closestDI
 import org.kodein.di.instance
 import ru.erdenian.studentassistant.entity.Homework
 import ru.erdenian.studentassistant.entity.Lesson
@@ -26,7 +26,7 @@ class HomeworkEditorViewModel private constructor(
     lesson: Lesson?
 ) : AndroidViewModel(application), DIAware {
 
-    override val di by di()
+    override val di by closestDI()
     private val semesterRepository by instance<SemesterRepository>()
     private val lessonRepository by instance<LessonRepository>()
     private val homeworkRepository by instance<HomeworkRepository>()
