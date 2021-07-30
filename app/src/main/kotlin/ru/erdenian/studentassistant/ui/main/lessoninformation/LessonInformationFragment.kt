@@ -96,7 +96,7 @@ class LessonInformationFragment : Fragment(R.layout.fragment_lesson_information)
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
         requireActivity().menuInflater.inflate(R.menu.context_homeworks, menu)
         @Suppress("UnsafeCast")
-        (menuInfo as AdapterView.AdapterContextMenuInfo?)?.run {
+        (menuInfo as AdapterView.AdapterContextMenuInfo).run {
             menu.setHeaderTitle(homeworksAdapter.homeworks[position].subjectName)
         }
     }

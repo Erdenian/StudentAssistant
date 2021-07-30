@@ -11,8 +11,11 @@ import ru.erdenian.studentassistant.database.ScheduleDatabase
 fun databaseKodein(application: Application, databaseName: String? = null) = DI.direct {
     bindSingleton {
         val builder =
-            if (databaseName == null) Room.inMemoryDatabaseBuilder(application, ScheduleDatabase::class.java)
-            else Room.databaseBuilder(application, ScheduleDatabase::class.java, databaseName)
+            if (databaseName == null) {
+                Room.inMemoryDatabaseBuilder(application, ScheduleDatabase::class.java)
+            } else {
+                Room.databaseBuilder(application, ScheduleDatabase::class.java, databaseName)
+            }
         builder.build()
     }
 

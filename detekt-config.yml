@@ -1,5 +1,5 @@
 build:
-  maxIssues: 40
+  maxIssues: 30
   excludeCorrectable: false
   weights:
     UnsafeCallOnNullableType: 100500
@@ -49,7 +49,7 @@ output-reports:
 
 comments:
   active: true
-  excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
+  excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
   AbsentOrWrongFileLicense:
     active: false
     licenseTemplateFile: 'license.template'
@@ -127,7 +127,7 @@ complexity:
     ignoreStringsRegex: '$^'
   TooManyFunctions:
     active: true
-    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/*Dao.kt', '**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     thresholdInFiles: 11
     thresholdInClasses: 11
     thresholdInInterfaces: 11
@@ -249,7 +249,7 @@ formatting:
   android: true
   autoCorrect: false
   AnnotationOnSeparateLine:
-    active: false
+    active: true
     autoCorrect: true
   AnnotationSpacing:
     active: true
@@ -275,9 +275,8 @@ formatting:
     autoCorrect: true
     insertFinalNewLine: true
   ImportOrdering:
-    active: false
+    active: true
     autoCorrect: true
-    layout: '*,java.**,javax.**,kotlin.**,^'
   Indentation:
     active: true
     autoCorrect: true
@@ -627,12 +626,12 @@ style:
     ignoreRanges: false
     ignoreExtensionFunctions: true
   MandatoryBracesIfStatements:
-    active: false
+    active: true
   MandatoryBracesLoops:
-    active: false
+    active: true
   MaxLineLength:
     active: true
-    excludes: "**/*Dao.kt"
+    excludes: '**/*Dao.kt'
     maxLineLength: 130
     excludePackageStatements: true
     excludeImportStatements: true
@@ -717,7 +716,7 @@ style:
   UseCheckNotNull:
     active: true
   UseCheckOrError:
-    active: false
+    active: true
   UseDataClass:
     active: true
     excludeAnnotatedClasses: []

@@ -27,8 +27,11 @@ private abstract class SharedPreferenceMutableLiveData<T>(
     private val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, k ->
         if (k != key) return@OnSharedPreferenceChangeListener
 
-        if (Looper.myLooper() == Looper.getMainLooper()) value = sharedValue
-        else postValue(sharedValue)
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            value = sharedValue
+        } else {
+            postValue(sharedValue)
+        }
     }
 
     init {

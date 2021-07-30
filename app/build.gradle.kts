@@ -10,15 +10,15 @@ android {
     val compileSdkVersion: String by project
     val targetSdkVersion: String by project
 
-    compileSdkVersion(compileSdkVersion.toInt())
+    compileSdk = compileSdkVersion.toInt()
 
     defaultConfig {
         applicationId = "ru.erdenian.studentassistant"
         versionCode = 18
         versionName = "0.4.5"
 
-        minSdkVersion(21)
-        targetSdkVersion(targetSdkVersion.toInt())
+        minSdk = 21
+        targetSdk = targetSdkVersion.toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
