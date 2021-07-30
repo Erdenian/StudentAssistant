@@ -1,5 +1,3 @@
-@file:Suppress("TooManyFunctions")
-
 package ru.erdenian.studentassistant.utils
 
 import androidx.lifecycle.LiveData

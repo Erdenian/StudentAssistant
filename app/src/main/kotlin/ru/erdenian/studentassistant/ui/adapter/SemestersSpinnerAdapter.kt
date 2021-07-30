@@ -15,13 +15,11 @@ class SemestersSpinnerAdapter : GenericBaseAdapter<Semester>() {
             notifyDataSetChanged()
         }
 
-    @Suppress("UnsafeCast")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup) =
         getOrInflateView<TextView>(convertView, parent, R.layout.spinner_item_semesters).apply {
             text = semesters[position].name
         }
 
-    @Suppress("UnsafeCast")
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View =
         getOrInflateView<TextView>(convertView, parent, R.layout.spinner_dropdown_item_semesters).apply {
             text = semesters[position].name

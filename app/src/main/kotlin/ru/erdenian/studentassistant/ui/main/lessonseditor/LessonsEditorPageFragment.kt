@@ -60,7 +60,7 @@ class LessonsEditorPageFragment : Fragment(R.layout.page_fragment_lessons_editor
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
         requireActivity().menuInflater.inflate(R.menu.context_lessons_editor, menu)
         @Suppress("UnsafeCast")
-        (menuInfo as AdapterView.AdapterContextMenuInfo?)?.run {
+        (menuInfo as AdapterView.AdapterContextMenuInfo).run {
             menu.setHeaderTitle(adapter.lessons[position].subjectName)
         }
     }
