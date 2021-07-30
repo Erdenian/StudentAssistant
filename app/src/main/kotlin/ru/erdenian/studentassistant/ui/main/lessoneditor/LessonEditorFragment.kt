@@ -135,14 +135,14 @@ class LessonEditorFragment : Fragment(R.layout.fragment_lesson_editor) {
                 value == when (selectedItemPosition) {
                     byWeekdayIndex -> Lesson.Repeat.ByWeekday::class
                     byDatesIndex -> Lesson.Repeat.ByDates::class
-                    else -> throw IllegalStateException("Неизвестный тип повторения")
+                    else -> error("Неизвестный тип повторения")
                 }
             }.observe(owner) { lessonRepeat ->
                 setSelection(
                     when (lessonRepeat) {
                         Lesson.Repeat.ByWeekday::class -> byWeekdayIndex
                         Lesson.Repeat.ByDates::class -> byDatesIndex
-                        else -> throw IllegalStateException("Неизвестный тип повторений: $lessonRepeat")
+                        else -> error("Неизвестный тип повторений: $lessonRepeat")
                     }
                 )
             }
@@ -151,7 +151,7 @@ class LessonEditorFragment : Fragment(R.layout.fragment_lesson_editor) {
                     viewModel.lessonRepeat.value = when (position) {
                         byWeekdayIndex -> Lesson.Repeat.ByWeekday::class
                         byDatesIndex -> Lesson.Repeat.ByDates::class
-                        else -> throw IllegalStateException("Неизвестный тип повторения")
+                        else -> error("Неизвестный тип повторения")
                     }
                 }
 
@@ -167,7 +167,7 @@ class LessonEditorFragment : Fragment(R.layout.fragment_lesson_editor) {
                 displayedChild = when (lessonRepeat) {
                     Lesson.Repeat.ByWeekday::class -> byWeekdayIndex
                     Lesson.Repeat.ByDates::class -> byDatesIndex
-                    else -> throw IllegalStateException("Неизвестный тип повторений: $lessonRepeat")
+                    else -> error("Неизвестный тип повторений: $lessonRepeat")
                 }
             }
         }

@@ -37,8 +37,11 @@ class TimeDurationPreferenceDialog : PreferenceDialogFragmentCompat() {
     private var TimePicker.duration: Duration
         get() {
             val period =
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) Period(hour, minute, 0, 0)
-                else Period(currentHour, currentMinute, 0, 0)
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                    Period(hour, minute, 0, 0)
+                } else {
+                    Period(currentHour, currentMinute, 0, 0)
+                }
             return period.toStandardDuration()
         }
         set(value) {

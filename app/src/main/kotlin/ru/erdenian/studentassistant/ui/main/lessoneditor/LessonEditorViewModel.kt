@@ -114,9 +114,13 @@ class LessonEditorViewModel private constructor(
         val observer = Observer { startTime: LocalTime ->
             val previous = previousStartTime
             val endTime = value
-            if ((previous == null) || (endTime == null)) viewModelScope.launch {
-                value = startTime + settingsRepository.defaultLessonDuration.toPeriod()
-            } else value = startTime + Period.fieldDifference(previous, endTime)
+            if ((previous == null) || (endTime == null)) {
+                viewModelScope.launch {
+                    value = startTime + settingsRepository.defaultLessonDuration.toPeriod()
+                }
+            } else {
+                value = startTime + Period.fieldDifference(previous, endTime)
+            }
             previousStartTime = startTime
         }
         addSource(startTime, observer)
@@ -221,11 +225,9 @@ class LessonEditorViewModel private constructor(
                 }
             }
 
-            if (forceRenameOther && (oldLesson != null)) lessonRepository.renameSubject(
-                oldLesson.semesterId,
-                oldLesson.subjectName,
-                subjectName
-            )
+            if (forceRenameOther && (oldLesson != null)) {
+                lessonRepository.renameSubject(oldLesson.semesterId, oldLesson.subjectName, subjectName)
+            }
 
             donePrivate.value = true
         }

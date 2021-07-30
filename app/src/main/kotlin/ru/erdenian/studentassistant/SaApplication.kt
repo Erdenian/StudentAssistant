@@ -10,7 +10,6 @@ import ru.erdenian.studentassistant.repository.di.repositoryModule
 @Suppress("unused")
 class SaApplication : Application(), DIAware {
 
-    @Suppress("MagicNumber")
     override val di by DI.lazy {
         val app = this@SaApplication
         import(repositoryModule(app, "schedule.db"))
