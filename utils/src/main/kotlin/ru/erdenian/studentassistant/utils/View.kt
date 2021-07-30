@@ -42,7 +42,7 @@ fun <V : View> ViewGroup.setViewCount(
         when (view.parent) {
             null -> addView(view)
             this -> Unit
-            else -> throw IllegalStateException("View must not be attached to any other ViewGroup")
+            else -> error("View must not be attached to any other ViewGroup")
         }
     }
 

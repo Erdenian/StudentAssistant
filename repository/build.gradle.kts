@@ -8,20 +8,14 @@ android {
     val compileSdkVersion: String by project
     val targetSdkVersion: String by project
 
-    compileSdkVersion(compileSdkVersion.toInt())
+    compileSdk = compileSdkVersion.toInt()
 
     defaultConfig {
-        versionCode = 1
-        versionName = "1.0"
-
-        minSdkVersion(16)
-        targetSdkVersion(targetSdkVersion.toInt())
+        minSdk = 16
+        targetSdk = targetSdkVersion.toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArgument(
-            "runnerBuilder",
-            "de.mannodermaus.junit5.AndroidJUnit5Builder"
-        )
+        testInstrumentationRunnerArguments += mapOf("runnerBuilder" to "de.mannodermaus.junit5.AndroidJUnit5Builder")
 
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -42,7 +36,7 @@ android {
 
     packagingOptions {
         // JUnit 5
-        exclude("META-INF/LICENSE*")
+        resources.excludes += "META-INF/LICENSE*"
     }
 
     sourceSets {

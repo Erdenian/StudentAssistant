@@ -111,8 +111,9 @@ class HomeworkEditorFragment : Fragment(R.layout.fragment_homework_editor) {
                     }
                 )
             } ?: run {
-                if (viewModel.lessonExists) viewModel.save()
-                else {
+                if (viewModel.lessonExists) {
+                    viewModel.save()
+                } else {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle(R.string.hef_unknown_lesson)
                         .setMessage(R.string.hef_unknown_lesson_message)

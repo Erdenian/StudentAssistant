@@ -62,8 +62,7 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
             val hasHomeworksIndex = 0
             val noScheduleIndex = 1
             val hoHomeworksIndex = 2
-            viewModel.state.observe(owner) { state ->
-                @Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
+            viewModel.state.observe(owner) { state: HomeworksViewModel.State ->
                 displayedChild = when (state) {
                     HomeworksViewModel.State.NO_SCHEDULE -> noScheduleIndex
                     HomeworksViewModel.State.NO_HOMEWORKS -> hoHomeworksIndex

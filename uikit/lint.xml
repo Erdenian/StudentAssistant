@@ -12,7 +12,7 @@
     <issue id="SyntheticAccessor" severity="ignore" />
     <issue id="TypographyQuotes" severity="warning" />
     <issue id="UnknownNullness" severity="warning" />
-    <issue id="UnusedIds" severity="error" />
+    <issue id="UnusedIds" severity="warning" />
     <issue id="ValidActionsXml" severity="warning" />
     <issue id="WrongThreadInterprocedural" severity="error" />
 </lint>

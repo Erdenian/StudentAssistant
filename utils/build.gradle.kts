@@ -7,14 +7,11 @@ android {
     val compileSdkVersion: String by project
     val targetSdkVersion: String by project
 
-    compileSdkVersion(compileSdkVersion.toInt())
+    compileSdk = compileSdkVersion.toInt()
 
     defaultConfig {
-        versionCode = 1
-        versionName = "1.0"
-
-        minSdkVersion(16)
-        targetSdkVersion(targetSdkVersion.toInt())
+        minSdk = 16
+        targetSdk = targetSdkVersion.toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -54,7 +51,7 @@ dependencies {
     // region AndroidX
     api("androidx.core:core-ktx:1.6.0")
 
-    api("androidx.fragment:fragment-ktx:1.3.5")
+    api("androidx.fragment:fragment-ktx:1.3.6")
 
     val lifecycleVersion: String by project
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")

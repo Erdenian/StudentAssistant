@@ -8,7 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.kodein.di.DIAware
-import org.kodein.di.android.x.di
+import org.kodein.di.android.x.closestDI
 import org.kodein.di.instance
 import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.repository.HomeworkRepository
@@ -17,7 +17,7 @@ import ru.erdenian.studentassistant.repository.SemesterRepository
 
 class HomeworksViewModel(application: Application) : AndroidViewModel(application), DIAware {
 
-    override val di by di()
+    override val di by closestDI()
     private val selectedSemesterRepository by instance<SelectedSemesterRepository>()
     private val semesterRepository by instance<SemesterRepository>()
     private val homeworkRepository by instance<HomeworkRepository>()

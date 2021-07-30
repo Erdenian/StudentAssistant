@@ -18,7 +18,7 @@ import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 import org.joda.time.Period
 import org.kodein.di.DIAware
-import org.kodein.di.android.x.di
+import org.kodein.di.android.x.closestDI
 import org.kodein.di.instance
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.entity.immutableSortedSetOf
@@ -34,7 +34,7 @@ class LessonEditorViewModel private constructor(
     private val lesson: Lesson?
 ) : AndroidViewModel(application), DIAware {
 
-    override val di by di()
+    override val di by closestDI()
     private val lessonRepository by instance<LessonRepository>()
     private val homeworkRepository by instance<HomeworkRepository>()
     private val settingsRepository by instance<SettingsRepository>()
@@ -114,9 +114,13 @@ class LessonEditorViewModel private constructor(
         val observer = Observer { startTime: LocalTime ->
             val previous = previousStartTime
             val endTime = value
-            if ((previous == null) || (endTime == null)) viewModelScope.launch {
-                value = startTime + settingsRepository.defaultLessonDuration.toPeriod()
-            } else value = startTime + Period.fieldDifference(previous, endTime)
+            if ((previous == null) || (endTime == null)) {
+                viewModelScope.launch {
+                    value = startTime + settingsRepository.defaultLessonDuration.toPeriod()
+                }
+            } else {
+                value = startTime + Period.fieldDifference(previous, endTime)
+            }
             previousStartTime = startTime
         }
         addSource(startTime, observer)
@@ -221,11 +225,9 @@ class LessonEditorViewModel private constructor(
                 }
             }
 
-            if (forceRenameOther && (oldLesson != null)) lessonRepository.renameSubject(
-                oldLesson.semesterId,
-                oldLesson.subjectName,
-                subjectName
-            )
+            if (forceRenameOther && (oldLesson != null)) {
+                lessonRepository.renameSubject(oldLesson.semesterId, oldLesson.subjectName, subjectName)
+            }
 
             donePrivate.value = true
         }
