@@ -1,22 +1,41 @@
 package ru.erdenian.studentassistant.ui.main.lessoninformation
 
 import android.os.Bundle
-import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.map
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentLessonInformationBinding
-import ru.erdenian.studentassistant.ui.adapter.HomeworksListAdapter
-import ru.erdenian.studentassistant.ui.adapter.SpacingItemDecoration
+import ru.erdenian.studentassistant.entity.Homework
+import ru.erdenian.studentassistant.uikit.style.AppTheme
+import ru.erdenian.studentassistant.uikit.views.HomeworkCard
 import ru.erdenian.studentassistant.utils.getColorCompat
 import ru.erdenian.studentassistant.utils.navArgsFactory
 import ru.erdenian.studentassistant.utils.setColor
@@ -30,13 +49,8 @@ class LessonInformationFragment : Fragment(R.layout.fragment_lesson_information)
     private val viewModel by viewModels<LessonInformationViewModel> {
         navArgsFactory<LessonInformationFragmentArgs> { LessonInformationViewModel(it, lesson) }
     }
-    private val homeworksAdapter by lazy {
-        HomeworksListAdapter().apply {
-            onHomeworkClickListener = { findNavController().navigate(LessonInformationFragmentDirections.editHomework(it)) }
-            viewModel.homeworks.observe(this@LessonInformationFragment) { homeworks = it.list }
-        }
-    }
 
+    @OptIn(ExperimentalFoundationApi::class)
     @Suppress("ComplexMethod")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = FragmentLessonInformationBinding.bind(view)
@@ -72,11 +86,58 @@ class LessonInformationFragment : Fragment(R.layout.fragment_lesson_information)
             }
         }
 
-        binding.content.homeworks.apply {
-            adapter = homeworksAdapter
-            layoutManager = LinearLayoutManager(context)
-            addItemDecoration(SpacingItemDecoration(context.resources.getDimensionPixelSize(R.dimen.cards_spacing)))
-            registerForContextMenu(this)
+        binding.content.homeworks.setContent {
+            val deadlineFormatter = DateTimeFormat.shortDate()
+            AppTheme {
+                val homeworks by viewModel.homeworks.map { it.list }.observeAsState(emptyList())
+                var contextMenuHomework by remember { mutableStateOf<Homework?>(null) }
+                Box {
+                    LazyColumn(
+                        contentPadding = PaddingValues(
+                            horizontal = dimensionResource(R.dimen.activity_horizontal_margin),
+                            vertical = dimensionResource(R.dimen.activity_vertical_margin)
+                        )
+                    ) {
+                        itemsIndexed(homeworks) { index, homework ->
+                            if (index != 0) Spacer(modifier = Modifier.height(dimensionResource(R.dimen.cards_spacing)))
+
+                            HomeworkCard(
+                                subjectName = homework.subjectName,
+                                description = homework.description,
+                                deadline = homework.deadline.toString(deadlineFormatter),
+                                modifier = Modifier
+                                    .combinedClickable(
+                                        onLongClick = { contextMenuHomework = homework },
+                                        onClick = {
+                                            findNavController().navigate(
+                                                LessonInformationFragmentDirections.editHomework(homework)
+                                            )
+                                        }
+                                    )
+                            )
+                        }
+                    }
+
+                    DropdownMenu(
+                        expanded = (contextMenuHomework != null),
+                        onDismissRequest = { contextMenuHomework = null }
+                    ) {
+                        DropdownMenuItem(
+                            onClick = {
+                                val homeworkId = checkNotNull(contextMenuHomework).id
+                                contextMenuHomework = null
+                                MaterialAlertDialogBuilder(requireContext())
+                                    .setMessage(R.string.lif_delete_message)
+                                    .setPositiveButton(R.string.lif_delete_yes) { _, _ -> viewModel.deleteHomework(homeworkId) }
+                                    .setNegativeButton(R.string.lif_delete_no, null)
+                                    .show()
+                            }
+                        ) {
+                            Text(text = stringResource(R.string.hf_delete_homework))
+                        }
+                    }
+                }
+            }
         }
 
         binding.addHomework.setOnClickListener {
@@ -91,31 +152,6 @@ class LessonInformationFragment : Fragment(R.layout.fragment_lesson_information)
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_lesson_information, menu)
         menu.setColor(requireContext().getColorCompat(R.color.menu))
-    }
-
-    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
-        requireActivity().menuInflater.inflate(R.menu.context_homeworks, menu)
-        @Suppress("UnsafeCast")
-        (menuInfo as AdapterView.AdapterContextMenuInfo).run {
-            menu.setHeaderTitle(homeworksAdapter.homeworks[position].subjectName)
-        }
-    }
-
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        @Suppress("UnsafeCast")
-        val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
-        val homework = homeworksAdapter.homeworks[info.position]
-        return when (item.itemId) {
-            R.id.ch_delete -> {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setMessage(R.string.lif_delete_message)
-                    .setPositiveButton(R.string.lif_delete_yes) { _, _ -> viewModel.deleteHomework(homework.id) }
-                    .setNegativeButton(R.string.lif_delete_no, null)
-                    .show()
-                true
-            }
-            else -> false
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
