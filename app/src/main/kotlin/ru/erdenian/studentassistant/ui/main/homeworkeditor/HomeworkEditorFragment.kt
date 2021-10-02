@@ -28,6 +28,7 @@ import ru.erdenian.studentassistant.utils.toast
 class HomeworkEditorFragment : Fragment(R.layout.fragment_homework_editor) {
 
     companion object {
+        @Deprecated("")
         private const val DATE_FORMAT = "dd.MM.yyyy"
     }
 
