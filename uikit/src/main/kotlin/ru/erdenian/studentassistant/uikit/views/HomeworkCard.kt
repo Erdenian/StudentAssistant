@@ -37,6 +37,8 @@ fun HomeworkCard(
     ) {
         Text(
             text = subjectName,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
             style = MaterialTheme.typography.body1
         )
 
@@ -63,7 +65,7 @@ fun HomeworkCard(
 private fun HomeworkCardPreview() = AppTheme {
     HomeworkCard(
         subjectName = "Интернет программирование",
-        description = "Сделать лабы",
+        description = "Лабораторная работа",
         deadline = "21.08.2021"
     )
 }
@@ -73,7 +75,17 @@ private fun HomeworkCardPreview() = AppTheme {
 private fun HomeworkCardPreviewDark() = AppTheme(isDarkTheme = true) {
     HomeworkCard(
         subjectName = "Интернет программирование",
-        description = "Сделать лабы",
+        description = "Лабораторная работа",
+        deadline = "21.08.2021"
+    )
+}
+
+@Preview
+@Composable
+private fun HomeworkCardPreviewLong() = AppTheme {
+    HomeworkCard(
+        subjectName = "Интернет программирование программирование программирование программирование программирование",
+        description = "Лабораторная работа" + " работа".repeat(100),
         deadline = "21.08.2021"
     )
 }
