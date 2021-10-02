@@ -45,6 +45,7 @@ import ru.erdenian.studentassistant.utils.toast
 class LessonEditorFragment : Fragment(R.layout.fragment_lesson_editor) {
 
     companion object {
+        @Deprecated("")
         private const val TIME_FORMAT = "HH:mm"
     }
 

@@ -25,6 +25,7 @@ import ru.erdenian.studentassistant.utils.toast
 class SemesterEditorFragment : Fragment(R.layout.fragment_semester_editor) {
 
     companion object {
+        @Deprecated("")
         private const val DATE_FORMAT = "dd.MM.yyyy"
     }
 
