@@ -68,19 +68,21 @@ private fun TopAppBarActionsContent(
     }
 
     val neverShow = actions.filterIsInstance<ActionItem.NeverShow>()
-    if (neverShow.isNotEmpty()) Box {
-        IconButton(onClick = onExpandClick) {
-            Icon(imageVector = AppIcons.MoreVert, contentDescription = null)
-        }
+    if (neverShow.isNotEmpty()) {
+        Box {
+            IconButton(onClick = onExpandClick) {
+                Icon(imageVector = AppIcons.MoreVert, contentDescription = null)
+            }
 
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = onDismissRequest,
-            offset = DpOffset(0.dp, (-48).dp)
-        ) {
-            neverShow.forEach { item ->
-                DropdownMenuItem(onClick = item.onClick) {
-                    Text(text = item.name)
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = onDismissRequest,
+                offset = DpOffset(0.dp, (-48).dp)
+            ) {
+                neverShow.forEach { item ->
+                    DropdownMenuItem(onClick = item.onClick) {
+                        Text(text = item.name)
+                    }
                 }
             }
         }

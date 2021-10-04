@@ -48,7 +48,6 @@ fun Lesson(
     override val endTime = endTime
     override val lessonRepeat = lessonRepeat
 
-
     override val semesterId get() = error("Not implemented")
     override val id get() = error("Not implemented")
 

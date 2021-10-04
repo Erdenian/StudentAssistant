@@ -51,10 +51,12 @@ fun LessonCard(
     Column(
         modifier = Modifier
             .run {
-                if ((onClick != null) || (onLongClick != null)) combinedClickable(
-                    onLongClick = onLongClick,
-                    onClick = onClick ?: {}
-                ) else this
+                if ((onClick != null) || (onLongClick != null)) {
+                    combinedClickable(
+                        onLongClick = onLongClick,
+                        onClick = onClick ?: {}
+                    )
+                } else this
             }
             .padding(dimensionResource(R.dimen.card_margin_inside))
     ) {

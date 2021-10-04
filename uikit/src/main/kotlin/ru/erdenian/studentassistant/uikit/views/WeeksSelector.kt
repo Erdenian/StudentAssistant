@@ -204,16 +204,17 @@ private fun WeeksSelectorView(
         )
     }
 
-    Divider(modifier = Modifier
-        .padding(vertical = 8.dp)
-        .width(1.dp)
-        .constrainAs(minusDivider) {
-            start.linkTo(minusButton.end)
-            top.linkTo(checkboxesScroll.top)
-            end.linkTo(checkboxesScroll.start)
-            bottom.linkTo(checkboxesScroll.bottom)
-            height = Dimension.fillToConstraints
-        }
+    Divider(
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .width(1.dp)
+            .constrainAs(minusDivider) {
+                start.linkTo(minusButton.end)
+                top.linkTo(checkboxesScroll.top)
+                end.linkTo(checkboxesScroll.start)
+                bottom.linkTo(checkboxesScroll.bottom)
+                height = Dimension.fillToConstraints
+            }
     )
 
     LazyRow(
@@ -236,16 +237,17 @@ private fun WeeksSelectorView(
         }
     }
 
-    Divider(modifier = Modifier
-        .padding(vertical = 8.dp)
-        .width(1.dp)
-        .constrainAs(plusDivider) {
-            top.linkTo(checkboxesScroll.top)
-            start.linkTo(checkboxesScroll.end)
-            bottom.linkTo(checkboxesScroll.bottom)
-            end.linkTo(plusButton.start)
-            height = Dimension.fillToConstraints
-        }
+    Divider(
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .width(1.dp)
+            .constrainAs(plusDivider) {
+                top.linkTo(checkboxesScroll.top)
+                start.linkTo(checkboxesScroll.end)
+                bottom.linkTo(checkboxesScroll.bottom)
+                end.linkTo(plusButton.start)
+                height = Dimension.fillToConstraints
+            }
     )
 
     IconButton(

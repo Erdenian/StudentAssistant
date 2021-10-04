@@ -77,27 +77,30 @@ class LessonInformationFragment : Fragment() {
             val lesson by viewModel.lesson.observeAsState(navArgs<LessonInformationFragmentArgs>().value.lesson)
             val homeworks by viewModel.homeworks.map { it.list }.observeAsState(emptyList())
 
-            if (lesson == null) findNavController().popBackStack()
-            else AppTheme {
-                LessonInformationContent(
-                    lesson = checkNotNull(lesson),
-                    homeworks = homeworks,
-                    onBackClick = { findNavController().popBackStack() },
-                    onEditClick = {
-                        findNavController().navigate(
-                            LessonInformationFragmentDirections.editLesson(checkNotNull(viewModel.lesson.value))
-                        )
-                    },
-                    onHomeworkClick = { homework ->
-                        findNavController().navigate(LessonInformationFragmentDirections.editHomework(homework))
-                    },
-                    onAddHomeworkClick = {
-                        findNavController().navigate(
-                            LessonInformationFragmentDirections.createHomework(checkNotNull(viewModel.lesson.value))
-                        )
-                    },
-                    onDeleteHomeworkClick = { viewModel.deleteHomework(it.id) }
-                )
+            if (lesson == null) {
+                findNavController().popBackStack()
+            } else {
+                AppTheme {
+                    LessonInformationContent(
+                        lesson = checkNotNull(lesson),
+                        homeworks = homeworks,
+                        onBackClick = { findNavController().popBackStack() },
+                        onEditClick = {
+                            findNavController().navigate(
+                                LessonInformationFragmentDirections.editLesson(checkNotNull(viewModel.lesson.value))
+                            )
+                        },
+                        onHomeworkClick = { homework ->
+                            findNavController().navigate(LessonInformationFragmentDirections.editHomework(homework))
+                        },
+                        onAddHomeworkClick = {
+                            findNavController().navigate(
+                                LessonInformationFragmentDirections.createHomework(checkNotNull(viewModel.lesson.value))
+                            )
+                        },
+                        onDeleteHomeworkClick = { viewModel.deleteHomework(it.id) }
+                    )
+                }
             }
         }
     }
