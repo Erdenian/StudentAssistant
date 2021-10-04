@@ -19,6 +19,9 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -29,7 +32,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -39,6 +41,7 @@ import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import ru.erdenian.studentassistant.uikit.R
+import ru.erdenian.studentassistant.uikit.style.AppIcons
 import ru.erdenian.studentassistant.uikit.style.AppTheme
 
 /**
@@ -160,7 +163,7 @@ private fun WeeksSelectorView(
         )
 
         Icon(
-            painter = painterResource(R.drawable.ic_plus),
+            imageVector = AppIcons.ArrowDropDown,
             contentDescription = null
         )
     }
@@ -196,7 +199,7 @@ private fun WeeksSelectorView(
         enabled = isMinusEnabled
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_minus),
+            imageVector = AppIcons.Remove,
             contentDescription = null
         )
     }
@@ -257,7 +260,7 @@ private fun WeeksSelectorView(
         enabled = isPlusEnabled
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_plus),
+            imageVector = AppIcons.Add,
             contentDescription = null
         )
     }

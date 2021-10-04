@@ -6,4 +6,4 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.LiveData
 
 @Composable
-fun <T : Any> LiveData<T>.observeAsStateNullable(): State<T> = observeAsState(checkNotNull(value))
+fun <T : Any> LiveData<T>.observeAsStateNonNull(): State<T> = observeAsState(checkNotNull(value))

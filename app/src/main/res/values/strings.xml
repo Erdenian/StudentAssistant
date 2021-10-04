@@ -37,6 +37,7 @@
     <string name="lif_title">Данные занятия</string>
     <string name="lif_no_homeworks">Нет заданий</string>
     <string name="lif_edit">Редактировать</string>
+    <string name="lif_delete_homework">Удалить</string>
     <string name="lif_delete_message">Удалить задание?</string>
     <string name="lif_delete_yes">Да</string>
     <string name="lif_delete_no">Нет</string>

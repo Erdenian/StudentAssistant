@@ -1,6 +1,8 @@
 package ru.erdenian.studentassistant.uikit.views
 
 import android.content.res.Configuration
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,6 +32,7 @@ import ru.erdenian.studentassistant.uikit.style.AppTheme
 /**
  * Карточка пары.
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LessonCard(
     subjectName: String,
@@ -38,13 +41,22 @@ fun LessonCard(
     classrooms: List<String>,
     startTime: String,
     endTime: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null
 ) = Card(
     elevation = 4.dp,
     modifier = modifier
 ) {
     Column(
-        modifier = Modifier.padding(dimensionResource(R.dimen.card_margin_inside))
+        modifier = Modifier
+            .run {
+                if ((onClick != null) || (onLongClick != null)) combinedClickable(
+                    onLongClick = onLongClick,
+                    onClick = onClick ?: {}
+                ) else this
+            }
+            .padding(dimensionResource(R.dimen.card_margin_inside))
     ) {
         Row(
             verticalAlignment = Alignment.Bottom
