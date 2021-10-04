@@ -59,22 +59,11 @@ import ru.erdenian.studentassistant.uikit.views.ExposedDropdownMenu
 import ru.erdenian.studentassistant.uikit.views.TopAppBarActions
 import ru.erdenian.studentassistant.utils.Homeworks
 import ru.erdenian.studentassistant.utils.navArgsFactory
-import ru.erdenian.studentassistant.utils.observeAsStateNullable
+import ru.erdenian.studentassistant.utils.observeAsStateNonNull
 import ru.erdenian.studentassistant.utils.showDatePicker
 import ru.erdenian.studentassistant.utils.toast
 
 class HomeworkEditorFragment : Fragment() {
-
-    private val viewModel by viewModels<HomeworkEditorViewModel> {
-        navArgsFactory<HomeworkEditorFragmentArgs> { application ->
-            when {
-                (semesterId >= 0) -> HomeworkEditorViewModel(application, semesterId)
-                (lesson != null) -> HomeworkEditorViewModel(application, lesson)
-                (homework != null) -> HomeworkEditorViewModel(application, homework)
-                else -> throw IllegalArgumentException("Wrong fragment arguments: $this")
-            }
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -84,14 +73,26 @@ class HomeworkEditorFragment : Fragment() {
 
     @Suppress("ComplexMethod")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val viewModel by viewModels<HomeworkEditorViewModel> {
+            navArgsFactory<HomeworkEditorFragmentArgs> { application ->
+                when {
+                    (semesterId >= 0) -> HomeworkEditorViewModel(application, semesterId)
+                    (lesson != null) -> HomeworkEditorViewModel(application, lesson)
+                    (homework != null) -> HomeworkEditorViewModel(application, homework)
+                    else -> throw IllegalArgumentException("Wrong fragment arguments: $this")
+                }
+            }
+        }
+
         val backObserver = Observer<Boolean> { if (it) findNavController().popBackStack() }
         viewModel.done.observe(viewLifecycleOwner, backObserver)
 
         (view as ComposeView).setContent {
             AppTheme {
-                val subjectName by viewModel.subjectName.observeAsStateNullable()
-                val description by viewModel.description.observeAsStateNullable()
-                val deadline by viewModel.deadline.observeAsStateNullable()
+                val subjectName by viewModel.subjectName.observeAsStateNonNull()
+                val description by viewModel.description.observeAsStateNonNull()
+                val deadline by viewModel.deadline.observeAsStateNonNull()
+
                 val semesterDatesRange by viewModel.semesterDatesRange.observeAsState(LocalDate.now()..LocalDate.now())
                 val error by viewModel.error.observeAsState()
                 val existingSubjects by viewModel.existingSubjects.map { it.list }.observeAsState(listOf())

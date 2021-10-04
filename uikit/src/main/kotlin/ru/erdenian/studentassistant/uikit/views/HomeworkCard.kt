@@ -1,6 +1,8 @@
 package ru.erdenian.studentassistant.uikit.views
 
 import android.content.res.Configuration
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
@@ -23,18 +25,28 @@ import ru.erdenian.studentassistant.uikit.style.AppTheme
 /**
  * Карточка домашнего задания.
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeworkCard(
     subjectName: String,
     description: String,
     deadline: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null
 ) = Card(
     elevation = 4.dp,
     modifier = modifier
 ) {
     Column(
-        modifier = Modifier.padding(dimensionResource(R.dimen.card_margin_inside))
+        modifier = Modifier
+            .run {
+                if ((onClick != null) || (onLongClick != null)) combinedClickable(
+                    onLongClick = onLongClick,
+                    onClick = onClick ?: {}
+                ) else this
+            }
+            .padding(dimensionResource(R.dimen.card_margin_inside))
     ) {
         Text(
             text = subjectName,

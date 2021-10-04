@@ -2,7 +2,6 @@ package ru.erdenian.studentassistant.ui.adapter
 
 import android.view.ViewGroup
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -34,18 +33,15 @@ class LessonsListAdapter : RecyclerView.Adapter<LessonsListAdapter.ItemViewHolde
         holder.view.setContent {
             AppTheme {
                 LessonCard(
-                    lesson.subjectName,
-                    lesson.type,
-                    lesson.teachers.list,
-                    lesson.classrooms.list,
-                    lesson.startTime.toString(timeFormatter),
-                    lesson.endTime.toString(timeFormatter),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .combinedClickable(
-                            onLongClick = { holder.view.showContextMenu() },
-                            onClick = { onLessonClickListener?.invoke(lesson) }
-                        )
+                    subjectName = lesson.subjectName,
+                    type = lesson.type,
+                    teachers = lesson.teachers.list,
+                    classrooms = lesson.classrooms.list,
+                    startTime = lesson.startTime.toString(timeFormatter),
+                    endTime = lesson.endTime.toString(timeFormatter),
+                    onClick = { onLessonClickListener?.invoke(lesson) },
+                    onLongClick = { holder.view.showContextMenu() },
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }

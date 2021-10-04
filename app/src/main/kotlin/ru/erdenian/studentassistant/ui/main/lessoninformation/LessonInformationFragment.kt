@@ -6,13 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -64,10 +62,6 @@ import ru.erdenian.studentassistant.utils.navArgsFactory
 
 class LessonInformationFragment : Fragment() {
 
-    private val viewModel by viewModels<LessonInformationViewModel> {
-        navArgsFactory<LessonInformationFragmentArgs> { LessonInformationViewModel(it, lesson) }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -75,6 +69,10 @@ class LessonInformationFragment : Fragment() {
     ) = ComposeView(inflater.context)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val viewModel by viewModels<LessonInformationViewModel> {
+            navArgsFactory<LessonInformationFragmentArgs> { LessonInformationViewModel(it, lesson) }
+        }
+
         (view as ComposeView).setContent {
             val lesson by viewModel.lesson.observeAsState(navArgs<LessonInformationFragmentArgs>().value.lesson)
             val homeworks by viewModel.homeworks.map { it.list }.observeAsState(emptyList())
@@ -156,22 +154,22 @@ private fun LessonInformationContent(
             startTime = lesson.startTime.toString(timeFormatter),
             endTime = lesson.endTime.toString(timeFormatter),
             modifier = Modifier.padding(
-                start = dimensionResource(R.dimen.activity_horizontal_margin),
-                end = dimensionResource(R.dimen.activity_horizontal_margin),
-                top = dimensionResource(R.dimen.activity_vertical_margin)
+                horizontal = dimensionResource(R.dimen.activity_horizontal_margin),
+                vertical = dimensionResource(R.dimen.activity_vertical_margin)
             )
         )
 
-        Divider(modifier = Modifier.padding(top = dimensionResource(R.dimen.activity_vertical_margin)))
+        Divider()
 
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
             if (homeworks.isEmpty()) {
                 Text(
                     text = stringResource(R.string.lif_no_homeworks),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.Center)
+                    modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
                 )
             } else {
                 var contextMenuHomework by remember { mutableStateOf<Homework?>(null) }
@@ -181,7 +179,8 @@ private fun LessonInformationContent(
                         horizontal = dimensionResource(R.dimen.activity_horizontal_margin),
                         vertical = dimensionResource(R.dimen.activity_vertical_margin)
                     ),
-                    verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.cards_spacing))
+                    verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.cards_spacing)),
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     itemsIndexed(homeworks) { _, homework ->
                         val deadlineFormatter = remember { DateTimeFormat.shortDate() }
@@ -190,11 +189,8 @@ private fun LessonInformationContent(
                             subjectName = homework.subjectName,
                             description = homework.description,
                             deadline = homework.deadline.toString(deadlineFormatter),
-                            modifier = Modifier
-                                .combinedClickable(
-                                    onLongClick = { contextMenuHomework = homework },
-                                    onClick = { onHomeworkClick(homework) }
-                                )
+                            onClick = { onHomeworkClick(homework) },
+                            onLongClick = { contextMenuHomework = homework }
                         )
                     }
                 }
@@ -215,7 +211,7 @@ private fun LessonInformationContent(
                                 .show()
                         }
                     ) {
-                        Text(text = stringResource(R.string.hf_delete_homework))
+                        Text(text = stringResource(R.string.lif_delete_homework))
                     }
                 }
             }
