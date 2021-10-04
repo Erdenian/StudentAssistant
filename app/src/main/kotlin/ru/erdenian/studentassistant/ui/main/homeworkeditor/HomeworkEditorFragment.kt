@@ -1,36 +1,69 @@
 package ru.erdenian.studentassistant.ui.main.homeworkeditor
 
+import android.content.res.Configuration
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
+import android.text.InputType
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
+import android.view.ViewGroup
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.LocalTextStyle
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.takeOrElse
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.map
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.databinding.FragmentHomeworkEditorBinding
 import ru.erdenian.studentassistant.ui.main.homeworkeditor.HomeworkEditorViewModel.Error
+import ru.erdenian.studentassistant.uikit.style.AppIcons
+import ru.erdenian.studentassistant.uikit.style.AppTheme
+import ru.erdenian.studentassistant.uikit.views.ActionItem
 import ru.erdenian.studentassistant.uikit.views.ExposedDropdownMenu
-import ru.erdenian.studentassistant.utils.distinctUntilChanged
-import ru.erdenian.studentassistant.utils.getColorCompat
+import ru.erdenian.studentassistant.uikit.views.TopAppBarActions
+import ru.erdenian.studentassistant.utils.Homeworks
 import ru.erdenian.studentassistant.utils.navArgsFactory
-import ru.erdenian.studentassistant.utils.setColor
+import ru.erdenian.studentassistant.utils.observeAsStateNullable
 import ru.erdenian.studentassistant.utils.showDatePicker
 import ru.erdenian.studentassistant.utils.toast
 
-class HomeworkEditorFragment : Fragment(R.layout.fragment_homework_editor) {
-
-    companion object {
-        @Deprecated("")
-        private const val DATE_FORMAT = "dd.MM.yyyy"
-    }
+class HomeworkEditorFragment : Fragment() {
 
     private val viewModel by viewModels<HomeworkEditorViewModel> {
         navArgsFactory<HomeworkEditorFragmentArgs> { application ->
@@ -43,105 +76,258 @@ class HomeworkEditorFragment : Fragment(R.layout.fragment_homework_editor) {
         }
     }
 
-    private val backObserver = Observer<Boolean> { if (it) findNavController().popBackStack() }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = ComposeView(inflater.context)
 
     @Suppress("ComplexMethod")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val binding = FragmentHomeworkEditorBinding.bind(view)
-        val owner = viewLifecycleOwner
-        setHasOptionsMenu(true)
+        val backObserver = Observer<Boolean> { if (it) findNavController().popBackStack() }
+        viewModel.done.observe(viewLifecycleOwner, backObserver)
 
-        (requireActivity() as AppCompatActivity).apply {
-            setSupportActionBar(binding.toolbar)
-            checkNotNull(supportActionBar).setDisplayHomeAsUpEnabled(true)
-        }
+        (view as ComposeView).setContent {
+            AppTheme {
+                val subjectName by viewModel.subjectName.observeAsStateNullable()
+                val description by viewModel.description.observeAsStateNullable()
+                val deadline by viewModel.deadline.observeAsStateNullable()
+                val semesterDatesRange by viewModel.semesterDatesRange.observeAsState(LocalDate.now()..LocalDate.now())
+                val error by viewModel.error.observeAsState()
+                val existingSubjects by viewModel.existingSubjects.map { it.list }.observeAsState(listOf())
 
-        binding.subjectName.apply {
-            setAdapter(
-                ExposedDropdownMenu.createAdapter(context).apply {
-                    viewModel.existingSubjects.observe(owner) { items = it.list }
-                }
-            )
-
-            viewModel.subjectName
-                .distinctUntilChanged { it == text?.toString() ?: "" }
-                .observe(owner) { text = it }
-            onTextChangedListener = { text, _ -> viewModel.subjectName.value = text }
-        }
-
-        binding.description.apply {
-            viewModel.description
-                .distinctUntilChanged { it == text?.toString() ?: "" }
-                .observe(owner) { setText(it) }
-            addTextChangedListener { viewModel.description.value = it?.toString() ?: "" }
-        }
-
-        binding.deadline.apply {
-            val dateFormatter = DateTimeFormat.forPattern(DATE_FORMAT)
-            viewModel.deadline.observe(owner) { text = it.toString(dateFormatter) }
-            setOnClickListener {
-                requireContext().showDatePicker(
-                    viewModel.deadline.value,
-                    LocalDate.now(),
-                    viewModel.semesterLastDay.value
-                ) { viewModel.deadline.value = it }
-            }
-        }
-
-        viewModel.error.observe(owner) {}
-        viewModel.done.observe(owner, backObserver)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_homework_editor, menu)
-        menu.findItem(R.id.mhe_delete).isVisible = viewModel.isEditing
-        menu.setColor(requireContext().getColorCompat(R.color.menu))
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        android.R.id.home -> {
-            findNavController().popBackStack()
-            true
-        }
-        R.id.mhe_save -> {
-            viewModel.error.value?.let { error ->
-                requireContext().toast(
-                    when (error) {
-                        Error.EMPTY_SUBJECT -> R.string.hef_error_empty_subject_name
-                        Error.EMPTY_DESCRIPTION -> R.string.hef_error_empty_description
-                    }
-                )
-            } ?: run {
-                if (viewModel.lessonExists) {
-                    viewModel.save()
-                } else {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(R.string.hef_unknown_lesson)
-                        .setMessage(R.string.hef_unknown_lesson_message)
-                        .setPositiveButton(R.string.hef_unknown_lesson_yes) { _, _ -> viewModel.save() }
-                        .setNegativeButton(R.string.hef_unknown_lesson_no, null)
-                        .setNeutralButton(R.string.hef_unknown_lesson_yes_and_create) { _, _ ->
-                            viewModel.run {
-                                done.removeObserver(backObserver)
-                                save()
-                                findNavController().navigate(
-                                    HomeworkEditorFragmentDirections.addLesson(semesterId, checkNotNull(subjectName.value))
-                                )
+                HomeworkEditorContent(
+                    isEditing = viewModel.isEditing,
+                    existingSubjects = existingSubjects,
+                    subjectName = subjectName,
+                    deadline = deadline,
+                    description = description,
+                    semesterDates = semesterDatesRange,
+                    onBackClick = { findNavController().popBackStack() },
+                    onSaveClick = {
+                        error?.let { error ->
+                            requireContext().toast(
+                                when (error) {
+                                    Error.EMPTY_SUBJECT -> R.string.hef_error_empty_subject_name
+                                    Error.EMPTY_DESCRIPTION -> R.string.hef_error_empty_description
+                                }
+                            )
+                        } ?: run {
+                            if (viewModel.lessonExists) {
+                                viewModel.save()
+                            } else {
+                                MaterialAlertDialogBuilder(requireContext())
+                                    .setTitle(R.string.hef_unknown_lesson)
+                                    .setMessage(R.string.hef_unknown_lesson_message)
+                                    .setPositiveButton(R.string.hef_unknown_lesson_yes) { _, _ -> viewModel.save() }
+                                    .setNegativeButton(R.string.hef_unknown_lesson_no, null)
+                                    .setNeutralButton(R.string.hef_unknown_lesson_yes_and_create) { _, _ ->
+                                        viewModel.done.removeObserver(backObserver)
+                                        viewModel.save()
+                                        findNavController().navigate(
+                                            HomeworkEditorFragmentDirections.addLesson(
+                                                viewModel.semesterId,
+                                                subjectName
+                                            )
+                                        )
+                                    }
+                                    .show()
                             }
                         }
-                        .show()
-                }
+                    },
+                    onDeleteClick = {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setMessage(R.string.hef_delete_message)
+                            .setPositiveButton(R.string.hef_delete_yes) { _, _ -> viewModel.delete() }
+                            .setNegativeButton(R.string.hef_delete_no, null)
+                            .show()
+                    },
+                    onSubjectNameChange = { viewModel.subjectName.value = it },
+                    onDeadlineChange = { viewModel.deadline.value = it },
+                    onDescriptionChange = { viewModel.description.value = it }
+                )
             }
-            true
         }
-        R.id.mhe_delete -> {
-            MaterialAlertDialogBuilder(requireContext())
-                .setMessage(R.string.hef_delete_message)
-                .setPositiveButton(R.string.hef_delete_yes) { _, _ -> viewModel.delete() }
-                .setNegativeButton(R.string.hef_delete_no, null)
-                .show()
-            true
-        }
-        else -> false
     }
+}
+
+@Composable
+private fun HomeworkEditorContent(
+    isEditing: Boolean,
+    existingSubjects: List<String>,
+    subjectName: String,
+    deadline: LocalDate,
+    description: String,
+    semesterDates: ClosedRange<LocalDate>,
+    onBackClick: () -> Unit,
+    onSaveClick: () -> Unit,
+    onDeleteClick: () -> Unit,
+    onSubjectNameChange: (String) -> Unit,
+    onDeadlineChange: (LocalDate) -> Unit,
+    onDescriptionChange: (String) -> Unit
+) = Scaffold(
+    topBar = {
+        TopAppBar(
+            title = { Text(text = stringResource(R.string.hef_title)) },
+            navigationIcon = {
+                IconButton(onClick = onBackClick) {
+                    Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
+                }
+            },
+            actions = {
+                TopAppBarActions(
+                    actions = listOfNotNull(
+                        ActionItem.AlwaysShow(
+                            name = stringResource(R.string.hef_save),
+                            imageVector = AppIcons.Check,
+                            onClick = onSaveClick
+                        ),
+                        if (isEditing) {
+                            ActionItem.NeverShow(
+                                name = stringResource(R.string.hef_delete),
+                                onClick = onDeleteClick
+                            )
+                        } else null
+                    )
+                )
+            }
+        )
+    }
+) {
+    Column(
+        modifier = Modifier.padding(
+            horizontal = dimensionResource(R.dimen.activity_horizontal_margin),
+            vertical = dimensionResource(R.dimen.activity_vertical_margin)
+        )
+    ) {
+        ExposedDropdownMenu(
+            value = subjectName,
+            items = existingSubjects,
+            onValueChange = onSubjectNameChange,
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES,
+            hint = stringResource(R.string.hef_subject),
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(vertical = 8.dp)
+        ) {
+            val context = LocalContext.current
+
+            Text(
+                text = stringResource(R.string.hef_deadline_label),
+                style = MaterialTheme.typography.body2,
+                modifier = Modifier.weight(1.0f)
+            )
+            TextButton(
+                onClick = {
+                    context.showDatePicker(
+                        deadline,
+                        semesterDates.start,
+                        semesterDates.endInclusive
+                    ) { onDeadlineChange(it) }
+                }
+            ) {
+                val deadlineFormatter = remember { DateTimeFormat.shortDate() }
+                Text(text = deadline.toString(deadlineFormatter))
+            }
+        }
+
+        SimpleTextField(
+            value = description,
+            onValueChange = onDescriptionChange,
+            label = { Text(text = stringResource(R.string.hef_description)) }
+        )
+    }
+}
+
+@Composable
+private fun SimpleTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: @Composable (() -> Unit)? = null
+) = Box {
+    val textStyle = LocalTextStyle.current
+    val colors = TextFieldDefaults.textFieldColors()
+    val textColor = textStyle.color.takeOrElse { colors.textColor(true).value }
+
+    BasicTextField(
+        value = value,
+        textStyle = textStyle.merge(TextStyle(color = textColor)),
+        onValueChange = onValueChange,
+        modifier = Modifier.fillMaxSize()
+    )
+
+    if (value.isEmpty() && (label != null)) {
+        val contentColor = colors.labelColor(
+            enabled = true,
+            error = false,
+            interactionSource = remember { MutableInteractionSource() }
+        ).value
+        CompositionLocalProvider(
+            LocalContentColor provides contentColor,
+            LocalContentAlpha provides contentColor.alpha,
+            content = label
+        )
+    }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun PreviewRegular() = AppTheme {
+    HomeworkEditorContent(
+        isEditing = true,
+        existingSubjects = emptyList(),
+        subjectName = Homeworks.regular.subjectName,
+        deadline = Homeworks.regular.deadline,
+        description = Homeworks.regular.description,
+        semesterDates = LocalDate(2021, 9, 1)..LocalDate(2022, 6, 30),
+        onBackClick = {},
+        onSaveClick = {},
+        onDeleteClick = {},
+        onSubjectNameChange = {},
+        onDeadlineChange = {},
+        onDescriptionChange = {}
+    )
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun PreviewEmpty() = AppTheme {
+    HomeworkEditorContent(
+        isEditing = true,
+        existingSubjects = emptyList(),
+        subjectName = "",
+        deadline = LocalDate(2021, 10, 3),
+        description = "",
+        semesterDates = LocalDate(2021, 9, 1)..LocalDate(2022, 6, 30),
+        onBackClick = {},
+        onSaveClick = {},
+        onDeleteClick = {},
+        onSubjectNameChange = {},
+        onDeadlineChange = {},
+        onDescriptionChange = {}
+    )
+}
+
+@Preview
+@Composable
+private fun PreviewLong() = AppTheme {
+    HomeworkEditorContent(
+        isEditing = true,
+        existingSubjects = emptyList(),
+        subjectName = Homeworks.long.subjectName,
+        deadline = Homeworks.long.deadline,
+        description = Homeworks.long.description,
+        semesterDates = LocalDate(2021, 9, 1)..LocalDate(2022, 6, 30),
+        onBackClick = {},
+        onSaveClick = {},
+        onDeleteClick = {},
+        onSubjectNameChange = {},
+        onDeadlineChange = {},
+        onDescriptionChange = {}
+    )
 }
