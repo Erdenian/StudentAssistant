@@ -145,20 +145,16 @@ private fun HomeworksContent(
         modifier = Modifier.fillMaxSize()
     ) {
         when {
-            semesters.isEmpty() -> {
-                Text(
-                    text = stringResource(R.string.hf_no_schedule),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
-                )
-            }
-            actualHomeworks.isEmpty() && pastHomeworks.isEmpty() -> {
-                Text(
-                    text = stringResource(R.string.hf_no_homeworks),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
-                )
-            }
+            semesters.isEmpty() -> Text(
+                text = stringResource(R.string.hf_no_schedule),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
+            )
+            actualHomeworks.isEmpty() && pastHomeworks.isEmpty() -> Text(
+                text = stringResource(R.string.hf_no_homeworks),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
+            )
             else -> {
                 var contextMenuHomework by remember { mutableStateOf<Homework?>(null) }
                 val deadlineFormatter = remember { DateTimeFormat.shortDate() }
