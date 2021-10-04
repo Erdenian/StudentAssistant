@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.uikit.views
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
@@ -60,19 +61,10 @@ fun HomeworkCard(
     }
 }
 
-@Preview
+@Preview(name = "HomeworkCard preview")
+@Preview(name = "HomeworkCard preview (dark)", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun HomeworkCardPreview() = AppTheme {
-    HomeworkCard(
-        subjectName = "Интернет программирование",
-        description = "Лабораторная работа",
-        deadline = "21.08.2021"
-    )
-}
-
-@Preview
-@Composable
-private fun HomeworkCardPreviewDark() = AppTheme(isDarkTheme = true) {
     HomeworkCard(
         subjectName = "Интернет программирование",
         description = "Лабораторная работа",

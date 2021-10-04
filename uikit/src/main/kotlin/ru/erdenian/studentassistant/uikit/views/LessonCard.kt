@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.uikit.views
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -119,22 +120,10 @@ fun LessonCard(
     }
 }
 
-@Preview
+@Preview(name = "LessonCard preview")
+@Preview(name = "LessonCard preview (dark)", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun LessonCardPreview() = AppTheme {
-    LessonCard(
-        subjectName = "Интернет программирование",
-        type = "Лабораторная работа",
-        teachers = listOf("Кожухов Игорь Борисович"),
-        classrooms = listOf("4212а", "4212б"),
-        startTime = "09:00",
-        endTime = "10:30"
-    )
-}
-
-@Preview
-@Composable
-private fun LessonCardPreviewDark() = AppTheme(isDarkTheme = true) {
     LessonCard(
         subjectName = "Интернет программирование",
         type = "Лабораторная работа",

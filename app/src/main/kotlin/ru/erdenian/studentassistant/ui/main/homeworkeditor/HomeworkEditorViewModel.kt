@@ -41,7 +41,7 @@ class HomeworkEditorViewModel private constructor(
     constructor(application: Application, homework: Homework) : this(application, homework.semesterId, homework, null)
 
     val existingSubjects = lessonRepository.getSubjects(semesterId)
-    val semesterLastDay = semesterRepository.getLiveData(semesterId).map { checkNotNull(it).lastDay }
+    val semesterDatesRange = semesterRepository.getLiveData(semesterId).map { checkNotNull(it).firstDay..it.lastDay }
 
     val subjectName = MutableLiveData(lesson?.subjectName ?: homework?.subjectName ?: "")
     val description = MutableLiveData(homework?.description ?: "")

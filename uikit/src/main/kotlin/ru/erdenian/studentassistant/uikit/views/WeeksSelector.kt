@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.uikit.views
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -262,7 +263,8 @@ private fun WeeksSelectorView(
     }
 }
 
-@Preview
+@Preview(name = "WeeksSelector preview")
+@Preview(name = "WeeksSelector preview (dark)", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun WeeksSelectorPreview() = AppTheme {
     WeeksSelectorView(
@@ -302,31 +304,6 @@ private fun WeeksSelectorPreviewLongRepeatVariant() = AppTheme {
         isCustomEnabled = true,
         modifier = Modifier.fillMaxWidth()
     )
-}
-
-@Preview
-@Composable
-private fun WeeksSelectorPreviewDark() = AppTheme(isDarkTheme = true) {
-    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.onBackground) {
-        WeeksSelectorView(
-            repeatVariants = listOf("По чётным", "По нечётным", "Своё"),
-            selectedRepeatVariantIndex = 2,
-            repeatVariantsExpanded = false,
-            onSelectedRepeatVariantClick = {},
-            onRepeatVariantsDismissRequest = {},
-            onRepeatVariantClick = {},
-            weeks = listOf(true, false, true),
-            onWeekClick = { _, _ -> },
-            onMinusClick = {},
-            onPlusClick = {},
-            isMinusEnabled = true,
-            isPlusEnabled = true,
-            isCustomEnabled = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colors.background)
-        )
-    }
 }
 
 @Composable
@@ -370,9 +347,9 @@ private fun CheckBoxWithTextPreviewDisabled() = AppTheme {
     CheckBoxWithText(true, "Disabled", null, enabled = false)
 }
 
-@Preview(name = "Dark theme")
+@Preview(name = "Dark theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun CheckBoxWithTextPreviewDark() = AppTheme(isDarkTheme = true) {
+private fun CheckBoxWithTextPreviewDark() = AppTheme {
     CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.onBackground) {
         CheckBoxWithText(
             true,

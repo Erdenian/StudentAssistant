@@ -71,7 +71,7 @@ object Homeworks {
     val long
         @Composable get() = Homework(
             subjectName = "Интернет программирование программирование программирование программирование программирование",
-            description = "Лабораторная работа работа работа работа работа работа работа работа работа работа работа работа",
+            description = "Лабораторная работа" + " работа".repeat(1000),
             deadline = LocalDate(2021, 10, 2),
             isDone = false
         )

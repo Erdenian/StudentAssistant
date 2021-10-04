@@ -4,6 +4,11 @@ import android.content.Context
 import android.text.InputType
 import android.util.AttributeSet
 import android.widget.ArrayAdapter
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.withStyledAttributes
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -73,4 +78,30 @@ class ExposedDropdownMenu @JvmOverloads constructor(
         override fun getItemId(position: Int) = strings[position].hashCode().toLong()
         override fun getCount() = strings.size
     }
+}
+
+@Composable
+fun ExposedDropdownMenu(
+    value: String,
+    items: List<String>,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    hint: String = "",
+    inputType: Int = InputType.TYPE_CLASS_TEXT
+) {
+    val adapter = LocalContext.current.let { remember { ExposedDropdownMenu.createAdapter(it) } }
+    AndroidView(
+        factory = { context ->
+            ExposedDropdownMenu(context).apply {
+                checkNotNull(editText).inputType = inputType
+                this.hint = hint
+
+                setAdapter(adapter)
+                onTextChangedListener = { text, _ -> onValueChange(text) }
+            }
+        },
+        update = { if (it.text != value) it.text = value },
+        modifier = modifier
+    )
+    adapter.items = items
 }
