@@ -2,7 +2,6 @@ package ru.erdenian.studentassistant.uikit.views
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
@@ -44,43 +43,50 @@ fun TopAppBarDropdownMenu(
 ) {
     var expanded by remember { mutableStateOf(false) }
 
-    Row(
+    StartEndRow(
         verticalAlignment = Alignment.CenterVertically,
+        contentStart = {
+            Text(
+                text = selectedItem,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+        },
+        contentEnd = {
+            Icon(
+                imageVector = AppIcons.ArrowDropDown,
+                contentDescription = null,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        },
         modifier = Modifier
             .fillMaxHeight()
             .clickable { expanded = !expanded }
-    ) {
-        Text(
-            text = selectedItem,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1
-        )
-        Icon(
-            imageVector = AppIcons.ArrowDropDown,
-            contentDescription = null,
-            modifier = Modifier.padding(start = 8.dp)
-        )
+    )
 
-        val xOffset = MenuDefaults
-            .DropdownMenuItemContentPadding
-            .calculateStartPadding(LocalLayoutDirection.current)
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            offset = DpOffset(-xOffset, (-60).dp),
-            properties = PopupProperties(focusable = true, clippingEnabled = false)
-        ) {
-            items.forEachIndexed { index, item ->
-                DropdownMenuItem(
-                    onClick = {
-                        expanded = false
-                        onSelectedItemChange(index, item)
-                    }
-                ) {
-                    ProvideTextStyle(value = MaterialTheme.typography.h6) {
-                        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
-                            Text(text = item)
-                        }
+    val xOffset = MenuDefaults
+        .DropdownMenuItemContentPadding
+        .calculateStartPadding(LocalLayoutDirection.current)
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = { expanded = false },
+        offset = DpOffset(-xOffset, (-60).dp),
+        properties = PopupProperties(focusable = true, clippingEnabled = false)
+    ) {
+        items.forEachIndexed { index, item ->
+            DropdownMenuItem(
+                onClick = {
+                    expanded = false
+                    onSelectedItemChange(index, item)
+                }
+            ) {
+                ProvideTextStyle(value = MaterialTheme.typography.h6) {
+                    CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
+                        Text(
+                            text = item,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1
+                        )
                     }
                 }
             }
