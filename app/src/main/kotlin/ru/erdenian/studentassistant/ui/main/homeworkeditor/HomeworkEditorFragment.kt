@@ -2,7 +2,6 @@ package ru.erdenian.studentassistant.ui.main.homeworkeditor
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.LocalContentAlpha
@@ -34,12 +35,16 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
@@ -201,12 +206,21 @@ private fun HomeworkEditorContent(
             vertical = dimensionResource(R.dimen.activity_vertical_margin)
         )
     ) {
+        val descriptionFocusRequester = remember { FocusRequester() }
+
         ExposedDropdownMenu(
             value = subjectName,
             items = existingSubjects,
             onValueChange = onSubjectNameChange,
-            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES,
-            hint = stringResource(R.string.hef_subject),
+            label = stringResource(R.string.hef_subject),
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences,
+                imeAction = ImeAction.Next
+            ),
+            keyboardActions = KeyboardActions(
+                onNext = { descriptionFocusRequester.requestFocus() }
+            ),
+            singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -238,7 +252,10 @@ private fun HomeworkEditorContent(
         SimpleTextField(
             value = description,
             onValueChange = onDescriptionChange,
-            label = { Text(text = stringResource(R.string.hef_description)) }
+            label = { Text(text = stringResource(R.string.hef_description)) },
+            modifier = Modifier
+                .fillMaxSize()
+                .focusRequester(descriptionFocusRequester)
         )
     }
 }
@@ -247,7 +264,8 @@ private fun HomeworkEditorContent(
 private fun SimpleTextField(
     value: String,
     onValueChange: (String) -> Unit,
-    label: @Composable (() -> Unit)? = null
+    label: @Composable (() -> Unit)? = null,
+    modifier: Modifier = Modifier
 ) = Box {
     val textStyle = LocalTextStyle.current
     val colors = TextFieldDefaults.textFieldColors()
@@ -257,7 +275,7 @@ private fun SimpleTextField(
         value = value,
         textStyle = textStyle.merge(TextStyle(color = textColor)),
         onValueChange = onValueChange,
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier
     )
 
     if (value.isEmpty() && (label != null)) {
