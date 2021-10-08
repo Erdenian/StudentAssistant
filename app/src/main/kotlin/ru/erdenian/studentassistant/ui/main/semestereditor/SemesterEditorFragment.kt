@@ -3,7 +3,6 @@ package ru.erdenian.studentassistant.ui.main.semestereditor
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -63,15 +63,14 @@ class SemesterEditorFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = ComposeView(inflater.context)
+    ) = ComposeView(inflater.context).apply {
+        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
 
-    @Suppress("ComplexMethod")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val viewModel by viewModels<SemesterEditorViewModel> {
             navArgsFactory<SemesterEditorFragmentArgs> { SemesterEditorViewModel(it, semester) }
         }
 
-        (view as ComposeView).setContent {
+        setContent {
             val name by viewModel.name.observeAsStateNonNull()
             val firstDay by viewModel.firstDay.observeAsStateNonNull()
             val lastDay by viewModel.lastDay.observeAsStateNonNull()

@@ -3,7 +3,6 @@ package ru.erdenian.studentassistant.ui.main.homeworks
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -58,12 +58,12 @@ class HomeworksFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = ComposeView(inflater.context)
+    ) = ComposeView(inflater.context).apply {
+        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val viewModel by viewModels<HomeworksViewModel>()
 
-        (view as ComposeView).setContent {
+        setContent {
             AppTheme {
                 val semesters by viewModel.allSemesters.map { it.list }.observeAsState(emptyList())
                 val selectedSemester by viewModel.selectedSemester.observeAsState()
@@ -167,7 +167,10 @@ private fun HomeworksContent(
                     verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.cards_spacing)),
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    fun LazyListScope.createList(homeworks: List<Homework>) = itemsIndexed(homeworks) { _, homework ->
+                    fun LazyListScope.createList(homeworks: List<Homework>) = itemsIndexed(
+                        items = homeworks,
+                        key = { _, item -> item.id }
+                    ) { _, homework ->
                         HomeworkCard(
                             subjectName = homework.subjectName,
                             description = homework.description,

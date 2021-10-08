@@ -43,6 +43,25 @@ fun TopAppBarDropdownMenu(
 ) {
     var expanded by remember { mutableStateOf(false) }
 
+    TopAppBarDropdownMenuContent(
+        items = items,
+        selectedItem = selectedItem,
+        expanded = expanded,
+        onSelectedItemChange = onSelectedItemChange,
+        onClick = { expanded = !expanded },
+        onDismissRequest = { expanded = false }
+    )
+}
+
+@Composable
+private fun TopAppBarDropdownMenuContent(
+    items: List<String>,
+    selectedItem: String,
+    expanded: Boolean,
+    onSelectedItemChange: (Int, String) -> Unit,
+    onClick: () -> Unit,
+    onDismissRequest: () -> Unit
+) {
     StartEndRow(
         verticalAlignment = Alignment.CenterVertically,
         contentStart = {
@@ -61,7 +80,7 @@ fun TopAppBarDropdownMenu(
         },
         modifier = Modifier
             .fillMaxHeight()
-            .clickable { expanded = !expanded }
+            .clickable(onClick = onClick)
     )
 
     val xOffset = MenuDefaults
@@ -69,14 +88,14 @@ fun TopAppBarDropdownMenu(
         .calculateStartPadding(LocalLayoutDirection.current)
     DropdownMenu(
         expanded = expanded,
-        onDismissRequest = { expanded = false },
+        onDismissRequest = onDismissRequest,
         offset = DpOffset(-xOffset, (-60).dp),
         properties = PopupProperties(focusable = true, clippingEnabled = false)
     ) {
         items.forEachIndexed { index, item ->
             DropdownMenuItem(
                 onClick = {
-                    expanded = false
+                    onDismissRequest()
                     onSelectedItemChange(index, item)
                 }
             ) {

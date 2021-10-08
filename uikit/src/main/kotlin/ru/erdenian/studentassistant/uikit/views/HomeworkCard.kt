@@ -40,14 +40,11 @@ fun HomeworkCard(
 ) {
     Column(
         modifier = Modifier
-            .run {
-                if ((onClick != null) || (onLongClick != null)) {
-                    combinedClickable(
-                        onLongClick = onLongClick,
-                        onClick = onClick ?: {}
-                    )
-                } else this
-            }
+            .combinedClickable(
+                enabled = (onClick != null) || (onLongClick != null),
+                onLongClick = onLongClick,
+                onClick = onClick ?: {}
+            )
             .padding(dimensionResource(R.dimen.card_margin_inside))
     ) {
         Text(
