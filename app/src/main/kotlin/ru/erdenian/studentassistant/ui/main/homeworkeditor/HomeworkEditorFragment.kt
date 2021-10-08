@@ -3,7 +3,6 @@ package ru.erdenian.studentassistant.ui.main.homeworkeditor
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -24,6 +23,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
+import androidx.compose.material.TextFieldColors
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.filled.ArrowBack
@@ -40,6 +40,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -74,10 +75,9 @@ class HomeworkEditorFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = ComposeView(inflater.context)
+    ) = ComposeView(inflater.context).apply {
+        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
 
-    @Suppress("ComplexMethod")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val viewModel by viewModels<HomeworkEditorViewModel> {
             navArgsFactory<HomeworkEditorFragmentArgs> { application ->
                 when {
@@ -92,7 +92,7 @@ class HomeworkEditorFragment : Fragment() {
         val backObserver = Observer<Boolean> { if (it) findNavController().popBackStack() }
         viewModel.done.observe(viewLifecycleOwner, backObserver)
 
-        (view as ComposeView).setContent {
+        setContent {
             AppTheme {
                 val subjectName by viewModel.subjectName.observeAsStateNonNull()
                 val description by viewModel.description.observeAsStateNonNull()
@@ -148,7 +148,7 @@ class HomeworkEditorFragment : Fragment() {
                             .setNegativeButton(R.string.hef_delete_no, null)
                             .show()
                     },
-                    onSubjectNameChange = { viewModel.subjectName.value = it },
+                    onSubjectNameChange = { value, _ -> viewModel.subjectName.value = value },
                     onDeadlineChange = { viewModel.deadline.value = it },
                     onDescriptionChange = { viewModel.description.value = it }
                 )
@@ -168,7 +168,7 @@ private fun HomeworkEditorContent(
     onBackClick: () -> Unit,
     onSaveClick: () -> Unit,
     onDeleteClick: () -> Unit,
-    onSubjectNameChange: (String) -> Unit,
+    onSubjectNameChange: (String, Int) -> Unit,
     onDeadlineChange: (LocalDate) -> Unit,
     onDescriptionChange: (String) -> Unit
 ) = Scaffold(
@@ -264,11 +264,11 @@ private fun HomeworkEditorContent(
 private fun SimpleTextField(
     value: String,
     onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
     label: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+    colors: TextFieldColors = TextFieldDefaults.textFieldColors()
 ) = Box {
     val textStyle = LocalTextStyle.current
-    val colors = TextFieldDefaults.textFieldColors()
     val textColor = textStyle.color.takeOrElse { colors.textColor(true).value }
 
     BasicTextField(
@@ -306,7 +306,7 @@ private fun PreviewRegular() = AppTheme {
         onBackClick = {},
         onSaveClick = {},
         onDeleteClick = {},
-        onSubjectNameChange = {},
+        onSubjectNameChange = { _, _ -> },
         onDeadlineChange = {},
         onDescriptionChange = {}
     )
@@ -326,7 +326,7 @@ private fun PreviewEmpty() = AppTheme {
         onBackClick = {},
         onSaveClick = {},
         onDeleteClick = {},
-        onSubjectNameChange = {},
+        onSubjectNameChange = { _, _ -> },
         onDeadlineChange = {},
         onDescriptionChange = {}
     )
@@ -345,7 +345,7 @@ private fun PreviewLong() = AppTheme {
         onBackClick = {},
         onSaveClick = {},
         onDeleteClick = {},
-        onSubjectNameChange = {},
+        onSubjectNameChange = { _, _ -> },
         onDeadlineChange = {},
         onDescriptionChange = {}
     )

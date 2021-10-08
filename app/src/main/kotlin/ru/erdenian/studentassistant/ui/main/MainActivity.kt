@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.navigationView.apply {
-            setOnNavigationItemSelectedListener { item ->
+            setOnItemSelectedListener { item ->
                 // setupWithNavController добавляет анимацию, поэтому Toolbar начинает мерцать при переходе
                 findNavController(R.id.nav_host_fragment).navigate(item.itemId)
                 true

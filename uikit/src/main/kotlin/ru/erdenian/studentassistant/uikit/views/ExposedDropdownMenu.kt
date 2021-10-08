@@ -98,7 +98,36 @@ class ExposedDropdownMenu @JvmOverloads constructor(
 fun ExposedDropdownMenu(
     value: String,
     items: List<String>,
-    onValueChange: (String) -> Unit,
+    onValueChange: (value: String, index: Int) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    label: String = "",
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    singleLine: Boolean = false,
+    maxLines: Int = Int.MAX_VALUE
+) = ExposedDropdownMenu(
+    value = value,
+    items = items,
+    stringSelector = { it },
+    onValueChange = { newValue, newIndex, _ -> onValueChange(newValue, newIndex) },
+    modifier = modifier,
+    enabled = enabled,
+    readOnly = readOnly,
+    label = label,
+    keyboardOptions = keyboardOptions,
+    keyboardActions = keyboardActions,
+    singleLine = singleLine,
+    maxLines = maxLines,
+)
+
+@Composable
+fun <T : Any> ExposedDropdownMenu(
+    value: String,
+    items: List<T>,
+    stringSelector: (T) -> String,
+    onValueChange: (newValue: String, newIndex: Int, newItem: T?) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     readOnly: Boolean = false,
@@ -108,15 +137,17 @@ fun ExposedDropdownMenu(
     singleLine: Boolean = false,
     maxLines: Int = Int.MAX_VALUE
 ) {
-    val rememberedKeyboardActions = rememberUpdatedState(keyboardActions)
-    val adapter = LocalContext.current.let { remember { ExposedDropdownMenu.createAdapter(it) } }
+    val currentKeyboardActions = rememberUpdatedState(keyboardActions)
+    val adapter = LocalContext.current.let { context ->
+        remember(context) { ExposedDropdownMenu.Adapter(context, items, stringSelector) }
+    }
 
     AndroidView(
         factory = { context ->
             ExposedDropdownMenu(context).apply {
-                checkNotNull(editText).setOnEditorActionListener(createOnEditorActionListener(rememberedKeyboardActions))
+                checkNotNull(editText).setOnEditorActionListener(createOnEditorActionListener(currentKeyboardActions))
                 setAdapter(adapter)
-                onTextChangedListener = { text, _ -> onValueChange(text) }
+                onTextChangedListener = { text, index -> onValueChange(text, index, items.getOrNull(index)) }
             }
         },
         update = { view ->
@@ -223,6 +254,6 @@ private fun ExposedDropdownMenuPreview() = AppTheme {
     ExposedDropdownMenu(
         value = "Text",
         items = emptyList(),
-        onValueChange = {}
+        onValueChange = { _, _ -> }
     )
 }

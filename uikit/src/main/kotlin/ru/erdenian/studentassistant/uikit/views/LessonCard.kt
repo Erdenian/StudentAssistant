@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -49,14 +50,11 @@ fun LessonCard(
 ) {
     Column(
         modifier = Modifier
-            .run {
-                if ((onClick != null) || (onLongClick != null)) {
-                    combinedClickable(
-                        onLongClick = onLongClick,
-                        onClick = onClick ?: {}
-                    )
-                } else this
-            }
+            .combinedClickable(
+                enabled = (onClick != null) || (onLongClick != null),
+                onLongClick = onLongClick,
+                onClick = onClick ?: {}
+            )
             .padding(dimensionResource(R.dimen.card_margin_inside))
     ) {
         Row(
@@ -114,20 +112,22 @@ fun LessonCard(
 
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             teachers.forEach { teacher ->
-                Row(
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    Icon(
-                        imageVector = AppIcons.Person,
-                        contentDescription = null
-                    )
+                key(teacher) {
+                    Row(
+                        verticalAlignment = Alignment.Bottom
+                    ) {
+                        Icon(
+                            imageVector = AppIcons.Person,
+                            contentDescription = null
+                        )
 
-                    Text(
-                        text = teacher,
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1,
-                        style = MaterialTheme.typography.body1
-                    )
+                        Text(
+                            text = teacher,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                            style = MaterialTheme.typography.body1
+                        )
+                    }
                 }
             }
         }

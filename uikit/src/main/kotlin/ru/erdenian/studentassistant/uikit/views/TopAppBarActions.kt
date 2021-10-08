@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -61,27 +62,38 @@ private fun TopAppBarActionsContent(
     onExpandClick: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
-    actions.asSequence().filterIsInstance<ActionItem.AlwaysShow>().forEach { item ->
-        IconButton(onClick = item.onClick) {
-            Icon(imageVector = item.imageVector, contentDescription = item.name)
+    run {
+        val alwaysShowActions by remember(actions) {
+            derivedStateOf { actions.filterIsInstance<ActionItem.AlwaysShow>() }
+        }
+
+        alwaysShowActions.forEach { item ->
+            IconButton(onClick = item.onClick) {
+                Icon(imageVector = item.imageVector, contentDescription = item.name)
+            }
         }
     }
 
-    val neverShow = actions.filterIsInstance<ActionItem.NeverShow>()
-    if (neverShow.isNotEmpty()) {
-        Box {
-            IconButton(onClick = onExpandClick) {
-                Icon(imageVector = AppIcons.MoreVert, contentDescription = null)
-            }
+    run {
+        val neverShowActions by remember(actions) {
+            derivedStateOf { actions.filterIsInstance<ActionItem.NeverShow>() }
+        }
 
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = onDismissRequest,
-                offset = DpOffset(0.dp, (-48).dp)
-            ) {
-                neverShow.forEach { item ->
-                    DropdownMenuItem(onClick = item.onClick) {
-                        Text(text = item.name)
+        if (neverShowActions.isNotEmpty()) {
+            Box {
+                IconButton(onClick = onExpandClick) {
+                    Icon(imageVector = AppIcons.MoreVert, contentDescription = null)
+                }
+
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = onDismissRequest,
+                    offset = DpOffset(0.dp, (-48).dp)
+                ) {
+                    neverShowActions.forEach { item ->
+                        DropdownMenuItem(onClick = item.onClick) {
+                            Text(text = item.name)
+                        }
                     }
                 }
             }

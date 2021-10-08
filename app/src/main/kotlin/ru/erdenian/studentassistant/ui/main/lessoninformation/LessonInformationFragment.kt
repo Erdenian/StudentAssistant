@@ -3,7 +3,6 @@ package ru.erdenian.studentassistant.ui.main.lessoninformation
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -35,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -66,14 +66,14 @@ class LessonInformationFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = ComposeView(inflater.context)
+    ) = ComposeView(inflater.context).apply {
+        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val viewModel by viewModels<LessonInformationViewModel> {
             navArgsFactory<LessonInformationFragmentArgs> { LessonInformationViewModel(it, lesson) }
         }
 
-        (view as ComposeView).setContent {
+        setContent {
             val lesson by viewModel.lesson.observeAsState(navArgs<LessonInformationFragmentArgs>().value.lesson)
             val homeworks by viewModel.homeworks.map { it.list }.observeAsState(emptyList())
 
@@ -139,9 +139,7 @@ private fun LessonInformationContent(
         )
     },
     floatingActionButton = {
-        FloatingActionButton(
-            onClick = onAddHomeworkClick
-        ) {
+        FloatingActionButton(onClick = onAddHomeworkClick) {
             Icon(painter = painterResource(R.drawable.ic_plus), contentDescription = null)
         }
     }
@@ -185,7 +183,10 @@ private fun LessonInformationContent(
                     verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.cards_spacing)),
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    itemsIndexed(homeworks) { _, homework ->
+                    itemsIndexed(
+                        items = homeworks,
+                        key = { _, item -> item.id }
+                    ) { _, homework ->
                         val deadlineFormatter = remember { DateTimeFormat.shortDate() }
 
                         HomeworkCard(
