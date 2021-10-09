@@ -72,6 +72,8 @@ class HomeworksFragment : Fragment() {
                 val actualHomeworks by viewModel.actual.map { it.list }.observeAsState(emptyList())
                 val pastHomeworks by viewModel.past.map { it.list }.observeAsState(emptyList())
 
+                val context = LocalContext.current
+
                 HomeworksContent(
                     semesters = semesters.map { it.name },
                     selectedSemester = selectedSemester?.name,
@@ -86,7 +88,7 @@ class HomeworksFragment : Fragment() {
                     },
                     onHomeworkClick = { findNavController().navigate(HomeworksFragmentDirections.editHomework(it)) },
                     onDeleteHomeworkClick = { homework ->
-                        MaterialAlertDialogBuilder(requireContext())
+                        MaterialAlertDialogBuilder(context)
                             .setMessage(R.string.hf_delete_message)
                             .setPositiveButton(R.string.hf_delete_yes) { _, _ -> viewModel.deleteHomework(homework.id) }
                             .setNegativeButton(R.string.hf_delete_no, null)

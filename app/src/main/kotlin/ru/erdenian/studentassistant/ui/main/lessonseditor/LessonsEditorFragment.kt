@@ -9,10 +9,8 @@ import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.databinding.FragmentLessonsEditorBinding
 import ru.erdenian.studentassistant.utils.colorAttr
@@ -67,12 +65,10 @@ class LessonsEditorFragment : Fragment(R.layout.fragment_lessons_editor) {
         // TODO: 13.11.2016 добавить заполнение списка пар по датам
 
         binding.addLesson.setOnClickListener {
-            lifecycleScope.launch {
-                val weekday = binding.byWeekdaysPager.currentItem + 1
-                findNavController().navigate(
-                    LessonsEditorFragmentDirections.addLesson(checkNotNull(viewModel.semester.value).id, weekday)
-                )
-            }
+            val weekday = binding.byWeekdaysPager.currentItem + 1
+            findNavController().navigate(
+                LessonsEditorFragmentDirections.addLesson(checkNotNull(viewModel.semester.value).id, weekday)
+            )
         }
 
         viewModel.semester.observe(owner) { if (it == null) findNavController().popBackStack() }

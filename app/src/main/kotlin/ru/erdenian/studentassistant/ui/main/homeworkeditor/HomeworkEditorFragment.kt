@@ -99,8 +99,18 @@ class HomeworkEditorFragment : Fragment() {
                 val deadline by viewModel.deadline.observeAsStateNonNull()
 
                 val semesterDatesRange by viewModel.semesterDatesRange.observeAsState(LocalDate.now()..LocalDate.now())
-                val error by viewModel.error.observeAsState()
                 val existingSubjects by viewModel.existingSubjects.map { it.list }.observeAsState(listOf())
+
+                val errorMessageResource by viewModel.error.map { error ->
+                    when (error) {
+                        Error.EMPTY_SUBJECT -> R.string.hef_error_empty_subject_name
+                        Error.EMPTY_DESCRIPTION -> R.string.hef_error_empty_description
+                        null -> null
+                    }
+                }.observeAsState()
+                val errorMessage = errorMessageResource?.let { stringResource(it) }
+
+                val context = LocalContext.current
 
                 HomeworkEditorContent(
                     isEditing = viewModel.isEditing,
@@ -111,18 +121,12 @@ class HomeworkEditorFragment : Fragment() {
                     semesterDates = semesterDatesRange,
                     onBackClick = { findNavController().popBackStack() },
                     onSaveClick = {
-                        error?.let { error ->
-                            requireContext().toast(
-                                when (error) {
-                                    Error.EMPTY_SUBJECT -> R.string.hef_error_empty_subject_name
-                                    Error.EMPTY_DESCRIPTION -> R.string.hef_error_empty_description
-                                }
-                            )
-                        } ?: run {
+                        if (errorMessage != null) context.toast(errorMessage)
+                        else {
                             if (viewModel.lessonExists) {
                                 viewModel.save()
                             } else {
-                                MaterialAlertDialogBuilder(requireContext())
+                                MaterialAlertDialogBuilder(context)
                                     .setTitle(R.string.hef_unknown_lesson)
                                     .setMessage(R.string.hef_unknown_lesson_message)
                                     .setPositiveButton(R.string.hef_unknown_lesson_yes) { _, _ -> viewModel.save() }
@@ -142,7 +146,7 @@ class HomeworkEditorFragment : Fragment() {
                         }
                     },
                     onDeleteClick = {
-                        MaterialAlertDialogBuilder(requireContext())
+                        MaterialAlertDialogBuilder(context)
                             .setMessage(R.string.hef_delete_message)
                             .setPositiveButton(R.string.hef_delete_yes) { _, _ -> viewModel.delete() }
                             .setNegativeButton(R.string.hef_delete_no, null)

@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -37,9 +38,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ChainStyle
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 import ru.erdenian.studentassistant.uikit.R
 import ru.erdenian.studentassistant.uikit.style.AppIcons
 import ru.erdenian.studentassistant.uikit.style.AppTheme
@@ -116,151 +114,98 @@ private fun WeeksSelectorContent(
     isPlusEnabled: Boolean,
     isCustomEnabled: Boolean,
     modifier: Modifier = Modifier
-) = ConstraintLayout(modifier = modifier) {
-    val (
-        repeatTitle, selectedRepeatVariant, repeatDropdownMenu,
-        minusButton, minusDivider,
-        checkboxesScroll,
-        plusDivider, plusButton
-    ) = createRefs()
-
-    val barrier = createBottomBarrier(repeatTitle)
-    createHorizontalChain(
-        repeatTitle,
-        selectedRepeatVariant,
-        chainStyle = ChainStyle.Packed(0.0f)
-    )
-
-    Text(
-        text = stringResource(R.string.ws_variants_title),
-        modifier = Modifier
-            .constrainAs(repeatTitle) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(selectedRepeatVariant.start)
-                bottom.linkTo(barrier)
-            }
-            .padding(
-                start = dimensionResource(R.dimen.activity_horizontal_margin),
-                end = 8.dp
-            )
-    )
+) = Column(modifier = modifier) {
 
     Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .constrainAs(selectedRepeatVariant) {
-                top.linkTo(parent.top)
-                start.linkTo(repeatTitle.end)
-                end.linkTo(parent.end)
-                bottom.linkTo(barrier)
-            }
-            .padding(end = dimensionResource(R.dimen.activity_horizontal_margin))
-            .clickable(onClick = onSelectedRepeatVariantClick)
+        verticalAlignment = Alignment.Bottom
     ) {
         Text(
-            text = repeatVariants[selectedRepeatVariantIndex],
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1
+            text = stringResource(R.string.ws_variants_title),
+            modifier = Modifier.padding(start = dimensionResource(R.dimen.activity_horizontal_margin))
         )
 
-        Icon(
-            imageVector = AppIcons.ArrowDropDown,
-            contentDescription = null
-        )
+        StartEndRow(
+            verticalAlignment = Alignment.Bottom,
+            modifier = Modifier
+                .padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
+                .clickable(onClick = onSelectedRepeatVariantClick),
+            contentStart = {
+                Text(
+                    text = repeatVariants[selectedRepeatVariantIndex],
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
+                )
 
-        DropdownMenu(
-            expanded = repeatVariantsExpanded,
-            onDismissRequest = onRepeatVariantsDismissRequest
-        ) {
-            repeatVariants.forEachIndexed { index, variant ->
-                DropdownMenuItem(
-                    onClick = { onRepeatVariantClick(index) }
+                DropdownMenu(
+                    expanded = repeatVariantsExpanded,
+                    onDismissRequest = onRepeatVariantsDismissRequest
                 ) {
-                    Text(text = variant)
+                    repeatVariants.forEachIndexed { index, variant ->
+                        DropdownMenuItem(
+                            onClick = { onRepeatVariantClick(index) }
+                        ) {
+                            Text(text = variant)
+                        }
+                    }
                 }
-            }
-        }
-    }
-
-    IconButton(
-        onClick = onMinusClick,
-        modifier = Modifier
-            .constrainAs(minusButton) {
-                top.linkTo(checkboxesScroll.top)
-                start.linkTo(parent.start)
-                end.linkTo(minusDivider.start)
-                bottom.linkTo(checkboxesScroll.bottom)
             },
-        enabled = isMinusEnabled
-    ) {
-        Icon(
-            imageVector = AppIcons.Remove,
-            contentDescription = null
+            contentEnd = {
+                Icon(
+                    imageVector = AppIcons.ArrowDropDown,
+                    contentDescription = null
+                )
+            }
         )
     }
 
-    Divider(
-        modifier = Modifier
-            .padding(vertical = 8.dp)
-            .width(1.dp)
-            .constrainAs(minusDivider) {
-                start.linkTo(minusButton.end)
-                top.linkTo(checkboxesScroll.top)
-                end.linkTo(checkboxesScroll.start)
-                bottom.linkTo(checkboxesScroll.bottom)
-                height = Dimension.fillToConstraints
-            }
-    )
-
-    LazyRow(
-        modifier = Modifier
-            .constrainAs(checkboxesScroll) {
-                top.linkTo(barrier)
-                start.linkTo(minusDivider.end)
-                end.linkTo(plusDivider.start)
-                bottom.linkTo(parent.bottom)
-                width = Dimension.fillToConstraints
-            }
+    Row(
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        itemsIndexed(weeks) { index, checked ->
-            CheckBoxWithText(
-                checked = checked,
-                text = (index + 1).toString(),
-                onCheckedChange = { onWeekCheckedChange(index, it) },
-                enabled = isCustomEnabled
+        IconButton(
+            onClick = onMinusClick,
+            enabled = isMinusEnabled
+        ) {
+            Icon(
+                imageVector = AppIcons.Remove,
+                contentDescription = null
             )
         }
-    }
 
-    Divider(
-        modifier = Modifier
-            .padding(vertical = 8.dp)
-            .width(1.dp)
-            .constrainAs(plusDivider) {
-                top.linkTo(checkboxesScroll.top)
-                start.linkTo(checkboxesScroll.end)
-                bottom.linkTo(checkboxesScroll.bottom)
-                end.linkTo(plusButton.start)
-                height = Dimension.fillToConstraints
-            }
-    )
-
-    IconButton(
-        onClick = onPlusClick,
-        modifier = Modifier
-            .constrainAs(plusButton) {
-                top.linkTo(checkboxesScroll.top)
-                start.linkTo(plusDivider.end)
-                end.linkTo(parent.end)
-                bottom.linkTo(checkboxesScroll.bottom)
-            },
-        enabled = isPlusEnabled
-    ) {
-        Icon(
-            imageVector = AppIcons.Add,
-            contentDescription = null
+        Divider(
+            modifier = Modifier
+                .height(40.dp)
+                .width(1.dp)
         )
+
+        LazyRow(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.weight(1.0f)
+        ) {
+            itemsIndexed(weeks) { index, checked ->
+                CheckBoxWithText(
+                    checked = checked,
+                    text = (index + 1).toString(),
+                    onCheckedChange = { onWeekCheckedChange(index, it) },
+                    enabled = isCustomEnabled
+                )
+            }
+        }
+
+        Divider(
+            modifier = Modifier
+                .height(40.dp)
+                .width(1.dp)
+        )
+
+        IconButton(
+            onClick = onPlusClick,
+            enabled = isPlusEnabled
+        ) {
+            Icon(
+                imageVector = AppIcons.Add,
+                contentDescription = null
+            )
+        }
     }
 }
 
