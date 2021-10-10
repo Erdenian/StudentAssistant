@@ -2,15 +2,21 @@ package ru.erdenian.studentassistant.uikit.views
 
 import android.content.res.Configuration
 import android.text.InputType
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.MultiAutoCompleteTextView
 import androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
@@ -35,19 +41,26 @@ fun MultiAutoCompleteTextField(
     singleLine: Boolean = false,
     maxLines: Int = Int.MAX_VALUE
 ) {
+    val currentValue by rememberUpdatedState(value)
     val currentKeyboardActions = rememberUpdatedState(keyboardActions)
     val adapter = LocalContext.current.let { context ->
         remember(context, items) { ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, items) }
     }
+    var viewToFocus by remember { mutableStateOf<View?>(null) }
 
     AndroidView(
         factory = { context ->
             TextInputLayout(context).apply {
                 AppCompatMultiAutoCompleteTextView(context).apply {
                     setOnEditorActionListener(createOnEditorActionListener(currentKeyboardActions))
-                    addTextChangedListener { onValueChange(it?.toString() ?: "") }
+                    addTextChangedListener {
+                        val newValue = it?.toString() ?: ""
+                        if (newValue != currentValue) onValueChange(newValue)
+                    }
                     setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
-                }.let(this::addView)
+                }
+                    .also { viewToFocus = it }
+                    .also(this::addView)
             }
         },
         update = { view ->
@@ -74,6 +87,8 @@ fun MultiAutoCompleteTextField(
 
         },
         modifier = modifier
+            .onFocusChanged { if (it.isFocused) checkNotNull(viewToFocus).requestFocus() }
+            .focusable()
     )
 }
 

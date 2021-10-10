@@ -46,6 +46,7 @@ import androidx.navigation.fragment.findNavController
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.ui.main.lessoneditor.LessonEditorViewModel
 import ru.erdenian.studentassistant.ui.main.semestereditor.SemesterEditorViewModel.Error
 import ru.erdenian.studentassistant.uikit.style.AppIcons
 import ru.erdenian.studentassistant.uikit.style.AppTheme
@@ -71,9 +72,7 @@ class SemesterEditorFragment : Fragment() {
         }
 
         setContent {
-            val name by viewModel.name.observeAsStateNonNull()
-            val firstDay by viewModel.firstDay.observeAsStateNonNull()
-            val lastDay by viewModel.lastDay.observeAsStateNonNull()
+            var isNameChanged by rememberSaveable { mutableStateOf(false) }
 
             val errorMessageResource by viewModel.error.map { error ->
                 when (error) {
@@ -86,10 +85,14 @@ class SemesterEditorFragment : Fragment() {
             val errorMessage = errorMessageResource?.let { stringResource(it) }
             val error by viewModel.error.observeAsState()
 
+            val name by viewModel.name.observeAsStateNonNull()
+            val nameErrorMessage = errorMessage?.takeIf { (error == Error.EMPTY_NAME) && isNameChanged }
+
+            val firstDay by viewModel.firstDay.observeAsStateNonNull()
+            val lastDay by viewModel.lastDay.observeAsStateNonNull()
+
             val saved by viewModel.saved.observeAsStateNonNull()
             if (saved) findNavController().popBackStack()
-
-            var isNameChanged by rememberSaveable { mutableStateOf(false) }
 
             AppTheme {
                 val context = LocalContext.current
@@ -99,13 +102,12 @@ class SemesterEditorFragment : Fragment() {
                     name = name,
                     firstDay = firstDay,
                     lastDay = lastDay,
-                    errorMessage = when (error) {
-                        Error.EMPTY_NAME,
-                        Error.SEMESTER_EXISTS -> if (isNameChanged) errorMessage else null
-                        else -> null
-                    },
+                    errorMessage = nameErrorMessage,
                     onBackClick = { findNavController().popBackStack() },
-                    onSaveClick = { errorMessage?.let { context.toast(it) } ?: viewModel.save() },
+                    onSaveClick = {
+                        isNameChanged = true
+                        errorMessage?.let { context.toast(it) } ?: viewModel.save()
+                    },
                     onNameChange = {
                         isNameChanged = true
                         viewModel.name.value = it

@@ -4,13 +4,19 @@ import android.content.Context
 import android.content.res.Configuration
 import android.text.InputType
 import android.util.AttributeSet
+import android.view.View
 import android.widget.ArrayAdapter
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
@@ -131,17 +137,25 @@ fun <T : Any> ExposedDropdownMenu(
     singleLine: Boolean = false,
     maxLines: Int = Int.MAX_VALUE
 ) {
+    val currentValue by rememberUpdatedState(value)
     val currentKeyboardActions = rememberUpdatedState(keyboardActions)
     val adapter = LocalContext.current.let { context ->
         // Not including items to remember's keys as it can be updated on the fly
         remember(context, stringSelector) { ExposedDropdownMenu.Adapter(context, items, stringSelector) }
     }
+    var viewToFocus by remember { mutableStateOf<View?>(null) }
 
     AndroidView(
         factory = { context ->
             ExposedDropdownMenu(context).apply {
-                checkNotNull(editText).setOnEditorActionListener(createOnEditorActionListener(currentKeyboardActions))
+                checkNotNull(editText).apply {
+                    setOnEditorActionListener(createOnEditorActionListener(currentKeyboardActions))
+                    viewToFocus = this
+                }
                 setAdapter(adapter)
+                onTextChangedListener = { text, index ->
+                    if (text != currentValue) onValueChange(text, index, items.getOrNull(index))
+                }
                 onTextChangedListener = { text, index -> onValueChange(text, index, items.getOrNull(index)) }
             }
         },
@@ -165,6 +179,8 @@ fun <T : Any> ExposedDropdownMenu(
             if (adapter.items != items) adapter.items = items
         },
         modifier = modifier
+            .onFocusChanged { if (it.isFocused) checkNotNull(viewToFocus).requestFocus() }
+            .focusable()
     )
 }
 
