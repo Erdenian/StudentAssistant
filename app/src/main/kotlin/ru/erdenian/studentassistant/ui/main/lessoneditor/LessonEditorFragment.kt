@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
@@ -25,8 +24,11 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -86,6 +88,8 @@ class LessonEditorFragment : Fragment() {
         viewModel.done.observe(viewLifecycleOwner) { if (it) findNavController().popBackStack() }
 
         setContent {
+            var isSubjectNameChanged by rememberSaveable { mutableStateOf(false) }
+
             val isEditing = viewModel.isEditing
 
             val errorMessageResource by viewModel.error.map { error ->
@@ -101,11 +105,12 @@ class LessonEditorFragment : Fragment() {
 
             val subjectName by viewModel.subjectName.observeAsStateNonNull()
             val existingSubjects by viewModel.existingSubjects.map { it.list }.observeAsState(emptyList())
-            val subjectNameErrorMessage = errorMessage?.takeIf { error == Error.EMPTY_SUBJECT_NAME }
+            val subjectNameErrorMessage = errorMessage?.takeIf { (error == Error.EMPTY_SUBJECT_NAME) && isSubjectNameChanged }
 
             val type by viewModel.type.observeAsStateNonNull()
             val predefinedTypes = stringArrayResource(R.array.lesson_types).toList()
-            val existingTypes by viewModel.existingTypes.map { (predefinedTypes + it.list).distinct() }
+            val existingTypes by viewModel.existingTypes
+                .map { (predefinedTypes + it.list).distinct() }
                 .observeAsState(emptyList())
 
             val teachers by viewModel.teachers.observeAsStateNonNull()
@@ -141,6 +146,7 @@ class LessonEditorFragment : Fragment() {
                     weeks = weeks,
                     onBackClick = { findNavController().popBackStack() },
                     onSaveClick = {
+                        isSubjectNameChanged = true
                         if (errorMessage != null) context.toast(errorMessage)
                         else {
                             coroutineScope.launch {
@@ -175,7 +181,10 @@ class LessonEditorFragment : Fragment() {
                             }
                         }
                     },
-                    onSubjectNameChange = { viewModel.subjectName.value = it },
+                    onSubjectNameChange = {
+                        isSubjectNameChanged = true
+                        viewModel.subjectName.value = it
+                    },
                     onTypeChange = { viewModel.type.value = it },
                     onTeachersChange = { viewModel.teachers.value = it },
                     onClassroomsChange = { viewModel.classrooms.value = it },
@@ -265,11 +274,9 @@ private fun LessonEditorContent(
                 capitalization = KeyboardCapitalization.Sentences,
                 imeAction = ImeAction.Next
             ),
-            keyboardActions = KeyboardActions(
-                onNext = {}
-            ),
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
         )
 
         AutoCompleteTextField(
@@ -280,9 +287,6 @@ private fun LessonEditorContent(
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
                 imeAction = ImeAction.Next
-            ),
-            keyboardActions = KeyboardActions(
-                onNext = {}
             ),
             singleLine = true,
             modifier = Modifier
@@ -299,9 +303,6 @@ private fun LessonEditorContent(
                 capitalization = KeyboardCapitalization.Words,
                 imeAction = ImeAction.Next
             ),
-            keyboardActions = KeyboardActions(
-                onNext = {}
-            ),
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
@@ -316,9 +317,6 @@ private fun LessonEditorContent(
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
                 imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = {}
             ),
             singleLine = true,
             modifier = Modifier

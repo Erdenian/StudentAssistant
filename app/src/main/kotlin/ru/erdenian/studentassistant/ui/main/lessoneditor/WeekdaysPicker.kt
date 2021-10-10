@@ -68,9 +68,13 @@ internal fun WeekdaysPicker(
 
                 val calendarToJoda = jodaToCalendar.entries.associate { (k, v) -> v to k }
                 setOnWeekdaysChangeListener { _, _, weekdays ->
-                    weekdays.singleOrNull()
-                        ?.let { currentOnValueChange(calendarToJoda.getValue(it)) }
-                        ?: selectDay(jodaToCalendar.getValue(currentValue))
+                    val weekday = weekdays.singleOrNull()
+                        ?.let(calendarToJoda::getValue)
+                        ?: run {
+                            selectDay(jodaToCalendar.getValue(currentValue))
+                            return@setOnWeekdaysChangeListener
+                        }
+                    if (weekday != currentValue) currentOnValueChange(weekday)
                 }
             }
         },
