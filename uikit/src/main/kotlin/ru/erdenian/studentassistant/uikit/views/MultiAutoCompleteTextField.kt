@@ -53,11 +53,18 @@ fun MultiAutoCompleteTextField(
             TextInputLayout(context).apply {
                 AppCompatMultiAutoCompleteTextView(context).apply {
                     setOnEditorActionListener(createOnEditorActionListener(currentKeyboardActions))
-                    addTextChangedListener {
-                        val newValue = it?.toString() ?: ""
+                    setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
+
+                    var isInitialized = false
+                    addTextChangedListener { editable ->
+                        // Ignore the first call to the listener
+                        // because it is called with an empty string during initialization of inputType
+                        if (!isInitialized && editable.isNullOrEmpty()) return@addTextChangedListener
+                        isInitialized = true
+
+                        val newValue = editable?.toString() ?: ""
                         if (newValue != currentValue) onValueChange(newValue)
                     }
-                    setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
                 }
                     .also { viewToFocus = it }
                     .also(this::addView)

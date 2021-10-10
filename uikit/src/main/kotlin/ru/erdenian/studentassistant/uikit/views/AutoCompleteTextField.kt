@@ -52,8 +52,15 @@ fun AutoCompleteTextField(
             TextInputLayout(context).apply {
                 MaterialAutoCompleteTextView(context).apply {
                     setOnEditorActionListener(createOnEditorActionListener(currentKeyboardActions))
-                    addTextChangedListener {
-                        val newValue = it?.toString() ?: ""
+
+                    var isInitialized = false
+                    addTextChangedListener { editable ->
+                        // Ignore the first call to the listener
+                        // because it is called with an empty string during initialization of inputType
+                        if (!isInitialized && editable.isNullOrEmpty()) return@addTextChangedListener
+                        isInitialized = true
+
+                        val newValue = editable?.toString() ?: ""
                         if (newValue != currentValue) onValueChange(newValue)
                     }
                 }
