@@ -39,8 +39,7 @@
     <fragment
         android:id="@+id/nav_fragment_homeworks"
         android:name="ru.erdenian.studentassistant.ui.main.homeworks.HomeworksFragment"
-        android:label="@string/hf_title"
-        tools:layout="@layout/fragment_homeworks">
+        android:label="@string/hf_title">
 
         <action
             android:id="@+id/create_homework"
@@ -102,8 +101,7 @@
     <fragment
         android:id="@+id/nav_fragment_lesson_information"
         android:name="ru.erdenian.studentassistant.ui.main.lessoninformation.LessonInformationFragment"
-        android:label="@string/lif_title"
-        tools:layout="@layout/fragment_lesson_information">
+        android:label="@string/lif_title">
 
         <argument
             android:name="lesson"
@@ -191,8 +189,7 @@
     <fragment
         android:id="@+id/nav_fragment_semester_editor"
         android:name="ru.erdenian.studentassistant.ui.main.semestereditor.SemesterEditorFragment"
-        android:label="@string/sef_title_edit"
-        tools:layout="@layout/fragment_semester_editor">
+        android:label="@string/sef_title_edit">
 
         <argument
             android:name="semester"
@@ -315,8 +312,7 @@
     <fragment
         android:id="@+id/nav_fragment_lesson_editor"
         android:name="ru.erdenian.studentassistant.ui.main.lessoneditor.LessonEditorFragment"
-        android:label="@string/lef_title_edit"
-        tools:layout="@layout/fragment_homework_editor">
+        android:label="@string/lef_title_edit">
 
         <argument
             android:name="semester_id"
@@ -345,8 +341,7 @@
     <fragment
         android:id="@+id/nav_fragment_homework_editor"
         android:name="ru.erdenian.studentassistant.ui.main.homeworkeditor.HomeworkEditorFragment"
-        android:label="@string/hef_title"
-        tools:layout="@layout/fragment_homework_editor">
+        android:label="@string/hef_title">
 
         <argument
             android:name="semester_id"
