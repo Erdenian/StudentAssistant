@@ -156,7 +156,6 @@ fun <T : Any> ExposedDropdownMenu(
                 onTextChangedListener = { text, index ->
                     if (text != currentValue) onValueChange(text, index, items.getOrNull(index))
                 }
-                onTextChangedListener = { text, index -> onValueChange(text, index, items.getOrNull(index)) }
             }
         },
         update = { view ->
