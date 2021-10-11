@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -100,7 +99,6 @@ class HomeworksFragment : Fragment() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun HomeworksContent(
     semesters: List<String>,

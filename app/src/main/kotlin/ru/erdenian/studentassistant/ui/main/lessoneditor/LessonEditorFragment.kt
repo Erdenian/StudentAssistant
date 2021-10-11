@@ -346,7 +346,9 @@ private fun LessonEditorContent(
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
         ) {
             val context = LocalContext.current
 

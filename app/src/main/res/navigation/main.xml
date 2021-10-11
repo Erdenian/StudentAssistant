@@ -200,8 +200,7 @@
 
     <fragment
         android:id="@+id/nav_fragment_lessons_editor"
-        android:name="ru.erdenian.studentassistant.ui.main.lessonseditor.LessonsEditorFragment"
-        tools:layout="@layout/fragment_lessons_editor">
+        android:name="ru.erdenian.studentassistant.ui.main.lessonseditor.LessonsEditorFragment">
 
         <argument
             android:name="semester"
