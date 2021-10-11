@@ -22,6 +22,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
@@ -36,7 +37,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -140,7 +140,7 @@ private fun LessonInformationContent(
     },
     floatingActionButton = {
         FloatingActionButton(onClick = onAddHomeworkClick) {
-            Icon(painter = painterResource(R.drawable.ic_plus), contentDescription = null)
+            Icon(imageVector = AppIcons.Add, contentDescription = null)
         }
     }
 ) {

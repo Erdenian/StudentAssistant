@@ -46,7 +46,6 @@ import androidx.navigation.fragment.findNavController
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.ui.main.lessoneditor.LessonEditorViewModel
 import ru.erdenian.studentassistant.ui.main.semestereditor.SemesterEditorViewModel.Error
 import ru.erdenian.studentassistant.uikit.style.AppIcons
 import ru.erdenian.studentassistant.uikit.style.AppTheme
@@ -167,7 +166,7 @@ private fun SemesterEditorContent(
         OutlinedTextField(
             value = name,
             onValueChange = onNameChange,
-            label = { Text(text = stringResource(R.string.hef_subject)) },
+            label = { Text(text = stringResource(R.string.sef_name)) },
             isError = (errorMessage != null),
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,

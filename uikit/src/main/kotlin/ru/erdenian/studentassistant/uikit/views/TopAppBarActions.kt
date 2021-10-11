@@ -91,7 +91,12 @@ private fun TopAppBarActionsContent(
                     offset = DpOffset(0.dp, (-48).dp)
                 ) {
                     neverShowActions.forEach { item ->
-                        DropdownMenuItem(onClick = item.onClick) {
+                        DropdownMenuItem(
+                            onClick = {
+                                onDismissRequest()
+                                item.onClick()
+                            }
+                        ) {
                             Text(text = item.name)
                         }
                     }

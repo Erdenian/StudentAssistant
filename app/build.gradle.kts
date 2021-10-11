@@ -155,6 +155,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-rc01")
     // Integration with observables
     implementation("androidx.compose.runtime:runtime-livedata:1.0.3")
+    implementation("com.google.accompanist:accompanist-pager:0.19.0")
     //endregion
 
     // region Core
