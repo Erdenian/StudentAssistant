@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.ui.main.lessonseditor
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -33,9 +34,11 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
@@ -55,6 +58,7 @@ import ru.erdenian.studentassistant.uikit.style.AppTheme
 import ru.erdenian.studentassistant.uikit.views.ActionItem
 import ru.erdenian.studentassistant.uikit.views.LessonCard
 import ru.erdenian.studentassistant.uikit.views.TopAppBarActions
+import ru.erdenian.studentassistant.utils.Lessons
 import ru.erdenian.studentassistant.utils.navArgsFactory
 
 class LessonsEditorFragment : Fragment() {
@@ -75,11 +79,11 @@ class LessonsEditorFragment : Fragment() {
 
         setContent {
             val coroutineScope = rememberCoroutineScope()
-            val state = rememberPagerState()
+            val pagerState = rememberPagerState()
 
             AppTheme {
                 LessonsEditorContent(
-                    state = state,
+                    state = pagerState,
                     lessonsGetter = { page ->
                         val weekday = page + 1
                         viewModel.getLessons(weekday).map { it.list }
@@ -125,7 +129,7 @@ class LessonsEditorFragment : Fragment() {
                         }
                     },
                     onAddLessonClick = {
-                        val weekday = state.currentPage + 1
+                        val weekday = pagerState.currentPage + 1
                         findNavController().navigate(
                             LessonsEditorFragmentDirections.addLesson(checkNotNull(viewModel.semester.value).id, weekday)
                         )
@@ -259,4 +263,23 @@ private fun LessonsEditorContent(
             }
         }
     }
+}
+
+@OptIn(ExperimentalPagerApi::class)
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun LessonsEditorContentPreview() = AppTheme {
+    val lesson = Lessons.regular
+    LessonsEditorContent(
+        state = rememberPagerState(),
+        lessonsGetter = { MutableLiveData(List(10) { lesson }) },
+        onBackClick = {},
+        onEditSemesterClick = {},
+        onDeleteSemesterClick = {},
+        onLessonClick = {},
+        onCopyLessonClick = {},
+        onDeleteLessonClick = {},
+        onAddLessonClick = {}
+    )
 }

@@ -1,135 +1,262 @@
 package ru.erdenian.studentassistant.ui.main.schedule
 
+import android.content.res.Configuration
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.widget.AdapterView
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Today
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.distinctUntilChanged
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
+import androidx.navigation.findNavController
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.PagerState
+import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.launch
+import org.joda.time.Days
 import org.joda.time.LocalDate
+import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.databinding.FragmentScheduleBinding
-import ru.erdenian.studentassistant.ui.adapter.SemestersSpinnerAdapter
-import ru.erdenian.studentassistant.utils.binding
-import ru.erdenian.studentassistant.utils.colorAttr
-import ru.erdenian.studentassistant.utils.getColorCompat
-import ru.erdenian.studentassistant.utils.setColor
+import ru.erdenian.studentassistant.entity.Lesson
+import ru.erdenian.studentassistant.entity.Semester
+import ru.erdenian.studentassistant.ui.main.lessonseditor.PagerTabStrip
+import ru.erdenian.studentassistant.uikit.style.AppIcons
+import ru.erdenian.studentassistant.uikit.style.AppTheme
+import ru.erdenian.studentassistant.uikit.views.ActionItem
+import ru.erdenian.studentassistant.uikit.views.LessonCard
+import ru.erdenian.studentassistant.uikit.views.TopAppBarActions
+import ru.erdenian.studentassistant.uikit.views.TopAppBarDropdownMenu
+import ru.erdenian.studentassistant.utils.Lessons
+import ru.erdenian.studentassistant.utils.Semesters
 import ru.erdenian.studentassistant.utils.showDatePicker
 
-class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
+private fun Semester.getDate(position: Int): LocalDate = firstDay.plusDays(position)
+private fun Semester.getPosition(date: LocalDate) = Days.daysBetween(firstDay, date.coerceIn(range)).days
 
-    companion object {
-        private const val PAGE_DATE = "page_date"
+class ScheduleFragment : Fragment() {
+
+    @OptIn(ExperimentalPagerApi::class)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = ComposeView(inflater.context).apply {
+        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+        val viewModel by viewModels<ScheduleViewModel>()
+
+        setContent {
+            val semesters by viewModel.allSemesters.map { it.list }.observeAsState(emptyList())
+            val semestersNames by derivedStateOf { semesters.map { it.name } }
+            val selectedSemester by viewModel.selectedSemester.observeAsState()
+
+            AppTheme {
+                val pagerState = rememberPagerState()
+                val coroutineScope = rememberCoroutineScope()
+
+                ScheduleContent(
+                    state = pagerState,
+                    semestersNames = semestersNames,
+                    selectedSemester = selectedSemester,
+                    lessonsGetter = { date -> viewModel.getLessons(date).map { it.list } },
+                    onSelectedSemesterChange = { index ->
+                        val selectedDate = selectedSemester?.getDate(pagerState.currentPage) ?: LocalDate.now()
+                        val newSemester = semesters[index]
+                        viewModel.selectSemester(newSemester)
+                        coroutineScope.launch {
+                            pagerState.scrollToPage(newSemester.getPosition(selectedDate))
+                        }
+                    },
+                    onAddSemesterClick = { findNavController().navigate(ScheduleFragmentDirections.addSemester()) },
+                    onEditSemesterClick = {
+                        findNavController().navigate(ScheduleFragmentDirections.editSchedule(checkNotNull(selectedSemester)))
+                    },
+                    onLessonClick = { findNavController().navigate(ScheduleFragmentDirections.showLessonInformation(it)) }
+                )
+            }
+        }
     }
+}
 
-    private val viewModel by viewModels<ScheduleViewModel>()
-
-    private val binding by binding { FragmentScheduleBinding.bind(it) }
-
-    private var selectedDate: LocalDate? = LocalDate.now()
-    private val pagerAdapter by lazy {
-        SchedulePagerAdapter(childFragmentManager).apply {
-            viewModel.selectedSemester.observe(this@ScheduleFragment) { semester ->
-                if (count > 0) selectedDate = getDate(binding.viewPager.currentItem)
-                this.semester = semester
-                if (count > 0) {
-                    binding.viewPager.setCurrentItem(getPosition(selectedDate ?: LocalDate.now()), false)
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+private fun ScheduleContent(
+    state: PagerState,
+    semestersNames: List<String>,
+    selectedSemester: Semester?,
+    lessonsGetter: (date: LocalDate) -> LiveData<List<Lesson>>,
+    onSelectedSemesterChange: (Int) -> Unit,
+    onAddSemesterClick: () -> Unit,
+    onEditSemesterClick: () -> Unit,
+    onLessonClick: (Lesson) -> Unit
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    if (semestersNames.size <= 1) {
+                        Text(text = stringResource(R.string.sf_title))
+                    } else {
+                        TopAppBarDropdownMenu(
+                            items = semestersNames,
+                            selectedItem = checkNotNull(selectedSemester).name,
+                            onSelectedItemChange = { index, _ -> onSelectedSemesterChange(index) }
+                        )
+                    }
+                },
+                actions = {
+                    val context = LocalContext.current
+                    val coroutineScope = rememberCoroutineScope()
+                    TopAppBarActions(
+                        actions = listOfNotNull(
+                            if (selectedSemester != null) {
+                                ActionItem.AlwaysShow(
+                                    name = stringResource(R.string.sf_calendar),
+                                    imageVector = AppIcons.Today,
+                                    onClick = {
+                                        context.showDatePicker(
+                                            selectedSemester.getDate(state.currentPage),
+                                            selectedSemester.firstDay,
+                                            selectedSemester.lastDay
+                                        ) {
+                                            coroutineScope.launch {
+                                                state.animateScrollToPage(selectedSemester.getPosition(it))
+                                            }
+                                        }
+                                    }
+                                )
+                            } else null,
+                            if (selectedSemester == null) {
+                                ActionItem.AlwaysShow(
+                                    name = stringResource(R.string.sf_add),
+                                    imageVector = AppIcons.Add,
+                                    onClick = onAddSemesterClick
+                                )
+                            } else {
+                                ActionItem.NeverShow(
+                                    name = stringResource(R.string.sf_add),
+                                    onClick = onAddSemesterClick
+                                )
+                            },
+                            if (selectedSemester != null) {
+                                ActionItem.NeverShow(
+                                    name = stringResource(R.string.sf_edit),
+                                    onClick = onEditSemesterClick
+                                )
+                            } else null
+                        )
+                    )
                 }
-                selectedDate = null
-            }
+            )
         }
-    }
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            if (selectedSemester == null) {
+                Text(
+                    text = stringResource(R.string.sf_no_schedule),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
+                )
+            } else {
+                val shortTitleFormatter = remember { DateTimeFormat.forPattern("EEEE, dd MMMM") }
+                val fullTitleFormatter = remember { DateTimeFormat.forPattern("EEEE, dd MMMM yyyy") }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val owner = viewLifecycleOwner
-        setHasOptionsMenu(true)
+                PagerTabStrip(
+                    state = state,
+                    titleGetter = { page ->
+                        val date = selectedSemester.firstDay.plusDays(page)
+                        date.toString(if (date.year == LocalDate.now().year) shortTitleFormatter else fullTitleFormatter)
+                    }
+                )
 
-        viewModel.selectedSemester.observe(owner) { requireActivity().invalidateOptionsMenu() }
+                HorizontalPager(
+                    count = selectedSemester.length,
+                    state = state
+                ) { page ->
+                    val lessons by lessonsGetter(selectedSemester.getDate(page)).observeAsState(emptyList())
 
-        (requireActivity() as AppCompatActivity).apply {
-            setSupportActionBar(binding.toolbar)
-            findNavController().addOnDestinationChangedListener { _, destination, _ -> title = destination.label }
-            viewModel.allSemesters.observe(owner) { checkNotNull(supportActionBar).setDisplayShowTitleEnabled(it.size <= 1) }
-        }
+                    if (lessons.isEmpty()) {
+                        Text(
+                            text = stringResource(R.string.sf_free_day),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
+                        )
+                    } else {
+                        LazyColumn(
+                            contentPadding = PaddingValues(
+                                horizontal = dimensionResource(R.dimen.activity_horizontal_margin),
+                                vertical = dimensionResource(R.dimen.activity_vertical_margin)
+                            ),
+                            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.cards_spacing)),
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            itemsIndexed(
+                                items = lessons,
+                                key = { _, item -> item.id }
+                            ) { _, lesson ->
+                                val timeFormatter = remember { DateTimeFormat.shortTime() }
 
-        binding.semesters.apply {
-            viewModel.allSemesters.observe(owner) { visibility = if (it.size > 1) View.VISIBLE else View.GONE }
-            val adapter = SemestersSpinnerAdapter().apply { viewModel.allSemesters.observe(owner) { semesters = it.list } }
-            this.adapter = adapter
-            viewModel.selectedSemester.distinctUntilChanged().observe(owner) { semester ->
-                viewModel.allSemesters.value?.indexOf(semester)?.takeIf { it >= 0 }?.let { setSelection(it) }
-            }
-            onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) =
-                    viewModel.selectSemester(adapter.getItem(position))
-
-                override fun onNothingSelected(parent: AdapterView<*>?) = Unit
-            }
-        }
-
-        binding.viewPager.adapter = pagerAdapter
-        binding.pagerTabStrip.apply {
-            val color = requireContext().colorAttr(R.attr.colorPrimary)
-            setTextColor(color)
-            tabIndicatorColor = color
-        }
-
-        binding.flipper.apply {
-            val scheduleIndex = 0
-            val noScheduleIndex = 1
-            viewModel.selectedSemester.observe(owner) { semester ->
-                displayedChild = if (semester != null) scheduleIndex else noScheduleIndex
-            }
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        if ((view != null) && (pagerAdapter.semester != null)) {
-            outState.putSerializable(PAGE_DATE, pagerAdapter.getDate(binding.viewPager.currentItem))
-        }
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        selectedDate = savedInstanceState?.getSerializable(PAGE_DATE) as? LocalDate
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_schedule, menu)
-        menu.setColor(requireContext().getColorCompat(R.color.menu))
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        val hasSchedule = (viewModel.selectedSemester.value != null)
-        menu.findItem(R.id.ms_calendar).isVisible = hasSchedule
-        menu.findItem(R.id.ms_add_schedule).setShowAsAction(
-            if (hasSchedule) MenuItem.SHOW_AS_ACTION_NEVER else MenuItem.SHOW_AS_ACTION_IF_ROOM
-        )
-        menu.findItem(R.id.ms_edit_schedule).isVisible = hasSchedule
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-        R.id.ms_calendar -> {
-            viewModel.selectedSemester.value?.run {
-                requireContext().showDatePicker(pagerAdapter.getDate(binding.viewPager.currentItem), firstDay, lastDay) {
-                    binding.viewPager.currentItem = pagerAdapter.getPosition(it)
+                                LessonCard(
+                                    subjectName = lesson.subjectName,
+                                    type = lesson.type,
+                                    teachers = lesson.teachers.list,
+                                    classrooms = lesson.classrooms.list,
+                                    startTime = lesson.startTime.toString(timeFormatter),
+                                    endTime = lesson.endTime.toString(timeFormatter),
+                                    onClick = { onLessonClick(lesson) }
+                                )
+                            }
+                        }
+                    }
                 }
             }
-            true
         }
-        R.id.ms_add_schedule -> {
-            findNavController().navigate(ScheduleFragmentDirections.addSemester())
-            true
-        }
-        R.id.ms_edit_schedule -> {
-            findNavController().navigate(ScheduleFragmentDirections.editSchedule(checkNotNull(viewModel.selectedSemester.value)))
-            true
-        }
-        else -> false
     }
+}
+
+@OptIn(ExperimentalPagerApi::class)
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun LessonsEditorContentPreview() = AppTheme {
+    val lesson = Lessons.regular
+    ScheduleContent(
+        state = rememberPagerState(),
+        semestersNames = emptyList(),
+        selectedSemester = Semesters.regular,
+        lessonsGetter = { MutableLiveData(List(10) { lesson }) },
+        onSelectedSemesterChange = {},
+        onAddSemesterClick = {},
+        onEditSemesterClick = {},
+        onLessonClick = {}
+    )
 }
