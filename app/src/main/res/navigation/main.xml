@@ -92,12 +92,6 @@
         android:label="@string/stf_title" />
 
     <fragment
-        android:id="@+id/nav_fragment_help"
-        android:name="ru.erdenian.studentassistant.ui.main.help.HelpFragment"
-        android:label="@string/hlpf_title"
-        tools:layout="@layout/fragment_help" />
-
-    <fragment
         android:id="@+id/nav_fragment_lesson_information"
         android:name="ru.erdenian.studentassistant.ui.main.lessoninformation.LessonInformationFragment"
         android:label="@string/lif_title">
@@ -407,11 +401,6 @@
     <action
         android:id="@+id/nav_action_settings"
         app:destination="@id/nav_fragment_settings"
-        app:popUpTo="@id/main" />
-
-    <action
-        android:id="@+id/nav_action_help"
-        app:destination="@id/nav_fragment_help"
         app:popUpTo="@id/main" />
 
     <!-- endregion -->

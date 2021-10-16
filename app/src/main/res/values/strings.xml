@@ -7,7 +7,6 @@
     <string name="ma_schedule">Расписание</string>
     <string name="ma_homeworks">Домашние задания</string>
     <string name="ma_settings">Настройки</string>
-    <string name="ma_help">Справка</string>
 
     <!-- ScheduleFragment -->
     <string name="sf_title">Расписание</string>
@@ -110,10 +109,6 @@
     <string name="hef_delete_message">Удалить задание?</string>
     <string name="hef_delete_yes">Удалить</string>
     <string name="hef_delete_no">Нет</string>
-
-    <!-- HelpFragment -->
-    <string name="hlpf_title">Справка</string>
-    <!-- endregion -->
 
     <!-- endregion -->
 
