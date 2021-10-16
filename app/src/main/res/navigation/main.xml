@@ -11,8 +11,7 @@
     <fragment
         android:id="@+id/nav_fragment_schedule"
         android:name="ru.erdenian.studentassistant.ui.main.schedule.ScheduleFragment"
-        android:label="@string/sf_title"
-        tools:layout="@layout/fragment_schedule">
+        android:label="@string/sf_title">
 
         <action
             android:id="@+id/show_lesson_information"
