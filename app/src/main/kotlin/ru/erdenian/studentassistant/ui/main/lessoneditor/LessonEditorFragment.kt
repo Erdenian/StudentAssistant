@@ -54,11 +54,11 @@ import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.ui.main.lessoneditor.LessonEditorViewModel.Error
 import ru.erdenian.studentassistant.uikit.style.AppIcons
 import ru.erdenian.studentassistant.uikit.style.AppTheme
-import ru.erdenian.studentassistant.uikit.views.ActionItem
-import ru.erdenian.studentassistant.uikit.views.AutoCompleteTextField
-import ru.erdenian.studentassistant.uikit.views.MultiAutoCompleteTextField
-import ru.erdenian.studentassistant.uikit.views.TopAppBarActions
-import ru.erdenian.studentassistant.uikit.views.WeeksSelector
+import ru.erdenian.studentassistant.uikit.view.ActionItem
+import ru.erdenian.studentassistant.uikit.view.AutoCompleteTextField
+import ru.erdenian.studentassistant.uikit.view.MultiAutoCompleteTextField
+import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
+import ru.erdenian.studentassistant.uikit.view.WeeksSelector
 import ru.erdenian.studentassistant.utils.Lessons
 import ru.erdenian.studentassistant.utils.navArgsFactory
 import ru.erdenian.studentassistant.utils.observeAsStateNonNull

@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.uikit.preferences
+package ru.erdenian.studentassistant.uikit.preference
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater

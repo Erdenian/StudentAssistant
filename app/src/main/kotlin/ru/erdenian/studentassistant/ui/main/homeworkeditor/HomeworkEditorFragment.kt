@@ -60,9 +60,9 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.ui.main.homeworkeditor.HomeworkEditorViewModel.Error
 import ru.erdenian.studentassistant.uikit.style.AppIcons
 import ru.erdenian.studentassistant.uikit.style.AppTheme
-import ru.erdenian.studentassistant.uikit.views.ActionItem
-import ru.erdenian.studentassistant.uikit.views.ExposedDropdownMenu
-import ru.erdenian.studentassistant.uikit.views.TopAppBarActions
+import ru.erdenian.studentassistant.uikit.view.ActionItem
+import ru.erdenian.studentassistant.uikit.view.ExposedDropdownMenu
+import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.utils.Homeworks
 import ru.erdenian.studentassistant.utils.navArgsFactory
 import ru.erdenian.studentassistant.utils.observeAsStateNonNull

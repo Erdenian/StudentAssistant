@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.uikit.views
+package ru.erdenian.studentassistant.uikit.view
 
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi

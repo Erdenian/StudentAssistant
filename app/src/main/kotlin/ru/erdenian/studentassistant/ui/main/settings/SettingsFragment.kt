@@ -20,8 +20,8 @@ import androidx.fragment.app.viewModels
 import org.joda.time.Duration
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.uikit.preferences.DurationPreference
-import ru.erdenian.studentassistant.uikit.preferences.TimePreference
+import ru.erdenian.studentassistant.uikit.preference.DurationPreference
+import ru.erdenian.studentassistant.uikit.preference.TimePreference
 import ru.erdenian.studentassistant.uikit.style.AppTheme
 
 class SettingsFragment : Fragment() {

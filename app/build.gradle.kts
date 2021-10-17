@@ -25,9 +25,7 @@ android {
         setProperty("archivesBaseName", "${rootProject.name}-$versionName")
     }
 
-    buildFeatures {
-        compose = true
-    }
+    buildFeatures.compose = true
 
     composeOptions {
         val composeVersion: String by project

@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.uikit.preferences
+package ru.erdenian.studentassistant.uikit.preference
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember

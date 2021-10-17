@@ -1,7 +1,7 @@
 package ru.erdenian.studentassistant.repository
 
 import android.content.Context
-import androidx.core.content.edit
+import android.content.SharedPreferences
 import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -19,7 +19,7 @@ class SettingsRepositoryTest {
     private val settingsRepository = SettingsRepository(sharedPreferences)
 
     @AfterEach
-    fun clear() = sharedPreferences.edit(true) { clear() }
+    fun clear() = sharedPreferences.edit().apply(SharedPreferences.Editor::clear).apply()
 
     @Test
     fun defaultLessonDurationTest() = runBlocking(Dispatchers.Main) {

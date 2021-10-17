@@ -44,10 +44,10 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.entity.Homework
 import ru.erdenian.studentassistant.uikit.style.AppIcons
 import ru.erdenian.studentassistant.uikit.style.AppTheme
-import ru.erdenian.studentassistant.uikit.views.ActionItem
-import ru.erdenian.studentassistant.uikit.views.HomeworkCard
-import ru.erdenian.studentassistant.uikit.views.TopAppBarActions
-import ru.erdenian.studentassistant.uikit.views.TopAppBarDropdownMenu
+import ru.erdenian.studentassistant.uikit.view.ActionItem
+import ru.erdenian.studentassistant.uikit.view.HomeworkCard
+import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
+import ru.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
 import ru.erdenian.studentassistant.utils.Homeworks
 import ru.erdenian.studentassistant.utils.Semesters
 
