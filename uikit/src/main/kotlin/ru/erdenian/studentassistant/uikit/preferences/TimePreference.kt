@@ -1,43 +1,30 @@
 package ru.erdenian.studentassistant.uikit.preferences
 
-import android.content.Context
-import android.content.res.TypedArray
-import android.util.AttributeSet
-import androidx.preference.DialogPreference
-import androidx.preference.Preference.SummaryProvider
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
-import ru.erdenian.studentassistant.uikit.R
+import ru.erdenian.studentassistant.utils.showTimePicker
 
-class TimePreference @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = R.attr.dialogPreferenceStyle,
-    defStyleRes: Int = 0
-) : DialogPreference(context, attrs, defStyleAttr, defStyleRes) {
+@Composable
+fun TimePreference(
+    title: String,
+    value: LocalTime,
+    onValueChange: (LocalTime) -> Unit,
+    modifier: Modifier = Modifier,
+    icon: Painter? = null
+) {
+    val timeFormatter = remember { DateTimeFormat.shortTime() }
+    val context = LocalContext.current
 
-    init {
-        val formatter = DateTimeFormat.shortTime()
-        summaryProvider = SummaryProvider<TimePreference> { it.time.toString(formatter) }
-    }
-
-    var time = getPersistedInt(DEFAULT_TIME_MILLIS).toLocalTime()
-        set(value) {
-            field = value
-            persistInt(value.toInt())
-            notifyChanged()
-        }
-
-    override fun onGetDefaultValue(a: TypedArray, index: Int) = a.getInteger(index, DEFAULT_TIME_MILLIS).toLocalTime()
-
-    override fun onSetInitialValue(defaultValue: Any?) {
-        time = (defaultValue as LocalTime?) ?: return
-    }
-
-    private fun LocalTime.toInt() = millisOfDay
-    private fun Int.toLocalTime(): LocalTime = LocalTime.MIDNIGHT.plusMillis(this)
-
-    companion object {
-        private const val DEFAULT_TIME_MILLIS = 0
-    }
+    BasePreference(
+        title = title,
+        description = value.toString(timeFormatter),
+        icon = icon,
+        onClick = { context.showTimePicker(value) { onValueChange(it) } },
+        modifier = modifier
+    )
 }
