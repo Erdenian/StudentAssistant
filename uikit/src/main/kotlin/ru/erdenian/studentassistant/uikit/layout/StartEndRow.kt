@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.uikit.views
+package ru.erdenian.studentassistant.uikit.layout
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

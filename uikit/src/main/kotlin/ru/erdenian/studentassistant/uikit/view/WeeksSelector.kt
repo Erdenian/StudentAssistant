@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.uikit.views
+package ru.erdenian.studentassistant.uikit.view
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -40,6 +40,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.erdenian.studentassistant.uikit.R
+import ru.erdenian.studentassistant.uikit.layout.StartEndRow
 import ru.erdenian.studentassistant.uikit.style.AppIcons
 import ru.erdenian.studentassistant.uikit.style.AppTheme
 

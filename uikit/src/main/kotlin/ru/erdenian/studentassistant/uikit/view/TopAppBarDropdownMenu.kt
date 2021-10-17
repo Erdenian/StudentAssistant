@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.uikit.views
+package ru.erdenian.studentassistant.uikit.view
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
+import ru.erdenian.studentassistant.uikit.layout.StartEndRow
 import ru.erdenian.studentassistant.uikit.style.AppIcons
 import ru.erdenian.studentassistant.uikit.style.AppTheme
 

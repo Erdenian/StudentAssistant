@@ -2,6 +2,7 @@ package ru.erdenian.studentassistant.utils
 
 import android.annotation.SuppressLint
 import android.os.Parcel
+import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
@@ -16,16 +17,13 @@ fun Semester(
     name: String,
     firstDay: LocalDate,
     lastDay: LocalDate
-) = object : Semester {
+): Semester = object : Semester, NoOpParcelable {
 
     override val name = name
     override val firstDay = firstDay
     override val lastDay = lastDay
 
     override val id get() = error("Not implemented")
-
-    override fun describeContents() = error("Not implemented")
-    override fun writeToParcel(parcel: Parcel, flags: Int) = error("Not implemented")
 }
 
 @SuppressLint("ComposableNaming")
@@ -38,7 +36,7 @@ fun Lesson(
     startTime: LocalTime,
     endTime: LocalTime,
     lessonRepeat: Lesson.Repeat
-) = object : Lesson {
+): Lesson = object : Lesson, NoOpParcelable {
 
     override val subjectName = subjectName
     override val type = type
@@ -50,30 +48,19 @@ fun Lesson(
 
     override val semesterId get() = error("Not implemented")
     override val id get() = error("Not implemented")
-
-    override fun describeContents() = error("Not implemented")
-    override fun writeToParcel(parcel: Parcel, flags: Int) = error("Not implemented")
 }
 
 @SuppressLint("ComposableNaming")
 @Composable
-fun ByWeekday(weekday: Int, weeks: List<Boolean>) = object : Lesson.Repeat.ByWeekday() {
-
+fun ByWeekday(weekday: Int, weeks: List<Boolean>): Lesson.Repeat.ByWeekday = object : Lesson.Repeat.ByWeekday(), NoOpParcelable {
     override val weekday get() = weekday
     override val weeks get() = weeks
-
-    override fun describeContents() = error("Not implemented")
-    override fun writeToParcel(parcel: Parcel, flags: Int) = error("Not implemented")
 }
 
 @SuppressLint("ComposableNaming")
 @Composable
-fun ByDates(dates: Set<LocalDate>) = object : Lesson.Repeat.ByDates() {
-
+fun ByDates(dates: Set<LocalDate>): Lesson.Repeat.ByDates = object : Lesson.Repeat.ByDates(), NoOpParcelable {
     override val dates get() = dates
-
-    override fun describeContents() = error("Not implemented")
-    override fun writeToParcel(parcel: Parcel, flags: Int) = error("Not implemented")
 }
 
 @SuppressLint("ComposableNaming")
@@ -83,7 +70,7 @@ fun Homework(
     description: String,
     deadline: LocalDate,
     isDone: Boolean
-) = object : Homework {
+): Homework = object : Homework, NoOpParcelable {
 
     override val subjectName get() = subjectName
     override val description get() = description
@@ -92,7 +79,9 @@ fun Homework(
 
     override val semesterId get() = error("Not implemented")
     override val id get() = error("Not implemented")
+}
 
+private interface NoOpParcelable : Parcelable {
     override fun describeContents() = error("Not implemented")
     override fun writeToParcel(parcel: Parcel, flags: Int) = error("Not implemented")
 }

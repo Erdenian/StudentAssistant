@@ -18,9 +18,7 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
-    buildFeatures {
-        compose = true
-    }
+    buildFeatures.compose = true
 
     composeOptions {
         val composeVersion: String by project
