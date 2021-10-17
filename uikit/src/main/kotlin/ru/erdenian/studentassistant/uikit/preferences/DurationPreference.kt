@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.uikit.preferences
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.widget.TimePicker
 import androidx.compose.foundation.layout.Row
@@ -56,6 +57,7 @@ fun DurationPreference(
             text = {
                 AndroidView(
                     factory = { context ->
+                        @SuppressLint("InflateParams")
                         val timePicker = LayoutInflater.from(context).inflate(R.layout.spinner_time_picker, null) as TimePicker
                         timePicker.apply {
                             setIs24HourView(true)

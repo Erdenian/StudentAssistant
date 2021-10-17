@@ -59,7 +59,7 @@ fun StartEndRow(
 
 @Preview
 @Composable
-private fun Preview() {
+private fun StartEndRowPreview() {
     Column(
         modifier = Modifier.width(100.dp)
     ) {

@@ -116,7 +116,6 @@ private fun WeeksSelectorContent(
     isCustomEnabled: Boolean,
     modifier: Modifier = Modifier
 ) = Column(modifier = modifier) {
-
     Row(
         verticalAlignment = Alignment.Bottom
     ) {
@@ -235,7 +234,7 @@ private fun WeeksSelectorPreview() = AppTheme {
 
 @Preview(group = "WeeksSelector")
 @Composable
-private fun WeeksSelectorPreviewLongRepeatVariant() = AppTheme {
+private fun WeeksSelectorLongRepeatVariantPreview() = AppTheme {
     WeeksSelectorContent(
         repeatVariants = listOf("По чётным чётным чётным чётным чётным чётным чётным"),
         selectedRepeatVariantIndex = 0,
@@ -271,31 +270,31 @@ private fun CheckBoxWithText(
 
 @Preview(name = "Short text", group = "CheckBoxWithText")
 @Composable
-private fun CheckBoxWithTextPreviewShort() = AppTheme {
+private fun CheckBoxWithTextShortPreview() = AppTheme {
     CheckBoxWithText(true, "1", null)
 }
 
 @Preview(name = "Medium text", group = "CheckBoxWithText")
 @Composable
-private fun CheckBoxWithTextPreviewMedium() = AppTheme {
+private fun CheckBoxWithTextMediumPreview() = AppTheme {
     CheckBoxWithText(true, "Text", null)
 }
 
 @Preview(name = "Long text", group = "CheckBoxWithText")
 @Composable
-private fun CheckBoxWithTextPreviewLong() = AppTheme {
+private fun CheckBoxWithTextLongPreview() = AppTheme {
     CheckBoxWithText(true, "Long text", null)
 }
 
 @Preview(name = "Disabled", group = "CheckBoxWithText")
 @Composable
-private fun CheckBoxWithTextPreviewDisabled() = AppTheme {
+private fun CheckBoxWithTextDisabledPreview() = AppTheme {
     CheckBoxWithText(true, "Disabled", null, enabled = false)
 }
 
 @Preview(name = "Dark theme", group = "CheckBoxWithText", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun CheckBoxWithTextPreviewDark() = AppTheme {
+private fun CheckBoxWithTextDarkPreview() = AppTheme {
     CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.onBackground) {
         CheckBoxWithText(
             true,

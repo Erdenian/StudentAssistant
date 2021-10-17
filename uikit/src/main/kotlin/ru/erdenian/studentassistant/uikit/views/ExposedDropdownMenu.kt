@@ -28,7 +28,7 @@ import ru.erdenian.studentassistant.uikit.style.AppTheme
 import ru.erdenian.studentassistant.uikit.utils.createOnEditorActionListener
 import ru.erdenian.studentassistant.uikit.utils.update
 
-class ExposedDropdownMenu @JvmOverloads constructor(
+private class ExposedDropdownMenu @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = R.attr.exposedDropdownMenuStyle
@@ -43,8 +43,8 @@ class ExposedDropdownMenu @JvmOverloads constructor(
 
         autoCompleteTextView.addTextChangedListener { text ->
             val string = text?.toString() ?: ""
-            val adapter = autoCompleteTextView.adapter as Adapter<*>?
-            onTextChangedListener?.invoke(string, adapter?.strings?.indexOf(string) ?: -1)
+            val adapter = autoCompleteTextView.adapter as Adapter<*>
+            onTextChangedListener?.invoke(string, adapter.strings.indexOf(string))
         }
     }
 

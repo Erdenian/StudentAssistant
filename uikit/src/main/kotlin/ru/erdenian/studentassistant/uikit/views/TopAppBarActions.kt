@@ -138,7 +138,7 @@ private fun TopAppBarActionsPreview() = AppTheme {
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun TopAppBarActionsPreviewExpanded() = AppTheme {
+private fun TopAppBarActionsExpandedPreview() = AppTheme {
     TopAppBar(
         title = { Text(text = "Title") },
         navigationIcon = {

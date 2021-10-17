@@ -121,8 +121,9 @@ class HomeworkEditorFragment : Fragment() {
                     semesterDates = semesterDatesRange,
                     onBackClick = { findNavController().popBackStack() },
                     onSaveClick = {
-                        if (errorMessage != null) context.toast(errorMessage)
-                        else {
+                        if (errorMessage != null) {
+                            context.toast(errorMessage)
+                        } else {
                             if (viewModel.lessonExists) {
                                 viewModel.save()
                             } else {
@@ -299,7 +300,7 @@ private fun SimpleTextField(
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun PreviewRegular() = AppTheme {
+private fun HomeworkEditorContentRegularPreview() = AppTheme {
     HomeworkEditorContent(
         isEditing = true,
         existingSubjects = emptyList(),
@@ -319,7 +320,7 @@ private fun PreviewRegular() = AppTheme {
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun PreviewEmpty() = AppTheme {
+private fun HomeworkEditorContentEmptyPreview() = AppTheme {
     HomeworkEditorContent(
         isEditing = true,
         existingSubjects = emptyList(),
@@ -338,7 +339,7 @@ private fun PreviewEmpty() = AppTheme {
 
 @Preview
 @Composable
-private fun PreviewLong() = AppTheme {
+private fun HomeworkEditorContentLongPreview() = AppTheme {
     HomeworkEditorContent(
         isEditing = true,
         existingSubjects = emptyList(),

@@ -91,7 +91,6 @@ fun MultiAutoCompleteTextField(
 
                 setSelection(selectionStart, selectionEnd)
             }
-
         },
         modifier = modifier
             .onFocusChanged { if (it.isFocused) checkNotNull(viewToFocus).requestFocus() }

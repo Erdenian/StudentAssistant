@@ -218,7 +218,7 @@ private fun HomeworksContent(
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun HomeworksContentPreviewRegular() = AppTheme {
+private fun HomeworksContentRegularPreview() = AppTheme {
     HomeworksContent(
         semesters = listOf(Semesters.regular.name),
         selectedSemester = Semesters.regular.name,

@@ -40,14 +40,16 @@ private fun <T> SharedPreferences.getFlow(
 
 // region Extensions
 
-internal fun SharedPreferences.getLocalTime(key: String, defaultValue: LocalTime) =
+internal fun SharedPreferences.getLocalTime(key: String, defaultValue: LocalTime): LocalTime =
     LocalTime.MIDNIGHT.plusMillis(getInt(key, defaultValue.millisOfDay))
 
-internal fun SharedPreferences.Editor.putLocalTime(key: String, value: LocalTime) = putInt(key, value.millisOfDay)
+internal fun SharedPreferences.Editor.putLocalTime(key: String, value: LocalTime): SharedPreferences.Editor =
+    putInt(key, value.millisOfDay)
 
-internal fun SharedPreferences.getDuration(key: String, defaultValue: Duration) =
+internal fun SharedPreferences.getDuration(key: String, defaultValue: Duration): Duration =
     Duration.millis(getLong(key, defaultValue.millis))
 
-internal fun SharedPreferences.Editor.putDuration(key: String, value: Duration) = putLong(key, value.millis)
+internal fun SharedPreferences.Editor.putDuration(key: String, value: Duration): SharedPreferences.Editor =
+    putLong(key, value.millis)
 
 // endregion

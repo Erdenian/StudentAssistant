@@ -76,9 +76,9 @@ dependencies {
     val androidxTestVersion: String by project
     androidTestImplementation("androidx.test:core:$androidxTestVersion")
     androidTestImplementation("androidx.test:runner:$androidxTestVersion")
-    val junit5TestVersion: String by project
-    androidTestImplementation("de.mannodermaus.junit5:android-test-core:$junit5TestVersion")
-    androidTestRuntimeOnly("de.mannodermaus.junit5:android-test-runner:$junit5TestVersion")
+    val junit5AndroidTestVersion: String by project
+    androidTestImplementation("de.mannodermaus.junit5:android-test-core:$junit5AndroidTestVersion")
+    androidTestRuntimeOnly("de.mannodermaus.junit5:android-test-runner:$junit5AndroidTestVersion")
     // endregion
 
     // region Kotlin
