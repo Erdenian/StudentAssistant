@@ -1,69 +1,103 @@
 package ru.erdenian.studentassistant.ui.main.settings
 
+import android.content.res.Configuration
 import android.os.Bundle
-import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
 import org.joda.time.Duration
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.uikit.databinding.FragmentSettingsBinding
-import ru.erdenian.studentassistant.uikit.preferences.TimeDurationPreference
-import ru.erdenian.studentassistant.uikit.preferences.TimeDurationPreferenceDialog
+import ru.erdenian.studentassistant.uikit.preferences.DurationPreference
 import ru.erdenian.studentassistant.uikit.preferences.TimePreference
-import ru.erdenian.studentassistant.uikit.preferences.TimePreferenceDialog
+import ru.erdenian.studentassistant.uikit.style.AppTheme
 
-class SettingsFragment : PreferenceFragmentCompat() {
+class SettingsFragment : Fragment() {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val binding = FragmentSettingsBinding.bind(view)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = ComposeView(inflater.context).apply {
+        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
 
-        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
-    }
-
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.settings, rootKey)
-
-        fun <T : Preference> requirePreference(key: CharSequence) = checkNotNull(findPreference<T>(key))
-        val owner = this
         val viewModel by viewModels<SettingsViewModel>()
 
-        requirePreference<TimePreference>(getString(R.string.pk_default_start_time)).apply {
-            viewModel.defaultStartTimeLiveData.observe(owner) { time = it }
-            setOnPreferenceChangeListener { _, newValue ->
-                viewModel.setDefaultStartTime(newValue as LocalTime)
-                true
-            }
-        }
+        setContent {
+            val defaultStartTime by viewModel.defaultStartTimeFlow.collectAsState()
+            val defaultLessonDuration by viewModel.defaultLessonDurationFlow.collectAsState()
+            val defaultBreakDuration by viewModel.defaultBreakDurationFlow.collectAsState()
 
-        requirePreference<TimeDurationPreference>(getString(R.string.pk_default_lesson_duration)).apply {
-            viewModel.defaultLessonDurationLiveData.observe(owner) { duration = it }
-            setOnPreferenceChangeListener { _, newValue ->
-                viewModel.setDefaultLessonDuration(newValue as Duration)
-                true
-            }
-        }
-
-        requirePreference<TimeDurationPreference>(getString(R.string.pk_default_break_duration)).apply {
-            viewModel.defaultBreakDurationLiveData.observe(owner) { duration = it }
-            setOnPreferenceChangeListener { _, newValue ->
-                viewModel.setDefaultBreakDuration(newValue as Duration)
-                true
+            AppTheme {
+                SettingsContent(
+                    defaultStartTime = defaultStartTime,
+                    onDefaultStartTimeChange = { viewModel.setDefaultStartTime(it) },
+                    defaultLessonDuration = defaultLessonDuration,
+                    onDefaultLessonDurationChange = { viewModel.setDefaultLessonDuration(it) },
+                    defaultBreakDuration = defaultBreakDuration,
+                    onDefaultBreakDurationChange = { viewModel.setDefaultBreakDuration(it) }
+                )
             }
         }
     }
+}
 
-    override fun onDisplayPreferenceDialog(preference: Preference) {
-        val fragment = when (preference) {
-            is TimePreference -> TimePreferenceDialog.newInstance(preference.key)
-            is TimeDurationPreference -> TimeDurationPreferenceDialog.newInstance(preference.key)
-            else -> return super.onDisplayPreferenceDialog(preference)
-        }
-        @Suppress("DEPRECATION")
-        fragment.setTargetFragment(this@SettingsFragment, 0)
-        fragment.show(parentFragmentManager, null)
+@Composable
+private fun SettingsContent(
+    defaultStartTime: LocalTime,
+    onDefaultStartTimeChange: (LocalTime) -> Unit,
+    defaultLessonDuration: Duration,
+    onDefaultLessonDurationChange: (Duration) -> Unit,
+    defaultBreakDuration: Duration,
+    onDefaultBreakDurationChange: (Duration) -> Unit
+) = Scaffold(
+    topBar = {
+        TopAppBar(
+            title = { Text(text = stringResource(R.string.stf_title)) }
+        )
     }
+) {
+    Column {
+        TimePreference(
+            title = stringResource(R.string.stf_default_start_time),
+            value = defaultStartTime,
+            onValueChange = onDefaultStartTimeChange
+        )
+        DurationPreference(
+            title = stringResource(R.string.stf_default_lesson_duration),
+            value = defaultLessonDuration,
+            onValueChange = onDefaultLessonDurationChange
+        )
+        DurationPreference(
+            title = stringResource(R.string.stf_default_break_duration),
+            value = defaultBreakDuration,
+            onValueChange = onDefaultBreakDurationChange
+        )
+    }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun SettingsPreview() = AppTheme {
+    SettingsContent(
+        defaultStartTime = LocalTime.now(),
+        onDefaultStartTimeChange = {},
+        defaultLessonDuration = Duration.ZERO,
+        onDefaultLessonDurationChange = {},
+        defaultBreakDuration = Duration.ZERO,
+        onDefaultBreakDurationChange = {}
+    )
 }
