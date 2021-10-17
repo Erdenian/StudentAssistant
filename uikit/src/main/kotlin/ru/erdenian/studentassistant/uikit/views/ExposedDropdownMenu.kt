@@ -20,7 +20,6 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.withStyledAttributes
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
@@ -35,27 +34,12 @@ class ExposedDropdownMenu @JvmOverloads constructor(
     defStyleAttr: Int = R.attr.exposedDropdownMenuStyle
 ) : TextInputLayout(context, attrs, defStyleAttr) {
 
-    companion object {
-        fun <T> createAdapter(context: Context, items: List<T> = emptyList(), stringSelector: (T) -> CharSequence) =
-            Adapter(context, items, stringSelector)
-
-        fun createAdapter(context: Context, items: List<String> = emptyList()) =
-            Adapter(context, items) { it }
-    }
-
     private val autoCompleteTextView = MaterialAutoCompleteTextView(context).apply {
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
     }
 
     init {
         addView(autoCompleteTextView)
-
-        context.withStyledAttributes(attrs, R.styleable.ExposedDropdownMenu, defStyleAttr) {
-            val editable = getBoolean(R.styleable.ExposedDropdownMenu_editable, false)
-            if (!editable) autoCompleteTextView.inputType = InputType.TYPE_NULL
-            autoCompleteTextView.isSingleLine = getBoolean(R.styleable.ExposedDropdownMenu_singleLine, false)
-            autoCompleteTextView.inputType = getInt(R.styleable.ExposedDropdownMenu_android_inputType, 0)
-        }
 
         autoCompleteTextView.addTextChangedListener { text ->
             val string = text?.toString() ?: ""

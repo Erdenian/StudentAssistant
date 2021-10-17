@@ -16,9 +16,4 @@
         <item>Самостоятельная работа</item>
     </string-array>
 
-    <string-array name="homeworks_pages">
-        <item>Текущие</item>
-        <item>Завершенные</item>
-    </string-array>
-
 </resources>
