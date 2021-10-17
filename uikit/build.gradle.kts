@@ -19,12 +19,12 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
         compose = true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.0.3"
+        val composeVersion: String by project
+        kotlinCompilerExtensionVersion = composeVersion
     }
 
     buildTypes {
@@ -60,27 +60,23 @@ dependencies {
     // endregion
 
     // region Compose
-    implementation("androidx.compose.ui:ui:1.0.3")
-    // Tooling support (Previews, etc.)
-    implementation("androidx.compose.ui:ui-tooling:1.0.3")
-    // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
-    implementation("androidx.compose.foundation:foundation:1.0.3")
-    // Material Design
-    implementation("androidx.compose.material:material:1.0.3")
-    // Material design icons
-    implementation("androidx.compose.material:material-icons-core:1.0.3")
-    implementation("androidx.compose.material:material-icons-extended:1.0.3")
-    // Integration with activities
-    implementation("androidx.activity:activity-compose:1.3.1")
-    // Integration with ViewModels
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-rc01")
-    // Integration with observables
-    implementation("androidx.compose.runtime:runtime-livedata:1.0.3")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0-rc01")
+    val composeVersion: String by project
+
+    api("androidx.compose.ui:ui:$composeVersion")
+    api("androidx.compose.ui:ui-tooling:$composeVersion")
+
+    api("androidx.compose.foundation:foundation:$composeVersion")
+    api("androidx.compose.material:material:$composeVersion")
+
+    api("androidx.compose.material:material-icons-core:$composeVersion")
+    api("androidx.compose.material:material-icons-extended:$composeVersion")
     //endregion
+
+    // region AndroidX
+    api("androidx.core:core-ktx:1.6.0")
+    // endregion
 
     // region UI
     api("com.google.android.material:material:1.4.0")
-    api("androidx.preference:preference:1.1.1")
     // endregion
 }

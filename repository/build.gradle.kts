@@ -56,7 +56,6 @@ dependencies {
     // region Private
     api(project(":entity"))
     implementation(project(":database"))
-    implementation(project(":utils"))
     // endregion
 
     // region Tests
@@ -80,7 +79,7 @@ dependencies {
 
     // region AndroidX
     val lifecycleVersion: String by project
-    api("androidx.lifecycle:lifecycle-livedata:$lifecycleVersion")
+    api("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     // endregion
 
     // region Core

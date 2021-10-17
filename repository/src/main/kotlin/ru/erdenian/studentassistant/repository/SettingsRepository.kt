@@ -1,7 +1,6 @@
 package ru.erdenian.studentassistant.repository
 
 import android.content.SharedPreferences
-import androidx.core.content.edit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.joda.time.Duration
@@ -52,4 +51,6 @@ class SettingsRepository(private val sharedPreferences: SharedPreferences) {
         sharedPreferences.getDurationFlow(scope, DEFAULT_BREAK_DURATION_KEY, DEFAULT_BREAK_DURATION)
 
     // endregion
+
+    private fun SharedPreferences.edit(block: SharedPreferences.Editor.() -> Unit) = edit().apply(block).apply()
 }

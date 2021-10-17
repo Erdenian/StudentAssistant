@@ -3,31 +3,8 @@ package ru.erdenian.studentassistant.utils
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
-import androidx.core.content.ContextCompat
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
-
-/**
- * Обертка над [ContextCompat.getColor].
- *
- * @param id id цвета
- * @return цвет
- * @author Ilya Solovyov
- * @since 0.0.0
- */
-fun Context.getColorCompat(@ColorRes id: Int) = ContextCompat.getColor(this, id)
-
-/**
- * Обертка над [ContextCompat.getDrawable].
- *
- * @param id id ресурса
- * @return иконка
- * @author Ilya Solovyov
- * @since 0.4.3
- */
-fun Context.getDrawableCompat(@DrawableRes id: Int) = ContextCompat.getDrawable(this, id)
 
 /**
  * Отображает [DatePickerDialog].

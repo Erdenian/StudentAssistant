@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.main.lessonseditor
+package ru.erdenian.studentassistant.ui.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

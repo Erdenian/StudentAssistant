@@ -53,6 +53,7 @@ import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.entity.Lesson
+import ru.erdenian.studentassistant.ui.composables.PagerTabStrip
 import ru.erdenian.studentassistant.uikit.style.AppIcons
 import ru.erdenian.studentassistant.uikit.style.AppTheme
 import ru.erdenian.studentassistant.uikit.views.ActionItem
