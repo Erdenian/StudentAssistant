@@ -147,8 +147,9 @@ class LessonEditorFragment : Fragment() {
                     onBackClick = { findNavController().popBackStack() },
                     onSaveClick = {
                         isSubjectNameChanged = true
-                        if (errorMessage != null) context.toast(errorMessage)
-                        else {
+                        if (errorMessage != null) {
+                            context.toast(errorMessage)
+                        } else {
                             coroutineScope.launch {
                                 if (viewModel.isSubjectNameChangedAndNotLast()) {
                                     MaterialAlertDialogBuilder(context)

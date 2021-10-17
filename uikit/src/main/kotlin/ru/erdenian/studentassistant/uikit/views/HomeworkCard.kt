@@ -85,7 +85,7 @@ private fun HomeworkCardPreview() = AppTheme {
 
 @Preview
 @Composable
-private fun HomeworkCardPreviewLong() = AppTheme {
+private fun HomeworkCardLongPreview() = AppTheme {
     HomeworkCard(
         subjectName = "Интернет программирование программирование программирование программирование программирование",
         description = "Лабораторная работа" + " работа".repeat(100),

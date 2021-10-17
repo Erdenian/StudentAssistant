@@ -226,7 +226,7 @@ private fun LessonInformationContent(
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun PreviewRegular() = AppTheme {
+private fun LessonInformationContentRegularPreview() = AppTheme {
     LessonInformationContent(
         lesson = Lessons.regular,
         homeworks = List(10) { Homeworks.regular },
@@ -240,7 +240,7 @@ private fun PreviewRegular() = AppTheme {
 
 @Preview
 @Composable
-private fun PreviewLong() = AppTheme {
+private fun LessonInformationContentLongPreview() = AppTheme {
     LessonInformationContent(
         lesson = Lessons.long,
         homeworks = List(10) { Homeworks.long },

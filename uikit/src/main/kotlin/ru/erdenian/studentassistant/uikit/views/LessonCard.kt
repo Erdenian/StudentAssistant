@@ -150,8 +150,7 @@ private fun LessonCardPreview() = AppTheme {
 
 @Preview
 @Composable
-private fun LessonCardPreviewLong() = AppTheme {
-    // Todo: correct classrooms width
+private fun LessonCardLongPreview() = AppTheme {
     LessonCard(
         subjectName = "Интернет программирование программирование программирование программирование программирование",
         type = "Лабораторная работа работа работа работа работа работа работа работа работа работа работа работа работа работа",

@@ -135,7 +135,7 @@ private fun TopAppBarDropdownMenuPreview() = AppTheme {
 
 @Preview
 @Composable
-private fun TopAppBarDropdownMenuPreviewLong() = AppTheme {
+private fun TopAppBarDropdownMenuLongPreview() = AppTheme {
     TopAppBar(
         title = {
             TopAppBarDropdownMenu(

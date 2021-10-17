@@ -245,7 +245,7 @@ private fun SemesterEditorPreview() = AppTheme {
 
 @Preview
 @Composable
-private fun SemesterEditorPreviewLong() = AppTheme {
+private fun SemesterEditorLongPreview() = AppTheme {
     SemesterEditorContent(
         isEditing = false,
         name = Semesters.long.name,

@@ -4,18 +4,17 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_main)
 
-        binding.navigationView.apply {
+        findViewById<BottomNavigationView>(R.id.navigation_view).apply {
             setOnItemSelectedListener { item ->
                 // setupWithNavController добавляет анимацию, поэтому Toolbar начинает мерцать при переходе
                 findNavController(R.id.nav_host_fragment).navigate(item.itemId)
