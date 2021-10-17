@@ -5,13 +5,9 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="cards_spacing">10dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="card_margin_inside">8dp</dimen>
 
-    <dimen name="divider_margin">4dp</dimen>
     <dimen name="divider_margin_top_bottom">4dp</dimen>
-
-    <dimen name="weeks_selector_checkbox_padding">6dp</dimen>
 
 </resources>

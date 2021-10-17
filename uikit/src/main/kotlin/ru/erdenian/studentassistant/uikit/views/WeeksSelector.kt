@@ -3,6 +3,7 @@ package ru.erdenian.studentassistant.uikit.views
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -178,6 +179,7 @@ private fun WeeksSelectorContent(
         )
 
         LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.weight(1.0f)
         ) {
@@ -261,9 +263,7 @@ private fun CheckBoxWithText(
     enabled: Boolean = true
 ) = Column(
     horizontalAlignment = Alignment.CenterHorizontally,
-    modifier = modifier
-        .run { if (enabled) clickable { onCheckedChange?.invoke(!checked) } else this }
-        .padding(4.dp)
+    modifier = modifier.run { if (enabled) clickable { onCheckedChange?.invoke(!checked) } else this }
 ) {
     Checkbox(checked = checked, onCheckedChange = null, enabled = enabled)
     Text(text = text, maxLines = 1)

@@ -24,24 +24,6 @@
         <item name="android:textColorSecondary">@color/secondary_text</item>
         <!-- endregion -->
 
-        <!-- region Text styles -->
-        <item name="textAppearanceHeadline1">@style/TextAppearance.AppTheme.Headline1</item>
-        <item name="textAppearanceHeadline2">@style/TextAppearance.AppTheme.Headline2</item>
-        <item name="textAppearanceHeadline3">@style/TextAppearance.AppTheme.Headline3</item>
-        <item name="textAppearanceHeadline4">@style/TextAppearance.AppTheme.Headline4</item>
-        <item name="textAppearanceHeadline5">@style/TextAppearance.AppTheme.Headline5</item>
-        <item name="textAppearanceHeadline6">@style/TextAppearance.AppTheme.Headline6</item>
-        <item name="textAppearanceSubtitle1">@style/TextAppearance.AppTheme.Subtitle1</item>
-        <item name="textAppearanceSubtitle2">@style/TextAppearance.AppTheme.Subtitle2</item>
-
-        <item name="textAppearanceBody1">@style/TextAppearance.AppTheme.Body1</item>
-        <item name="textAppearanceBody2">@style/TextAppearance.AppTheme.Body2</item>
-
-        <item name="textAppearanceButton">@style/TextAppearance.AppTheme.Button</item>
-        <item name="textAppearanceCaption">@style/TextAppearance.AppTheme.Caption</item>
-        <item name="textAppearanceOverline">@style/TextAppearance.AppTheme.Overline</item>
-        <!-- endregion -->
-
         <!-- region Component styles -->
         <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
         <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
