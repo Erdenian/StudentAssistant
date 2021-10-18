@@ -3,7 +3,7 @@ package ru.erdenian.studentassistant.uikit.preference
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.widget.TimePicker
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -64,24 +64,25 @@ fun DurationPreference(
                             duration = value
                             durationGetter = { duration }
                         }
-                    }
+                    },
+                    modifier = Modifier.fillMaxWidth()
                 )
             },
-            buttons = {
-                Row {
-                    TextButton(
-                        onClick = { isShowDialog = false }
-                    ) {
-                        Text(text = stringResource(android.R.string.cancel))
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onValueChange(durationGetter())
+                        isShowDialog = false
                     }
-                    TextButton(
-                        onClick = {
-                            onValueChange(durationGetter())
-                            isShowDialog = false
-                        }
-                    ) {
-                        Text(text = stringResource(android.R.string.ok))
-                    }
+                ) {
+                    Text(text = stringResource(android.R.string.ok))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { isShowDialog = false }
+                ) {
+                    Text(text = stringResource(android.R.string.cancel))
                 }
             }
         )
