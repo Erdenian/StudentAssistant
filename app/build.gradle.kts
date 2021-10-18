@@ -25,7 +25,12 @@ android {
         setProperty("archivesBaseName", "${rootProject.name}-$versionName")
     }
 
-    buildFeatures.viewBinding = true
+    buildFeatures.compose = true
+
+    composeOptions {
+        val composeVersion: String by project
+        kotlinCompilerExtensionVersion = composeVersion
+    }
 
     signingConfigs {
         val localProperties = File("${rootDir.path}/local.properties").run {
@@ -120,13 +125,15 @@ dependencies {
     implementation(project(":utils"))
     // endregion
 
+    // region Compose
+    val composeVersion: String by project
+    implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
+    //endregion
+
     // region AndroidX
     val navigationVersion: String by project
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
-
-    implementation("androidx.constraintlayout:constraintlayout:2.1.0")
-    implementation("androidx.viewpager:viewpager:1.0.0")
     // endregion
 
     // region Core
@@ -136,6 +143,7 @@ dependencies {
     // endregion
 
     // region UI
+    implementation("com.google.accompanist:accompanist-pager:0.20.0")
     implementation("net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC3")
     implementation("com.github.DavidProdinger:weekdays-selector:1.1.1")
     // endregion

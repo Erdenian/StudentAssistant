@@ -3,6 +3,7 @@ package ru.erdenian.studentassistant.ui.main.lessonseditor
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +19,6 @@ import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 import ru.erdenian.studentassistant.repository.HomeworkRepository
 import ru.erdenian.studentassistant.repository.LessonRepository
 import ru.erdenian.studentassistant.repository.SemesterRepository
-import ru.erdenian.studentassistant.utils.liveDataOf
 
 class LessonsEditorViewModel(
     application: Application,
@@ -30,7 +30,10 @@ class LessonsEditorViewModel(
     private val lessonRepository by instance<LessonRepository>()
     private val homeworkRepository by instance<HomeworkRepository>()
 
-    val semester = liveDataOf(semester, semesterRepository.getLiveData(semester.id))
+    val semester = liveData {
+        emit(semester)
+        emitSource(semesterRepository.getLiveData(semester.id))
+    }
 
     fun getLessons(weekday: Int) = semester.switchMap { semester ->
         semester

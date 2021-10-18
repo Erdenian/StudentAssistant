@@ -196,14 +196,25 @@ class LessonEditorViewModel private constructor(
 
             when (checkNotNull(lessonRepeat.value)) {
                 Lesson.Repeat.ByWeekday::class -> {
+                    var weeksValue = checkNotNull(weeks.value)
+                    cycleLengthLoop@ for (cycleLength in 1..(weeksValue.size / 2)) {
+                        if (weeksValue.size % cycleLength != 0) continue
+                        for (offset in cycleLength until weeksValue.size step cycleLength) {
+                            for (position in 0 until cycleLength) {
+                                if (weeksValue[position] != weeksValue[offset + position]) continue@cycleLengthLoop
+                            }
+                        }
+                        weeksValue = weeksValue.take(cycleLength)
+                    }
+
                     oldLesson?.let {
                         lessonRepository.update(
                             it.id, subjectName, type, teachers, classrooms, startTime, endTime, semesterId,
-                            checkNotNull(weekday.value), checkNotNull(weeks.value)
+                            checkNotNull(weekday.value), weeksValue
                         )
                     } ?: lessonRepository.insert(
                         subjectName, type, teachers, classrooms, startTime, endTime, semesterId,
-                        checkNotNull(weekday.value), checkNotNull(weeks.value)
+                        checkNotNull(weekday.value), weeksValue
                     )
                 }
                 Lesson.Repeat.ByDates::class -> {
