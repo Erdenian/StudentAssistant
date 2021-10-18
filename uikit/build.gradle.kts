@@ -18,7 +18,12 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
-    buildFeatures.viewBinding = true
+    buildFeatures.compose = true
+
+    composeOptions {
+        val composeVersion: String by project
+        kotlinCompilerExtensionVersion = composeVersion
+    }
 
     buildTypes {
         getByName("release") {
@@ -52,8 +57,24 @@ dependencies {
     implementation(project(":utils"))
     // endregion
 
+    // region Compose
+    val composeVersion: String by project
+
+    api("androidx.compose.ui:ui:$composeVersion")
+    api("androidx.compose.ui:ui-tooling:$composeVersion")
+
+    api("androidx.compose.foundation:foundation:$composeVersion")
+    api("androidx.compose.material:material:$composeVersion")
+
+    api("androidx.compose.material:material-icons-core:$composeVersion")
+    api("androidx.compose.material:material-icons-extended:$composeVersion")
+    //endregion
+
+    // region AndroidX
+    api("androidx.core:core-ktx:1.6.0")
+    // endregion
+
     // region UI
     api("com.google.android.material:material:1.4.0")
-    api("androidx.preference:preference:1.1.1")
     // endregion
 }

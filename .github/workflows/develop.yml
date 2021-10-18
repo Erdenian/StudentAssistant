@@ -23,7 +23,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: 16
+          java-version: 15
       - name: Detekt
         run: ./gradlew detekt
       - uses: actions/upload-artifact@v2
@@ -54,7 +54,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: 16
+          java-version: 15
       - name: Unit Test
         run: ./gradlew testDebugUnitTest
       - uses: actions/upload-artifact@v2
@@ -78,7 +78,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: 16
+          java-version: 15
       - name: Android Test
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -105,7 +105,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: 16
+          java-version: 15
       - name: Assemble Debug
         run: ./gradlew assembleDebug
       - uses: actions/upload-artifact@v2

@@ -49,13 +49,8 @@ android {
 
 dependencies {
     // region AndroidX
-    api("androidx.core:core-ktx:1.6.0")
-
-    api("androidx.fragment:fragment-ktx:1.3.6")
-
     val lifecycleVersion: String by project
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
-    api("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
 
     val navigationVersion: String by project
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")

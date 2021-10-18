@@ -3,13 +3,13 @@
 
     <string-array name="repeat_variants">
         <item>Каждую неделю</item>
-        <item>По нечетным</item>
-        <item>По четным</item>
+        <item>По нечётным</item>
+        <item>По чётным</item>
         <item>По первым числителям</item>
         <item>По первым знаменателям</item>
         <item>По вторым числителям</item>
         <item>По вторым знаменателям</item>
-        <item>Свое</item>
+        <item>Своё</item>
     </string-array>
 
 </resources>
