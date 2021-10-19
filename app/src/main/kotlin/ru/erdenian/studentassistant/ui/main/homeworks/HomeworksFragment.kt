@@ -1,9 +1,6 @@
 package ru.erdenian.studentassistant.ui.main.homeworks
 
 import android.content.res.Configuration
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -27,17 +24,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.map
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
@@ -51,52 +43,38 @@ import ru.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
 import ru.erdenian.studentassistant.utils.Homeworks
 import ru.erdenian.studentassistant.utils.Semesters
 
-class HomeworksFragment : Fragment() {
+@Composable
+fun HomeworksScreen(
+    viewModel: HomeworksViewModel,
+    navigateToCreateHomework: (Long) -> Unit,
+    navigateToEditHomework: (Homework) -> Unit
+) {
+    val semesters by viewModel.allSemesters.map { it.list }.observeAsState(emptyList())
+    val selectedSemester by viewModel.selectedSemester.observeAsState()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = ComposeView(inflater.context).apply {
-        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+    val overdueHomeworks by viewModel.overdue.map { it.list }.observeAsState(emptyList())
+    val actualHomeworks by viewModel.actual.map { it.list }.observeAsState(emptyList())
+    val pastHomeworks by viewModel.past.map { it.list }.observeAsState(emptyList())
 
-        val viewModel by viewModels<HomeworksViewModel>()
+    val context = LocalContext.current
 
-        setContent {
-            AppTheme {
-                val semesters by viewModel.allSemesters.map { it.list }.observeAsState(emptyList())
-                val selectedSemester by viewModel.selectedSemester.observeAsState()
-
-                val overdueHomeworks by viewModel.overdue.map { it.list }.observeAsState(emptyList())
-                val actualHomeworks by viewModel.actual.map { it.list }.observeAsState(emptyList())
-                val pastHomeworks by viewModel.past.map { it.list }.observeAsState(emptyList())
-
-                val context = LocalContext.current
-
-                HomeworksContent(
-                    semesters = semesters.map { it.name },
-                    selectedSemester = selectedSemester?.name,
-                    overdueHomeworks = overdueHomeworks,
-                    actualHomeworks = actualHomeworks,
-                    pastHomeworks = pastHomeworks,
-                    onSelectedSemesterChange = { viewModel.selectSemester(semesters[it]) },
-                    onAddHomeworkClick = {
-                        findNavController().navigate(
-                            HomeworksFragmentDirections.createHomework(checkNotNull(viewModel.selectedSemester.value).id)
-                        )
-                    },
-                    onHomeworkClick = { findNavController().navigate(HomeworksFragmentDirections.editHomework(it)) },
-                    onDeleteHomeworkClick = { homework ->
-                        MaterialAlertDialogBuilder(context)
-                            .setMessage(R.string.hf_delete_message)
-                            .setPositiveButton(R.string.hf_delete_yes) { _, _ -> viewModel.deleteHomework(homework.id) }
-                            .setNegativeButton(R.string.hf_delete_no, null)
-                            .show()
-                    }
-                )
-            }
+    HomeworksContent(
+        semesters = semesters.map { it.name },
+        selectedSemester = selectedSemester?.name,
+        overdueHomeworks = overdueHomeworks,
+        actualHomeworks = actualHomeworks,
+        pastHomeworks = pastHomeworks,
+        onSelectedSemesterChange = { viewModel.selectSemester(semesters[it]) },
+        onAddHomeworkClick = { navigateToCreateHomework(checkNotNull(selectedSemester).id) },
+        onHomeworkClick = navigateToEditHomework,
+        onDeleteHomeworkClick = { homework ->
+            MaterialAlertDialogBuilder(context)
+                .setMessage(R.string.hf_delete_message)
+                .setPositiveButton(R.string.hf_delete_yes) { _, _ -> viewModel.deleteHomework(homework.id) }
+                .setNegativeButton(R.string.hf_delete_no, null)
+                .show()
         }
-    }
+    )
 }
 
 @Composable
