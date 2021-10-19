@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.main.lessonseditor
+package ru.erdenian.studentassistant.ui.main.scheduleeditor
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
@@ -58,8 +58,8 @@ import ru.erdenian.studentassistant.utils.Lessons
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun LessonsEditorScreen(
-    viewModel: LessonsEditorViewModel,
+fun ScheduleEditorScreen(
+    viewModel: ScheduleEditorViewModel,
     navigateBack: () -> Unit,
     navigateToEditSemester: (Semester) -> Unit,
     navigateToEditLesson: (Lesson) -> Unit,
@@ -77,7 +77,7 @@ fun LessonsEditorScreen(
     val pagerState = rememberPagerState()
     val context = LocalContext.current
 
-    LessonsEditorContent(
+    ScheduleEditorContent(
         state = pagerState,
         lessonsGetter = { page ->
             val weekday = page + 1
@@ -128,7 +128,7 @@ fun LessonsEditorScreen(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-private fun LessonsEditorContent(
+private fun ScheduleEditorContent(
     state: PagerState,
     lessonsGetter: (page: Int) -> StateFlow<List<Lesson>>,
     onBackClick: () -> Unit,
@@ -256,9 +256,9 @@ private fun LessonsEditorContent(
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun LessonsEditorContentPreview() = AppTheme {
+private fun ScheduleEditorContentPreview() = AppTheme {
     val lesson = Lessons.regular
-    LessonsEditorContent(
+    ScheduleEditorContent(
         state = rememberPagerState(),
         lessonsGetter = { MutableStateFlow(List(10) { lesson }) },
         onBackClick = {},

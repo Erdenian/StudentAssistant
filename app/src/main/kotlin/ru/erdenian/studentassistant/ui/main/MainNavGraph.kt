@@ -17,10 +17,10 @@ import ru.erdenian.studentassistant.ui.main.lessoneditor.LessonEditorScreen
 import ru.erdenian.studentassistant.ui.main.lessoneditor.LessonEditorViewModel
 import ru.erdenian.studentassistant.ui.main.lessoninformation.LessonInformationScreen
 import ru.erdenian.studentassistant.ui.main.lessoninformation.LessonInformationViewModel
-import ru.erdenian.studentassistant.ui.main.lessonseditor.LessonsEditorScreen
-import ru.erdenian.studentassistant.ui.main.lessonseditor.LessonsEditorViewModel
 import ru.erdenian.studentassistant.ui.main.schedule.ScheduleScreen
 import ru.erdenian.studentassistant.ui.main.schedule.ScheduleViewModel
+import ru.erdenian.studentassistant.ui.main.scheduleeditor.ScheduleEditorScreen
+import ru.erdenian.studentassistant.ui.main.scheduleeditor.ScheduleEditorViewModel
 import ru.erdenian.studentassistant.ui.main.semestereditor.SemesterEditorScreen
 import ru.erdenian.studentassistant.ui.main.semestereditor.SemesterEditorViewModel
 import ru.erdenian.studentassistant.ui.main.settings.SettingsScreen
@@ -91,7 +91,7 @@ class MainDirections(private val navController: NavHostController) {
 
         val editSchedule: (semester: Semester) -> Unit = { semester ->
             this@MainDirections.semester = semester
-            navController.navigate("lessons_editor/${semester.id}")
+            navController.navigate("schedule_editor/${semester.id}")
         }
     }
 
@@ -249,7 +249,7 @@ fun MainNavGraph(
         }
 
         composable(
-            route = "lessons_editor/{semester_id}",
+            route = "schedule_editor/{semester_id}",
             arguments = listOf(
                 navArgument("semester_id") {
                     type = NavType.LongType
@@ -260,10 +260,10 @@ fun MainNavGraph(
             val semester = directions.semester
             check(semester.id == semesterId)
 
-            val viewModel = viewModel { LessonsEditorViewModel(it, semester) }
+            val viewModel = viewModel { ScheduleEditorViewModel(it, semester) }
             val directions = directions.LessonsEditor
 
-            LessonsEditorScreen(
+            ScheduleEditorScreen(
                 viewModel = viewModel,
                 navigateBack = { navController.popBackStack() },
                 navigateToEditSemester = directions.editSemester,

@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.main.lessonseditor
+package ru.erdenian.studentassistant.ui.main.scheduleeditor
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -24,7 +24,7 @@ import ru.erdenian.studentassistant.repository.HomeworkRepository
 import ru.erdenian.studentassistant.repository.LessonRepository
 import ru.erdenian.studentassistant.repository.SemesterRepository
 
-class LessonsEditorViewModel(
+class ScheduleEditorViewModel(
     application: Application,
     semester: Semester
 ) : AndroidViewModel(application), DIAware {
