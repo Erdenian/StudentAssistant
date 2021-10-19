@@ -1,9 +1,6 @@
 package ru.erdenian.studentassistant.ui.main.lessonseditor
 
 import android.content.res.Configuration
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,6 +19,8 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -29,30 +28,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.fragment.findNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.entity.Lesson
+import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.ui.composable.PagerTabStrip
 import ru.erdenian.studentassistant.uikit.style.AppIcons
 import ru.erdenian.studentassistant.uikit.style.AppTheme
@@ -60,92 +55,82 @@ import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.LessonCard
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.utils.Lessons
-import ru.erdenian.studentassistant.utils.navArgsFactory
 
-class LessonsEditorFragment : Fragment() {
-
-    @OptIn(ExperimentalPagerApi::class)
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = ComposeView(inflater.context).apply {
-        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-
-        val viewModel by viewModels<LessonsEditorViewModel> {
-            navArgsFactory<LessonsEditorFragmentArgs> { LessonsEditorViewModel(it, semester) }
-        }
-
-        viewModel.semester.observe(viewLifecycleOwner) { if (it == null) findNavController().popBackStack() }
-
-        setContent {
-            val coroutineScope = rememberCoroutineScope()
-            val pagerState = rememberPagerState()
-
-            AppTheme {
-                LessonsEditorContent(
-                    state = pagerState,
-                    lessonsGetter = { page ->
-                        val weekday = page + 1
-                        viewModel.getLessons(weekday).map { it.list }
-                    },
-                    onBackClick = { findNavController().popBackStack() },
-                    onEditSemesterClick = {
-                        findNavController().navigate(
-                            LessonsEditorFragmentDirections.editSemester(checkNotNull(viewModel.semester.value))
-                        )
-                    },
-                    onDeleteSemesterClick = {
-                        MaterialAlertDialogBuilder(requireContext())
-                            .setMessage(R.string.lsef_delete_message)
-                            .setPositiveButton(R.string.lsef_delete_yes) { _, _ -> viewModel.deleteSemester() }
-                            .setNegativeButton(R.string.lsef_delete_no, null)
-                            .show()
-                    },
-                    onLessonClick = { findNavController().navigate(LessonsEditorFragmentDirections.editLesson(it)) },
-                    onCopyLessonClick = { findNavController().navigate(LessonsEditorFragmentDirections.copyLesson(it)) },
-                    onDeleteLessonClick = { lesson ->
-                        coroutineScope.launch {
-                            if (viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson)) {
-                                MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle(R.string.lef_delete_homeworks_title)
-                                    .setMessage(R.string.lef_delete_homeworks_message)
-                                    .setPositiveButton(R.string.lef_delete_homeworks_yes) { _, _ ->
-                                        viewModel.deleteLesson(lesson, true)
-                                    }
-                                    .setNegativeButton(R.string.lef_delete_homeworks_no) { _, _ ->
-                                        viewModel.deleteLesson(lesson, false)
-                                    }
-                                    .setNeutralButton(R.string.lef_delete_homeworks_cancel, null)
-                                    .show()
-                            } else {
-                                MaterialAlertDialogBuilder(requireContext())
-                                    .setMessage(R.string.lef_delete_message)
-                                    .setPositiveButton(R.string.lef_delete_yes) { _, _ ->
-                                        viewModel.viewModelScope.launch { viewModel.deleteLesson(lesson) }
-                                    }
-                                    .setNegativeButton(R.string.lef_delete_no, null)
-                                    .show()
-                            }
-                        }
-                    },
-                    onAddLessonClick = {
-                        val weekday = pagerState.currentPage + 1
-                        findNavController().navigate(
-                            LessonsEditorFragmentDirections.addLesson(checkNotNull(viewModel.semester.value).id, weekday)
-                        )
-                    }
-                )
-            }
-        }
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun LessonsEditorScreen(
+    viewModel: LessonsEditorViewModel,
+    navigateBack: () -> Unit,
+    navigateToEditSemester: (Semester) -> Unit,
+    navigateToEditLesson: (Lesson) -> Unit,
+    navigateToCopyLesson: (Lesson) -> Unit,
+    navigateToCreateLesson: (Long, Int) -> Unit
+) {
+    val semester by viewModel.semester.collectAsState()
+    val isDeleted by viewModel.isDeleted.observeAsState(false)
+    DisposableEffect(isDeleted) {
+        if (isDeleted) navigateBack()
+        onDispose {}
     }
+
+    val coroutineScope = rememberCoroutineScope()
+    val pagerState = rememberPagerState()
+    val context = LocalContext.current
+
+    LessonsEditorContent(
+        state = pagerState,
+        lessonsGetter = { page ->
+            val weekday = page + 1
+            viewModel.getLessons(weekday)
+        },
+        onBackClick = navigateBack,
+        onEditSemesterClick = { navigateToEditSemester(semester) },
+        onDeleteSemesterClick = {
+            MaterialAlertDialogBuilder(context)
+                .setMessage(R.string.lsef_delete_message)
+                .setPositiveButton(R.string.lsef_delete_yes) { _, _ -> viewModel.deleteSemester() }
+                .setNegativeButton(R.string.lsef_delete_no, null)
+                .show()
+        },
+        onLessonClick = navigateToEditLesson,
+        onCopyLessonClick = navigateToCopyLesson,
+        onDeleteLessonClick = { lesson ->
+            coroutineScope.launch {
+                if (viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson)) {
+                    MaterialAlertDialogBuilder(context)
+                        .setTitle(R.string.lef_delete_homeworks_title)
+                        .setMessage(R.string.lef_delete_homeworks_message)
+                        .setPositiveButton(R.string.lef_delete_homeworks_yes) { _, _ ->
+                            viewModel.deleteLesson(lesson, true)
+                        }
+                        .setNegativeButton(R.string.lef_delete_homeworks_no) { _, _ ->
+                            viewModel.deleteLesson(lesson, false)
+                        }
+                        .setNeutralButton(R.string.lef_delete_homeworks_cancel, null)
+                        .show()
+                } else {
+                    MaterialAlertDialogBuilder(context)
+                        .setMessage(R.string.lef_delete_message)
+                        .setPositiveButton(R.string.lef_delete_yes) { _, _ ->
+                            viewModel.viewModelScope.launch { viewModel.deleteLesson(lesson) }
+                        }
+                        .setNegativeButton(R.string.lef_delete_no, null)
+                        .show()
+                }
+            }
+        },
+        onAddLessonClick = {
+            val weekday = pagerState.currentPage + 1
+            navigateToCreateLesson(semester.id, weekday)
+        }
+    )
 }
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun LessonsEditorContent(
     state: PagerState,
-    lessonsGetter: (page: Int) -> LiveData<List<Lesson>>,
+    lessonsGetter: (page: Int) -> StateFlow<List<Lesson>>,
     onBackClick: () -> Unit,
     onEditSemesterClick: () -> Unit,
     onDeleteSemesterClick: () -> Unit,
@@ -200,7 +185,8 @@ private fun LessonsEditorContent(
             count = DateTimeConstants.DAYS_PER_WEEK,
             state = state
         ) { page ->
-            val lessons by lessonsGetter(page).observeAsState(emptyList())
+            val lessonsFlow = remember(lessonsGetter) { lessonsGetter(page) }
+            val lessons by lessonsFlow.collectAsState()
 
             if (lessons.isEmpty()) {
                 Text(
@@ -274,7 +260,7 @@ private fun LessonsEditorContentPreview() = AppTheme {
     val lesson = Lessons.regular
     LessonsEditorContent(
         state = rememberPagerState(),
-        lessonsGetter = { MutableLiveData(List(10) { lesson }) },
+        lessonsGetter = { MutableStateFlow(List(10) { lesson }) },
         onBackClick = {},
         onEditSemesterClick = {},
         onDeleteSemesterClick = {},

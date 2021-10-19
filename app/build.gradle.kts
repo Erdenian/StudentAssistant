@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("androidx.navigation.safeargs.kotlin")
     id("com.github.triplet.play") version "3.6.0"
     id("ru.erdenian.shrinkometer")
 }
@@ -131,9 +130,12 @@ dependencies {
     //endregion
 
     // region AndroidX
-    val navigationVersion: String by project
-    implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
-    implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
+    implementation("androidx.activity:activity-compose:1.3.1")
+
+    val lifecycleVersion: String by project
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+
+    implementation("androidx.navigation:navigation-compose:2.4.0-alpha10")
     // endregion
 
     // region Core

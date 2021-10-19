@@ -1,9 +1,6 @@
 package ru.erdenian.studentassistant.ui.main.settings
 
 import android.content.res.Configuration
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -11,12 +8,8 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import org.joda.time.Duration
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.R
@@ -24,34 +17,22 @@ import ru.erdenian.studentassistant.uikit.preference.DurationPreference
 import ru.erdenian.studentassistant.uikit.preference.TimePreference
 import ru.erdenian.studentassistant.uikit.style.AppTheme
 
-class SettingsFragment : Fragment() {
+@Composable
+fun SettingsScreen(
+    viewModel: SettingsViewModel
+) {
+    val defaultStartTime by viewModel.defaultStartTimeFlow.collectAsState()
+    val defaultLessonDuration by viewModel.defaultLessonDurationFlow.collectAsState()
+    val defaultBreakDuration by viewModel.defaultBreakDurationFlow.collectAsState()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = ComposeView(inflater.context).apply {
-        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-
-        val viewModel by viewModels<SettingsViewModel>()
-
-        setContent {
-            val defaultStartTime by viewModel.defaultStartTimeFlow.collectAsState()
-            val defaultLessonDuration by viewModel.defaultLessonDurationFlow.collectAsState()
-            val defaultBreakDuration by viewModel.defaultBreakDurationFlow.collectAsState()
-
-            AppTheme {
-                SettingsContent(
-                    defaultStartTime = defaultStartTime,
-                    onDefaultStartTimeChange = { viewModel.setDefaultStartTime(it) },
-                    defaultLessonDuration = defaultLessonDuration,
-                    onDefaultLessonDurationChange = { viewModel.setDefaultLessonDuration(it) },
-                    defaultBreakDuration = defaultBreakDuration,
-                    onDefaultBreakDurationChange = { viewModel.setDefaultBreakDuration(it) }
-                )
-            }
-        }
-    }
+    SettingsContent(
+        defaultStartTime = defaultStartTime,
+        onDefaultStartTimeChange = { viewModel.setDefaultStartTime(it) },
+        defaultLessonDuration = defaultLessonDuration,
+        onDefaultLessonDurationChange = { viewModel.setDefaultLessonDuration(it) },
+        defaultBreakDuration = defaultBreakDuration,
+        onDefaultBreakDurationChange = { viewModel.setDefaultBreakDuration(it) }
+    )
 }
 
 @Composable

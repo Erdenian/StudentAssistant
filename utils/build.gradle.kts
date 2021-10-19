@@ -48,14 +48,6 @@ android {
 }
 
 dependencies {
-    // region AndroidX
-    val lifecycleVersion: String by project
-    api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
-
-    val navigationVersion: String by project
-    implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
-    // endregion
-
     // region Core
     val jodaTimeVersion: String by project
     api("joda-time:joda-time:$jodaTimeVersion")

@@ -1,9 +1,6 @@
 package ru.erdenian.studentassistant.ui.main.lessoneditor
 
 import android.content.res.Configuration
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,6 +19,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -31,9 +29,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -41,10 +37,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.map
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.joda.time.LocalTime
@@ -60,143 +53,126 @@ import ru.erdenian.studentassistant.uikit.view.MultiAutoCompleteTextField
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.uikit.view.WeeksSelector
 import ru.erdenian.studentassistant.utils.Lessons
-import ru.erdenian.studentassistant.utils.navArgsFactory
 import ru.erdenian.studentassistant.utils.observeAsStateNonNull
 import ru.erdenian.studentassistant.utils.showTimePicker
 import ru.erdenian.studentassistant.utils.toast
 
-class LessonEditorFragment : Fragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = ComposeView(inflater.context).apply {
-        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-
-        val viewModel by viewModels<LessonEditorViewModel> {
-            navArgsFactory<LessonEditorFragmentArgs> { application ->
-                when {
-                    (semesterId >= 0) && (weekday >= 0) -> LessonEditorViewModel(application, semesterId, weekday)
-                    (semesterId >= 0) && (subjectName != null) -> LessonEditorViewModel(application, semesterId, subjectName)
-                    (lesson != null) -> LessonEditorViewModel(application, lesson, copy)
-                    else -> throw IllegalArgumentException("Wrong fragment arguments: $this")
-                }
-            }
-        }
-
-        viewModel.done.observe(viewLifecycleOwner) { if (it) findNavController().popBackStack() }
-
-        setContent {
-            var isSubjectNameChanged by rememberSaveable { mutableStateOf(false) }
-
-            val isEditing = viewModel.isEditing
-
-            val errorMessageResource by viewModel.error.map { error ->
-                when (error) {
-                    Error.EMPTY_SUBJECT_NAME -> R.string.lef_error_empty_subject_name
-                    Error.WRONG_TIMES -> R.string.lef_error_wrong_time
-                    Error.EMPTY_REPEAT -> R.string.lef_error_empty_repeat
-                    null -> null
-                }
-            }.observeAsState()
-            val errorMessage = errorMessageResource?.let { stringResource(it) }
-            val error by viewModel.error.observeAsState()
-
-            val subjectName by viewModel.subjectName.observeAsStateNonNull()
-            val existingSubjects by viewModel.existingSubjects.map { it.list }.observeAsState(emptyList())
-            val subjectNameErrorMessage = errorMessage?.takeIf { (error == Error.EMPTY_SUBJECT_NAME) && isSubjectNameChanged }
-
-            val type by viewModel.type.observeAsStateNonNull()
-            val predefinedTypes = stringArrayResource(R.array.lesson_types).toList()
-            val existingTypes by viewModel.existingTypes
-                .map { (predefinedTypes + it.list).distinct() }
-                .observeAsState(emptyList())
-
-            val teachers by viewModel.teachers.observeAsStateNonNull()
-            val existingTeachers by viewModel.existingTeachers.map { it.list }.observeAsState(emptyList())
-
-            val classrooms by viewModel.classrooms.observeAsStateNonNull()
-            val existingClassrooms by viewModel.existingClassrooms.map { it.list }.observeAsState(emptyList())
-
-            val startTime by viewModel.startTime.observeAsState(LocalTime.now())
-            val endTime by viewModel.endTime.observeAsState(LocalTime.now())
-
-            val weekday by viewModel.weekday.observeAsStateNonNull()
-            val weeks by viewModel.weeks.observeAsStateNonNull()
-
-            AppTheme {
-                val context = LocalContext.current
-                val coroutineScope = rememberCoroutineScope()
-
-                LessonEditorContent(
-                    isEditing = isEditing,
-                    subjectName = subjectName,
-                    existingSubjects = existingSubjects,
-                    subjectNameErrorMessage = subjectNameErrorMessage,
-                    type = type,
-                    existingTypes = existingTypes,
-                    teachers = teachers,
-                    existingTeachers = existingTeachers,
-                    classrooms = classrooms,
-                    existingClassrooms = existingClassrooms,
-                    startTime = startTime,
-                    endTime = endTime,
-                    weekday = weekday,
-                    weeks = weeks,
-                    onBackClick = { findNavController().popBackStack() },
-                    onSaveClick = {
-                        isSubjectNameChanged = true
-                        if (errorMessage != null) {
-                            context.toast(errorMessage)
-                        } else {
-                            coroutineScope.launch {
-                                if (viewModel.isSubjectNameChangedAndNotLast()) {
-                                    MaterialAlertDialogBuilder(context)
-                                        .setTitle(R.string.lef_rename_others_title)
-                                        .setMessage(R.string.lef_rename_others_message)
-                                        .setPositiveButton(R.string.lef_rename_others_yes) { _, _ -> viewModel.save(true) }
-                                        .setNegativeButton(R.string.lef_rename_others_no) { _, _ -> viewModel.save(false) }
-                                        .setNeutralButton(R.string.lef_rename_others_cancel, null)
-                                        .show()
-                                } else viewModel.save()
-                            }
-                        }
-                    },
-                    onDeleteClick = {
-                        coroutineScope.launch {
-                            if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) {
-                                MaterialAlertDialogBuilder(context)
-                                    .setTitle(R.string.lef_delete_homeworks_title)
-                                    .setMessage(R.string.lef_delete_homeworks_message)
-                                    .setPositiveButton(R.string.lef_delete_homeworks_yes) { _, _ -> viewModel.delete(true) }
-                                    .setNegativeButton(R.string.lef_delete_homeworks_no) { _, _ -> viewModel.delete(false) }
-                                    .setNeutralButton(R.string.lef_delete_homeworks_cancel, null)
-                                    .show()
-                            } else {
-                                MaterialAlertDialogBuilder(context)
-                                    .setMessage(R.string.lef_delete_message)
-                                    .setPositiveButton(R.string.lef_delete_yes) { _, _ -> viewModel.delete() }
-                                    .setNegativeButton(R.string.lef_delete_no, null)
-                                    .show()
-                            }
-                        }
-                    },
-                    onSubjectNameChange = {
-                        isSubjectNameChanged = true
-                        viewModel.subjectName.value = it
-                    },
-                    onTypeChange = { viewModel.type.value = it },
-                    onTeachersChange = { viewModel.teachers.value = it },
-                    onClassroomsChange = { viewModel.classrooms.value = it },
-                    onStartTimeChange = { viewModel.startTime.value = it },
-                    onEndTimeChange = { viewModel.endTime.value = it },
-                    onWeekdayChange = { viewModel.weekday.value = it },
-                    onWeeksChange = { viewModel.weeks.value = it }
-                )
-            }
-        }
+@Composable
+fun LessonEditorScreen(
+    viewModel: LessonEditorViewModel,
+    navigateBack: () -> Unit
+) {
+    val done by viewModel.done.observeAsStateNonNull()
+    DisposableEffect(done) {
+        if (done) navigateBack()
+        onDispose {}
     }
+
+    var isSubjectNameChanged by rememberSaveable { mutableStateOf(false) }
+
+    val isEditing = viewModel.isEditing
+
+    val errorMessageResource by viewModel.error.map { error ->
+        when (error) {
+            Error.EMPTY_SUBJECT_NAME -> R.string.lef_error_empty_subject_name
+            Error.WRONG_TIMES -> R.string.lef_error_wrong_time
+            Error.EMPTY_REPEAT -> R.string.lef_error_empty_repeat
+            null -> null
+        }
+    }.observeAsState()
+    val errorMessage = errorMessageResource?.let { stringResource(it) }
+    val error by viewModel.error.observeAsState()
+
+    val subjectName by viewModel.subjectName.observeAsStateNonNull()
+    val existingSubjects by viewModel.existingSubjects.map { it.list }.observeAsState(emptyList())
+    val subjectNameErrorMessage = errorMessage?.takeIf { (error == Error.EMPTY_SUBJECT_NAME) && isSubjectNameChanged }
+
+    val type by viewModel.type.observeAsStateNonNull()
+    val predefinedTypes = stringArrayResource(R.array.lesson_types).toList()
+    val existingTypes by viewModel.existingTypes
+        .map { (predefinedTypes + it.list).distinct() }
+        .observeAsState(emptyList())
+
+    val teachers by viewModel.teachers.observeAsStateNonNull()
+    val existingTeachers by viewModel.existingTeachers.map { it.list }.observeAsState(emptyList())
+
+    val classrooms by viewModel.classrooms.observeAsStateNonNull()
+    val existingClassrooms by viewModel.existingClassrooms.map { it.list }.observeAsState(emptyList())
+
+    val startTime by viewModel.startTime.observeAsState(LocalTime.now())
+    val endTime by viewModel.endTime.observeAsState(LocalTime.now())
+
+    val weekday by viewModel.weekday.observeAsStateNonNull()
+    val weeks by viewModel.weeks.observeAsStateNonNull()
+
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+
+    LessonEditorContent(
+        isEditing = isEditing,
+        subjectName = subjectName,
+        existingSubjects = existingSubjects,
+        subjectNameErrorMessage = subjectNameErrorMessage,
+        type = type,
+        existingTypes = existingTypes,
+        teachers = teachers,
+        existingTeachers = existingTeachers,
+        classrooms = classrooms,
+        existingClassrooms = existingClassrooms,
+        startTime = startTime,
+        endTime = endTime,
+        weekday = weekday,
+        weeks = weeks,
+        onBackClick = navigateBack,
+        onSaveClick = {
+            isSubjectNameChanged = true
+            if (errorMessage != null) {
+                context.toast(errorMessage)
+            } else {
+                coroutineScope.launch {
+                    if (viewModel.isSubjectNameChangedAndNotLast()) {
+                        MaterialAlertDialogBuilder(context)
+                            .setTitle(R.string.lef_rename_others_title)
+                            .setMessage(R.string.lef_rename_others_message)
+                            .setPositiveButton(R.string.lef_rename_others_yes) { _, _ -> viewModel.save(true) }
+                            .setNegativeButton(R.string.lef_rename_others_no) { _, _ -> viewModel.save(false) }
+                            .setNeutralButton(R.string.lef_rename_others_cancel, null)
+                            .show()
+                    } else viewModel.save()
+                }
+            }
+        },
+        onDeleteClick = {
+            coroutineScope.launch {
+                if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) {
+                    MaterialAlertDialogBuilder(context)
+                        .setTitle(R.string.lef_delete_homeworks_title)
+                        .setMessage(R.string.lef_delete_homeworks_message)
+                        .setPositiveButton(R.string.lef_delete_homeworks_yes) { _, _ -> viewModel.delete(true) }
+                        .setNegativeButton(R.string.lef_delete_homeworks_no) { _, _ -> viewModel.delete(false) }
+                        .setNeutralButton(R.string.lef_delete_homeworks_cancel, null)
+                        .show()
+                } else {
+                    MaterialAlertDialogBuilder(context)
+                        .setMessage(R.string.lef_delete_message)
+                        .setPositiveButton(R.string.lef_delete_yes) { _, _ -> viewModel.delete() }
+                        .setNegativeButton(R.string.lef_delete_no, null)
+                        .show()
+                }
+            }
+        },
+        onSubjectNameChange = {
+            isSubjectNameChanged = true
+            viewModel.subjectName.value = it
+        },
+        onTypeChange = { viewModel.type.value = it },
+        onTeachersChange = { viewModel.teachers.value = it },
+        onClassroomsChange = { viewModel.classrooms.value = it },
+        onStartTimeChange = { viewModel.startTime.value = it },
+        onEndTimeChange = { viewModel.endTime.value = it },
+        onWeekdayChange = { viewModel.weekday.value = it },
+        onWeeksChange = { viewModel.weeks.value = it }
+    )
 }
 
 @Composable

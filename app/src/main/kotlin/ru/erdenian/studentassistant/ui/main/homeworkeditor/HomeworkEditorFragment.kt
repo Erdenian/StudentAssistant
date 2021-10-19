@@ -1,9 +1,6 @@
 package ru.erdenian.studentassistant.ui.main.homeworkeditor
 
 import android.content.res.Configuration
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +27,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
@@ -38,9 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.takeOrElse
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -48,11 +44,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.map
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
@@ -64,102 +56,79 @@ import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.ExposedDropdownMenu
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.utils.Homeworks
-import ru.erdenian.studentassistant.utils.navArgsFactory
 import ru.erdenian.studentassistant.utils.observeAsStateNonNull
 import ru.erdenian.studentassistant.utils.showDatePicker
 import ru.erdenian.studentassistant.utils.toast
 
-class HomeworkEditorFragment : Fragment() {
+@Composable
+fun HomeworkEditorScreen(
+    viewModel: HomeworkEditorViewModel,
+    navigateBack: () -> Unit,
+    navigateToCreateLesson: (Long, String) -> Unit
+) {
+    val done by viewModel.done.observeAsStateNonNull()
+    DisposableEffect(done) {
+        if (done) navigateBack()
+        onDispose {}
+    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = ComposeView(inflater.context).apply {
-        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+    val subjectName by viewModel.subjectName.observeAsStateNonNull()
+    val description by viewModel.description.observeAsStateNonNull()
+    val deadline by viewModel.deadline.observeAsStateNonNull()
 
-        val viewModel by viewModels<HomeworkEditorViewModel> {
-            navArgsFactory<HomeworkEditorFragmentArgs> { application ->
-                when {
-                    (semesterId >= 0) -> HomeworkEditorViewModel(application, semesterId)
-                    (lesson != null) -> HomeworkEditorViewModel(application, lesson)
-                    (homework != null) -> HomeworkEditorViewModel(application, homework)
-                    else -> throw IllegalArgumentException("Wrong fragment arguments: $this")
+    val semesterDatesRange by viewModel.semesterDatesRange.observeAsState(LocalDate.now()..LocalDate.now())
+    val existingSubjects by viewModel.existingSubjects.map { it.list }.observeAsState(listOf())
+
+    val errorMessageResource by viewModel.error.map { error ->
+        when (error) {
+            Error.EMPTY_SUBJECT -> R.string.hef_error_empty_subject_name
+            Error.EMPTY_DESCRIPTION -> R.string.hef_error_empty_description
+            null -> null
+        }
+    }.observeAsState()
+    val errorMessage = errorMessageResource?.let { stringResource(it) }
+
+    val context = LocalContext.current
+
+    HomeworkEditorContent(
+        isEditing = viewModel.isEditing,
+        existingSubjects = existingSubjects,
+        subjectName = subjectName,
+        deadline = deadline,
+        description = description,
+        semesterDates = semesterDatesRange,
+        onBackClick = navigateBack,
+        onSaveClick = {
+            if (errorMessage != null) {
+                context.toast(errorMessage)
+            } else {
+                if (viewModel.lessonExists) {
+                    viewModel.save()
+                } else {
+                    MaterialAlertDialogBuilder(context)
+                        .setTitle(R.string.hef_unknown_lesson)
+                        .setMessage(R.string.hef_unknown_lesson_message)
+                        .setPositiveButton(R.string.hef_unknown_lesson_yes) { _, _ -> viewModel.save() }
+                        .setNegativeButton(R.string.hef_unknown_lesson_no, null)
+                        .setNeutralButton(R.string.hef_unknown_lesson_yes_and_create) { _, _ ->
+                            viewModel.save()
+                            navigateToCreateLesson(viewModel.semesterId, subjectName)
+                        }
+                        .show()
                 }
             }
-        }
-
-        val backObserver = Observer<Boolean> { if (it) findNavController().popBackStack() }
-        viewModel.done.observe(viewLifecycleOwner, backObserver)
-
-        setContent {
-            AppTheme {
-                val subjectName by viewModel.subjectName.observeAsStateNonNull()
-                val description by viewModel.description.observeAsStateNonNull()
-                val deadline by viewModel.deadline.observeAsStateNonNull()
-
-                val semesterDatesRange by viewModel.semesterDatesRange.observeAsState(LocalDate.now()..LocalDate.now())
-                val existingSubjects by viewModel.existingSubjects.map { it.list }.observeAsState(listOf())
-
-                val errorMessageResource by viewModel.error.map { error ->
-                    when (error) {
-                        Error.EMPTY_SUBJECT -> R.string.hef_error_empty_subject_name
-                        Error.EMPTY_DESCRIPTION -> R.string.hef_error_empty_description
-                        null -> null
-                    }
-                }.observeAsState()
-                val errorMessage = errorMessageResource?.let { stringResource(it) }
-
-                val context = LocalContext.current
-
-                HomeworkEditorContent(
-                    isEditing = viewModel.isEditing,
-                    existingSubjects = existingSubjects,
-                    subjectName = subjectName,
-                    deadline = deadline,
-                    description = description,
-                    semesterDates = semesterDatesRange,
-                    onBackClick = { findNavController().popBackStack() },
-                    onSaveClick = {
-                        if (errorMessage != null) {
-                            context.toast(errorMessage)
-                        } else {
-                            if (viewModel.lessonExists) {
-                                viewModel.save()
-                            } else {
-                                MaterialAlertDialogBuilder(context)
-                                    .setTitle(R.string.hef_unknown_lesson)
-                                    .setMessage(R.string.hef_unknown_lesson_message)
-                                    .setPositiveButton(R.string.hef_unknown_lesson_yes) { _, _ -> viewModel.save() }
-                                    .setNegativeButton(R.string.hef_unknown_lesson_no, null)
-                                    .setNeutralButton(R.string.hef_unknown_lesson_yes_and_create) { _, _ ->
-                                        viewModel.done.removeObserver(backObserver)
-                                        viewModel.save()
-                                        findNavController().navigate(
-                                            HomeworkEditorFragmentDirections.addLesson(
-                                                viewModel.semesterId,
-                                                subjectName
-                                            )
-                                        )
-                                    }
-                                    .show()
-                            }
-                        }
-                    },
-                    onDeleteClick = {
-                        MaterialAlertDialogBuilder(context)
-                            .setMessage(R.string.hef_delete_message)
-                            .setPositiveButton(R.string.hef_delete_yes) { _, _ -> viewModel.delete() }
-                            .setNegativeButton(R.string.hef_delete_no, null)
-                            .show()
-                    },
-                    onSubjectNameChange = { value, _ -> viewModel.subjectName.value = value },
-                    onDeadlineChange = { viewModel.deadline.value = it },
-                    onDescriptionChange = { viewModel.description.value = it }
-                )
-            }
-        }
-    }
+        },
+        onDeleteClick = {
+            MaterialAlertDialogBuilder(context)
+                .setMessage(R.string.hef_delete_message)
+                .setPositiveButton(R.string.hef_delete_yes) { _, _ -> viewModel.delete() }
+                .setNegativeButton(R.string.hef_delete_no, null)
+                .show()
+        },
+        onSubjectNameChange = { value, _ -> viewModel.subjectName.value = value },
+        onDeadlineChange = { viewModel.deadline.value = it },
+        onDescriptionChange = { viewModel.description.value = it }
+    )
 }
 
 @Composable
