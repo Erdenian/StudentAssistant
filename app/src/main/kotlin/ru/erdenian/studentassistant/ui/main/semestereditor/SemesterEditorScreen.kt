@@ -1,9 +1,6 @@
 package ru.erdenian.studentassistant.ui.main.semestereditor
 
 import android.content.res.Configuration
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,6 +18,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -29,20 +27,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.map
-import androidx.navigation.fragment.findNavController
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
@@ -52,71 +45,60 @@ import ru.erdenian.studentassistant.uikit.style.AppTheme
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.utils.Semesters
-import ru.erdenian.studentassistant.utils.navArgsFactory
 import ru.erdenian.studentassistant.utils.observeAsStateNonNull
 import ru.erdenian.studentassistant.utils.showDatePicker
 import ru.erdenian.studentassistant.utils.toast
 
-class SemesterEditorFragment : Fragment() {
+@Composable
+fun SemesterEditorScreen(
+    viewModel: SemesterEditorViewModel,
+    navigateBack: () -> Unit
+) {
+    var isNameChanged by rememberSaveable { mutableStateOf(false) }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = ComposeView(inflater.context).apply {
-        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-
-        val viewModel by viewModels<SemesterEditorViewModel> {
-            navArgsFactory<SemesterEditorFragmentArgs> { SemesterEditorViewModel(it, semester) }
+    val errorMessageResource by viewModel.error.map { error ->
+        when (error) {
+            Error.EMPTY_NAME -> R.string.sef_error_empty_name
+            Error.SEMESTER_EXISTS -> R.string.sef_error_name_not_available
+            Error.WRONG_DATES -> R.string.sef_error_wrong_dates
+            null -> null
         }
+    }.observeAsState()
+    val errorMessage = errorMessageResource?.let { stringResource(it) }
+    val error by viewModel.error.observeAsState()
 
-        setContent {
-            var isNameChanged by rememberSaveable { mutableStateOf(false) }
+    val name by viewModel.name.observeAsStateNonNull()
+    val nameErrorMessage = errorMessage?.takeIf { (error == Error.EMPTY_NAME) && isNameChanged }
 
-            val errorMessageResource by viewModel.error.map { error ->
-                when (error) {
-                    Error.EMPTY_NAME -> R.string.sef_error_empty_name
-                    Error.SEMESTER_EXISTS -> R.string.sef_error_name_not_available
-                    Error.WRONG_DATES -> R.string.sef_error_wrong_dates
-                    null -> null
-                }
-            }.observeAsState()
-            val errorMessage = errorMessageResource?.let { stringResource(it) }
-            val error by viewModel.error.observeAsState()
+    val firstDay by viewModel.firstDay.observeAsStateNonNull()
+    val lastDay by viewModel.lastDay.observeAsStateNonNull()
 
-            val name by viewModel.name.observeAsStateNonNull()
-            val nameErrorMessage = errorMessage?.takeIf { (error == Error.EMPTY_NAME) && isNameChanged }
-
-            val firstDay by viewModel.firstDay.observeAsStateNonNull()
-            val lastDay by viewModel.lastDay.observeAsStateNonNull()
-
-            val saved by viewModel.saved.observeAsStateNonNull()
-            if (saved) findNavController().popBackStack()
-
-            AppTheme {
-                val context = LocalContext.current
-
-                SemesterEditorContent(
-                    isEditing = viewModel.isEditing,
-                    name = name,
-                    firstDay = firstDay,
-                    lastDay = lastDay,
-                    errorMessage = nameErrorMessage,
-                    onBackClick = { findNavController().popBackStack() },
-                    onSaveClick = {
-                        isNameChanged = true
-                        errorMessage?.let { context.toast(it) } ?: viewModel.save()
-                    },
-                    onNameChange = {
-                        isNameChanged = true
-                        viewModel.name.value = it
-                    },
-                    onFirstDayChange = { viewModel.firstDay.value = it },
-                    onLastDayChange = { viewModel.lastDay.value = it }
-                )
-            }
-        }
+    val saved by viewModel.saved.observeAsStateNonNull()
+    DisposableEffect(saved) {
+        if (saved) navigateBack()
+        onDispose {}
     }
+
+    val context = LocalContext.current
+
+    SemesterEditorContent(
+        isEditing = viewModel.isEditing,
+        name = name,
+        firstDay = firstDay,
+        lastDay = lastDay,
+        errorMessage = nameErrorMessage,
+        onBackClick = navigateBack,
+        onSaveClick = {
+            isNameChanged = true
+            errorMessage?.let { context.toast(it) } ?: viewModel.save()
+        },
+        onNameChange = {
+            isNameChanged = true
+            viewModel.name.value = it
+        },
+        onFirstDayChange = { viewModel.firstDay.value = it },
+        onLastDayChange = { viewModel.lastDay.value = it }
+    )
 }
 
 @Composable
