@@ -1,9 +1,6 @@
 package ru.erdenian.studentassistant.ui.main.schedule
 
 import android.content.res.Configuration
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,19 +20,14 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
-import androidx.navigation.findNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
@@ -61,48 +53,38 @@ import ru.erdenian.studentassistant.utils.showDatePicker
 private fun Semester.getDate(position: Int): LocalDate = firstDay.plusDays(position)
 private fun Semester.getPosition(date: LocalDate) = Days.daysBetween(firstDay, date.coerceIn(range)).days
 
-class ScheduleFragment : Fragment() {
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun ScheduleScreen(
+    viewModel: ScheduleViewModel,
+    navigateToAddSemester: () -> Unit,
+    navigateToEditSchedule: (Semester) -> Unit,
+    navigateToShowLessonInformation: (Lesson) -> Unit
+) {
+    val semesters by viewModel.allSemesters.map { it.list }.observeAsState(emptyList())
+    val semestersNames by derivedStateOf { semesters.map { it.name } }
+    val selectedSemester by viewModel.selectedSemester.observeAsState()
 
-    @OptIn(ExperimentalPagerApi::class)
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = ComposeView(inflater.context).apply {
-        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-        val viewModel by viewModels<ScheduleViewModel>()
+    val pagerState = rememberPagerState()
+    val coroutineScope = rememberCoroutineScope()
 
-        setContent {
-            val semesters by viewModel.allSemesters.map { it.list }.observeAsState(emptyList())
-            val semestersNames by derivedStateOf { semesters.map { it.name } }
-            val selectedSemester by viewModel.selectedSemester.observeAsState()
-
-            AppTheme {
-                val pagerState = rememberPagerState()
-                val coroutineScope = rememberCoroutineScope()
-
-                ScheduleContent(
-                    state = pagerState,
-                    semestersNames = semestersNames,
-                    selectedSemester = selectedSemester,
-                    lessonsGetter = { date -> viewModel.getLessons(date).map { it.list } },
-                    onSelectedSemesterChange = { index ->
-                        val selectedDate = selectedSemester?.getDate(pagerState.currentPage) ?: LocalDate.now()
-                        val newSemester = semesters[index]
-                        viewModel.selectSemester(newSemester)
-                        coroutineScope.launch {
-                            pagerState.scrollToPage(newSemester.getPosition(selectedDate))
-                        }
-                    },
-                    onAddSemesterClick = { findNavController().navigate(ScheduleFragmentDirections.addSemester()) },
-                    onEditSemesterClick = {
-                        findNavController().navigate(ScheduleFragmentDirections.editSchedule(checkNotNull(selectedSemester)))
-                    },
-                    onLessonClick = { findNavController().navigate(ScheduleFragmentDirections.showLessonInformation(it)) }
-                )
+    ScheduleContent(
+        state = pagerState,
+        semestersNames = semestersNames,
+        selectedSemester = selectedSemester,
+        lessonsGetter = { date -> viewModel.getLessons(date).map { it.list } },
+        onSelectedSemesterChange = { index ->
+            val selectedDate = selectedSemester?.getDate(pagerState.currentPage) ?: LocalDate.now()
+            val newSemester = semesters[index]
+            viewModel.selectSemester(newSemester)
+            coroutineScope.launch {
+                pagerState.scrollToPage(newSemester.getPosition(selectedDate))
             }
-        }
-    }
+        },
+        onAddSemesterClick = navigateToAddSemester,
+        onEditSemesterClick = { navigateToEditSchedule(checkNotNull(selectedSemester)) },
+        onLessonClick = navigateToShowLessonInformation
+    )
 }
 
 @OptIn(ExperimentalPagerApi::class)
@@ -178,6 +160,7 @@ private fun ScheduleContent(
         }
     ) {
         Column(
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()
         ) {
             if (selectedSemester == null) {
@@ -202,7 +185,8 @@ private fun ScheduleContent(
                     count = selectedSemester.length,
                     state = state
                 ) { page ->
-                    val lessons by lessonsGetter(selectedSemester.getDate(page)).observeAsState(emptyList())
+                    val lessonsFlow = remember(selectedSemester, lessonsGetter) { lessonsGetter(selectedSemester.getDate(page)) }
+                    val lessons by lessonsFlow.observeAsState(emptyList())
 
                     if (lessons.isEmpty()) {
                         Text(

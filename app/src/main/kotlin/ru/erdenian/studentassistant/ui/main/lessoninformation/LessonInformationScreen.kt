@@ -1,9 +1,6 @@
 package ru.erdenian.studentassistant.ui.main.lessoninformation
 
 import android.content.res.Configuration
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,6 +23,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -33,18 +32,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.map
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
@@ -58,52 +50,33 @@ import ru.erdenian.studentassistant.uikit.view.LessonCard
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.utils.Homeworks
 import ru.erdenian.studentassistant.utils.Lessons
-import ru.erdenian.studentassistant.utils.navArgsFactory
 
-class LessonInformationFragment : Fragment() {
+@Composable
+fun LessonInformationScreen(
+    viewModel: LessonInformationViewModel,
+    navigateBack: () -> Unit,
+    navigateToEditLesson: (Lesson) -> Unit,
+    navigateToEditHomework: (Homework) -> Unit,
+    navigateToCreateHomework: (Lesson) -> Unit
+) {
+    val lesson by viewModel.lesson.collectAsState()
+    val homeworks by viewModel.homeworks.collectAsState()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = ComposeView(inflater.context).apply {
-        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-
-        val viewModel by viewModels<LessonInformationViewModel> {
-            navArgsFactory<LessonInformationFragmentArgs> { LessonInformationViewModel(it, lesson) }
-        }
-
-        setContent {
-            val lesson by viewModel.lesson.observeAsState(navArgs<LessonInformationFragmentArgs>().value.lesson)
-            val homeworks by viewModel.homeworks.map { it.list }.observeAsState(emptyList())
-
-            if (lesson == null) {
-                findNavController().popBackStack()
-            } else {
-                AppTheme {
-                    LessonInformationContent(
-                        lesson = checkNotNull(lesson),
-                        homeworks = homeworks,
-                        onBackClick = { findNavController().popBackStack() },
-                        onEditClick = {
-                            findNavController().navigate(
-                                LessonInformationFragmentDirections.editLesson(checkNotNull(viewModel.lesson.value))
-                            )
-                        },
-                        onHomeworkClick = { homework ->
-                            findNavController().navigate(LessonInformationFragmentDirections.editHomework(homework))
-                        },
-                        onAddHomeworkClick = {
-                            findNavController().navigate(
-                                LessonInformationFragmentDirections.createHomework(checkNotNull(viewModel.lesson.value))
-                            )
-                        },
-                        onDeleteHomeworkClick = { viewModel.deleteHomework(it.id) }
-                    )
-                }
-            }
-        }
+    val isDeleted by viewModel.isDeleted.observeAsState(false)
+    DisposableEffect(isDeleted) {
+        if (isDeleted) navigateBack()
+        onDispose {}
     }
+
+    LessonInformationContent(
+        lesson = lesson,
+        homeworks = homeworks.list,
+        onBackClick = navigateBack,
+        onEditClick = { navigateToEditLesson(lesson) },
+        onHomeworkClick = navigateToEditHomework,
+        onAddHomeworkClick = { navigateToCreateHomework(lesson) },
+        onDeleteHomeworkClick = { viewModel.deleteHomework(it.id) }
+    )
 }
 
 @OptIn(ExperimentalFoundationApi::class)

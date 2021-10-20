@@ -89,7 +89,6 @@ fun AutoCompleteTextField(
 
                 setSelection(selectionStart, selectionEnd)
             }
-
         },
         modifier = modifier
             .onFocusChanged { if (it.isFocused) checkNotNull(viewToFocus).requestFocus() }

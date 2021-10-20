@@ -1,13 +1,18 @@
-package ru.erdenian.studentassistant.ui.main.lessonseditor
+package ru.erdenian.studentassistant.ui.main.scheduleeditor
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.liveData
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kodein.di.DIAware
@@ -15,12 +20,11 @@ import org.kodein.di.android.x.closestDI
 import org.kodein.di.instance
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.entity.Semester
-import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 import ru.erdenian.studentassistant.repository.HomeworkRepository
 import ru.erdenian.studentassistant.repository.LessonRepository
 import ru.erdenian.studentassistant.repository.SemesterRepository
 
-class LessonsEditorViewModel(
+class ScheduleEditorViewModel(
     application: Application,
     semester: Semester
 ) : AndroidViewModel(application), DIAware {
@@ -30,16 +34,22 @@ class LessonsEditorViewModel(
     private val lessonRepository by instance<LessonRepository>()
     private val homeworkRepository by instance<HomeworkRepository>()
 
-    val semester = liveData {
-        emit(semester)
-        emitSource(semesterRepository.getLiveData(semester.id))
-    }
+    val semester = semesterRepository.getLiveData(semester.id).asFlow().filterNotNull().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = semester
+    )
 
-    fun getLessons(weekday: Int) = semester.switchMap { semester ->
-        semester
-            ?.let { lessonRepository.getAllLiveData(it.id, weekday) }
-            ?: MutableLiveData(immutableSortedSetOf())
-    }
+    val isDeleted = semesterRepository.getLiveData(semester.id).map { it == null }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun getLessons(weekday: Int) = semester.flatMapLatest { semester ->
+        lessonRepository.getAllLiveData(semester.id, weekday).asFlow()
+    }.map { it.list }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = emptyList()
+    )
 
     fun deleteSemester() {
         viewModelScope.launch {

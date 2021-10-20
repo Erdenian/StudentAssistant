@@ -1,27 +1,34 @@
 package ru.erdenian.studentassistant.ui.main
 
 import android.os.Bundle
-import android.view.View
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
-import ru.erdenian.studentassistant.R
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
+import ru.erdenian.studentassistant.uikit.style.AppTheme
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        findViewById<BottomNavigationView>(R.id.navigation_view).apply {
-            setOnItemSelectedListener { item ->
-                // setupWithNavController добавляет анимацию, поэтому Toolbar начинает мерцать при переходе
-                findNavController(R.id.nav_host_fragment).navigate(item.itemId)
-                true
+        setContent {
+            @OptIn(ExperimentalCoroutinesApi::class)
+            val isKeyboardOpenFlow = callbackFlow {
+                val listener = KeyboardVisibilityEventListener { isOpen -> trySend(isOpen) }
+                val unregistrar = KeyboardVisibilityEvent.registerEventListener(this@MainActivity, listener)
+                awaitClose { unregistrar.unregister() }
             }
-            KeyboardVisibilityEvent.setEventListener(this@MainActivity) { isOpen ->
-                visibility = if (isOpen) View.GONE else View.VISIBLE
+            val isKeyboardOpen by isKeyboardOpenFlow.collectAsState(false)
+
+            AppTheme {
+                StudentAssistantApp(
+                    isBottomNavigationVisible = !isKeyboardOpen
+                )
             }
         }
     }
