@@ -160,6 +160,7 @@ private fun ScheduleContent(
         }
     ) {
         Column(
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()
         ) {
             if (selectedSemester == null) {
