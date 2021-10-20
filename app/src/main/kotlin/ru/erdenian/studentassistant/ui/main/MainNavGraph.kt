@@ -139,7 +139,7 @@ class MainDirections(private val navController: NavHostController) {
         }
 
         val createLesson: (semesterId: Long, weekday: Int) -> Unit = { semesterId, weekday ->
-            navController.navigate("lesson_editor_create?semester_id=$semesterId&weekday=$weekday&subject_name=null")
+            navController.navigate("lesson_editor_create?semester_id=$semesterId&weekday=$weekday")
         }
 
         val editLesson: (lesson: Lesson) -> Unit = { lesson ->
@@ -158,7 +158,7 @@ class MainDirections(private val navController: NavHostController) {
     inner class HomeworkEditorDirections {
 
         val createLesson: (semesterId: Long, subjectName: String) -> Unit = { semesterId, subjectName ->
-            navController.navigate("lesson_editor_create?semester_id=$semesterId&subject_name=$subjectName&weekday=-1")
+            navController.navigate("lesson_editor_create?semester_id=$semesterId&subject_name=$subjectName")
         }
     }
 }
@@ -281,9 +281,12 @@ fun MainNavGraph(
                 },
                 navArgument("weekday") {
                     type = NavType.IntType
+                    defaultValue = -1
                 },
                 navArgument("subject_name") {
                     type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
                 }
             )
         ) { backStackEntry ->
