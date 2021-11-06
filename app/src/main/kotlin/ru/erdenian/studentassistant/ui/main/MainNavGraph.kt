@@ -6,9 +6,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import ru.erdenian.studentassistant.entity.Homework
-import ru.erdenian.studentassistant.entity.Lesson
-import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.ui.main.homeworkeditor.HomeworkEditorScreen
 import ru.erdenian.studentassistant.ui.main.homeworkeditor.HomeworkEditorViewModel
 import ru.erdenian.studentassistant.ui.main.homeworks.HomeworksScreen
@@ -35,10 +32,6 @@ object MainRoutes {
 }
 
 class MainDirections(private val navController: NavHostController) {
-
-    lateinit var semester: Semester
-    lateinit var lesson: Lesson
-    lateinit var homework: Homework
 
     val schedule: () -> Unit = {
         if (navController.currentBackStackEntry?.destination?.route != MainRoutes.SCHEDULE) {
@@ -80,18 +73,16 @@ class MainDirections(private val navController: NavHostController) {
 
     inner class ScheduleDirections {
 
-        val showLessonInformation: (lesson: Lesson) -> Unit = { lesson ->
-            this@MainDirections.lesson = lesson
-            navController.navigate("lesson_information/${lesson.id}")
+        val showLessonInformation: (lessonId: Long) -> Unit = { lessonId ->
+            navController.navigate("lesson_information/$lessonId")
         }
 
         val addSemester: () -> Unit = {
             navController.navigate("semester_editor")
         }
 
-        val editSchedule: (semester: Semester) -> Unit = { semester ->
-            this@MainDirections.semester = semester
-            navController.navigate("schedule_editor/${semester.id}")
+        val editSchedule: (semesterId: Long) -> Unit = { semesterId ->
+            navController.navigate("schedule_editor/$semesterId")
         }
     }
 
@@ -103,9 +94,8 @@ class MainDirections(private val navController: NavHostController) {
             navController.navigate("homework_editor?semester_id=$semesterId")
         }
 
-        val editHomework: (homework: Homework) -> Unit = { homework ->
-            this@MainDirections.homework = homework
-            navController.navigate("homework_editor?homework_id=${homework.id}")
+        val editHomework: (semesterId: Long, homeworkId: Long) -> Unit = { semesterId, homeworkId ->
+            navController.navigate("homework_editor?semester_id=$semesterId&homework_id=$homeworkId")
         }
     }
 
@@ -113,43 +103,37 @@ class MainDirections(private val navController: NavHostController) {
 
     inner class LessonInformationDirections {
 
-        val editLesson: (lesson: Lesson) -> Unit = { lesson ->
-            this@MainDirections.lesson = lesson
-            navController.navigate("lesson_editor_edit/${lesson.id}")
+        val editLesson: (semesterId: Long, lessonId: Long) -> Unit = { semesterId, lessonId ->
+            navController.navigate("lesson_editor_edit/$semesterId/$lessonId")
         }
 
-        val createHomework: (lesson: Lesson) -> Unit = { lesson ->
-            this@MainDirections.lesson = lesson
-            navController.navigate("homework_editor?lesson_id=${lesson.id}")
+        val createHomework: (semesterId: Long, subjectName: String) -> Unit = { semesterId, subjectName ->
+            navController.navigate("homework_editor?semester_id=$semesterId&subject_name=$subjectName")
         }
 
-        val editHomework: (homework: Homework) -> Unit = { homework ->
-            this@MainDirections.homework = homework
-            navController.navigate("homework_editor?homework_id=${homework.id}")
+        val editHomework: (semesterId: Long, homeworkId: Long) -> Unit = { semesterId, homeworkId ->
+            navController.navigate("homework_editor?semester_id=$semesterId&homework_id=$homeworkId")
         }
     }
 
-    val LessonsEditor = LessonsEditorDirections()
+    val ScheduleEditor = ScheduleEditorDirections()
 
-    inner class LessonsEditorDirections {
+    inner class ScheduleEditorDirections {
 
-        val editSemester: (semester: Semester) -> Unit = { semester ->
-            this@MainDirections.semester = semester
-            navController.navigate("semester_editor?semester_id=${semester.id}")
+        val editSemester: (semesterId: Long) -> Unit = { semesterId: Long ->
+            navController.navigate("semester_editor?semester_id=${semesterId}")
         }
 
         val createLesson: (semesterId: Long, weekday: Int) -> Unit = { semesterId, weekday ->
             navController.navigate("lesson_editor_create?semester_id=$semesterId&weekday=$weekday")
         }
 
-        val editLesson: (lesson: Lesson) -> Unit = { lesson ->
-            this@MainDirections.lesson = lesson
-            navController.navigate("lesson_editor_edit/${lesson.id}")
+        val editLesson: (semesterId: Long, lessonId: Long) -> Unit = { semesterId, lessonId ->
+            navController.navigate("lesson_editor_edit/$semesterId/$lessonId")
         }
 
-        val copyLesson: (lesson: Lesson) -> Unit = { lesson ->
-            this@MainDirections.lesson = lesson
-            navController.navigate("lesson_editor_copy/${lesson.id}")
+        val copyLesson: (semesterId: Long, lessonId: Long) -> Unit = { semesterId, lessonId ->
+            navController.navigate("lesson_editor_copy/$semesterId/$lessonId")
         }
     }
 
@@ -213,10 +197,7 @@ fun MainNavGraph(
             )
         ) { backStackEntry ->
             val lessonId = checkNotNull(backStackEntry.arguments?.getLong("lesson_id", -1L)?.takeIf { it >= 0 })
-            val lesson = directions.lesson
-            check(lesson.id == lessonId)
-
-            val viewModel = viewModel { LessonInformationViewModel(it, lesson) }
+            val viewModel = viewModel { LessonInformationViewModel(it, lessonId) }
             val directions = directions.LessonInformation
 
             LessonInformationScreen(
@@ -238,9 +219,7 @@ fun MainNavGraph(
             )
         ) { backStackEntry ->
             val semesterId = backStackEntry.arguments?.getLong("semester_id", -1L)?.takeIf { it >= 0 }
-            val semester = if ((semesterId != null) && (directions.semester.id == semesterId)) directions.semester else null
-
-            val viewModel = viewModel { SemesterEditorViewModel(it, semester) }
+            val viewModel = viewModel { SemesterEditorViewModel(it, semesterId) }
 
             SemesterEditorScreen(
                 viewModel = viewModel,
@@ -257,11 +236,8 @@ fun MainNavGraph(
             )
         ) { backStackEntry ->
             val semesterId = checkNotNull(backStackEntry.arguments?.getLong("semester_id", -1L)?.takeIf { it >= 0 })
-            val semester = directions.semester
-            check(semester.id == semesterId)
-
-            val viewModel = viewModel { ScheduleEditorViewModel(it, semester) }
-            val directions = directions.LessonsEditor
+            val viewModel = viewModel { ScheduleEditorViewModel(it, semesterId) }
+            val directions = directions.ScheduleEditor
 
             ScheduleEditorScreen(
                 viewModel = viewModel,
@@ -310,55 +286,57 @@ fun MainNavGraph(
         }
 
         composable(
-            route = "lesson_editor_edit/{lesson_id}",
-            arguments = listOf(
-                navArgument("lesson_id") {
-                    type = NavType.LongType
-                }
-            )
-        ) { backStackEntry ->
-            val lessonId = checkNotNull(backStackEntry.arguments?.getLong("lesson_id", -1L)?.takeIf { it >= 0 })
-            val lesson = directions.lesson
-            check(lesson.id == lessonId)
-
-            val viewModel = viewModel { LessonEditorViewModel(it, lesson, false) }
-
-            LessonEditorScreen(
-                viewModel = viewModel,
-                navigateBack = { navController.popBackStack() }
-            )
-        }
-
-        composable(
-            route = "lesson_editor_copy/{lesson_id}",
-            arguments = listOf(
-                navArgument("lesson_id") {
-                    type = NavType.LongType
-                }
-            )
-        ) { backStackEntry ->
-            val lessonId = checkNotNull(backStackEntry.arguments?.getLong("lesson_id", -1L)?.takeIf { it >= 0 })
-            val lesson = directions.lesson
-            check(lesson.id == lessonId)
-
-            val viewModel = viewModel { LessonEditorViewModel(it, lesson, true) }
-
-            LessonEditorScreen(
-                viewModel = viewModel,
-                navigateBack = { navController.popBackStack() }
-            )
-        }
-
-        composable(
-            route = "homework_editor?semester_id={semester_id}&lesson_id={lesson_id}&homework_id={homework_id}",
+            route = "lesson_editor_edit/{semester_id}/{lesson_id}",
             arguments = listOf(
                 navArgument("semester_id") {
                     type = NavType.LongType
-                    defaultValue = -1L
                 },
                 navArgument("lesson_id") {
                     type = NavType.LongType
-                    defaultValue = -1L
+                }
+            )
+        ) { backStackEntry ->
+            val semesterId = checkNotNull(backStackEntry.arguments?.getLong("semester_id", -1L)?.takeIf { it >= 0 })
+            val lessonId = checkNotNull(backStackEntry.arguments?.getLong("lesson_id", -1L)?.takeIf { it >= 0 })
+            val viewModel = viewModel { LessonEditorViewModel(it, semesterId, lessonId, false) }
+
+            LessonEditorScreen(
+                viewModel = viewModel,
+                navigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = "lesson_editor_copy/{semester_id}/{lesson_id}",
+            arguments = listOf(
+                navArgument("semester_id") {
+                    type = NavType.LongType
+                },
+                navArgument("lesson_id") {
+                    type = NavType.LongType
+                }
+            )
+        ) { backStackEntry ->
+            val semesterId = checkNotNull(backStackEntry.arguments?.getLong("semester_id", -1L)?.takeIf { it >= 0 })
+            val lessonId = checkNotNull(backStackEntry.arguments?.getLong("lesson_id", -1L)?.takeIf { it >= 0 })
+            val viewModel = viewModel { LessonEditorViewModel(it, semesterId, lessonId, true) }
+
+            LessonEditorScreen(
+                viewModel = viewModel,
+                navigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = "homework_editor?semester_id={semester_id}&subject_name={subject_name}&homework_id={homework_id}",
+            arguments = listOf(
+                navArgument("semester_id") {
+                    type = NavType.LongType
+                },
+                navArgument("subject_name") {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
                 },
                 navArgument("homework_id") {
                     type = NavType.LongType
@@ -367,18 +345,15 @@ fun MainNavGraph(
             )
         ) { backStackEntry ->
             val arguments = checkNotNull(backStackEntry.arguments)
-            val semesterId = arguments.getLong("semester_id", -1L).takeIf { it >= 0 }
-            val lessonId = arguments.getLong("lesson_id", -1L).takeIf { it >= 0 }
+            val semesterId = checkNotNull(arguments.getLong("semester_id", -1L).takeIf { it >= 0 })
+            val subjectName = arguments.getString("subject_name")
             val homeworkId = arguments.getLong("homework_id", -1L).takeIf { it >= 0 }
-            val lesson = if ((lessonId != null) && (directions.lesson.id == lessonId)) directions.lesson else null
-            val homework = if ((homeworkId != null) && (directions.homework.id == homeworkId)) directions.homework else null
 
             val viewModel = viewModel { application ->
                 when {
-                    (semesterId != null) -> HomeworkEditorViewModel(application, semesterId)
-                    (lesson != null) -> HomeworkEditorViewModel(application, lesson)
-                    (homework != null) -> HomeworkEditorViewModel(application, homework)
-                    else -> throw IllegalArgumentException("Wrong HomeworkEditor arguments")
+                    (homeworkId != null) -> HomeworkEditorViewModel(application, semesterId, homeworkId)
+                    (subjectName != null) -> HomeworkEditorViewModel(application, semesterId, subjectName)
+                    else -> HomeworkEditorViewModel(application, semesterId)
                 }
             }
             val directions = directions.HomeworkEditor

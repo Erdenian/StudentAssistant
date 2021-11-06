@@ -1,11 +1,11 @@
 package ru.erdenian.studentassistant.database.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.database.entity.HomeworkEntity
 
@@ -34,10 +34,10 @@ interface HomeworkDao {
     suspend fun get(id: Long): HomeworkEntity?
 
     @Query("SELECT * FROM homeworks WHERE _id = :id")
-    fun getLiveData(id: Long): LiveData<HomeworkEntity?>
+    fun getFlow(id: Long): Flow<HomeworkEntity?>
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId ORDER BY deadline, _id")
-    fun getAllLiveData(semesterId: Long): LiveData<List<HomeworkEntity>>
+    fun getAllFlow(semesterId: Long): Flow<List<HomeworkEntity>>
 
     @Query("SELECT COUNT(_id) FROM homeworks WHERE semester_id = :semesterId")
     suspend fun getCount(semesterId: Long): Int
@@ -47,7 +47,7 @@ interface HomeworkDao {
     // region By subject name
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName ORDER BY deadline, _id")
-    fun getAllLiveData(semesterId: Long, subjectName: String): LiveData<List<HomeworkEntity>>
+    fun getAllFlow(semesterId: Long, subjectName: String): Flow<List<HomeworkEntity>>
 
     @Query("SELECT COUNT(_id) FROM homeworks WHERE subject_name = :subjectName AND semester_id = :semesterId")
     suspend fun getCount(semesterId: Long, subjectName: String): Int
@@ -60,20 +60,20 @@ interface HomeworkDao {
     // region By deadline
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline >= :today ORDER BY deadline, _id")
-    fun getActualLiveData(semesterId: Long, today: LocalDate = LocalDate.now()): LiveData<List<HomeworkEntity>>
+    fun getActualFlow(semesterId: Long, today: LocalDate = LocalDate.now()): Flow<List<HomeworkEntity>>
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline < :today AND is_done = 0 ORDER BY deadline, _id")
-    fun getOverdueLiveData(semesterId: Long, today: LocalDate = LocalDate.now()): LiveData<List<HomeworkEntity>>
+    fun getOverdueFlow(semesterId: Long, today: LocalDate = LocalDate.now()): Flow<List<HomeworkEntity>>
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline < :today AND is_done = 1 ORDER BY deadline, _id")
-    fun getPastLiveData(semesterId: Long, today: LocalDate = LocalDate.now()): LiveData<List<HomeworkEntity>>
+    fun getPastFlow(semesterId: Long, today: LocalDate = LocalDate.now()): Flow<List<HomeworkEntity>>
 
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName AND deadline >= :today ORDER BY deadline, _id")
-    fun getActualLiveData(
+    fun getActualFlow(
         semesterId: Long,
         subjectName: String,
         today: LocalDate = LocalDate.now()
-    ): LiveData<List<HomeworkEntity>>
+    ): Flow<List<HomeworkEntity>>
 
     // endregion
 }

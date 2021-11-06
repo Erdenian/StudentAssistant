@@ -2,23 +2,23 @@ package ru.erdenian.studentassistant.ui.main.semestereditor
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
 import org.kodein.di.DIAware
 import org.kodein.di.android.x.closestDI
 import org.kodein.di.instance
-import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.repository.SemesterRepository
 
 class SemesterEditorViewModel(
     application: Application,
-    private val semester: Semester?
+    private val semesterId: Long?
 ) : AndroidViewModel(application), DIAware {
 
     override val di by closestDI()
@@ -30,72 +30,63 @@ class SemesterEditorViewModel(
         WRONG_DATES
     }
 
-    private val ranges = listOf(
+    private val semestersRanges = listOf(
         DateTimeConstants.FEBRUARY..DateTimeConstants.MAY,
         DateTimeConstants.SEPTEMBER..DateTimeConstants.DECEMBER
     )
 
-    val name = MutableLiveData("")
-    val firstDay = MutableLiveData<LocalDate>()
-    val lastDay = MutableLiveData<LocalDate>()
+    val name = MutableStateFlow("")
+    val firstDay: MutableStateFlow<LocalDate>
+    val lastDay: MutableStateFlow<LocalDate>
+
+    private var initialName: String? = null
 
     init {
-        semester?.also { s ->
-            name.value = s.name
-            firstDay.value = s.firstDay
-            lastDay.value = s.lastDay
-        }
-
         val today = LocalDate.now().withDayOfMonth(1)
-        val range = ranges.find { today.monthOfYear <= it.last } ?: ranges.first()
-        firstDay.value = today.withMonthOfYear(range.first)
-        lastDay.value = today.withMonthOfYear(range.last).dayOfMonth().withMaximumValue()
-    }
+        val range = semestersRanges.find { today.monthOfYear <= it.last } ?: semestersRanges.first()
+        firstDay = MutableStateFlow(today.withMonthOfYear(range.first))
+        lastDay = MutableStateFlow(today.withMonthOfYear(range.last).dayOfMonth().withMaximumValue())
 
-    private val semestersNames = semesterRepository.namesLiveData
+        if (semesterId != null) {
+            viewModelScope.launch {
+                val semester = semesterRepository.get(semesterId)
+                if (semester != null) {
+                    name.value = semester.name
+                    initialName = semester.name
 
-    val error: LiveData<Error?> = MediatorLiveData<Error?>().apply {
-        val onChanged = Observer<Any?> {
-            val name = name.value ?: ""
-            val names = semestersNames.value ?: emptyList()
-            val firstDay = firstDay.value
-            val lastDay = lastDay.value
-            value = when {
-                name.isBlank() -> Error.EMPTY_NAME
-                (semester == null) && names.contains(name) -> Error.SEMESTER_EXISTS
-                (semester != null) && (name != semester.name) && names.contains(name) -> Error.SEMESTER_EXISTS
-                (firstDay != null) && (lastDay != null) && (firstDay > lastDay) -> Error.WRONG_DATES
-                else -> null
+                    firstDay.value = semester.firstDay
+                    lastDay.value = semester.lastDay
+                } else {
+                    donePrivate.value = true
+                }
             }
         }
-
-        addSource(name, onChanged)
-        addSource(firstDay, onChanged)
-        addSource(lastDay, onChanged)
-        addSource(semestersNames, onChanged)
     }
 
-    val isEditing get() = (semester != null)
+    private val semestersNames = semesterRepository.namesFlow
 
-    private val savedPrivate = MutableLiveData(false)
-    val saved: LiveData<Boolean> get() = savedPrivate
+    val error = combine(name, firstDay, lastDay, semestersNames) { name, firstDay, lastDay, semestersNames ->
+        when {
+            name.isBlank() -> Error.EMPTY_NAME
+            (semesterId == null) && semestersNames.contains(name) -> Error.SEMESTER_EXISTS
+            (semesterId != null) && (name != initialName) && semestersNames.contains(name) -> Error.SEMESTER_EXISTS
+            (firstDay >= lastDay) -> Error.WRONG_DATES
+            else -> null
+        }
+    }.stateIn(viewModelScope, SharingStarted.Lazily, null)
+
+    val isEditing = (semesterId != null)
+
+    private val donePrivate = MutableStateFlow(false)
+    val done = donePrivate.asStateFlow()
 
     fun save() {
         check(error.value == null)
         viewModelScope.launch {
-            semester?.id?.let { id ->
-                semesterRepository.update(
-                    id,
-                    checkNotNull(name.value),
-                    checkNotNull(firstDay.value),
-                    checkNotNull(lastDay.value)
-                )
-            } ?: semesterRepository.insert(
-                checkNotNull(name.value),
-                checkNotNull(firstDay.value),
-                checkNotNull(lastDay.value)
-            )
-            savedPrivate.value = true
+            semesterId?.let { id ->
+                semesterRepository.update(id, name.value, firstDay.value, lastDay.value)
+            } ?: semesterRepository.insert(name.value, firstDay.value, lastDay.value)
+            donePrivate.value = true
         }
     }
 }

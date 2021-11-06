@@ -28,8 +28,8 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,7 +44,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.map
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
@@ -56,7 +55,6 @@ import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.ExposedDropdownMenu
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.utils.Homeworks
-import ru.erdenian.studentassistant.utils.observeAsStateNonNull
 import ru.erdenian.studentassistant.utils.showDatePicker
 import ru.erdenian.studentassistant.utils.toast
 
@@ -64,35 +62,38 @@ import ru.erdenian.studentassistant.utils.toast
 fun HomeworkEditorScreen(
     viewModel: HomeworkEditorViewModel,
     navigateBack: () -> Unit,
-    navigateToCreateLesson: (Long, String) -> Unit
+    navigateToCreateLesson: (semesterId: Long, subjectName: String) -> Unit
 ) {
-    val done by viewModel.done.observeAsStateNonNull()
-    DisposableEffect(done) {
-        if (done) navigateBack()
-        onDispose {}
+    val done by viewModel.done.collectAsState()
+    if (done) {
+        DisposableEffect(done) {
+            navigateBack()
+            onDispose {}
+        }
     }
 
-    val subjectName by viewModel.subjectName.observeAsStateNonNull()
-    val description by viewModel.description.observeAsStateNonNull()
-    val deadline by viewModel.deadline.observeAsStateNonNull()
+    val subjectName by viewModel.subjectName.collectAsState()
+    val description by viewModel.description.collectAsState()
+    val deadline by viewModel.deadline.collectAsState()
 
-    val semesterDatesRange by viewModel.semesterDatesRange.observeAsState(LocalDate.now()..LocalDate.now())
-    val existingSubjects by viewModel.existingSubjects.map { it.list }.observeAsState(listOf())
+    val semesterDatesRange by viewModel.semesterDatesRange.collectAsState()
+    val existingSubjects by viewModel.existingSubjects.collectAsState()
 
-    val errorMessageResource by viewModel.error.map { error ->
-        when (error) {
-            Error.EMPTY_SUBJECT -> R.string.hef_error_empty_subject_name
-            Error.EMPTY_DESCRIPTION -> R.string.hef_error_empty_description
-            null -> null
-        }
-    }.observeAsState()
-    val errorMessage = errorMessageResource?.let { stringResource(it) }
+    val error by viewModel.error.collectAsState()
+    val errorMessage = when (error) {
+        Error.EMPTY_SUBJECT -> R.string.hef_error_empty_subject_name
+        Error.EMPTY_DESCRIPTION -> R.string.hef_error_empty_description
+        null -> null
+    }?.let { stringResource(it) }
+
+    val isLoaded by viewModel.isLoaded.collectAsState()
 
     val context = LocalContext.current
 
     HomeworkEditorContent(
+        isLoaded = isLoaded,
         isEditing = viewModel.isEditing,
-        existingSubjects = existingSubjects,
+        existingSubjects = existingSubjects.list,
         subjectName = subjectName,
         deadline = deadline,
         description = description,
@@ -133,6 +134,7 @@ fun HomeworkEditorScreen(
 
 @Composable
 private fun HomeworkEditorContent(
+    isLoaded: Boolean,
     isEditing: Boolean,
     existingSubjects: List<String>,
     subjectName: String,
@@ -160,12 +162,14 @@ private fun HomeworkEditorContent(
                         ActionItem.AlwaysShow(
                             name = stringResource(R.string.hef_save),
                             imageVector = AppIcons.Check,
-                            onClick = onSaveClick
+                            onClick = onSaveClick,
+                            enabled = isLoaded
                         ),
                         if (isEditing) {
                             ActionItem.NeverShow(
                                 name = stringResource(R.string.hef_delete),
-                                onClick = onDeleteClick
+                                onClick = onDeleteClick,
+                                enabled = isLoaded
                             )
                         } else null
                     )
@@ -186,6 +190,7 @@ private fun HomeworkEditorContent(
             value = subjectName,
             items = existingSubjects,
             onValueChange = onSubjectNameChange,
+            enabled = isLoaded,
             label = stringResource(R.string.hef_subject),
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
@@ -216,7 +221,8 @@ private fun HomeworkEditorContent(
                         semesterDates.start,
                         semesterDates.endInclusive
                     ) { onDeadlineChange(it) }
-                }
+                },
+                enabled = isLoaded
             ) {
                 val deadlineFormatter = remember { DateTimeFormat.shortDate() }
                 Text(text = deadline.toString(deadlineFormatter))
@@ -227,6 +233,7 @@ private fun HomeworkEditorContent(
             value = description,
             onValueChange = onDescriptionChange,
             label = { Text(text = stringResource(R.string.hef_description)) },
+            enabled = isLoaded,
             modifier = Modifier
                 .fillMaxSize()
                 .focusRequester(descriptionFocusRequester)
@@ -240,6 +247,7 @@ private fun SimpleTextField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     label: @Composable (() -> Unit)? = null,
+    enabled: Boolean = true,
     colors: TextFieldColors = TextFieldDefaults.textFieldColors()
 ) = Box {
     val textStyle = LocalTextStyle.current
@@ -247,8 +255,9 @@ private fun SimpleTextField(
 
     BasicTextField(
         value = value,
-        textStyle = textStyle.merge(TextStyle(color = textColor)),
         onValueChange = onValueChange,
+        enabled = enabled,
+        textStyle = textStyle.merge(TextStyle(color = textColor)),
         modifier = modifier
     )
 
@@ -271,6 +280,7 @@ private fun SimpleTextField(
 @Composable
 private fun HomeworkEditorContentRegularPreview() = AppTheme {
     HomeworkEditorContent(
+        isLoaded = true,
         isEditing = true,
         existingSubjects = emptyList(),
         subjectName = Homeworks.regular.subjectName,
@@ -291,6 +301,7 @@ private fun HomeworkEditorContentRegularPreview() = AppTheme {
 @Composable
 private fun HomeworkEditorContentEmptyPreview() = AppTheme {
     HomeworkEditorContent(
+        isLoaded = true,
         isEditing = true,
         existingSubjects = emptyList(),
         subjectName = "",
@@ -310,6 +321,7 @@ private fun HomeworkEditorContentEmptyPreview() = AppTheme {
 @Composable
 private fun HomeworkEditorContentLongPreview() = AppTheme {
     HomeworkEditorContent(
+        isLoaded = true,
         isEditing = true,
         existingSubjects = emptyList(),
         subjectName = Homeworks.long.subjectName,

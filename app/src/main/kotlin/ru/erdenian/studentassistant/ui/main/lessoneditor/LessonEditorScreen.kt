@@ -20,8 +20,8 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -37,7 +37,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.map
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.joda.time.LocalTime
@@ -53,7 +52,6 @@ import ru.erdenian.studentassistant.uikit.view.MultiAutoCompleteTextField
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.uikit.view.WeeksSelector
 import ru.erdenian.studentassistant.utils.Lessons
-import ru.erdenian.studentassistant.utils.observeAsStateNonNull
 import ru.erdenian.studentassistant.utils.showTimePicker
 import ru.erdenian.studentassistant.utils.toast
 
@@ -62,7 +60,7 @@ fun LessonEditorScreen(
     viewModel: LessonEditorViewModel,
     navigateBack: () -> Unit
 ) {
-    val done by viewModel.done.observeAsStateNonNull()
+    val done by viewModel.done.collectAsState()
     DisposableEffect(done) {
         if (done) navigateBack()
         onDispose {}
@@ -72,38 +70,34 @@ fun LessonEditorScreen(
 
     val isEditing = viewModel.isEditing
 
-    val errorMessageResource by viewModel.error.map { error ->
-        when (error) {
-            Error.EMPTY_SUBJECT_NAME -> R.string.lef_error_empty_subject_name
-            Error.WRONG_TIMES -> R.string.lef_error_wrong_time
-            Error.EMPTY_REPEAT -> R.string.lef_error_empty_repeat
-            null -> null
-        }
-    }.observeAsState()
-    val errorMessage = errorMessageResource?.let { stringResource(it) }
-    val error by viewModel.error.observeAsState()
+    val error by viewModel.error.collectAsState()
+    val errorMessage = when (error) {
+        Error.EMPTY_SUBJECT_NAME -> R.string.lef_error_empty_subject_name
+        Error.WRONG_TIMES -> R.string.lef_error_wrong_time
+        Error.EMPTY_REPEAT -> R.string.lef_error_empty_repeat
+        null -> null
+    }?.let { stringResource(it) }
 
-    val subjectName by viewModel.subjectName.observeAsStateNonNull()
-    val existingSubjects by viewModel.existingSubjects.map { it.list }.observeAsState(emptyList())
+    val subjectName by viewModel.subjectName.collectAsState()
+    val existingSubjects by viewModel.existingSubjects.collectAsState()
     val subjectNameErrorMessage = errorMessage?.takeIf { (error == Error.EMPTY_SUBJECT_NAME) && isSubjectNameChanged }
 
-    val type by viewModel.type.observeAsStateNonNull()
+    val type by viewModel.type.collectAsState()
     val predefinedTypes = stringArrayResource(R.array.lesson_types).toList()
-    val existingTypes by viewModel.existingTypes
-        .map { (predefinedTypes + it.list).distinct() }
-        .observeAsState(emptyList())
+    val existingTypes by viewModel.existingTypes.collectAsState()
+    val displayedTypes = (predefinedTypes + existingTypes.list).distinct()
 
-    val teachers by viewModel.teachers.observeAsStateNonNull()
-    val existingTeachers by viewModel.existingTeachers.map { it.list }.observeAsState(emptyList())
+    val teachers by viewModel.teachers.collectAsState()
+    val existingTeachers by viewModel.existingTeachers.collectAsState()
 
-    val classrooms by viewModel.classrooms.observeAsStateNonNull()
-    val existingClassrooms by viewModel.existingClassrooms.map { it.list }.observeAsState(emptyList())
+    val classrooms by viewModel.classrooms.collectAsState()
+    val existingClassrooms by viewModel.existingClassrooms.collectAsState()
 
-    val startTime by viewModel.startTime.observeAsState(LocalTime.now())
-    val endTime by viewModel.endTime.observeAsState(LocalTime.now())
+    val startTime by viewModel.startTime.collectAsState()
+    val endTime by viewModel.endTime.collectAsState()
 
-    val weekday by viewModel.weekday.observeAsStateNonNull()
-    val weeks by viewModel.weeks.observeAsStateNonNull()
+    val weekday by viewModel.weekday.collectAsState()
+    val weeks by viewModel.weeks.collectAsState()
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -111,14 +105,14 @@ fun LessonEditorScreen(
     LessonEditorContent(
         isEditing = isEditing,
         subjectName = subjectName,
-        existingSubjects = existingSubjects,
+        existingSubjects = existingSubjects.list,
         subjectNameErrorMessage = subjectNameErrorMessage,
         type = type,
-        existingTypes = existingTypes,
+        existingTypes = displayedTypes,
         teachers = teachers,
-        existingTeachers = existingTeachers,
+        existingTeachers = existingTeachers.list,
         classrooms = classrooms,
-        existingClassrooms = existingClassrooms,
+        existingClassrooms = existingClassrooms.list,
         startTime = startTime,
         endTime = endTime,
         weekday = weekday,

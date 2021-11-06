@@ -27,18 +27,21 @@ import ru.erdenian.studentassistant.uikit.style.AppTheme
 
 sealed class ActionItem(
     val name: String,
-    val onClick: () -> Unit
+    val onClick: () -> Unit,
+    val enabled: Boolean = true
 ) {
     class AlwaysShow(
         name: String,
         val imageVector: ImageVector,
-        onClick: () -> Unit
-    ) : ActionItem(name, onClick)
+        onClick: () -> Unit,
+        enabled: Boolean = true
+    ) : ActionItem(name, onClick, enabled)
 
     class NeverShow(
         name: String,
-        onClick: () -> Unit
-    ) : ActionItem(name, onClick)
+        onClick: () -> Unit,
+        enabled: Boolean = true
+    ) : ActionItem(name, onClick, enabled)
 }
 
 @Suppress("unused")
