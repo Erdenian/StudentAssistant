@@ -1,12 +1,12 @@
 package ru.erdenian.studentassistant.database.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.database.entity.ByDateEntity
@@ -105,21 +105,21 @@ abstract class LessonDao {
 
     @Transaction
     @Query("SELECT * FROM lessons WHERE _id = :id")
-    abstract fun getLiveData(id: Long): LiveData<FullLesson?>
+    abstract fun getFlow(id: Long): Flow<FullLesson?>
 
     @Transaction
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId ORDER BY start_time, end_time, _id")
-    abstract fun getAllLiveData(semesterId: Long): LiveData<List<FullLesson>>
+    abstract fun getAllFlow(semesterId: Long): Flow<List<FullLesson>>
 
     @Transaction
     @Query("SELECT * FROM lessons as l INNER JOIN by_weekday AS w ON w.lesson_id = l._id WHERE semester_id = :semesterId AND weekday = :weekday")
-    abstract fun getAllLiveData(semesterId: Long, weekday: Int): LiveData<List<FullLesson>>
+    abstract fun getAllFlow(semesterId: Long, weekday: Int): Flow<List<FullLesson>>
 
     @Query("SELECT COUNT(_id) FROM lessons WHERE semester_id = :semesterId")
     abstract suspend fun getCount(semesterId: Long): Int
 
     @Query("SELECT EXISTS(SELECT _id FROM lessons WHERE semester_id = :semesterId)")
-    abstract fun hasLessonsLiveData(semesterId: Long): LiveData<Boolean>
+    abstract fun hasLessonsFlow(semesterId: Long): Flow<Boolean>
 
     // endregion
 
@@ -129,7 +129,7 @@ abstract class LessonDao {
     abstract suspend fun getCount(semesterId: Long, subjectName: String): Int
 
     @Query("SELECT DISTINCT subject_name FROM lessons WHERE semester_id = :semesterId ORDER BY subject_name")
-    abstract fun getSubjectsLiveData(semesterId: Long): LiveData<List<String>>
+    abstract fun getSubjectsFlow(semesterId: Long): Flow<List<String>>
 
     @Transaction
     open suspend fun renameSubject(semesterId: Long, oldName: String, newName: String) = withContext(Dispatchers.IO) {
@@ -148,13 +148,13 @@ abstract class LessonDao {
     // region Other fields
 
     @Query("SELECT DISTINCT type FROM lessons WHERE type IS NOT NULL AND semester_id = :semesterId ORDER BY type")
-    abstract fun getTypesLiveData(semesterId: Long): LiveData<List<String>>
+    abstract fun getTypesFlow(semesterId: Long): Flow<List<String>>
 
     @Query("SELECT DISTINCT t.name FROM teachers AS t INNER JOIN lessons AS l ON l._id = t.lesson_id WHERE l.semester_id = :semesterId ORDER BY t.name")
-    abstract fun getTeachersLiveData(semesterId: Long): LiveData<List<String>>
+    abstract fun getTeachersFlow(semesterId: Long): Flow<List<String>>
 
     @Query("SELECT DISTINCT c.name FROM classrooms AS c INNER JOIN lessons AS l ON l._id = c.lesson_id WHERE l.semester_id = :semesterId ORDER BY c.name")
-    abstract fun getClassroomsLiveData(semesterId: Long): LiveData<List<String>>
+    abstract fun getClassroomsFlow(semesterId: Long): Flow<List<String>>
 
     @Query("SELECT l.end_time FROM lessons AS l INNER JOIN by_weekday AS w ON w.lesson_id = l._id WHERE l.semester_id = :semesterId AND w.weekday = :weekday ORDER BY end_time DESC LIMIT 1")
     abstract suspend fun getLastEndTime(semesterId: Long, weekday: Int): LocalTime?

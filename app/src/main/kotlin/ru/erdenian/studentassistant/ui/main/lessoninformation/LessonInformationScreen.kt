@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
@@ -26,7 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -55,26 +55,28 @@ import ru.erdenian.studentassistant.utils.Lessons
 fun LessonInformationScreen(
     viewModel: LessonInformationViewModel,
     navigateBack: () -> Unit,
-    navigateToEditLesson: (Lesson) -> Unit,
-    navigateToEditHomework: (Homework) -> Unit,
-    navigateToCreateHomework: (Lesson) -> Unit
+    navigateToEditLesson: (semesterId: Long, lessonId: Long) -> Unit,
+    navigateToEditHomework: (semesterId: Long, homeworkId: Long) -> Unit,
+    navigateToCreateHomework: (semesterId: Long, subjectName: String) -> Unit
 ) {
+    val isDeleted by viewModel.isDeleted.collectAsState()
+    if (isDeleted) {
+        DisposableEffect(isDeleted) {
+            if (isDeleted) navigateBack()
+            onDispose {}
+        }
+    }
+
     val lesson by viewModel.lesson.collectAsState()
     val homeworks by viewModel.homeworks.collectAsState()
-
-    val isDeleted by viewModel.isDeleted.observeAsState(false)
-    DisposableEffect(isDeleted) {
-        if (isDeleted) navigateBack()
-        onDispose {}
-    }
 
     LessonInformationContent(
         lesson = lesson,
         homeworks = homeworks.list,
         onBackClick = navigateBack,
-        onEditClick = { navigateToEditLesson(lesson) },
-        onHomeworkClick = navigateToEditHomework,
-        onAddHomeworkClick = { navigateToCreateHomework(lesson) },
+        onEditClick = { navigateToEditLesson(checkNotNull(lesson).semesterId, viewModel.lessonId) },
+        onHomeworkClick = { navigateToEditHomework(checkNotNull(lesson).semesterId, it.id) },
+        onAddHomeworkClick = { navigateToCreateHomework(checkNotNull(lesson).semesterId, checkNotNull(lesson).subjectName) },
         onDeleteHomeworkClick = { viewModel.deleteHomework(it.id) }
     )
 }
@@ -82,7 +84,7 @@ fun LessonInformationScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun LessonInformationContent(
-    lesson: Lesson,
+    lesson: Lesson?,
     homeworks: List<Homework>,
     onBackClick: () -> Unit,
     onEditClick: () -> Unit,
@@ -117,78 +119,82 @@ private fun LessonInformationContent(
         }
     }
 ) {
-    Column {
-        val timeFormatter = remember { DateTimeFormat.shortTime() }
+    if (lesson == null) {
+        CircularProgressIndicator()
+    } else {
+        Column {
+            val timeFormatter = remember { DateTimeFormat.shortTime() }
 
-        LessonCard(
-            subjectName = lesson.subjectName,
-            type = lesson.type,
-            teachers = lesson.teachers.list,
-            classrooms = lesson.classrooms.list,
-            startTime = lesson.startTime.toString(timeFormatter),
-            endTime = lesson.endTime.toString(timeFormatter),
-            modifier = Modifier.padding(
-                horizontal = dimensionResource(R.dimen.activity_horizontal_margin),
-                vertical = dimensionResource(R.dimen.activity_vertical_margin)
-            )
-        )
-
-        Divider()
-
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            if (homeworks.isEmpty()) {
-                Text(
-                    text = stringResource(R.string.lif_no_homeworks),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
+            LessonCard(
+                subjectName = lesson.subjectName,
+                type = lesson.type,
+                teachers = lesson.teachers.list,
+                classrooms = lesson.classrooms.list,
+                startTime = lesson.startTime.toString(timeFormatter),
+                endTime = lesson.endTime.toString(timeFormatter),
+                modifier = Modifier.padding(
+                    horizontal = dimensionResource(R.dimen.activity_horizontal_margin),
+                    vertical = dimensionResource(R.dimen.activity_vertical_margin)
                 )
-            } else {
-                var contextMenuHomework by remember { mutableStateOf<Homework?>(null) }
+            )
 
-                LazyColumn(
-                    contentPadding = PaddingValues(
-                        horizontal = dimensionResource(R.dimen.activity_horizontal_margin),
-                        vertical = dimensionResource(R.dimen.activity_vertical_margin)
-                    ),
-                    verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.cards_spacing)),
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    itemsIndexed(
-                        items = homeworks,
-                        key = { _, item -> item.id }
-                    ) { _, homework ->
-                        val deadlineFormatter = remember { DateTimeFormat.shortDate() }
+            Divider()
 
-                        HomeworkCard(
-                            subjectName = homework.subjectName,
-                            description = homework.description,
-                            deadline = homework.deadline.toString(deadlineFormatter),
-                            onClick = { onHomeworkClick(homework) },
-                            onLongClick = { contextMenuHomework = homework }
-                        )
-                    }
-                }
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                if (homeworks.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.lif_no_homeworks),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
+                    )
+                } else {
+                    var contextMenuHomework by remember { mutableStateOf<Homework?>(null) }
 
-                DropdownMenu(
-                    expanded = (contextMenuHomework != null),
-                    onDismissRequest = { contextMenuHomework = null }
-                ) {
-                    val context = LocalContext.current
-                    DropdownMenuItem(
-                        onClick = {
-                            val homework = checkNotNull(contextMenuHomework)
-                            contextMenuHomework = null
-                            MaterialAlertDialogBuilder(context)
-                                .setMessage(R.string.lif_delete_message)
-                                .setPositiveButton(R.string.lif_delete_yes) { _, _ -> onDeleteHomeworkClick(homework) }
-                                .setNegativeButton(R.string.lif_delete_no, null)
-                                .show()
-                        }
+                    LazyColumn(
+                        contentPadding = PaddingValues(
+                            horizontal = dimensionResource(R.dimen.activity_horizontal_margin),
+                            vertical = dimensionResource(R.dimen.activity_vertical_margin)
+                        ),
+                        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.cards_spacing)),
+                        modifier = Modifier.fillMaxSize()
                     ) {
-                        Text(text = stringResource(R.string.lif_delete_homework))
+                        itemsIndexed(
+                            items = homeworks,
+                            key = { _, item -> item.id }
+                        ) { _, homework ->
+                            val deadlineFormatter = remember { DateTimeFormat.shortDate() }
+
+                            HomeworkCard(
+                                subjectName = homework.subjectName,
+                                description = homework.description,
+                                deadline = homework.deadline.toString(deadlineFormatter),
+                                onClick = { onHomeworkClick(homework) },
+                                onLongClick = { contextMenuHomework = homework }
+                            )
+                        }
+                    }
+
+                    DropdownMenu(
+                        expanded = (contextMenuHomework != null),
+                        onDismissRequest = { contextMenuHomework = null }
+                    ) {
+                        val context = LocalContext.current
+                        DropdownMenuItem(
+                            onClick = {
+                                val homework = checkNotNull(contextMenuHomework)
+                                contextMenuHomework = null
+                                MaterialAlertDialogBuilder(context)
+                                    .setMessage(R.string.lif_delete_message)
+                                    .setPositiveButton(R.string.lif_delete_yes) { _, _ -> onDeleteHomeworkClick(homework) }
+                                    .setNegativeButton(R.string.lif_delete_no, null)
+                                    .show()
+                            }
+                        ) {
+                            Text(text = stringResource(R.string.lif_delete_homework))
+                        }
                     }
                 }
             }

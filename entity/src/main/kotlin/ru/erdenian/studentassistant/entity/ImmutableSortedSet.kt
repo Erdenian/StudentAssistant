@@ -41,6 +41,8 @@ class ImmutableSortedSet<E : Comparable<E>>(
     }
 
     override fun hashCode() = value.hashCode()
+
+    operator fun plus(elements: Iterable<E>): ImmutableSortedSet<E> = ImmutableSortedSet((list + elements).toSortedSet())
 }
 
 /**
@@ -62,3 +64,6 @@ fun <E : Comparable<E>> Collection<E>.toImmutableSortedSet() = ImmutableSortedSe
 fun <E : Comparable<E>> Sequence<E>.toImmutableSortedSet() = ImmutableSortedSet(toSortedSet())
 
 fun <T : Comparable<T>> immutableSortedSetOf(vararg elements: T) = ImmutableSortedSet(elements.toSortedSet())
+
+fun <T : Comparable<T>> immutableSortedSetOfNotNull(vararg elements: T?) =
+    ImmutableSortedSet(elements.asSequence().filterNotNull().toSortedSet())

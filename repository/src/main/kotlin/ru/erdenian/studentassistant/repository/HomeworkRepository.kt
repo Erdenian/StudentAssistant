@@ -1,9 +1,10 @@
 package ru.erdenian.studentassistant.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
-import androidx.lifecycle.switchMap
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.database.dao.HomeworkDao
 import ru.erdenian.studentassistant.database.entity.HomeworkEntity
@@ -12,6 +13,7 @@ import ru.erdenian.studentassistant.entity.ImmutableSortedSet
 import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class HomeworkRepository(
     private val homeworkDao: HomeworkDao,
     private val selectedSemesterRepository: SelectedSemesterRepository
@@ -36,25 +38,26 @@ class HomeworkRepository(
 
     suspend fun get(id: Long): Homework? = homeworkDao.get(id)
 
-    fun getLiveData(id: Long): LiveData<Homework?> = homeworkDao.getLiveData(id).map { it }
+    fun getFlow(id: Long): Flow<Homework?> = homeworkDao.getFlow(id).map { it }
 
-    val allLiveData: LiveData<ImmutableSortedSet<Homework>> =
-        selectedSemesterRepository.selectedLiveData.switchMap { semester ->
-            semester?.id?.let { homeworkDao.getAllLiveData(it).map() } ?: MutableLiveData(immutableSortedSetOf())
+    val allFlow: Flow<ImmutableSortedSet<Homework>> =
+        selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
+            semester?.id?.let { homeworkDao.getAllFlow(it).map() } ?: flowOf(immutableSortedSetOf())
         }
 
-    suspend fun getCount(): Int = homeworkDao.getCount(selectedSemesterRepository.selected.id)
+    suspend fun getCount(): Int = selectedSemesterRepository.selectedFlow.value?.id?.let { homeworkDao.getCount(it) } ?: 0
 
     // endregion
 
     // region By subject name
 
-    fun getAllLiveData(subjectName: String): LiveData<ImmutableSortedSet<Homework>> =
-        selectedSemesterRepository.selectedLiveData.switchMap { semester ->
-            semester?.id?.let { homeworkDao.getAllLiveData(it, subjectName).map() } ?: MutableLiveData(immutableSortedSetOf())
+    fun getAllFlow(subjectName: String): Flow<ImmutableSortedSet<Homework>> =
+        selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
+            semester?.id?.let { homeworkDao.getAllFlow(it, subjectName).map() } ?: flowOf(immutableSortedSetOf())
         }
 
-    suspend fun getCount(subjectName: String): Int = homeworkDao.getCount(selectedSemesterRepository.selected.id, subjectName)
+    suspend fun getCount(subjectName: String): Int =
+        selectedSemesterRepository.selectedFlow.value?.id?.let { homeworkDao.getCount(it, subjectName) } ?: 0
 
     suspend fun hasHomeworks(semesterId: Long, subjectName: String): Boolean =
         homeworkDao.hasHomeworks(semesterId, subjectName)
@@ -63,27 +66,27 @@ class HomeworkRepository(
 
     // region By deadline
 
-    val actualLiveData: LiveData<ImmutableSortedSet<Homework>> =
-        selectedSemesterRepository.selectedLiveData.switchMap { semester ->
-            semester?.id?.let { homeworkDao.getActualLiveData(it).map() } ?: MutableLiveData(immutableSortedSetOf())
+    val actualFlow: Flow<ImmutableSortedSet<Homework>> =
+        selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
+            semester?.id?.let { homeworkDao.getActualFlow(it).map() } ?: flowOf(immutableSortedSetOf())
         }
 
-    val overdueLiveData: LiveData<ImmutableSortedSet<Homework>> =
-        selectedSemesterRepository.selectedLiveData.switchMap { semester ->
-            semester?.id?.let { homeworkDao.getOverdueLiveData(it).map() } ?: MutableLiveData(immutableSortedSetOf())
+    val overdueFlow: Flow<ImmutableSortedSet<Homework>> =
+        selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
+            semester?.id?.let { homeworkDao.getOverdueFlow(it).map() } ?: flowOf(immutableSortedSetOf())
         }
 
-    val pastLiveData: LiveData<ImmutableSortedSet<Homework>> =
-        selectedSemesterRepository.selectedLiveData.switchMap { semester ->
-            semester?.id?.let { homeworkDao.getPastLiveData(it).map() } ?: MutableLiveData(immutableSortedSetOf())
+    val pastFlow: Flow<ImmutableSortedSet<Homework>> =
+        selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
+            semester?.id?.let { homeworkDao.getPastFlow(it).map() } ?: flowOf(immutableSortedSetOf())
         }
 
-    fun getActualLiveData(subjectName: String): LiveData<ImmutableSortedSet<Homework>> =
-        selectedSemesterRepository.selectedLiveData.switchMap { semester ->
-            semester?.id?.let { homeworkDao.getActualLiveData(it, subjectName).map() } ?: MutableLiveData(immutableSortedSetOf())
+    fun getActualFlow(subjectName: String): Flow<ImmutableSortedSet<Homework>> =
+        selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
+            semester?.id?.let { homeworkDao.getActualFlow(it, subjectName).map() } ?: flowOf(immutableSortedSetOf())
         }
 
     // endregion
 
-    private fun LiveData<List<HomeworkEntity>>.map() = map { it.toImmutableSortedSet<Homework>() }
+    private fun Flow<List<HomeworkEntity>>.map() = map { it.toImmutableSortedSet<Homework>() }
 }

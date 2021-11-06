@@ -1,6 +1,7 @@
 package ru.erdenian.studentassistant.database.dao
 
 import androidx.test.core.app.ApplicationProvider
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
@@ -21,7 +22,6 @@ import ru.erdenian.studentassistant.database.entity.FullLesson
 import ru.erdenian.studentassistant.database.entity.LessonEntity
 import ru.erdenian.studentassistant.database.entity.SemesterEntity
 import ru.erdenian.studentassistant.database.entity.TeacherEntity
-import ru.erdenian.studentassistant.database.utils.await
 
 internal class LessonDaoAndroidTest {
 
@@ -47,7 +47,7 @@ internal class LessonDaoAndroidTest {
 
     @Test
     fun insertTest() = runBlocking {
-        assertEquals(emptyList<SemesterEntity>(), lessonDao.getAllLiveData(semesterId).await())
+        assertEquals(emptyList<SemesterEntity>(), lessonDao.getAllFlow(semesterId).first())
 
         val lesson = FullLesson(
             LessonEntity(
@@ -78,12 +78,12 @@ internal class LessonDaoAndroidTest {
             null,
             lesson.byDates.map { it.copy(lessonId = id) }
         )
-        assertEquals(listOf(expected), lessonDao.getAllLiveData(semesterId).await())
+        assertEquals(listOf(expected), lessonDao.getAllFlow(semesterId).first())
     }
 
     @Test
     fun insertNoAutoincrementTest() = runBlocking {
-        assertEquals(emptyList<SemesterEntity>(), lessonDao.getAllLiveData(semesterId).await())
+        assertEquals(emptyList<SemesterEntity>(), lessonDao.getAllFlow(semesterId).first())
 
         val lesson = FullLesson(
             LessonEntity(
@@ -107,12 +107,12 @@ internal class LessonDaoAndroidTest {
         )
         assertEquals(10L, id)
 
-        assertEquals(listOf(lesson), lessonDao.getAllLiveData(semesterId).await())
+        assertEquals(listOf(lesson), lessonDao.getAllFlow(semesterId).first())
     }
 
     @Test
     fun getNextStartTimeTest() = runBlocking {
-        assertEquals(emptyList<SemesterEntity>(), lessonDao.getAllLiveData(semesterId).await())
+        assertEquals(emptyList<SemesterEntity>(), lessonDao.getAllFlow(semesterId).first())
         assertNull(lessonDao.getLastEndTime(semesterId, DateTimeConstants.MONDAY))
 
         lessonDao.insert(
