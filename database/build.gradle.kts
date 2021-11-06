@@ -87,9 +87,6 @@ dependencies {
     // endregion
 
     // region AndroidX
-    val lifecycleVersion: String by project
-    api("androidx.lifecycle:lifecycle-livedata:$lifecycleVersion")
-
     val roomVersion: String by project
     kapt("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")

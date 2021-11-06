@@ -2,6 +2,7 @@ package ru.erdenian.studentassistant.repository.di
 
 import android.app.Application
 import android.content.Context
+import kotlinx.coroutines.CoroutineScope
 import org.kodein.di.DI
 import org.kodein.di.bind
 import org.kodein.di.bindSingleton
@@ -17,11 +18,12 @@ import ru.erdenian.studentassistant.repository.SettingsRepository
 
 fun repositoryModule(
     application: Application,
+    applicationCoroutineScope: CoroutineScope,
     databaseName: String? = null
 ) = DI.Module(name = "Repository") {
     val db = databaseKodein(application, databaseName)
 
-    bindSingleton { SelectedSemesterRepository(db.instance()) }
+    bindSingleton { SelectedSemesterRepository(applicationCoroutineScope, db.instance()) }
 
     bind {
         singleton(ref = softReference) {
@@ -29,7 +31,7 @@ fun repositoryModule(
         }
     }
 
-    bind { singleton(ref = softReference) { SemesterRepository(db.instance()) } }
+    bind { singleton(ref = softReference) { SemesterRepository(db.instance(), instance()) } }
     bind { singleton(ref = softReference) { LessonRepository(db.instance(), instance(), instance()) } }
     bind { singleton(ref = softReference) { HomeworkRepository(db.instance(), instance()) } }
 }

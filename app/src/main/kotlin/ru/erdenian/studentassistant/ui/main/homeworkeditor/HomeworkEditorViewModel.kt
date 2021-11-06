@@ -2,19 +2,21 @@ package ru.erdenian.studentassistant.ui.main.homeworkeditor
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.joda.time.LocalDate
 import org.kodein.di.DIAware
 import org.kodein.di.android.x.closestDI
 import org.kodein.di.instance
-import ru.erdenian.studentassistant.entity.Homework
-import ru.erdenian.studentassistant.entity.Lesson
+import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 import ru.erdenian.studentassistant.repository.HomeworkRepository
 import ru.erdenian.studentassistant.repository.LessonRepository
 import ru.erdenian.studentassistant.repository.SemesterRepository
@@ -22,8 +24,8 @@ import ru.erdenian.studentassistant.repository.SemesterRepository
 class HomeworkEditorViewModel private constructor(
     application: Application,
     val semesterId: Long,
-    private val homework: Homework?,
-    lesson: Lesson?
+    private val homeworkId: Long?,
+    subjectName: String?
 ) : AndroidViewModel(application), DIAware {
 
     override val di by closestDI()
@@ -36,56 +38,73 @@ class HomeworkEditorViewModel private constructor(
         EMPTY_DESCRIPTION
     }
 
-    constructor(application: Application, semesterId: Long) : this(application, semesterId, null, null)
-    constructor(application: Application, lesson: Lesson) : this(application, lesson.semesterId, null, lesson)
-    constructor(application: Application, homework: Homework) : this(application, homework.semesterId, homework, null)
+    constructor(application: Application, semesterId: Long, subjectName: String? = null) :
+            this(application, semesterId, null, subjectName)
+
+    constructor(application: Application, semesterId: Long, homeworkId: Long) :
+            this(application, semesterId, homeworkId, null)
+
+    val subjectName = MutableStateFlow(subjectName ?: "")
+    val description = MutableStateFlow("")
+    val deadline = MutableStateFlow(LocalDate.now().plusWeeks(1))
 
     val existingSubjects = lessonRepository.getSubjects(semesterId)
-    val semesterDatesRange = semesterRepository.getLiveData(semesterId).map { checkNotNull(it).firstDay..it.lastDay }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = immutableSortedSetOf()
+        )
+    val semesterDatesRange = semesterRepository.getFlow(semesterId)
+        .filterNotNull()
+        .map { it.firstDay..it.lastDay }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), LocalDate.now()..LocalDate.now())
 
-    val subjectName = MutableLiveData(lesson?.subjectName ?: homework?.subjectName ?: "")
-    val description = MutableLiveData(homework?.description ?: "")
-    val deadline = MutableLiveData(homework?.deadline ?: LocalDate.now().plusWeeks(1))
+    val error = combine(this.subjectName, description) { subjectName, description ->
+        when {
+            subjectName.isBlank() -> Error.EMPTY_SUBJECT
+            description.isBlank() -> Error.EMPTY_DESCRIPTION
+            else -> null
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = null
+    )
 
-    val error: LiveData<Error?> = MediatorLiveData<Error?>().apply {
-        val observer = Observer<Any?> {
-            value = when {
-                subjectName.value.isNullOrBlank() -> Error.EMPTY_SUBJECT
-                description.value.isNullOrBlank() -> Error.EMPTY_DESCRIPTION
-                else -> null
+    val isEditing get() = (homeworkId != null)
+    val lessonExists get() = subjectName.value in existingSubjects.value
+
+    private val isLoadedPrivate = MutableStateFlow(homeworkId == null)
+    val isLoaded = isLoadedPrivate.asStateFlow()
+
+    private val donePrivate = MutableStateFlow(false)
+    val done: StateFlow<Boolean> get() = donePrivate.asStateFlow()
+
+    init {
+        if (homeworkId != null) {
+            viewModelScope.launch {
+                val homework = homeworkRepository.get(homeworkId)
+                if (homework != null) {
+                    this@HomeworkEditorViewModel.subjectName.value = homework.subjectName
+                    description.value = homework.description
+                    deadline.value = homework.deadline
+                } else {
+                    // Homework was deleted
+                    donePrivate.value = true
+                }
+                isLoadedPrivate.value = true
             }
         }
-
-        addSource(subjectName, observer)
-        addSource(description, observer)
     }
-
-    val isEditing get() = (homework != null)
-
-    val lessonExists get() = checkNotNull(subjectName.value) in checkNotNull(existingSubjects.value)
-
-    private val donePrivate = MutableLiveData(false)
-    val done: LiveData<Boolean> get() = donePrivate
 
     fun save() {
         check(error.value == null)
 
         viewModelScope.launch {
-            homework?.let { homework ->
-                homeworkRepository.update(
-                    homework.id,
-                    checkNotNull(subjectName.value),
-                    checkNotNull(description.value),
-                    checkNotNull(deadline.value),
-                    semesterId
-                )
-            } ?: run {
-                homeworkRepository.insert(
-                    checkNotNull(subjectName.value),
-                    checkNotNull(description.value),
-                    checkNotNull(deadline.value),
-                    semesterId
-                )
+            if (homeworkId != null) {
+                homeworkRepository.update(homeworkId, subjectName.value, description.value, deadline.value, semesterId)
+            } else {
+                homeworkRepository.insert(subjectName.value, description.value, deadline.value, semesterId)
             }
             donePrivate.value = true
         }
@@ -93,7 +112,7 @@ class HomeworkEditorViewModel private constructor(
 
     fun delete() {
         viewModelScope.launch {
-            homeworkRepository.delete(checkNotNull(homework).id)
+            homeworkRepository.delete(checkNotNull(homeworkId))
             donePrivate.value = true
         }
     }

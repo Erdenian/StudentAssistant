@@ -137,8 +137,15 @@ fun <T : Any> ExposedDropdownMenu(
                     viewToFocus = this
                 }
                 setAdapter(adapter)
+                var isInitialized = false
                 onTextChangedListener = { text, index ->
-                    if (text != currentValue) onValueChange(text, index, items.getOrNull(index))
+                    // Ignore the first call to the listener
+                    // because it is called with an empty string during initialization of inputType
+                    if (!isInitialized && text.isEmpty()) {
+                        isInitialized = true
+                    } else {
+                        if (text != currentValue) onValueChange(text, index, items.getOrNull(index))
+                    }
                 }
             }
         },

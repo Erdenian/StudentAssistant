@@ -1,41 +1,76 @@
 package ru.erdenian.studentassistant.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.combineTransform
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.database.dao.SemesterDao
-import ru.erdenian.studentassistant.database.entity.SemesterEntity
 import ru.erdenian.studentassistant.entity.Semester
 
-class SelectedSemesterRepository(semesterDao: SemesterDao) {
+class SelectedSemesterRepository(
+    coroutineScope: CoroutineScope,
+    semesterDao: SemesterDao
+) {
 
-    private val selectedLiveDataPrivate: MutableLiveData<Semester?> = MediatorLiveData<Semester?>().apply {
-        var previousSemesters = emptyList<SemesterEntity>()
+    private val databaseSemestersFlow = semesterDao.getAllFlow().onEach {
+        // We received actual list from database, clear inserted and deleted cache
+        insertedSemesters.value = emptySet()
+        deletedSemesterIds.value = emptySet()
+    }
 
-        addSource(semesterDao.getAllLiveData()) { semesters ->
+    private val insertedSemesters = MutableStateFlow<Set<Semester>>(emptySet())
+    internal fun onSemesterInserted(semester: Semester) {
+        insertedSemesters.value += semester
+    }
+
+    private val deletedSemesterIds = MutableStateFlow<Set<Long>>(emptySet())
+    internal fun onSemesterDeleted(semesterId: Long) {
+        deletedSemesterIds.value += semesterId
+    }
+
+    private val allSemestersFlow = combine(
+        databaseSemestersFlow,
+        insertedSemesters,
+        deletedSemesterIds
+    ) { database, inserted, deleted ->
+        (database.asSequence() + inserted.asSequence()).filter { it.id !in deleted }.toList()
+    }.map { semesters -> semesters.associateBy { it.id } }
+
+    private var selectedSemesterIdFlow = MutableStateFlow<Long?>(null)
+
+    val selectedFlow: StateFlow<Semester?> = combineTransform(selectedSemesterIdFlow, allSemestersFlow) { id, semesters ->
+        fun selectDefault() {
             val now = LocalDate.now()
-            fun List<Semester>.default() = find { now in it.firstDay..it.lastDay } ?: lastOrNull()
+            fun Collection<Semester>.default() = find { now in it.range } ?: lastOrNull()
 
-            value = when {
-                (value == null) -> semesters.default()
-                (semesters.size > previousSemesters.size) -> (semesters - previousSemesters).first()
-                else -> semesters.find { it.id == value?.id } ?: semesters.default()
-            }
-            previousSemesters = semesters
+            selectedSemesterIdFlow.value = semesters.values.default()?.id
         }
+
+        if (id == null) {
+            emit(null)
+            selectDefault() // But maybe we got some new semesters at this point, let's try to find one
+        } else {
+            val semester = semesters[id]
+            if (semester != null) {
+                emit(semester)
+            } else {
+                // Selected semester was deleted, select default semester from the rest
+                selectDefault()
+            }
+        }
+    }.stateIn(
+        scope = coroutineScope,
+        started = SharingStarted.Eagerly,
+        initialValue = null
+    )
+
+    fun selectSemester(semesterId: Long) {
+        selectedSemesterIdFlow.value = semesterId
     }
-    val selectedLiveData: LiveData<Semester?> get() = selectedLiveDataPrivate
-
-    val selected: Semester get() = checkNotNull(selectedLiveData.value)
-
-    fun selectSemester(semester: Semester) {
-        selectedLiveDataPrivate.value = semester
-    }
-
-    private val observer = Observer<Any?> {}
-
-    fun activate(): Unit = selectedLiveData.observeForever(observer)
-    fun deactivate(): Unit = selectedLiveData.removeObserver(observer)
 }

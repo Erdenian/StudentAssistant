@@ -14,9 +14,9 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Today
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -25,20 +25,21 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.joda.time.Days
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.entity.ImmutableSortedSet
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.entity.Semester
+import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 import ru.erdenian.studentassistant.ui.composable.PagerTabStrip
 import ru.erdenian.studentassistant.uikit.style.AppIcons
 import ru.erdenian.studentassistant.uikit.style.AppTheme
@@ -58,12 +59,12 @@ private fun Semester.getPosition(date: LocalDate) = Days.daysBetween(firstDay, d
 fun ScheduleScreen(
     viewModel: ScheduleViewModel,
     navigateToAddSemester: () -> Unit,
-    navigateToEditSchedule: (Semester) -> Unit,
-    navigateToShowLessonInformation: (Lesson) -> Unit
+    navigateToEditSchedule: (semesterId: Long) -> Unit,
+    navigateToShowLessonInformation: (lessonId: Long) -> Unit
 ) {
-    val semesters by viewModel.allSemesters.map { it.list }.observeAsState(emptyList())
+    val semesters by viewModel.allSemesters.collectAsState()
     val semestersNames by derivedStateOf { semesters.map { it.name } }
-    val selectedSemester by viewModel.selectedSemester.observeAsState()
+    val selectedSemester by viewModel.selectedSemester.collectAsState()
 
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
@@ -72,18 +73,18 @@ fun ScheduleScreen(
         state = pagerState,
         semestersNames = semestersNames,
         selectedSemester = selectedSemester,
-        lessonsGetter = { date -> viewModel.getLessons(date).map { it.list } },
+        lessonsGetter = { date -> viewModel.getLessons(date) },
         onSelectedSemesterChange = { index ->
             val selectedDate = selectedSemester?.getDate(pagerState.currentPage) ?: LocalDate.now()
-            val newSemester = semesters[index]
-            viewModel.selectSemester(newSemester)
+            val newSemester = semesters.list[index]
+            viewModel.selectSemester(newSemester.id)
             coroutineScope.launch {
                 pagerState.scrollToPage(newSemester.getPosition(selectedDate))
             }
         },
         onAddSemesterClick = navigateToAddSemester,
-        onEditSemesterClick = { navigateToEditSchedule(checkNotNull(selectedSemester)) },
-        onLessonClick = navigateToShowLessonInformation
+        onEditSemesterClick = { navigateToEditSchedule(checkNotNull(selectedSemester).id) },
+        onLessonClick = { navigateToShowLessonInformation(it.id) }
     )
 }
 
@@ -93,7 +94,7 @@ private fun ScheduleContent(
     state: PagerState,
     semestersNames: List<String>,
     selectedSemester: Semester?,
-    lessonsGetter: (date: LocalDate) -> LiveData<List<Lesson>>,
+    lessonsGetter: (date: LocalDate) -> StateFlow<ImmutableSortedSet<Lesson>>,
     onSelectedSemesterChange: (Int) -> Unit,
     onAddSemesterClick: () -> Unit,
     onEditSemesterClick: () -> Unit,
@@ -186,7 +187,7 @@ private fun ScheduleContent(
                     state = state
                 ) { page ->
                     val lessonsFlow = remember(selectedSemester, lessonsGetter) { lessonsGetter(selectedSemester.getDate(page)) }
-                    val lessons by lessonsFlow.observeAsState(emptyList())
+                    val lessons by lessonsFlow.collectAsState()
 
                     if (lessons.isEmpty()) {
                         Text(
@@ -204,7 +205,7 @@ private fun ScheduleContent(
                             modifier = Modifier.fillMaxSize()
                         ) {
                             itemsIndexed(
-                                items = lessons,
+                                items = lessons.list,
                                 key = { _, item -> item.id }
                             ) { _, lesson ->
                                 val timeFormatter = remember { DateTimeFormat.shortTime() }
@@ -237,7 +238,7 @@ private fun LessonsEditorContentPreview() = AppTheme {
         state = rememberPagerState(),
         semestersNames = emptyList(),
         selectedSemester = Semesters.regular,
-        lessonsGetter = { MutableLiveData(List(10) { lesson }) },
+        lessonsGetter = { MutableStateFlow(List(10) { lesson }.toImmutableSortedSet()) },
         onSelectedSemesterChange = {},
         onAddSemesterClick = {},
         onEditSemesterClick = {},

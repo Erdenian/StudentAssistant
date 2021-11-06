@@ -59,8 +59,10 @@ fun MultiAutoCompleteTextField(
                     addTextChangedListener { editable ->
                         // Ignore the first call to the listener
                         // because it is called with an empty string during initialization of inputType
-                        if (!isInitialized && editable.isNullOrEmpty()) return@addTextChangedListener
-                        isInitialized = true
+                        if (!isInitialized && editable.isNullOrEmpty()) {
+                            isInitialized = true
+                            return@addTextChangedListener
+                        }
 
                         val newValue = editable?.toString() ?: ""
                         if (newValue != currentValue) onValueChange(newValue)
