@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -46,8 +45,9 @@ import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.entity.ImmutableSortedSet
 import ru.erdenian.studentassistant.entity.Lesson
-import ru.erdenian.studentassistant.entity.Semester
+import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 import ru.erdenian.studentassistant.ui.composable.PagerTabStrip
 import ru.erdenian.studentassistant.uikit.style.AppIcons
 import ru.erdenian.studentassistant.uikit.style.AppTheme
@@ -61,13 +61,13 @@ import ru.erdenian.studentassistant.utils.Lessons
 fun ScheduleEditorScreen(
     viewModel: ScheduleEditorViewModel,
     navigateBack: () -> Unit,
-    navigateToEditSemester: (Semester) -> Unit,
-    navigateToEditLesson: (Lesson) -> Unit,
-    navigateToCopyLesson: (Lesson) -> Unit,
-    navigateToCreateLesson: (Long, Int) -> Unit
+    navigateToEditSemester: (semesterId: Long) -> Unit,
+    navigateToEditLesson: (semesterId: Long, lessonId: Long) -> Unit,
+    navigateToCopyLesson: (semesterId: Long, lessonId: Long) -> Unit,
+    navigateToCreateLesson: (semesterId: Long, weekday: Int) -> Unit
 ) {
     val semester by viewModel.semester.collectAsState()
-    val isDeleted by viewModel.isDeleted.observeAsState(false)
+    val isDeleted by viewModel.isDeleted.collectAsState()
     DisposableEffect(isDeleted) {
         if (isDeleted) navigateBack()
         onDispose {}
@@ -84,7 +84,7 @@ fun ScheduleEditorScreen(
             viewModel.getLessons(weekday)
         },
         onBackClick = navigateBack,
-        onEditSemesterClick = { navigateToEditSemester(semester) },
+        onEditSemesterClick = { navigateToEditSemester(viewModel.semesterId) },
         onDeleteSemesterClick = {
             MaterialAlertDialogBuilder(context)
                 .setMessage(R.string.lsef_delete_message)
@@ -92,8 +92,8 @@ fun ScheduleEditorScreen(
                 .setNegativeButton(R.string.lsef_delete_no, null)
                 .show()
         },
-        onLessonClick = navigateToEditLesson,
-        onCopyLessonClick = navigateToCopyLesson,
+        onLessonClick = { navigateToEditLesson(checkNotNull(semester).id, it.id) },
+        onCopyLessonClick = { navigateToCopyLesson(checkNotNull(semester).id, it.id) },
         onDeleteLessonClick = { lesson ->
             coroutineScope.launch {
                 if (viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson)) {
@@ -121,7 +121,7 @@ fun ScheduleEditorScreen(
         },
         onAddLessonClick = {
             val weekday = pagerState.currentPage + 1
-            navigateToCreateLesson(semester.id, weekday)
+            navigateToCreateLesson(viewModel.semesterId, weekday)
         }
     )
 }
@@ -130,7 +130,7 @@ fun ScheduleEditorScreen(
 @Composable
 private fun ScheduleEditorContent(
     state: PagerState,
-    lessonsGetter: (page: Int) -> StateFlow<List<Lesson>>,
+    lessonsGetter: (page: Int) -> StateFlow<ImmutableSortedSet<Lesson>>,
     onBackClick: () -> Unit,
     onEditSemesterClick: () -> Unit,
     onDeleteSemesterClick: () -> Unit,
@@ -206,7 +206,7 @@ private fun ScheduleEditorContent(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     itemsIndexed(
-                        items = lessons,
+                        items = lessons.list,
                         key = { _, item -> item.id }
                     ) { _, lesson ->
                         val timeFormatter = remember { DateTimeFormat.shortTime() }
@@ -260,7 +260,7 @@ private fun ScheduleEditorContentPreview() = AppTheme {
     val lesson = Lessons.regular
     ScheduleEditorContent(
         state = rememberPagerState(),
-        lessonsGetter = { MutableStateFlow(List(10) { lesson }) },
+        lessonsGetter = { MutableStateFlow(List(10) { lesson }.toImmutableSortedSet()) },
         onBackClick = {},
         onEditSemesterClick = {},
         onDeleteSemesterClick = {},

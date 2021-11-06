@@ -124,11 +124,6 @@ dependencies {
     implementation(project(":utils"))
     // endregion
 
-    // region Compose
-    val composeVersion: String by project
-    implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
-    //endregion
-
     // region AndroidX
     implementation("androidx.activity:activity-compose:1.3.1")
 

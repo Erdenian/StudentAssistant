@@ -19,8 +19,8 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -35,7 +35,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.map
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
@@ -45,7 +44,6 @@ import ru.erdenian.studentassistant.uikit.style.AppTheme
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.utils.Semesters
-import ru.erdenian.studentassistant.utils.observeAsStateNonNull
 import ru.erdenian.studentassistant.utils.showDatePicker
 import ru.erdenian.studentassistant.utils.toast
 
@@ -56,26 +54,23 @@ fun SemesterEditorScreen(
 ) {
     var isNameChanged by rememberSaveable { mutableStateOf(false) }
 
-    val errorMessageResource by viewModel.error.map { error ->
-        when (error) {
-            Error.EMPTY_NAME -> R.string.sef_error_empty_name
-            Error.SEMESTER_EXISTS -> R.string.sef_error_name_not_available
-            Error.WRONG_DATES -> R.string.sef_error_wrong_dates
-            null -> null
-        }
-    }.observeAsState()
-    val errorMessage = errorMessageResource?.let { stringResource(it) }
-    val error by viewModel.error.observeAsState()
+    val error by viewModel.error.collectAsState()
+    val errorMessage = when (error) {
+        Error.EMPTY_NAME -> R.string.sef_error_empty_name
+        Error.SEMESTER_EXISTS -> R.string.sef_error_name_not_available
+        Error.WRONG_DATES -> R.string.sef_error_wrong_dates
+        null -> null
+    }?.let { stringResource(it) }
 
-    val name by viewModel.name.observeAsStateNonNull()
+    val name by viewModel.name.collectAsState()
     val nameErrorMessage = errorMessage?.takeIf { (error == Error.EMPTY_NAME) && isNameChanged }
 
-    val firstDay by viewModel.firstDay.observeAsStateNonNull()
-    val lastDay by viewModel.lastDay.observeAsStateNonNull()
+    val firstDay by viewModel.firstDay.collectAsState()
+    val lastDay by viewModel.lastDay.collectAsState()
 
-    val saved by viewModel.saved.observeAsStateNonNull()
-    DisposableEffect(saved) {
-        if (saved) navigateBack()
+    val done by viewModel.done.collectAsState()
+    DisposableEffect(done) {
+        if (done) navigateBack()
         onDispose {}
     }
 

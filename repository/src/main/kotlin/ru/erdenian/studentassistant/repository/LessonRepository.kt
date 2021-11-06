@@ -1,9 +1,10 @@
 package ru.erdenian.studentassistant.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
-import androidx.lifecycle.switchMap
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.database.dao.LessonDao
@@ -18,6 +19,7 @@ import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class LessonRepository(
     private val lessonDao: LessonDao,
     private val selectedSemesterRepository: SelectedSemesterRepository,
@@ -51,7 +53,7 @@ class LessonRepository(
         startTime: LocalTime,
         endTime: LocalTime,
         semesterId: Long,
-        dates: List<LocalDate>
+        dates: ImmutableSortedSet<LocalDate>
     ) {
         val lessonEntity = LessonEntity(subjectName, type, startTime, endTime, semesterId)
         val teachersEntity = teachers.map { TeacherEntity(it) }
@@ -86,7 +88,7 @@ class LessonRepository(
         startTime: LocalTime,
         endTime: LocalTime,
         semesterId: Long,
-        dates: List<LocalDate>
+        dates: ImmutableSortedSet<LocalDate>
     ) {
         val lessonEntity = LessonEntity(subjectName, type, startTime, endTime, semesterId, id)
         val teachersEntity = teachers.map { TeacherEntity(it, id) }
@@ -102,27 +104,27 @@ class LessonRepository(
 
     suspend fun get(id: Long): Lesson? = lessonDao.get(id)
 
-    fun getLiveData(id: Long): LiveData<Lesson?> = lessonDao.getLiveData(id).map { it }
+    fun getFlow(id: Long): Flow<Lesson?> = lessonDao.getFlow(id)
 
-    val allLiveData: LiveData<ImmutableSortedSet<Lesson>> = selectedSemesterRepository.selectedLiveData.switchMap { semester ->
-        semester?.id?.let { lessonDao.getAllLiveData(it).map() } ?: MutableLiveData(immutableSortedSetOf())
+    val allFlow: Flow<ImmutableSortedSet<Lesson>> = selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
+        semester?.id?.let { lessonDao.getAllFlow(it).map() } ?: flowOf(immutableSortedSetOf())
     }
 
-    fun getAllLiveData(day: LocalDate): LiveData<ImmutableSortedSet<Lesson>> =
-        selectedSemesterRepository.selectedLiveData.switchMap { semester ->
-            (semester?.id?.let { lessonDao.getAllLiveData(it) } ?: MutableLiveData(emptyList())).map { lessons ->
+    fun getAllFlow(day: LocalDate): Flow<ImmutableSortedSet<Lesson>> =
+        selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
+            (semester?.id?.let { lessonDao.getAllFlow(it) } ?: flowOf(emptyList())).map { lessons ->
                 val weekNumber = semester?.getWeekNumber(day) ?: return@map immutableSortedSetOf()
                 lessons.filter { it.lessonRepeat.repeatsOnDay(day, weekNumber) }.toImmutableSortedSet()
             }
         }
 
-    fun getAllLiveData(semesterId: Long, weekday: Int): LiveData<ImmutableSortedSet<Lesson>> =
-        lessonDao.getAllLiveData(semesterId, weekday).map()
+    fun getAllFlow(semesterId: Long, weekday: Int): Flow<ImmutableSortedSet<Lesson>> =
+        lessonDao.getAllFlow(semesterId, weekday).map()
 
     suspend fun getCount(semesterId: Long): Int = lessonDao.getCount(semesterId)
 
-    val hasLessonsLiveData: LiveData<Boolean> = selectedSemesterRepository.selectedLiveData.switchMap { semester ->
-        semester?.id?.let { lessonDao.hasLessonsLiveData(it) } ?: MutableLiveData(false)
+    val hasLessonsFlow: Flow<Boolean> = selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
+        semester?.id?.let { lessonDao.hasLessonsFlow(it) } ?: flowOf(false)
     }
 
     // endregion
@@ -131,7 +133,7 @@ class LessonRepository(
 
     suspend fun getCount(semesterId: Long, subjectName: String): Int = lessonDao.getCount(semesterId, subjectName)
 
-    fun getSubjects(semesterId: Long): LiveData<ImmutableSortedSet<String>> = lessonDao.getSubjectsLiveData(semesterId).map()
+    fun getSubjects(semesterId: Long): Flow<ImmutableSortedSet<String>> = lessonDao.getSubjectsFlow(semesterId).map()
 
     suspend fun renameSubject(semesterId: Long, oldName: String, newName: String): Unit =
         lessonDao.renameSubject(semesterId, oldName, newName)
@@ -140,11 +142,11 @@ class LessonRepository(
 
     // region Other fields
 
-    fun getTypes(semesterId: Long): LiveData<ImmutableSortedSet<String>> = lessonDao.getTypesLiveData(semesterId).map()
+    fun getTypes(semesterId: Long): Flow<ImmutableSortedSet<String>> = lessonDao.getTypesFlow(semesterId).map()
 
-    fun getTeachers(semesterId: Long): LiveData<ImmutableSortedSet<String>> = lessonDao.getTeachersLiveData(semesterId).map()
+    fun getTeachers(semesterId: Long): Flow<ImmutableSortedSet<String>> = lessonDao.getTeachersFlow(semesterId).map()
 
-    fun getClassrooms(semesterId: Long): LiveData<ImmutableSortedSet<String>> = lessonDao.getClassroomsLiveData(semesterId).map()
+    fun getClassrooms(semesterId: Long): Flow<ImmutableSortedSet<String>> = lessonDao.getClassroomsFlow(semesterId).map()
 
     suspend fun getNextStartTime(semesterId: Long, weekday: Int): LocalTime = lessonDao.getLastEndTime(semesterId, weekday)
         ?.plusMillis(settingsRepository.defaultBreakDuration.millis.toInt())
@@ -152,8 +154,8 @@ class LessonRepository(
 
     // endregion
 
-    private fun LiveData<List<FullLesson>>.map() = map { it.toImmutableSortedSet<Lesson>() }
+    private fun Flow<List<FullLesson>>.map() = map { it.toImmutableSortedSet<Lesson>() }
 
     @JvmName("mapString")
-    private fun LiveData<List<String>>.map() = map { it.toImmutableSortedSet() }
+    private fun Flow<List<String>>.map() = map { it.toImmutableSortedSet() }
 }

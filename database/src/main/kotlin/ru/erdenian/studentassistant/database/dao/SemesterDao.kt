@@ -1,11 +1,11 @@
 package ru.erdenian.studentassistant.database.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 import ru.erdenian.studentassistant.database.entity.SemesterEntity
 
 @Dao
@@ -25,11 +25,14 @@ interface SemesterDao {
     // endregion
 
     @Query("SELECT * FROM semesters ORDER BY first_day, last_day, name, _id")
-    fun getAllLiveData(): LiveData<List<SemesterEntity>>
+    fun getAllFlow(): Flow<List<SemesterEntity>>
 
     @Query("SELECT * FROM semesters WHERE _id = :id")
-    fun getLiveData(id: Long): LiveData<SemesterEntity?>
+    suspend fun get(id: Long): SemesterEntity?
+
+    @Query("SELECT * FROM semesters WHERE _id = :id")
+    fun getFlow(id: Long): Flow<SemesterEntity?>
 
     @Query("SELECT name FROM semesters ORDER BY first_day, last_day, name, _id")
-    fun getNamesLiveData(): LiveData<List<String>>
+    fun getNamesFlow(): Flow<List<String>>
 }
