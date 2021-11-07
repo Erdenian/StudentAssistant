@@ -1,6 +1,7 @@
 package ru.erdenian.studentassistant.ui.main
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -150,12 +151,14 @@ class MainDirections(private val navController: NavHostController) {
 @Composable
 fun MainNavGraph(
     navController: NavHostController,
-    directions: MainDirections
+    directions: MainDirections,
+    modifier: Modifier = Modifier
 ) {
     @Suppress("NAME_SHADOWING")
     NavHost(
         navController = navController,
-        startDestination = MainRoutes.SCHEDULE
+        startDestination = MainRoutes.SCHEDULE,
+        modifier = modifier
     ) {
         composable(MainRoutes.SCHEDULE) {
             val viewModel = viewModel<ScheduleViewModel>()
