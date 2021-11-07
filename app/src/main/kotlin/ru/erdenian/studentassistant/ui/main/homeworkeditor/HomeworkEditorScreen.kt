@@ -126,7 +126,7 @@ fun HomeworkEditorScreen(
                 .setNegativeButton(R.string.hef_delete_no, null)
                 .show()
         },
-        onSubjectNameChange = { value, _ -> viewModel.subjectName.value = value },
+        onSubjectNameChange = { viewModel.subjectName.value = it },
         onDeadlineChange = { viewModel.deadline.value = it },
         onDescriptionChange = { viewModel.description.value = it }
     )
@@ -144,7 +144,7 @@ private fun HomeworkEditorContent(
     onBackClick: () -> Unit,
     onSaveClick: () -> Unit,
     onDeleteClick: () -> Unit,
-    onSubjectNameChange: (String, Int) -> Unit,
+    onSubjectNameChange: (String) -> Unit,
     onDeadlineChange: (LocalDate) -> Unit,
     onDescriptionChange: (String) -> Unit
 ) = Scaffold(
@@ -290,7 +290,7 @@ private fun HomeworkEditorContentRegularPreview() = AppTheme {
         onBackClick = {},
         onSaveClick = {},
         onDeleteClick = {},
-        onSubjectNameChange = { _, _ -> },
+        onSubjectNameChange = {},
         onDeadlineChange = {},
         onDescriptionChange = {}
     )
@@ -311,7 +311,7 @@ private fun HomeworkEditorContentEmptyPreview() = AppTheme {
         onBackClick = {},
         onSaveClick = {},
         onDeleteClick = {},
-        onSubjectNameChange = { _, _ -> },
+        onSubjectNameChange = {},
         onDeadlineChange = {},
         onDescriptionChange = {}
     )
@@ -331,7 +331,7 @@ private fun HomeworkEditorContentLongPreview() = AppTheme {
         onBackClick = {},
         onSaveClick = {},
         onDeleteClick = {},
-        onSubjectNameChange = { _, _ -> },
+        onSubjectNameChange = {},
         onDeadlineChange = {},
         onDescriptionChange = {}
     )

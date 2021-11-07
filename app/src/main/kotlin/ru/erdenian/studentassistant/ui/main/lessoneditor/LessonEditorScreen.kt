@@ -155,9 +155,9 @@ fun LessonEditorScreen(
                 }
             }
         },
-        onSubjectNameChange = {
+        onSubjectNameChange = { value ->
             isSubjectNameChanged = true
-            viewModel.subjectName.value = it
+            viewModel.subjectName.value = value
         },
         onTypeChange = { viewModel.type.value = it },
         onTeachersChange = { viewModel.teachers.value = it },

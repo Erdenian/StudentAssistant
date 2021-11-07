@@ -1,6 +1,7 @@
 package ru.erdenian.studentassistant.uikit.utils
 
 import android.text.InputType
+import android.text.TextWatcher
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
@@ -35,8 +36,11 @@ internal fun createOnEditorActionListener(
     } else false
 }
 
-internal fun EditText.update(singleLine: Boolean, keyboardOptions: KeyboardOptions) {
+internal fun EditText.update(singleLine: Boolean, keyboardOptions: KeyboardOptions, textWatcher: TextWatcher) {
     fun hasFlag(bits: Int, flag: Int) = (bits and flag) == flag
+
+    // Input type setting causes TextWatcher to be called, so we remove watcher for now
+    removeTextChangedListener(textWatcher)
 
     var imeOptions = when (keyboardOptions.imeAction) {
         ImeAction.Default -> if (singleLine) EditorInfo.IME_ACTION_DONE else EditorInfo.IME_ACTION_UNSPECIFIED
@@ -87,5 +91,8 @@ internal fun EditText.update(singleLine: Boolean, keyboardOptions: KeyboardOptio
     imeOptions = imeOptions or EditorInfo.IME_FLAG_NO_FULLSCREEN
 
     this.imeOptions = imeOptions
-    this.inputType = inputType
+    this.inputType = inputType // This line causes TextWatcher to be called
+
+    // Here we return TextWatcher back
+    addTextChangedListener(textWatcher)
 }

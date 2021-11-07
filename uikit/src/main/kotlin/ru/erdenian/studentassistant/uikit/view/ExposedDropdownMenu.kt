@@ -2,7 +2,9 @@ package ru.erdenian.studentassistant.uikit.view
 
 import android.content.Context
 import android.content.res.Configuration
+import android.text.Editable
 import android.text.InputType
+import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.View
 import android.widget.ArrayAdapter
@@ -20,7 +22,6 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import ru.erdenian.studentassistant.uikit.R
@@ -40,41 +41,35 @@ private class ExposedDropdownMenu @JvmOverloads constructor(
 
     init {
         addView(autoCompleteTextView)
-
-        autoCompleteTextView.addTextChangedListener { text ->
-            val string = text?.toString() ?: ""
-            val adapter = autoCompleteTextView.adapter as Adapter<*>
-            onTextChangedListener?.invoke(string, adapter.strings.indexOf(string))
-        }
     }
 
     var text: CharSequence?
         get() = autoCompleteTextView.text?.toString()
         set(value) = autoCompleteTextView.setText(value, false)
 
-    fun <T> setAdapter(adapter: Adapter<T>) = autoCompleteTextView.setAdapter(adapter)
+    fun setAdapter(adapter: Adapter) = autoCompleteTextView.setAdapter(adapter)
 
-    var onTextChangedListener: ((text: String, position: Int) -> Unit)? = null
+    var textChangedListener: TextWatcher? = null
+        set(value) {
+            if (value != null) autoCompleteTextView.addTextChangedListener(value)
+            else autoCompleteTextView.removeTextChangedListener(field)
+            field = value
+        }
 
-    class Adapter<T>(
+    class Adapter(
         context: Context,
-        items: List<T> = emptyList(),
-        private val stringSelector: (T) -> CharSequence
+        items: List<String> = emptyList()
     ) : ArrayAdapter<CharSequence>(context, R.layout.dropdown_menu_popup_item) {
 
-        var items: List<T> = items
+        var items: List<String> = items
             set(value) {
                 field = value
-                strings = items.map(stringSelector)
                 notifyDataSetChanged()
             }
 
-        internal var strings: List<CharSequence> = items.map(stringSelector)
-            private set
-
-        override fun getItem(position: Int) = strings[position]
-        override fun getItemId(position: Int) = strings[position].hashCode().toLong()
-        override fun getCount() = strings.size
+        override fun getItem(position: Int) = items[position]
+        override fun getItemId(position: Int) = items[position].hashCode().toLong()
+        override fun getCount() = items.size
     }
 }
 
@@ -82,36 +77,7 @@ private class ExposedDropdownMenu @JvmOverloads constructor(
 fun ExposedDropdownMenu(
     value: String,
     items: List<String>,
-    onValueChange: (value: String, index: Int) -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    readOnly: Boolean = false,
-    label: String = "",
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
-    singleLine: Boolean = false,
-    maxLines: Int = Int.MAX_VALUE
-) = ExposedDropdownMenu(
-    value = value,
-    items = items,
-    stringSelector = { it },
-    onValueChange = { newValue, newIndex, _ -> onValueChange(newValue, newIndex) },
-    modifier = modifier,
-    enabled = enabled,
-    readOnly = readOnly,
-    label = label,
-    keyboardOptions = keyboardOptions,
-    keyboardActions = keyboardActions,
-    singleLine = singleLine,
-    maxLines = maxLines,
-)
-
-@Composable
-fun <T : Any> ExposedDropdownMenu(
-    value: String,
-    items: List<T>,
-    stringSelector: (T) -> String,
-    onValueChange: (newValue: String, newIndex: Int, newItem: T?) -> Unit,
+    onValueChange: (newValue: String) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     readOnly: Boolean = false,
@@ -121,11 +87,26 @@ fun <T : Any> ExposedDropdownMenu(
     singleLine: Boolean = false,
     maxLines: Int = Int.MAX_VALUE
 ) {
-    val currentValue by rememberUpdatedState(value)
+    val textWatcher = run {
+        val currentValue by rememberUpdatedState(value)
+        val currentOnValueChange by rememberUpdatedState(onValueChange)
+        remember {
+            object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+
+                override fun afterTextChanged(s: Editable?) {
+                    val newValue = s?.toString() ?: ""
+                    if (newValue != currentValue) currentOnValueChange(newValue)
+                }
+            }
+        }
+    }
+
     val currentKeyboardActions = rememberUpdatedState(keyboardActions)
     val adapter = LocalContext.current.let { context ->
         // Not including items to remember's keys as it can be updated on the fly
-        remember(context, stringSelector) { ExposedDropdownMenu.Adapter(context, items, stringSelector) }
+        remember(context) { ExposedDropdownMenu.Adapter(context, items) }
     }
     var viewToFocus by remember { mutableStateOf<View?>(null) }
 
@@ -137,16 +118,7 @@ fun <T : Any> ExposedDropdownMenu(
                     viewToFocus = this
                 }
                 setAdapter(adapter)
-                var isInitialized = false
-                onTextChangedListener = { text, index ->
-                    // Ignore the first call to the listener
-                    // because it is called with an empty string during initialization of inputType
-                    if (!isInitialized && text.isEmpty()) {
-                        isInitialized = true
-                    } else {
-                        if (text != currentValue) onValueChange(text, index, items.getOrNull(index))
-                    }
-                }
+                textChangedListener = textWatcher
             }
         },
         update = { view ->
@@ -154,7 +126,7 @@ fun <T : Any> ExposedDropdownMenu(
                 val selectionStart = selectionStart
                 val selectionEnd = selectionEnd
 
-                update(singleLine, keyboardOptions)
+                update(singleLine, keyboardOptions, textWatcher)
                 if (readOnly) inputType = InputType.TYPE_NULL
                 this.isSingleLine = singleLine
                 this.maxLines = maxLines
@@ -181,6 +153,6 @@ private fun ExposedDropdownMenuPreview() = AppTheme {
     ExposedDropdownMenu(
         value = "Text",
         items = emptyList(),
-        onValueChange = { _, _ -> }
+        onValueChange = {}
     )
 }
