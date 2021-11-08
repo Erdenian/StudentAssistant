@@ -26,7 +26,6 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:label="@string/ma_title"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
 
     </application>
