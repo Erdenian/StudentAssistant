@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.main.scheduleeditor
+package ru.erdenian.studentassistant.schedule.scheduleeditor
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
@@ -43,14 +43,14 @@ import kotlinx.coroutines.launch
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.entity.ImmutableSortedSet
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 import ru.erdenian.studentassistant.sampledata.Lessons
+import ru.erdenian.studentassistant.schedule.R
+import ru.erdenian.studentassistant.schedule.composable.PagerTabStrip
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
-import ru.erdenian.studentassistant.ui.composable.PagerTabStrip
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.LessonCard
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions

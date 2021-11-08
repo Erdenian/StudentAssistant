@@ -3,6 +3,7 @@ rootProject.name = "StudentAssistant"
 include(
     ":app",
 
+    ":features:schedule",
     ":features:homeworks",
     ":features:settings",
 

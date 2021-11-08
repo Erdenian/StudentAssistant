@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.main.lessoninformation
+package ru.erdenian.studentassistant.schedule.lessoninformation
 
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -38,11 +38,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.joda.time.format.DateTimeFormat
-import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.entity.Homework
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.sampledata.Homeworks
 import ru.erdenian.studentassistant.sampledata.Lessons
+import ru.erdenian.studentassistant.schedule.R
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.uikit.view.ActionItem

@@ -12,18 +12,18 @@ import ru.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorScree
 import ru.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorViewModel
 import ru.erdenian.studentassistant.homeworks.homeworks.HomeworksScreen
 import ru.erdenian.studentassistant.homeworks.homeworks.HomeworksViewModel
+import ru.erdenian.studentassistant.schedule.lessoneditor.LessonEditorScreen
+import ru.erdenian.studentassistant.schedule.lessoneditor.LessonEditorViewModel
+import ru.erdenian.studentassistant.schedule.lessoninformation.LessonInformationScreen
+import ru.erdenian.studentassistant.schedule.lessoninformation.LessonInformationViewModel
+import ru.erdenian.studentassistant.schedule.schedule.ScheduleScreen
+import ru.erdenian.studentassistant.schedule.schedule.ScheduleViewModel
+import ru.erdenian.studentassistant.schedule.scheduleeditor.ScheduleEditorScreen
+import ru.erdenian.studentassistant.schedule.scheduleeditor.ScheduleEditorViewModel
+import ru.erdenian.studentassistant.schedule.semestereditor.SemesterEditorScreen
+import ru.erdenian.studentassistant.schedule.semestereditor.SemesterEditorViewModel
 import ru.erdenian.studentassistant.settings.SettingsScreen
 import ru.erdenian.studentassistant.settings.SettingsViewModel
-import ru.erdenian.studentassistant.ui.main.lessoneditor.LessonEditorScreen
-import ru.erdenian.studentassistant.ui.main.lessoneditor.LessonEditorViewModel
-import ru.erdenian.studentassistant.ui.main.lessoninformation.LessonInformationScreen
-import ru.erdenian.studentassistant.ui.main.lessoninformation.LessonInformationViewModel
-import ru.erdenian.studentassistant.ui.main.schedule.ScheduleScreen
-import ru.erdenian.studentassistant.ui.main.schedule.ScheduleViewModel
-import ru.erdenian.studentassistant.ui.main.scheduleeditor.ScheduleEditorScreen
-import ru.erdenian.studentassistant.ui.main.scheduleeditor.ScheduleEditorViewModel
-import ru.erdenian.studentassistant.ui.main.semestereditor.SemesterEditorScreen
-import ru.erdenian.studentassistant.ui.main.semestereditor.SemesterEditorViewModel
 import ru.erdenian.studentassistant.utils.viewModel
 
 object MainRoutes {

@@ -129,6 +129,7 @@ dependencies {
     implementation(project(":core:style"))
     implementation(project(":core:strings"))
 
+    implementation(project(":features:schedule"))
     implementation(project(":features:homeworks"))
     implementation(project(":features:settings"))
 
@@ -150,9 +151,7 @@ dependencies {
     // endregion
 
     // region UI
-    implementation("com.google.accompanist:accompanist-pager:0.20.2")
     implementation("net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC3")
-    implementation("com.github.DavidProdinger:weekdays-selector:1.1.1")
     // endregion
 }
 
