@@ -40,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.R
 import ru.erdenian.studentassistant.uikit.layout.StartEndRow
 
@@ -121,13 +122,13 @@ private fun WeeksSelectorContent(
     ) {
         Text(
             text = stringResource(R.string.ws_variants_title),
-            modifier = Modifier.padding(start = AppTheme.dimensions.activityHorizontalMargin)
+            modifier = Modifier.padding(start = MaterialTheme.dimensions.activityHorizontalMargin)
         )
 
         StartEndRow(
             verticalAlignment = Alignment.Bottom,
             modifier = Modifier
-                .padding(horizontal = AppTheme.dimensions.activityHorizontalMargin)
+                .padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
                 .clickable(onClick = onSelectedRepeatVariantClick),
             contentStart = {
                 Text(

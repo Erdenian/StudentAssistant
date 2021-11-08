@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.R
 
 /**
@@ -44,7 +45,7 @@ fun HomeworkCard(
                 onLongClick = onLongClick,
                 onClick = onClick ?: {}
             )
-            .padding(AppTheme.dimensions.cardMarginInside)
+            .padding(MaterialTheme.dimensions.cardMarginInside)
     ) {
         Text(
             text = subjectName,
@@ -53,7 +54,7 @@ fun HomeworkCard(
             style = MaterialTheme.typography.body1
         )
 
-        Divider(modifier = Modifier.padding(vertical = AppTheme.dimensions.dividerMarginTopBottom))
+        Divider(modifier = Modifier.padding(vertical = MaterialTheme.dimensions.dividerMarginTopBottom))
 
         Text(
             text = description,

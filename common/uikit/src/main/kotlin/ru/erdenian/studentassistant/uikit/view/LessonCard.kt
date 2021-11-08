@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.style.dimensions
 
 /**
  * Карточка пары.
@@ -53,7 +54,7 @@ fun LessonCard(
                 onLongClick = onLongClick,
                 onClick = onClick ?: {}
             )
-            .padding(AppTheme.dimensions.cardMarginInside)
+            .padding(MaterialTheme.dimensions.cardMarginInside)
     ) {
         Row(
             verticalAlignment = Alignment.Bottom
@@ -89,7 +90,7 @@ fun LessonCard(
             }
         }
 
-        Divider(modifier = Modifier.padding(vertical = AppTheme.dimensions.dividerMarginTopBottom))
+        Divider(modifier = Modifier.padding(vertical = MaterialTheme.dimensions.dividerMarginTopBottom))
 
         if (type.isNotBlank()) {
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {

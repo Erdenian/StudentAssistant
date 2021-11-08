@@ -46,6 +46,7 @@ import ru.erdenian.studentassistant.schedule.R
 import ru.erdenian.studentassistant.schedule.lessoneditor.LessonEditorViewModel.Error
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.AutoCompleteTextField
 import ru.erdenian.studentassistant.uikit.view.MultiAutoCompleteTextField
@@ -228,8 +229,8 @@ private fun LessonEditorContent(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
             .padding(
-                horizontal = AppTheme.dimensions.activityHorizontalMargin,
-                vertical = AppTheme.dimensions.activityVerticalMargin
+                horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
+                vertical = MaterialTheme.dimensions.activityVerticalMargin
             )
     ) {
         val timeFormatter = remember { DateTimeFormat.shortTime() }

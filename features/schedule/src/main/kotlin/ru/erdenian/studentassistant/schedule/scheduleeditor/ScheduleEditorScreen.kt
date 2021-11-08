@@ -13,6 +13,7 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -51,6 +52,7 @@ import ru.erdenian.studentassistant.schedule.R
 import ru.erdenian.studentassistant.schedule.composable.PagerTabStrip
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.LessonCard
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
@@ -190,17 +192,17 @@ private fun ScheduleEditorContent(
                 Text(
                     text = stringResource(R.string.sce_free_day),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = AppTheme.dimensions.activityHorizontalMargin)
+                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
                 )
             } else {
                 var contextMenuLesson by remember { mutableStateOf<Lesson?>(null) }
 
                 LazyColumn(
                     contentPadding = PaddingValues(
-                        horizontal = AppTheme.dimensions.activityHorizontalMargin,
-                        vertical = AppTheme.dimensions.activityVerticalMargin
+                        horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
+                        vertical = MaterialTheme.dimensions.activityVerticalMargin
                     ),
-                    verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.cardsSpacing),
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.cardsSpacing),
                     modifier = Modifier.fillMaxSize()
                 ) {
                     itemsIndexed(

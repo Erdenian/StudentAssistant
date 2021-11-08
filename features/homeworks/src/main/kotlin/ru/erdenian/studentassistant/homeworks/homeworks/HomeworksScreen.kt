@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -36,6 +37,7 @@ import ru.erdenian.studentassistant.sampledata.Homeworks
 import ru.erdenian.studentassistant.sampledata.Semesters
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.HomeworkCard
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
@@ -124,12 +126,12 @@ private fun HomeworksContent(
             semesters.isEmpty() -> Text(
                 text = stringResource(R.string.h_no_schedule),
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = AppTheme.dimensions.activityHorizontalMargin)
+                modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
             )
             overdueHomeworks.isEmpty() && actualHomeworks.isEmpty() && pastHomeworks.isEmpty() -> Text(
                 text = stringResource(R.string.h_no_homeworks),
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = AppTheme.dimensions.activityHorizontalMargin)
+                modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
             )
             else -> {
                 var contextMenuHomework by remember { mutableStateOf<Homework?>(null) }
@@ -137,10 +139,10 @@ private fun HomeworksContent(
 
                 LazyColumn(
                     contentPadding = PaddingValues(
-                        horizontal = AppTheme.dimensions.activityHorizontalMargin,
-                        vertical = AppTheme.dimensions.activityVerticalMargin
+                        horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
+                        vertical = MaterialTheme.dimensions.activityVerticalMargin
                     ),
-                    verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.cardsSpacing),
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.cardsSpacing),
                     modifier = Modifier.fillMaxSize()
                 ) {
                     fun LazyListScope.createList(homeworks: List<Homework>) = itemsIndexed(
