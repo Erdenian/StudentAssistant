@@ -33,7 +33,7 @@ jobs:
           path: "build/reports/detekt/detekt.html"
           if-no-files-found: error
       - name: Lint Debug
-        run: ./gradlew lintDebug
+        run: ./gradlew :app:lintDebug
       - uses: actions/upload-artifact@v2
         if: always()
         with:

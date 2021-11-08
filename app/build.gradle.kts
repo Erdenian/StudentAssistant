@@ -24,6 +24,13 @@ android {
         setProperty("archivesBaseName", "${rootProject.name}-$versionName")
     }
 
+    lint {
+        isCheckDependencies = true
+        isCheckAllWarnings = true
+        xmlReport = false
+        isCheckTestSources = true
+    }
+
     buildFeatures.compose = true
 
     composeOptions {
