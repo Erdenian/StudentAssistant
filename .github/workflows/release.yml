@@ -33,7 +33,7 @@ jobs:
           path: "build/reports/detekt/detekt.html"
           if-no-files-found: error
       - name: Lint Release
-        run: ./gradlew lintRelease
+        run: ./gradlew :app:lintRelease
       - uses: actions/upload-artifact@v2
         if: always()
         with:

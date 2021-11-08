@@ -2,13 +2,7 @@
 
     <string name="app_name">Student Assistant</string>
 
-    <!-- region MainActivity -->
-    <string name="ma_title">Расписание</string>
-    <string name="ma_schedule">Расписание</string>
-    <string name="ma_homeworks">Домашние задания</string>
-    <string name="ma_settings">Настройки</string>
-
-    <!-- ScheduleFragment -->
+    <!-- Schedule -->
     <string name="sf_title">Расписание</string>
     <string name="sf_calendar">Календарь</string>
     <string name="sf_add">Добавить расписание</string>
@@ -16,7 +10,7 @@
     <string name="sf_no_schedule">Здесь пока пусто. Добавьте расписание своего университета или школы.</string>
     <string name="sf_free_day">Выходной</string>
 
-    <!-- HomeworksFragment -->
+    <!-- Homeworks -->
     <string name="hf_title">Домашние задания</string>
     <string name="hf_add">Добавить задание</string>
     <string name="hf_no_schedule">Здесь пока пусто. Добавьте расписание своего университета или школы.</string>
@@ -26,13 +20,13 @@
     <string name="hf_delete_yes">Да</string>
     <string name="hf_delete_no">Нет</string>
 
-    <!-- SettingsFragment -->
+    <!-- Settings -->
     <string name="stf_title">Настройки</string>
     <string name="stf_default_start_time">Время начала первого занятия</string>
     <string name="stf_default_lesson_duration">Длительность занятия</string>
     <string name="stf_default_break_duration">Длительность перемены</string>
 
-    <!-- LessonInformationFragment -->
+    <!-- Lesson Information -->
     <string name="lif_title">Данные занятия</string>
     <string name="lif_no_homeworks">Нет заданий</string>
     <string name="lif_edit">Редактировать</string>
@@ -41,7 +35,7 @@
     <string name="lif_delete_yes">Да</string>
     <string name="lif_delete_no">Нет</string>
 
-    <!-- SemesterEditorFragment -->
+    <!-- Semester Editor -->
     <string name="sef_title_new">Добавление расписания</string>
     <string name="sef_title_edit">Данные расписания</string>
     <string name="sef_name">Название</string>
@@ -52,7 +46,7 @@
     <string name="sef_error_name_not_available">Такое имя уже занято</string>
     <string name="sef_error_wrong_dates">Даты первого и последнего дня введены некорректно</string>
 
-    <!-- LessonsEditorFragment -->
+    <!-- Schedule Editor -->
     <string name="lsef_title">Редактор расписания</string>
     <string name="lsef_free_day">Выходной</string>
     <string name="lsef_edit">Изменить данные расписания</string>
@@ -63,7 +57,7 @@
     <string name="lsef_copy_lesson">Копировать</string>
     <string name="lsef_delete_lesson">Удалить</string>
 
-    <!-- LessonEditorFragment -->
+    <!-- Lesson Editor -->
     <string name="lef_title_new">Добавление занятия</string>
     <string name="lef_title_edit">Данные занятия</string>
     <string name="lef_subject_name">Название занятия</string>
@@ -92,7 +86,7 @@
     <string name="lef_delete_homeworks_no">Оставить</string>
     <string name="lef_delete_homeworks_cancel">Отмена</string>
 
-    <!-- HomeworkEditorFragment -->
+    <!-- Homework Editor -->
     <string name="hef_title">Редактор задания</string>
     <string name="hef_subject">Предмет</string>
     <string name="hef_description">Описание</string>
@@ -109,7 +103,5 @@
     <string name="hef_delete_message">Удалить задание?</string>
     <string name="hef_delete_yes">Удалить</string>
     <string name="hef_delete_no">Нет</string>
-
-    <!-- endregion -->
 
 </resources>
