@@ -53,12 +53,6 @@ android {
 }
 
 dependencies {
-    // region Private
-    implementation(project(":core:strings"))
-    implementation(project(":core:style"))
-    implementation(project(":common:utils"))
-    // endregion
-
     // region Compose
     val composeVersion: String by project
 
@@ -71,12 +65,4 @@ dependencies {
     api("androidx.compose.material:material-icons-core:$composeVersion")
     api("androidx.compose.material:material-icons-extended:$composeVersion")
     //endregion
-
-    // region AndroidX
-    api("androidx.core:core-ktx:1.7.0")
-    // endregion
-
-    // region UI
-    api("com.google.android.material:material:1.4.0")
-    // endregion
 }

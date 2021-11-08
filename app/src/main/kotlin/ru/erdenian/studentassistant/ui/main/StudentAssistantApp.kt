@@ -28,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.flow.collect
 import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.uikit.style.AppIcons
+import ru.erdenian.studentassistant.style.AppIcons
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable

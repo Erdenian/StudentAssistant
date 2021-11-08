@@ -131,6 +131,8 @@ dependencies {
     implementation(project(":data:repository"))
     implementation(project(":common:uikit"))
     implementation(project(":common:utils"))
+    implementation(project(":core:strings"))
+    implementation(project(":core:style"))
     // endregion
 
     // region AndroidX

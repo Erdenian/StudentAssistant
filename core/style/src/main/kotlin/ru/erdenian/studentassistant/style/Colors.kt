@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.uikit.style
+package ru.erdenian.studentassistant.style
 
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors

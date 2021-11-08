@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.uikit.style
+package ru.erdenian.studentassistant.style
 
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.unit.Dp

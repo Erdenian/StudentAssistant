@@ -10,7 +10,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
-import ru.erdenian.studentassistant.uikit.style.AppTheme
+import ru.erdenian.studentassistant.style.AppTheme
 
 class MainActivity : AppCompatActivity() {
 

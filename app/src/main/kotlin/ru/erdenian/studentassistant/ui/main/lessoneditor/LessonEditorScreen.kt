@@ -42,9 +42,9 @@ import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.entity.Lesson
+import ru.erdenian.studentassistant.style.AppIcons
+import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.ui.main.lessoneditor.LessonEditorViewModel.Error
-import ru.erdenian.studentassistant.uikit.style.AppIcons
-import ru.erdenian.studentassistant.uikit.style.AppTheme
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.AutoCompleteTextField
 import ru.erdenian.studentassistant.uikit.view.MultiAutoCompleteTextField
