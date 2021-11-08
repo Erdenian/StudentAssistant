@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 
 @Composable
-inline fun <reified VM : ViewModel> viewModel(
+internal inline fun <reified VM : ViewModel> viewModel(
     viewModelStoreOwner: ViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current) {
         "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
     },
