@@ -15,17 +15,22 @@ import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.flow.collect
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.uikit.style.AppIcons
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun StudentAssistantApp(
     isBottomNavigationVisible: Boolean
@@ -33,6 +38,11 @@ fun StudentAssistantApp(
     Box(modifier = Modifier.fillMaxSize()) {
         val navController = rememberNavController()
         val directions = remember(navController) { MainDirections(navController) }
+        val keyboardController = LocalSoftwareKeyboardController.current
+
+        LaunchedEffect(navController, keyboardController) {
+            navController.currentBackStackEntryFlow.collect { keyboardController?.hide() }
+        }
 
         Scaffold(
             bottomBar = {
