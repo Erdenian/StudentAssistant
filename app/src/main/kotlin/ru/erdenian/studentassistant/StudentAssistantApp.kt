@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.main
+package ru.erdenian.studentassistant
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
@@ -27,7 +27,6 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.flow.collect
-import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.style.AppIcons
 
 @OptIn(ExperimentalComposeUiApi::class)

@@ -59,7 +59,7 @@ dependencies {
     // endregion
 
     // region UI
-    // Todo: switch to Compose completely to remove this dependency
-    api("com.google.android.material:material:1.4.0")
+    val materialVersion: String by project
+    api("com.google.android.material:material:$materialVersion")
     // endregion
 }
