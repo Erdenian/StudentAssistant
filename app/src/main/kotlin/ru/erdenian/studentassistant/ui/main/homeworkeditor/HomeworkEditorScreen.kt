@@ -30,7 +30,9 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -64,10 +66,12 @@ fun HomeworkEditorScreen(
     navigateBack: () -> Unit,
     navigateToCreateLesson: (semesterId: Long, subjectName: String) -> Unit
 ) {
+    var lessonNameToCreate by remember { mutableStateOf<String?>(null) }
     val done by viewModel.done.collectAsState()
     if (done) {
         DisposableEffect(done) {
             navigateBack()
+            lessonNameToCreate?.let { navigateToCreateLesson(viewModel.semesterId, it) }
             onDispose {}
         }
     }
@@ -112,8 +116,8 @@ fun HomeworkEditorScreen(
                         .setPositiveButton(R.string.hef_unknown_lesson_yes) { _, _ -> viewModel.save() }
                         .setNegativeButton(R.string.hef_unknown_lesson_no, null)
                         .setNeutralButton(R.string.hef_unknown_lesson_yes_and_create) { _, _ ->
+                            lessonNameToCreate = subjectName
                             viewModel.save()
-                            navigateToCreateLesson(viewModel.semesterId, subjectName)
                         }
                         .show()
                 }
