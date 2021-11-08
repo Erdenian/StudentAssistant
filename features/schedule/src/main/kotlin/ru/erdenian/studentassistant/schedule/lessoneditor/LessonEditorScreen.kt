@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.main.lessoneditor
+package ru.erdenian.studentassistant.schedule.lessoneditor
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
@@ -40,12 +40,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
-import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.sampledata.Lessons
+import ru.erdenian.studentassistant.schedule.R
+import ru.erdenian.studentassistant.schedule.lessoneditor.LessonEditorViewModel.Error
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
-import ru.erdenian.studentassistant.ui.main.lessoneditor.LessonEditorViewModel.Error
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.AutoCompleteTextField
 import ru.erdenian.studentassistant.uikit.view.MultiAutoCompleteTextField

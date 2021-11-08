@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.main.lessoneditor
+package ru.erdenian.studentassistant.schedule.lessoneditor
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable

@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.composable
+package ru.erdenian.studentassistant.schedule.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.main.schedule
+package ru.erdenian.studentassistant.schedule.schedule
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
