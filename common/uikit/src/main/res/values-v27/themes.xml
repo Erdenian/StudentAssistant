@@ -2,7 +2,7 @@
 <resources>
 
     <style name="AppTheme" parent="Base.AppTheme">
-        <item name="android:navigationBarColor">?colorSurface</item>
+        <item name="android:navigationBarColor">@color/navigation_bar</item>
         <item name="android:windowLightNavigationBar">true</item>
     </style>
 
