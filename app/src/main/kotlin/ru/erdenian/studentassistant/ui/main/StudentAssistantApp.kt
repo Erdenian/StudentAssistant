@@ -69,29 +69,28 @@ private fun StudentAssistantBottomNavigation(
                 imageVector = AppIcons.Schedule,
                 labelId = R.string.sf_title,
                 route = MainRoutes.SCHEDULE,
-                onClick = directions.schedule
+                onClick = directions::navigateToSchedule
             ),
             Item(
                 imageVector = AppIcons.MenuBook,
                 labelId = R.string.hf_title,
                 route = MainRoutes.HOMEWORKS,
-                onClick = directions.homeworks
+                onClick = directions::navigateToHomeworks
             ),
             Item(
                 imageVector = AppIcons.Settings,
                 labelId = R.string.stf_title,
                 route = MainRoutes.SETTINGS,
-                onClick = directions.settings
+                onClick = directions::navigateToSettings
             ),
         )
     }
 
+    var selectedRoute by remember { mutableStateOf(MainRoutes.SCHEDULE) }
     if (isBottomNavigationVisible) {
         BottomNavigation(
             backgroundColor = MaterialTheme.colors.surface
         ) {
-            var selectedRoute by remember { mutableStateOf(MainRoutes.SCHEDULE) }
-
             items.forEach { item ->
                 BottomNavigationItem(
                     selected = (selectedRoute == item.route),
