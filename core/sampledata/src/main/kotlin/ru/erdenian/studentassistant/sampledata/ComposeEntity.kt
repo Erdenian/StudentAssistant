@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.utils
+package ru.erdenian.studentassistant.sampledata
 
 import android.annotation.SuppressLint
 import android.os.Parcel

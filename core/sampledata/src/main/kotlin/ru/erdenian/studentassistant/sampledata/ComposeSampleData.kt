@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.utils
+package ru.erdenian.studentassistant.sampledata
 
 import androidx.compose.runtime.Composable
 import org.joda.time.LocalDate

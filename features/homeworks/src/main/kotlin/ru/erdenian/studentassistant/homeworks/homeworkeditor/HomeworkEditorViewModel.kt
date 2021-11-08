@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.main.homeworkeditor
+package ru.erdenian.studentassistant.homeworks.homeworkeditor
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

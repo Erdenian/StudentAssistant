@@ -42,6 +42,7 @@ import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.entity.Lesson
+import ru.erdenian.studentassistant.sampledata.Lessons
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.ui.main.lessoneditor.LessonEditorViewModel.Error
@@ -50,7 +51,6 @@ import ru.erdenian.studentassistant.uikit.view.AutoCompleteTextField
 import ru.erdenian.studentassistant.uikit.view.MultiAutoCompleteTextField
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.uikit.view.WeeksSelector
-import ru.erdenian.studentassistant.utils.Lessons
 import ru.erdenian.studentassistant.utils.showTimePicker
 import ru.erdenian.studentassistant.utils.toast
 

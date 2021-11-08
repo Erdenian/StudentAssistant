@@ -8,12 +8,12 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import ru.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorScreen
+import ru.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorViewModel
+import ru.erdenian.studentassistant.homeworks.homeworks.HomeworksScreen
+import ru.erdenian.studentassistant.homeworks.homeworks.HomeworksViewModel
 import ru.erdenian.studentassistant.settings.SettingsScreen
 import ru.erdenian.studentassistant.settings.SettingsViewModel
-import ru.erdenian.studentassistant.ui.main.homeworkeditor.HomeworkEditorScreen
-import ru.erdenian.studentassistant.ui.main.homeworkeditor.HomeworkEditorViewModel
-import ru.erdenian.studentassistant.ui.main.homeworks.HomeworksScreen
-import ru.erdenian.studentassistant.ui.main.homeworks.HomeworksViewModel
 import ru.erdenian.studentassistant.ui.main.lessoneditor.LessonEditorScreen
 import ru.erdenian.studentassistant.ui.main.lessoneditor.LessonEditorViewModel
 import ru.erdenian.studentassistant.ui.main.lessoninformation.LessonInformationScreen

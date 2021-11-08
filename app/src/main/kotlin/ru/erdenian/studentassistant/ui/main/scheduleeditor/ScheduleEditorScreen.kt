@@ -47,13 +47,13 @@ import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.entity.ImmutableSortedSet
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.entity.toImmutableSortedSet
+import ru.erdenian.studentassistant.sampledata.Lessons
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.ui.composable.PagerTabStrip
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.LessonCard
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
-import ru.erdenian.studentassistant.utils.Lessons
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
