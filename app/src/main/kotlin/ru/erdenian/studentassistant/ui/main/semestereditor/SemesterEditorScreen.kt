@@ -37,12 +37,12 @@ import androidx.compose.ui.unit.dp
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.sampledata.Semesters
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.ui.main.semestereditor.SemesterEditorViewModel.Error
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
-import ru.erdenian.studentassistant.utils.Semesters
 import ru.erdenian.studentassistant.utils.showDatePicker
 import ru.erdenian.studentassistant.utils.toast
 

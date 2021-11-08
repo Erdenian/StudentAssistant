@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.main.homeworkeditor
+package ru.erdenian.studentassistant.homeworks.homeworkeditor
 
 import android.content.res.Configuration
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -48,14 +48,14 @@ import androidx.compose.ui.unit.dp
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import ru.erdenian.studentassistant.R
+import ru.erdenian.studentassistant.homeworks.R
+import ru.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorViewModel.Error
+import ru.erdenian.studentassistant.sampledata.Homeworks
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
-import ru.erdenian.studentassistant.ui.main.homeworkeditor.HomeworkEditorViewModel.Error
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.ExposedDropdownMenu
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
-import ru.erdenian.studentassistant.utils.Homeworks
 import ru.erdenian.studentassistant.utils.showDatePicker
 import ru.erdenian.studentassistant.utils.toast
 

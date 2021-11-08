@@ -129,12 +129,14 @@ dependencies {
     implementation(project(":core:style"))
     implementation(project(":core:strings"))
 
+    implementation(project(":features:homeworks"))
     implementation(project(":features:settings"))
 
     // Todo: remove this dependencies after moving all features to separate modules
     implementation(project(":data:repository"))
     implementation(project(":common:uikit"))
     implementation(project(":common:utils"))
+    implementation(project(":core:sampledata"))
     // endregion
 
     // region AndroidX

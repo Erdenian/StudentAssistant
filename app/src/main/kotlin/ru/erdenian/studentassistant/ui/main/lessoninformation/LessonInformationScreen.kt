@@ -41,14 +41,14 @@ import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.entity.Homework
 import ru.erdenian.studentassistant.entity.Lesson
+import ru.erdenian.studentassistant.sampledata.Homeworks
+import ru.erdenian.studentassistant.sampledata.Lessons
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.HomeworkCard
 import ru.erdenian.studentassistant.uikit.view.LessonCard
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
-import ru.erdenian.studentassistant.utils.Homeworks
-import ru.erdenian.studentassistant.utils.Lessons
 
 @Composable
 fun LessonInformationScreen(

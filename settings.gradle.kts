@@ -3,15 +3,17 @@ rootProject.name = "StudentAssistant"
 include(
     ":app",
 
+    ":features:homeworks",
     ":features:settings",
 
-    ":data:repository",
-    ":data:database",
-    ":data:entity",
+    ":common:uikit",
+    ":common:utils",
 
     ":core:strings",
     ":core:style",
+    ":core:sampledata",
 
-    ":common:uikit",
-    ":common:utils"
+    ":data:repository",
+    ":data:database",
+    ":data:entity"
 )

@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.main.homeworks
+package ru.erdenian.studentassistant.homeworks.homeworks
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
@@ -30,16 +30,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.joda.time.format.DateTimeFormat
-import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.entity.Homework
+import ru.erdenian.studentassistant.homeworks.R
+import ru.erdenian.studentassistant.sampledata.Homeworks
+import ru.erdenian.studentassistant.sampledata.Semesters
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.HomeworkCard
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
-import ru.erdenian.studentassistant.utils.Homeworks
-import ru.erdenian.studentassistant.utils.Semesters
 
 @Composable
 fun HomeworksScreen(
