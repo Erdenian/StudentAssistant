@@ -7,7 +7,7 @@ import org.kodein.di.DIAware
 import ru.erdenian.studentassistant.repository.di.repositoryModule
 
 @Suppress("unused")
-class MainApplication : Application(), DIAware {
+internal class MainApplication : Application(), DIAware {
 
     override val di by DI.lazy {
         val app = this@MainApplication

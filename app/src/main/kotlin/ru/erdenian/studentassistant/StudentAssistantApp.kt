@@ -31,7 +31,7 @@ import ru.erdenian.studentassistant.style.AppIcons
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun StudentAssistantApp(
+internal fun StudentAssistantApp(
     isBottomNavigationVisible: Boolean
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
