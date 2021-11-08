@@ -94,7 +94,7 @@ private fun LessonInformationContent(
 ) = Scaffold(
     topBar = {
         TopAppBar(
-            title = { Text(stringResource(R.string.lif_title)) },
+            title = { Text(stringResource(R.string.li_title)) },
             navigationIcon = {
                 IconButton(onClick = onBackClick) {
                     Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
@@ -104,7 +104,7 @@ private fun LessonInformationContent(
                 TopAppBarActions(
                     actions = listOf(
                         ActionItem.AlwaysShow(
-                            name = stringResource(R.string.lif_edit),
+                            name = stringResource(R.string.li_edit),
                             imageVector = AppIcons.Edit,
                             onClick = onEditClick
                         )
@@ -146,7 +146,7 @@ private fun LessonInformationContent(
             ) {
                 if (homeworks.isEmpty()) {
                     Text(
-                        text = stringResource(R.string.lif_no_homeworks),
+                        text = stringResource(R.string.li_no_homeworks),
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
                     )
@@ -187,13 +187,13 @@ private fun LessonInformationContent(
                                 val homework = checkNotNull(contextMenuHomework)
                                 contextMenuHomework = null
                                 MaterialAlertDialogBuilder(context)
-                                    .setMessage(R.string.lif_delete_message)
-                                    .setPositiveButton(R.string.lif_delete_yes) { _, _ -> onDeleteHomeworkClick(homework) }
-                                    .setNegativeButton(R.string.lif_delete_no, null)
+                                    .setMessage(R.string.li_delete_message)
+                                    .setPositiveButton(R.string.li_delete_yes) { _, _ -> onDeleteHomeworkClick(homework) }
+                                    .setNegativeButton(R.string.li_delete_no, null)
                                     .show()
                             }
                         ) {
-                            Text(text = stringResource(R.string.lif_delete_homework))
+                            Text(text = stringResource(R.string.li_delete_homework))
                         }
                     }
                 }

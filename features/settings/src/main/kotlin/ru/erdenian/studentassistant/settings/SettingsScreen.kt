@@ -45,23 +45,23 @@ private fun SettingsContent(
 ) = Scaffold(
     topBar = {
         TopAppBar(
-            title = { Text(text = stringResource(R.string.stf_title)) }
+            title = { Text(text = stringResource(R.string.st_title)) }
         )
     }
 ) {
     Column {
         TimePreference(
-            title = stringResource(R.string.stf_default_start_time),
+            title = stringResource(R.string.st_default_start_time),
             value = defaultStartTime,
             onValueChange = onDefaultStartTimeChange
         )
         DurationPreference(
-            title = stringResource(R.string.stf_default_lesson_duration),
+            title = stringResource(R.string.st_default_lesson_duration),
             value = defaultLessonDuration,
             onValueChange = onDefaultLessonDurationChange
         )
         DurationPreference(
-            title = stringResource(R.string.stf_default_break_duration),
+            title = stringResource(R.string.st_default_break_duration),
             value = defaultBreakDuration,
             onValueChange = onDefaultBreakDurationChange
         )

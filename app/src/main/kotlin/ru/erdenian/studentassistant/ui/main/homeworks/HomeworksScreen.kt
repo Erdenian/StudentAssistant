@@ -68,9 +68,9 @@ fun HomeworksScreen(
         onHomeworkClick = { navigateToEditHomework(checkNotNull(selectedSemester).id, it.id) },
         onDeleteHomeworkClick = { homework ->
             MaterialAlertDialogBuilder(context)
-                .setMessage(R.string.hf_delete_message)
-                .setPositiveButton(R.string.hf_delete_yes) { _, _ -> viewModel.deleteHomework(homework.id) }
-                .setNegativeButton(R.string.hf_delete_no, null)
+                .setMessage(R.string.h_delete_message)
+                .setPositiveButton(R.string.h_delete_yes) { _, _ -> viewModel.deleteHomework(homework.id) }
+                .setNegativeButton(R.string.h_delete_no, null)
                 .show()
         }
     )
@@ -92,7 +92,7 @@ private fun HomeworksContent(
         TopAppBar(
             title = {
                 if (semesters.size <= 1) {
-                    Text(text = stringResource(R.string.hf_title))
+                    Text(text = stringResource(R.string.h_title))
                 } else {
                     TopAppBarDropdownMenu(
                         items = semesters,
@@ -106,7 +106,7 @@ private fun HomeworksContent(
                     actions = listOfNotNull(
                         if (semesters.isNotEmpty()) {
                             ActionItem.AlwaysShow(
-                                name = stringResource(R.string.hf_add),
+                                name = stringResource(R.string.h_add),
                                 imageVector = AppIcons.Add,
                                 onClick = onAddHomeworkClick
                             )
@@ -123,12 +123,12 @@ private fun HomeworksContent(
     ) {
         when {
             semesters.isEmpty() -> Text(
-                text = stringResource(R.string.hf_no_schedule),
+                text = stringResource(R.string.h_no_schedule),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
             )
             overdueHomeworks.isEmpty() && actualHomeworks.isEmpty() && pastHomeworks.isEmpty() -> Text(
-                text = stringResource(R.string.hf_no_homeworks),
+                text = stringResource(R.string.h_no_homeworks),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
             )
@@ -178,13 +178,13 @@ private fun HomeworksContent(
                             val homework = checkNotNull(contextMenuHomework)
                             contextMenuHomework = null
                             MaterialAlertDialogBuilder(context)
-                                .setMessage(R.string.hf_delete_message)
-                                .setPositiveButton(R.string.hf_delete_yes) { _, _ -> onDeleteHomeworkClick(homework) }
-                                .setNegativeButton(R.string.hf_delete_no, null)
+                                .setMessage(R.string.h_delete_message)
+                                .setPositiveButton(R.string.h_delete_yes) { _, _ -> onDeleteHomeworkClick(homework) }
+                                .setNegativeButton(R.string.h_delete_no, null)
                                 .show()
                         }
                     ) {
-                        Text(text = stringResource(R.string.hf_delete_homework))
+                        Text(text = stringResource(R.string.h_delete_homework))
                     }
                 }
             }
