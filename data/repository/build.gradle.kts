@@ -78,6 +78,9 @@ dependencies {
     // endregion
 
     // region Core
+    val jodaTimeVersion: String by project
+    api("joda-time:joda-time:$jodaTimeVersion")
+
     val kodeinVersion: String by project
     implementation("org.kodein.di:kodein-di-jvm:$kodeinVersion")
     // endregion

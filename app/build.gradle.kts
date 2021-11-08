@@ -126,27 +126,24 @@ android {
 
 dependencies {
     // region Private
+    implementation(project(":core:style"))
+    implementation(project(":core:strings"))
+
     implementation(project(":features:settings"))
 
+    // Todo: remove this dependencies after moving all features to separate modules
     implementation(project(":data:repository"))
     implementation(project(":common:uikit"))
     implementation(project(":common:utils"))
-    implementation(project(":core:strings"))
-    implementation(project(":core:style"))
     // endregion
 
     // region AndroidX
     implementation("androidx.activity:activity-compose:1.4.0")
-
-    val lifecycleVersion: String by project
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
-
     implementation("androidx.navigation:navigation-compose:2.4.0-beta02")
     // endregion
 
     // region Core
     val kodeinVersion: String by project
-    implementation("org.kodein.di:kodein-di-jvm:$kodeinVersion")
     implementation("org.kodein.di:kodein-di-framework-android-x:$kodeinVersion")
     // endregion
 
