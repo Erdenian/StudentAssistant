@@ -2,7 +2,8 @@ subprojects {
     afterEvaluate {
         dependencies {
             val implementation by configurations
-            implementation(project(":common:strings"))
+            implementation(project(":core:strings"))
+            implementation(project(":core:style"))
         }
     }
 }

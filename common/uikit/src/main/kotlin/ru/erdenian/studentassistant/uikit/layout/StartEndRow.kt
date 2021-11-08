@@ -17,7 +17,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import ru.erdenian.studentassistant.uikit.style.AppIcons
+import ru.erdenian.studentassistant.style.AppIcons
 
 @Composable
 fun StartEndRow(

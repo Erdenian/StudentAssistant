@@ -14,7 +14,7 @@ import org.joda.time.Duration
 import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.settings.preference.DurationPreference
 import ru.erdenian.studentassistant.settings.preference.TimePreference
-import ru.erdenian.studentassistant.uikit.style.AppTheme
+import ru.erdenian.studentassistant.style.AppTheme
 
 @Composable
 fun SettingsScreen(

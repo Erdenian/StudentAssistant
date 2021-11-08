@@ -9,7 +9,9 @@ include(
     ":data:database",
     ":data:entity",
 
-    ":common:strings",
+    ":core:strings",
+    ":core:style",
+
     ":common:uikit",
     ":common:utils"
 )

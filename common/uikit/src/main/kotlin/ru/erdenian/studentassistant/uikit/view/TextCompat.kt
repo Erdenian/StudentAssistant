@@ -22,7 +22,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import ru.erdenian.studentassistant.uikit.style.AppTheme
+import ru.erdenian.studentassistant.style.AppTheme
 
 /**
  * Text that supports setting [TextAlign.End] combined with [TextOverflow.Clip]
