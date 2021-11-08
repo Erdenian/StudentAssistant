@@ -64,7 +64,7 @@ android {
 
 dependencies {
     // region Private
-    api(project(":entity"))
+    api(project(":data:entity"))
     // endregion
 
     // region Tests

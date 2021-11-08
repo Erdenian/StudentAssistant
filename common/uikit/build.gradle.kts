@@ -1,7 +1,6 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    id("de.mannodermaus.android-junit5")
 }
 
 android {
@@ -11,13 +10,19 @@ android {
     compileSdk = compileSdkVersion.toInt()
 
     defaultConfig {
-        minSdk = 16
+        minSdk = 21
         targetSdk = targetSdkVersion.toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArguments["runnerBuilder"] = "de.mannodermaus.junit5.AndroidJUnit5Builder"
 
         consumerProguardFiles("consumer-rules.pro")
+    }
+
+    buildFeatures.compose = true
+
+    composeOptions {
+        val composeVersion: String by project
+        kotlinCompilerExtensionVersion = composeVersion
     }
 
     buildTypes {
@@ -32,11 +37,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    packagingOptions {
-        // JUnit 5
-        resources.excludes += "META-INF/LICENSE*"
     }
 
     sourceSets {
@@ -54,31 +54,27 @@ android {
 
 dependencies {
     // region Private
-    api(project(":entity"))
-    implementation(project(":database"))
+    implementation(project(":common:utils"))
     // endregion
 
-    // region Tests
-    val junitVersion: String by project
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    // region Compose
+    val composeVersion: String by project
 
-    androidTestImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    val androidxTestVersion: String by project
-    androidTestImplementation("androidx.test:core:$androidxTestVersion")
-    androidTestImplementation("androidx.test:runner:$androidxTestVersion")
-    val junit5AndroidTestVersion: String by project
-    androidTestImplementation("de.mannodermaus.junit5:android-test-core:$junit5AndroidTestVersion")
-    androidTestRuntimeOnly("de.mannodermaus.junit5:android-test-runner:$junit5AndroidTestVersion")
+    api("androidx.compose.ui:ui:$composeVersion")
+    api("androidx.compose.ui:ui-tooling:$composeVersion")
+
+    api("androidx.compose.foundation:foundation:$composeVersion")
+    api("androidx.compose.material:material:$composeVersion")
+
+    api("androidx.compose.material:material-icons-core:$composeVersion")
+    api("androidx.compose.material:material-icons-extended:$composeVersion")
+    //endregion
+
+    // region AndroidX
+    api("androidx.core:core-ktx:1.7.0")
     // endregion
 
-    // region Kotlin
-    val coroutinesVersion: String by project
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
-    // endregion
-
-    // region Core
-    val kodeinVersion: String by project
-    implementation("org.kodein.di:kodein-di-jvm:$kodeinVersion")
+    // region UI
+    api("com.google.android.material:material:1.4.0")
     // endregion
 }
