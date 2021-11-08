@@ -71,7 +71,7 @@ dependencies {
     //endregion
 
     // region AndroidX
-    api("androidx.core:core-ktx:1.6.0")
+    api("androidx.core:core-ktx:1.7.0")
     // endregion
 
     // region UI

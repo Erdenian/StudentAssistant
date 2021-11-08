@@ -1,49 +1,61 @@
 package ru.erdenian.studentassistant.ui.main
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.icons.filled.AvTimer
 import androidx.compose.material.icons.filled.MenuBook
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.flow.collect
 import ru.erdenian.studentassistant.R
 import ru.erdenian.studentassistant.uikit.style.AppIcons
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun StudentAssistantApp(
     isBottomNavigationVisible: Boolean
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         val navController = rememberNavController()
         val directions = remember(navController) { MainDirections(navController) }
+        val keyboardController = LocalSoftwareKeyboardController.current
+
+        LaunchedEffect(navController, keyboardController) {
+            navController.currentBackStackEntryFlow.collect { keyboardController?.hide() }
+        }
 
         Scaffold(
             bottomBar = {
                 StudentAssistantBottomNavigation(
-                    navController = navController,
                     directions = directions,
                     isBottomNavigationVisible = isBottomNavigationVisible
                 )
             }
-        ) {
+        ) { paddingValues ->
             MainNavGraph(
                 navController = navController,
-                directions = directions
+                directions = directions,
+                modifier = Modifier.padding(paddingValues)
             )
         }
     }
@@ -51,7 +63,6 @@ fun StudentAssistantApp(
 
 @Composable
 private fun StudentAssistantBottomNavigation(
-    navController: NavHostController,
     directions: MainDirections,
     isBottomNavigationVisible: Boolean
 ) {
@@ -65,41 +76,46 @@ private fun StudentAssistantBottomNavigation(
     val items = remember(directions) {
         listOf(
             Item(
-                imageVector = AppIcons.AvTimer,
+                imageVector = AppIcons.Schedule,
                 labelId = R.string.sf_title,
                 route = MainRoutes.SCHEDULE,
-                onClick = directions.schedule
+                onClick = directions::navigateToSchedule
             ),
             Item(
                 imageVector = AppIcons.MenuBook,
                 labelId = R.string.hf_title,
                 route = MainRoutes.HOMEWORKS,
-                onClick = directions.homeworks
+                onClick = directions::navigateToHomeworks
             ),
             Item(
                 imageVector = AppIcons.Settings,
                 labelId = R.string.stf_title,
                 route = MainRoutes.SETTINGS,
-                onClick = directions.settings
+                onClick = directions::navigateToSettings
             ),
         )
     }
 
+    var selectedRoute by remember { mutableStateOf(MainRoutes.SCHEDULE) }
     if (isBottomNavigationVisible) {
-        BottomNavigation {
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentRoute = navBackStackEntry?.destination?.route
-
+        BottomNavigation(
+            backgroundColor = MaterialTheme.colors.surface
+        ) {
             items.forEach { item ->
                 BottomNavigationItem(
-                    selected = (currentRoute == item.route),
+                    selected = (selectedRoute == item.route),
                     icon = {
                         Icon(
                             imageVector = item.imageVector,
                             contentDescription = stringResource(item.labelId)
                         )
                     },
-                    onClick = item.onClick
+                    onClick = {
+                        selectedRoute = item.route
+                        item.onClick()
+                    },
+                    selectedContentColor = MaterialTheme.colors.primary,
+                    unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
                 )
             }
         }

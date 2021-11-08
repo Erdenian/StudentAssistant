@@ -62,8 +62,7 @@ fun ScheduleEditorScreen(
     viewModel: ScheduleEditorViewModel,
     navigateBack: () -> Unit,
     navigateToEditSemester: (semesterId: Long) -> Unit,
-    navigateToEditLesson: (semesterId: Long, lessonId: Long) -> Unit,
-    navigateToCopyLesson: (semesterId: Long, lessonId: Long) -> Unit,
+    navigateToEditLesson: (semesterId: Long, lessonId: Long, copy: Boolean) -> Unit,
     navigateToCreateLesson: (semesterId: Long, weekday: Int) -> Unit
 ) {
     val semester by viewModel.semester.collectAsState()
@@ -92,8 +91,8 @@ fun ScheduleEditorScreen(
                 .setNegativeButton(R.string.lsef_delete_no, null)
                 .show()
         },
-        onLessonClick = { navigateToEditLesson(checkNotNull(semester).id, it.id) },
-        onCopyLessonClick = { navigateToCopyLesson(checkNotNull(semester).id, it.id) },
+        onLessonClick = { navigateToEditLesson(checkNotNull(semester).id, it.id, false) },
+        onCopyLessonClick = { navigateToEditLesson(checkNotNull(semester).id, it.id, true) },
         onDeleteLessonClick = { lesson ->
             coroutineScope.launch {
                 if (viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson)) {

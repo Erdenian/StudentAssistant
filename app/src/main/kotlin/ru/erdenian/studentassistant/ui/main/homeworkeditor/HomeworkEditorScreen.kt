@@ -30,7 +30,9 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -64,10 +66,12 @@ fun HomeworkEditorScreen(
     navigateBack: () -> Unit,
     navigateToCreateLesson: (semesterId: Long, subjectName: String) -> Unit
 ) {
+    var lessonNameToCreate by remember { mutableStateOf<String?>(null) }
     val done by viewModel.done.collectAsState()
     if (done) {
         DisposableEffect(done) {
             navigateBack()
+            lessonNameToCreate?.let { navigateToCreateLesson(viewModel.semesterId, it) }
             onDispose {}
         }
     }
@@ -112,8 +116,8 @@ fun HomeworkEditorScreen(
                         .setPositiveButton(R.string.hef_unknown_lesson_yes) { _, _ -> viewModel.save() }
                         .setNegativeButton(R.string.hef_unknown_lesson_no, null)
                         .setNeutralButton(R.string.hef_unknown_lesson_yes_and_create) { _, _ ->
+                            lessonNameToCreate = subjectName
                             viewModel.save()
-                            navigateToCreateLesson(viewModel.semesterId, subjectName)
                         }
                         .show()
                 }
@@ -126,7 +130,7 @@ fun HomeworkEditorScreen(
                 .setNegativeButton(R.string.hef_delete_no, null)
                 .show()
         },
-        onSubjectNameChange = { value, _ -> viewModel.subjectName.value = value },
+        onSubjectNameChange = { viewModel.subjectName.value = it },
         onDeadlineChange = { viewModel.deadline.value = it },
         onDescriptionChange = { viewModel.description.value = it }
     )
@@ -144,7 +148,7 @@ private fun HomeworkEditorContent(
     onBackClick: () -> Unit,
     onSaveClick: () -> Unit,
     onDeleteClick: () -> Unit,
-    onSubjectNameChange: (String, Int) -> Unit,
+    onSubjectNameChange: (String) -> Unit,
     onDeadlineChange: (LocalDate) -> Unit,
     onDescriptionChange: (String) -> Unit
 ) = Scaffold(
@@ -290,7 +294,7 @@ private fun HomeworkEditorContentRegularPreview() = AppTheme {
         onBackClick = {},
         onSaveClick = {},
         onDeleteClick = {},
-        onSubjectNameChange = { _, _ -> },
+        onSubjectNameChange = {},
         onDeadlineChange = {},
         onDescriptionChange = {}
     )
@@ -311,7 +315,7 @@ private fun HomeworkEditorContentEmptyPreview() = AppTheme {
         onBackClick = {},
         onSaveClick = {},
         onDeleteClick = {},
-        onSubjectNameChange = { _, _ -> },
+        onSubjectNameChange = {},
         onDeadlineChange = {},
         onDescriptionChange = {}
     )
@@ -331,7 +335,7 @@ private fun HomeworkEditorContentLongPreview() = AppTheme {
         onBackClick = {},
         onSaveClick = {},
         onDeleteClick = {},
-        onSubjectNameChange = { _, _ -> },
+        onSubjectNameChange = {},
         onDeadlineChange = {},
         onDescriptionChange = {}
     )
