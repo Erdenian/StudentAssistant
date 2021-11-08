@@ -28,7 +28,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -191,17 +190,17 @@ private fun ScheduleEditorContent(
                 Text(
                     text = stringResource(R.string.sce_free_day),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
+                    modifier = Modifier.padding(horizontal = AppTheme.dimensions.activityHorizontalMargin)
                 )
             } else {
                 var contextMenuLesson by remember { mutableStateOf<Lesson?>(null) }
 
                 LazyColumn(
                     contentPadding = PaddingValues(
-                        horizontal = dimensionResource(R.dimen.activity_horizontal_margin),
-                        vertical = dimensionResource(R.dimen.activity_vertical_margin)
+                        horizontal = AppTheme.dimensions.activityHorizontalMargin,
+                        vertical = AppTheme.dimensions.activityVerticalMargin
                     ),
-                    verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.cards_spacing)),
+                    verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.cardsSpacing),
                     modifier = Modifier.fillMaxSize()
                 ) {
                     itemsIndexed(

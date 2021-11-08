@@ -30,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -229,8 +228,8 @@ private fun LessonEditorContent(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
             .padding(
-                horizontal = dimensionResource(R.dimen.activity_horizontal_margin),
-                vertical = dimensionResource(R.dimen.activity_vertical_margin)
+                horizontal = AppTheme.dimensions.activityHorizontalMargin,
+                vertical = AppTheme.dimensions.activityVerticalMargin
             )
     ) {
         val timeFormatter = remember { DateTimeFormat.shortTime() }

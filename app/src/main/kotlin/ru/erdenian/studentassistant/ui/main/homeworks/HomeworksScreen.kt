@@ -25,7 +25,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -125,12 +124,12 @@ private fun HomeworksContent(
             semesters.isEmpty() -> Text(
                 text = stringResource(R.string.h_no_schedule),
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
+                modifier = Modifier.padding(horizontal = AppTheme.dimensions.activityHorizontalMargin)
             )
             overdueHomeworks.isEmpty() && actualHomeworks.isEmpty() && pastHomeworks.isEmpty() -> Text(
                 text = stringResource(R.string.h_no_homeworks),
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
+                modifier = Modifier.padding(horizontal = AppTheme.dimensions.activityHorizontalMargin)
             )
             else -> {
                 var contextMenuHomework by remember { mutableStateOf<Homework?>(null) }
@@ -138,10 +137,10 @@ private fun HomeworksContent(
 
                 LazyColumn(
                     contentPadding = PaddingValues(
-                        horizontal = dimensionResource(R.dimen.activity_horizontal_margin),
-                        vertical = dimensionResource(R.dimen.activity_vertical_margin)
+                        horizontal = AppTheme.dimensions.activityHorizontalMargin,
+                        vertical = AppTheme.dimensions.activityVerticalMargin
                     ),
-                    verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.cards_spacing)),
+                    verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.cardsSpacing),
                     modifier = Modifier.fillMaxSize()
                 ) {
                     fun LazyListScope.createList(homeworks: List<Homework>) = itemsIndexed(

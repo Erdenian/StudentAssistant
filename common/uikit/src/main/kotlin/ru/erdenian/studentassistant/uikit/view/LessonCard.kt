@@ -20,12 +20,10 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import ru.erdenian.studentassistant.uikit.R
 import ru.erdenian.studentassistant.uikit.style.AppIcons
 import ru.erdenian.studentassistant.uikit.style.AppTheme
 
@@ -55,7 +53,7 @@ fun LessonCard(
                 onLongClick = onLongClick,
                 onClick = onClick ?: {}
             )
-            .padding(dimensionResource(R.dimen.card_margin_inside))
+            .padding(AppTheme.dimensions.cardMarginInside)
     ) {
         Row(
             verticalAlignment = Alignment.Bottom
@@ -91,7 +89,7 @@ fun LessonCard(
             }
         }
 
-        Divider(modifier = Modifier.padding(vertical = dimensionResource(R.dimen.divider_margin_top_bottom)))
+        Divider(modifier = Modifier.padding(vertical = AppTheme.dimensions.dividerMarginTopBottom))
 
         if (type.isNotBlank()) {
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
