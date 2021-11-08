@@ -39,7 +39,7 @@ subprojects {
 
 detekt {
     config = files("detekt-config.yml")
-    source = files(*subprojects.map { "${it.name}/src" }.toTypedArray())
+    source = files(*subprojects.map { "${it.projectDir}/src" }.toTypedArray())
 }
 
 dependencies {
