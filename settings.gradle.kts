@@ -9,12 +9,12 @@ include(
 
     ":common:uikit",
     ":common:utils",
-
-    ":core:strings",
-    ":core:style",
-    ":core:sampledata",
+    ":common:sampledata",
 
     ":data:repository",
     ":data:database",
-    ":data:entity"
+    ":data:entity",
+
+    ":core:strings",
+    ":core:style"
 )

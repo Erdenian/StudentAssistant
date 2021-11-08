@@ -54,9 +54,11 @@ android {
 
 dependencies {
     // region Private
-    implementation(project(":data:repository"))
     implementation(project(":common:uikit"))
     implementation(project(":common:utils"))
+    implementation(project(":common:sampledata"))
+
+    implementation(project(":data:repository"))
     // endregion
 
     // region AndroidX
