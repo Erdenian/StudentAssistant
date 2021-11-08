@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.uikit.preference
+package ru.erdenian.studentassistant.settings.preference
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -22,7 +22,7 @@ import org.joda.time.format.PeriodFormatterBuilder
 import ru.erdenian.studentassistant.uikit.R
 
 @Composable
-fun DurationPreference(
+internal fun DurationPreference(
     title: String,
     value: Duration,
     onValueChange: (Duration) -> Unit,

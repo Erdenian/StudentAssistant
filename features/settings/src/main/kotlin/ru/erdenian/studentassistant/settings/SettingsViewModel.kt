@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.main.settings
+package ru.erdenian.studentassistant.settings
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

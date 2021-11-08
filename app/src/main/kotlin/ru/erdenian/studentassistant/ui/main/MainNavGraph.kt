@@ -8,6 +8,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import ru.erdenian.studentassistant.settings.SettingsScreen
+import ru.erdenian.studentassistant.settings.SettingsViewModel
 import ru.erdenian.studentassistant.ui.main.homeworkeditor.HomeworkEditorScreen
 import ru.erdenian.studentassistant.ui.main.homeworkeditor.HomeworkEditorViewModel
 import ru.erdenian.studentassistant.ui.main.homeworks.HomeworksScreen
@@ -22,8 +24,6 @@ import ru.erdenian.studentassistant.ui.main.scheduleeditor.ScheduleEditorScreen
 import ru.erdenian.studentassistant.ui.main.scheduleeditor.ScheduleEditorViewModel
 import ru.erdenian.studentassistant.ui.main.semestereditor.SemesterEditorScreen
 import ru.erdenian.studentassistant.ui.main.semestereditor.SemesterEditorViewModel
-import ru.erdenian.studentassistant.ui.main.settings.SettingsScreen
-import ru.erdenian.studentassistant.ui.main.settings.SettingsViewModel
 import ru.erdenian.studentassistant.utils.viewModel
 
 object MainRoutes {
