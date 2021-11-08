@@ -54,6 +54,7 @@ android {
 
 dependencies {
     // region Private
+    implementation(project(":common:strings"))
     implementation(project(":common:utils"))
     // endregion
 

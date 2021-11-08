@@ -39,7 +39,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -184,8 +183,8 @@ private fun HomeworkEditorContent(
 ) {
     Column(
         modifier = Modifier.padding(
-            horizontal = dimensionResource(R.dimen.activity_horizontal_margin),
-            vertical = dimensionResource(R.dimen.activity_vertical_margin)
+            horizontal = AppTheme.dimensions.activityHorizontalMargin,
+            vertical = AppTheme.dimensions.activityVerticalMargin
         )
     ) {
         val descriptionFocusRequester = remember { FocusRequester() }

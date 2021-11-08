@@ -33,7 +33,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -122,13 +121,13 @@ private fun WeeksSelectorContent(
     ) {
         Text(
             text = stringResource(R.string.ws_variants_title),
-            modifier = Modifier.padding(start = dimensionResource(R.dimen.activity_horizontal_margin))
+            modifier = Modifier.padding(start = AppTheme.dimensions.activityHorizontalMargin)
         )
 
         StartEndRow(
             verticalAlignment = Alignment.Bottom,
             modifier = Modifier
-                .padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
+                .padding(horizontal = AppTheme.dimensions.activityHorizontalMargin)
                 .clickable(onClick = onSelectedRepeatVariantClick),
             contentStart = {
                 Text(

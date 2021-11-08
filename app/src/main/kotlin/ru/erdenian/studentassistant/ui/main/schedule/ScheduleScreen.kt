@@ -21,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -168,7 +167,7 @@ private fun ScheduleContent(
                 Text(
                     text = stringResource(R.string.s_no_schedule),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
+                    modifier = Modifier.padding(horizontal = AppTheme.dimensions.activityHorizontalMargin)
                 )
             } else {
                 val shortTitleFormatter = remember { DateTimeFormat.forPattern("EEEE, dd MMMM") }
@@ -193,15 +192,15 @@ private fun ScheduleContent(
                         Text(
                             text = stringResource(R.string.s_free_day),
                             textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
+                            modifier = Modifier.padding(horizontal = AppTheme.dimensions.activityHorizontalMargin)
                         )
                     } else {
                         LazyColumn(
                             contentPadding = PaddingValues(
-                                horizontal = dimensionResource(R.dimen.activity_horizontal_margin),
-                                vertical = dimensionResource(R.dimen.activity_vertical_margin)
+                                horizontal = AppTheme.dimensions.activityHorizontalMargin,
+                                vertical = AppTheme.dimensions.activityVerticalMargin
                             ),
-                            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.cards_spacing)),
+                            verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.cardsSpacing),
                             modifier = Modifier.fillMaxSize()
                         ) {
                             itemsIndexed(

@@ -104,4 +104,14 @@
     <string name="he_delete_yes">Удалить</string>
     <string name="he_delete_no">Нет</string>
 
+    <!-- region uikit -->
+
+    <!--HomeworkCard -->
+    <string name="hc_deadline">До %1$s</string>
+
+    <!-- WeeksSelector -->
+    <string name="ws_variants_title">Повторять</string>
+
+    <!-- endregion -->
+
 </resources>
