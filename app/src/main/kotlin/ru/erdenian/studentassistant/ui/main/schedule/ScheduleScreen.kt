@@ -105,7 +105,7 @@ private fun ScheduleContent(
             TopAppBar(
                 title = {
                     if (semestersNames.size <= 1) {
-                        Text(text = stringResource(R.string.sf_title))
+                        Text(text = stringResource(R.string.s_title))
                     } else {
                         TopAppBarDropdownMenu(
                             items = semestersNames,
@@ -121,7 +121,7 @@ private fun ScheduleContent(
                         actions = listOfNotNull(
                             if (selectedSemester != null) {
                                 ActionItem.AlwaysShow(
-                                    name = stringResource(R.string.sf_calendar),
+                                    name = stringResource(R.string.s_calendar),
                                     imageVector = AppIcons.Today,
                                     onClick = {
                                         context.showDatePicker(
@@ -138,19 +138,19 @@ private fun ScheduleContent(
                             } else null,
                             if (selectedSemester == null) {
                                 ActionItem.AlwaysShow(
-                                    name = stringResource(R.string.sf_add),
+                                    name = stringResource(R.string.s_add),
                                     imageVector = AppIcons.Add,
                                     onClick = onAddSemesterClick
                                 )
                             } else {
                                 ActionItem.NeverShow(
-                                    name = stringResource(R.string.sf_add),
+                                    name = stringResource(R.string.s_add),
                                     onClick = onAddSemesterClick
                                 )
                             },
                             if (selectedSemester != null) {
                                 ActionItem.NeverShow(
-                                    name = stringResource(R.string.sf_edit),
+                                    name = stringResource(R.string.s_edit),
                                     onClick = onEditSemesterClick
                                 )
                             } else null
@@ -166,7 +166,7 @@ private fun ScheduleContent(
         ) {
             if (selectedSemester == null) {
                 Text(
-                    text = stringResource(R.string.sf_no_schedule),
+                    text = stringResource(R.string.s_no_schedule),
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
                 )
@@ -191,7 +191,7 @@ private fun ScheduleContent(
 
                     if (lessons.isEmpty()) {
                         Text(
-                            text = stringResource(R.string.sf_free_day),
+                            text = stringResource(R.string.s_free_day),
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
                         )

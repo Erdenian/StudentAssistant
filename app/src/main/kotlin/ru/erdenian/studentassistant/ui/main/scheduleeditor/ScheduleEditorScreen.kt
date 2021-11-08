@@ -86,9 +86,9 @@ fun ScheduleEditorScreen(
         onEditSemesterClick = { navigateToEditSemester(viewModel.semesterId) },
         onDeleteSemesterClick = {
             MaterialAlertDialogBuilder(context)
-                .setMessage(R.string.lsef_delete_message)
-                .setPositiveButton(R.string.lsef_delete_yes) { _, _ -> viewModel.deleteSemester() }
-                .setNegativeButton(R.string.lsef_delete_no, null)
+                .setMessage(R.string.sce_delete_message)
+                .setPositiveButton(R.string.sce_delete_yes) { _, _ -> viewModel.deleteSemester() }
+                .setNegativeButton(R.string.sce_delete_no, null)
                 .show()
         },
         onLessonClick = { navigateToEditLesson(checkNotNull(semester).id, it.id, false) },
@@ -97,23 +97,23 @@ fun ScheduleEditorScreen(
             coroutineScope.launch {
                 if (viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson)) {
                     MaterialAlertDialogBuilder(context)
-                        .setTitle(R.string.lef_delete_homeworks_title)
-                        .setMessage(R.string.lef_delete_homeworks_message)
-                        .setPositiveButton(R.string.lef_delete_homeworks_yes) { _, _ ->
+                        .setTitle(R.string.le_delete_homeworks_title)
+                        .setMessage(R.string.le_delete_homeworks_message)
+                        .setPositiveButton(R.string.le_delete_homeworks_yes) { _, _ ->
                             viewModel.deleteLesson(lesson, true)
                         }
-                        .setNegativeButton(R.string.lef_delete_homeworks_no) { _, _ ->
+                        .setNegativeButton(R.string.le_delete_homeworks_no) { _, _ ->
                             viewModel.deleteLesson(lesson, false)
                         }
-                        .setNeutralButton(R.string.lef_delete_homeworks_cancel, null)
+                        .setNeutralButton(R.string.le_delete_homeworks_cancel, null)
                         .show()
                 } else {
                     MaterialAlertDialogBuilder(context)
-                        .setMessage(R.string.lef_delete_message)
-                        .setPositiveButton(R.string.lef_delete_yes) { _, _ ->
+                        .setMessage(R.string.le_delete_message)
+                        .setPositiveButton(R.string.le_delete_yes) { _, _ ->
                             viewModel.viewModelScope.launch { viewModel.deleteLesson(lesson) }
                         }
-                        .setNegativeButton(R.string.lef_delete_no, null)
+                        .setNegativeButton(R.string.le_delete_no, null)
                         .show()
                 }
             }
@@ -140,7 +140,7 @@ private fun ScheduleEditorContent(
 ) = Scaffold(
     topBar = {
         TopAppBar(
-            title = { Text(text = stringResource(R.string.lsef_title)) },
+            title = { Text(text = stringResource(R.string.sce_title)) },
             navigationIcon = {
                 IconButton(onClick = onBackClick) {
                     Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
@@ -150,11 +150,11 @@ private fun ScheduleEditorContent(
                 TopAppBarActions(
                     actions = listOf(
                         ActionItem.NeverShow(
-                            name = stringResource(R.string.lsef_edit),
+                            name = stringResource(R.string.sce_edit),
                             onClick = onEditSemesterClick
                         ),
                         ActionItem.NeverShow(
-                            name = stringResource(R.string.lsef_delete),
+                            name = stringResource(R.string.sce_delete),
                             onClick = onDeleteSemesterClick
                         )
                     )
@@ -189,7 +189,7 @@ private fun ScheduleEditorContent(
 
             if (lessons.isEmpty()) {
                 Text(
-                    text = stringResource(R.string.lsef_free_day),
+                    text = stringResource(R.string.sce_free_day),
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.activity_horizontal_margin))
                 )
@@ -234,7 +234,7 @@ private fun ScheduleEditorContent(
                             onCopyLessonClick(lesson)
                         }
                     ) {
-                        Text(text = stringResource(R.string.lsef_copy_lesson))
+                        Text(text = stringResource(R.string.sce_copy_lesson))
                     }
                     DropdownMenuItem(
                         onClick = {
@@ -243,7 +243,7 @@ private fun ScheduleEditorContent(
                             onDeleteLessonClick(lesson)
                         }
                     ) {
-                        Text(text = stringResource(R.string.lsef_delete_lesson))
+                        Text(text = stringResource(R.string.sce_delete_lesson))
                     }
                 }
             }

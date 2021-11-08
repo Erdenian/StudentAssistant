@@ -77,19 +77,19 @@ private fun StudentAssistantBottomNavigation(
         listOf(
             Item(
                 imageVector = AppIcons.Schedule,
-                labelId = R.string.sf_title,
+                labelId = R.string.s_title,
                 route = MainRoutes.SCHEDULE,
                 onClick = directions::navigateToSchedule
             ),
             Item(
                 imageVector = AppIcons.MenuBook,
-                labelId = R.string.hf_title,
+                labelId = R.string.h_title,
                 route = MainRoutes.HOMEWORKS,
                 onClick = directions::navigateToHomeworks
             ),
             Item(
                 imageVector = AppIcons.Settings,
-                labelId = R.string.stf_title,
+                labelId = R.string.st_title,
                 route = MainRoutes.SETTINGS,
                 onClick = directions::navigateToSettings
             ),

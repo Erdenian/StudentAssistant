@@ -85,8 +85,8 @@ fun HomeworkEditorScreen(
 
     val error by viewModel.error.collectAsState()
     val errorMessage = when (error) {
-        Error.EMPTY_SUBJECT -> R.string.hef_error_empty_subject_name
-        Error.EMPTY_DESCRIPTION -> R.string.hef_error_empty_description
+        Error.EMPTY_SUBJECT -> R.string.he_error_empty_subject_name
+        Error.EMPTY_DESCRIPTION -> R.string.he_error_empty_description
         null -> null
     }?.let { stringResource(it) }
 
@@ -111,11 +111,11 @@ fun HomeworkEditorScreen(
                     viewModel.save()
                 } else {
                     MaterialAlertDialogBuilder(context)
-                        .setTitle(R.string.hef_unknown_lesson)
-                        .setMessage(R.string.hef_unknown_lesson_message)
-                        .setPositiveButton(R.string.hef_unknown_lesson_yes) { _, _ -> viewModel.save() }
-                        .setNegativeButton(R.string.hef_unknown_lesson_no, null)
-                        .setNeutralButton(R.string.hef_unknown_lesson_yes_and_create) { _, _ ->
+                        .setTitle(R.string.he_unknown_lesson)
+                        .setMessage(R.string.he_unknown_lesson_message)
+                        .setPositiveButton(R.string.he_unknown_lesson_yes) { _, _ -> viewModel.save() }
+                        .setNegativeButton(R.string.he_unknown_lesson_no, null)
+                        .setNeutralButton(R.string.he_unknown_lesson_yes_and_create) { _, _ ->
                             lessonNameToCreate = subjectName
                             viewModel.save()
                         }
@@ -125,9 +125,9 @@ fun HomeworkEditorScreen(
         },
         onDeleteClick = {
             MaterialAlertDialogBuilder(context)
-                .setMessage(R.string.hef_delete_message)
-                .setPositiveButton(R.string.hef_delete_yes) { _, _ -> viewModel.delete() }
-                .setNegativeButton(R.string.hef_delete_no, null)
+                .setMessage(R.string.he_delete_message)
+                .setPositiveButton(R.string.he_delete_yes) { _, _ -> viewModel.delete() }
+                .setNegativeButton(R.string.he_delete_no, null)
                 .show()
         },
         onSubjectNameChange = { viewModel.subjectName.value = it },
@@ -154,7 +154,7 @@ private fun HomeworkEditorContent(
 ) = Scaffold(
     topBar = {
         TopAppBar(
-            title = { Text(text = stringResource(R.string.hef_title)) },
+            title = { Text(text = stringResource(R.string.he_title)) },
             navigationIcon = {
                 IconButton(onClick = onBackClick) {
                     Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
@@ -164,14 +164,14 @@ private fun HomeworkEditorContent(
                 TopAppBarActions(
                     actions = listOfNotNull(
                         ActionItem.AlwaysShow(
-                            name = stringResource(R.string.hef_save),
+                            name = stringResource(R.string.he_save),
                             imageVector = AppIcons.Check,
                             onClick = onSaveClick,
                             enabled = isLoaded
                         ),
                         if (isEditing) {
                             ActionItem.NeverShow(
-                                name = stringResource(R.string.hef_delete),
+                                name = stringResource(R.string.he_delete),
                                 onClick = onDeleteClick,
                                 enabled = isLoaded
                             )
@@ -195,7 +195,7 @@ private fun HomeworkEditorContent(
             items = existingSubjects,
             onValueChange = onSubjectNameChange,
             enabled = isLoaded,
-            label = stringResource(R.string.hef_subject),
+            label = stringResource(R.string.he_subject),
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
                 imeAction = ImeAction.Next
@@ -214,7 +214,7 @@ private fun HomeworkEditorContent(
             val context = LocalContext.current
 
             Text(
-                text = stringResource(R.string.hef_deadline_label),
+                text = stringResource(R.string.he_deadline_label),
                 style = MaterialTheme.typography.body2,
                 modifier = Modifier.weight(1.0f)
             )
@@ -236,7 +236,7 @@ private fun HomeworkEditorContent(
         SimpleTextField(
             value = description,
             onValueChange = onDescriptionChange,
-            label = { Text(text = stringResource(R.string.hef_description)) },
+            label = { Text(text = stringResource(R.string.he_description)) },
             enabled = isLoaded,
             modifier = Modifier
                 .fillMaxSize()

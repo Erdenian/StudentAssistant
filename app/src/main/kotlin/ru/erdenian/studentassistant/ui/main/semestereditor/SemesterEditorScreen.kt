@@ -56,9 +56,9 @@ fun SemesterEditorScreen(
 
     val error by viewModel.error.collectAsState()
     val errorMessage = when (error) {
-        Error.EMPTY_NAME -> R.string.sef_error_empty_name
-        Error.SEMESTER_EXISTS -> R.string.sef_error_name_not_available
-        Error.WRONG_DATES -> R.string.sef_error_wrong_dates
+        Error.EMPTY_NAME -> R.string.se_error_empty_name
+        Error.SEMESTER_EXISTS -> R.string.se_error_name_not_available
+        Error.WRONG_DATES -> R.string.se_error_wrong_dates
         null -> null
     }?.let { stringResource(it) }
 
@@ -111,7 +111,7 @@ private fun SemesterEditorContent(
 ) = Scaffold(
     topBar = {
         TopAppBar(
-            title = { Text(text = stringResource(if (isEditing) R.string.sef_title_edit else R.string.sef_title_new)) },
+            title = { Text(text = stringResource(if (isEditing) R.string.se_title_edit else R.string.se_title_new)) },
             navigationIcon = {
                 IconButton(onClick = onBackClick) {
                     Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
@@ -121,7 +121,7 @@ private fun SemesterEditorContent(
                 TopAppBarActions(
                     actions = listOf(
                         ActionItem.AlwaysShow(
-                            name = stringResource(R.string.sef_save),
+                            name = stringResource(R.string.se_save),
                             imageVector = AppIcons.Check,
                             onClick = onSaveClick
                         )
@@ -143,7 +143,7 @@ private fun SemesterEditorContent(
         OutlinedTextField(
             value = name,
             onValueChange = onNameChange,
-            label = { Text(text = stringResource(R.string.sef_name)) },
+            label = { Text(text = stringResource(R.string.se_name)) },
             isError = (errorMessage != null),
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
@@ -172,7 +172,7 @@ private fun SemesterEditorContent(
             val context = LocalContext.current
 
             Text(
-                text = stringResource(R.string.sef_first_day),
+                text = stringResource(R.string.se_first_day),
                 style = MaterialTheme.typography.body2,
                 modifier = Modifier.weight(1.0f)
             )
@@ -189,7 +189,7 @@ private fun SemesterEditorContent(
             val context = LocalContext.current
 
             Text(
-                text = stringResource(R.string.sef_last_day),
+                text = stringResource(R.string.se_last_day),
                 style = MaterialTheme.typography.body2,
                 modifier = Modifier.weight(1.0f)
             )

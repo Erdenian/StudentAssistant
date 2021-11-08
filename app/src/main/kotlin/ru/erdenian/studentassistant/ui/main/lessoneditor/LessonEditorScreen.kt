@@ -72,9 +72,9 @@ fun LessonEditorScreen(
 
     val error by viewModel.error.collectAsState()
     val errorMessage = when (error) {
-        Error.EMPTY_SUBJECT_NAME -> R.string.lef_error_empty_subject_name
-        Error.WRONG_TIMES -> R.string.lef_error_wrong_time
-        Error.EMPTY_REPEAT -> R.string.lef_error_empty_repeat
+        Error.EMPTY_SUBJECT_NAME -> R.string.le_error_empty_subject_name
+        Error.WRONG_TIMES -> R.string.le_error_wrong_time
+        Error.EMPTY_REPEAT -> R.string.le_error_empty_repeat
         null -> null
     }?.let { stringResource(it) }
 
@@ -126,11 +126,11 @@ fun LessonEditorScreen(
                 coroutineScope.launch {
                     if (viewModel.isSubjectNameChangedAndNotLast()) {
                         MaterialAlertDialogBuilder(context)
-                            .setTitle(R.string.lef_rename_others_title)
-                            .setMessage(R.string.lef_rename_others_message)
-                            .setPositiveButton(R.string.lef_rename_others_yes) { _, _ -> viewModel.save(true) }
-                            .setNegativeButton(R.string.lef_rename_others_no) { _, _ -> viewModel.save(false) }
-                            .setNeutralButton(R.string.lef_rename_others_cancel, null)
+                            .setTitle(R.string.le_rename_others_title)
+                            .setMessage(R.string.le_rename_others_message)
+                            .setPositiveButton(R.string.le_rename_others_yes) { _, _ -> viewModel.save(true) }
+                            .setNegativeButton(R.string.le_rename_others_no) { _, _ -> viewModel.save(false) }
+                            .setNeutralButton(R.string.le_rename_others_cancel, null)
                             .show()
                     } else viewModel.save()
                 }
@@ -140,17 +140,17 @@ fun LessonEditorScreen(
             coroutineScope.launch {
                 if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) {
                     MaterialAlertDialogBuilder(context)
-                        .setTitle(R.string.lef_delete_homeworks_title)
-                        .setMessage(R.string.lef_delete_homeworks_message)
-                        .setPositiveButton(R.string.lef_delete_homeworks_yes) { _, _ -> viewModel.delete(true) }
-                        .setNegativeButton(R.string.lef_delete_homeworks_no) { _, _ -> viewModel.delete(false) }
-                        .setNeutralButton(R.string.lef_delete_homeworks_cancel, null)
+                        .setTitle(R.string.le_delete_homeworks_title)
+                        .setMessage(R.string.le_delete_homeworks_message)
+                        .setPositiveButton(R.string.le_delete_homeworks_yes) { _, _ -> viewModel.delete(true) }
+                        .setNegativeButton(R.string.le_delete_homeworks_no) { _, _ -> viewModel.delete(false) }
+                        .setNeutralButton(R.string.le_delete_homeworks_cancel, null)
                         .show()
                 } else {
                     MaterialAlertDialogBuilder(context)
-                        .setMessage(R.string.lef_delete_message)
-                        .setPositiveButton(R.string.lef_delete_yes) { _, _ -> viewModel.delete() }
-                        .setNegativeButton(R.string.lef_delete_no, null)
+                        .setMessage(R.string.le_delete_message)
+                        .setPositiveButton(R.string.le_delete_yes) { _, _ -> viewModel.delete() }
+                        .setNegativeButton(R.string.le_delete_no, null)
                         .show()
                 }
             }
@@ -199,7 +199,7 @@ private fun LessonEditorContent(
 ) = Scaffold(
     topBar = {
         TopAppBar(
-            title = { Text(text = stringResource(if (isEditing) R.string.lef_title_edit else R.string.lef_title_new)) },
+            title = { Text(text = stringResource(if (isEditing) R.string.le_title_edit else R.string.le_title_new)) },
             navigationIcon = {
                 IconButton(onClick = onBackClick) {
                     Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
@@ -209,13 +209,13 @@ private fun LessonEditorContent(
                 TopAppBarActions(
                     actions = listOfNotNull(
                         ActionItem.AlwaysShow(
-                            name = stringResource(R.string.lef_save),
+                            name = stringResource(R.string.le_save),
                             imageVector = AppIcons.Check,
                             onClick = onSaveClick
                         ),
                         if (isEditing) {
                             ActionItem.NeverShow(
-                                name = stringResource(R.string.lef_delete),
+                                name = stringResource(R.string.le_delete),
                                 onClick = onDeleteClick
                             )
                         } else null
@@ -239,7 +239,7 @@ private fun LessonEditorContent(
             value = subjectName,
             items = existingSubjects,
             onValueChange = onSubjectNameChange,
-            label = stringResource(R.string.lef_subject_name),
+            label = stringResource(R.string.le_subject_name),
             error = subjectNameErrorMessage ?: "",
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
@@ -254,7 +254,7 @@ private fun LessonEditorContent(
             value = type,
             items = existingTypes,
             onValueChange = onTypeChange,
-            label = stringResource(R.string.lef_type),
+            label = stringResource(R.string.le_type),
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
                 imeAction = ImeAction.Next
@@ -269,7 +269,7 @@ private fun LessonEditorContent(
             value = teachers,
             items = existingTeachers,
             onValueChange = onTeachersChange,
-            label = stringResource(R.string.lef_teachers),
+            label = stringResource(R.string.le_teachers),
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Words,
                 imeAction = ImeAction.Next
@@ -284,7 +284,7 @@ private fun LessonEditorContent(
             value = classrooms,
             items = existingClassrooms,
             onValueChange = onClassroomsChange,
-            label = stringResource(R.string.lef_classrooms),
+            label = stringResource(R.string.le_classrooms),
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
                 imeAction = ImeAction.Done
@@ -304,7 +304,7 @@ private fun LessonEditorContent(
             val context = LocalContext.current
 
             Text(
-                text = stringResource(R.string.lef_start_time),
+                text = stringResource(R.string.le_start_time),
                 style = MaterialTheme.typography.body2,
                 modifier = Modifier.weight(1.0f)
             )
@@ -324,7 +324,7 @@ private fun LessonEditorContent(
             val context = LocalContext.current
 
             Text(
-                text = stringResource(R.string.lef_end_time),
+                text = stringResource(R.string.le_end_time),
                 style = MaterialTheme.typography.body2,
                 modifier = Modifier.weight(1.0f)
             )
