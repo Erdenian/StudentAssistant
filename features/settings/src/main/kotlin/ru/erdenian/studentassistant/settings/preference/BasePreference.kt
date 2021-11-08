@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.uikit.preference
+package ru.erdenian.studentassistant.settings.preference
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable

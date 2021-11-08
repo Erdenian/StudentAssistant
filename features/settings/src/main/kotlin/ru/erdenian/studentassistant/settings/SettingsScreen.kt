@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.main.settings
+package ru.erdenian.studentassistant.settings
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
@@ -12,9 +12,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.joda.time.Duration
 import org.joda.time.LocalTime
-import ru.erdenian.studentassistant.R
-import ru.erdenian.studentassistant.uikit.preference.DurationPreference
-import ru.erdenian.studentassistant.uikit.preference.TimePreference
+import ru.erdenian.studentassistant.settings.preference.DurationPreference
+import ru.erdenian.studentassistant.settings.preference.TimePreference
 import ru.erdenian.studentassistant.uikit.style.AppTheme
 
 @Composable

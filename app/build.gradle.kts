@@ -119,6 +119,8 @@ android {
 
 dependencies {
     // region Private
+    implementation(project(":features:settings"))
+
     implementation(project(":data:repository"))
     implementation(project(":common:uikit"))
     implementation(project(":common:utils"))

@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.uikit.preference
+package ru.erdenian.studentassistant.settings.preference
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -10,7 +10,7 @@ import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.utils.showTimePicker
 
 @Composable
-fun TimePreference(
+internal fun TimePreference(
     title: String,
     value: LocalTime,
     onValueChange: (LocalTime) -> Unit,
