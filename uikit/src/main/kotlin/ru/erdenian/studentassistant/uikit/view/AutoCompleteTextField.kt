@@ -1,7 +1,9 @@
 package ru.erdenian.studentassistant.uikit.view
 
 import android.content.res.Configuration
+import android.text.Editable
 import android.text.InputType
+import android.text.TextWatcher
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.compose.foundation.focusable
@@ -18,7 +20,6 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import ru.erdenian.studentassistant.uikit.style.AppTheme
@@ -40,7 +41,22 @@ fun AutoCompleteTextField(
     singleLine: Boolean = false,
     maxLines: Int = Int.MAX_VALUE
 ) {
-    val currentValue by rememberUpdatedState(value)
+    val textWatcher = run {
+        val currentValue by rememberUpdatedState(value)
+        val currentOnValueChange by rememberUpdatedState(onValueChange)
+        remember {
+            object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+
+                override fun afterTextChanged(s: Editable?) {
+                    val newValue = s?.toString() ?: ""
+                    if (newValue != currentValue) currentOnValueChange(newValue)
+                }
+            }
+        }
+    }
+
     val currentKeyboardActions = rememberUpdatedState(keyboardActions)
     val adapter = LocalContext.current.let { context ->
         remember(context, items) { ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, items) }
@@ -52,19 +68,7 @@ fun AutoCompleteTextField(
             TextInputLayout(context).apply {
                 MaterialAutoCompleteTextView(context).apply {
                     setOnEditorActionListener(createOnEditorActionListener(currentKeyboardActions))
-
-                    var isInitialized = false
-                    addTextChangedListener { editable ->
-                        // Ignore the first call to the listener
-                        // because it is called with an empty string during initialization of inputType
-                        if (!isInitialized && editable.isNullOrEmpty()) {
-                            isInitialized = true
-                            return@addTextChangedListener
-                        }
-
-                        val newValue = editable?.toString() ?: ""
-                        if (newValue != currentValue) onValueChange(newValue)
-                    }
+                    addTextChangedListener(textWatcher)
                 }
                     .also { viewToFocus = it }
                     .also(this::addView)
@@ -81,7 +85,7 @@ fun AutoCompleteTextField(
                 val selectionStart = selectionStart
                 val selectionEnd = selectionEnd
 
-                update(singleLine, keyboardOptions)
+                update(singleLine, keyboardOptions, textWatcher)
                 if (readOnly) inputType = InputType.TYPE_NULL
                 this.isSingleLine = singleLine
                 this.maxLines = maxLines

@@ -85,11 +85,11 @@ fun SemesterEditorScreen(
         onBackClick = navigateBack,
         onSaveClick = {
             isNameChanged = true
-            errorMessage?.let { context.toast(it) } ?: viewModel.save()
+            errorMessage?.let { it -> context.toast(it) } ?: viewModel.save()
         },
-        onNameChange = {
+        onNameChange = { value ->
             isNameChanged = true
-            viewModel.name.value = it
+            viewModel.name.value = value
         },
         onFirstDayChange = { viewModel.firstDay.value = it },
         onLastDayChange = { viewModel.lastDay.value = it }
