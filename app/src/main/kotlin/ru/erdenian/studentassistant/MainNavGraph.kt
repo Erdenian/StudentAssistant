@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.ui.main
+package ru.erdenian.studentassistant
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

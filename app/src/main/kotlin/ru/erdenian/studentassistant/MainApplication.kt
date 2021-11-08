@@ -7,10 +7,10 @@ import org.kodein.di.DIAware
 import ru.erdenian.studentassistant.repository.di.repositoryModule
 
 @Suppress("unused")
-class SaApplication : Application(), DIAware {
+class MainApplication : Application(), DIAware {
 
     override val di by DI.lazy {
-        val app = this@SaApplication
+        val app = this@MainApplication
         import(repositoryModule(app, GlobalScope, "schedule.db"))
     }
 }
