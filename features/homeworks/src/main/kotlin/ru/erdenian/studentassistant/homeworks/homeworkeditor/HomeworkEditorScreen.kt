@@ -53,6 +53,7 @@ import ru.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorViewM
 import ru.erdenian.studentassistant.sampledata.Homeworks
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.ExposedDropdownMenu
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
@@ -183,8 +184,8 @@ private fun HomeworkEditorContent(
 ) {
     Column(
         modifier = Modifier.padding(
-            horizontal = AppTheme.dimensions.activityHorizontalMargin,
-            vertical = AppTheme.dimensions.activityVerticalMargin
+            horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
+            vertical = MaterialTheme.dimensions.activityVerticalMargin
         )
     ) {
         val descriptionFocusRequester = remember { FocusRequester() }

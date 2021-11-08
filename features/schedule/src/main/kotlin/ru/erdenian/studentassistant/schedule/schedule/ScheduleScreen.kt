@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -44,6 +45,7 @@ import ru.erdenian.studentassistant.schedule.R
 import ru.erdenian.studentassistant.schedule.composable.PagerTabStrip
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.LessonCard
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
@@ -167,7 +169,7 @@ private fun ScheduleContent(
                 Text(
                     text = stringResource(R.string.s_no_schedule),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = AppTheme.dimensions.activityHorizontalMargin)
+                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
                 )
             } else {
                 val shortTitleFormatter = remember { DateTimeFormat.forPattern("EEEE, dd MMMM") }
@@ -192,15 +194,15 @@ private fun ScheduleContent(
                         Text(
                             text = stringResource(R.string.s_free_day),
                             textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(horizontal = AppTheme.dimensions.activityHorizontalMargin)
+                            modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
                         )
                     } else {
                         LazyColumn(
                             contentPadding = PaddingValues(
-                                horizontal = AppTheme.dimensions.activityHorizontalMargin,
-                                vertical = AppTheme.dimensions.activityVerticalMargin
+                                horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
+                                vertical = MaterialTheme.dimensions.activityVerticalMargin
                             ),
-                            verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.cardsSpacing),
+                            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.cardsSpacing),
                             modifier = Modifier.fillMaxSize()
                         ) {
                             itemsIndexed(

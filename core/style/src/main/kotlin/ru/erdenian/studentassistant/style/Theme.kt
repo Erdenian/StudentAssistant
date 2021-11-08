@@ -25,12 +25,10 @@ fun AppTheme(
     }
 }
 
-object AppTheme {
-
-    val dimensions: Dimensions
-        @Composable
-        @ReadOnlyComposable
-        get() = LocalDimensions.current
-}
+@Suppress("unused")
+val MaterialTheme.dimensions: Dimensions
+    @Composable
+    @ReadOnlyComposable
+    get() = LocalDimensions.current
 
 typealias AppIcons = Icons.Filled

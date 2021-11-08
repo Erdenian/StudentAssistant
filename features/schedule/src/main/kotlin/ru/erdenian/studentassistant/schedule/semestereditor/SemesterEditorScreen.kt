@@ -41,6 +41,7 @@ import ru.erdenian.studentassistant.schedule.R
 import ru.erdenian.studentassistant.schedule.semestereditor.SemesterEditorViewModel.Error
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.utils.showDatePicker
@@ -132,8 +133,8 @@ private fun SemesterEditorContent(
 ) {
     Column(
         modifier = Modifier.padding(
-            horizontal = AppTheme.dimensions.activityHorizontalMargin,
-            vertical = AppTheme.dimensions.activityVerticalMargin
+            horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
+            vertical = MaterialTheme.dimensions.activityVerticalMargin
         )
     ) {
         val dateFormatter = remember { DateTimeFormat.shortDate() }
