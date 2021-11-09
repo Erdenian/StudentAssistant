@@ -1,7 +1,6 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    id("de.mannodermaus.android-junit5")
 }
 
 android {
@@ -47,12 +46,4 @@ android {
             "androidTest${flavor.name.capitalize()}".let { getByName(it).java.srcDirs("src/$it/kotlin") }
         }
     }
-}
-
-dependencies {
-    // region Tests
-    val junitVersion: String by project
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-    // endregion
 }

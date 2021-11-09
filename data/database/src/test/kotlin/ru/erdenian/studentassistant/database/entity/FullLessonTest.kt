@@ -3,8 +3,8 @@ package ru.erdenian.studentassistant.database.entity
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
+import org.junit.Assert.assertThrows
+import org.junit.Test
 
 internal class FullLessonTest {
 
@@ -46,7 +46,7 @@ internal class FullLessonTest {
 
     @Test
     fun noRepeatsTest() {
-        assertThrows<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             FullLesson(
                 LessonEntity(
                     "name",
@@ -66,7 +66,7 @@ internal class FullLessonTest {
 
     @Test
     fun multipleRepeatsTest() {
-        assertThrows<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             FullLesson(
                 LessonEntity(
                     "name",

@@ -5,11 +5,11 @@ import android.content.SharedPreferences
 import androidx.test.core.app.ApplicationProvider
 import java.time.Duration
 import java.time.LocalTime
+import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import org.junit.After
+import org.junit.Test
 
 class SettingsRepositoryTest {
 
@@ -18,7 +18,7 @@ class SettingsRepositoryTest {
         .getSharedPreferences("settings", Context.MODE_PRIVATE)
     private val settingsRepository = SettingsRepository(sharedPreferences)
 
-    @AfterEach
+    @After
     fun clear() = sharedPreferences.edit().apply(SharedPreferences.Editor::clear).apply()
 
     @Test
