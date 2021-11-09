@@ -63,6 +63,12 @@ jobs:
           name: Unit Test
           path: "**/build/reports/tests/"
           if-no-files-found: error
+      - uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Unit Test Report
+          path: "**/build/test-results/test*/TEST-*.xml"
+          reporter: java-junit
 
   androidTest:
     runs-on: macos-latest
@@ -86,6 +92,12 @@ jobs:
           name: Android Test
           path: "**/build/reports/androidTests/"
           if-no-files-found: error
+      - uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Android Test Report
+          path: "**/build/outputs/androidTest-results/connected/TEST-*.xml"
+          reporter: java-junit
 
   build:
     needs: [analysis, test, androidTest]

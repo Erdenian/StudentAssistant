@@ -34,8 +34,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import ru.erdenian.studentassistant.sampledata.Semesters
 import ru.erdenian.studentassistant.schedule.R
 import ru.erdenian.studentassistant.schedule.semestereditor.SemesterEditorViewModel.Error
@@ -85,7 +86,7 @@ fun SemesterEditorScreen(
         onBackClick = navigateBack,
         onSaveClick = {
             isNameChanged = true
-            errorMessage?.let { it -> context.toast(it) } ?: viewModel.save()
+            errorMessage?.let { context.toast(it) } ?: viewModel.save()
         },
         onNameChange = { value ->
             isNameChanged = true
@@ -137,7 +138,7 @@ private fun SemesterEditorContent(
             vertical = MaterialTheme.dimensions.activityVerticalMargin
         )
     ) {
-        val dateFormatter = remember { DateTimeFormat.shortDate() }
+        val dateFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
         val focusManager = LocalFocusManager.current
 
         OutlinedTextField(
@@ -179,7 +180,7 @@ private fun SemesterEditorContent(
             TextButton(
                 onClick = { context.showDatePicker(preselectedDate = firstDay, onDateSet = onFirstDayChange) }
             ) {
-                Text(text = firstDay.toString(dateFormatter))
+                Text(text = firstDay.format(dateFormatter))
             }
         }
 
@@ -196,7 +197,7 @@ private fun SemesterEditorContent(
             TextButton(
                 onClick = { context.showDatePicker(preselectedDate = lastDay, onDateSet = onLastDayChange) }
             ) {
-                Text(text = lastDay.toString(dateFormatter))
+                Text(text = lastDay.format(dateFormatter))
             }
         }
     }

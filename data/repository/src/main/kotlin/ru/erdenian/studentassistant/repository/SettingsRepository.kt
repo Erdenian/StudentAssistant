@@ -1,22 +1,22 @@
 package ru.erdenian.studentassistant.repository
 
 import android.content.SharedPreferences
+import java.time.Duration
+import java.time.LocalTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
-import org.joda.time.Duration
-import org.joda.time.LocalTime
 
 class SettingsRepository(private val sharedPreferences: SharedPreferences) {
 
     companion object {
         private const val DEFAULT_START_TIME_KEY = "default_start_time"
-        private val DEFAULT_START_TIME = LocalTime(9, 0)
+        private val DEFAULT_START_TIME = LocalTime.of(9, 0)
 
         private const val DEFAULT_LESSON_DURATION_KEY = "default_lesson_duration"
-        private val DEFAULT_LESSON_DURATION = Duration.standardMinutes(90)
+        private val DEFAULT_LESSON_DURATION = Duration.ofMinutes(90)
 
         private const val DEFAULT_BREAK_DURATION_KEY = "default_break_duration"
-        private val DEFAULT_BREAK_DURATION = Duration.standardMinutes(10)
+        private val DEFAULT_BREAK_DURATION = Duration.ofMinutes(10)
     }
 
     // region Default start time

@@ -46,8 +46,9 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import ru.erdenian.studentassistant.homeworks.R
 import ru.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorViewModel.Error
 import ru.erdenian.studentassistant.sampledata.Homeworks
@@ -228,8 +229,8 @@ private fun HomeworkEditorContent(
                 },
                 enabled = isLoaded
             ) {
-                val deadlineFormatter = remember { DateTimeFormat.shortDate() }
-                Text(text = deadline.toString(deadlineFormatter))
+                val deadlineFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
+                Text(text = deadline.format(deadlineFormatter))
             }
         }
 
@@ -238,6 +239,7 @@ private fun HomeworkEditorContent(
             onValueChange = onDescriptionChange,
             label = { Text(text = stringResource(R.string.he_description)) },
             enabled = isLoaded,
+            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
             modifier = Modifier
                 .fillMaxSize()
                 .focusRequester(descriptionFocusRequester)
@@ -252,6 +254,7 @@ private fun SimpleTextField(
     modifier: Modifier = Modifier,
     label: @Composable (() -> Unit)? = null,
     enabled: Boolean = true,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(),
     colors: TextFieldColors = TextFieldDefaults.textFieldColors()
 ) = Box {
     val textStyle = LocalTextStyle.current
@@ -262,6 +265,7 @@ private fun SimpleTextField(
         onValueChange = onValueChange,
         enabled = enabled,
         textStyle = textStyle.merge(TextStyle(color = textColor)),
+        keyboardOptions = keyboardOptions,
         modifier = modifier
     )
 
@@ -290,7 +294,7 @@ private fun HomeworkEditorContentRegularPreview() = AppTheme {
         subjectName = Homeworks.regular.subjectName,
         deadline = Homeworks.regular.deadline,
         description = Homeworks.regular.description,
-        semesterDates = LocalDate(2021, 9, 1)..LocalDate(2022, 6, 30),
+        semesterDates = LocalDate.of(2021, 9, 1)..LocalDate.of(2022, 6, 30),
         onBackClick = {},
         onSaveClick = {},
         onDeleteClick = {},
@@ -309,9 +313,9 @@ private fun HomeworkEditorContentEmptyPreview() = AppTheme {
         isEditing = true,
         existingSubjects = emptyList(),
         subjectName = "",
-        deadline = LocalDate(2021, 10, 3),
+        deadline = LocalDate.of(2021, 10, 3),
         description = "",
-        semesterDates = LocalDate(2021, 9, 1)..LocalDate(2022, 6, 30),
+        semesterDates = LocalDate.of(2021, 9, 1)..LocalDate.of(2022, 6, 30),
         onBackClick = {},
         onSaveClick = {},
         onDeleteClick = {},
@@ -331,7 +335,7 @@ private fun HomeworkEditorContentLongPreview() = AppTheme {
         subjectName = Homeworks.long.subjectName,
         deadline = Homeworks.long.deadline,
         description = Homeworks.long.description,
-        semesterDates = LocalDate(2021, 9, 1)..LocalDate(2022, 6, 30),
+        semesterDates = LocalDate.of(2021, 9, 1)..LocalDate.of(2022, 6, 30),
         onBackClick = {},
         onSaveClick = {},
         onDeleteClick = {},

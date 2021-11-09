@@ -8,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import java.time.DayOfWeek
 import ru.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorScreen
 import ru.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorViewModel
 import ru.erdenian.studentassistant.homeworks.homeworks.HomeworksScreen
@@ -221,8 +222,8 @@ internal class MainDirections(private val navController: NavHostController) {
                     navigateToEditLesson = { semester, lesson, copy ->
                         navigateToLessonEditor(semester, lessonId = lesson, copy = copy)
                     },
-                    navigateToCreateLesson = { semester, weekday ->
-                        navigateToLessonEditor(semester, weekday = weekday)
+                    navigateToCreateLesson = { semester, dayOfWeek ->
+                        navigateToLessonEditor(semester, dayOfWeek = dayOfWeek)
                     }
                 )
             }
@@ -235,13 +236,13 @@ internal class MainDirections(private val navController: NavHostController) {
 
     fun navigateToLessonEditor(
         semesterId: Long,
-        weekday: Int? = null,
+        dayOfWeek: DayOfWeek? = null,
         subjectName: String? = null,
         lessonId: Long? = null,
         copy: Boolean? = null
     ) {
         val arguments = args(
-            "weekday" to weekday,
+            "day_of_week" to dayOfWeek?.value,
             "subject_name" to subjectName,
             "lesson_id" to lessonId,
             "copy" to copy
@@ -252,12 +253,12 @@ internal class MainDirections(private val navController: NavHostController) {
     init {
         composables.add {
             composable(
-                route = "lesson_editor/{semester_id}?weekday={weekday}&subject_name={subject_name}&copy={copy}",
+                route = "lesson_editor/{semester_id}?day_of_week={day_of_week}&subject_name={subject_name}&lesson_id={lesson_id}&copy={copy}",
                 arguments = listOf(
                     navArgument("semester_id") {
                         type = NavType.LongType
                     },
-                    navArgument("weekday") {
+                    navArgument("day_of_week") {
                         type = NavType.IntType
                         defaultValue = -1
                     },
@@ -278,14 +279,14 @@ internal class MainDirections(private val navController: NavHostController) {
             ) { backStackEntry ->
                 val arguments = checkNotNull(backStackEntry.arguments)
                 val semesterId = checkNotNull(arguments.getLong("semester_id", -1L).takeIf { it >= 0 })
-                val weekday = arguments.getInt("weekday", -1).takeIf { it >= 0 }
+                val dayOfWeek = arguments.getInt("day_of_week", -1).takeIf { it >= 0 }?.let(DayOfWeek::of)
                 val subjectName = arguments.getString("subject_name")
-                val lessonId = arguments.getLong("semester_id", -1L).takeIf { it >= 0 }
+                val lessonId = arguments.getLong("lesson_id", -1L).takeIf { it >= 0 }
                 val copy = arguments.getBoolean("copy")
 
                 val viewModel = viewModel { application ->
                     when {
-                        (weekday != null) -> LessonEditorViewModel(application, semesterId, weekday)
+                        (dayOfWeek != null) -> LessonEditorViewModel(application, semesterId, dayOfWeek)
                         (subjectName != null) -> LessonEditorViewModel(application, semesterId, subjectName)
                         (lessonId != null) -> LessonEditorViewModel(application, semesterId, lessonId, copy)
                         else -> throw IllegalArgumentException("Wrong LessonEditor arguments")

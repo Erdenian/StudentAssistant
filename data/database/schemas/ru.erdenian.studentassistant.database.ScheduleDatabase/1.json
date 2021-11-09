@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0fea0765b0365687d2b443f0a6c42da0",
+    "identityHash": "bf1cd189df9d7e68a0f713edbfadb09b",
     "entities": [
       {
         "tableName": "semesters",
@@ -238,11 +238,11 @@
       },
       {
         "tableName": "by_weekday",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`weekday` INTEGER NOT NULL, `weeks` TEXT NOT NULL, `lesson_id` INTEGER NOT NULL, PRIMARY KEY(`lesson_id`), FOREIGN KEY(`lesson_id`) REFERENCES `lessons`(`_id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`day_of_week` INTEGER NOT NULL, `weeks` TEXT NOT NULL, `lesson_id` INTEGER NOT NULL, PRIMARY KEY(`lesson_id`), FOREIGN KEY(`lesson_id`) REFERENCES `lessons`(`_id`) ON UPDATE CASCADE ON DELETE CASCADE )",
         "fields": [
           {
-            "fieldPath": "weekday",
-            "columnName": "weekday",
+            "fieldPath": "dayOfWeek",
+            "columnName": "day_of_week",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -420,7 +420,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0fea0765b0365687d2b443f0a6c42da0')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bf1cd189df9d7e68a0f713edbfadb09b')"
     ]
   }
 }

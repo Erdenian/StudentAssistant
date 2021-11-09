@@ -3,9 +3,9 @@ package ru.erdenian.studentassistant.database.entity
 import androidx.room.Embedded
 import androidx.room.Ignore
 import androidx.room.Relation
+import java.time.LocalDate
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
-import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 

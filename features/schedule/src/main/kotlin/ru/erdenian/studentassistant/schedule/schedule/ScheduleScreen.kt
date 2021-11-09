@@ -29,12 +29,13 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.time.temporal.ChronoUnit
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.joda.time.Days
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.entity.ImmutableSortedSet
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.entity.Semester
@@ -52,8 +53,8 @@ import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
 import ru.erdenian.studentassistant.utils.showDatePicker
 
-private fun Semester.getDate(position: Int): LocalDate = firstDay.plusDays(position)
-private fun Semester.getPosition(date: LocalDate) = Days.daysBetween(firstDay, date.coerceIn(range)).days
+private fun Semester.getDate(position: Int): LocalDate = firstDay.plusDays(position.toLong())
+private fun Semester.getPosition(date: LocalDate) = ChronoUnit.DAYS.between(firstDay, date.coerceIn(range)).toInt()
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -172,14 +173,14 @@ private fun ScheduleContent(
                     modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
                 )
             } else {
-                val shortTitleFormatter = remember { DateTimeFormat.forPattern("EEEE, dd MMMM") }
-                val fullTitleFormatter = remember { DateTimeFormat.forPattern("EEEE, dd MMMM yyyy") }
+                val shortTitleFormatter = remember { DateTimeFormatter.ofPattern("EEEE, dd MMMM") }
+                val fullTitleFormatter = remember { DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy") }
 
                 PagerTabStrip(
                     state = state,
                     titleGetter = { page ->
-                        val date = selectedSemester.firstDay.plusDays(page)
-                        date.toString(if (date.year == LocalDate.now().year) shortTitleFormatter else fullTitleFormatter)
+                        val date = selectedSemester.firstDay.plusDays(page.toLong())
+                        date.format(if (date.year == LocalDate.now().year) shortTitleFormatter else fullTitleFormatter)
                     }
                 )
 
@@ -209,15 +210,15 @@ private fun ScheduleContent(
                                 items = lessons.list,
                                 key = { _, item -> item.id }
                             ) { _, lesson ->
-                                val timeFormatter = remember { DateTimeFormat.shortTime() }
+                                val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
 
                                 LessonCard(
                                     subjectName = lesson.subjectName,
                                     type = lesson.type,
                                     teachers = lesson.teachers.list,
                                     classrooms = lesson.classrooms.list,
-                                    startTime = lesson.startTime.toString(timeFormatter),
-                                    endTime = lesson.endTime.toString(timeFormatter),
+                                    startTime = lesson.startTime.format(timeFormatter),
+                                    endTime = lesson.endTime.format(timeFormatter),
                                     onClick = { onLessonClick(lesson) }
                                 )
                             }

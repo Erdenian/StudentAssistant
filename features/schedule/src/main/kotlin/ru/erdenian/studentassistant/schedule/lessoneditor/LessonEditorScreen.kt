@@ -37,9 +37,11 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.time.DayOfWeek
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import kotlinx.coroutines.launch
-import org.joda.time.LocalTime
-import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.sampledata.Lessons
 import ru.erdenian.studentassistant.schedule.R
@@ -96,7 +98,7 @@ fun LessonEditorScreen(
     val startTime by viewModel.startTime.collectAsState()
     val endTime by viewModel.endTime.collectAsState()
 
-    val weekday by viewModel.weekday.collectAsState()
+    val dayOfWeek by viewModel.dayOfWeek.collectAsState()
     val weeks by viewModel.weeks.collectAsState()
 
     val context = LocalContext.current
@@ -115,7 +117,7 @@ fun LessonEditorScreen(
         existingClassrooms = existingClassrooms.list,
         startTime = startTime,
         endTime = endTime,
-        weekday = weekday,
+        dayOfWeek = dayOfWeek,
         weeks = weeks,
         onBackClick = navigateBack,
         onSaveClick = {
@@ -164,7 +166,7 @@ fun LessonEditorScreen(
         onClassroomsChange = { viewModel.classrooms.value = it },
         onStartTimeChange = { viewModel.startTime.value = it },
         onEndTimeChange = { viewModel.endTime.value = it },
-        onWeekdayChange = { viewModel.weekday.value = it },
+        onDayOfWeekChange = { viewModel.dayOfWeek.value = it },
         onWeeksChange = { viewModel.weeks.value = it }
     )
 }
@@ -183,7 +185,7 @@ private fun LessonEditorContent(
     existingClassrooms: List<String>,
     startTime: LocalTime,
     endTime: LocalTime,
-    weekday: Int,
+    dayOfWeek: DayOfWeek,
     weeks: List<Boolean>,
     onBackClick: () -> Unit,
     onSaveClick: () -> Unit,
@@ -194,7 +196,7 @@ private fun LessonEditorContent(
     onClassroomsChange: (String) -> Unit,
     onStartTimeChange: (LocalTime) -> Unit,
     onEndTimeChange: (LocalTime) -> Unit,
-    onWeekdayChange: (Int) -> Unit,
+    onDayOfWeekChange: (DayOfWeek) -> Unit,
     onWeeksChange: (List<Boolean>) -> Unit
 ) = Scaffold(
     topBar = {
@@ -233,7 +235,7 @@ private fun LessonEditorContent(
                 vertical = MaterialTheme.dimensions.activityVerticalMargin
             )
     ) {
-        val timeFormatter = remember { DateTimeFormat.shortTime() }
+        val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
 
         AutoCompleteTextField(
             value = subjectName,
@@ -311,7 +313,7 @@ private fun LessonEditorContent(
             TextButton(
                 onClick = { context.showTimePicker(preselectedTime = startTime, onTimeSet = onStartTimeChange) }
             ) {
-                Text(text = startTime.toString(timeFormatter))
+                Text(text = startTime.format(timeFormatter))
             }
         }
 
@@ -331,16 +333,15 @@ private fun LessonEditorContent(
             TextButton(
                 onClick = { context.showTimePicker(preselectedTime = endTime, onTimeSet = onEndTimeChange) }
             ) {
-                Text(text = endTime.toString(timeFormatter))
+                Text(text = endTime.format(timeFormatter))
             }
         }
 
         Divider(modifier = Modifier.padding(vertical = 8.dp))
 
         WeekdaysPicker(
-            value = weekday,
-            onValueChange = onWeekdayChange,
-            sundayFirstDay = false,
+            value = dayOfWeek,
+            onValueChange = onDayOfWeekChange,
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -371,7 +372,7 @@ private fun LessonEditorContentPreview() = AppTheme {
         existingClassrooms = emptyList(),
         startTime = Lessons.regular.startTime,
         endTime = Lessons.regular.endTime,
-        weekday = (Lessons.regular.lessonRepeat as Lesson.Repeat.ByWeekday).weekday,
+        dayOfWeek = (Lessons.regular.lessonRepeat as Lesson.Repeat.ByWeekday).dayOfWeek,
         weeks = (Lessons.regular.lessonRepeat as Lesson.Repeat.ByWeekday).weeks,
         onBackClick = {},
         onSaveClick = {},
@@ -382,7 +383,7 @@ private fun LessonEditorContentPreview() = AppTheme {
         onClassroomsChange = {},
         onStartTimeChange = {},
         onEndTimeChange = {},
-        onWeekdayChange = {},
+        onDayOfWeekChange = {},
         onWeeksChange = {}
     )
 }

@@ -1,7 +1,5 @@
 package ru.erdenian.studentassistant.utils
 
-private val lineSeparator = checkNotNull(System.getProperty("line.separator"))
-
 /**
  * Преобразует многострочный текст в единственную строку.
  *
@@ -10,4 +8,4 @@ private val lineSeparator = checkNotNull(System.getProperty("line.separator"))
  * @author Ilya Solovyov
  * @since 0.2.6
  */
-fun String.toSingleLine() = replace(lineSeparator, " ")
+fun String.toSingleLine() = lineSequence().joinToString(" ")

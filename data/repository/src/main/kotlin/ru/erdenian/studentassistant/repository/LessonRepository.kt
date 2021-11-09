@@ -1,12 +1,13 @@
 package ru.erdenian.studentassistant.repository
 
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.LocalTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import org.joda.time.LocalDate
-import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.database.dao.LessonDao
 import ru.erdenian.studentassistant.database.entity.ByDateEntity
 import ru.erdenian.studentassistant.database.entity.ByWeekdayEntity
@@ -36,13 +37,13 @@ class LessonRepository(
         startTime: LocalTime,
         endTime: LocalTime,
         semesterId: Long,
-        weekday: Int,
+        dayOfWeek: DayOfWeek,
         weeks: List<Boolean>
     ) {
         val lessonEntity = LessonEntity(subjectName, type, startTime, endTime, semesterId)
         val teachersEntity = teachers.map { TeacherEntity(it) }
         val classroomsEntity = classrooms.map { ClassroomEntity(it) }
-        lessonDao.insert(lessonEntity, teachersEntity, classroomsEntity, ByWeekdayEntity(weekday, weeks))
+        lessonDao.insert(lessonEntity, teachersEntity, classroomsEntity, ByWeekdayEntity(dayOfWeek, weeks))
     }
 
     suspend fun insert(
@@ -70,13 +71,13 @@ class LessonRepository(
         startTime: LocalTime,
         endTime: LocalTime,
         semesterId: Long,
-        weekday: Int,
+        dayOfWeek: DayOfWeek,
         weeks: List<Boolean>
     ) {
         val lessonEntity = LessonEntity(subjectName, type, startTime, endTime, semesterId, id)
         val teachersEntity = teachers.map { TeacherEntity(it, id) }
         val classroomsEntity = classrooms.map { ClassroomEntity(it, id) }
-        lessonDao.update(lessonEntity, teachersEntity, classroomsEntity, ByWeekdayEntity(weekday, weeks, id))
+        lessonDao.update(lessonEntity, teachersEntity, classroomsEntity, ByWeekdayEntity(dayOfWeek, weeks, id))
     }
 
     suspend fun update(
@@ -118,8 +119,8 @@ class LessonRepository(
             }
         }
 
-    fun getAllFlow(semesterId: Long, weekday: Int): Flow<ImmutableSortedSet<Lesson>> =
-        lessonDao.getAllFlow(semesterId, weekday).map()
+    fun getAllFlow(semesterId: Long, dayOfWeek: DayOfWeek): Flow<ImmutableSortedSet<Lesson>> =
+        lessonDao.getAllFlow(semesterId, dayOfWeek).map()
 
     suspend fun getCount(semesterId: Long): Int = lessonDao.getCount(semesterId)
 
@@ -148,9 +149,10 @@ class LessonRepository(
 
     fun getClassrooms(semesterId: Long): Flow<ImmutableSortedSet<String>> = lessonDao.getClassroomsFlow(semesterId).map()
 
-    suspend fun getNextStartTime(semesterId: Long, weekday: Int): LocalTime = lessonDao.getLastEndTime(semesterId, weekday)
-        ?.plusMillis(settingsRepository.defaultBreakDuration.millis.toInt())
-        ?: settingsRepository.defaultStartTime
+    suspend fun getNextStartTime(semesterId: Long, dayOfWeek: DayOfWeek): LocalTime =
+        lessonDao.getLastEndTime(semesterId, dayOfWeek)
+            ?.plusNanos(settingsRepository.defaultBreakDuration.toNanos())
+            ?: settingsRepository.defaultStartTime
 
     // endregion
 

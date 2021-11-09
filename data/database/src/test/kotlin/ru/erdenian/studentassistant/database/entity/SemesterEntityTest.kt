@@ -1,28 +1,28 @@
 package ru.erdenian.studentassistant.database.entity
 
-import org.joda.time.LocalDate
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
+import java.time.LocalDate
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
+import org.junit.Test
 
 internal class SemesterEntityTest {
 
     @Test
     fun nameTest() {
-        assertThrows<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             SemesterEntity("", LocalDate.now().minusDays(1), LocalDate.now())
         }
-        assertThrows<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             SemesterEntity("    ", LocalDate.now().minusDays(1), LocalDate.now())
         }
     }
 
     @Test
     fun datesTest() {
-        assertThrows<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             SemesterEntity("name", LocalDate.now(), LocalDate.now().minusDays(1))
         }
-        assertThrows<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             SemesterEntity("name", LocalDate.now(), LocalDate.now())
         }
     }
@@ -41,17 +41,17 @@ internal class SemesterEntityTest {
             2,
             SemesterEntity(
                 "name",
-                LocalDate(2019, 7, 12),
-                LocalDate(2019, 7, 31)
-            ).getWeekNumber(LocalDate(2019, 7, 22))
+                LocalDate.of(2019, 7, 12),
+                LocalDate.of(2019, 7, 31)
+            ).getWeekNumber(LocalDate.of(2019, 7, 22))
         )
         assertEquals(
             2,
             SemesterEntity(
                 "name",
-                LocalDate(2019, 7, 12),
-                LocalDate(2019, 7, 31)
-            ).getWeekNumber(LocalDate(2019, 7, 28))
+                LocalDate.of(2019, 7, 12),
+                LocalDate.of(2019, 7, 31)
+            ).getWeekNumber(LocalDate.of(2019, 7, 28))
         )
     }
 }

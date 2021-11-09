@@ -3,21 +3,20 @@ plugins {
     kotlin("android")
     kotlin("kapt")
     kotlin("plugin.parcelize")
-    id("de.mannodermaus.android-junit5")
 }
 
 android {
+    val minSdkVersion: String by project
     val compileSdkVersion: String by project
     val targetSdkVersion: String by project
 
     compileSdk = compileSdkVersion.toInt()
 
     defaultConfig {
-        minSdk = 16
+        minSdk = minSdkVersion.toInt()
         targetSdk = targetSdkVersion.toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArguments["runnerBuilder"] = "de.mannodermaus.junit5.AndroidJUnit5Builder"
 
         consumerProguardFiles("consumer-rules.pro")
 
@@ -40,13 +39,10 @@ android {
     }
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    packagingOptions {
-        // JUnit 5
-        resources.excludes += "META-INF/LICENSE*"
     }
 
     sourceSets {
@@ -69,16 +65,14 @@ dependencies {
 
     // region Tests
     val junitVersion: String by project
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    testImplementation("junit:junit:$junitVersion")
 
-    androidTestImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    val junitExtVersion: String by project
+    androidTestImplementation("androidx.test.ext:junit-ktx:$junitExtVersion")
+
     val androidxTestVersion: String by project
-    androidTestImplementation("androidx.test:core:$androidxTestVersion")
+    androidTestImplementation("androidx.test:core-ktx:$androidxTestVersion")
     androidTestImplementation("androidx.test:runner:$androidxTestVersion")
-    val junit5AndroidTestVersion: String by project
-    androidTestImplementation("de.mannodermaus.junit5:android-test-core:$junit5AndroidTestVersion")
-    androidTestRuntimeOnly("de.mannodermaus.junit5:android-test-runner:$junit5AndroidTestVersion")
     // endregion
 
     // region Kotlin
@@ -93,9 +87,6 @@ dependencies {
     // endregion
 
     // region Core
-    val jodaTimeVersion: String by project
-    api("joda-time:joda-time:$jodaTimeVersion")
-
     val kodeinVersion: String by project
     implementation("org.kodein.di:kodein-di-jvm:$kodeinVersion")
     // endregion
