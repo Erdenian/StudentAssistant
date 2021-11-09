@@ -20,8 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpOffset
-import androidx.compose.ui.unit.dp
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 
@@ -90,8 +88,7 @@ private fun TopAppBarActionsContent(
 
                 DropdownMenu(
                     expanded = expanded,
-                    onDismissRequest = onDismissRequest,
-                    offset = DpOffset(0.dp, (-48).dp)
+                    onDismissRequest = onDismissRequest
                 ) {
                     neverShowActions.forEach { item ->
                         DropdownMenuItem(

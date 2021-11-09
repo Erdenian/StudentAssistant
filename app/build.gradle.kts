@@ -149,10 +149,10 @@ dependencies {
     // endregion
 
     // region UI
+    implementation("net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC3")
+
     val materialVersion: String by project
     implementation("com.google.android.material:material:$materialVersion")
-
-    implementation("net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC3")
     // endregion
 }
 
