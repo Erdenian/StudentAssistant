@@ -1,9 +1,9 @@
 package ru.erdenian.studentassistant.database.dao
 
 import androidx.test.core.app.ApplicationProvider
+import java.time.LocalDate
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import org.joda.time.LocalDate
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

@@ -1,9 +1,9 @@
 package ru.erdenian.studentassistant.entity
 
 import android.os.Parcelable
-import org.joda.time.DateTimeConstants
-import org.joda.time.LocalDate
-import org.joda.time.LocalTime
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.LocalTime
 
 /**
  * Класс пары (урока).
@@ -66,35 +66,31 @@ interface Lesson : Comparable<Lesson>, Parcelable {
          *
          * Для хранения списка недель используется List, так как массивы изменяемы.
          *
-         * @property weekday день недели (1 - понедельник, 7 - воскресенье)
+         * @property dayOfWeek день недели
          * @property weeks список boolean значений, где i-е значение показывает
          *              повторять ли пару каждую i-ю неделю
-         * @throws IllegalArgumentException если [weekday] задан некорректно или [weeks] пуст
+         * @throws IllegalArgumentException если [weeks] пуст
          * @author Ilya Solovyov
          * @since 0.0.0
          */
         abstract class ByWeekday : Repeat() {
 
-            abstract val weekday: Int
+            abstract val dayOfWeek: DayOfWeek
             abstract val weeks: List<Boolean>
 
             override fun repeatsOnDay(day: LocalDate, weekNumber: Int) =
-                (day.dayOfWeek == weekday) && (weeks[weekNumber % weeks.size])
+                (day.dayOfWeek == dayOfWeek) && (weeks[weekNumber % weeks.size])
 
             /**
              * Показывает, повторяется ли пара в заданный день недели без учета номера недели.
              *
-             * @param weekday день недели (1 - понедельник, 7 - воскресенье)
+             * @param dayOfWeek день недели
              * @return true, если пара повторяется в этот день недели, хотя бы на одной неделе,
              *               false в противном случае
-             * @throws IllegalArgumentException если [weekday] задан некорректно
              * @author Ilya Solovyov
              * @since 0.0.0
              */
-            fun repeatsOnWeekday(weekday: Int): Boolean {
-                require(weekday in DateTimeConstants.MONDAY..DateTimeConstants.SUNDAY) { "Неверный день недели: $weekday" }
-                return (weekday == this.weekday)
-            }
+            fun repeatsOnDayOfWeek(dayOfWeek: DayOfWeek): Boolean = (dayOfWeek == this.dayOfWeek)
         }
 
         /**

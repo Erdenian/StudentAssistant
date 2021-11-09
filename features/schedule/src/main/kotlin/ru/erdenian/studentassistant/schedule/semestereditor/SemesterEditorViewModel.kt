@@ -3,14 +3,14 @@ package ru.erdenian.studentassistant.schedule.semestereditor
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import java.time.LocalDate
+import java.time.Month
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.joda.time.DateTimeConstants
-import org.joda.time.LocalDate
 import org.kodein.di.DIAware
 import org.kodein.di.android.x.closestDI
 import org.kodein.di.instance
@@ -31,8 +31,8 @@ class SemesterEditorViewModel(
     }
 
     private val semestersRanges = listOf(
-        DateTimeConstants.FEBRUARY..DateTimeConstants.MAY,
-        DateTimeConstants.SEPTEMBER..DateTimeConstants.DECEMBER
+        Month.FEBRUARY..Month.MAY,
+        Month.SEPTEMBER..Month.DECEMBER
     )
 
     val name = MutableStateFlow("")
@@ -43,9 +43,9 @@ class SemesterEditorViewModel(
 
     init {
         val today = LocalDate.now().withDayOfMonth(1)
-        val range = semestersRanges.find { today.monthOfYear <= it.last } ?: semestersRanges.first()
-        firstDay = MutableStateFlow(today.withMonthOfYear(range.first))
-        lastDay = MutableStateFlow(today.withMonthOfYear(range.last).dayOfMonth().withMaximumValue())
+        val range = semestersRanges.find { today.month <= it.endInclusive } ?: semestersRanges.first()
+        firstDay = MutableStateFlow(today.withMonth(range.start.value))
+        lastDay = MutableStateFlow(today.withMonth(range.endInclusive.value).withDayOfMonth(range.endInclusive.maxLength()))
 
         if (semesterId != null) {
             viewModelScope.launch {

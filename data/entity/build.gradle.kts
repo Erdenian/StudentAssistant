@@ -5,13 +5,14 @@ plugins {
 }
 
 android {
+    val minSdkVersion: String by project
     val compileSdkVersion: String by project
     val targetSdkVersion: String by project
 
     compileSdk = compileSdkVersion.toInt()
 
     defaultConfig {
-        minSdk = 16
+        minSdk = minSdkVersion.toInt()
         targetSdk = targetSdkVersion.toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -29,6 +30,8 @@ android {
     }
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -51,10 +54,5 @@ dependencies {
     val junitVersion: String by project
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-    // endregion
-
-    // region Core
-    val jodaTimeVersion: String by project
-    api("joda-time:joda-time:$jodaTimeVersion")
     // endregion
 }

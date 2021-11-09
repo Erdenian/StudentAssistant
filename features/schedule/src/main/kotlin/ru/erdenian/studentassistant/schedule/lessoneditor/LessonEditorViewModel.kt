@@ -3,6 +3,10 @@ package ru.erdenian.studentassistant.schedule.lessoneditor
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import java.time.DayOfWeek
+import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalTime
 import kotlin.reflect.KClass
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
@@ -16,10 +20,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.joda.time.DateTimeConstants
-import org.joda.time.LocalDate
-import org.joda.time.LocalTime
-import org.joda.time.Period
 import org.kodein.di.DIAware
 import org.kodein.di.android.x.closestDI
 import org.kodein.di.instance
@@ -48,8 +48,8 @@ class LessonEditorViewModel private constructor(
         EMPTY_REPEAT
     }
 
-    constructor(application: Application, semesterId: Long, weekday: Int) : this(application, semesterId, null) {
-        this.weekday.value = weekday
+    constructor(application: Application, semesterId: Long, dayOfWeek: DayOfWeek) : this(application, semesterId, null) {
+        this.dayOfWeek.value = dayOfWeek
         viewModelScope.launch {
             initTime(true)
             isLoadedPrivate.value = true
@@ -85,7 +85,7 @@ class LessonEditorViewModel private constructor(
             endTime.value = lesson.endTime
             lessonRepeat.value = when (val lessonRepeat = lesson.lessonRepeat) {
                 is Lesson.Repeat.ByWeekday -> {
-                    weekday.value = lessonRepeat.weekday
+                    dayOfWeek.value = lessonRepeat.dayOfWeek
                     weeks.value = lessonRepeat.weeks
                     Lesson.Repeat.ByWeekday::class
                 }
@@ -105,23 +105,23 @@ class LessonEditorViewModel private constructor(
     val teachers = MutableStateFlow("")
     val classrooms = MutableStateFlow("")
 
-    val weekday = MutableStateFlow(DateTimeConstants.MONDAY)
+    val dayOfWeek = MutableStateFlow(DayOfWeek.MONDAY)
     val weeks = MutableStateFlow(listOf(true))
     val dates = MutableStateFlow(immutableSortedSetOf<LocalDate>())
 
     val startTime = MutableStateFlow(settingsRepository.defaultStartTime)
-    val endTime = MutableStateFlow<LocalTime>(startTime.value + settingsRepository.defaultLessonDuration.toPeriod())
+    val endTime = MutableStateFlow<LocalTime>(startTime.value + settingsRepository.defaultLessonDuration)
 
     private suspend fun initTime(loadDefaultStartTime: Boolean): Unit = coroutineScope {
         launch(start = CoroutineStart.UNDISPATCHED) {
             var previousStartTime = startTime.value
             startTime.collect { startTime ->
-                val difference = Period.fieldDifference(previousStartTime, endTime.value)
+                val difference = Duration.between(previousStartTime, endTime.value)
                 endTime.value = startTime + difference
                 previousStartTime = startTime
             }
         }
-        if (loadDefaultStartTime) startTime.value = lessonRepository.getNextStartTime(semesterId, weekday.value)
+        if (loadDefaultStartTime) startTime.value = lessonRepository.getNextStartTime(semesterId, dayOfWeek.value)
     }
 
     val lessonRepeat = MutableStateFlow<KClass<out Lesson.Repeat>>(Lesson.Repeat.ByWeekday::class)
@@ -206,12 +206,12 @@ class LessonEditorViewModel private constructor(
                     if (lessonId != null) {
                         lessonRepository.update(
                             lessonId, subjectName, type, teachers, classrooms, startTime, endTime, semesterId,
-                            weekday.value, weeksValue
+                            dayOfWeek.value, weeksValue
                         )
                     } else {
                         lessonRepository.insert(
                             subjectName, type, teachers, classrooms, startTime, endTime, semesterId,
-                            weekday.value, weeksValue
+                            dayOfWeek.value, weeksValue
                         )
                     }
                 }

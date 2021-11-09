@@ -4,8 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.time.DayOfWeek
 import kotlinx.parcelize.Parcelize
-import org.joda.time.DateTimeConstants
 import ru.erdenian.studentassistant.entity.Lesson
 
 @Entity(
@@ -23,8 +23,8 @@ import ru.erdenian.studentassistant.entity.Lesson
 @Parcelize
 data class ByWeekdayEntity(
 
-    @ColumnInfo(name = "weekday")
-    override val weekday: Int,
+    @ColumnInfo(name = "day_of_week")
+    override val dayOfWeek: DayOfWeek,
 
     @ColumnInfo(name = "weeks")
     override val weeks: List<Boolean>,
@@ -36,7 +36,6 @@ data class ByWeekdayEntity(
 ) : Lesson.Repeat.ByWeekday() {
 
     init {
-        require(weekday in DateTimeConstants.MONDAY..DateTimeConstants.SUNDAY) { "Неверный день недели: $weekday" }
         require(weeks.isNotEmpty()) { "Список недель пуст" }
         require(weeks.contains(true)) { "Нет повторений ни на одной неделе" }
     }

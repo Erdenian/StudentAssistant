@@ -1,7 +1,7 @@
 package ru.erdenian.studentassistant.entity
 
 import android.os.Parcelable
-import org.joda.time.LocalDate
+import java.time.LocalDate
 
 /**
  * Класс домашнего задания.

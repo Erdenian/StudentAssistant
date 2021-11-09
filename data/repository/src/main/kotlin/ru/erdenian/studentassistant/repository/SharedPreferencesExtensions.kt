@@ -1,6 +1,8 @@
 package ru.erdenian.studentassistant.repository
 
 import android.content.SharedPreferences
+import java.time.Duration
+import java.time.LocalTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
@@ -8,8 +10,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.stateIn
-import org.joda.time.Duration
-import org.joda.time.LocalTime
 
 // regions Flows
 
@@ -41,15 +41,15 @@ private fun <T> SharedPreferences.getFlow(
 // region Extensions
 
 internal fun SharedPreferences.getLocalTime(key: String, defaultValue: LocalTime): LocalTime =
-    LocalTime.MIDNIGHT.plusMillis(getInt(key, defaultValue.millisOfDay))
+    LocalTime.ofNanoOfDay(getLong(key, defaultValue.toNanoOfDay()))
 
 internal fun SharedPreferences.Editor.putLocalTime(key: String, value: LocalTime): SharedPreferences.Editor =
-    putInt(key, value.millisOfDay)
+    putLong(key, value.toNanoOfDay())
 
 internal fun SharedPreferences.getDuration(key: String, defaultValue: Duration): Duration =
-    Duration.millis(getLong(key, defaultValue.millis))
+    Duration.ofNanos(getLong(key, defaultValue.toNanos()))
 
 internal fun SharedPreferences.Editor.putDuration(key: String, value: Duration): SharedPreferences.Editor =
-    putLong(key, value.millis)
+    putLong(key, value.toNanos())
 
 // endregion

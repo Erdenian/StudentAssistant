@@ -6,6 +6,7 @@ plugins {
 }
 
 android {
+    val minSdkVersion: String by project
     val compileSdkVersion: String by project
     val targetSdkVersion: String by project
 
@@ -16,7 +17,7 @@ android {
         versionCode = 18
         versionName = "0.4.5"
 
-        minSdk = 21
+        minSdk = minSdkVersion.toInt()
         targetSdk = targetSdkVersion.toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -107,6 +108,8 @@ android {
     }
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }

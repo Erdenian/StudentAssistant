@@ -1,6 +1,6 @@
 package ru.erdenian.studentassistant.database.entity
 
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 

@@ -38,7 +38,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.joda.time.format.DateTimeFormat
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import ru.erdenian.studentassistant.entity.Homework
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.sampledata.Homeworks
@@ -124,15 +125,15 @@ private fun LessonInformationContent(
         CircularProgressIndicator()
     } else {
         Column {
-            val timeFormatter = remember { DateTimeFormat.shortTime() }
+            val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
 
             LessonCard(
                 subjectName = lesson.subjectName,
                 type = lesson.type,
                 teachers = lesson.teachers.list,
                 classrooms = lesson.classrooms.list,
-                startTime = lesson.startTime.toString(timeFormatter),
-                endTime = lesson.endTime.toString(timeFormatter),
+                startTime = lesson.startTime.format(timeFormatter),
+                endTime = lesson.endTime.format(timeFormatter),
                 modifier = Modifier.padding(
                     horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
                     vertical = MaterialTheme.dimensions.activityVerticalMargin
@@ -166,12 +167,12 @@ private fun LessonInformationContent(
                             items = homeworks,
                             key = { _, item -> item.id }
                         ) { _, homework ->
-                            val deadlineFormatter = remember { DateTimeFormat.shortDate() }
+                            val deadlineFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
 
                             HomeworkCard(
                                 subjectName = homework.subjectName,
                                 description = homework.description,
-                                deadline = homework.deadline.toString(deadlineFormatter),
+                                deadline = homework.deadline.format(deadlineFormatter),
                                 onClick = { onHomeworkClick(homework) },
                                 onLongClick = { contextMenuHomework = homework }
                             )
