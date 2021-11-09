@@ -30,7 +30,7 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 @Composable
-internal fun WeekdaysPicker(
+internal fun WeekdayPicker(
     value: DayOfWeek,
     onValueChange: (DayOfWeek) -> Unit,
     modifier: Modifier = Modifier,
