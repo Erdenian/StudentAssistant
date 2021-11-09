@@ -1,8 +1,8 @@
 package ru.erdenian.studentassistant.database.entity
 
 import java.time.LocalDate
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
+import org.junit.Assert.assertThrows
+import org.junit.Test
 
 internal class HomeworkEntityTest {
 
@@ -10,7 +10,7 @@ internal class HomeworkEntityTest {
 
     @Test
     fun subjectNameTest() {
-        assertThrows<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             HomeworkEntity(
                 "",
                 "description",
@@ -18,7 +18,7 @@ internal class HomeworkEntityTest {
                 semesterId
             )
         }
-        assertThrows<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             HomeworkEntity(
                 "    ",
                 "description",
@@ -30,7 +30,7 @@ internal class HomeworkEntityTest {
 
     @Test
     fun descriptionTest() {
-        assertThrows<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             HomeworkEntity(
                 "name",
                 "",
@@ -38,7 +38,7 @@ internal class HomeworkEntityTest {
                 semesterId
             )
         }
-        assertThrows<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             HomeworkEntity(
                 "name",
                 "     ",

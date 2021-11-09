@@ -1,17 +1,19 @@
 package ru.erdenian.studentassistant.database.dao
 
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotEquals
-import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertNull
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
 import org.kodein.di.instance
 import ru.erdenian.studentassistant.database.ScheduleDatabase
 import ru.erdenian.studentassistant.database.di.databaseKodein
@@ -23,6 +25,7 @@ import ru.erdenian.studentassistant.database.entity.LessonEntity
 import ru.erdenian.studentassistant.database.entity.SemesterEntity
 import ru.erdenian.studentassistant.database.entity.TeacherEntity
 
+@RunWith(AndroidJUnit4::class)
 internal class LessonDaoAndroidTest {
 
     private val di = databaseKodein(ApplicationProvider.getApplicationContext())
@@ -30,7 +33,7 @@ internal class LessonDaoAndroidTest {
 
     private val semesterId = 1L
 
-    @BeforeEach
+    @Before
     fun setUp(): Unit = runBlocking {
         di.instance<SemesterDao>().insert(
             SemesterEntity(
@@ -42,7 +45,7 @@ internal class LessonDaoAndroidTest {
         )
     }
 
-    @AfterEach
+    @After
     fun tearDown() = di.instance<ScheduleDatabase>().close()
 
     @Test
