@@ -33,12 +33,12 @@ jobs:
           path: "build/reports/detekt/detekt.html"
           if-no-files-found: error
       - name: Lint Release
-        run: ./gradlew lintRelease
+        run: ./gradlew :app:lintRelease
       - uses: actions/upload-artifact@v2
         if: always()
         with:
           name: Lint
-          path: "*/build/reports/lint-results*.html"
+          path: "**/build/reports/lint-results*.html"
           if-no-files-found: error
 
   test:
@@ -61,7 +61,7 @@ jobs:
         if: always()
         with:
           name: Unit Test
-          path: "*/build/reports/tests/"
+          path: "**/build/reports/tests/"
           if-no-files-found: error
 
   androidTest:
@@ -84,7 +84,7 @@ jobs:
         if: always()
         with:
           name: Android Test
-          path: "*/build/reports/androidTests/"
+          path: "**/build/reports/androidTests/"
           if-no-files-found: error
 
   build:

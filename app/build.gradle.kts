@@ -24,6 +24,13 @@ android {
         setProperty("archivesBaseName", "${rootProject.name}-$versionName")
     }
 
+    lint {
+        isCheckDependencies = true
+        isCheckAllWarnings = true
+        xmlReport = false
+        isCheckTestSources = true
+    }
+
     buildFeatures.compose = true
 
     composeOptions {
@@ -119,30 +126,33 @@ android {
 
 dependencies {
     // region Private
-    implementation(project(":repository"))
-    implementation(project(":uikit"))
-    implementation(project(":utils"))
+    implementation(project(":core:style"))
+    implementation(project(":core:strings"))
+
+    implementation(project(":data:repository"))
+
+    implementation(project(":features:schedule"))
+    implementation(project(":features:homeworks"))
+    implementation(project(":features:settings"))
     // endregion
 
     // region AndroidX
+    implementation("androidx.appcompat:appcompat:1.3.1")
     implementation("androidx.activity:activity-compose:1.4.0")
-
-    val lifecycleVersion: String by project
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
-
     implementation("androidx.navigation:navigation-compose:2.4.0-beta02")
+    implementation("androidx.core:core-splashscreen:1.0.0-alpha02")
     // endregion
 
     // region Core
     val kodeinVersion: String by project
-    implementation("org.kodein.di:kodein-di-jvm:$kodeinVersion")
     implementation("org.kodein.di:kodein-di-framework-android-x:$kodeinVersion")
     // endregion
 
     // region UI
-    implementation("com.google.accompanist:accompanist-pager:0.20.2")
     implementation("net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC3")
-    implementation("com.github.DavidProdinger:weekdays-selector:1.1.1")
+
+    val materialVersion: String by project
+    implementation("com.google.android.material:material:$materialVersion")
     // endregion
 }
 
