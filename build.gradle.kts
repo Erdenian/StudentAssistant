@@ -35,6 +35,14 @@ subprojects {
             freeCompilerArgs += listOf("-Xjvm-default=all")
         }
     }
+
+    afterEvaluate {
+        dependencies {
+            configurations.findByName("coreLibraryDesugaring")?.let { coreLibraryDesugaring ->
+                coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+            }
+        }
+    }
 }
 
 detekt {

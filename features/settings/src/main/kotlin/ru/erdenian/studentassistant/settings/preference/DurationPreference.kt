@@ -16,9 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
-import org.joda.time.Duration
-import org.joda.time.Period
-import org.joda.time.format.PeriodFormatterBuilder
+import java.time.Duration
 import ru.erdenian.studentassistant.uikit.R
 
 @Composable
@@ -29,20 +27,11 @@ internal fun DurationPreference(
     modifier: Modifier = Modifier,
     icon: Painter? = null
 ) {
-    val formatter = remember {
-        PeriodFormatterBuilder()
-            .printZeroAlways()
-            .minimumPrintedDigits(2)
-            .appendHours()
-            .appendSeparator(":")
-            .appendMinutes()
-            .toFormatter()
-    }
     var isShowDialog by remember { mutableStateOf(false) }
 
     BasePreference(
         title = title,
-        description = value.toPeriod().toString(formatter),
+        description = String.format("%02d:%02d", value.toHours(), value.toMinutesPart()),
         icon = icon,
         onClick = { isShowDialog = true },
         modifier = modifier
@@ -92,21 +81,25 @@ internal fun DurationPreference(
 @Suppress("DEPRECATION")
 private var TimePicker.duration: Duration
     get() {
-        val period =
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                Period(hour, minute, 0, 0)
-            } else {
-                Period(currentHour, currentMinute, 0, 0)
-            }
-        return period.toStandardDuration()
+        val hours: Int
+        val minutes: Int
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            hours = hour
+            minutes = minute
+        } else {
+            hours = currentHour
+            minutes = currentMinute
+        }
+
+        return Duration.ofHours(hours.toLong()).plusMinutes(minutes.toLong())
     }
     set(value) {
-        val period = value.toPeriod()
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            hour = period.hours
-            minute = period.minutes
+            hour = value.toHours().toInt()
+            minute = value.toMinutesPart()
         } else {
-            currentHour = period.hours
-            currentMinute = period.minutes
+            currentHour = value.toHours().toInt()
+            currentMinute = value.toMinutesPart()
         }
     }

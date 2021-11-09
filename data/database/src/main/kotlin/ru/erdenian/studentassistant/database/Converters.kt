@@ -1,30 +1,35 @@
 package ru.erdenian.studentassistant.database
 
 import androidx.room.TypeConverter
-import org.joda.time.Days
-import org.joda.time.LocalDate
-import org.joda.time.LocalTime
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.LocalTime
 
 internal object Converters {
 
-    @Suppress("MagicNumber")
-    private val epoch = LocalDate(1970, 1, 1)
+    @TypeConverter
+    @JvmStatic
+    fun dayOfWeekToInt(value: DayOfWeek?): Int? = value?.value
 
     @TypeConverter
     @JvmStatic
-    fun localDateToInt(value: LocalDate?): Int? = value?.let { Days.daysBetween(epoch, it).days }
+    fun intToDayOfWeek(value: Int?): DayOfWeek? = value?.let(DayOfWeek::of)
 
     @TypeConverter
     @JvmStatic
-    fun intToLocalDate(value: Int?): LocalDate? = value?.let(epoch::plusDays)
+    fun localDateToLong(value: LocalDate?): Long? = value?.toEpochDay()
 
     @TypeConverter
     @JvmStatic
-    fun localTimeToInt(value: LocalTime?): Int? = value?.millisOfDay
+    fun longToLocalDate(value: Long?): LocalDate? = value?.let(LocalDate::ofEpochDay)
 
     @TypeConverter
     @JvmStatic
-    fun intToLocalTime(value: Int?): LocalTime? = value?.let(LocalTime.MIDNIGHT::plusMillis)
+    fun localTimeToInt(value: LocalTime?): Long? = value?.toNanoOfDay()
+
+    @TypeConverter
+    @JvmStatic
+    fun intToLocalTime(value: Long?): LocalTime? = value?.let(LocalTime::ofNanoOfDay)
 
     @TypeConverter
     @JvmStatic

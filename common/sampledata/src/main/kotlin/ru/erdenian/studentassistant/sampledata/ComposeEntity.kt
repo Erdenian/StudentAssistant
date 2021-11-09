@@ -4,8 +4,9 @@ import android.annotation.SuppressLint
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
-import org.joda.time.LocalDate
-import org.joda.time.LocalTime
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.LocalTime
 import ru.erdenian.studentassistant.entity.Homework
 import ru.erdenian.studentassistant.entity.ImmutableSortedSet
 import ru.erdenian.studentassistant.entity.Lesson
@@ -52,10 +53,11 @@ fun Lesson(
 
 @SuppressLint("ComposableNaming")
 @Composable
-fun ByWeekday(weekday: Int, weeks: List<Boolean>): Lesson.Repeat.ByWeekday = object : Lesson.Repeat.ByWeekday(), NoOpParcelable {
-    override val weekday get() = weekday
-    override val weeks get() = weeks
-}
+fun ByWeekday(dayOfWeek: DayOfWeek, weeks: List<Boolean>): Lesson.Repeat.ByWeekday =
+    object : Lesson.Repeat.ByWeekday(), NoOpParcelable {
+        override val dayOfWeek get() = dayOfWeek
+        override val weeks get() = weeks
+    }
 
 @SuppressLint("ComposableNaming")
 @Composable

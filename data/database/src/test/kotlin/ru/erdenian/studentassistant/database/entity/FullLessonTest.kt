@@ -1,8 +1,8 @@
 package ru.erdenian.studentassistant.database.entity
 
-import org.joda.time.DateTimeConstants
-import org.joda.time.LocalDate
-import org.joda.time.LocalTime
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.LocalTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
@@ -21,7 +21,7 @@ internal class FullLessonTest {
             ),
             listOf(TeacherEntity("teacher", 10L)),
             listOf(ClassroomEntity("classroom", 10L)),
-            ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true)),
+            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
             emptyList()
         )
     }
@@ -40,7 +40,7 @@ internal class FullLessonTest {
             listOf(TeacherEntity("teacher", 10L)),
             listOf(ClassroomEntity("classroom", 10L)),
             null,
-            listOf(ByDateEntity(LocalDate(2020, 4, 25), 10L))
+            listOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L))
         )
     }
 
@@ -78,8 +78,8 @@ internal class FullLessonTest {
                 ),
                 listOf(TeacherEntity("teacher", 10L)),
                 listOf(ClassroomEntity("classroom", 10L)),
-                ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true)),
-                listOf(ByDateEntity(LocalDate(2020, 4, 25), 10L))
+                ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
+                listOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L))
             )
         }
     }

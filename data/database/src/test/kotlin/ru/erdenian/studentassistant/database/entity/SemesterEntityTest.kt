@@ -1,6 +1,6 @@
 package ru.erdenian.studentassistant.database.entity
 
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -41,17 +41,17 @@ internal class SemesterEntityTest {
             2,
             SemesterEntity(
                 "name",
-                LocalDate(2019, 7, 12),
-                LocalDate(2019, 7, 31)
-            ).getWeekNumber(LocalDate(2019, 7, 22))
+                LocalDate.of(2019, 7, 12),
+                LocalDate.of(2019, 7, 31)
+            ).getWeekNumber(LocalDate.of(2019, 7, 22))
         )
         assertEquals(
             2,
             SemesterEntity(
                 "name",
-                LocalDate(2019, 7, 12),
-                LocalDate(2019, 7, 31)
-            ).getWeekNumber(LocalDate(2019, 7, 28))
+                LocalDate.of(2019, 7, 12),
+                LocalDate.of(2019, 7, 31)
+            ).getWeekNumber(LocalDate.of(2019, 7, 28))
         )
     }
 }

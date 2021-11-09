@@ -30,7 +30,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.joda.time.format.DateTimeFormat
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import ru.erdenian.studentassistant.entity.Homework
 import ru.erdenian.studentassistant.homeworks.R
 import ru.erdenian.studentassistant.sampledata.Homeworks
@@ -135,7 +136,7 @@ private fun HomeworksContent(
             )
             else -> {
                 var contextMenuHomework by remember { mutableStateOf<Homework?>(null) }
-                val deadlineFormatter = remember { DateTimeFormat.shortDate() }
+                val deadlineFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
 
                 LazyColumn(
                     contentPadding = PaddingValues(
@@ -152,7 +153,7 @@ private fun HomeworksContent(
                         HomeworkCard(
                             subjectName = homework.subjectName,
                             description = homework.description,
-                            deadline = homework.deadline.toString(deadlineFormatter),
+                            deadline = homework.deadline.format(deadlineFormatter),
                             onLongClick = { contextMenuHomework = homework },
                             onClick = { onHomeworkClick(homework) }
                         )

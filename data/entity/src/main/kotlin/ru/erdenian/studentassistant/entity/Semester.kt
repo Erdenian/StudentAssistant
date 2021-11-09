@@ -1,9 +1,8 @@
 package ru.erdenian.studentassistant.entity
 
 import android.os.Parcelable
-import org.joda.time.Days
-import org.joda.time.LocalDate
-import org.joda.time.Weeks
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 /**
  * Класс семестра (четверти).
@@ -29,7 +28,7 @@ interface Semester : Comparable<Semester>, Parcelable {
      * @author Ilya Solovyov
      * @since 0.0.0
      */
-    val length: Int get() = Days.daysBetween(firstDay, lastDay).days + 1
+    val length: Int get() = ChronoUnit.DAYS.between(firstDay, lastDay).toInt() + 1
 
     val range: ClosedRange<LocalDate> get() = firstDay..lastDay
 
@@ -39,7 +38,7 @@ interface Semester : Comparable<Semester>, Parcelable {
      * @author Ilya Solovyov
      * @since 0.2.6
      */
-    private val firstWeekMonday: LocalDate get() = firstDay.minusDays(firstDay.dayOfWeek - 1)
+    private val firstWeekMonday: LocalDate get() = firstDay.minusDays(firstDay.dayOfWeek.value.toLong() - 1L)
 
     /**
      * Позволяет получить номер недели с начала семестра, содержащей определенную дату.
@@ -51,7 +50,8 @@ interface Semester : Comparable<Semester>, Parcelable {
      * @param day день
      * @return номер недели, содержащей этот день (< 0, если [day] < [firstDay])
      */
-    fun getWeekNumber(day: LocalDate): Int = Weeks.weeksBetween(firstWeekMonday, day).weeks - if (day >= firstWeekMonday) 0 else 1
+    fun getWeekNumber(day: LocalDate): Int =
+        ChronoUnit.WEEKS.between(firstWeekMonday, day).toInt() - if (day >= firstWeekMonday) 0 else 1
 
     override fun compareTo(other: Semester) = compareValuesBy(
         this,

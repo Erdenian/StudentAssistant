@@ -5,10 +5,11 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import java.time.DayOfWeek
+import java.time.LocalTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
-import org.joda.time.LocalTime
 import ru.erdenian.studentassistant.database.entity.ByDateEntity
 import ru.erdenian.studentassistant.database.entity.ByWeekdayEntity
 import ru.erdenian.studentassistant.database.entity.ClassroomEntity
@@ -112,8 +113,8 @@ abstract class LessonDao {
     abstract fun getAllFlow(semesterId: Long): Flow<List<FullLesson>>
 
     @Transaction
-    @Query("SELECT * FROM lessons as l INNER JOIN by_weekday AS w ON w.lesson_id = l._id WHERE semester_id = :semesterId AND weekday = :weekday")
-    abstract fun getAllFlow(semesterId: Long, weekday: Int): Flow<List<FullLesson>>
+    @Query("SELECT * FROM lessons as l INNER JOIN by_weekday AS w ON w.lesson_id = l._id WHERE semester_id = :semesterId AND day_of_week = :dayOfWeek")
+    abstract fun getAllFlow(semesterId: Long, dayOfWeek: DayOfWeek): Flow<List<FullLesson>>
 
     @Query("SELECT COUNT(_id) FROM lessons WHERE semester_id = :semesterId")
     abstract suspend fun getCount(semesterId: Long): Int
@@ -156,8 +157,8 @@ abstract class LessonDao {
     @Query("SELECT DISTINCT c.name FROM classrooms AS c INNER JOIN lessons AS l ON l._id = c.lesson_id WHERE l.semester_id = :semesterId ORDER BY c.name")
     abstract fun getClassroomsFlow(semesterId: Long): Flow<List<String>>
 
-    @Query("SELECT l.end_time FROM lessons AS l INNER JOIN by_weekday AS w ON w.lesson_id = l._id WHERE l.semester_id = :semesterId AND w.weekday = :weekday ORDER BY end_time DESC LIMIT 1")
-    abstract suspend fun getLastEndTime(semesterId: Long, weekday: Int): LocalTime?
+    @Query("SELECT l.end_time FROM lessons AS l INNER JOIN by_weekday AS w ON w.lesson_id = l._id WHERE l.semester_id = :semesterId AND w.day_of_week = :dayOfWeek ORDER BY end_time DESC LIMIT 1")
+    abstract suspend fun getLastEndTime(semesterId: Long, dayOfWeek: DayOfWeek): LocalTime?
 
     // endregion
 }

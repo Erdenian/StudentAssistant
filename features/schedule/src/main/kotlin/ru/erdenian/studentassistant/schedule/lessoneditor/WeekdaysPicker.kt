@@ -16,13 +16,13 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.viewinterop.AndroidView
+import java.time.DayOfWeek
 import java.util.Calendar
-import org.joda.time.DateTimeConstants
 
 @Composable
 internal fun WeekdaysPicker(
-    value: Int,
-    onValueChange: (Int) -> Unit,
+    value: DayOfWeek,
+    onValueChange: (DayOfWeek) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     editable: Boolean = true,
@@ -34,15 +34,15 @@ internal fun WeekdaysPicker(
     borderThickness: Dp = Dp.Unspecified,
     borderHighlightThickness: Dp = Dp.Unspecified
 ) {
-    val jodaToCalendar = remember {
+    val javaToCalendar = remember {
         mapOf(
-            DateTimeConstants.MONDAY to Calendar.MONDAY,
-            DateTimeConstants.TUESDAY to Calendar.TUESDAY,
-            DateTimeConstants.WEDNESDAY to Calendar.WEDNESDAY,
-            DateTimeConstants.THURSDAY to Calendar.THURSDAY,
-            DateTimeConstants.FRIDAY to Calendar.FRIDAY,
-            DateTimeConstants.SATURDAY to Calendar.SATURDAY,
-            DateTimeConstants.SUNDAY to Calendar.SUNDAY
+            DayOfWeek.MONDAY to Calendar.MONDAY,
+            DayOfWeek.TUESDAY to Calendar.TUESDAY,
+            DayOfWeek.WEDNESDAY to Calendar.WEDNESDAY,
+            DayOfWeek.THURSDAY to Calendar.THURSDAY,
+            DayOfWeek.FRIDAY to Calendar.FRIDAY,
+            DayOfWeek.SATURDAY to Calendar.SATURDAY,
+            DayOfWeek.SUNDAY to Calendar.SUNDAY
         )
     }
 
@@ -66,15 +66,15 @@ internal fun WeekdaysPicker(
                 setSelectOnlyOne(true)
                 weekendDarker = true
 
-                val calendarToJoda = jodaToCalendar.entries.associate { (k, v) -> v to k }
+                val calendarToJava = javaToCalendar.entries.associate { (k, v) -> v to k }
                 setOnWeekdaysChangeListener { _, _, weekdays ->
-                    val weekday = weekdays.singleOrNull()
-                        ?.let(calendarToJoda::getValue)
+                    val dayOfWeek = weekdays.singleOrNull()
+                        ?.let(calendarToJava::getValue)
                         ?: run {
-                            selectDay(jodaToCalendar.getValue(currentValue))
+                            selectDay(javaToCalendar.getValue(currentValue))
                             return@setOnWeekdaysChangeListener
                         }
-                    if (weekday != currentValue) currentOnValueChange(weekday)
+                    if (dayOfWeek != currentValue) currentOnValueChange(dayOfWeek)
                 }
             }
         },
@@ -103,7 +103,7 @@ internal fun WeekdaysPicker(
                 view.borderHighlightThickness = borderHighlightThickness.toPx().toInt()
             }
 
-            val calendarValue = jodaToCalendar.getValue(value)
+            val calendarValue = javaToCalendar.getValue(value)
             if (view.selectedDays.single() != calendarValue) view.selectDay(calendarValue)
 
             view.redrawDays()

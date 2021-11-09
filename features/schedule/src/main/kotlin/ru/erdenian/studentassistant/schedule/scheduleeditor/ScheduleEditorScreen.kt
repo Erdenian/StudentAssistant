@@ -38,12 +38,14 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.time.DayOfWeek
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.time.format.TextStyle
+import java.util.Locale
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.joda.time.DateTimeConstants
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
 import ru.erdenian.studentassistant.entity.ImmutableSortedSet
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.entity.toImmutableSortedSet
@@ -64,7 +66,7 @@ fun ScheduleEditorScreen(
     navigateBack: () -> Unit,
     navigateToEditSemester: (semesterId: Long) -> Unit,
     navigateToEditLesson: (semesterId: Long, lessonId: Long, copy: Boolean) -> Unit,
-    navigateToCreateLesson: (semesterId: Long, weekday: Int) -> Unit
+    navigateToCreateLesson: (semesterId: Long, dayOfWeek: DayOfWeek) -> Unit
 ) {
     val semester by viewModel.semester.collectAsState()
     val isDeleted by viewModel.isDeleted.collectAsState()
@@ -80,8 +82,8 @@ fun ScheduleEditorScreen(
     ScheduleEditorContent(
         state = pagerState,
         lessonsGetter = { page ->
-            val weekday = page + 1
-            viewModel.getLessons(weekday)
+            val dayOfWeek = DayOfWeek.of(page + 1)
+            viewModel.getLessons(dayOfWeek)
         },
         onBackClick = navigateBack,
         onEditSemesterClick = { navigateToEditSemester(viewModel.semesterId) },
@@ -120,8 +122,8 @@ fun ScheduleEditorScreen(
             }
         },
         onAddLessonClick = {
-            val weekday = pagerState.currentPage + 1
-            navigateToCreateLesson(viewModel.semesterId, weekday)
+            val dayOfWeek = DayOfWeek.of(pagerState.currentPage + 1)
+            navigateToCreateLesson(viewModel.semesterId, dayOfWeek)
         }
     )
 }
@@ -172,17 +174,15 @@ private fun ScheduleEditorContent(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        val weekdays = remember {
-            List<String>(DateTimeConstants.DAYS_PER_WEEK) { LocalDate().withDayOfWeek(it + 1).dayOfWeek().asText }
-        }
+        val daysOfWeek = DayOfWeek.values().map { it.getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault()) }
 
         PagerTabStrip(
             state = state,
-            titleGetter = { weekdays[it] }
+            titleGetter = { daysOfWeek[it] }
         )
 
         HorizontalPager(
-            count = DateTimeConstants.DAYS_PER_WEEK,
+            count = daysOfWeek.size,
             state = state
         ) { page ->
             val lessonsFlow = remember(lessonsGetter) { lessonsGetter(page) }
@@ -209,15 +209,15 @@ private fun ScheduleEditorContent(
                         items = lessons.list,
                         key = { _, item -> item.id }
                     ) { _, lesson ->
-                        val timeFormatter = remember { DateTimeFormat.shortTime() }
+                        val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
 
                         LessonCard(
                             subjectName = lesson.subjectName,
                             type = lesson.type,
                             teachers = lesson.teachers.list,
                             classrooms = lesson.classrooms.list,
-                            startTime = lesson.startTime.toString(timeFormatter),
-                            endTime = lesson.endTime.toString(timeFormatter),
+                            startTime = lesson.startTime.format(timeFormatter),
+                            endTime = lesson.endTime.format(timeFormatter),
                             onClick = { onLessonClick(lesson) },
                             onLongClick = { contextMenuLesson = lesson }
                         )

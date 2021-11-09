@@ -5,8 +5,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.time.LocalTime
 import kotlinx.parcelize.Parcelize
-import org.joda.time.LocalTime
 
 @Entity(
     tableName = "lessons",

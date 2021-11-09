@@ -4,8 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import java.time.LocalDate
 import kotlinx.parcelize.Parcelize
-import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.entity.Semester
 
 @Entity(
