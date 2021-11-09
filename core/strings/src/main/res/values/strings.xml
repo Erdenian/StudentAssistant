@@ -1,0 +1,129 @@
+<resources>
+
+    <string name="app_name">Student Assistant</string>
+
+    <!-- region schedule -->
+
+    <!-- Schedule -->
+    <string name="s_title">Расписание</string>
+    <string name="s_calendar">Календарь</string>
+    <string name="s_add">Добавить расписание</string>
+    <string name="s_edit">Редактировать расписание</string>
+    <string name="s_no_schedule">Здесь пока пусто. Добавьте расписание своего университета или школы.</string>
+    <string name="s_free_day">Выходной</string>
+
+    <!-- Lesson Information -->
+    <string name="li_title">Данные занятия</string>
+    <string name="li_no_homeworks">Нет заданий</string>
+    <string name="li_edit">Редактировать</string>
+    <string name="li_delete_homework">Удалить</string>
+    <string name="li_delete_message">Удалить задание?</string>
+    <string name="li_delete_yes">Да</string>
+    <string name="li_delete_no">Нет</string>
+
+    <!-- Semester Editor -->
+    <string name="se_title_new">Добавление расписания</string>
+    <string name="se_title_edit">Данные расписания</string>
+    <string name="se_name">Название</string>
+    <string name="se_first_day">Первый день</string>
+    <string name="se_last_day">Последний день</string>
+    <string name="se_save">Сохранить</string>
+    <string name="se_error_empty_name">Имя не может быть пустым</string>
+    <string name="se_error_name_not_available">Такое имя уже занято</string>
+    <string name="se_error_wrong_dates">Даты первого и последнего дня введены некорректно</string>
+
+    <!-- Schedule Editor -->
+    <string name="sce_title">Редактор расписания</string>
+    <string name="sce_free_day">Выходной</string>
+    <string name="sce_edit">Изменить данные расписания</string>
+    <string name="sce_delete">Удалить расписание</string>
+    <string name="sce_delete_message">Удалить расписание?</string>
+    <string name="sce_delete_yes">Да</string>
+    <string name="sce_delete_no">Нет</string>
+    <string name="sce_copy_lesson">Копировать</string>
+    <string name="sce_delete_lesson">Удалить</string>
+
+    <!-- Lesson Editor -->
+    <string name="le_title_new">Добавление занятия</string>
+    <string name="le_title_edit">Данные занятия</string>
+    <string name="le_subject_name">Название занятия</string>
+    <string name="le_type">Тип занятия</string>
+    <string name="le_teachers">Преподаватели</string>
+    <string name="le_classrooms">Аудитории</string>
+    <string name="le_start_time">Время начала</string>
+    <string name="le_end_time">Время конца</string>
+    <string name="le_repeat_type">Когда повторять</string>
+    <string name="le_save">Сохранить</string>
+    <string name="le_error_empty_subject_name">Введите название занятия</string>
+    <string name="le_error_wrong_time">Время начала и конца введено некорректно</string>
+    <string name="le_error_empty_repeat">Не выбраны дни для повторения</string>
+    <string name="le_rename_others_title">Изменить занятия?</string>
+    <string name="le_rename_others_message">Предмет был изменен. Изменить его у остальных занятий?</string>
+    <string name="le_rename_others_yes">Да</string>
+    <string name="le_rename_others_no">Нет</string>
+    <string name="le_rename_others_cancel">Отмена</string>
+    <string name="le_delete">Удалить занятие</string>
+    <string name="le_delete_message">Удалить занятие?</string>
+    <string name="le_delete_yes">Удалить</string>
+    <string name="le_delete_no">Нет</string>
+    <string name="le_delete_homeworks_title">Задания будут удалены</string>
+    <string name="le_delete_homeworks_message">Для данного предмета есть домашние задания, удалить их вместе с ним?</string>
+    <string name="le_delete_homeworks_yes">Удалить</string>
+    <string name="le_delete_homeworks_no">Оставить</string>
+    <string name="le_delete_homeworks_cancel">Отмена</string>
+
+    <!-- endregion -->
+
+    <!-- region homeworks -->
+
+    <!-- Homeworks -->
+    <string name="h_title">Домашние задания</string>
+    <string name="h_add">Добавить задание</string>
+    <string name="h_no_schedule">Здесь пока пусто. Добавьте расписание своего университета или школы.</string>
+    <string name="h_no_homeworks">Нет заданий</string>
+    <string name="h_delete_homework">Удалить</string>
+    <string name="h_delete_message">Удалить задание?</string>
+    <string name="h_delete_yes">Да</string>
+    <string name="h_delete_no">Нет</string>
+
+    <!-- Homework Editor -->
+    <string name="he_title">Редактор задания</string>
+    <string name="he_subject">Предмет</string>
+    <string name="he_description">Описание</string>
+    <string name="he_deadline_label">Дата сдачи</string>
+    <string name="he_save">Сохранить</string>
+    <string name="he_error_empty_subject_name">Введите или выберите предмет</string>
+    <string name="he_error_empty_description">Введите описание домашнего задания</string>
+    <string name="he_unknown_lesson">Неизвестный предмет</string>
+    <string name="he_unknown_lesson_message">Введен неизвестный предмет. Сохранить задание?</string>
+    <string name="he_unknown_lesson_yes">Сохранить</string>
+    <string name="he_unknown_lesson_no">Нет</string>
+    <string name="he_unknown_lesson_yes_and_create">Сохранить и создать занятие</string>
+    <string name="he_delete">Удалить задание</string>
+    <string name="he_delete_message">Удалить задание?</string>
+    <string name="he_delete_yes">Удалить</string>
+    <string name="he_delete_no">Нет</string>
+
+    <!-- endregion -->
+
+    <!-- region settings -->
+
+    <!-- Settings -->
+    <string name="st_title">Настройки</string>
+    <string name="st_default_start_time">Время начала первого занятия</string>
+    <string name="st_default_lesson_duration">Длительность занятия</string>
+    <string name="st_default_break_duration">Длительность перемены</string>
+
+    <!-- endregion -->
+
+    <!-- region uikit -->
+
+    <!--HomeworkCard -->
+    <string name="hc_deadline">До %1$s</string>
+
+    <!-- WeeksSelector -->
+    <string name="ws_variants_title">Повторять</string>
+
+    <!-- endregion -->
+
+</resources>
