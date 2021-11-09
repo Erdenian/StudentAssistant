@@ -76,6 +76,5 @@ dependencies {
 
     // region UI
     implementation("com.google.accompanist:accompanist-pager:0.20.2")
-    implementation("com.github.DavidProdinger:weekdays-selector:1.1.1")
     // endregion
 }

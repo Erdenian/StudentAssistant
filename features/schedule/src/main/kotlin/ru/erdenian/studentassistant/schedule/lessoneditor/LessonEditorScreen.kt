@@ -342,7 +342,6 @@ private fun LessonEditorContent(
         WeekdaysPicker(
             value = dayOfWeek,
             onValueChange = onDayOfWeekChange,
-            sundayFirstDay = false,
             modifier = Modifier.fillMaxWidth()
         )
 
