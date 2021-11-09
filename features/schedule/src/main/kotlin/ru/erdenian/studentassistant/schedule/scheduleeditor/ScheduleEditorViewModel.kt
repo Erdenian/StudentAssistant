@@ -3,6 +3,7 @@ package ru.erdenian.studentassistant.schedule.scheduleeditor
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import java.time.DayOfWeek
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
@@ -39,8 +40,8 @@ class ScheduleEditorViewModel(
         .stateIn(viewModelScope, SharingStarted.Lazily, false)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun getLessons(weekday: Int) = semester.flatMapLatest { semester ->
-        if (semester != null) lessonRepository.getAllFlow(semester.id, weekday) else emptyFlow()
+    fun getLessons(dayOfWeek: DayOfWeek) = semester.flatMapLatest { semester ->
+        if (semester != null) lessonRepository.getAllFlow(semester.id, dayOfWeek) else emptyFlow()
     }.stateIn(viewModelScope, SharingStarted.Lazily, immutableSortedSetOf())
 
     fun deleteSemester() {

@@ -1,24 +1,27 @@
 package ru.erdenian.studentassistant.database.dao
 
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import java.time.LocalDate
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import org.joda.time.LocalDate
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Test
+import org.junit.runner.RunWith
 import org.kodein.di.instance
 import ru.erdenian.studentassistant.database.ScheduleDatabase
 import ru.erdenian.studentassistant.database.di.databaseKodein
 import ru.erdenian.studentassistant.database.entity.SemesterEntity
 
+@RunWith(AndroidJUnit4::class)
 internal class SemesterDaoAndroidTest {
 
     private val di = databaseKodein(ApplicationProvider.getApplicationContext())
     private val database: ScheduleDatabase = di.instance()
     private val semesterDao: SemesterDao = di.instance()
 
-    @AfterEach
+    @After
     fun tearDown() = database.close()
 
     @Test

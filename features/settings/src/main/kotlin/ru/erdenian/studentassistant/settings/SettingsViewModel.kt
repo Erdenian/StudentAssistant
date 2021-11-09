@@ -3,8 +3,8 @@ package ru.erdenian.studentassistant.settings
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import org.joda.time.Duration
-import org.joda.time.LocalTime
+import java.time.Duration
+import java.time.LocalTime
 import org.kodein.di.DIAware
 import org.kodein.di.android.x.closestDI
 import org.kodein.di.instance

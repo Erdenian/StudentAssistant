@@ -1,17 +1,19 @@
 package ru.erdenian.studentassistant.database.dao
 
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.LocalTime
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import org.joda.time.DateTimeConstants
-import org.joda.time.LocalDate
-import org.joda.time.LocalTime
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotEquals
-import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertNull
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
 import org.kodein.di.instance
 import ru.erdenian.studentassistant.database.ScheduleDatabase
 import ru.erdenian.studentassistant.database.di.databaseKodein
@@ -23,6 +25,7 @@ import ru.erdenian.studentassistant.database.entity.LessonEntity
 import ru.erdenian.studentassistant.database.entity.SemesterEntity
 import ru.erdenian.studentassistant.database.entity.TeacherEntity
 
+@RunWith(AndroidJUnit4::class)
 internal class LessonDaoAndroidTest {
 
     private val di = databaseKodein(ApplicationProvider.getApplicationContext())
@@ -30,19 +33,19 @@ internal class LessonDaoAndroidTest {
 
     private val semesterId = 1L
 
-    @BeforeEach
+    @Before
     fun setUp(): Unit = runBlocking {
         di.instance<SemesterDao>().insert(
             SemesterEntity(
                 "name",
-                LocalDate(2020, 1, 1),
-                LocalDate(2020, 6, 1),
+                LocalDate.of(2020, 1, 1),
+                LocalDate.of(2020, 6, 1),
                 semesterId
             )
         )
     }
 
-    @AfterEach
+    @After
     fun tearDown() = di.instance<ScheduleDatabase>().close()
 
     @Test
@@ -60,7 +63,7 @@ internal class LessonDaoAndroidTest {
             listOf(TeacherEntity("teacher")),
             listOf(ClassroomEntity("classroom")),
             null,
-            listOf(ByDateEntity(LocalDate(2020, 4, 25)))
+            listOf(ByDateEntity(LocalDate.of(2020, 4, 25)))
         )
 
         val id = lessonDao.insert(
@@ -97,7 +100,7 @@ internal class LessonDaoAndroidTest {
             listOf(TeacherEntity("teacher", 10L, 20L)),
             listOf(ClassroomEntity("classroom", 10L, 20L)),
             null,
-            listOf(ByDateEntity(LocalDate(2020, 4, 25), 10L))
+            listOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L))
         )
         val id = lessonDao.insert(
             lesson.lesson,
@@ -113,125 +116,125 @@ internal class LessonDaoAndroidTest {
     @Test
     fun getNextStartTimeTest() = runBlocking {
         assertEquals(emptyList<SemesterEntity>(), lessonDao.getAllFlow(semesterId).first())
-        assertNull(lessonDao.getLastEndTime(semesterId, DateTimeConstants.MONDAY))
+        assertNull(lessonDao.getLastEndTime(semesterId, DayOfWeek.MONDAY))
 
         lessonDao.insert(
             LessonEntity(
                 "name",
                 "",
-                LocalTime(9, 0),
-                LocalTime(11, 30),
+                LocalTime.of(9, 0),
+                LocalTime.of(11, 30),
                 semesterId
             ),
             emptyList(),
             emptyList(),
-            ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
+            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true))
         )
         assertEquals(
-            LocalTime(11, 30),
-            lessonDao.getLastEndTime(semesterId, DateTimeConstants.MONDAY)
+            LocalTime.of(11, 30),
+            lessonDao.getLastEndTime(semesterId, DayOfWeek.MONDAY)
         )
-        assertNull(lessonDao.getLastEndTime(semesterId, DateTimeConstants.TUESDAY))
+        assertNull(lessonDao.getLastEndTime(semesterId, DayOfWeek.TUESDAY))
 
         lessonDao.insert(
             LessonEntity(
                 "name",
                 "",
-                LocalTime(11, 50),
-                LocalTime(14, 20),
+                LocalTime.of(11, 50),
+                LocalTime.of(14, 20),
                 semesterId
             ),
             emptyList(),
             emptyList(),
-            ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
+            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true))
         )
         assertEquals(
-            LocalTime(14, 20),
-            lessonDao.getLastEndTime(semesterId, DateTimeConstants.MONDAY)
-        )
-
-        lessonDao.insert(
-            LessonEntity(
-                "name",
-                "",
-                LocalTime(14, 40),
-                LocalTime(17, 10),
-                semesterId
-            ),
-            emptyList(),
-            emptyList(),
-            ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
-        )
-        assertEquals(
-            LocalTime(17, 10),
-            lessonDao.getLastEndTime(semesterId, DateTimeConstants.MONDAY)
+            LocalTime.of(14, 20),
+            lessonDao.getLastEndTime(semesterId, DayOfWeek.MONDAY)
         )
 
         lessonDao.insert(
             LessonEntity(
                 "name",
                 "",
-                LocalTime(17, 20),
-                LocalTime(17, 50),
+                LocalTime.of(14, 40),
+                LocalTime.of(17, 10),
                 semesterId
             ),
             emptyList(),
             emptyList(),
-            ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
+            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true))
         )
         assertEquals(
-            LocalTime(17, 50),
-            lessonDao.getLastEndTime(semesterId, DateTimeConstants.MONDAY)
+            LocalTime.of(17, 10),
+            lessonDao.getLastEndTime(semesterId, DayOfWeek.MONDAY)
         )
 
         lessonDao.insert(
             LessonEntity(
                 "name",
                 "",
-                LocalTime(18, 0),
-                LocalTime(18, 30),
+                LocalTime.of(17, 20),
+                LocalTime.of(17, 50),
                 semesterId
             ),
             emptyList(),
             emptyList(),
-            ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
-        )
-        lessonDao.insert(
-            LessonEntity(
-                "name",
-                "",
-                LocalTime(18, 40),
-                LocalTime(19, 10),
-                semesterId
-            ),
-            emptyList(),
-            emptyList(),
-            ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true))
+            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true))
         )
         assertEquals(
-            LocalTime(19, 10),
-            lessonDao.getLastEndTime(semesterId, DateTimeConstants.MONDAY)
+            LocalTime.of(17, 50),
+            lessonDao.getLastEndTime(semesterId, DayOfWeek.MONDAY)
         )
 
         lessonDao.insert(
             LessonEntity(
                 "name",
                 "",
-                LocalTime(17, 20),
-                LocalTime(22, 0),
+                LocalTime.of(18, 0),
+                LocalTime.of(18, 30),
                 semesterId
             ),
             emptyList(),
             emptyList(),
-            ByWeekdayEntity(DateTimeConstants.TUESDAY, listOf(true))
+            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true))
+        )
+        lessonDao.insert(
+            LessonEntity(
+                "name",
+                "",
+                LocalTime.of(18, 40),
+                LocalTime.of(19, 10),
+                semesterId
+            ),
+            emptyList(),
+            emptyList(),
+            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true))
         )
         assertEquals(
-            LocalTime(19, 10),
-            lessonDao.getLastEndTime(semesterId, DateTimeConstants.MONDAY)
+            LocalTime.of(19, 10),
+            lessonDao.getLastEndTime(semesterId, DayOfWeek.MONDAY)
+        )
+
+        lessonDao.insert(
+            LessonEntity(
+                "name",
+                "",
+                LocalTime.of(17, 20),
+                LocalTime.of(22, 0),
+                semesterId
+            ),
+            emptyList(),
+            emptyList(),
+            ByWeekdayEntity(DayOfWeek.TUESDAY, listOf(true))
         )
         assertEquals(
-            LocalTime(22, 0),
-            lessonDao.getLastEndTime(semesterId, DateTimeConstants.TUESDAY)
+            LocalTime.of(19, 10),
+            lessonDao.getLastEndTime(semesterId, DayOfWeek.MONDAY)
+        )
+        assertEquals(
+            LocalTime.of(22, 0),
+            lessonDao.getLastEndTime(semesterId, DayOfWeek.TUESDAY)
         )
     }
 }

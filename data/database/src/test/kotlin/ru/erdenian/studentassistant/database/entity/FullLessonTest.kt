@@ -1,10 +1,10 @@
 package ru.erdenian.studentassistant.database.entity
 
-import org.joda.time.DateTimeConstants
-import org.joda.time.LocalDate
-import org.joda.time.LocalTime
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.LocalTime
+import org.junit.Assert.assertThrows
+import org.junit.Test
 
 internal class FullLessonTest {
 
@@ -21,7 +21,7 @@ internal class FullLessonTest {
             ),
             listOf(TeacherEntity("teacher", 10L)),
             listOf(ClassroomEntity("classroom", 10L)),
-            ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true)),
+            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
             emptyList()
         )
     }
@@ -40,13 +40,13 @@ internal class FullLessonTest {
             listOf(TeacherEntity("teacher", 10L)),
             listOf(ClassroomEntity("classroom", 10L)),
             null,
-            listOf(ByDateEntity(LocalDate(2020, 4, 25), 10L))
+            listOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L))
         )
     }
 
     @Test
     fun noRepeatsTest() {
-        assertThrows<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             FullLesson(
                 LessonEntity(
                     "name",
@@ -66,7 +66,7 @@ internal class FullLessonTest {
 
     @Test
     fun multipleRepeatsTest() {
-        assertThrows<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             FullLesson(
                 LessonEntity(
                     "name",
@@ -78,8 +78,8 @@ internal class FullLessonTest {
                 ),
                 listOf(TeacherEntity("teacher", 10L)),
                 listOf(ClassroomEntity("classroom", 10L)),
-                ByWeekdayEntity(DateTimeConstants.MONDAY, listOf(true)),
-                listOf(ByDateEntity(LocalDate(2020, 4, 25), 10L))
+                ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
+                listOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L))
             )
         }
     }

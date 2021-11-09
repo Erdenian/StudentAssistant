@@ -4,8 +4,8 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import java.time.LocalDate
 import kotlinx.parcelize.Parcelize
-import org.joda.time.LocalDate
 
 @Entity(
     tableName = "by_date",

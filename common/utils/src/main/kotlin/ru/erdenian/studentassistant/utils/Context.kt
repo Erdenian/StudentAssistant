@@ -3,8 +3,9 @@ package ru.erdenian.studentassistant.utils
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import org.joda.time.LocalDate
-import org.joda.time.LocalTime
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
 
 /**
  * Отображает [DatePickerDialog].
@@ -28,13 +29,13 @@ fun Context.showDatePicker(
 
     DatePickerDialog(
         this,
-        { _, year, month, dayOfMonth -> onDateSet.invoke(LocalDate(year, month + 1, dayOfMonth)) },
+        { _, year, month, dayOfMonth -> onDateSet.invoke(LocalDate.of(year, month + 1, dayOfMonth)) },
         preselected.year,
-        preselected.monthOfYear - 1,
+        preselected.monthValue - 1,
         preselected.dayOfMonth
     ).apply {
-        minDate?.let { datePicker.minDate = it.toDate().time }
-        maxDate?.let { datePicker.maxDate = it.toDate().time }
+        minDate?.let { datePicker.minDate = it.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli() }
+        maxDate?.let { datePicker.maxDate = it.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli() }
     }.show()
 }
 
@@ -54,9 +55,9 @@ fun Context.showTimePicker(
 
     TimePickerDialog(
         this,
-        { _, hourOfDay, minute -> onTimeSet.invoke(LocalTime(hourOfDay, minute)) },
-        preselected.hourOfDay,
-        preselected.minuteOfHour,
+        { _, hourOfDay, minute -> onTimeSet.invoke(LocalTime.of(hourOfDay, minute)) },
+        preselected.hour,
+        preselected.minute,
         true
     ).show()
 }

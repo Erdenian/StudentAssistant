@@ -1,8 +1,8 @@
 package ru.erdenian.studentassistant.repository
 
+import java.time.LocalDate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.database.dao.SemesterDao
 import ru.erdenian.studentassistant.database.entity.SemesterEntity
 import ru.erdenian.studentassistant.entity.ImmutableSortedSet

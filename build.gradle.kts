@@ -11,14 +11,13 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle:7.0.3")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31")
-        classpath("de.mannodermaus.gradle.plugins:android-junit5:1.8.0.0")
     }
 }
 
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven("https://jitpack.io")
     }
 }
@@ -33,6 +32,14 @@ subprojects {
             jvmTarget = JavaVersion.VERSION_1_8.toString()
             @Suppress("SuspiciousCollectionReassignment")
             freeCompilerArgs += listOf("-Xjvm-default=all")
+        }
+    }
+
+    afterEvaluate {
+        dependencies {
+            configurations.findByName("coreLibraryDesugaring")?.let { coreLibraryDesugaring ->
+                coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+            }
         }
     }
 }

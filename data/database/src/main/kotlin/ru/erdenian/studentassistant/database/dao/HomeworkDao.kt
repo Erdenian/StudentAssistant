@@ -5,8 +5,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import java.time.LocalDate
 import kotlinx.coroutines.flow.Flow
-import org.joda.time.LocalDate
 import ru.erdenian.studentassistant.database.entity.HomeworkEntity
 
 @Dao

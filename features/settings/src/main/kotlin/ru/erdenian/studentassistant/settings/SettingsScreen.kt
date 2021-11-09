@@ -10,8 +10,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import org.joda.time.Duration
-import org.joda.time.LocalTime
+import java.time.Duration
+import java.time.LocalTime
 import ru.erdenian.studentassistant.settings.preference.DurationPreference
 import ru.erdenian.studentassistant.settings.preference.TimePreference
 import ru.erdenian.studentassistant.style.AppTheme
