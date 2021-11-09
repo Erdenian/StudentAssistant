@@ -1,23 +1,33 @@
 package ru.erdenian.studentassistant.schedule.lessoneditor
 
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.Typeface
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
-import androidx.compose.ui.graphics.isSpecified
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import java.time.DayOfWeek
-import java.util.Calendar
+import java.time.format.TextStyle
+import java.util.Locale
 
 @Composable
 internal fun WeekdaysPicker(
@@ -26,28 +36,14 @@ internal fun WeekdaysPicker(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     editable: Boolean = true,
-    sundayFirstDay: Boolean = true,
-    showWeekend: Boolean = true,
-    recurrence: Boolean = false,
-    fullSize: Boolean = false,
-    colors: WeekdaysPickerColors = WeekdaysPickerDefaults.weekdaysPickerColors(),
-    borderThickness: Dp = Dp.Unspecified,
-    borderHighlightThickness: Dp = Dp.Unspecified
+    colors: WeekdaysPickerColors = WeekdaysPickerDefaults.weekdaysPickerColors()
 ) {
-    val javaToCalendar = remember {
-        mapOf(
-            DayOfWeek.MONDAY to Calendar.MONDAY,
-            DayOfWeek.TUESDAY to Calendar.TUESDAY,
-            DayOfWeek.WEDNESDAY to Calendar.WEDNESDAY,
-            DayOfWeek.THURSDAY to Calendar.THURSDAY,
-            DayOfWeek.FRIDAY to Calendar.FRIDAY,
-            DayOfWeek.SATURDAY to Calendar.SATURDAY,
-            DayOfWeek.SUNDAY to Calendar.SUNDAY
-        )
+    val daysOfWeek = run {
+        val locale = Locale.getDefault()
+        remember(locale) {
+            DayOfWeek.values().associateWith { it.getDisplayName(TextStyle.NARROW_STANDALONE, locale) }
+        }
     }
-
-    val currentValue by rememberUpdatedState(value)
-    val currentOnValueChange by rememberUpdatedState(onValueChange)
 
     val highlightColor = colors.highlightColor().value
     val backgroundColor = colors.backgroundColor().value
@@ -60,55 +56,92 @@ internal fun WeekdaysPicker(
 
     val density = LocalDensity.current
 
-    AndroidView(
-        factory = { context ->
-            com.dpro.widgets.WeekdaysPicker(context).apply {
-                setSelectOnlyOne(true)
-                weekendDarker = true
+    val spacing = 8.dp
+    val spacingPx = with(density) { spacing.toPx().toInt() }
+    val textSize = 16.sp
+    val textSizePx = with(density) { textSize.toPx() }
 
-                val calendarToJava = javaToCalendar.entries.associate { (k, v) -> v to k }
-                setOnWeekdaysChangeListener { _, _, weekdays ->
-                    val dayOfWeek = weekdays.singleOrNull()
-                        ?.let(calendarToJava::getValue)
-                        ?: run {
-                            selectDay(javaToCalendar.getValue(currentValue))
-                            return@setOnWeekdaysChangeListener
-                        }
-                    if (dayOfWeek != currentValue) currentOnValueChange(dayOfWeek)
+    Layout(
+        modifier = modifier,
+        measurePolicy = { measurables, constraints ->
+            val spacingSum = spacingPx * (daysOfWeek.size - 1)
+
+            val width = constraints.maxWidth
+            val height = (width - spacingSum) / daysOfWeek.size
+
+            val childConstraints = constraints.copy(minHeight = height, maxHeight = height)
+            val placeables = measurables.map { it.measure(childConstraints) }
+
+            layout(width, height) {
+                placeables.single().placeRelative(0, 0)
+            }
+        },
+        content = {
+            val selectedPaint = remember(textSizePx, textColor) {
+                Paint().apply {
+                    this.textSize = textSizePx
+                    color = textColor.toArgb()
+
+                    isAntiAlias = true
+                    typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+                    textAlign = Paint.Align.CENTER
                 }
             }
-        },
-        update = { view ->
-            view.isEnabled = enabled
-            view.setEditable(editable)
+            val unselectedPaint = remember(textSizePx, textUnselectedColor) {
+                Paint().apply {
+                    this.textSize = textSizePx
+                    color = textUnselectedColor.toArgb()
 
-            view.sundayFirstDay = sundayFirstDay
-            view.showWeekend = showWeekend
-            view.recurrence = recurrence
-            view.fullSize = fullSize
-
-            view.highlightColor = highlightColor.toArgb()
-            view.backgroundColor = backgroundColor.toArgb()
-            view.weekendColor = weekendColor.toArgb()
-
-            view.textColor = textColor.toArgb()
-            view.textUnselectedColor = textUnselectedColor.toArgb()
-            view.weekendTextColor = weekendTextColor.toArgb()
-
-            view.borderColor = borderColor.takeIf { it.isSpecified }?.toArgb() ?: -1
-            view.borderHighlightColor = borderHighlightColor.takeIf { it.isSpecified }?.toArgb() ?: -1
-
-            with(density) {
-                view.borderThickness = borderThickness.toPx().toInt()
-                view.borderHighlightThickness = borderHighlightThickness.toPx().toInt()
+                    isAntiAlias = true
+                    typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+                    textAlign = Paint.Align.CENTER
+                }
             }
+            val bounds = remember { Rect() }
 
-            val calendarValue = javaToCalendar.getValue(value)
-            if (view.selectedDays.single() != calendarValue) view.selectDay(calendarValue)
+            Canvas(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .pointerInput(Unit) {
+                        detectTapGestures { offset ->
+                            if (!enabled || !editable) return@detectTapGestures
 
-            view.redrawDays()
-        },
-        modifier = modifier
+                            val spacingSum = spacingPx * (daysOfWeek.size - 1)
+                            val dayWidth = (size.width - spacingSum) / 7.0f
+                            val dayWidthWithSpacing = dayWidth + spacingPx
+                            val clickedIndex = (offset.x / dayWidthWithSpacing).toInt()
+
+                            onValueChange(DayOfWeek.of(clickedIndex + 1))
+                        }
+                    }
+            ) {
+                val spacingSum = spacingPx * (daysOfWeek.size - 1)
+                val dayWidth = (size.width - spacingSum) / 7.0f
+                val dayRadius = dayWidth / 2.0f
+
+                daysOfWeek.entries.forEachIndexed { index, (day, name) ->
+                    val isSelected = (day == value)
+                    val center = Offset((dayWidth + spacingPx) * index + dayRadius, dayRadius)
+                    drawCircle(
+                        color = if (isSelected) highlightColor else backgroundColor,
+                        radius = dayRadius,
+                        center = center
+                    )
+
+                    drawIntoCanvas { canvas ->
+                        selectedPaint.getTextBounds(name, 0, name.length, bounds)
+                        val textVerticalOffset = bounds.height() / 2
+
+                        canvas.nativeCanvas.drawText(
+                            name,
+                            center.x,
+                            center.y + textVerticalOffset,
+                            if (isSelected) selectedPaint else unselectedPaint
+                        )
+                    }
+                }
+            }
+        }
     )
 }
 

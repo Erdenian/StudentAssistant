@@ -174,7 +174,9 @@ private fun ScheduleEditorContent(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        val daysOfWeek = DayOfWeek.values().map { it.getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault()) }
+        val daysOfWeek = remember {
+            DayOfWeek.values().map { it.getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault()) }
+        }
 
         PagerTabStrip(
             state = state,
