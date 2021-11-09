@@ -90,7 +90,7 @@ private fun TopAppBarDropdownMenuContent(
     DropdownMenu(
         expanded = expanded,
         onDismissRequest = onDismissRequest,
-        offset = DpOffset(-xOffset, (-60).dp),
+        offset = DpOffset(-xOffset, 0.dp),
         properties = PopupProperties(focusable = true, clippingEnabled = false)
     ) {
         items.forEachIndexed { index, item ->

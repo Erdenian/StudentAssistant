@@ -2,6 +2,8 @@
 
     <string name="app_name">Student Assistant</string>
 
+    <!-- region schedule -->
+
     <!-- Schedule -->
     <string name="s_title">Расписание</string>
     <string name="s_calendar">Календарь</string>
@@ -9,22 +11,6 @@
     <string name="s_edit">Редактировать расписание</string>
     <string name="s_no_schedule">Здесь пока пусто. Добавьте расписание своего университета или школы.</string>
     <string name="s_free_day">Выходной</string>
-
-    <!-- Homeworks -->
-    <string name="h_title">Домашние задания</string>
-    <string name="h_add">Добавить задание</string>
-    <string name="h_no_schedule">Здесь пока пусто. Добавьте расписание своего университета или школы.</string>
-    <string name="h_no_homeworks">Нет заданий</string>
-    <string name="h_delete_homework">Удалить</string>
-    <string name="h_delete_message">Удалить задание?</string>
-    <string name="h_delete_yes">Да</string>
-    <string name="h_delete_no">Нет</string>
-
-    <!-- Settings -->
-    <string name="st_title">Настройки</string>
-    <string name="st_default_start_time">Время начала первого занятия</string>
-    <string name="st_default_lesson_duration">Длительность занятия</string>
-    <string name="st_default_break_duration">Длительность перемены</string>
 
     <!-- Lesson Information -->
     <string name="li_title">Данные занятия</string>
@@ -86,6 +72,20 @@
     <string name="le_delete_homeworks_no">Оставить</string>
     <string name="le_delete_homeworks_cancel">Отмена</string>
 
+    <!-- endregion -->
+
+    <!-- region homeworks -->
+
+    <!-- Homeworks -->
+    <string name="h_title">Домашние задания</string>
+    <string name="h_add">Добавить задание</string>
+    <string name="h_no_schedule">Здесь пока пусто. Добавьте расписание своего университета или школы.</string>
+    <string name="h_no_homeworks">Нет заданий</string>
+    <string name="h_delete_homework">Удалить</string>
+    <string name="h_delete_message">Удалить задание?</string>
+    <string name="h_delete_yes">Да</string>
+    <string name="h_delete_no">Нет</string>
+
     <!-- Homework Editor -->
     <string name="he_title">Редактор задания</string>
     <string name="he_subject">Предмет</string>
@@ -103,6 +103,18 @@
     <string name="he_delete_message">Удалить задание?</string>
     <string name="he_delete_yes">Удалить</string>
     <string name="he_delete_no">Нет</string>
+
+    <!-- endregion -->
+
+    <!-- region settings -->
+
+    <!-- Settings -->
+    <string name="st_title">Настройки</string>
+    <string name="st_default_start_time">Время начала первого занятия</string>
+    <string name="st_default_lesson_duration">Длительность занятия</string>
+    <string name="st_default_break_duration">Длительность перемены</string>
+
+    <!-- endregion -->
 
     <!-- region uikit -->
 

@@ -6,36 +6,20 @@ import androidx.compose.ui.unit.dp
 
 class Dimensions(
 
-    val activityHorizontalMargin: Dp,
-    val activityVerticalMargin: Dp,
+    val activityHorizontalMargin: Dp = 16.dp,
+    val activityVerticalMargin: Dp = 16.dp,
 
-    val cardsSpacing: Dp,
+    val cardsSpacing: Dp = 10.dp,
 
-    val cardMarginInside: Dp,
+    val cardMarginInside: Dp = 8.dp,
 
-    val dividerMarginTopBottom: Dp
+    val dividerMarginTopBottom: Dp = 4.dp
 )
 
 internal val LocalDimensions = staticCompositionLocalOf { DefaultDimensions }
 
-internal val DefaultDimensions = Dimensions(
-    activityHorizontalMargin = 16.dp,
-    activityVerticalMargin = 16.dp,
-
-    cardsSpacing = 10.dp,
-
-    cardMarginInside = 8.dp,
-
-    dividerMarginTopBottom = 4.dp
-)
+internal val DefaultDimensions = Dimensions()
 
 internal val LargeScreenDimensions = Dimensions(
-    activityHorizontalMargin = 64.dp,
-    activityVerticalMargin = 16.dp,
-
-    cardsSpacing = 10.dp,
-
-    cardMarginInside = 8.dp,
-
-    dividerMarginTopBottom = 4.dp
+    activityHorizontalMargin = 64.dp
 )
