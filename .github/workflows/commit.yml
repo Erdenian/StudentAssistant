@@ -21,8 +21,8 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
       - uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
-          java-version: 15
+          distribution: 'temurin'
+          java-version: 17
       - name: Detekt
         run: ./gradlew detekt
       - uses: actions/upload-artifact@v2

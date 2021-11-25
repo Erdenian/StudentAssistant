@@ -22,8 +22,8 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
       - uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
-          java-version: 15
+          distribution: 'temurin'
+          java-version: 17
       - name: Detekt
         run: ./gradlew detekt
       - uses: actions/upload-artifact@v2
@@ -53,8 +53,8 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
       - uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
-          java-version: 15
+          distribution: 'temurin'
+          java-version: 17
       - name: Unit Test
         run: ./gradlew testDebugUnitTest
       - uses: actions/upload-artifact@v2
@@ -83,8 +83,8 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
       - uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
-          java-version: 15
+          distribution: 'temurin'
+          java-version: 17
       - name: Android Test
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -116,8 +116,8 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
       - uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
-          java-version: 15
+          distribution: 'temurin'
+          java-version: 17
       - name: Assemble Debug
         run: ./gradlew assembleDebug
       - uses: actions/upload-artifact@v2
