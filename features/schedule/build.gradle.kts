@@ -75,6 +75,6 @@ dependencies {
     // endregion
 
     // region UI
-    implementation("com.google.accompanist:accompanist-pager:0.20.2")
+    implementation("com.google.accompanist:accompanist-pager:0.21.4-beta")
     // endregion
 }

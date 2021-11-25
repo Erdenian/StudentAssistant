@@ -38,7 +38,7 @@ internal fun DurationPreference(
     )
 
     if (isShowDialog) {
-        lateinit var durationGetter: () -> Duration
+        var selectedDuration by remember(value) { mutableStateOf(value) }
 
         AlertDialog(
             onDismissRequest = { isShowDialog = false },
@@ -51,7 +51,9 @@ internal fun DurationPreference(
                         timePicker.apply {
                             setIs24HourView(true)
                             duration = value
-                            durationGetter = { duration }
+                            setOnTimeChangedListener { _, hourOfDay, minute ->
+                                selectedDuration = Duration.ofHours(hourOfDay.toLong()).plusMinutes(minute.toLong())
+                            }
                         }
                     },
                     modifier = Modifier.fillMaxWidth()
@@ -60,7 +62,7 @@ internal fun DurationPreference(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        onValueChange(durationGetter())
+                        onValueChange(selectedDuration)
                         isShowDialog = false
                     }
                 ) {

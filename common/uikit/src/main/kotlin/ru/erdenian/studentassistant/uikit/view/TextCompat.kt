@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import ru.erdenian.studentassistant.style.AppTheme
 
 /**
- * Text that supports setting [TextAlign.End] combined with [TextOverflow.Clip]
+ * Text that supports setting [TextAlign.End] combined with [TextOverflow.Clip].
  *
  * @see <a href="https://issuetracker.google.com/issues/183835422">Issue on IssueTracker</a>
  */
