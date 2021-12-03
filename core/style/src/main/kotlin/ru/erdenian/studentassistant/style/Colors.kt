@@ -1,3 +1,5 @@
+@file:Suppress("MagicNumber")
+
 package ru.erdenian.studentassistant.style
 
 import androidx.compose.material.darkColors
