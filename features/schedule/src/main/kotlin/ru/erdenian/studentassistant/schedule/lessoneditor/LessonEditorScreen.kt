@@ -53,7 +53,6 @@ import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.AutoCompleteTextField
 import ru.erdenian.studentassistant.uikit.view.MultiAutoCompleteTextField
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
-import ru.erdenian.studentassistant.uikit.view.WeeksSelector
 import ru.erdenian.studentassistant.utils.showTimePicker
 import ru.erdenian.studentassistant.utils.toast
 
@@ -339,7 +338,7 @@ private fun LessonEditorContent(
 
         Divider(modifier = Modifier.padding(vertical = 8.dp))
 
-        WeekdaysPicker(
+        WeekdayPicker(
             value = dayOfWeek,
             onValueChange = onDayOfWeekChange,
             modifier = Modifier.fillMaxWidth()
