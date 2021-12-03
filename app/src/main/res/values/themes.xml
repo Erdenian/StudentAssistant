@@ -20,7 +20,6 @@
 
         <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
         <item name="autoCompleteTextViewStyle">@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox</item>
-        <!--suppress AndroidDomInspection -->
         <item name="exposedDropdownMenuStyle">
             @style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu
         </item>

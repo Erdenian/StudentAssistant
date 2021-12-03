@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.uikit.view
+package ru.erdenian.studentassistant.schedule.lessoneditor
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -48,7 +48,7 @@ import ru.erdenian.studentassistant.uikit.layout.StartEndRow
  * View для выбора недель для повторения пары.
  */
 @Composable
-fun WeeksSelector(
+internal fun WeeksSelector(
     weeks: List<Boolean>,
     onWeeksChange: (weeks: List<Boolean>) -> Unit,
     modifier: Modifier = Modifier
