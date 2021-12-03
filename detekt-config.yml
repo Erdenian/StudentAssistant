@@ -1,5 +1,5 @@
 build:
-  maxIssues: 45
+  maxIssues: 35
   excludeCorrectable: false
   weights:
     UnsafeCallOnNullableType: 100500
@@ -64,7 +64,7 @@ comments:
     active: true
     endOfSentenceFormat: '([.?!][ \t\n\r\f<])|([.?!:]$)'
   OutdatedDocumentation:
-    active: true
+    active: false
     matchTypeParameters: true
     matchDeclarationsOrder: true
   UndocumentedPublicClass:
@@ -108,7 +108,7 @@ complexity:
       - 'use'
       - 'with'
   LabeledExpression:
-    active: true
+    active: false
     ignoredLabels: []
   LargeClass:
     active: true
@@ -609,7 +609,7 @@ potential-bugs:
 style:
   active: true
   ClassOrdering:
-    active: true
+    active: false
   CollapsibleIfStatements:
     active: true
   DataClassContainsFunctions:
@@ -719,7 +719,7 @@ style:
   OptionalAbstractKeyword:
     active: true
   OptionalUnit:
-    active: true
+    active: false
   OptionalWhenBraces:
     active: true
   PreferToOverPairSyntax:
@@ -767,7 +767,7 @@ style:
   UnnecessaryLet:
     active: true
   UnnecessaryParentheses:
-    active: true
+    active: false
   UntilInsteadOfRangeTo:
     active: true
   UnusedImports:
