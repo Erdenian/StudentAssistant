@@ -16,11 +16,14 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -31,8 +34,9 @@ internal fun PagerTabStrip(
     state: PagerState,
     titleGetter: (page: Int) -> String,
     modifier: Modifier = Modifier,
-    textStyle: TextStyle = MaterialTheme.typography.body2,
+    fontSize: TextUnit = 12.sp,
     textSpacing: Dp = 32.dp,
+    otherTabsAlpha: Float = ContentAlpha.medium,
     colors: PagerTabStripColors = PagerTabStripDefaults.pagerTabStripColors()
 ) {
     Column(
@@ -48,19 +52,34 @@ internal fun PagerTabStrip(
                 fun createText(title: String, color: Color) = Text(
                     text = title,
                     color = color,
-                    style = textStyle
+                    fontSize = fontSize,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
 
+                val textColor = colors.textColor().value
                 val page = state.currentPage + state.currentPageOffset.roundToInt()
-                createText(title = getText(page - 1) ?: "", color = colors.otherTabsColor().value)
-                createText(title = titleGetter(page), color = colors.currentTabColor().value)
-                createText(title = getText(page + 1) ?: "", color = colors.otherTabsColor().value)
+                val offset = abs(abs(state.currentPageOffset) % 1 - 0.5f) * 2.0f
+                val animatedAlpha = otherTabsAlpha + (textColor.alpha - otherTabsAlpha) * offset
+
+                createText(
+                    title = getText(page - 1) ?: "",
+                    color = textColor.copy(alpha = otherTabsAlpha)
+                )
+                createText(
+                    title = titleGetter(page),
+                    color = textColor.copy(alpha = animatedAlpha)
+                )
+                createText(
+                    title = getText(page + 1) ?: "",
+                    color = textColor.copy(alpha = otherTabsAlpha)
+                )
             }
         ) { measurables, constraints ->
             val width = constraints.maxWidth
             val height = constraints.maxHeight
 
-            val childConstraints = constraints.copy(maxWidth = width / 2, minHeight = 0)
+            val childConstraints = constraints.copy(maxWidth = width / 2 - textSpacing.toPx().toInt(), minHeight = 0)
             val placeables = measurables.map { it.measure(childConstraints) }
 
             layout(width, height) {
@@ -71,7 +90,10 @@ internal fun PagerTabStrip(
                 val halfCurrWidth = currentPlaceable.width / 2
                 val contentWidth = width - currentPlaceable.width
 
-                val currOffset = (state.currentPageOffset + 0.5f) % 1
+                val currOffset = run {
+                    val offset = (state.currentPageOffset + 0.5f) % 1
+                    if (offset >= 0.0f) offset else offset + 1.0f
+                }
 
                 val currCenter = width - halfCurrWidth - (contentWidth * currOffset).toInt()
                 val currLeft = currCenter - currentPlaceable.width / 2
@@ -103,12 +125,10 @@ internal object PagerTabStripDefaults {
 
     @Composable
     fun pagerTabStripColors(
-        currentTabColor: Color = MaterialTheme.colors.primary,
-        otherTabsColor: Color = MaterialTheme.colors.primary.copy(alpha = ContentAlpha.medium),
+        textColor: Color = MaterialTheme.colors.primary,
         tabIndicatorColor: Color = MaterialTheme.colors.primary
     ): PagerTabStripColors = DefaultPagerTabStripColors(
-        currentTabColor = currentTabColor,
-        otherTabsColor = otherTabsColor,
+        textColor = textColor,
         tabIndicatorColor = tabIndicatorColor
     )
 }
@@ -117,10 +137,7 @@ internal object PagerTabStripDefaults {
 internal interface PagerTabStripColors {
 
     @Composable
-    fun currentTabColor(): State<Color>
-
-    @Composable
-    fun otherTabsColor(): State<Color>
+    fun textColor(): State<Color>
 
     @Composable
     fun tabIndicatorColor(): State<Color>
@@ -128,16 +145,12 @@ internal interface PagerTabStripColors {
 
 @Immutable
 private class DefaultPagerTabStripColors(
-    private val currentTabColor: Color,
-    private val otherTabsColor: Color,
+    private val textColor: Color,
     private val tabIndicatorColor: Color
 ) : PagerTabStripColors {
 
     @Composable
-    override fun currentTabColor() = rememberUpdatedState(currentTabColor)
-
-    @Composable
-    override fun otherTabsColor() = rememberUpdatedState(otherTabsColor)
+    override fun textColor() = rememberUpdatedState(textColor)
 
     @Composable
     override fun tabIndicatorColor() = rememberUpdatedState(tabIndicatorColor)

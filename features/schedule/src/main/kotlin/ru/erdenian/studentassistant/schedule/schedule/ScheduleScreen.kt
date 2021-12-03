@@ -173,8 +173,8 @@ private fun ScheduleContent(
                     modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
                 )
             } else {
-                val shortTitleFormatter = remember { DateTimeFormatter.ofPattern("EEEE, dd MMMM") }
-                val fullTitleFormatter = remember { DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy") }
+                val shortTitleFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d MMMM") }
+                val fullTitleFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy") }
 
                 PagerTabStrip(
                     state = state,
