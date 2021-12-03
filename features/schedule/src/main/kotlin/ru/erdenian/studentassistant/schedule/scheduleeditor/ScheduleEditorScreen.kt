@@ -172,6 +172,7 @@ private fun ScheduleEditorContent(
     }
 ) {
     Column(
+        verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxSize()
     ) {
         val daysOfWeek = remember {
@@ -185,7 +186,8 @@ private fun ScheduleEditorContent(
 
         HorizontalPager(
             count = daysOfWeek.size,
-            state = state
+            state = state,
+            modifier = Modifier.fillMaxSize()
         ) { page ->
             val lessonsFlow = remember(lessonsGetter) { lessonsGetter(page) }
             val lessons by lessonsFlow.collectAsState()
