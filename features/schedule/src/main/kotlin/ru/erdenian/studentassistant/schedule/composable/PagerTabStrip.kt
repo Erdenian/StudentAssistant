@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -37,6 +38,7 @@ internal fun PagerTabStrip(
     fontSize: TextUnit = 12.sp,
     textSpacing: Dp = 32.dp,
     otherTabsAlpha: Float = ContentAlpha.medium,
+    underscoreHeight: Dp = 2.dp,
     colors: PagerTabStripColors = PagerTabStripDefaults.pagerTabStripColors()
 ) {
     Column(
@@ -58,9 +60,12 @@ internal fun PagerTabStrip(
                 )
 
                 val textColor = colors.textColor().value
+                val tabIndicatorColor = colors.tabIndicatorColor().value
+
                 val page = state.currentPage + state.currentPageOffset.roundToInt()
                 val offset = abs(abs(state.currentPageOffset) % 1 - 0.5f) * 2.0f
-                val animatedAlpha = otherTabsAlpha + (textColor.alpha - otherTabsAlpha) * offset
+                val animatedCurrentTextAlpha = otherTabsAlpha + (textColor.alpha - otherTabsAlpha) * offset
+                val animatedUnderscoreAlpha = tabIndicatorColor.alpha * offset
 
                 createText(
                     title = getText(page - 1) ?: "",
@@ -68,24 +73,32 @@ internal fun PagerTabStrip(
                 )
                 createText(
                     title = titleGetter(page),
-                    color = textColor.copy(alpha = animatedAlpha)
+                    color = textColor.copy(alpha = animatedCurrentTextAlpha)
                 )
                 createText(
                     title = getText(page + 1) ?: "",
                     color = textColor.copy(alpha = otherTabsAlpha)
                 )
+
+                Box(modifier = Modifier.background(tabIndicatorColor.copy(alpha = animatedUnderscoreAlpha)))
             }
         ) { measurables, constraints ->
             val width = constraints.maxWidth
             val height = constraints.maxHeight
+            val textSpacingPx = textSpacing.roundToPx()
 
-            val childConstraints = constraints.copy(maxWidth = width / 2 - textSpacing.toPx().toInt(), minHeight = 0)
-            val placeables = measurables.map { it.measure(childConstraints) }
+            val titlesConstraints = constraints.copy(maxWidth = width / 2 - textSpacingPx, minHeight = 0)
+            val titlesPlaceables = measurables.dropLast(1).map { it.measure(titlesConstraints) }
+
+            val previousPlaceable = titlesPlaceables[0]
+            val currentPlaceable = titlesPlaceables[1]
+            val nextPlaceable = titlesPlaceables[2]
+
+            val underscorePlaceable = measurables.last().measure(
+                Constraints.fixed(currentPlaceable.width + textSpacingPx, underscoreHeight.roundToPx())
+            )
 
             layout(width, height) {
-                val previousPlaceable = placeables[0]
-                val currentPlaceable = placeables[1]
-                val nextPlaceable = placeables[2]
 
                 val halfCurrWidth = currentPlaceable.width / 2
                 val contentWidth = width - currentPlaceable.width
@@ -99,16 +112,17 @@ internal fun PagerTabStrip(
                 val currLeft = currCenter - currentPlaceable.width / 2
                 val currRight = currLeft + currentPlaceable.width
 
-                val mScaledTextSpacing = textSpacing.toPx().toInt()
                 val y = (height - currentPlaceable.height) / 2
 
                 currentPlaceable.placeRelative(currLeft, y)
 
-                val prevLeft = min(0, currLeft - mScaledTextSpacing - previousPlaceable.width)
+                val prevLeft = min(0, currLeft - textSpacingPx - previousPlaceable.width)
                 previousPlaceable.placeRelative(prevLeft, y)
 
-                val nextLeft = max(width - nextPlaceable.width, currRight + mScaledTextSpacing)
+                val nextLeft = max(width - nextPlaceable.width, currRight + textSpacingPx)
                 nextPlaceable.placeRelative(nextLeft, y)
+
+                underscorePlaceable.placeRelative(currLeft - textSpacingPx / 2, height - underscorePlaceable.height)
             }
         }
 
