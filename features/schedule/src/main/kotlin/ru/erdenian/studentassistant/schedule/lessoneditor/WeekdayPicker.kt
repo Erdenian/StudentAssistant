@@ -45,14 +45,10 @@ internal fun WeekdayPicker(
         }
     }
 
-    val highlightColor = colors.highlightColor().value
     val backgroundColor = colors.backgroundColor().value
-    val weekendColor = colors.weekendColor().value
+    val selectedBackgroundColor = colors.selectedBackgroundColor().value
     val textColor = colors.textColor().value
-    val textUnselectedColor = colors.textUnselectedColor().value
-    val weekendTextColor = colors.weekendTextColor().value
-    val borderColor = colors.borderColor().value
-    val borderHighlightColor = colors.borderHighlightColor().value
+    val selectedTextColor = colors.selectedTextColor().value
 
     val density = LocalDensity.current
 
@@ -77,20 +73,20 @@ internal fun WeekdayPicker(
             }
         },
         content = {
-            val selectedPaint = remember(textSizePx, textColor) {
+            val selectedPaint = remember(textSizePx, selectedTextColor) {
                 Paint().apply {
                     this.textSize = textSizePx
-                    color = textColor.toArgb()
+                    color = selectedTextColor.toArgb()
 
                     isAntiAlias = true
                     typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
                     textAlign = Paint.Align.CENTER
                 }
             }
-            val unselectedPaint = remember(textSizePx, textUnselectedColor) {
+            val unselectedPaint = remember(textSizePx, textColor) {
                 Paint().apply {
                     this.textSize = textSizePx
-                    color = textUnselectedColor.toArgb()
+                    color = textColor.toArgb()
 
                     isAntiAlias = true
                     typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
@@ -123,7 +119,7 @@ internal fun WeekdayPicker(
                     val isSelected = (day == value)
                     val center = Offset((dayWidth + spacingPx) * index + dayRadius, dayRadius)
                     drawCircle(
-                        color = if (isSelected) highlightColor else backgroundColor,
+                        color = if (isSelected) selectedBackgroundColor else backgroundColor,
                         radius = dayRadius,
                         center = center
                     )
@@ -149,23 +145,15 @@ object WeekdaysPickerDefaults {
 
     @Composable
     fun weekdaysPickerColors(
-        highlightColor: Color = MaterialTheme.colors.primary,
         backgroundColor: Color = MaterialTheme.colors.onSurface.copy(alpha = 0.38f).compositeOver(MaterialTheme.colors.surface),
-        weekendColor: Color = backgroundColor,
+        selectedBackgroundColor: Color = MaterialTheme.colors.primary,
         textColor: Color = MaterialTheme.colors.onPrimary,
-        textUnselectedColor: Color = MaterialTheme.colors.onPrimary,
-        weekendTextColor: Color = textUnselectedColor,
-        borderColor: Color = Color.Unspecified,
-        borderHighlightColor: Color = Color.Unspecified
+        selectedTextColor: Color = MaterialTheme.colors.onPrimary
     ): WeekdaysPickerColors = DefaultWeekdaysPickerColors(
-        highlightColor = highlightColor,
         backgroundColor = backgroundColor,
-        weekendColor = weekendColor,
+        selectedBackgroundColor = selectedBackgroundColor,
         textColor = textColor,
-        textUnselectedColor = textUnselectedColor,
-        weekendTextColor = weekendTextColor,
-        borderColor = borderColor,
-        borderHighlightColor = borderHighlightColor
+        selectedTextColor = selectedTextColor
     )
 }
 
@@ -173,65 +161,37 @@ object WeekdaysPickerDefaults {
 interface WeekdaysPickerColors {
 
     @Composable
-    fun highlightColor(): State<Color>
-
-    @Composable
     fun backgroundColor(): State<Color>
 
     @Composable
-    fun weekendColor(): State<Color>
+    fun selectedBackgroundColor(): State<Color>
 
     @Composable
     fun textColor(): State<Color>
 
     @Composable
-    fun textUnselectedColor(): State<Color>
-
-    @Composable
-    fun weekendTextColor(): State<Color>
-
-    @Composable
-    fun borderColor(): State<Color>
-
-    @Composable
-    fun borderHighlightColor(): State<Color>
+    fun selectedTextColor(): State<Color>
 }
 
 @Immutable
 private class DefaultWeekdaysPickerColors(
-    private val highlightColor: Color,
     private val backgroundColor: Color,
-    private val weekendColor: Color,
+    private val selectedBackgroundColor: Color,
     private val textColor: Color,
-    private val textUnselectedColor: Color,
-    private val weekendTextColor: Color,
-    private val borderColor: Color,
-    private val borderHighlightColor: Color
+    private val selectedTextColor: Color
 ) : WeekdaysPickerColors {
-
-    @Composable
-    override fun highlightColor() = rememberUpdatedState(highlightColor)
 
     @Composable
     override fun backgroundColor() = rememberUpdatedState(backgroundColor)
 
     @Composable
-    override fun weekendColor() = rememberUpdatedState(weekendColor)
+    override fun selectedBackgroundColor() = rememberUpdatedState(selectedBackgroundColor)
 
     @Composable
     override fun textColor() = rememberUpdatedState(textColor)
 
     @Composable
-    override fun textUnselectedColor() = rememberUpdatedState(textUnselectedColor)
-
-    @Composable
-    override fun weekendTextColor() = rememberUpdatedState(weekendTextColor)
-
-    @Composable
-    override fun borderColor() = rememberUpdatedState(borderColor)
-
-    @Composable
-    override fun borderHighlightColor() = rememberUpdatedState(borderHighlightColor)
+    override fun selectedTextColor() = rememberUpdatedState(selectedTextColor)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -239,27 +199,19 @@ private class DefaultWeekdaysPickerColors(
 
         other as DefaultWeekdaysPickerColors
 
-        if (highlightColor != other.highlightColor) return false
         if (backgroundColor != other.backgroundColor) return false
-        if (weekendColor != other.weekendColor) return false
+        if (selectedBackgroundColor != other.selectedBackgroundColor) return false
         if (textColor != other.textColor) return false
-        if (textUnselectedColor != other.textUnselectedColor) return false
-        if (weekendTextColor != other.weekendTextColor) return false
-        if (borderColor != other.borderColor) return false
-        if (borderHighlightColor != other.borderHighlightColor) return false
+        if (selectedTextColor != other.selectedTextColor) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = highlightColor.hashCode()
-        result = 31 * result + backgroundColor.hashCode()
-        result = 31 * result + weekendColor.hashCode()
+        var result = backgroundColor.hashCode()
+        result = 31 * result + selectedBackgroundColor.hashCode()
         result = 31 * result + textColor.hashCode()
-        result = 31 * result + textUnselectedColor.hashCode()
-        result = 31 * result + weekendTextColor.hashCode()
-        result = 31 * result + borderColor.hashCode()
-        result = 31 * result + borderHighlightColor.hashCode()
+        result = 31 * result + selectedTextColor.hashCode()
         return result
     }
 }
