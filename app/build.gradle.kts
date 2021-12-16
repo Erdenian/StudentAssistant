@@ -140,10 +140,14 @@ dependencies {
     // endregion
 
     // region AndroidX
-    implementation("androidx.appcompat:appcompat:1.4.0")
-    implementation("androidx.activity:activity-compose:1.4.0")
-    implementation("androidx.navigation:navigation-compose:2.4.0-beta02")
-    implementation("androidx.core:core-splashscreen:1.0.0-alpha02")
+    val appcompatVersion: String by project
+    implementation("androidx.appcompat:appcompat:$appcompatVersion")
+    val activityVersion: String by project
+    implementation("androidx.activity:activity-compose:$activityVersion")
+    val navigationVersion: String by project
+    implementation("androidx.navigation:navigation-compose:$navigationVersion")
+    val splashscreenVersion: String by project
+    implementation("androidx.core:core-splashscreen:$splashscreenVersion")
     // endregion
 
     // region Core
@@ -152,7 +156,8 @@ dependencies {
     // endregion
 
     // region UI
-    implementation("net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC3")
+    val keyboardVisibilityEventVersion: String by project
+    implementation("net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:$keyboardVisibilityEventVersion")
 
     val materialVersion: String by project
     implementation("com.google.android.material:material:$materialVersion")

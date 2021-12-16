@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.rememberNavController
-import kotlinx.coroutines.flow.collect
 import ru.erdenian.studentassistant.style.AppIcons
 
 @OptIn(ExperimentalComposeUiApi::class)
