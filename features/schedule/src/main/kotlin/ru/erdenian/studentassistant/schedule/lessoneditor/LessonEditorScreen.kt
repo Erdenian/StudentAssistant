@@ -54,6 +54,7 @@ import ru.erdenian.studentassistant.uikit.view.AutoCompleteTextField
 import ru.erdenian.studentassistant.uikit.view.MultiAutoCompleteTextField
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.utils.showTimePicker
+import ru.erdenian.studentassistant.utils.toSingleLine
 import ru.erdenian.studentassistant.utils.toast
 
 @Composable
@@ -160,9 +161,9 @@ fun LessonEditorScreen(
             isSubjectNameChanged = true
             viewModel.subjectName.value = value
         },
-        onTypeChange = { viewModel.type.value = it },
-        onTeachersChange = { viewModel.teachers.value = it },
-        onClassroomsChange = { viewModel.classrooms.value = it },
+        onTypeChange = { viewModel.type.value = it.toSingleLine() },
+        onTeachersChange = { viewModel.teachers.value = it.toSingleLine() },
+        onClassroomsChange = { viewModel.classrooms.value = it.toSingleLine() },
         onStartTimeChange = { viewModel.startTime.value = it },
         onEndTimeChange = { viewModel.endTime.value = it },
         onDayOfWeekChange = { viewModel.dayOfWeek.value = it },
