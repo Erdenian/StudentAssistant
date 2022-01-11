@@ -1,6 +1,12 @@
 package ru.erdenian.studentassistant.schedule.composable
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.gestures.scrollBy
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +36,7 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -44,19 +53,36 @@ internal fun PagerTabStrip(
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
+        val scrollCoroutineScope = rememberCoroutineScope()
         Layout(
-            modifier = modifier.height(32.dp),
+            modifier = modifier
+                .height(32.dp)
+                .draggable(
+                    orientation = Orientation.Horizontal,
+                    state = rememberDraggableState { delta ->
+                        scrollCoroutineScope.launch { state.scrollBy(-delta) }
+                    },
+                    onDragStopped = {
+                        launch { state.animateScrollToPage(state.currentPage + state.currentPageOffset.roundToInt()) }
+                    }
+                ),
             content = {
                 val indices = 0 until state.pageCount
-                fun getText(index: Int) = index.takeIf { it in indices }?.let { titleGetter(it) }
 
                 @Composable
-                fun createText(title: String, color: Color) = Text(
-                    text = title,
+                fun createText(page: Int, color: Color) = Text(
+                    text = if (page in indices) titleGetter(page) else "",
                     color = color,
                     fontSize = fontSize,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        enabled = (page in indices)
+                    ) {
+                        scrollCoroutineScope.launch { state.animateScrollToPage(page) }
+                    }
                 )
 
                 val textColor = colors.textColor().value
@@ -68,15 +94,15 @@ internal fun PagerTabStrip(
                 val animatedUnderscoreAlpha = tabIndicatorColor.alpha * offset
 
                 createText(
-                    title = getText(page - 1) ?: "",
+                    page = page - 1,
                     color = textColor.copy(alpha = otherTabsAlpha)
                 )
                 createText(
-                    title = titleGetter(page),
+                    page = page,
                     color = textColor.copy(alpha = animatedCurrentTextAlpha)
                 )
                 createText(
-                    title = getText(page + 1) ?: "",
+                    page = page + 1,
                     color = textColor.copy(alpha = otherTabsAlpha)
                 )
 
@@ -99,7 +125,6 @@ internal fun PagerTabStrip(
             )
 
             layout(width, height) {
-
                 val halfCurrWidth = currentPlaceable.width / 2
                 val contentWidth = width - currentPlaceable.width
 
