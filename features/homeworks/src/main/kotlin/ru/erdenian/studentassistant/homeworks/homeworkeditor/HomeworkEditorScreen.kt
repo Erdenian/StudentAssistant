@@ -59,6 +59,7 @@ import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.ExposedDropdownMenu
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.utils.showDatePicker
+import ru.erdenian.studentassistant.utils.toSingleLine
 import ru.erdenian.studentassistant.utils.toast
 
 @Composable
@@ -131,7 +132,7 @@ fun HomeworkEditorScreen(
                 .setNegativeButton(R.string.he_delete_no, null)
                 .show()
         },
-        onSubjectNameChange = { viewModel.subjectName.value = it },
+        onSubjectNameChange = { viewModel.subjectName.value = it.toSingleLine() },
         onDeadlineChange = { viewModel.deadline.value = it },
         onDescriptionChange = { viewModel.description.value = it }
     )

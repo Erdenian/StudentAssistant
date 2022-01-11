@@ -1,6 +1,7 @@
 package ru.erdenian.studentassistant.schedule.semestereditor
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -46,6 +47,7 @@ import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.utils.showDatePicker
+import ru.erdenian.studentassistant.utils.toSingleLine
 import ru.erdenian.studentassistant.utils.toast
 
 @Composable
@@ -64,7 +66,9 @@ fun SemesterEditorScreen(
     }?.let { stringResource(it) }
 
     val name by viewModel.name.collectAsState()
-    val nameErrorMessage = errorMessage?.takeIf { (error == Error.EMPTY_NAME) && isNameChanged }
+    val nameErrorMessage = errorMessage?.takeIf {
+        (error == Error.EMPTY_NAME) && isNameChanged || (error == Error.SEMESTER_EXISTS)
+    }
 
     val firstDay by viewModel.firstDay.collectAsState()
     val lastDay by viewModel.lastDay.collectAsState()
@@ -90,7 +94,7 @@ fun SemesterEditorScreen(
         },
         onNameChange = { value ->
             isNameChanged = true
-            viewModel.name.value = value
+            viewModel.name.value = value.toSingleLine()
         },
         onFirstDayChange = { viewModel.firstDay.value = it },
         onLastDayChange = { viewModel.lastDay.value = it }
@@ -157,9 +161,9 @@ private fun SemesterEditorContent(
             modifier = Modifier.fillMaxWidth()
         )
 
-        if (errorMessage != null) {
+        AnimatedVisibility(errorMessage != null) {
             Text(
-                text = errorMessage,
+                text = errorMessage ?: "",
                 color = MaterialTheme.colors.error,
                 style = MaterialTheme.typography.caption,
                 modifier = Modifier.padding(start = 16.dp)
