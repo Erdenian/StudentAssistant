@@ -1,13 +1,11 @@
 package ru.erdenian.studentassistant.schedule.schedule
 
 import android.content.res.Configuration
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -31,24 +29,24 @@ import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import java.time.temporal.ChronoUnit
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.entity.ImmutableSortedSet
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.entity.Semester
+import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 import ru.erdenian.studentassistant.sampledata.Lessons
 import ru.erdenian.studentassistant.sampledata.Semesters
 import ru.erdenian.studentassistant.schedule.R
+import ru.erdenian.studentassistant.schedule.composable.LazyLessonsList
 import ru.erdenian.studentassistant.schedule.composable.PagerTabStrip
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.view.ActionItem
-import ru.erdenian.studentassistant.uikit.view.LessonCard
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
 import ru.erdenian.studentassistant.utils.showDatePicker
@@ -90,13 +88,13 @@ fun ScheduleScreen(
     )
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalAnimationApi::class)
 @Composable
 private fun ScheduleContent(
     state: PagerState,
     semestersNames: List<String>,
     selectedSemester: Semester?,
-    lessonsGetter: (date: LocalDate) -> StateFlow<ImmutableSortedSet<Lesson>>,
+    lessonsGetter: (date: LocalDate) -> Flow<ImmutableSortedSet<Lesson>>,
     onSelectedSemesterChange: (Int) -> Unit,
     onAddSemesterClick: () -> Unit,
     onEditSemesterClick: () -> Unit,
@@ -190,41 +188,9 @@ private fun ScheduleContent(
                     modifier = Modifier.fillMaxSize()
                 ) { page ->
                     val lessonsFlow = remember(selectedSemester, lessonsGetter) { lessonsGetter(selectedSemester.getDate(page)) }
-                    val lessons by lessonsFlow.collectAsState()
+                    val lessons by lessonsFlow.collectAsState(null)
 
-                    if (lessons.isEmpty()) {
-                        Text(
-                            text = stringResource(R.string.s_free_day),
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
-                        )
-                    } else {
-                        LazyColumn(
-                            contentPadding = PaddingValues(
-                                horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
-                                vertical = MaterialTheme.dimensions.activityVerticalMargin
-                            ),
-                            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.cardsSpacing),
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            itemsIndexed(
-                                items = lessons.list,
-                                key = { _, item -> item.id }
-                            ) { _, lesson ->
-                                val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
-
-                                LessonCard(
-                                    subjectName = lesson.subjectName,
-                                    type = lesson.type,
-                                    teachers = lesson.teachers.list,
-                                    classrooms = lesson.classrooms.list,
-                                    startTime = lesson.startTime.format(timeFormatter),
-                                    endTime = lesson.endTime.format(timeFormatter),
-                                    onClick = { onLessonClick(lesson) }
-                                )
-                            }
-                        }
-                    }
+                    LazyLessonsList(lessons = lessons?.list, onLessonClick = onLessonClick)
                 }
             }
         }
@@ -235,11 +201,28 @@ private fun ScheduleContent(
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
+private fun LessonsEditorContentEmptyPreview() = AppTheme {
+    ScheduleContent(
+        state = rememberPagerState(),
+        semestersNames = listOf(Semesters.regular.name),
+        selectedSemester = Semesters.regular,
+        lessonsGetter = { MutableStateFlow(immutableSortedSetOf()) },
+        onSelectedSemesterChange = {},
+        onAddSemesterClick = {},
+        onEditSemesterClick = {},
+        onLessonClick = {}
+    )
+}
+
+@OptIn(ExperimentalPagerApi::class)
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
 private fun LessonsEditorContentPreview() = AppTheme {
     val lesson = Lessons.regular
     ScheduleContent(
         state = rememberPagerState(),
-        semestersNames = emptyList(),
+        semestersNames = listOf(Semesters.regular.name),
         selectedSemester = Semesters.regular,
         lessonsGetter = { MutableStateFlow(List(10) { lesson }.toImmutableSortedSet()) },
         onSelectedSemesterChange = {},

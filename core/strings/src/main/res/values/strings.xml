@@ -4,13 +4,15 @@
 
     <!-- region schedule -->
 
+    <!-- LazyLessonsList -->
+    <string name="lll_free_day">Выходной</string>
+
     <!-- Schedule -->
     <string name="s_title">Расписание</string>
     <string name="s_calendar">Календарь</string>
     <string name="s_add">Добавить расписание</string>
     <string name="s_edit">Редактировать расписание</string>
     <string name="s_no_schedule">Здесь пока пусто. Добавьте расписание своего университета или школы.</string>
-    <string name="s_free_day">Выходной</string>
 
     <!-- Lesson Information -->
     <string name="li_title">Данные занятия</string>

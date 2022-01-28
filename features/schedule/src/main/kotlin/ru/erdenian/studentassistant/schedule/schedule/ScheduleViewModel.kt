@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.stateIn
 import org.kodein.di.DIAware
 import org.kodein.di.android.x.closestDI
 import org.kodein.di.instance
-import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 import ru.erdenian.studentassistant.entity.immutableSortedSetOfNotNull
 import ru.erdenian.studentassistant.repository.LessonRepository
 import ru.erdenian.studentassistant.repository.SelectedSemesterRepository
@@ -29,5 +28,4 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
     fun selectSemester(semesterId: Long) = selectedSemesterRepository.selectSemester(semesterId)
 
     fun getLessons(day: LocalDate) = lessonRepository.getAllFlow(day)
-        .stateIn(viewModelScope, SharingStarted.Lazily, immutableSortedSetOf())
 }
