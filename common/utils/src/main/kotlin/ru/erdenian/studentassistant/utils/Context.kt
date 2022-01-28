@@ -3,9 +3,12 @@ package ru.erdenian.studentassistant.utils
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.widget.Toast
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
+
+fun Context.toast(text: CharSequence, length: Int = Toast.LENGTH_SHORT) = Toast.makeText(this, text, length).show()
 
 /**
  * Отображает [DatePickerDialog].
