@@ -85,7 +85,7 @@ fun ScheduleScreen(
             }
         },
         onAddSemesterClick = navigateToAddSemester,
-        onEditSemesterClick = { navigateToEditSchedule(checkNotNull(selectedSemester).id) },
+        onEditSemesterClick = { navigateToEditSchedule(it.id) },
         onLessonClick = { navigateToShowLessonInformation(it.id) }
     )
 }
@@ -99,19 +99,19 @@ private fun ScheduleContent(
     lessonsGetter: (date: LocalDate) -> Flow<List<Lesson>>,
     onSelectedSemesterChange: (Int) -> Unit,
     onAddSemesterClick: () -> Unit,
-    onEditSemesterClick: () -> Unit,
+    onEditSemesterClick: (semester: Semester) -> Unit,
     onLessonClick: (Lesson) -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    if (semestersNames.size <= 1) {
+                    if ((semestersNames.size <= 1) || (selectedSemester == null)) {
                         Text(text = stringResource(R.string.s_title))
                     } else {
                         TopAppBarDropdownMenu(
                             items = semestersNames,
-                            selectedItem = checkNotNull(selectedSemester).name,
+                            selectedItem = selectedSemester.name,
                             onSelectedItemChange = { index, _ -> onSelectedSemesterChange(index) }
                         )
                     }
@@ -153,7 +153,7 @@ private fun ScheduleContent(
                             if (selectedSemester != null) {
                                 ActionItem.NeverShow(
                                     name = stringResource(R.string.s_edit),
-                                    onClick = onEditSemesterClick
+                                    onClick = { onEditSemesterClick(selectedSemester) }
                                 )
                             } else null
                         )

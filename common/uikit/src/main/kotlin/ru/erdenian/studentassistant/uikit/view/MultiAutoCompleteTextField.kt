@@ -51,7 +51,7 @@ fun MultiAutoCompleteTextField(
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
 
                 override fun afterTextChanged(s: Editable?) {
-                    val newValue = s?.toString() ?: ""
+                    val newValue = s?.toString().orEmpty()
                     if (newValue != currentValue) currentOnValueChange(newValue)
                 }
             }

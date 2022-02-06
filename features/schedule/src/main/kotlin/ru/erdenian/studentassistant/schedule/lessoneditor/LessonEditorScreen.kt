@@ -242,7 +242,7 @@ private fun LessonEditorContent(
             items = existingSubjects,
             onValueChange = onSubjectNameChange,
             label = stringResource(R.string.le_subject_name),
-            error = subjectNameErrorMessage ?: "",
+            error = subjectNameErrorMessage.orEmpty(),
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
                 imeAction = ImeAction.Next

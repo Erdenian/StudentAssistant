@@ -80,7 +80,7 @@ class ScheduleEditorViewModel(
                 deleteHomeworks.await()
             }
 
-            deletedLessonIds.value = setOf(lesson.id)
+            deletedLessonIds.value += lesson.id
             operationPrivate.value = null
         }
     }
