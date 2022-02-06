@@ -74,7 +74,6 @@ internal fun LazyHomeworksList(
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.cardsSpacing),
                         modifier = Modifier.fillMaxSize()
                     ) {
-
                         fun LazyListScope.createList(homeworks: List<Homework>) = itemsIndexed(
                             items = homeworks,
                             key = { _, item -> item.id }
