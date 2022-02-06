@@ -7,6 +7,9 @@
     <!-- LazyLessonsList -->
     <string name="lll_free_day">Выходной</string>
 
+    <!-- LazyHomeworksList -->
+    <string name="lhl_no_homeworks">Нет заданий</string>
+
     <!-- Schedule -->
     <string name="s_title">Расписание</string>
     <string name="s_calendar">Календарь</string>
@@ -16,12 +19,12 @@
 
     <!-- Lesson Information -->
     <string name="li_title">Данные занятия</string>
-    <string name="li_no_homeworks">Нет заданий</string>
     <string name="li_edit">Редактировать</string>
     <string name="li_delete_homework">Удалить</string>
-    <string name="li_delete_message">Удалить задание?</string>
-    <string name="li_delete_yes">Да</string>
-    <string name="li_delete_no">Нет</string>
+    <string name="li_delete_homework_message">Удалить задание?</string>
+    <string name="li_delete_homework_yes">Да</string>
+    <string name="li_delete_homework_no">Нет</string>
+    <string name="li_delete_homework_progress">Удаление задания…</string>
 
     <!-- Semester Editor -->
     <string name="se_title_new">Добавление расписания</string>

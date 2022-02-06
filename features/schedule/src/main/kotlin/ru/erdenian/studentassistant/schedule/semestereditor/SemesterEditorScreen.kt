@@ -229,7 +229,7 @@ private fun SemesterEditorContent(
 
             AnimatedVisibility(errorMessage != null) {
                 Text(
-                    text = errorMessage ?: "",
+                    text = errorMessage.orEmpty(),
                     color = MaterialTheme.colors.error,
                     style = MaterialTheme.typography.caption,
                     modifier = Modifier.padding(start = 16.dp)

@@ -44,7 +44,7 @@ class HomeworkEditorViewModel private constructor(
     constructor(application: Application, semesterId: Long, homeworkId: Long) :
             this(application, semesterId, homeworkId, null)
 
-    val subjectName = MutableStateFlow(subjectName ?: "")
+    val subjectName = MutableStateFlow(subjectName.orEmpty())
     val description = MutableStateFlow("")
     val deadline = MutableStateFlow(LocalDate.now().plusWeeks(1))
 

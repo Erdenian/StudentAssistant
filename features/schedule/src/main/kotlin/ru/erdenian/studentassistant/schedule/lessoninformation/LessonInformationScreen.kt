@@ -1,15 +1,15 @@
 package ru.erdenian.studentassistant.schedule.lessoninformation
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.with
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
@@ -17,6 +17,8 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -31,12 +33,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.placeholder
+import com.google.accompanist.placeholder.material.shimmer
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -45,12 +48,13 @@ import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.sampledata.Homeworks
 import ru.erdenian.studentassistant.sampledata.Lessons
 import ru.erdenian.studentassistant.schedule.R
+import ru.erdenian.studentassistant.schedule.composable.LazyHomeworksList
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.view.ActionItem
-import ru.erdenian.studentassistant.uikit.view.HomeworkCard
 import ru.erdenian.studentassistant.uikit.view.LessonCard
+import ru.erdenian.studentassistant.uikit.view.ProgressDialog
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
 @Composable
@@ -69,29 +73,32 @@ fun LessonInformationScreen(
         }
     }
 
+    val operation by viewModel.operation.collectAsState()
     val lesson by viewModel.lesson.collectAsState()
     val homeworks by viewModel.homeworks.collectAsState()
 
     LessonInformationContent(
+        operation = operation,
         lesson = lesson,
-        homeworks = homeworks.list,
+        homeworks = homeworks?.list,
         onBackClick = navigateBack,
-        onEditClick = { navigateToEditLesson(checkNotNull(lesson).semesterId, viewModel.lessonId) },
-        onHomeworkClick = { navigateToEditHomework(checkNotNull(lesson).semesterId, it.id) },
-        onAddHomeworkClick = { navigateToCreateHomework(checkNotNull(lesson).semesterId, checkNotNull(lesson).subjectName) },
+        onEditClick = { navigateToEditLesson(it.semesterId, it.id) },
+        onHomeworkClick = { navigateToEditHomework(it.semesterId, it.id) },
+        onAddHomeworkClick = { navigateToCreateHomework(it.semesterId, it.subjectName) },
         onDeleteHomeworkClick = { viewModel.deleteHomework(it.id) }
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
 private fun LessonInformationContent(
+    operation: LessonInformationViewModel.Operation?,
     lesson: Lesson?,
-    homeworks: List<Homework>,
+    homeworks: List<Homework>?,
     onBackClick: () -> Unit,
-    onEditClick: () -> Unit,
+    onEditClick: (Lesson) -> Unit,
     onHomeworkClick: (Homework) -> Unit,
-    onAddHomeworkClick: () -> Unit,
+    onAddHomeworkClick: (Lesson) -> Unit,
     onDeleteHomeworkClick: (Homework) -> Unit
 ) = Scaffold(
     topBar = {
@@ -103,102 +110,102 @@ private fun LessonInformationContent(
                 }
             },
             actions = {
+                val icon = AppIcons.Edit
                 TopAppBarActions(
                     actions = listOf(
-                        ActionItem.AlwaysShow(
-                            name = stringResource(R.string.li_edit),
-                            imageVector = AppIcons.Edit,
-                            onClick = onEditClick
-                        )
+                        if (lesson == null) {
+                            ActionItem.AlwaysShow(
+                                name = stringResource(R.string.li_edit),
+                                onClick = {},
+                                enabled = false
+                            ) {
+                                CircularProgressIndicator(
+                                    color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
+                                    modifier = Modifier.size(icon.defaultWidth, icon.defaultHeight)
+                                )
+                            }
+                        } else {
+                            ActionItem.AlwaysShow(
+                                name = stringResource(R.string.li_edit),
+                                imageVector = icon,
+                                onClick = { onEditClick(lesson) }
+                            )
+                        }
                     )
                 )
             }
         )
     },
     floatingActionButton = {
-        FloatingActionButton(onClick = onAddHomeworkClick) {
-            Icon(imageVector = AppIcons.Add, contentDescription = null)
+        if (lesson != null) {
+            FloatingActionButton(onClick = { onAddHomeworkClick(lesson) }) {
+                Icon(imageVector = AppIcons.Add, contentDescription = null)
+            }
         }
     }
 ) {
-    if (lesson == null) {
-        CircularProgressIndicator()
-    } else {
-        Column {
-            val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
+    if (operation != null) {
+        val stringId = when (operation) {
+            LessonInformationViewModel.Operation.DELETING_HOMEWORK -> R.string.li_delete_homework_progress
+        }
+        ProgressDialog { Text(text = stringResource(stringId)) }
+    }
 
+    Column {
+        val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
+
+        AnimatedContent(
+            targetState = lesson,
+            transitionSpec = { fadeIn() with fadeOut() }
+        ) { lessonState ->
+            // Random non-empty string to make LessonCard larger. User will not see it behind the shimmer
+            val emptyText = "Loading..."
             LessonCard(
-                subjectName = lesson.subjectName,
-                type = lesson.type,
-                teachers = lesson.teachers.list,
-                classrooms = lesson.classrooms.list,
-                startTime = lesson.startTime.format(timeFormatter),
-                endTime = lesson.endTime.format(timeFormatter),
-                modifier = Modifier.padding(
-                    horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
-                    vertical = MaterialTheme.dimensions.activityVerticalMargin
-                )
-            )
-
-            Divider()
-
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                if (homeworks.isEmpty()) {
-                    Text(
-                        text = stringResource(R.string.li_no_homeworks),
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
+                subjectName = lessonState?.subjectName ?: emptyText,
+                type = lessonState?.type ?: emptyText,
+                teachers = lessonState?.teachers?.list ?: listOf(emptyText),
+                classrooms = lessonState?.classrooms?.list ?: listOf(emptyText),
+                startTime = lessonState?.startTime?.format(timeFormatter) ?: emptyText,
+                endTime = lessonState?.endTime?.format(timeFormatter) ?: emptyText,
+                modifier = Modifier
+                    .padding(
+                        horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
+                        vertical = MaterialTheme.dimensions.activityVerticalMargin
                     )
-                } else {
-                    var contextMenuHomework by remember { mutableStateOf<Homework?>(null) }
+                    .placeholder(
+                        visible = (lessonState == null),
+                        highlight = PlaceholderHighlight.shimmer()
+                    )
+            )
+        }
 
-                    LazyColumn(
-                        contentPadding = PaddingValues(
-                            horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
-                            vertical = MaterialTheme.dimensions.activityVerticalMargin
-                        ),
-                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.cardsSpacing),
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        itemsIndexed(
-                            items = homeworks,
-                            key = { _, item -> item.id }
-                        ) { _, homework ->
-                            val deadlineFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
+        Divider()
 
-                            HomeworkCard(
-                                subjectName = homework.subjectName,
-                                description = homework.description,
-                                deadline = homework.deadline.format(deadlineFormatter),
-                                onClick = { onHomeworkClick(homework) },
-                                onLongClick = { contextMenuHomework = homework }
-                            )
-                        }
-                    }
+        var contextMenuHomework by remember { mutableStateOf<Homework?>(null) }
 
-                    DropdownMenu(
-                        expanded = (contextMenuHomework != null),
-                        onDismissRequest = { contextMenuHomework = null }
-                    ) {
-                        val context = LocalContext.current
-                        DropdownMenuItem(
-                            onClick = {
-                                val homework = checkNotNull(contextMenuHomework)
-                                contextMenuHomework = null
-                                MaterialAlertDialogBuilder(context)
-                                    .setMessage(R.string.li_delete_message)
-                                    .setPositiveButton(R.string.li_delete_yes) { _, _ -> onDeleteHomeworkClick(homework) }
-                                    .setNegativeButton(R.string.li_delete_no, null)
-                                    .show()
-                            }
-                        ) {
-                            Text(text = stringResource(R.string.li_delete_homework))
-                        }
-                    }
+        LazyHomeworksList(
+            homeworks = homeworks,
+            onHomeworkClick = onHomeworkClick,
+            onLongHomeworkClick = { contextMenuHomework = it }
+        )
+
+        DropdownMenu(
+            expanded = (contextMenuHomework != null),
+            onDismissRequest = { contextMenuHomework = null }
+        ) {
+            val context = LocalContext.current
+            DropdownMenuItem(
+                onClick = {
+                    val homework = checkNotNull(contextMenuHomework)
+                    contextMenuHomework = null
+                    MaterialAlertDialogBuilder(context)
+                        .setMessage(R.string.li_delete_homework_message)
+                        .setPositiveButton(R.string.li_delete_homework_yes) { _, _ -> onDeleteHomeworkClick(homework) }
+                        .setNegativeButton(R.string.li_delete_homework_no, null)
+                        .show()
                 }
+            ) {
+                Text(text = stringResource(R.string.li_delete_homework))
             }
         }
     }
@@ -209,6 +216,7 @@ private fun LessonInformationContent(
 @Composable
 private fun LessonInformationContentRegularPreview() = AppTheme {
     LessonInformationContent(
+        operation = null,
         lesson = Lessons.regular,
         homeworks = List(10) { Homeworks.regular },
         onBackClick = {},
@@ -223,6 +231,7 @@ private fun LessonInformationContentRegularPreview() = AppTheme {
 @Composable
 private fun LessonInformationContentLongPreview() = AppTheme {
     LessonInformationContent(
+        operation = null,
         lesson = Lessons.long,
         homeworks = List(10) { Homeworks.long },
         onBackClick = {},
