@@ -29,10 +29,22 @@ sealed class ActionItem(
 ) {
     class AlwaysShow(
         name: String,
-        val imageVector: ImageVector,
         onClick: () -> Unit,
-        enabled: Boolean = true
-    ) : ActionItem(name, onClick, enabled)
+        enabled: Boolean = true,
+        val content: @Composable () -> Unit
+    ) : ActionItem(name, onClick, enabled) {
+        constructor(
+            name: String,
+            imageVector: ImageVector,
+            onClick: () -> Unit,
+            enabled: Boolean = true
+        ) : this(
+            name = name,
+            onClick = onClick,
+            enabled = enabled,
+            content = { Icon(imageVector = imageVector, contentDescription = name) }
+        )
+    }
 
     class NeverShow(
         name: String,
@@ -66,9 +78,7 @@ private fun TopAppBarActionsContent(
         val alwaysShowActions = remember(actions) { actions.filterIsInstance<ActionItem.AlwaysShow>() }
 
         alwaysShowActions.forEach { item ->
-            IconButton(onClick = item.onClick) {
-                Icon(imageVector = item.imageVector, contentDescription = item.name)
-            }
+            IconButton(onClick = item.onClick, enabled = item.enabled, content = item.content)
         }
     }
 
@@ -90,7 +100,8 @@ private fun TopAppBarActionsContent(
                             onClick = {
                                 onDismissRequest()
                                 item.onClick()
-                            }
+                            },
+                            enabled = item.enabled
                         ) {
                             Text(text = item.name)
                         }

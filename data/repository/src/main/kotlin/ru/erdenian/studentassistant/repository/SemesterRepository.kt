@@ -29,10 +29,10 @@ class SemesterRepository(
         selectedSemesterRepository.onSemesterDeleted(id)
     }
 
-    val allFlow: Flow<ImmutableSortedSet<Semester>> = semesterDao.getAllFlow().map()
+    val allFlow: Flow<ImmutableSortedSet<Semester>> get() = semesterDao.getAllFlow().map()
     suspend fun get(id: Long): Semester? = semesterDao.get(id)
     fun getFlow(id: Long): Flow<Semester?> = semesterDao.getFlow(id)
-    val namesFlow: Flow<List<String>> = semesterDao.getNamesFlow()
+    val namesFlow: Flow<List<String>> get() = semesterDao.getNamesFlow()
 
     private fun Flow<List<SemesterEntity>>.map() = map { it.toImmutableSortedSet<Semester>() }
 }
