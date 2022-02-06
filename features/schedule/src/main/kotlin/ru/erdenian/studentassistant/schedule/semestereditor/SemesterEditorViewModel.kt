@@ -97,7 +97,7 @@ class SemesterEditorViewModel(
             (firstDay >= lastDay) -> Error.WRONG_DATES
             else -> null
         }
-    }.stateIn(viewModelScope, SharingStarted.Lazily, null)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     val isEditing = (semesterId != null)
 

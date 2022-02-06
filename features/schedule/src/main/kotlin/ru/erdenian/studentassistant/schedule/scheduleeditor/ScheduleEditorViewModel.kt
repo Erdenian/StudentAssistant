@@ -41,7 +41,7 @@ class ScheduleEditorViewModel(
     private val isDeletedPrivate = MutableStateFlow(false)
     val isDeleted = isDeletedPrivate.asStateFlow()
 
-    private val deletedLessonIds = MutableStateFlow<Set<Long>>(emptySet())
+    private val deletedLessonIds = MutableStateFlow(emptySet<Long>())
 
     fun getLessons(dayOfWeek: DayOfWeek) = combine(
         lessonRepository.getAllFlow(semesterId, dayOfWeek).onEach { deletedLessonIds.value = emptySet() },

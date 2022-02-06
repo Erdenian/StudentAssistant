@@ -97,6 +97,7 @@
     <string name="h_delete_message">Удалить задание?</string>
     <string name="h_delete_yes">Да</string>
     <string name="h_delete_no">Нет</string>
+    <string name="h_delete_progress">Удаление задания…</string>
 
     <!-- Homework Editor -->
     <string name="he_title">Редактор задания</string>

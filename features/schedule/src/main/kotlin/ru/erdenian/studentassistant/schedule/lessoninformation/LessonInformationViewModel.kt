@@ -46,7 +46,7 @@ class LessonInformationViewModel(
 
     val isDeleted = lessonPrivate.map { it == null }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
 
-    private val deletedHomeworkIds = MutableStateFlow<Set<Long>>(emptySet())
+    private val deletedHomeworkIds = MutableStateFlow(emptySet<Long>())
 
     val homeworks = combine(
         @OptIn(ExperimentalCoroutinesApi::class)
