@@ -11,14 +11,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
@@ -164,27 +160,14 @@ private fun SemesterEditorContent(
                         transitionSpec = { fadeIn() with fadeOut() },
                         contentAlignment = Alignment.Center
                     ) { isLoading ->
-                        val icon = AppIcons.Check
                         TopAppBarActions(
                             actions = listOf(
-                                if (isLoading) {
-                                    ActionItem.AlwaysShow(
-                                        name = stringResource(R.string.se_save),
-                                        onClick = onSaveClick,
-                                        enabled = false
-                                    ) {
-                                        CircularProgressIndicator(
-                                            color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
-                                            modifier = Modifier.size(icon.defaultWidth, icon.defaultHeight)
-                                        )
-                                    }
-                                } else {
-                                    ActionItem.AlwaysShow(
-                                        name = stringResource(R.string.se_save),
-                                        imageVector = icon,
-                                        onClick = onSaveClick
-                                    )
-                                }
+                                ActionItem.AlwaysShow(
+                                    name = stringResource(R.string.se_save),
+                                    imageVector = AppIcons.Check,
+                                    loading = isLoading,
+                                    onClick = onSaveClick
+                                )
                             )
                         )
                     }

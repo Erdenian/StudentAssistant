@@ -36,6 +36,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.placeholder
+import com.google.accompanist.placeholder.material.shimmer
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.time.DayOfWeek
 import java.time.LocalTime
@@ -52,6 +55,7 @@ import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.AutoCompleteTextField
 import ru.erdenian.studentassistant.uikit.view.MultiAutoCompleteTextField
+import ru.erdenian.studentassistant.uikit.view.ProgressDialog
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.utils.showTimePicker
 import ru.erdenian.studentassistant.utils.toSingleLine
@@ -80,6 +84,8 @@ fun LessonEditorScreen(
         null -> null
     }?.let { stringResource(it) }
 
+    val operation by viewModel.operation.collectAsState()
+
     val subjectName by viewModel.subjectName.collectAsState()
     val existingSubjects by viewModel.existingSubjects.collectAsState()
     val subjectNameErrorMessage = errorMessage?.takeIf { (error == Error.EMPTY_SUBJECT_NAME) && isSubjectNameChanged }
@@ -104,7 +110,11 @@ fun LessonEditorScreen(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
+    var customOperaionMessageId by remember { mutableStateOf<Int?>(null) }
+    customOperaionMessageId?.let { ProgressDialog { Text(text = stringResource(it)) } }
+
     LessonEditorContent(
+        operation = operation,
         isEditing = isEditing,
         subjectName = subjectName,
         existingSubjects = existingSubjects.list,
@@ -125,6 +135,7 @@ fun LessonEditorScreen(
             if (errorMessage != null) {
                 context.toast(errorMessage)
             } else {
+                customOperaionMessageId = R.string.le_rename_others_progress
                 coroutineScope.launch {
                     if (viewModel.isSubjectNameChangedAndNotLast()) {
                         MaterialAlertDialogBuilder(context)
@@ -135,10 +146,12 @@ fun LessonEditorScreen(
                             .setNeutralButton(R.string.le_rename_others_cancel, null)
                             .show()
                     } else viewModel.save()
+                    customOperaionMessageId = null
                 }
             }
         },
         onDeleteClick = {
+            customOperaionMessageId = R.string.le_delete_homeworks_progress
             coroutineScope.launch {
                 if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) {
                     MaterialAlertDialogBuilder(context)
@@ -155,6 +168,7 @@ fun LessonEditorScreen(
                         .setNegativeButton(R.string.le_delete_no, null)
                         .show()
                 }
+                customOperaionMessageId = null
             }
         },
         onSubjectNameChange = { value ->
@@ -173,6 +187,7 @@ fun LessonEditorScreen(
 
 @Composable
 private fun LessonEditorContent(
+    operation: LessonEditorViewModel.Operation?,
     isEditing: Boolean,
     subjectName: String,
     existingSubjects: List<String>,
@@ -198,160 +213,231 @@ private fun LessonEditorContent(
     onEndTimeChange: (LocalTime) -> Unit,
     onDayOfWeekChange: (DayOfWeek) -> Unit,
     onWeeksChange: (List<Boolean>) -> Unit
-) = Scaffold(
-    topBar = {
-        TopAppBar(
-            title = { Text(text = stringResource(if (isEditing) R.string.le_title_edit else R.string.le_title_new)) },
-            navigationIcon = {
-                IconButton(onClick = onBackClick) {
-                    Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
-                }
-            },
-            actions = {
-                TopAppBarActions(
-                    actions = listOfNotNull(
-                        ActionItem.AlwaysShow(
-                            name = stringResource(R.string.le_save),
-                            imageVector = AppIcons.Check,
-                            onClick = onSaveClick
-                        ),
-                        if (isEditing) {
-                            ActionItem.NeverShow(
-                                name = stringResource(R.string.le_delete),
-                                onClick = onDeleteClick
-                            )
-                        } else null
-                    )
-                )
-            }
-        )
-    }
 ) {
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .padding(
-                horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
-                vertical = MaterialTheme.dimensions.activityVerticalMargin
+    val nonBlockingProgress: Boolean
+    val blockingProgressMessageId: Int?
+    when (operation) {
+        LessonEditorViewModel.Operation.LOADING -> {
+            nonBlockingProgress = true
+            blockingProgressMessageId = null
+        }
+        LessonEditorViewModel.Operation.SAVING -> {
+            nonBlockingProgress = false
+            blockingProgressMessageId = R.string.le_save_progress
+        }
+        LessonEditorViewModel.Operation.DELETING -> {
+            nonBlockingProgress = false
+            blockingProgressMessageId = R.string.le_delete_progress
+        }
+        null -> {
+            nonBlockingProgress = false
+            blockingProgressMessageId = null
+        }
+    }
+
+    if (blockingProgressMessageId != null) {
+        ProgressDialog { Text(text = stringResource(blockingProgressMessageId)) }
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = stringResource(if (isEditing) R.string.le_title_edit else R.string.le_title_new)) },
+                navigationIcon = {
+                    IconButton(onClick = onBackClick) {
+                        Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
+                    }
+                },
+                actions = {
+                    TopAppBarActions(
+                        actions = listOfNotNull(
+                            ActionItem.AlwaysShow(
+                                name = stringResource(R.string.le_save),
+                                imageVector = AppIcons.Check,
+                                loading = nonBlockingProgress,
+                                onClick = onSaveClick
+                            ),
+                            if (isEditing) {
+                                ActionItem.NeverShow(
+                                    name = stringResource(R.string.le_delete),
+                                    loading = nonBlockingProgress,
+                                    onClick = onDeleteClick
+                                )
+                            } else null
+                        )
+                    )
+                }
             )
+        }
     ) {
-        val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
-
-        AutoCompleteTextField(
-            value = subjectName,
-            items = existingSubjects,
-            onValueChange = onSubjectNameChange,
-            label = stringResource(R.string.le_subject_name),
-            error = subjectNameErrorMessage.orEmpty(),
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.Sentences,
-                imeAction = ImeAction.Next
-            ),
-            singleLine = true,
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-        )
-
-        AutoCompleteTextField(
-            value = type,
-            items = existingTypes,
-            onValueChange = onTypeChange,
-            label = stringResource(R.string.le_type),
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.Sentences,
-                imeAction = ImeAction.Next
-            ),
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp)
-        )
-
-        MultiAutoCompleteTextField(
-            value = teachers,
-            items = existingTeachers,
-            onValueChange = onTeachersChange,
-            label = stringResource(R.string.le_teachers),
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.Words,
-                imeAction = ImeAction.Next
-            ),
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp)
-        )
-
-        MultiAutoCompleteTextField(
-            value = classrooms,
-            items = existingClassrooms,
-            onValueChange = onClassroomsChange,
-            label = stringResource(R.string.le_classrooms),
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.Sentences,
-                imeAction = ImeAction.Done
-            ),
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp)
-        )
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp)
+                .verticalScroll(rememberScrollState())
+                .padding(
+                    horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
+                    vertical = MaterialTheme.dimensions.activityVerticalMargin
+                )
         ) {
-            val context = LocalContext.current
+            val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
 
-            Text(
-                text = stringResource(R.string.le_start_time),
-                style = MaterialTheme.typography.body2,
-                modifier = Modifier.weight(1.0f)
+            AutoCompleteTextField(
+                value = subjectName,
+                items = existingSubjects,
+                onValueChange = onSubjectNameChange,
+                enabled = !nonBlockingProgress,
+                label = stringResource(R.string.le_subject_name),
+                error = subjectNameErrorMessage.orEmpty(),
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Next
+                ),
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .placeholder(
+                        visible = nonBlockingProgress,
+                        highlight = PlaceholderHighlight.shimmer()
+                    )
             )
-            TextButton(
-                onClick = { context.showTimePicker(preselectedTime = startTime, onTimeSet = onStartTimeChange) }
-            ) {
-                Text(text = startTime.format(timeFormatter))
-            }
-        }
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp)
-        ) {
-            val context = LocalContext.current
-
-            Text(
-                text = stringResource(R.string.le_end_time),
-                style = MaterialTheme.typography.body2,
-                modifier = Modifier.weight(1.0f)
+            AutoCompleteTextField(
+                value = type,
+                items = existingTypes,
+                onValueChange = onTypeChange,
+                enabled = !nonBlockingProgress,
+                label = stringResource(R.string.le_type),
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Next
+                ),
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
+                    .placeholder(
+                        visible = nonBlockingProgress,
+                        highlight = PlaceholderHighlight.shimmer()
+                    )
             )
-            TextButton(
-                onClick = { context.showTimePicker(preselectedTime = endTime, onTimeSet = onEndTimeChange) }
+
+            MultiAutoCompleteTextField(
+                value = teachers,
+                items = existingTeachers,
+                onValueChange = onTeachersChange,
+                enabled = !nonBlockingProgress,
+                label = stringResource(R.string.le_teachers),
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
+                    imeAction = ImeAction.Next
+                ),
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
+                    .placeholder(
+                        visible = nonBlockingProgress,
+                        highlight = PlaceholderHighlight.shimmer()
+                    )
+            )
+
+            MultiAutoCompleteTextField(
+                value = classrooms,
+                items = existingClassrooms,
+                onValueChange = onClassroomsChange,
+                enabled = !nonBlockingProgress,
+                label = stringResource(R.string.le_classrooms),
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Done
+                ),
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
+                    .placeholder(
+                        visible = nonBlockingProgress,
+                        highlight = PlaceholderHighlight.shimmer()
+                    )
+            )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
             ) {
-                Text(text = endTime.format(timeFormatter))
+                val context = LocalContext.current
+
+                Text(
+                    text = stringResource(R.string.le_start_time),
+                    style = MaterialTheme.typography.body2,
+                    modifier = Modifier.weight(1.0f)
+                )
+                TextButton(
+                    onClick = { context.showTimePicker(preselectedTime = startTime, onTimeSet = onStartTimeChange) },
+                    enabled = !nonBlockingProgress,
+                    modifier = Modifier.placeholder(
+                        visible = nonBlockingProgress,
+                        highlight = PlaceholderHighlight.shimmer()
+                    )
+                ) {
+                    Text(text = startTime.format(timeFormatter))
+                }
             }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
+            ) {
+                val context = LocalContext.current
+
+                Text(
+                    text = stringResource(R.string.le_end_time),
+                    style = MaterialTheme.typography.body2,
+                    modifier = Modifier.weight(1.0f)
+                )
+                TextButton(
+                    onClick = { context.showTimePicker(preselectedTime = endTime, onTimeSet = onEndTimeChange) },
+                    enabled = !nonBlockingProgress,
+                    modifier = Modifier.placeholder(
+                        visible = nonBlockingProgress,
+                        highlight = PlaceholderHighlight.shimmer()
+                    )
+                ) {
+                    Text(text = endTime.format(timeFormatter))
+                }
+            }
+
+            Divider(modifier = Modifier.padding(vertical = 8.dp))
+
+            WeekdayPicker(
+                value = dayOfWeek,
+                onValueChange = onDayOfWeekChange,
+                enabled = !nonBlockingProgress,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .placeholder(
+                        visible = nonBlockingProgress,
+                        highlight = PlaceholderHighlight.shimmer()
+                    )
+            )
+
+            Divider(modifier = Modifier.padding(vertical = 8.dp))
+
+            WeeksSelector(
+                weeks = weeks,
+                onWeeksChange = onWeeksChange,
+                enabled = !nonBlockingProgress,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .placeholder(
+                        visible = nonBlockingProgress,
+                        highlight = PlaceholderHighlight.shimmer()
+                    )
+            )
         }
-
-        Divider(modifier = Modifier.padding(vertical = 8.dp))
-
-        WeekdayPicker(
-            value = dayOfWeek,
-            onValueChange = onDayOfWeekChange,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Divider(modifier = Modifier.padding(vertical = 8.dp))
-
-        WeeksSelector(
-            weeks = weeks,
-            onWeeksChange = onWeeksChange,
-            modifier = Modifier.fillMaxWidth()
-        )
     }
 }
 
@@ -360,6 +446,7 @@ private fun LessonEditorContent(
 @Composable
 private fun LessonEditorContentPreview() = AppTheme {
     LessonEditorContent(
+        operation = null,
         isEditing = true,
         subjectName = Lessons.regular.subjectName,
         existingSubjects = emptyList(),

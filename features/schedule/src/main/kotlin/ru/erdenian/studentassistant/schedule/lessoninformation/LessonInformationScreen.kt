@@ -9,16 +9,12 @@ import androidx.compose.animation.with
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -110,27 +106,14 @@ private fun LessonInformationContent(
                 }
             },
             actions = {
-                val icon = AppIcons.Edit
                 TopAppBarActions(
                     actions = listOf(
-                        if (lesson == null) {
-                            ActionItem.AlwaysShow(
-                                name = stringResource(R.string.li_edit),
-                                onClick = {},
-                                enabled = false
-                            ) {
-                                CircularProgressIndicator(
-                                    color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
-                                    modifier = Modifier.size(icon.defaultWidth, icon.defaultHeight)
-                                )
-                            }
-                        } else {
-                            ActionItem.AlwaysShow(
-                                name = stringResource(R.string.li_edit),
-                                imageVector = icon,
-                                onClick = { onEditClick(lesson) }
-                            )
-                        }
+                        ActionItem.AlwaysShow(
+                            name = stringResource(R.string.li_edit),
+                            imageVector = AppIcons.Edit,
+                            loading = (lesson == null),
+                            onClick = { lesson?.let(onEditClick) }
+                        )
                     )
                 )
             }

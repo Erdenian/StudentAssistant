@@ -51,7 +51,8 @@ import ru.erdenian.studentassistant.uikit.layout.StartEndRow
 internal fun WeeksSelector(
     weeks: List<Boolean>,
     onWeeksChange: (weeks: List<Boolean>) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
 ) {
     val repeatVariants = stringArrayResource(R.array.repeat_variants).toList()
     val weeksVariants = remember {
@@ -94,8 +95,8 @@ internal fun WeeksSelector(
         onMinusClick = { onWeeksChange(weeks.dropLast(1)) },
         onPlusClick = { onWeeksChange(weeks + false) },
         isMinusEnabled = (weeks.size > 1) && isCustomEnabled,
-        isPlusEnabled = isCustomEnabled,
         isCustomEnabled = isCustomEnabled,
+        enabled = enabled,
         modifier = modifier
     )
 }
@@ -113,9 +114,9 @@ private fun WeeksSelectorContent(
     onMinusClick: () -> Unit,
     onPlusClick: () -> Unit,
     isMinusEnabled: Boolean,
-    isPlusEnabled: Boolean,
     isCustomEnabled: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
 ) = Column(modifier = modifier) {
     Row(
         verticalAlignment = Alignment.Bottom
@@ -129,7 +130,7 @@ private fun WeeksSelectorContent(
             verticalAlignment = Alignment.Bottom,
             modifier = Modifier
                 .padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
-                .clickable(onClick = onSelectedRepeatVariantClick),
+                .clickable(onClick = onSelectedRepeatVariantClick, enabled = enabled),
             contentStart = {
                 Text(
                     text = repeatVariants[selectedRepeatVariantIndex],
@@ -164,7 +165,7 @@ private fun WeeksSelectorContent(
     ) {
         IconButton(
             onClick = onMinusClick,
-            enabled = isMinusEnabled
+            enabled = (isMinusEnabled && enabled)
         ) {
             Icon(
                 imageVector = AppIcons.Remove,
@@ -188,7 +189,7 @@ private fun WeeksSelectorContent(
                     checked = checked,
                     text = (index + 1).toString(),
                     onCheckedChange = { onWeekCheckedChange(index, it) },
-                    enabled = isCustomEnabled
+                    enabled = (isCustomEnabled && enabled)
                 )
             }
         }
@@ -201,7 +202,7 @@ private fun WeeksSelectorContent(
 
         IconButton(
             onClick = onPlusClick,
-            enabled = isPlusEnabled
+            enabled = (isCustomEnabled && enabled)
         ) {
             Icon(
                 imageVector = AppIcons.Add,
@@ -211,8 +212,13 @@ private fun WeeksSelectorContent(
     }
 }
 
-@Preview(name = "WeeksSelector preview", group = "WeeksSelector")
-@Preview(name = "WeeksSelector preview (dark)", group = "WeeksSelector", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "WeeksSelector preview", group = "WeeksSelector", showBackground = true)
+@Preview(
+    name = "WeeksSelector preview (dark)",
+    group = "WeeksSelector",
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 private fun WeeksSelectorPreview() = AppTheme {
     WeeksSelectorContent(
@@ -227,13 +233,12 @@ private fun WeeksSelectorPreview() = AppTheme {
         onMinusClick = {},
         onPlusClick = {},
         isMinusEnabled = true,
-        isPlusEnabled = true,
         isCustomEnabled = true,
         modifier = Modifier.fillMaxWidth()
     )
 }
 
-@Preview(group = "WeeksSelector")
+@Preview(group = "WeeksSelector", showBackground = true)
 @Composable
 private fun WeeksSelectorLongRepeatVariantPreview() = AppTheme {
     WeeksSelectorContent(
@@ -248,7 +253,6 @@ private fun WeeksSelectorLongRepeatVariantPreview() = AppTheme {
         onMinusClick = {},
         onPlusClick = {},
         isMinusEnabled = true,
-        isPlusEnabled = true,
         isCustomEnabled = true,
         modifier = Modifier.fillMaxWidth()
     )
@@ -269,31 +273,31 @@ private fun CheckBoxWithText(
     Text(text = text, maxLines = 1)
 }
 
-@Preview(name = "Short text", group = "CheckBoxWithText")
+@Preview(name = "Short text", group = "CheckBoxWithText", showBackground = true)
 @Composable
 private fun CheckBoxWithTextShortPreview() = AppTheme {
     CheckBoxWithText(true, "1", null)
 }
 
-@Preview(name = "Medium text", group = "CheckBoxWithText")
+@Preview(name = "Medium text", group = "CheckBoxWithText", showBackground = true)
 @Composable
 private fun CheckBoxWithTextMediumPreview() = AppTheme {
     CheckBoxWithText(true, "Text", null)
 }
 
-@Preview(name = "Long text", group = "CheckBoxWithText")
+@Preview(name = "Long text", group = "CheckBoxWithText", showBackground = true)
 @Composable
 private fun CheckBoxWithTextLongPreview() = AppTheme {
     CheckBoxWithText(true, "Long text", null)
 }
 
-@Preview(name = "Disabled", group = "CheckBoxWithText")
+@Preview(name = "Disabled", group = "CheckBoxWithText", showBackground = true)
 @Composable
 private fun CheckBoxWithTextDisabledPreview() = AppTheme {
     CheckBoxWithText(true, "Disabled", null, enabled = false)
 }
 
-@Preview(name = "Dark theme", group = "CheckBoxWithText", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Dark theme", group = "CheckBoxWithText", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun CheckBoxWithTextDarkPreview() = AppTheme {
     CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.onBackground) {

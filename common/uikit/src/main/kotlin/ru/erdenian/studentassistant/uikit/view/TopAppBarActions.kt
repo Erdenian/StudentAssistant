@@ -1,12 +1,20 @@
 package ru.erdenian.studentassistant.uikit.view
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.filled.ArrowBack
@@ -17,40 +25,31 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 
 sealed class ActionItem(
     val name: String,
-    val onClick: () -> Unit,
-    val enabled: Boolean = true
+    val loading: Boolean = false,
+    val onClick: () -> Unit
 ) {
     class AlwaysShow(
         name: String,
-        onClick: () -> Unit,
-        enabled: Boolean = true,
-        val content: @Composable () -> Unit
-    ) : ActionItem(name, onClick, enabled) {
-        constructor(
-            name: String,
-            imageVector: ImageVector,
-            onClick: () -> Unit,
-            enabled: Boolean = true
-        ) : this(
-            name = name,
-            onClick = onClick,
-            enabled = enabled,
-            content = { Icon(imageVector = imageVector, contentDescription = name) }
-        )
-    }
+        val imageVector: ImageVector,
+        loading: Boolean = false,
+        onClick: () -> Unit
+    ) : ActionItem(name, loading, onClick)
 
     class NeverShow(
         name: String,
-        onClick: () -> Unit,
-        enabled: Boolean = true
-    ) : ActionItem(name, onClick, enabled)
+        loading: Boolean = false,
+        onClick: () -> Unit
+    ) : ActionItem(name, loading, onClick)
 }
 
 @Suppress("unused")
@@ -67,6 +66,7 @@ fun RowScope.TopAppBarActions(
     )
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun TopAppBarActionsContent(
     actions: List<ActionItem>,
@@ -78,7 +78,18 @@ private fun TopAppBarActionsContent(
         val alwaysShowActions = remember(actions) { actions.filterIsInstance<ActionItem.AlwaysShow>() }
 
         alwaysShowActions.forEach { item ->
-            IconButton(onClick = item.onClick, enabled = item.enabled, content = item.content)
+            IconButton(onClick = item.onClick, enabled = !item.loading) {
+                AnimatedContent(targetState = item.loading) { loading ->
+                    if (!loading) {
+                        Icon(imageVector = item.imageVector, contentDescription = item.name)
+                    } else {
+                        CircularProgressIndicator(
+                            color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
+                            modifier = Modifier.size(item.imageVector.defaultWidth, item.imageVector.defaultHeight)
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -101,8 +112,17 @@ private fun TopAppBarActionsContent(
                                 onDismissRequest()
                                 item.onClick()
                             },
-                            enabled = item.enabled
+                            enabled = !item.loading
                         ) {
+                            AnimatedVisibility(visible = item.loading) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier
+                                        .padding(end = 8.dp)
+                                        .size(24.dp)
+                                        .align(Alignment.CenterVertically)
+                                )
+                            }
+
                             Text(text = item.name)
                         }
                     }
