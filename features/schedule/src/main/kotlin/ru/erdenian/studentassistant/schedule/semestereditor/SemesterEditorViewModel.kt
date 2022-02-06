@@ -39,7 +39,7 @@ class SemesterEditorViewModel(
     }
 
     private val isSemesterLoaded = MutableStateFlow(false)
-    private val isNamesLoaded = MutableStateFlow(false)
+    private val areNamesLoaded = MutableStateFlow(false)
     private val operationPrivate = MutableStateFlow<Operation?>(Operation.LOADING)
     val operation = operationPrivate.asStateFlow()
 
@@ -79,7 +79,7 @@ class SemesterEditorViewModel(
         }
 
         viewModelScope.launch {
-            combine(isSemesterLoaded, isNamesLoaded) { semester, names -> semester && names }.filter { it }.first()
+            combine(isSemesterLoaded, areNamesLoaded) { semester, names -> semester && names }.filter { it }.first()
             if (operationPrivate.value == Operation.LOADING) operationPrivate.value = null
         }
     }
@@ -88,7 +88,7 @@ class SemesterEditorViewModel(
         name,
         firstDay,
         lastDay,
-        semesterRepository.namesFlow.onEach { isNamesLoaded.value = true }
+        semesterRepository.namesFlow.onEach { areNamesLoaded.value = true }
     ) { name, firstDay, lastDay, semestersNames ->
         when {
             name.isBlank() -> Error.EMPTY_NAME
