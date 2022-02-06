@@ -66,18 +66,18 @@ class HomeworkRepository(
 
     // region By deadline
 
-    val actualFlow: Flow<ImmutableSortedSet<Homework>> =
-        selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
+    val actualFlow: Flow<ImmutableSortedSet<Homework>>
+        get() = selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
             semester?.id?.let { homeworkDao.getActualFlow(it).map() } ?: flowOf(immutableSortedSetOf())
         }
 
-    val overdueFlow: Flow<ImmutableSortedSet<Homework>> =
-        selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
+    val overdueFlow: Flow<ImmutableSortedSet<Homework>>
+        get() = selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
             semester?.id?.let { homeworkDao.getOverdueFlow(it).map() } ?: flowOf(immutableSortedSetOf())
         }
 
-    val pastFlow: Flow<ImmutableSortedSet<Homework>> =
-        selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
+    val pastFlow: Flow<ImmutableSortedSet<Homework>>
+        get() = selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
             semester?.id?.let { homeworkDao.getPastFlow(it).map() } ?: flowOf(immutableSortedSetOf())
         }
 
