@@ -106,7 +106,7 @@ private fun ScheduleContent(
         topBar = {
             TopAppBar(
                 title = {
-                    if ((semestersNames.size <= 1) || (selectedSemester == null)) {
+                    if ((selectedSemester == null) || (semestersNames.size <= 1)) {
                         Text(text = stringResource(R.string.s_title))
                     } else {
                         TopAppBarDropdownMenu(

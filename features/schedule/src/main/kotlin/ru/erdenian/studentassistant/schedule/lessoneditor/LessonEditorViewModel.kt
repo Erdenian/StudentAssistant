@@ -148,18 +148,18 @@ class LessonEditorViewModel private constructor(
             ((lessonRepeat.value == Lesson.Repeat.ByDates::class) && dates.isEmpty()) -> Error.EMPTY_REPEAT
             else -> null
         }
-    }.stateIn(viewModelScope, SharingStarted.Lazily, null)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     val isEditing = (lessonId != null)
 
     val existingSubjects = lessonRepository.getSubjects(semesterId)
-        .stateIn(viewModelScope, SharingStarted.Lazily, immutableSortedSetOf())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), immutableSortedSetOf())
     val existingTypes = lessonRepository.getTypes(semesterId)
-        .stateIn(viewModelScope, SharingStarted.Lazily, immutableSortedSetOf())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), immutableSortedSetOf())
     val existingTeachers = lessonRepository.getTeachers(semesterId)
-        .stateIn(viewModelScope, SharingStarted.Lazily, immutableSortedSetOf())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), immutableSortedSetOf())
     val existingClassrooms = lessonRepository.getClassrooms(semesterId)
-        .stateIn(viewModelScope, SharingStarted.Lazily, immutableSortedSetOf())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), immutableSortedSetOf())
 
     private var initialSubjectName: String? = null
     private val isSubjectNameChanged

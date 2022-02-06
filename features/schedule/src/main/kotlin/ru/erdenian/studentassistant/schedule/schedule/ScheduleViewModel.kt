@@ -23,7 +23,7 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
 
     val selectedSemester = selectedSemesterRepository.selectedFlow
     val allSemesters = semesterRepository.allFlow
-        .stateIn(viewModelScope, SharingStarted.Lazily, immutableSortedSetOfNotNull(selectedSemester.value))
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), immutableSortedSetOfNotNull(selectedSemester.value))
 
     fun selectSemester(semesterId: Long) = selectedSemesterRepository.selectSemester(semesterId)
 

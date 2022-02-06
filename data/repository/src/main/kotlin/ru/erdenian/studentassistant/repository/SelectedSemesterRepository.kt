@@ -34,7 +34,7 @@ class SelectedSemesterRepository(
         insertedSemesters.value += semester
     }
 
-    private val deletedSemesterIds = MutableStateFlow<Set<Long>>(emptySet())
+    private val deletedSemesterIds = MutableStateFlow(emptySet<Long>())
     internal fun onSemesterDeleted(semesterId: Long) {
         deletedSemesterIds.value += semesterId
     }
