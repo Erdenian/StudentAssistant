@@ -13,7 +13,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,9 +63,7 @@ private fun TopAppBarActionsContent(
     onDismissRequest: () -> Unit
 ) {
     run {
-        val alwaysShowActions by remember(actions) {
-            derivedStateOf { actions.filterIsInstance<ActionItem.AlwaysShow>() }
-        }
+        val alwaysShowActions = remember(actions) { actions.filterIsInstance<ActionItem.AlwaysShow>() }
 
         alwaysShowActions.forEach { item ->
             IconButton(onClick = item.onClick) {
@@ -76,9 +73,7 @@ private fun TopAppBarActionsContent(
     }
 
     run {
-        val neverShowActions by remember(actions) {
-            derivedStateOf { actions.filterIsInstance<ActionItem.NeverShow>() }
-        }
+        val neverShowActions = remember(actions) { actions.filterIsInstance<ActionItem.NeverShow>() }
 
         if (neverShowActions.isNotEmpty()) {
             Box {

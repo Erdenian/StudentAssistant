@@ -32,12 +32,10 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import ru.erdenian.studentassistant.entity.ImmutableSortedSet
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.entity.Semester
-import ru.erdenian.studentassistant.entity.immutableSortedSetOf
-import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 import ru.erdenian.studentassistant.sampledata.Lessons
 import ru.erdenian.studentassistant.sampledata.Semesters
 import ru.erdenian.studentassistant.schedule.R
@@ -63,8 +61,12 @@ fun ScheduleScreen(
     navigateToShowLessonInformation: (lessonId: Long) -> Unit
 ) {
     val semesters by viewModel.allSemesters.collectAsState()
-    val semestersNames by derivedStateOf { semesters.map { it.name } }
+    val semestersNames by remember { derivedStateOf { semesters.map { it.name } } }
     val selectedSemester by viewModel.selectedSemester.collectAsState()
+
+    val lessonsGetter = remember<(LocalDate) -> Flow<List<Lesson>>>(viewModel) {
+        { date -> viewModel.getLessons(date).map { it.list } }
+    }
 
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
@@ -73,7 +75,7 @@ fun ScheduleScreen(
         state = pagerState,
         semestersNames = semestersNames,
         selectedSemester = selectedSemester,
-        lessonsGetter = { date -> viewModel.getLessons(date) },
+        lessonsGetter = lessonsGetter,
         onSelectedSemesterChange = { index ->
             val selectedDate = selectedSemester?.getDate(pagerState.currentPage) ?: LocalDate.now()
             val newSemester = semesters.list[index]
@@ -94,7 +96,7 @@ private fun ScheduleContent(
     state: PagerState,
     semestersNames: List<String>,
     selectedSemester: Semester?,
-    lessonsGetter: (date: LocalDate) -> Flow<ImmutableSortedSet<Lesson>>,
+    lessonsGetter: (date: LocalDate) -> Flow<List<Lesson>>,
     onSelectedSemesterChange: (Int) -> Unit,
     onAddSemesterClick: () -> Unit,
     onEditSemesterClick: () -> Unit,
@@ -187,10 +189,12 @@ private fun ScheduleContent(
                     state = state,
                     modifier = Modifier.fillMaxSize()
                 ) { page ->
-                    val lessonsFlow = remember(selectedSemester, lessonsGetter) { lessonsGetter(selectedSemester.getDate(page)) }
+                    val lessonsFlow = remember(lessonsGetter, selectedSemester, page) {
+                        lessonsGetter(selectedSemester.getDate(page))
+                    }
                     val lessons by lessonsFlow.collectAsState(null)
 
-                    LazyLessonsList(lessons = lessons?.list, onLessonClick = onLessonClick)
+                    LazyLessonsList(lessons = lessons, onLessonClick = onLessonClick)
                 }
             }
         }
@@ -206,7 +210,7 @@ private fun LessonsEditorContentEmptyPreview() = AppTheme {
         state = rememberPagerState(),
         semestersNames = listOf(Semesters.regular.name),
         selectedSemester = Semesters.regular,
-        lessonsGetter = { MutableStateFlow(immutableSortedSetOf()) },
+        lessonsGetter = { MutableStateFlow(listOf()) },
         onSelectedSemesterChange = {},
         onAddSemesterClick = {},
         onEditSemesterClick = {},
@@ -224,7 +228,7 @@ private fun LessonsEditorContentPreview() = AppTheme {
         state = rememberPagerState(),
         semestersNames = listOf(Semesters.regular.name),
         selectedSemester = Semesters.regular,
-        lessonsGetter = { MutableStateFlow(List(10) { lesson }.toImmutableSortedSet()) },
+        lessonsGetter = { MutableStateFlow(List(10) { lesson }) },
         onSelectedSemesterChange = {},
         onAddSemesterClick = {},
         onEditSemesterClick = {},

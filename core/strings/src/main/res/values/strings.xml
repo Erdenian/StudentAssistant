@@ -42,8 +42,10 @@
     <string name="sce_delete_message">Удалить расписание?</string>
     <string name="sce_delete_yes">Да</string>
     <string name="sce_delete_no">Нет</string>
+    <string name="sce_delete_progress">Удаление расписания…</string>
     <string name="sce_copy_lesson">Копировать</string>
     <string name="sce_delete_lesson">Удалить</string>
+    <string name="sce_delete_lesson_progress">Удаление занятия…</string>
 
     <!-- Lesson Editor -->
     <string name="le_title_new">Добавление занятия</string>
@@ -68,6 +70,7 @@
     <string name="le_delete_message">Удалить занятие?</string>
     <string name="le_delete_yes">Удалить</string>
     <string name="le_delete_no">Нет</string>
+    <string name="le_delete_homeworks_progress">Получение информации о домашних заданиях…</string>
     <string name="le_delete_homeworks_title">Задания будут удалены</string>
     <string name="le_delete_homeworks_message">Для данного предмета есть домашние задания, удалить их вместе с ним?</string>
     <string name="le_delete_homeworks_yes">Удалить</string>
