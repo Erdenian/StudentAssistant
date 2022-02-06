@@ -37,7 +37,8 @@ import ru.erdenian.studentassistant.uikit.view.LessonCard
 internal fun LazyLessonsList(
     lessons: List<Lesson>?,
     onLessonClick: (Lesson) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onLongLessonClick: ((Lesson) -> Unit)? = null
 ) {
     AnimatedContent(
         targetState = lessons,
@@ -78,7 +79,8 @@ internal fun LazyLessonsList(
                                 classrooms = lesson.classrooms.list,
                                 startTime = lesson.startTime.format(timeFormatter),
                                 endTime = lesson.endTime.format(timeFormatter),
-                                onClick = { onLessonClick(lesson) }
+                                onClick = { onLessonClick(lesson) },
+                                onLongClick = onLongLessonClick?.let { { it(lesson) } }
                             )
                         }
                     }
