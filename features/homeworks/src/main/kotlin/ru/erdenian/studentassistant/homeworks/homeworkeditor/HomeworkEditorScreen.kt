@@ -169,13 +169,13 @@ private fun HomeworkEditorContent(
                             name = stringResource(R.string.he_save),
                             imageVector = AppIcons.Check,
                             onClick = onSaveClick,
-                            enabled = isLoaded
+                            loading = !isLoaded
                         ),
                         if (isEditing) {
                             ActionItem.NeverShow(
                                 name = stringResource(R.string.he_delete),
                                 onClick = onDeleteClick,
-                                enabled = isLoaded
+                                loading = !isLoaded
                             )
                         } else null
                     )

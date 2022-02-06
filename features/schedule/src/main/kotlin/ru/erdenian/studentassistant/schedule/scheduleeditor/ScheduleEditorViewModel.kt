@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import java.time.DayOfWeek
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +11,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.kodein.di.DIAware
 import org.kodein.di.android.x.closestDI
 import org.kodein.di.instance
@@ -62,7 +60,7 @@ class ScheduleEditorViewModel(
         }
     }
 
-    suspend fun isLastLessonOfSubjectsAndHasHomeworks(lesson: Lesson): Boolean = withContext(Dispatchers.IO) {
+    suspend fun isLastLessonOfSubjectsAndHasHomeworks(lesson: Lesson): Boolean = coroutineScope {
         val subjectName = lesson.subjectName
         val isLastLesson = async { lessonRepository.getCount(semesterId, subjectName) == 1 }
         val hasHomeworks = async { homeworkRepository.hasHomeworks(semesterId, subjectName) }

@@ -47,11 +47,20 @@ class LessonEditorViewModel private constructor(
         EMPTY_REPEAT
     }
 
+    enum class Operation {
+        LOADING,
+        SAVING,
+        DELETING
+    }
+
+    private val operationPrivate = MutableStateFlow<Operation?>(Operation.LOADING)
+    val operation = operationPrivate.asStateFlow()
+
     constructor(application: Application, semesterId: Long, dayOfWeek: DayOfWeek) : this(application, semesterId, null) {
         this.dayOfWeek.value = dayOfWeek
         viewModelScope.launch {
             initTime(true)
-            isLoadedPrivate.value = true
+            operationPrivate.value = null
         }
     }
 
@@ -59,7 +68,7 @@ class LessonEditorViewModel private constructor(
         this.subjectName.value = subjectName
         viewModelScope.launch {
             initTime(true)
-            isLoadedPrivate.value = true
+            operationPrivate.value = null
         }
     }
 
@@ -95,7 +104,7 @@ class LessonEditorViewModel private constructor(
             }
 
             initTime(false)
-            isLoadedPrivate.value = true
+            operationPrivate.value = null
         }
     }
 
@@ -111,8 +120,8 @@ class LessonEditorViewModel private constructor(
     val startTime = MutableStateFlow(settingsRepository.defaultStartTime)
     val endTime = MutableStateFlow<LocalTime>(startTime.value + settingsRepository.defaultLessonDuration)
 
-    private suspend fun initTime(loadDefaultStartTime: Boolean): Unit = coroutineScope {
-        launch(start = CoroutineStart.UNDISPATCHED) {
+    private suspend fun initTime(loadDefaultStartTime: Boolean) {
+        viewModelScope.launch(start = CoroutineStart.UNDISPATCHED) {
             var previousStartTime = startTime.value
             startTime.collect { startTime ->
                 val difference = Duration.between(previousStartTime, endTime.value)
@@ -160,15 +169,13 @@ class LessonEditorViewModel private constructor(
         isSubjectNameChanged && lessonRepository.getCount(semesterId, initialSubjectName ?: return@withContext false) > 1
     }
 
-    private val isLoadedPrivate = MutableStateFlow(false)
-    val isLoaded = isLoadedPrivate.asStateFlow()
-
     private val donePrivate = MutableStateFlow(false)
     val done = donePrivate.asStateFlow()
 
     fun save(forceRenameOther: Boolean = false) {
         check(error.value == null)
 
+        operationPrivate.value = Operation.SAVING
         viewModelScope.launch {
             val subjectName = subjectName.value
             val type = type.value
@@ -233,12 +240,13 @@ class LessonEditorViewModel private constructor(
                 lessonRepository.renameSubject(semesterId, checkNotNull(initialSubjectName), subjectName)
             }
 
+            operationPrivate.value = null
             donePrivate.value = true
         }
     }
 
-    suspend fun isLastLessonOfSubjectsAndHasHomeworks(): Boolean = withContext(Dispatchers.IO) {
-        val subjectName = initialSubjectName ?: return@withContext false
+    suspend fun isLastLessonOfSubjectsAndHasHomeworks(): Boolean = coroutineScope {
+        val subjectName = initialSubjectName ?: return@coroutineScope false
         val isLastLesson = async { lessonRepository.getCount(semesterId, subjectName) == 1 }
         val hasHomeworks = async { homeworkRepository.hasHomeworks(semesterId, subjectName) }
         isLastLesson.await() && hasHomeworks.await()
@@ -248,12 +256,17 @@ class LessonEditorViewModel private constructor(
         checkNotNull(lessonId)
         val subjectName = checkNotNull(initialSubjectName)
 
+        operationPrivate.value = Operation.DELETING
         viewModelScope.launch {
-            val deleteLesson = async { lessonRepository.delete(lessonId) }
-            val deleteHomeworks = async { if (withHomeworks) homeworkRepository.delete(subjectName) }
+            coroutineScope {
+                val deleteLesson = async { lessonRepository.delete(lessonId) }
+                val deleteHomeworks = async { if (withHomeworks) homeworkRepository.delete(subjectName) }
 
-            deleteLesson.await()
-            deleteHomeworks.await()
+                deleteLesson.await()
+                deleteHomeworks.await()
+            }
+
+            operationPrivate.value = null
             donePrivate.value = true
         }
     }

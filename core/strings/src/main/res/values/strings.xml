@@ -62,9 +62,11 @@
     <string name="le_end_time">Время конца</string>
     <string name="le_repeat_type">Когда повторять</string>
     <string name="le_save">Сохранить</string>
+    <string name="le_save_progress">Сохранение…</string>
     <string name="le_error_empty_subject_name">Введите название занятия</string>
     <string name="le_error_wrong_time">Время начала и конца введено некорректно</string>
     <string name="le_error_empty_repeat">Не выбраны дни для повторения</string>
+    <string name="le_rename_others_progress">Получение информации о других занятиях…</string>
     <string name="le_rename_others_title">Изменить занятия?</string>
     <string name="le_rename_others_message">Предмет был изменен. Изменить его у остальных занятий?</string>
     <string name="le_rename_others_yes">Да</string>
@@ -74,6 +76,7 @@
     <string name="le_delete_message">Удалить занятие?</string>
     <string name="le_delete_yes">Удалить</string>
     <string name="le_delete_no">Нет</string>
+    <string name="le_delete_progress">Удаление…</string>
     <string name="le_delete_homeworks_progress">Получение информации о домашних заданиях…</string>
     <string name="le_delete_homeworks_title">Задания будут удалены</string>
     <string name="le_delete_homeworks_message">Для данного предмета есть домашние задания, удалить их вместе с ним?</string>
