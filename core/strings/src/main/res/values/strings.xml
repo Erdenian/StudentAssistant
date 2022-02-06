@@ -105,6 +105,7 @@
     <string name="he_description">Описание</string>
     <string name="he_deadline_label">Дата сдачи</string>
     <string name="he_save">Сохранить</string>
+    <string name="he_save_progress">Сохранение…</string>
     <string name="he_error_empty_subject_name">Введите или выберите предмет</string>
     <string name="he_error_empty_description">Введите описание домашнего задания</string>
     <string name="he_unknown_lesson">Неизвестный предмет</string>
@@ -116,6 +117,7 @@
     <string name="he_delete_message">Удалить задание?</string>
     <string name="he_delete_yes">Удалить</string>
     <string name="he_delete_no">Нет</string>
+    <string name="he_delete_progress">Удаление…</string>
 
     <!-- endregion -->
 
