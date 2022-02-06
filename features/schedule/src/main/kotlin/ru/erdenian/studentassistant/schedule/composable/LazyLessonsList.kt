@@ -30,6 +30,7 @@ import ru.erdenian.studentassistant.sampledata.Lessons
 import ru.erdenian.studentassistant.schedule.R
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
+import ru.erdenian.studentassistant.uikit.layout.DelayedVisibility
 import ru.erdenian.studentassistant.uikit.view.LessonCard
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -51,7 +52,7 @@ internal fun LazyLessonsList(
             modifier = Modifier.fillMaxSize()
         ) {
             when {
-                (lessonsState == null) -> CircularProgressIndicator()
+                (lessonsState == null) -> DelayedVisibility { CircularProgressIndicator() }
                 lessonsState.isEmpty() -> Text(
                     text = stringResource(R.string.lll_free_day),
                     textAlign = TextAlign.Center,
