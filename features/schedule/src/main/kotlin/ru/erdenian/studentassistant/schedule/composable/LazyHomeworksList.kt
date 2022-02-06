@@ -58,7 +58,7 @@ internal fun LazyHomeworksList(
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
                 )
-                else -> {
+                else ->
                     LazyColumn(
                         contentPadding = PaddingValues(
                             horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
@@ -82,7 +82,6 @@ internal fun LazyHomeworksList(
                             )
                         }
                     }
-                }
             }
         }
     }

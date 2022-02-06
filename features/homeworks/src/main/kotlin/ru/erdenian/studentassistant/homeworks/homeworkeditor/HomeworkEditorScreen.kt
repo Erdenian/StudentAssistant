@@ -101,7 +101,6 @@ fun HomeworkEditorScreen(
         null -> null
     }?.let { stringResource(it) }
 
-
     val context = LocalContext.current
 
     HomeworkEditorContent(
