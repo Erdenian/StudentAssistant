@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
@@ -96,13 +95,12 @@ internal fun WeekdayPicker(
             }
             val bounds = remember { Rect() }
 
-            val isGesturesEnabled by rememberUpdatedState(enabled && editable)
             Canvas(
                 modifier = Modifier
                     .fillMaxSize()
-                    .pointerInput(Unit) {
+                    .pointerInput(enabled, editable) {
                         detectTapGestures { offset ->
-                            if (!isGesturesEnabled) return@detectTapGestures
+                            if (!enabled || !editable) return@detectTapGestures
 
                             val spacingSum = spacingPx * (daysOfWeek.size - 1)
                             val dayWidth = (size.width - spacingSum) / 7.0f
