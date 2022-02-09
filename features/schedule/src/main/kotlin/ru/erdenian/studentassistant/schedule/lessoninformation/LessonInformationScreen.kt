@@ -10,8 +10,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -49,6 +47,8 @@ import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.view.ActionItem
+import ru.erdenian.studentassistant.uikit.view.ContextMenuDialog
+import ru.erdenian.studentassistant.uikit.view.ContextMenuItem
 import ru.erdenian.studentassistant.uikit.view.LessonCard
 import ru.erdenian.studentassistant.uikit.view.ProgressDialog
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
@@ -172,24 +172,22 @@ private fun LessonInformationContent(
             onLongHomeworkClick = { contextMenuHomework = it }
         )
 
-        DropdownMenu(
-            expanded = (contextMenuHomework != null),
-            onDismissRequest = { contextMenuHomework = null }
-        ) {
+        contextMenuHomework?.let { homework ->
             val context = LocalContext.current
-            DropdownMenuItem(
-                onClick = {
-                    val homework = checkNotNull(contextMenuHomework)
-                    contextMenuHomework = null
-                    MaterialAlertDialogBuilder(context)
-                        .setMessage(R.string.li_delete_homework_message)
-                        .setPositiveButton(R.string.li_delete_homework_yes) { _, _ -> onDeleteHomeworkClick(homework) }
-                        .setNegativeButton(R.string.li_delete_homework_no, null)
-                        .show()
-                }
-            ) {
-                Text(text = stringResource(R.string.li_delete_homework))
-            }
+            ContextMenuDialog(
+                onDismissRequest = { contextMenuHomework = null },
+                title = homework.subjectName,
+                items = listOf(
+                    ContextMenuItem(stringResource(R.string.li_delete_homework)) {
+                        contextMenuHomework = null
+                        MaterialAlertDialogBuilder(context)
+                            .setMessage(R.string.li_delete_homework_message)
+                            .setPositiveButton(R.string.li_delete_homework_yes) { _, _ -> onDeleteHomeworkClick(homework) }
+                            .setNegativeButton(R.string.li_delete_homework_no, null)
+                            .show()
+                    }
+                )
+            )
         }
     }
 }

@@ -1,8 +1,6 @@
 package ru.erdenian.studentassistant
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -33,29 +31,27 @@ import ru.erdenian.studentassistant.style.AppIcons
 internal fun StudentAssistantApp(
     isBottomNavigationVisible: Boolean
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        val navController = rememberNavController()
-        val directions = remember(navController) { MainDirections(navController) }
-        val keyboardController = LocalSoftwareKeyboardController.current
+    val navController = rememberNavController()
+    val directions = remember(navController) { MainDirections(navController) }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
-        LaunchedEffect(navController, keyboardController) {
-            navController.currentBackStackEntryFlow.collect { keyboardController?.hide() }
-        }
+    LaunchedEffect(navController, keyboardController) {
+        navController.currentBackStackEntryFlow.collect { keyboardController?.hide() }
+    }
 
-        Scaffold(
-            bottomBar = {
-                StudentAssistantBottomNavigation(
-                    directions = directions,
-                    isBottomNavigationVisible = isBottomNavigationVisible
-                )
-            }
-        ) { paddingValues ->
-            MainNavGraph(
-                navController = navController,
+    Scaffold(
+        bottomBar = {
+            StudentAssistantBottomNavigation(
                 directions = directions,
-                modifier = Modifier.padding(paddingValues)
+                isBottomNavigationVisible = isBottomNavigationVisible
             )
         }
+    ) { paddingValues ->
+        MainNavGraph(
+            navController = navController,
+            directions = directions,
+            modifier = Modifier.padding(paddingValues)
+        )
     }
 }
 

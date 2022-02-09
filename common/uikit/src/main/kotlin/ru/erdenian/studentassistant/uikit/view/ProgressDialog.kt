@@ -4,17 +4,14 @@ import android.app.Activity
 import android.content.ContextWrapper
 import android.content.res.Configuration
 import android.view.WindowManager
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -53,20 +50,16 @@ fun ProgressDialog(text: @Composable () -> Unit) {
 }
 
 @Composable
-private fun ProgressDialogContent(text: @Composable () -> Unit) = Row(
-    verticalAlignment = Alignment.CenterVertically
-) {
+private fun ProgressDialogContent(
+    text: @Composable () -> Unit
+) = Surface(shape = MaterialTheme.shapes.medium) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .background(MaterialTheme.colors.surface, shape = MaterialTheme.shapes.medium)
-            .padding(24.dp)
+        modifier = Modifier.padding(24.dp)
     ) {
-        CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.onSurface) {
-            CircularProgressIndicator(modifier = Modifier.padding(bottom = 16.dp))
-            text()
-        }
+        CircularProgressIndicator(modifier = Modifier.padding(bottom = 16.dp))
+        text()
     }
 }
 

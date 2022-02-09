@@ -4,8 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -47,6 +45,8 @@ import ru.erdenian.studentassistant.schedule.composable.PagerTabStrip
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.uikit.view.ActionItem
+import ru.erdenian.studentassistant.uikit.view.ContextMenuDialog
+import ru.erdenian.studentassistant.uikit.view.ContextMenuItem
 import ru.erdenian.studentassistant.uikit.view.ProgressDialog
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
@@ -214,28 +214,21 @@ private fun ScheduleEditorContent(
                 onLongLessonClick = { contextMenuLesson = it }
             )
 
-            DropdownMenu(
-                expanded = (contextMenuLesson != null),
-                onDismissRequest = { contextMenuLesson = null }
-            ) {
-                DropdownMenuItem(
-                    onClick = {
-                        val lesson = checkNotNull(contextMenuLesson)
-                        contextMenuLesson = null
-                        onCopyLessonClick(lesson)
-                    }
-                ) {
-                    Text(text = stringResource(R.string.sce_copy_lesson))
-                }
-                DropdownMenuItem(
-                    onClick = {
-                        val lesson = checkNotNull(contextMenuLesson)
-                        contextMenuLesson = null
-                        onDeleteLessonClick(lesson)
-                    }
-                ) {
-                    Text(text = stringResource(R.string.sce_delete_lesson))
-                }
+            contextMenuLesson?.let { lesson ->
+                ContextMenuDialog(
+                    onDismissRequest = { contextMenuLesson = null },
+                    title = lesson.subjectName,
+                    items = listOf(
+                        ContextMenuItem(stringResource(R.string.sce_copy_lesson)) {
+                            contextMenuLesson = null
+                            onCopyLessonClick(lesson)
+                        },
+                        ContextMenuItem(stringResource(R.string.sce_delete_lesson)) {
+                            contextMenuLesson = null
+                            onDeleteLessonClick(lesson)
+                        }
+                    )
+                )
             }
         }
     }
