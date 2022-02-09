@@ -186,7 +186,7 @@ class LessonEditorViewModel private constructor(
                 .map(String::trim)
                 .filter(String::isNotBlank)
                 .toImmutableSortedSet()
-            val classrooms = checkNotNull(classrooms.value)
+            val classrooms = classrooms.value
                 .toSingleLine()
                 .split(',')
                 .asSequence()
@@ -236,8 +236,8 @@ class LessonEditorViewModel private constructor(
                 }
             }
 
-            if (forceRenameOther && (lessonId != null)) {
-                lessonRepository.renameSubject(semesterId, checkNotNull(initialSubjectName), subjectName)
+            initialSubjectName?.let { initial ->
+                if (forceRenameOther) lessonRepository.renameSubject(semesterId, initial, subjectName)
             }
 
             operationPrivate.value = null
