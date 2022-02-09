@@ -13,11 +13,19 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Today
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -26,7 +34,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -68,32 +75,31 @@ fun ScheduleScreen(
         { date -> viewModel.getLessons(date).map { it.list } }
     }
 
-    val pagerState = rememberPagerState()
-    val coroutineScope = rememberCoroutineScope()
-
     ScheduleContent(
-        state = pagerState,
         semestersNames = semestersNames,
         selectedSemester = selectedSemester,
         lessonsGetter = lessonsGetter,
-        onSelectedSemesterChange = { index ->
-            val selectedDate = selectedSemester?.getDate(pagerState.currentPage) ?: LocalDate.now()
-            val newSemester = semesters.list[index]
-            viewModel.selectSemester(newSemester.id)
-            coroutineScope.launch {
-                pagerState.scrollToPage(newSemester.getPosition(selectedDate))
-            }
-        },
+        onSelectedSemesterChange = { index -> viewModel.selectSemester(semesters.list[index].id) },
         onAddSemesterClick = navigateToAddSemester,
         onEditSemesterClick = { navigateToEditSchedule(it.id) },
         onLessonClick = { navigateToShowLessonInformation(it.id) }
     )
 }
 
+@OptIn(ExperimentalPagerApi::class)
+@Stable
+private data class State(val pagerState: PagerState, val semester: Semester) {
+    companion object {
+        val Saver: Saver<State?, *> = listSaver(
+            save = { listOfNotNull(it?.pagerState?.currentPage, it?.semester) },
+            restore = { if (it.isNotEmpty()) State(PagerState(it[0] as Int), it[1] as Semester) else null }
+        )
+    }
+}
+
 @OptIn(ExperimentalPagerApi::class, ExperimentalAnimationApi::class)
 @Composable
 private fun ScheduleContent(
-    state: PagerState,
     semestersNames: List<String>,
     selectedSemester: Semester?,
     lessonsGetter: (date: LocalDate) -> Flow<List<Lesson>>,
@@ -102,6 +108,23 @@ private fun ScheduleContent(
     onEditSemesterClick: (semester: Semester) -> Unit,
     onLessonClick: (Lesson) -> Unit
 ) {
+    val state = run {
+        var previousState: State? by rememberSaveable(stateSaver = State.Saver) { mutableStateOf(null) }
+        val state by rememberSaveable(selectedSemester, stateSaver = State.Saver) {
+            mutableStateOf(
+                if (selectedSemester != null) {
+                    val selectedDate = previousState?.let { it.semester.getDate(it.pagerState.currentPage) } ?: LocalDate.now()
+                    val page = selectedSemester.getPosition(selectedDate)
+                    State(PagerState(page), selectedSemester)
+                } else null
+            )
+        }
+        LaunchedEffect(state) {
+            previousState = state
+        }
+        state
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -121,18 +144,18 @@ private fun ScheduleContent(
                     val coroutineScope = rememberCoroutineScope()
                     TopAppBarActions(
                         actions = listOfNotNull(
-                            if (selectedSemester != null) {
+                            if (state != null) {
                                 ActionItem.AlwaysShow(
                                     name = stringResource(R.string.s_calendar),
                                     imageVector = AppIcons.Today,
                                     onClick = {
                                         context.showDatePicker(
-                                            selectedSemester.getDate(state.currentPage),
-                                            selectedSemester.firstDay,
-                                            selectedSemester.lastDay
+                                            state.semester.getDate(state.pagerState.currentPage),
+                                            state.semester.firstDay,
+                                            state.semester.lastDay
                                         ) {
                                             coroutineScope.launch {
-                                                state.animateScrollToPage(selectedSemester.getPosition(it))
+                                                state.pagerState.animateScrollToPage(state.semester.getPosition(it))
                                             }
                                         }
                                     }
@@ -166,7 +189,7 @@ private fun ScheduleContent(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()
         ) {
-            if (selectedSemester == null) {
+            if (state == null) {
                 Text(
                     text = stringResource(R.string.s_no_schedule),
                     textAlign = TextAlign.Center,
@@ -177,24 +200,26 @@ private fun ScheduleContent(
                 val fullTitleFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy") }
 
                 PagerTabStrip(
-                    state = state,
+                    state = state.pagerState,
                     titleGetter = { page ->
-                        val date = selectedSemester.firstDay.plusDays(page.toLong())
+                        val date = state.semester.firstDay.plusDays(page.toLong())
                         date.format(if (date.year == LocalDate.now().year) shortTitleFormatter else fullTitleFormatter)
                     }
                 )
 
-                HorizontalPager(
-                    count = selectedSemester.length,
-                    state = state,
-                    modifier = Modifier.fillMaxSize()
-                ) { page ->
-                    val lessonsFlow = remember(lessonsGetter, selectedSemester, page) {
-                        lessonsGetter(selectedSemester.getDate(page))
-                    }
-                    val lessons by lessonsFlow.collectAsState(null)
+                key(state.semester) {
+                    HorizontalPager(
+                        count = state.semester.length,
+                        state = state.pagerState,
+                        modifier = Modifier.fillMaxSize()
+                    ) { page ->
+                        val lessonsFlow = remember(lessonsGetter, state, page) {
+                            lessonsGetter(state.semester.getDate(page))
+                        }
+                        val lessons by lessonsFlow.collectAsState(null)
 
-                    LazyLessonsList(lessons = lessons, onLessonClick = onLessonClick)
+                        LazyLessonsList(lessons = lessons, onLessonClick = onLessonClick)
+                    }
                 }
             }
         }
@@ -207,7 +232,6 @@ private fun ScheduleContent(
 @Composable
 private fun LessonsEditorContentEmptyPreview() = AppTheme {
     ScheduleContent(
-        state = rememberPagerState(),
         semestersNames = listOf(Semesters.regular.name),
         selectedSemester = Semesters.regular,
         lessonsGetter = { MutableStateFlow(listOf()) },
@@ -225,7 +249,6 @@ private fun LessonsEditorContentEmptyPreview() = AppTheme {
 private fun LessonsEditorContentPreview() = AppTheme {
     val lesson = Lessons.regular
     ScheduleContent(
-        state = rememberPagerState(),
         semestersNames = listOf(Semesters.regular.name),
         selectedSemester = Semesters.regular,
         lessonsGetter = { MutableStateFlow(List(10) { lesson }) },
