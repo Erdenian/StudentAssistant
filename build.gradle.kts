@@ -28,6 +28,7 @@ subprojects {
             @Suppress("SuspiciousCollectionReassignment")
             freeCompilerArgs += listOf(
                 "-Xjvm-default=all",
+                "-opt-in=kotlin.RequiresOptIn",
 
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",

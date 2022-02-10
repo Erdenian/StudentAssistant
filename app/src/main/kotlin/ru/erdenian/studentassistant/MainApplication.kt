@@ -1,6 +1,7 @@
 package ru.erdenian.studentassistant
 
 import android.app.Application
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import org.kodein.di.DI
 import org.kodein.di.DIAware
@@ -11,6 +12,6 @@ internal class MainApplication : Application(), DIAware {
 
     override val di by DI.lazy {
         val app = this@MainApplication
-        import(repositoryModule(app, GlobalScope, "schedule.db"))
+        import(repositoryModule(app, @OptIn(DelicateCoroutinesApi::class) GlobalScope, "schedule.db"))
     }
 }

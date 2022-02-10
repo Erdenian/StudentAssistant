@@ -31,7 +31,7 @@ internal fun StudentAssistantApp(
     isBottomNavigationVisible: Boolean
 ) {
     val navController = rememberNavController()
-    val directions = remember(navController) { MainDirections(navController) }
+    val navGraph = remember(navController) { StudentAssistantNavGraph(navController) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(navController, keyboardController) {
@@ -39,25 +39,26 @@ internal fun StudentAssistantApp(
     }
 
     Scaffold(
+        content = { paddingValues ->
+            StudentAssistantNavHost(
+                navController = navController,
+                navGraph = navGraph,
+                modifier = Modifier.padding(paddingValues)
+            )
+        },
         bottomBar = {
             StudentAssistantBottomNavigation(
-                directions = directions,
-                isBottomNavigationVisible = isBottomNavigationVisible
+                navGraph = navGraph,
+                visible = isBottomNavigationVisible
             )
         }
-    ) { paddingValues ->
-        MainNavGraph(
-            navController = navController,
-            directions = directions,
-            modifier = Modifier.padding(paddingValues)
-        )
-    }
+    )
 }
 
 @Composable
 private fun StudentAssistantBottomNavigation(
-    directions: MainDirections,
-    isBottomNavigationVisible: Boolean
+    navGraph: StudentAssistantNavGraph,
+    visible: Boolean
 ) {
     data class Item(
         val imageVector: ImageVector,
@@ -66,31 +67,31 @@ private fun StudentAssistantBottomNavigation(
         val onClick: () -> Unit
     )
 
-    val items = remember(directions) {
+    val items = remember(navGraph) {
         listOf(
             Item(
                 imageVector = AppIcons.Schedule,
                 labelId = RS.s_title,
                 route = MainRoutes.SCHEDULE,
-                onClick = directions::navigateToSchedule
+                onClick = navGraph::navigateToSchedule
             ),
             Item(
                 imageVector = AppIcons.MenuBook,
                 labelId = RS.h_title,
                 route = MainRoutes.HOMEWORKS,
-                onClick = directions::navigateToHomeworks
+                onClick = navGraph::navigateToHomeworks
             ),
             Item(
                 imageVector = AppIcons.Settings,
                 labelId = RS.st_title,
                 route = MainRoutes.SETTINGS,
-                onClick = directions::navigateToSettings
+                onClick = navGraph::navigateToSettings
             ),
         )
     }
 
     var selectedRoute by remember { mutableStateOf(MainRoutes.SCHEDULE) }
-    if (isBottomNavigationVisible) {
+    if (visible) {
         BottomNavigation(
             backgroundColor = MaterialTheme.colors.surface
         ) {
