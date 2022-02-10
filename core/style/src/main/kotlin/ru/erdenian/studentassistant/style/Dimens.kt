@@ -1,9 +1,11 @@
 package ru.erdenian.studentassistant.style
 
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
+@Stable
 class Dimensions(
 
     val activityHorizontalMargin: Dp = 16.dp,

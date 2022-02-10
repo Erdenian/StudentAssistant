@@ -73,4 +73,9 @@ dependencies {
     val kodeinVersion: String by project
     implementation("org.kodein.di:kodein-di-framework-android-x:$kodeinVersion")
     // endregion
+
+    // region UI
+    val accompanistVersion: String by project
+    implementation("com.google.accompanist:accompanist-placeholder-material:$accompanistVersion")
+    // endregion
 }
