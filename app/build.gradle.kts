@@ -1,26 +1,16 @@
 plugins {
     id("com.android.application")
     kotlin("android")
+
     id("com.github.triplet.play") version "3.7.0"
     id("ru.erdenian.shrinkometer")
 }
 
 android {
-    val minSdkVersion: String by project
-    val compileSdkVersion: String by project
-    val targetSdkVersion: String by project
-
-    compileSdk = compileSdkVersion.toInt()
-
     defaultConfig {
         applicationId = "ru.erdenian.studentassistant"
         versionCode = 18
         versionName = "0.4.5"
-
-        minSdk = minSdkVersion.toInt()
-        targetSdk = targetSdkVersion.toInt()
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         setProperty("archivesBaseName", "${rootProject.name}-$versionName")
     }
@@ -33,11 +23,6 @@ android {
     }
 
     buildFeatures.compose = true
-
-    composeOptions {
-        val composeVersion: String by project
-        kotlinCompilerExtensionVersion = composeVersion
-    }
 
     signingConfigs {
         val localProperties = File("${rootDir.path}/local.properties").run {
@@ -104,25 +89,6 @@ android {
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.findByName("release")
-        }
-    }
-
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    sourceSets {
-        getByName("main").java.srcDirs("src/main/kotlin")
-        getByName("test").java.srcDirs("src/test/kotlin")
-        getByName("androidTest").java.srcDirs("src/androidTest/kotlin")
-
-        productFlavors.forEach { flavor ->
-            getByName(flavor.name).java.srcDirs("src/${flavor.name}/kotlin")
-            "test${flavor.name.capitalize()}".let { getByName(it).java.srcDirs("src/$it/kotlin") }
-            "androidTest${flavor.name.capitalize()}".let { getByName(it).java.srcDirs("src/$it/kotlin") }
         }
     }
 }
