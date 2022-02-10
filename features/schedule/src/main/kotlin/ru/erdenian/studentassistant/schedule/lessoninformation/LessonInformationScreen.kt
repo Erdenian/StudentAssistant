@@ -146,7 +146,7 @@ private fun LessonInformationContent(
             LessonCard(
                 subjectName = lessonState?.subjectName ?: emptyText,
                 type = lessonState?.type ?: emptyText,
-                teachers = lessonState?.teachers?.list ?: listOf(emptyText),
+                teachers = lessonState?.teachers?.list ?: emptyList(),
                 classrooms = lessonState?.classrooms?.list ?: listOf(emptyText),
                 startTime = lessonState?.startTime?.format(timeFormatter) ?: emptyText,
                 endTime = lessonState?.endTime?.format(timeFormatter) ?: emptyText,

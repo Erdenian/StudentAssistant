@@ -33,6 +33,20 @@ import androidx.compose.ui.unit.dp
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 
+@Suppress("unused")
+@Composable
+fun RowScope.TopAppBarActions(
+    actions: List<ActionItem>,
+) {
+    var expanded by remember { mutableStateOf(false) }
+    TopAppBarActionsContent(
+        actions = actions,
+        expanded = expanded,
+        onExpandClick = { expanded = !expanded },
+        onDismissRequest = { expanded = false }
+    )
+}
+
 sealed class ActionItem(
     val name: String,
     val loading: Boolean = false,
@@ -50,20 +64,6 @@ sealed class ActionItem(
         loading: Boolean = false,
         onClick: () -> Unit
     ) : ActionItem(name, loading, onClick)
-}
-
-@Suppress("unused")
-@Composable
-fun RowScope.TopAppBarActions(
-    actions: List<ActionItem>,
-) {
-    var expanded by remember { mutableStateOf(false) }
-    TopAppBarActionsContent(
-        actions = actions,
-        expanded = expanded,
-        onExpandClick = { expanded = !expanded },
-        onDismissRequest = { expanded = false }
-    )
 }
 
 @OptIn(ExperimentalAnimationApi::class)
