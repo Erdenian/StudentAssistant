@@ -19,11 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import ru.erdenian.studentassistant.style.AppTheme
 
-data class ContextMenuItem(
-    val name: String,
-    val onClick: () -> Unit
-)
-
 @Composable
 fun ContextMenuDialog(
     onDismissRequest: () -> Unit,
@@ -32,6 +27,11 @@ fun ContextMenuDialog(
 ) = Dialog(
     onDismissRequest = onDismissRequest,
     content = { ContextMenuDialogContent(items, title) }
+)
+
+data class ContextMenuItem(
+    val name: String,
+    val onClick: () -> Unit
 )
 
 @Composable

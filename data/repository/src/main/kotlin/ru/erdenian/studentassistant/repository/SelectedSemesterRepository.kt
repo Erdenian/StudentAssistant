@@ -3,7 +3,6 @@ package ru.erdenian.studentassistant.repository
 import java.time.LocalDate
 import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -13,7 +12,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.withContext
 import ru.erdenian.studentassistant.database.dao.SemesterDao
 import ru.erdenian.studentassistant.entity.Semester
 
@@ -75,9 +73,7 @@ class SelectedSemesterRepository(
     )
 
     suspend fun await() {
-        withContext(Dispatchers.IO) {
-            selectedSharedFlow.first()
-        }
+        selectedSharedFlow.first()
     }
 
     fun selectSemester(semesterId: Long) {

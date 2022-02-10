@@ -45,6 +45,9 @@ import ru.erdenian.studentassistant.sampledata.Semesters
 import ru.erdenian.studentassistant.schedule.R
 import ru.erdenian.studentassistant.schedule.composable.LazyLessonsList
 import ru.erdenian.studentassistant.schedule.composable.PagerTabStrip
+import ru.erdenian.studentassistant.schedule.schedule.State.Companion.animateScrollToDate
+import ru.erdenian.studentassistant.schedule.schedule.State.Companion.currentDate
+import ru.erdenian.studentassistant.schedule.schedule.State.Companion.getDate
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
@@ -84,18 +87,16 @@ fun ScheduleScreen(
 @Stable
 private data class State(val pagerState: PagerState, val semester: Semester) {
 
+    constructor(semester: Semester, initialDate: LocalDate) : this(PagerState(semester.getPosition(initialDate)), semester)
+
     companion object {
+        val State.currentDate get() = getDate(pagerState.currentPage)
+        fun State.getDate(page: Int) = semester.getDate(page)
+        suspend fun State.animateScrollToDate(date: LocalDate) = pagerState.animateScrollToPage(semester.getPosition(date))
+
         private fun Semester.getDate(position: Int): LocalDate = firstDay.plusDays(position.toLong())
         private fun Semester.getPosition(date: LocalDate) = ChronoUnit.DAYS.between(firstDay, date.coerceIn(range)).toInt()
     }
-
-    constructor(semester: Semester, initialDate: LocalDate) : this(PagerState(semester.getPosition(initialDate)), semester)
-
-    val currentDate get() = getDate(pagerState.currentPage)
-    fun getDate(page: Int) = semester.getDate(page)
-    fun getPosition(date: LocalDate) = semester.getPosition(date)
-
-    suspend fun animateScrollToDate(date: LocalDate) = pagerState.animateScrollToPage(getPosition(date))
 }
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalAnimationApi::class)
