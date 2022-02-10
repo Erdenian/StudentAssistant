@@ -33,7 +33,8 @@ import java.time.DayOfWeek
 import java.time.format.TextStyle
 import java.util.Locale
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.entity.Lesson
@@ -232,12 +233,48 @@ private fun ScheduleEditorContent(
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun ScheduleEditorContentPreview() = AppTheme {
-    val lesson = Lessons.regular
+private fun ScheduleEditorContentLoadingPreview() = AppTheme {
     ScheduleEditorContent(
         operation = null,
         state = rememberPagerState(),
-        lessonsGetter = { MutableStateFlow(List(10) { lesson }) },
+        lessonsGetter = { flow {} },
+        onBackClick = {},
+        onEditSemesterClick = {},
+        onDeleteSemesterClick = {},
+        onLessonClick = {},
+        onCopyLessonClick = {},
+        onDeleteLessonClick = {},
+        onAddLessonClick = {}
+    )
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun ScheduleEditorContentNoLessonsPreview() = AppTheme {
+    ScheduleEditorContent(
+        operation = null,
+        state = rememberPagerState(),
+        lessonsGetter = { flowOf(emptyList()) },
+        onBackClick = {},
+        onEditSemesterClick = {},
+        onDeleteSemesterClick = {},
+        onLessonClick = {},
+        onCopyLessonClick = {},
+        onDeleteLessonClick = {},
+        onAddLessonClick = {}
+    )
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun ScheduleEditorContentPreview() = AppTheme {
+    val lessons = List(10) { Lessons.regular }
+    ScheduleEditorContent(
+        operation = null,
+        state = rememberPagerState(),
+        lessonsGetter = { flowOf(lessons) },
         onBackClick = {},
         onEditSemesterClick = {},
         onDeleteSemesterClick = {},

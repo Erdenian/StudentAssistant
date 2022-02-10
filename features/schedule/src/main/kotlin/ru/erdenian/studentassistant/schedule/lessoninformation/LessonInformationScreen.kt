@@ -192,11 +192,11 @@ private fun LessonInformationContent(
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun LessonInformationContentRegularPreview() = AppTheme {
+private fun LessonInformationContentLoadingPreview() = AppTheme {
     LessonInformationContent(
         operation = null,
-        lesson = Lessons.regular,
-        homeworks = List(10) { Homeworks.regular },
+        lesson = null,
+        homeworks = null,
         onBackClick = {},
         onEditClick = {},
         onHomeworkClick = {},
@@ -206,12 +206,29 @@ private fun LessonInformationContentRegularPreview() = AppTheme {
 }
 
 @Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun LessonInformationContentLongPreview() = AppTheme {
+private fun LessonInformationContentNoHomeworksPreview() = AppTheme {
     LessonInformationContent(
         operation = null,
-        lesson = Lessons.long,
-        homeworks = List(10) { Homeworks.long },
+        lesson = Lessons.regular,
+        homeworks = emptyList(),
+        onBackClick = {},
+        onEditClick = {},
+        onHomeworkClick = {},
+        onAddHomeworkClick = {},
+        onDeleteHomeworkClick = {}
+    )
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun LessonInformationContentPreview() = AppTheme {
+    LessonInformationContent(
+        operation = null,
+        lesson = Lessons.regular,
+        homeworks = List(10) { Homeworks.regular },
         onBackClick = {},
         onEditClick = {},
         onHomeworkClick = {},
