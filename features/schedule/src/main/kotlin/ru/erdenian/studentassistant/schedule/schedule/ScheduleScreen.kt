@@ -33,7 +33,8 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.entity.Lesson
@@ -214,11 +215,11 @@ private fun ScheduleContent(
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun LessonsEditorContentEmptyPreview() = AppTheme {
+private fun ScheduleScreenNoSchedulePreview() = AppTheme {
     ScheduleContent(
-        semestersNames = listOf(Semesters.regular.name),
-        selectedSemester = Semesters.regular,
-        lessonsGetter = { MutableStateFlow(listOf()) },
+        semestersNames = emptyList(),
+        selectedSemester = null,
+        lessonsGetter = { flowOf(emptyList()) },
         onSelectedSemesterChange = {},
         onAddSemesterClick = {},
         onEditSemesterClick = {},
@@ -229,12 +230,42 @@ private fun LessonsEditorContentEmptyPreview() = AppTheme {
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun LessonsEditorContentPreview() = AppTheme {
-    val lesson = Lessons.regular
+private fun ScheduleScreenLoadingPreview() = AppTheme {
     ScheduleContent(
         semestersNames = listOf(Semesters.regular.name),
         selectedSemester = Semesters.regular,
-        lessonsGetter = { MutableStateFlow(List(10) { lesson }) },
+        lessonsGetter = { flow {} },
+        onSelectedSemesterChange = {},
+        onAddSemesterClick = {},
+        onEditSemesterClick = {},
+        onLessonClick = {}
+    )
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun ScheduleScreenNoLessonsPreview() = AppTheme {
+    ScheduleContent(
+        semestersNames = listOf(Semesters.regular.name),
+        selectedSemester = Semesters.regular,
+        lessonsGetter = { flowOf(emptyList()) },
+        onSelectedSemesterChange = {},
+        onAddSemesterClick = {},
+        onEditSemesterClick = {},
+        onLessonClick = {}
+    )
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun ScheduleScreenPreview() = AppTheme {
+    val lessons = List(10) { Lessons.regular }
+    ScheduleContent(
+        semestersNames = listOf(Semesters.regular.name, Semesters.long.name),
+        selectedSemester = Semesters.regular,
+        lessonsGetter = { flowOf(lessons) },
         onSelectedSemesterChange = {},
         onAddSemesterClick = {},
         onEditSemesterClick = {},

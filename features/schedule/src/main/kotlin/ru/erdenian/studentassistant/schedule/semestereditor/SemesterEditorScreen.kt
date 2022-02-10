@@ -269,6 +269,25 @@ private fun SemesterEditorContent(
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
+private fun SemesterEditorLoadingPreview() = AppTheme {
+    SemesterEditorContent(
+        operation = SemesterEditorViewModel.Operation.LOADING,
+        isEditing = false,
+        name = Semesters.regular.name,
+        firstDay = Semesters.regular.firstDay,
+        lastDay = Semesters.regular.lastDay,
+        errorMessage = null,
+        onBackClick = {},
+        onSaveClick = {},
+        onNameChange = {},
+        onFirstDayChange = {},
+        onLastDayChange = {}
+    )
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
 private fun SemesterEditorPreview() = AppTheme {
     SemesterEditorContent(
         operation = null,
@@ -277,7 +296,7 @@ private fun SemesterEditorPreview() = AppTheme {
         firstDay = Semesters.regular.firstDay,
         lastDay = Semesters.regular.lastDay,
         errorMessage = null,
-        onBackClick = { },
+        onBackClick = {},
         onSaveClick = {},
         onNameChange = {},
         onFirstDayChange = {},
@@ -295,7 +314,7 @@ private fun SemesterEditorLongPreview() = AppTheme {
         firstDay = Semesters.long.firstDay,
         lastDay = Semesters.long.lastDay,
         errorMessage = null,
-        onBackClick = { },
+        onBackClick = {},
         onSaveClick = {},
         onNameChange = {},
         onFirstDayChange = {},

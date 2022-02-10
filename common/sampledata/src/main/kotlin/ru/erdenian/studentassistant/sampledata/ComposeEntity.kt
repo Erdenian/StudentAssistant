@@ -12,6 +12,8 @@ import ru.erdenian.studentassistant.entity.ImmutableSortedSet
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.entity.Semester
 
+private fun Any.getId() = System.identityHashCode(this).toLong()
+
 @SuppressLint("ComposableNaming")
 @Composable
 fun Semester(
@@ -24,7 +26,7 @@ fun Semester(
     override val firstDay = firstDay
     override val lastDay = lastDay
 
-    override val id get() = System.identityHashCode(this).toLong()
+    override val id get() = getId()
 }
 
 @SuppressLint("ComposableNaming")
@@ -48,7 +50,7 @@ fun Lesson(
     override val lessonRepeat = lessonRepeat
 
     override val semesterId get() = error("Not implemented")
-    override val id get() = System.identityHashCode(this).toLong()
+    override val id get() = getId()
 }
 
 @SuppressLint("ComposableNaming")
@@ -80,7 +82,7 @@ fun Homework(
     override val isDone get() = isDone
 
     override val semesterId get() = error("Not implemented")
-    override val id get() = System.identityHashCode(this).toLong()
+    override val id get() = getId()
 }
 
 private interface NoOpParcelable : Parcelable {

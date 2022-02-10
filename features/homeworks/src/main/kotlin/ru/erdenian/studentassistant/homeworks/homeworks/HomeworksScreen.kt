@@ -161,6 +161,60 @@ private fun HomeworksContent(
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
+private fun HomeworksContentNoSchedulePreview() = AppTheme {
+    HomeworksContent(
+        operation = null,
+        semesters = emptyList(),
+        selectedSemester = null,
+        overdueHomeworks = emptyList(),
+        actualHomeworks = emptyList(),
+        pastHomeworks = emptyList(),
+        onSelectedSemesterChange = {},
+        onAddHomeworkClick = {},
+        onHomeworkClick = {},
+        onDeleteHomeworkClick = {}
+    )
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun HomeworksContentLoadingPreview() = AppTheme {
+    HomeworksContent(
+        operation = null,
+        semesters = listOf(Semesters.regular.name),
+        selectedSemester = Semesters.regular,
+        overdueHomeworks = null,
+        actualHomeworks = null,
+        pastHomeworks = null,
+        onSelectedSemesterChange = {},
+        onAddHomeworkClick = {},
+        onHomeworkClick = {},
+        onDeleteHomeworkClick = {}
+    )
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun HomeworksContentNoHomeworksPreview() = AppTheme {
+    HomeworksContent(
+        operation = null,
+        semesters = listOf(Semesters.regular.name),
+        selectedSemester = Semesters.regular,
+        overdueHomeworks = emptyList(),
+        actualHomeworks = emptyList(),
+        pastHomeworks = emptyList(),
+        onSelectedSemesterChange = {},
+        onAddHomeworkClick = {},
+        onHomeworkClick = {},
+        onDeleteHomeworkClick = {}
+    )
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
 private fun HomeworksContentRegularPreview() = AppTheme {
     HomeworksContent(
         operation = null,
