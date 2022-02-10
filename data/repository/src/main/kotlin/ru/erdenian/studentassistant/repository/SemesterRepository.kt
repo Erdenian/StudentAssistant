@@ -16,9 +16,8 @@ class SemesterRepository(
 
     suspend fun insert(name: String, firstDay: LocalDate, lastDay: LocalDate) {
         val semester = SemesterEntity(name, firstDay, lastDay)
-        semesterDao.insert(semester)
-        selectedSemesterRepository.onSemesterInserted(semester)
-        selectedSemesterRepository.selectSemester(semester.id)
+        val id = semesterDao.insert(semester)
+        selectedSemesterRepository.onSemesterInserted(semester.copy(id = id))
     }
 
     suspend fun update(id: Long, name: String, firstDay: LocalDate, lastDay: LocalDate): Unit =

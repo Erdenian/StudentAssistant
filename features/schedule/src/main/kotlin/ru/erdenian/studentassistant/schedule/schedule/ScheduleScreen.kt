@@ -13,7 +13,6 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Today
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -22,8 +21,6 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -56,9 +53,6 @@ import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
 import ru.erdenian.studentassistant.utils.showDatePicker
 
-private fun Semester.getDate(position: Int): LocalDate = firstDay.plusDays(position.toLong())
-private fun Semester.getPosition(date: LocalDate) = ChronoUnit.DAYS.between(firstDay, date.coerceIn(range)).toInt()
-
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ScheduleScreen(
@@ -89,12 +83,19 @@ fun ScheduleScreen(
 @OptIn(ExperimentalPagerApi::class)
 @Stable
 private data class State(val pagerState: PagerState, val semester: Semester) {
+
     companion object {
-        val Saver: Saver<State?, *> = listSaver(
-            save = { listOfNotNull(it?.pagerState?.currentPage, it?.semester) },
-            restore = { if (it.isNotEmpty()) State(PagerState(it[0] as Int), it[1] as Semester) else null }
-        )
+        private fun Semester.getDate(position: Int): LocalDate = firstDay.plusDays(position.toLong())
+        private fun Semester.getPosition(date: LocalDate) = ChronoUnit.DAYS.between(firstDay, date.coerceIn(range)).toInt()
     }
+
+    constructor(semester: Semester, initialDate: LocalDate) : this(PagerState(semester.getPosition(initialDate)), semester)
+
+    val currentDate get() = getDate(pagerState.currentPage)
+    fun getDate(page: Int) = semester.getDate(page)
+    fun getPosition(date: LocalDate) = semester.getPosition(date)
+
+    suspend fun animateScrollToDate(date: LocalDate) = pagerState.animateScrollToPage(getPosition(date))
 }
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalAnimationApi::class)
@@ -108,22 +109,14 @@ private fun ScheduleContent(
     onEditSemesterClick: (semester: Semester) -> Unit,
     onLessonClick: (Lesson) -> Unit
 ) {
-    val state = run {
-        var previousState: State? by rememberSaveable(stateSaver = State.Saver) { mutableStateOf(null) }
-        val state by rememberSaveable(selectedSemester, stateSaver = State.Saver) {
-            mutableStateOf(
-                if (selectedSemester != null) {
-                    val selectedDate = previousState?.let { it.semester.getDate(it.pagerState.currentPage) } ?: LocalDate.now()
-                    val page = selectedSemester.getPosition(selectedDate)
-                    State(PagerState(page), selectedSemester)
-                } else null
-            )
-        }
-        LaunchedEffect(state) {
-            previousState = state
-        }
-        state
+    var currentDate: LocalDate? by rememberSaveable { mutableStateOf(null) }
+
+    val state = remember(selectedSemester) {
+        if (selectedSemester == null) null
+        else State(selectedSemester, currentDate ?: LocalDate.now())
     }
+
+    currentDate = state?.currentDate
 
     Scaffold(
         topBar = {
@@ -150,13 +143,11 @@ private fun ScheduleContent(
                                     imageVector = AppIcons.Today,
                                     onClick = {
                                         context.showDatePicker(
-                                            state.semester.getDate(state.pagerState.currentPage),
+                                            state.currentDate,
                                             state.semester.firstDay,
                                             state.semester.lastDay
-                                        ) {
-                                            coroutineScope.launch {
-                                                state.pagerState.animateScrollToPage(state.semester.getPosition(it))
-                                            }
+                                        ) { date ->
+                                            coroutineScope.launch { state.animateScrollToDate(date) }
                                         }
                                     }
                                 )
@@ -213,9 +204,7 @@ private fun ScheduleContent(
                         state = state.pagerState,
                         modifier = Modifier.fillMaxSize()
                     ) { page ->
-                        val lessonsFlow = remember(lessonsGetter, state, page) {
-                            lessonsGetter(state.semester.getDate(page))
-                        }
+                        val lessonsFlow = remember(lessonsGetter, state, page) { lessonsGetter(state.getDate(page)) }
                         val lessons by lessonsFlow.collectAsState(null)
 
                         LazyLessonsList(lessons = lessons, onLessonClick = onLessonClick)
