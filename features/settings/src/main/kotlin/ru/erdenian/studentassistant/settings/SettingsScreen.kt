@@ -14,6 +14,7 @@ import java.time.Duration
 import java.time.LocalTime
 import ru.erdenian.studentassistant.settings.preference.DurationPreference
 import ru.erdenian.studentassistant.settings.preference.TimePreference
+import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppTheme
 
 @Composable
@@ -45,23 +46,23 @@ private fun SettingsContent(
 ) = Scaffold(
     topBar = {
         TopAppBar(
-            title = { Text(text = stringResource(R.string.st_title)) }
+            title = { Text(text = stringResource(RS.st_title)) }
         )
     }
 ) {
     Column {
         TimePreference(
-            title = stringResource(R.string.st_default_start_time),
+            title = stringResource(RS.st_default_start_time),
             value = defaultStartTime,
             onValueChange = onDefaultStartTimeChange
         )
         DurationPreference(
-            title = stringResource(R.string.st_default_lesson_duration),
+            title = stringResource(RS.st_default_lesson_duration),
             value = defaultLessonDuration,
             onValueChange = onDefaultLessonDurationChange
         )
         DurationPreference(
-            title = stringResource(R.string.st_default_break_duration),
+            title = stringResource(RS.st_default_break_duration),
             value = defaultBreakDuration,
             onValueChange = onDefaultBreakDurationChange
         )

@@ -3,7 +3,6 @@ package ru.erdenian.studentassistant.schedule.semestereditor
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.with
@@ -47,8 +46,8 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import ru.erdenian.studentassistant.sampledata.Semesters
-import ru.erdenian.studentassistant.schedule.R
 import ru.erdenian.studentassistant.schedule.semestereditor.SemesterEditorViewModel.Error
+import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
@@ -70,9 +69,9 @@ fun SemesterEditorScreen(
 
     val error by viewModel.error.collectAsState()
     val errorMessage = when (error) {
-        Error.EMPTY_NAME -> R.string.se_error_empty_name
-        Error.SEMESTER_EXISTS -> R.string.se_error_name_not_available
-        Error.WRONG_DATES -> R.string.se_error_wrong_dates
+        Error.EMPTY_NAME -> RS.se_error_empty_name
+        Error.SEMESTER_EXISTS -> RS.se_error_name_not_available
+        Error.WRONG_DATES -> RS.se_error_wrong_dates
         null -> null
     }?.let { stringResource(it) }
 
@@ -113,7 +112,6 @@ fun SemesterEditorScreen(
     )
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun SemesterEditorContent(
     operation: SemesterEditorViewModel.Operation?,
@@ -148,7 +146,7 @@ private fun SemesterEditorContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(if (isEditing) R.string.se_title_edit else R.string.se_title_new)) },
+                title = { Text(text = stringResource(if (isEditing) RS.se_title_edit else RS.se_title_new)) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
@@ -163,7 +161,7 @@ private fun SemesterEditorContent(
                         TopAppBarActions(
                             actions = listOf(
                                 ActionItem.AlwaysShow(
-                                    name = stringResource(R.string.se_save),
+                                    name = stringResource(RS.se_save),
                                     imageVector = AppIcons.Check,
                                     loading = isLoading,
                                     onClick = onSaveClick
@@ -176,7 +174,7 @@ private fun SemesterEditorContent(
         }
     ) {
         if (isSaving) {
-            ProgressDialog { Text(text = stringResource(R.string.se_saving)) }
+            ProgressDialog(stringResource(RS.se_saving))
         }
 
         Column(
@@ -192,7 +190,7 @@ private fun SemesterEditorContent(
                 value = name,
                 onValueChange = onNameChange,
                 enabled = !isLoading,
-                label = { Text(text = stringResource(R.string.se_name)) },
+                label = { Text(text = stringResource(RS.se_name)) },
                 isError = (errorMessage != null),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
@@ -226,7 +224,7 @@ private fun SemesterEditorContent(
                 val context = LocalContext.current
 
                 Text(
-                    text = stringResource(R.string.se_first_day),
+                    text = stringResource(RS.se_first_day),
                     style = MaterialTheme.typography.body2,
                     modifier = Modifier.weight(1.0f)
                 )
@@ -249,7 +247,7 @@ private fun SemesterEditorContent(
                 val context = LocalContext.current
 
                 Text(
-                    text = stringResource(R.string.se_last_day),
+                    text = stringResource(RS.se_last_day),
                     style = MaterialTheme.typography.body2,
                     modifier = Modifier.weight(1.0f)
                 )
@@ -271,6 +269,25 @@ private fun SemesterEditorContent(
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
+private fun SemesterEditorLoadingPreview() = AppTheme {
+    SemesterEditorContent(
+        operation = SemesterEditorViewModel.Operation.LOADING,
+        isEditing = false,
+        name = Semesters.regular.name,
+        firstDay = Semesters.regular.firstDay,
+        lastDay = Semesters.regular.lastDay,
+        errorMessage = null,
+        onBackClick = {},
+        onSaveClick = {},
+        onNameChange = {},
+        onFirstDayChange = {},
+        onLastDayChange = {}
+    )
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
 private fun SemesterEditorPreview() = AppTheme {
     SemesterEditorContent(
         operation = null,
@@ -279,7 +296,7 @@ private fun SemesterEditorPreview() = AppTheme {
         firstDay = Semesters.regular.firstDay,
         lastDay = Semesters.regular.lastDay,
         errorMessage = null,
-        onBackClick = { },
+        onBackClick = {},
         onSaveClick = {},
         onNameChange = {},
         onFirstDayChange = {},
@@ -297,7 +314,7 @@ private fun SemesterEditorLongPreview() = AppTheme {
         firstDay = Semesters.long.firstDay,
         lastDay = Semesters.long.lastDay,
         errorMessage = null,
-        onBackClick = { },
+        onBackClick = {},
         onSaveClick = {},
         onNameChange = {},
         onFirstDayChange = {},

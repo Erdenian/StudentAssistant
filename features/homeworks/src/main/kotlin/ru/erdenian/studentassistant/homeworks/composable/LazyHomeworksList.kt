@@ -1,8 +1,6 @@
 package ru.erdenian.studentassistant.homeworks.composable
 
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.with
@@ -28,14 +26,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import ru.erdenian.studentassistant.entity.Homework
-import ru.erdenian.studentassistant.homeworks.R
 import ru.erdenian.studentassistant.sampledata.Homeworks
+import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.layout.DelayedVisibility
 import ru.erdenian.studentassistant.uikit.view.HomeworkCard
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 internal fun LazyHomeworksList(
     overdueHomeworks: List<Homework>?,
@@ -59,7 +56,7 @@ internal fun LazyHomeworksList(
                 (overdueHomeworksState == null) || (actualHomeworksState == null) || (pastHomeworksState == null) ->
                     DelayedVisibility { CircularProgressIndicator() }
                 overdueHomeworksState.isEmpty() && actualHomeworksState.isEmpty() && pastHomeworksState.isEmpty() -> Text(
-                    text = stringResource(R.string.lhl_no_homeworks),
+                    text = stringResource(RS.lhl_no_homeworks),
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
                 )
@@ -107,7 +104,6 @@ internal fun LazyHomeworksList(
 }
 
 @Preview(showSystemUi = true)
-@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun LazyHomeworksListLoadingPreview() = AppTheme {
     LazyHomeworksList(
@@ -119,7 +115,6 @@ private fun LazyHomeworksListLoadingPreview() = AppTheme {
 }
 
 @Preview(showSystemUi = true)
-@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun LazyHomeworksListEmptyPreview() = AppTheme {
     LazyHomeworksList(
@@ -131,7 +126,6 @@ private fun LazyHomeworksListEmptyPreview() = AppTheme {
 }
 
 @Preview(showSystemUi = true)
-@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun LazyHomeworksListPreview() = AppTheme {
     LazyHomeworksList(

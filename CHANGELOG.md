@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Приложение полностью переписано на Jetpack Compose
+
 ## [0.4.5] - 2021-04-15
 
 ### Fixed
@@ -61,5 +63,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.2.4]: https://github.com/Erdenian/StudentAssistant/compare/0.2.3...0.2.4
 [0.2.3]: https://github.com/Erdenian/StudentAssistant/compare/0.2.0...0.2.3
 [0.2.0]: https://github.com/Erdenian/StudentAssistant/compare/0.1.0...0.2.0
-[0.1.0]: https://github.com/Erdenian/StudentAssistant/compare/0.0.0...0.1.0
-[0.0.0]: https://github.com/Erdenian/StudentAssistant/releases/tag/0.0.0
+[0.1.0]: https://github.com/Erdenian/StudentAssistant/compare/e616d052ad609f694c1dd9c4492a758597fd8f3f...0.1.0

@@ -18,21 +18,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.rememberNavController
+import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppIcons
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun StudentAssistantApp(
     isBottomNavigationVisible: Boolean
 ) {
     val navController = rememberNavController()
-    val directions = remember(navController) { MainDirections(navController) }
+    val navGraph = remember(navController) { StudentAssistantNavGraph(navController) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(navController, keyboardController) {
@@ -40,25 +39,26 @@ internal fun StudentAssistantApp(
     }
 
     Scaffold(
+        content = { paddingValues ->
+            StudentAssistantNavHost(
+                navController = navController,
+                navGraph = navGraph,
+                modifier = Modifier.padding(paddingValues)
+            )
+        },
         bottomBar = {
             StudentAssistantBottomNavigation(
-                directions = directions,
-                isBottomNavigationVisible = isBottomNavigationVisible
+                navGraph = navGraph,
+                visible = isBottomNavigationVisible
             )
         }
-    ) { paddingValues ->
-        MainNavGraph(
-            navController = navController,
-            directions = directions,
-            modifier = Modifier.padding(paddingValues)
-        )
-    }
+    )
 }
 
 @Composable
 private fun StudentAssistantBottomNavigation(
-    directions: MainDirections,
-    isBottomNavigationVisible: Boolean
+    navGraph: StudentAssistantNavGraph,
+    visible: Boolean
 ) {
     data class Item(
         val imageVector: ImageVector,
@@ -67,31 +67,31 @@ private fun StudentAssistantBottomNavigation(
         val onClick: () -> Unit
     )
 
-    val items = remember(directions) {
+    val items = remember(navGraph) {
         listOf(
             Item(
                 imageVector = AppIcons.Schedule,
-                labelId = R.string.s_title,
+                labelId = RS.s_title,
                 route = MainRoutes.SCHEDULE,
-                onClick = directions::navigateToSchedule
+                onClick = navGraph::navigateToSchedule
             ),
             Item(
                 imageVector = AppIcons.MenuBook,
-                labelId = R.string.h_title,
+                labelId = RS.h_title,
                 route = MainRoutes.HOMEWORKS,
-                onClick = directions::navigateToHomeworks
+                onClick = navGraph::navigateToHomeworks
             ),
             Item(
                 imageVector = AppIcons.Settings,
-                labelId = R.string.st_title,
+                labelId = RS.st_title,
                 route = MainRoutes.SETTINGS,
-                onClick = directions::navigateToSettings
+                onClick = navGraph::navigateToSettings
             ),
         )
     }
 
     var selectedRoute by remember { mutableStateOf(MainRoutes.SCHEDULE) }
-    if (isBottomNavigationVisible) {
+    if (visible) {
         BottomNavigation(
             backgroundColor = MaterialTheme.colors.surface
         ) {

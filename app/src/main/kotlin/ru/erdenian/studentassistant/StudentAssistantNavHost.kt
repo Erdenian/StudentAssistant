@@ -27,6 +27,20 @@ import ru.erdenian.studentassistant.settings.SettingsScreen
 import ru.erdenian.studentassistant.settings.SettingsViewModel
 import ru.erdenian.studentassistant.utils.viewModel
 
+@Composable
+internal fun StudentAssistantNavHost(
+    navController: NavHostController,
+    navGraph: StudentAssistantNavGraph,
+    modifier: Modifier = Modifier
+) {
+    NavHost(
+        navController = navController,
+        startDestination = MainRoutes.SCHEDULE,
+        modifier = modifier,
+        builder = navGraph::build
+    )
+}
+
 internal object MainRoutes {
 
     const val SCHEDULE = "schedule"
@@ -34,7 +48,7 @@ internal object MainRoutes {
     const val SETTINGS = "settings"
 }
 
-internal class MainDirections(private val navController: NavHostController) {
+internal class StudentAssistantNavGraph(private val navController: NavHostController) {
 
     fun build(navGraphBuilder: NavGraphBuilder) = composables.forEach { it.invoke(navGraphBuilder) }
 
@@ -358,18 +372,4 @@ internal class MainDirections(private val navController: NavHostController) {
     }
 
     // endregion
-}
-
-@Composable
-internal fun MainNavGraph(
-    navController: NavHostController,
-    directions: MainDirections,
-    modifier: Modifier = Modifier
-) {
-    NavHost(
-        navController = navController,
-        startDestination = MainRoutes.SCHEDULE,
-        modifier = modifier,
-        builder = directions::build
-    )
 }

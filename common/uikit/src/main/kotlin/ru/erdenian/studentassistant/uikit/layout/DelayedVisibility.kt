@@ -1,6 +1,7 @@
 package ru.erdenian.studentassistant.uikit.layout
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.AnimationConstants
 import androidx.compose.animation.fadeIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -14,13 +15,13 @@ import kotlinx.coroutines.delay
 @Composable
 fun DelayedVisibility(
     modifier: Modifier = Modifier,
-    delayMillis: Long = 500L,
+    delayMillis: Int = AnimationConstants.DefaultDurationMillis,
     content: @Composable () -> Unit
 ) {
     var isVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        delay(delayMillis)
+        delay(delayMillis.toLong())
         isVisible = true
     }
 
