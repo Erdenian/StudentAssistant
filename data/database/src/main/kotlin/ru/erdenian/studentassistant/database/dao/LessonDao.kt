@@ -44,14 +44,17 @@ abstract class LessonDao {
         teachers: List<TeacherEntity>,
         classrooms: List<ClassroomEntity>,
         byDates: List<ByDateEntity>
-    ): Long = withContext(Dispatchers.IO) {
-        val id = insert(lesson)
-        insert(
-            teachers.onEach { it.lessonId = id },
-            classrooms.onEach { it.lessonId = id },
-            byDates.onEach { it.lessonId = id }
-        )
-        id
+    ): Long {
+        require(byDates.isNotEmpty()) { "Dates list must contain at least one item" }
+        return withContext(Dispatchers.IO) {
+            val id = insert(lesson)
+            insert(
+                teachers.onEach { it.lessonId = id },
+                classrooms.onEach { it.lessonId = id },
+                byDates.onEach { it.lessonId = id }
+            )
+            id
+        }
     }
 
     @Insert(onConflict = OnConflictStrategy.ABORT)

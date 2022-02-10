@@ -16,9 +16,8 @@ class SemesterRepository(
 
     suspend fun insert(name: String, firstDay: LocalDate, lastDay: LocalDate) {
         val semester = SemesterEntity(name, firstDay, lastDay)
-        semesterDao.insert(semester)
-        selectedSemesterRepository.onSemesterInserted(semester)
-        selectedSemesterRepository.selectSemester(semester.id)
+        val id = semesterDao.insert(semester)
+        selectedSemesterRepository.onSemesterInserted(semester.copy(id = id))
     }
 
     suspend fun update(id: Long, name: String, firstDay: LocalDate, lastDay: LocalDate): Unit =
@@ -29,10 +28,10 @@ class SemesterRepository(
         selectedSemesterRepository.onSemesterDeleted(id)
     }
 
-    val allFlow: Flow<ImmutableSortedSet<Semester>> = semesterDao.getAllFlow().map()
+    val allFlow: Flow<ImmutableSortedSet<Semester>> get() = semesterDao.getAllFlow().map()
     suspend fun get(id: Long): Semester? = semesterDao.get(id)
     fun getFlow(id: Long): Flow<Semester?> = semesterDao.getFlow(id)
-    val namesFlow: Flow<List<String>> = semesterDao.getNamesFlow()
+    val namesFlow: Flow<List<String>> get() = semesterDao.getNamesFlow()
 
     private fun Flow<List<SemesterEntity>>.map() = map { it.toImmutableSortedSet<Semester>() }
 }

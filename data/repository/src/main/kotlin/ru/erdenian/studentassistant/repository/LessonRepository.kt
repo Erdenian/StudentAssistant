@@ -113,9 +113,10 @@ class LessonRepository(
 
     fun getAllFlow(day: LocalDate): Flow<ImmutableSortedSet<Lesson>> =
         selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
-            (semester?.id?.let { lessonDao.getAllFlow(it) } ?: flowOf(emptyList())).map { lessons ->
+            val allLessons = semester?.id?.let(lessonDao::getAllFlow) ?: flowOf(emptyList())
+            allLessons.map { lessons ->
                 val weekNumber = semester?.getWeekNumber(day) ?: return@map immutableSortedSetOf()
-                lessons.filter { it.lessonRepeat.repeatsOnDay(day, weekNumber) }.toImmutableSortedSet()
+                lessons.asSequence().filter { it.lessonRepeat.repeatsOnDay(day, weekNumber) }.toImmutableSortedSet()
             }
         }
 

@@ -58,8 +58,8 @@ dependencies {
     val junitVersion: String by project
     testImplementation("junit:junit:$junitVersion")
 
-    val junitExtVersion: String by project
-    androidTestImplementation("androidx.test.ext:junit-ktx:$junitExtVersion")
+    val junitKtxVersion: String by project
+    androidTestImplementation("androidx.test.ext:junit-ktx:$junitKtxVersion")
 
     val androidxTestVersion: String by project
     androidTestImplementation("androidx.test:core-ktx:$androidxTestVersion")

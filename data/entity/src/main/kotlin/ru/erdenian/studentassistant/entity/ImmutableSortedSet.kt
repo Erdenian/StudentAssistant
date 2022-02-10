@@ -32,6 +32,8 @@ class ImmutableSortedSet<E : Comparable<E>>(
 
     override fun describeContents() = 0
 
+    override fun toString() = value.toString()
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

@@ -9,6 +9,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.kodein.di.DIAware
@@ -29,6 +32,16 @@ class SemesterEditorViewModel(
         SEMESTER_EXISTS,
         WRONG_DATES
     }
+
+    enum class Operation {
+        LOADING,
+        SAVING
+    }
+
+    private val isSemesterLoaded = MutableStateFlow(false)
+    private val areNamesLoaded = MutableStateFlow(false)
+    private val operationPrivate = MutableStateFlow<Operation?>(Operation.LOADING)
+    val operation = operationPrivate.asStateFlow()
 
     private val semestersRanges = listOf(
         Month.FEBRUARY..Month.MAY,
@@ -59,13 +72,24 @@ class SemesterEditorViewModel(
                 } else {
                     donePrivate.value = true
                 }
+                isSemesterLoaded.value = true
             }
+        } else {
+            isSemesterLoaded.value = true
+        }
+
+        viewModelScope.launch {
+            combine(isSemesterLoaded, areNamesLoaded) { semester, names -> semester && names }.filter { it }.first()
+            if (operationPrivate.value == Operation.LOADING) operationPrivate.value = null
         }
     }
 
-    private val semestersNames = semesterRepository.namesFlow
-
-    val error = combine(name, firstDay, lastDay, semestersNames) { name, firstDay, lastDay, semestersNames ->
+    val error = combine(
+        name,
+        firstDay,
+        lastDay,
+        semesterRepository.namesFlow.onEach { areNamesLoaded.value = true }
+    ) { name, firstDay, lastDay, semestersNames ->
         when {
             name.isBlank() -> Error.EMPTY_NAME
             (semesterId == null) && semestersNames.contains(name) -> Error.SEMESTER_EXISTS
@@ -73,7 +97,7 @@ class SemesterEditorViewModel(
             (firstDay >= lastDay) -> Error.WRONG_DATES
             else -> null
         }
-    }.stateIn(viewModelScope, SharingStarted.Lazily, null)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     val isEditing = (semesterId != null)
 
@@ -82,11 +106,13 @@ class SemesterEditorViewModel(
 
     fun save() {
         check(error.value == null)
+        operationPrivate.value = Operation.SAVING
         viewModelScope.launch {
             semesterId?.let { id ->
                 semesterRepository.update(id, name.value, firstDay.value, lastDay.value)
             } ?: semesterRepository.insert(name.value, firstDay.value, lastDay.value)
             donePrivate.value = true
+            operationPrivate.value = null
         }
     }
 }

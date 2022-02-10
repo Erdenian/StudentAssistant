@@ -3,17 +3,10 @@ package ru.erdenian.studentassistant.schedule.scheduleeditor
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -30,7 +23,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewModelScope
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -39,24 +31,23 @@ import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.time.DayOfWeek
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import java.time.format.TextStyle
 import java.util.Locale
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import ru.erdenian.studentassistant.entity.ImmutableSortedSet
 import ru.erdenian.studentassistant.entity.Lesson
-import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 import ru.erdenian.studentassistant.sampledata.Lessons
 import ru.erdenian.studentassistant.schedule.R
+import ru.erdenian.studentassistant.schedule.composable.LazyLessonsList
 import ru.erdenian.studentassistant.schedule.composable.PagerTabStrip
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
-import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.view.ActionItem
-import ru.erdenian.studentassistant.uikit.view.LessonCard
+import ru.erdenian.studentassistant.uikit.view.ContextMenuDialog
+import ru.erdenian.studentassistant.uikit.view.ContextMenuItem
+import ru.erdenian.studentassistant.uikit.view.ProgressDialog
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
 @OptIn(ExperimentalPagerApi::class)
@@ -68,7 +59,6 @@ fun ScheduleEditorScreen(
     navigateToEditLesson: (semesterId: Long, lessonId: Long, copy: Boolean) -> Unit,
     navigateToCreateLesson: (semesterId: Long, dayOfWeek: DayOfWeek) -> Unit
 ) {
-    val semester by viewModel.semester.collectAsState()
     val isDeleted by viewModel.isDeleted.collectAsState()
     DisposableEffect(isDeleted) {
         if (isDeleted) navigateBack()
@@ -79,12 +69,26 @@ fun ScheduleEditorScreen(
     val pagerState = rememberPagerState()
     val context = LocalContext.current
 
-    ScheduleEditorContent(
-        state = pagerState,
-        lessonsGetter = { page ->
+    val operation by viewModel.operation.collectAsState()
+
+    val lessonsGetter = remember<(Int) -> Flow<List<Lesson>>>(viewModel) {
+        { page ->
             val dayOfWeek = DayOfWeek.of(page + 1)
-            viewModel.getLessons(dayOfWeek)
-        },
+            viewModel.getLessons(dayOfWeek).map { it.list }
+        }
+    }
+
+    var showHomeworksCounterOperation by remember { mutableStateOf(false) }
+    if (showHomeworksCounterOperation) {
+        ProgressDialog {
+            Text(text = stringResource(R.string.le_delete_homeworks_progress))
+        }
+    }
+
+    ScheduleEditorContent(
+        operation = operation,
+        state = pagerState,
+        lessonsGetter = lessonsGetter,
         onBackClick = navigateBack,
         onEditSemesterClick = { navigateToEditSemester(viewModel.semesterId) },
         onDeleteSemesterClick = {
@@ -94,9 +98,10 @@ fun ScheduleEditorScreen(
                 .setNegativeButton(R.string.sce_delete_no, null)
                 .show()
         },
-        onLessonClick = { navigateToEditLesson(checkNotNull(semester).id, it.id, false) },
-        onCopyLessonClick = { navigateToEditLesson(checkNotNull(semester).id, it.id, true) },
+        onLessonClick = { navigateToEditLesson(viewModel.semesterId, it.id, false) },
+        onCopyLessonClick = { navigateToEditLesson(viewModel.semesterId, it.id, true) },
         onDeleteLessonClick = { lesson ->
+            showHomeworksCounterOperation = true
             coroutineScope.launch {
                 if (viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson)) {
                     MaterialAlertDialogBuilder(context)
@@ -119,6 +124,7 @@ fun ScheduleEditorScreen(
                         .setNegativeButton(R.string.le_delete_no, null)
                         .show()
                 }
+                showHomeworksCounterOperation = false
             }
         },
         onAddLessonClick = {
@@ -131,8 +137,9 @@ fun ScheduleEditorScreen(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun ScheduleEditorContent(
+    operation: ScheduleEditorViewModel.Operation?,
     state: PagerState,
-    lessonsGetter: (page: Int) -> StateFlow<ImmutableSortedSet<Lesson>>,
+    lessonsGetter: (page: Int) -> Flow<List<Lesson>>,
     onBackClick: () -> Unit,
     onEditSemesterClick: () -> Unit,
     onDeleteSemesterClick: () -> Unit,
@@ -171,7 +178,16 @@ private fun ScheduleEditorContent(
         }
     }
 ) {
+    if (operation != null) {
+        val stringId = when (operation) {
+            ScheduleEditorViewModel.Operation.DELETING_LESSON -> R.string.sce_delete_lesson_progress
+            ScheduleEditorViewModel.Operation.DELETING_SEMESTER -> R.string.sce_delete_progress
+        }
+        ProgressDialog { Text(text = stringResource(stringId)) }
+    }
+
     Column(
+        verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxSize()
     ) {
         val daysOfWeek = remember {
@@ -185,70 +201,34 @@ private fun ScheduleEditorContent(
 
         HorizontalPager(
             count = daysOfWeek.size,
-            state = state
+            state = state,
+            modifier = Modifier.fillMaxSize()
         ) { page ->
-            val lessonsFlow = remember(lessonsGetter) { lessonsGetter(page) }
-            val lessons by lessonsFlow.collectAsState()
+            val lessonsFlow = remember(lessonsGetter, page) { lessonsGetter(page) }
+            val lessons by lessonsFlow.collectAsState(null)
+            var contextMenuLesson by remember { mutableStateOf<Lesson?>(null) }
 
-            if (lessons.isEmpty()) {
-                Text(
-                    text = stringResource(R.string.sce_free_day),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
-                )
-            } else {
-                var contextMenuLesson by remember { mutableStateOf<Lesson?>(null) }
+            LazyLessonsList(
+                lessons = lessons,
+                onLessonClick = onLessonClick,
+                onLongLessonClick = { contextMenuLesson = it }
+            )
 
-                LazyColumn(
-                    contentPadding = PaddingValues(
-                        horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
-                        vertical = MaterialTheme.dimensions.activityVerticalMargin
-                    ),
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.cardsSpacing),
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    itemsIndexed(
-                        items = lessons.list,
-                        key = { _, item -> item.id }
-                    ) { _, lesson ->
-                        val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
-
-                        LessonCard(
-                            subjectName = lesson.subjectName,
-                            type = lesson.type,
-                            teachers = lesson.teachers.list,
-                            classrooms = lesson.classrooms.list,
-                            startTime = lesson.startTime.format(timeFormatter),
-                            endTime = lesson.endTime.format(timeFormatter),
-                            onClick = { onLessonClick(lesson) },
-                            onLongClick = { contextMenuLesson = lesson }
-                        )
-                    }
-                }
-
-                DropdownMenu(
-                    expanded = (contextMenuLesson != null),
-                    onDismissRequest = { contextMenuLesson = null }
-                ) {
-                    DropdownMenuItem(
-                        onClick = {
-                            val lesson = checkNotNull(contextMenuLesson)
+            contextMenuLesson?.let { lesson ->
+                ContextMenuDialog(
+                    onDismissRequest = { contextMenuLesson = null },
+                    title = lesson.subjectName,
+                    items = listOf(
+                        ContextMenuItem(stringResource(R.string.sce_copy_lesson)) {
                             contextMenuLesson = null
                             onCopyLessonClick(lesson)
-                        }
-                    ) {
-                        Text(text = stringResource(R.string.sce_copy_lesson))
-                    }
-                    DropdownMenuItem(
-                        onClick = {
-                            val lesson = checkNotNull(contextMenuLesson)
+                        },
+                        ContextMenuItem(stringResource(R.string.sce_delete_lesson)) {
                             contextMenuLesson = null
                             onDeleteLessonClick(lesson)
                         }
-                    ) {
-                        Text(text = stringResource(R.string.sce_delete_lesson))
-                    }
-                }
+                    )
+                )
             }
         }
     }
@@ -261,8 +241,9 @@ private fun ScheduleEditorContent(
 private fun ScheduleEditorContentPreview() = AppTheme {
     val lesson = Lessons.regular
     ScheduleEditorContent(
+        operation = null,
         state = rememberPagerState(),
-        lessonsGetter = { MutableStateFlow(List(10) { lesson }.toImmutableSortedSet()) },
+        lessonsGetter = { MutableStateFlow(List(10) { lesson }) },
         onBackClick = {},
         onEditSemesterClick = {},
         onDeleteSemesterClick = {},
