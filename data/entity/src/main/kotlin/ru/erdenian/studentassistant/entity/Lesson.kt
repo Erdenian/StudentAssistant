@@ -67,8 +67,7 @@ interface Lesson : Comparable<Lesson>, Parcelable {
          * Для хранения списка недель используется List, так как массивы изменяемы.
          *
          * @property dayOfWeek день недели
-         * @property weeks список boolean значений, где i-е значение показывает
-         *              повторять ли пару каждую i-ю неделю
+         * @property weeks список boolean значений, где i-е значение показывает повторять ли пару каждую i-ю неделю
          * @throws IllegalArgumentException если [weeks] пуст
          * @author Ilya Solovyov
          * @since 0.0.0
@@ -85,8 +84,7 @@ interface Lesson : Comparable<Lesson>, Parcelable {
              * Показывает, повторяется ли пара в заданный день недели без учета номера недели.
              *
              * @param dayOfWeek день недели
-             * @return true, если пара повторяется в этот день недели, хотя бы на одной неделе,
-             *               false в противном случае
+             * @return true, если пара повторяется в этот день недели, хотя бы на одной неделе, false в противном случае
              * @author Ilya Solovyov
              * @since 0.0.0
              */

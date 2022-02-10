@@ -1,7 +1,6 @@
 package ru.erdenian.studentassistant.uikit.view
 
 import android.content.res.Configuration
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,7 +30,6 @@ import ru.erdenian.studentassistant.style.dimensions
 /**
  * Карточка пары.
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LessonCard(
     subjectName: String,

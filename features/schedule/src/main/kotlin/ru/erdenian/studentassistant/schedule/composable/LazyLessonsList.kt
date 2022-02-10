@@ -2,7 +2,6 @@ package ru.erdenian.studentassistant.schedule.composable
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.with
@@ -27,13 +26,12 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.sampledata.Lessons
-import ru.erdenian.studentassistant.schedule.R
+import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.layout.DelayedVisibility
 import ru.erdenian.studentassistant.uikit.view.LessonCard
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 internal fun LazyLessonsList(
     lessons: List<Lesson>?,
@@ -54,7 +52,7 @@ internal fun LazyLessonsList(
             when {
                 (lessonsState == null) -> DelayedVisibility { CircularProgressIndicator() }
                 lessonsState.isEmpty() -> Text(
-                    text = stringResource(R.string.lll_free_day),
+                    text = stringResource(RS.lll_free_day),
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
                 )

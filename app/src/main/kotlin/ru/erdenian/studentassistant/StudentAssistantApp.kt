@@ -18,15 +18,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.rememberNavController
+import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppIcons
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun StudentAssistantApp(
     isBottomNavigationVisible: Boolean
@@ -71,19 +70,19 @@ private fun StudentAssistantBottomNavigation(
         listOf(
             Item(
                 imageVector = AppIcons.Schedule,
-                labelId = R.string.s_title,
+                labelId = RS.s_title,
                 route = MainRoutes.SCHEDULE,
                 onClick = directions::navigateToSchedule
             ),
             Item(
                 imageVector = AppIcons.MenuBook,
-                labelId = R.string.h_title,
+                labelId = RS.h_title,
                 route = MainRoutes.HOMEWORKS,
                 onClick = directions::navigateToHomeworks
             ),
             Item(
                 imageVector = AppIcons.Settings,
-                labelId = R.string.st_title,
+                labelId = RS.st_title,
                 route = MainRoutes.SETTINGS,
                 onClick = directions::navigateToSettings
             ),

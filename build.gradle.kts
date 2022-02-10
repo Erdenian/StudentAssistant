@@ -26,7 +26,15 @@ subprojects {
         kotlinOptions {
             jvmTarget = JavaVersion.VERSION_1_8.toString()
             @Suppress("SuspiciousCollectionReassignment")
-            freeCompilerArgs += listOf("-Xjvm-default=all")
+            freeCompilerArgs += listOf(
+                "-Xjvm-default=all",
+
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
+                "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi",
+                "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
+                "-opt-in=com.google.accompanist.pager.ExperimentalPagerApi"
+            )
         }
     }
 }

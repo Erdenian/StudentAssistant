@@ -1,7 +1,6 @@
 package ru.erdenian.studentassistant.schedule.schedule
 
 import android.content.res.Configuration
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,7 +27,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import java.time.LocalDate
@@ -42,12 +40,12 @@ import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.entity.Semester
 import ru.erdenian.studentassistant.sampledata.Lessons
 import ru.erdenian.studentassistant.sampledata.Semesters
-import ru.erdenian.studentassistant.schedule.R
 import ru.erdenian.studentassistant.schedule.composable.LazyLessonsList
 import ru.erdenian.studentassistant.schedule.composable.PagerTabStrip
 import ru.erdenian.studentassistant.schedule.schedule.State.Companion.animateScrollToDate
 import ru.erdenian.studentassistant.schedule.schedule.State.Companion.currentDate
 import ru.erdenian.studentassistant.schedule.schedule.State.Companion.getDate
+import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
@@ -56,7 +54,6 @@ import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
 import ru.erdenian.studentassistant.utils.showDatePicker
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ScheduleScreen(
     viewModel: ScheduleViewModel,
@@ -83,7 +80,6 @@ fun ScheduleScreen(
     )
 }
 
-@OptIn(ExperimentalPagerApi::class)
 @Stable
 private data class State(val pagerState: PagerState, val semester: Semester) {
 
@@ -99,7 +95,6 @@ private data class State(val pagerState: PagerState, val semester: Semester) {
     }
 }
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalAnimationApi::class)
 @Composable
 private fun ScheduleContent(
     semestersNames: List<String>,
@@ -124,7 +119,7 @@ private fun ScheduleContent(
             TopAppBar(
                 title = {
                     if ((selectedSemester == null) || (semestersNames.size <= 1)) {
-                        Text(text = stringResource(R.string.s_title))
+                        Text(text = stringResource(RS.s_title))
                     } else {
                         TopAppBarDropdownMenu(
                             items = semestersNames,
@@ -140,7 +135,7 @@ private fun ScheduleContent(
                         actions = listOfNotNull(
                             if (state != null) {
                                 ActionItem.AlwaysShow(
-                                    name = stringResource(R.string.s_calendar),
+                                    name = stringResource(RS.s_calendar),
                                     imageVector = AppIcons.Today,
                                     onClick = {
                                         context.showDatePicker(
@@ -155,19 +150,19 @@ private fun ScheduleContent(
                             } else null,
                             if (selectedSemester == null) {
                                 ActionItem.AlwaysShow(
-                                    name = stringResource(R.string.s_add),
+                                    name = stringResource(RS.s_add),
                                     imageVector = AppIcons.Add,
                                     onClick = onAddSemesterClick
                                 )
                             } else {
                                 ActionItem.NeverShow(
-                                    name = stringResource(R.string.s_add),
+                                    name = stringResource(RS.s_add),
                                     onClick = onAddSemesterClick
                                 )
                             },
                             if (selectedSemester != null) {
                                 ActionItem.NeverShow(
-                                    name = stringResource(R.string.s_edit),
+                                    name = stringResource(RS.s_edit),
                                     onClick = { onEditSemesterClick(selectedSemester) }
                                 )
                             } else null
@@ -183,7 +178,7 @@ private fun ScheduleContent(
         ) {
             if (state == null) {
                 Text(
-                    text = stringResource(R.string.s_no_schedule),
+                    text = stringResource(RS.s_no_schedule),
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
                 )
@@ -216,7 +211,6 @@ private fun ScheduleContent(
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
@@ -232,7 +226,6 @@ private fun LessonsEditorContentEmptyPreview() = AppTheme {
     )
 }
 
-@OptIn(ExperimentalPagerApi::class)
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
