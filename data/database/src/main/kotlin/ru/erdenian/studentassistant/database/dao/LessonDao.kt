@@ -116,7 +116,7 @@ abstract class LessonDao {
     abstract fun getAllFlow(semesterId: Long): Flow<List<FullLesson>>
 
     @Transaction
-    @Query("SELECT * FROM lessons as l INNER JOIN by_weekday AS w ON w.lesson_id = l._id WHERE semester_id = :semesterId AND day_of_week = :dayOfWeek")
+    @Query("SELECT lessons.* FROM lessons INNER JOIN by_weekday ON by_weekday.lesson_id = lessons._id WHERE semester_id = :semesterId AND day_of_week = :dayOfWeek")
     abstract fun getAllFlow(semesterId: Long, dayOfWeek: DayOfWeek): Flow<List<FullLesson>>
 
     @Query("SELECT COUNT(_id) FROM lessons WHERE semester_id = :semesterId")

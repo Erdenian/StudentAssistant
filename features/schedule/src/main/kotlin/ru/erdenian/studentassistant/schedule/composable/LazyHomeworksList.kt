@@ -2,7 +2,6 @@ package ru.erdenian.studentassistant.schedule.composable
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.with
@@ -27,13 +26,12 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import ru.erdenian.studentassistant.entity.Homework
 import ru.erdenian.studentassistant.sampledata.Homeworks
-import ru.erdenian.studentassistant.schedule.R
+import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.layout.DelayedVisibility
 import ru.erdenian.studentassistant.uikit.view.HomeworkCard
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 internal fun LazyHomeworksList(
     homeworks: List<Homework>?,
@@ -54,7 +52,7 @@ internal fun LazyHomeworksList(
             when {
                 (homeworksState == null) -> DelayedVisibility { CircularProgressIndicator() }
                 homeworksState.isEmpty() -> Text(
-                    text = stringResource(R.string.lhl_no_homeworks),
+                    text = stringResource(RS.lhl_no_homeworks),
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
                 )

@@ -8,7 +8,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.callbackFlow
@@ -37,7 +36,6 @@ internal class MainActivity : AppCompatActivity() {
             }
             val showSplashScreen by showSplashScreenFlow.collectAsState()
 
-            @OptIn(ExperimentalCoroutinesApi::class)
             val isKeyboardOpenFlow = remember {
                 callbackFlow {
                     val listener = KeyboardVisibilityEventListener { isOpen -> trySend(isOpen) }

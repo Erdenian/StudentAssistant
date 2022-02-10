@@ -3,7 +3,6 @@ package ru.erdenian.studentassistant.uikit.view
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
@@ -66,7 +65,6 @@ sealed class ActionItem(
     ) : ActionItem(name, loading, onClick)
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun TopAppBarActionsContent(
     actions: List<ActionItem>,

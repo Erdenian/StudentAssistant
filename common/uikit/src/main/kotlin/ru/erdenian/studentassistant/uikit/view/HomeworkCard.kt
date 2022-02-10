@@ -1,7 +1,6 @@
 package ru.erdenian.studentassistant.uikit.view
 
 import android.content.res.Configuration
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -18,14 +17,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
-import ru.erdenian.studentassistant.uikit.R
 
 /**
  * Карточка домашнего задания.
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeworkCard(
     subjectName: String,
@@ -65,7 +63,7 @@ fun HomeworkCard(
 
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(
-                text = stringResource(R.string.hc_deadline, deadline),
+                text = stringResource(RS.hc_deadline, deadline),
                 style = MaterialTheme.typography.body2
             )
         }

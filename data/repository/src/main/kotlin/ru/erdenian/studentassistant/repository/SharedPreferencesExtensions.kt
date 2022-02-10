@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import java.time.Duration
 import java.time.LocalTime
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -25,7 +24,6 @@ internal fun SharedPreferences.getDurationFlow(
     defaultValue: Duration
 ): StateFlow<Duration> = getFlow(scope, key) { getDuration(key, defaultValue) }
 
-@OptIn(ExperimentalCoroutinesApi::class)
 private fun <T> SharedPreferences.getFlow(
     scope: CoroutineScope,
     key: String,

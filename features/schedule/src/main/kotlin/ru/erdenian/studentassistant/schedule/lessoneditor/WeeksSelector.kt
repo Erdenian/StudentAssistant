@@ -38,10 +38,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import ru.erdenian.studentassistant.strings.RA
+import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
-import ru.erdenian.studentassistant.uikit.R
 import ru.erdenian.studentassistant.uikit.layout.StartEndRow
 
 /**
@@ -54,7 +55,7 @@ internal fun WeeksSelector(
     modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
-    val repeatVariants = stringArrayResource(R.array.repeat_variants).toList()
+    val repeatVariants = stringArrayResource(RA.repeat_variants).toList()
     val weeksVariants = remember {
         listOf(
             listOf(true),
@@ -122,7 +123,7 @@ private fun WeeksSelectorContent(
         verticalAlignment = Alignment.Bottom
     ) {
         Text(
-            text = stringResource(R.string.ws_variants_title),
+            text = stringResource(RS.ws_variants_title),
             modifier = Modifier.padding(start = MaterialTheme.dimensions.activityHorizontalMargin)
         )
 

@@ -2,11 +2,9 @@ package ru.erdenian.studentassistant.schedule.lessoninformation
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.with
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
@@ -41,8 +39,8 @@ import ru.erdenian.studentassistant.entity.Homework
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.sampledata.Homeworks
 import ru.erdenian.studentassistant.sampledata.Lessons
-import ru.erdenian.studentassistant.schedule.R
 import ru.erdenian.studentassistant.schedule.composable.LazyHomeworksList
+import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
@@ -85,7 +83,6 @@ fun LessonInformationScreen(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
 private fun LessonInformationContent(
     operation: LessonInformationViewModel.Operation?,
@@ -99,7 +96,7 @@ private fun LessonInformationContent(
 ) = Scaffold(
     topBar = {
         TopAppBar(
-            title = { Text(stringResource(R.string.li_title)) },
+            title = { Text(stringResource(RS.li_title)) },
             navigationIcon = {
                 IconButton(onClick = onBackClick) {
                     Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
@@ -109,7 +106,7 @@ private fun LessonInformationContent(
                 TopAppBarActions(
                     actions = listOf(
                         ActionItem.AlwaysShow(
-                            name = stringResource(R.string.li_edit),
+                            name = stringResource(RS.li_edit),
                             imageVector = AppIcons.Edit,
                             loading = (lesson == null),
                             onClick = { lesson?.let(onEditClick) }
@@ -129,7 +126,7 @@ private fun LessonInformationContent(
 ) {
     if (operation != null) {
         val stringId = when (operation) {
-            LessonInformationViewModel.Operation.DELETING_HOMEWORK -> R.string.li_delete_homework_progress
+            LessonInformationViewModel.Operation.DELETING_HOMEWORK -> RS.li_delete_homework_progress
         }
         ProgressDialog { Text(text = stringResource(stringId)) }
     }
@@ -178,12 +175,12 @@ private fun LessonInformationContent(
                 onDismissRequest = { contextMenuHomework = null },
                 title = homework.subjectName,
                 items = listOf(
-                    ContextMenuItem(stringResource(R.string.li_delete_homework)) {
+                    ContextMenuItem(stringResource(RS.li_delete_homework)) {
                         contextMenuHomework = null
                         MaterialAlertDialogBuilder(context)
-                            .setMessage(R.string.li_delete_homework_message)
-                            .setPositiveButton(R.string.li_delete_homework_yes) { _, _ -> onDeleteHomeworkClick(homework) }
-                            .setNegativeButton(R.string.li_delete_homework_no, null)
+                            .setMessage(RS.li_delete_homework_message)
+                            .setPositiveButton(RS.li_delete_homework_yes) { _, _ -> onDeleteHomeworkClick(homework) }
+                            .setNegativeButton(RS.li_delete_homework_no, null)
                             .show()
                     }
                 )
