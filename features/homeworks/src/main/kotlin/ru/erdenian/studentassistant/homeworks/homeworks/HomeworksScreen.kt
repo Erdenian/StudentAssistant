@@ -113,7 +113,7 @@ private fun HomeworksContent(
         val stringId = when (operation) {
             HomeworksViewModel.Operation.DELETING_HOMEWORK -> RS.h_delete_progress
         }
-        ProgressDialog { Text(text = stringResource(stringId)) }
+        ProgressDialog(stringResource(stringId))
     }
 
     Box(

@@ -24,7 +24,7 @@ fun Semester(
     override val firstDay = firstDay
     override val lastDay = lastDay
 
-    override val id get() = error("Not implemented")
+    override val id get() = System.identityHashCode(this).toLong()
 }
 
 @SuppressLint("ComposableNaming")
@@ -48,7 +48,7 @@ fun Lesson(
     override val lessonRepeat = lessonRepeat
 
     override val semesterId get() = error("Not implemented")
-    override val id get() = error("Not implemented")
+    override val id get() = System.identityHashCode(this).toLong()
 }
 
 @SuppressLint("ComposableNaming")
@@ -80,7 +80,7 @@ fun Homework(
     override val isDone get() = isDone
 
     override val semesterId get() = error("Not implemented")
-    override val id get() = error("Not implemented")
+    override val id get() = System.identityHashCode(this).toLong()
 }
 
 private interface NoOpParcelable : Parcelable {

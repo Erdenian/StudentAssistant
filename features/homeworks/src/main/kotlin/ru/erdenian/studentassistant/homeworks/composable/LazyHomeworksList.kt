@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.homeworks.composable
 
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -105,7 +104,6 @@ internal fun LazyHomeworksList(
 }
 
 @Preview(showSystemUi = true)
-@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun LazyHomeworksListLoadingPreview() = AppTheme {
     LazyHomeworksList(
@@ -117,7 +115,6 @@ private fun LazyHomeworksListLoadingPreview() = AppTheme {
 }
 
 @Preview(showSystemUi = true)
-@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun LazyHomeworksListEmptyPreview() = AppTheme {
     LazyHomeworksList(
@@ -129,7 +126,6 @@ private fun LazyHomeworksListEmptyPreview() = AppTheme {
 }
 
 @Preview(showSystemUi = true)
-@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun LazyHomeworksListPreview() = AppTheme {
     LazyHomeworksList(

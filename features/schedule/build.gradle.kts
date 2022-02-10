@@ -11,7 +11,7 @@ dependencies {
     // region Private
     implementation(project(":common:uikit"))
     implementation(project(":common:utils"))
-    implementation(project(":common:sampledata"))
+    compileOnly(project(":common:sampledata"))
 
     implementation(project(":data:repository"))
     // endregion

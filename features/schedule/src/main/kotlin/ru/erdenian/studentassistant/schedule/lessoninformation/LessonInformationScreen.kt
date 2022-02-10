@@ -128,7 +128,7 @@ private fun LessonInformationContent(
         val stringId = when (operation) {
             LessonInformationViewModel.Operation.DELETING_HOMEWORK -> RS.li_delete_homework_progress
         }
-        ProgressDialog { Text(text = stringResource(stringId)) }
+        ProgressDialog(stringResource(stringId))
     }
 
     Column {

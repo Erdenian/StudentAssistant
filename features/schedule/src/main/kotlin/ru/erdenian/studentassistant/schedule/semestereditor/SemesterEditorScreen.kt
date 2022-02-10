@@ -174,7 +174,7 @@ private fun SemesterEditorContent(
         }
     ) {
         if (isSaving) {
-            ProgressDialog { Text(text = stringResource(RS.se_saving)) }
+            ProgressDialog(stringResource(RS.se_saving))
         }
 
         Column(
