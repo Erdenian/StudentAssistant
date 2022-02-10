@@ -40,7 +40,6 @@
 
     <!-- Schedule Editor -->
     <string name="sce_title">Редактор расписания</string>
-    <string name="sce_free_day">Выходной</string>
     <string name="sce_edit">Изменить данные расписания</string>
     <string name="sce_delete">Удалить расписание</string>
     <string name="sce_delete_message">Удалить расписание?</string>
@@ -92,7 +91,6 @@
     <string name="h_title">Домашние задания</string>
     <string name="h_add">Добавить задание</string>
     <string name="h_no_schedule">Здесь пока пусто. Добавьте расписание своего университета или школы.</string>
-    <string name="h_no_homeworks">Нет заданий</string>
     <string name="h_delete_homework">Удалить</string>
     <string name="h_delete_message">Удалить задание?</string>
     <string name="h_delete_yes">Да</string>

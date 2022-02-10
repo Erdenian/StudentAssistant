@@ -1,7 +1,6 @@
 package ru.erdenian.studentassistant.uikit.view
 
 import android.content.res.Configuration
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,7 +30,6 @@ import ru.erdenian.studentassistant.style.dimensions
 /**
  * Карточка пары.
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LessonCard(
     subjectName: String,
@@ -105,7 +103,7 @@ fun LessonCard(
         Text(
             text = subjectName,
             overflow = TextOverflow.Ellipsis,
-            maxLines = 1,
+            maxLines = 2,
             style = MaterialTheme.typography.body1
         )
 
@@ -133,8 +131,8 @@ fun LessonCard(
     }
 }
 
-@Preview(name = "LessonCard preview")
-@Preview(name = "LessonCard preview (dark)", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun LessonCardPreview() = AppTheme {
     LessonCard(
@@ -142,6 +140,19 @@ private fun LessonCardPreview() = AppTheme {
         type = "Лабораторная работа",
         teachers = listOf("Кожухов Игорь Борисович"),
         classrooms = listOf("4212а", "4212б"),
+        startTime = "09:00",
+        endTime = "10:30"
+    )
+}
+
+@Preview
+@Composable
+private fun LessonCardMinimalPreview() = AppTheme {
+    LessonCard(
+        subjectName = "Интернет программирование",
+        type = "",
+        teachers = emptyList(),
+        classrooms = emptyList(),
         startTime = "09:00",
         endTime = "10:30"
     )

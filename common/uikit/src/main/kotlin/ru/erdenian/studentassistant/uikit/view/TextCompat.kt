@@ -85,13 +85,13 @@ fun TextCompat(
 @Composable
 private fun TextCompatPreview() = AppTheme {
     Column(modifier = Modifier.width(100.dp)) {
-        Text(
+        TextCompat(
             text = "Very very very very very very very very very very long text",
             textAlign = TextAlign.End,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1
         )
-        TextCompat(
+        Text(
             text = "Very very very very very very very very very very long text",
             textAlign = TextAlign.End,
             overflow = TextOverflow.Ellipsis,

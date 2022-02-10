@@ -24,10 +24,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ru.erdenian.studentassistant.entity.Homework
 import ru.erdenian.studentassistant.entity.Semester
-import ru.erdenian.studentassistant.homeworks.R
 import ru.erdenian.studentassistant.homeworks.composable.LazyHomeworksList
 import ru.erdenian.studentassistant.sampledata.Homeworks
 import ru.erdenian.studentassistant.sampledata.Semesters
+import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
@@ -84,7 +84,7 @@ private fun HomeworksContent(
         TopAppBar(
             title = {
                 if ((selectedSemester == null) || (semesters.size <= 1)) {
-                    Text(text = stringResource(R.string.h_title))
+                    Text(text = stringResource(RS.h_title))
                 } else {
                     TopAppBarDropdownMenu(
                         items = semesters,
@@ -98,7 +98,7 @@ private fun HomeworksContent(
                     actions = listOfNotNull(
                         if (selectedSemester != null) {
                             ActionItem.AlwaysShow(
-                                name = stringResource(R.string.h_add),
+                                name = stringResource(RS.h_add),
                                 imageVector = AppIcons.Add,
                                 onClick = { onAddHomeworkClick(selectedSemester) }
                             )
@@ -111,9 +111,9 @@ private fun HomeworksContent(
 ) {
     if (operation != null) {
         val stringId = when (operation) {
-            HomeworksViewModel.Operation.DELETING_HOMEWORK -> R.string.h_delete_progress
+            HomeworksViewModel.Operation.DELETING_HOMEWORK -> RS.h_delete_progress
         }
-        ProgressDialog { Text(text = stringResource(stringId)) }
+        ProgressDialog(stringResource(stringId))
     }
 
     Box(
@@ -122,7 +122,7 @@ private fun HomeworksContent(
     ) {
         if (selectedSemester == null) {
             Text(
-                text = stringResource(R.string.h_no_schedule),
+                text = stringResource(RS.h_no_schedule),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
             )
@@ -143,12 +143,12 @@ private fun HomeworksContent(
                     onDismissRequest = { contextMenuHomework = null },
                     title = homework.subjectName,
                     items = listOf(
-                        ContextMenuItem(stringResource(R.string.h_delete_homework)) {
+                        ContextMenuItem(stringResource(RS.h_delete_homework)) {
                             contextMenuHomework = null
                             MaterialAlertDialogBuilder(context)
-                                .setMessage(R.string.h_delete_message)
-                                .setPositiveButton(R.string.h_delete_yes) { _, _ -> onDeleteHomeworkClick(homework) }
-                                .setNegativeButton(R.string.h_delete_no, null)
+                                .setMessage(RS.h_delete_message)
+                                .setPositiveButton(RS.h_delete_yes) { _, _ -> onDeleteHomeworkClick(homework) }
+                                .setNegativeButton(RS.h_delete_no, null)
                                 .show()
                         }
                     )
@@ -156,6 +156,60 @@ private fun HomeworksContent(
             }
         }
     }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun HomeworksContentNoSchedulePreview() = AppTheme {
+    HomeworksContent(
+        operation = null,
+        semesters = emptyList(),
+        selectedSemester = null,
+        overdueHomeworks = emptyList(),
+        actualHomeworks = emptyList(),
+        pastHomeworks = emptyList(),
+        onSelectedSemesterChange = {},
+        onAddHomeworkClick = {},
+        onHomeworkClick = {},
+        onDeleteHomeworkClick = {}
+    )
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun HomeworksContentLoadingPreview() = AppTheme {
+    HomeworksContent(
+        operation = null,
+        semesters = listOf(Semesters.regular.name),
+        selectedSemester = Semesters.regular,
+        overdueHomeworks = null,
+        actualHomeworks = null,
+        pastHomeworks = null,
+        onSelectedSemesterChange = {},
+        onAddHomeworkClick = {},
+        onHomeworkClick = {},
+        onDeleteHomeworkClick = {}
+    )
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun HomeworksContentNoHomeworksPreview() = AppTheme {
+    HomeworksContent(
+        operation = null,
+        semesters = listOf(Semesters.regular.name),
+        selectedSemester = Semesters.regular,
+        overdueHomeworks = emptyList(),
+        actualHomeworks = emptyList(),
+        pastHomeworks = emptyList(),
+        onSelectedSemesterChange = {},
+        onAddHomeworkClick = {},
+        onHomeworkClick = {},
+        onDeleteHomeworkClick = {}
+    )
 }
 
 @Preview

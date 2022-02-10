@@ -3,7 +3,6 @@ package ru.erdenian.studentassistant.schedule.lessoninformation
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,7 +24,7 @@ import ru.erdenian.studentassistant.repository.LessonRepository
 
 class LessonInformationViewModel(
     application: Application,
-    val lessonId: Long
+    lessonId: Long
 ) : AndroidViewModel(application), DIAware {
 
     override val di by closestDI()
@@ -49,7 +48,6 @@ class LessonInformationViewModel(
     private val deletedHomeworkIds = MutableStateFlow(emptySet<Long>())
 
     val homeworks = combine(
-        @OptIn(ExperimentalCoroutinesApi::class)
         lessonPrivate.flatMapLatest { lesson ->
             if (lesson != null) homeworkRepository.getActualFlow(lesson.subjectName)
             else flowOf(immutableSortedSetOf())

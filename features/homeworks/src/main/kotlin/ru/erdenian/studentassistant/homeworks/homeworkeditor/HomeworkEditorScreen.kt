@@ -55,9 +55,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import ru.erdenian.studentassistant.homeworks.R
 import ru.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorViewModel.Error
 import ru.erdenian.studentassistant.sampledata.Homeworks
+import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
@@ -96,8 +96,8 @@ fun HomeworkEditorScreen(
 
     val error by viewModel.error.collectAsState()
     val errorMessage = when (error) {
-        Error.EMPTY_SUBJECT -> R.string.he_error_empty_subject_name
-        Error.EMPTY_DESCRIPTION -> R.string.he_error_empty_description
+        Error.EMPTY_SUBJECT -> RS.he_error_empty_subject_name
+        Error.EMPTY_DESCRIPTION -> RS.he_error_empty_description
         null -> null
     }?.let { stringResource(it) }
 
@@ -120,11 +120,11 @@ fun HomeworkEditorScreen(
                     viewModel.save()
                 } else {
                     MaterialAlertDialogBuilder(context)
-                        .setTitle(R.string.he_unknown_lesson)
-                        .setMessage(R.string.he_unknown_lesson_message)
-                        .setPositiveButton(R.string.he_unknown_lesson_yes) { _, _ -> viewModel.save() }
-                        .setNegativeButton(R.string.he_unknown_lesson_no, null)
-                        .setNeutralButton(R.string.he_unknown_lesson_yes_and_create) { _, _ ->
+                        .setTitle(RS.he_unknown_lesson)
+                        .setMessage(RS.he_unknown_lesson_message)
+                        .setPositiveButton(RS.he_unknown_lesson_yes) { _, _ -> viewModel.save() }
+                        .setNegativeButton(RS.he_unknown_lesson_no, null)
+                        .setNeutralButton(RS.he_unknown_lesson_yes_and_create) { _, _ ->
                             lessonNameToCreate = subjectName
                             viewModel.save()
                         }
@@ -164,11 +164,11 @@ private fun HomeworkEditorContent(
         }
         HomeworkEditorViewModel.Operation.SAVING -> {
             nonBlockingProgress = false
-            blockingProgressMessageId = R.string.he_save_progress
+            blockingProgressMessageId = RS.he_save_progress
         }
         HomeworkEditorViewModel.Operation.DELETING -> {
             nonBlockingProgress = false
-            blockingProgressMessageId = R.string.he_delete_progress
+            blockingProgressMessageId = RS.he_delete_progress
         }
         null -> {
             nonBlockingProgress = false
@@ -177,13 +177,13 @@ private fun HomeworkEditorContent(
     }
 
     if (blockingProgressMessageId != null) {
-        ProgressDialog { Text(text = stringResource(blockingProgressMessageId)) }
+        ProgressDialog(stringResource(blockingProgressMessageId))
     }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(R.string.he_title)) },
+                title = { Text(text = stringResource(RS.he_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
@@ -193,7 +193,7 @@ private fun HomeworkEditorContent(
                     TopAppBarActions(
                         actions = listOfNotNull(
                             ActionItem.AlwaysShow(
-                                name = stringResource(R.string.he_save),
+                                name = stringResource(RS.he_save),
                                 imageVector = AppIcons.Check,
                                 onClick = onSaveClick,
                                 loading = nonBlockingProgress
@@ -201,12 +201,12 @@ private fun HomeworkEditorContent(
                             if (isEditing) {
                                 val context = LocalContext.current
                                 ActionItem.NeverShow(
-                                    name = stringResource(R.string.he_delete),
+                                    name = stringResource(RS.he_delete),
                                     onClick = {
                                         MaterialAlertDialogBuilder(context)
-                                            .setMessage(R.string.he_delete_message)
-                                            .setPositiveButton(R.string.he_delete_yes) { _, _ -> onDeleteClick() }
-                                            .setNegativeButton(R.string.he_delete_no, null)
+                                            .setMessage(RS.he_delete_message)
+                                            .setPositiveButton(RS.he_delete_yes) { _, _ -> onDeleteClick() }
+                                            .setNegativeButton(RS.he_delete_no, null)
                                             .show()
                                     },
                                     loading = nonBlockingProgress
@@ -231,7 +231,7 @@ private fun HomeworkEditorContent(
                 items = existingSubjects,
                 onValueChange = onSubjectNameChange,
                 enabled = !nonBlockingProgress,
-                label = stringResource(R.string.he_subject),
+                label = stringResource(RS.he_subject),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
                     imeAction = ImeAction.Next
@@ -255,7 +255,7 @@ private fun HomeworkEditorContent(
                 val context = LocalContext.current
 
                 Text(
-                    text = stringResource(R.string.he_deadline_label),
+                    text = stringResource(RS.he_deadline_label),
                     style = MaterialTheme.typography.body2,
                     modifier = Modifier.weight(1.0f)
                 )
@@ -286,7 +286,7 @@ private fun HomeworkEditorContent(
                 SimpleTextField(
                     value = description,
                     onValueChange = onDescriptionChange,
-                    label = { Text(text = stringResource(R.string.he_description)) },
+                    label = { Text(text = stringResource(RS.he_description)) },
                     enabled = !nonBlockingProgress,
                     keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
                     modifier = Modifier

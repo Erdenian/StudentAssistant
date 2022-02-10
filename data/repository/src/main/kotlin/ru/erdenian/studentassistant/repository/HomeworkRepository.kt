@@ -1,7 +1,6 @@
 package ru.erdenian.studentassistant.repository
 
 import java.time.LocalDate
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -13,7 +12,6 @@ import ru.erdenian.studentassistant.entity.ImmutableSortedSet
 import ru.erdenian.studentassistant.entity.immutableSortedSetOf
 import ru.erdenian.studentassistant.entity.toImmutableSortedSet
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class HomeworkRepository(
     private val homeworkDao: HomeworkDao,
     private val selectedSemesterRepository: SelectedSemesterRepository

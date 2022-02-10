@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
@@ -46,11 +47,13 @@ class SelectedSemesterRepository(
         val deleted = deletedSemesterIds.get()
         val semesters = (database.asSequence() + inserted.asSequence()).filter { it.id !in deleted }.toList()
 
-        fun selectDefault() {
+        suspend fun selectDefault() {
             val now = LocalDate.now()
             fun Collection<Semester>.default() = find { now in it.range } ?: lastOrNull()
 
-            selectedSemesterIdFlow.value = semesters.default()?.id
+            val default = semesters.default()
+            val previousId = selectedSemesterIdFlow.getAndUpdate { default?.id }
+            if (previousId == default?.id) emit(default)
         }
 
         if (id == null) {

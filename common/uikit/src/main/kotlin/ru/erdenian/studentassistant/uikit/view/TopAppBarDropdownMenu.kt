@@ -2,6 +2,8 @@ package ru.erdenian.studentassistant.uikit.view
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
@@ -14,6 +16,7 @@ import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MenuDefaults
 import androidx.compose.material.ProvideTextStyle
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.filled.ArrowBack
@@ -93,21 +96,33 @@ private fun TopAppBarDropdownMenuContent(
         offset = DpOffset(-xOffset, 0.dp),
         properties = PopupProperties(focusable = true, clippingEnabled = false)
     ) {
-        items.forEachIndexed { index, item ->
-            DropdownMenuItem(
-                onClick = {
-                    onDismissRequest()
-                    onSelectedItemChange(index, item)
-                }
-            ) {
-                ProvideTextStyle(value = MaterialTheme.typography.h6) {
-                    CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
-                        Text(
-                            text = item,
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 1
-                        )
-                    }
+        DropdownMenuItems(
+            items = items,
+            onItemClick = { index, item ->
+                onDismissRequest()
+                onSelectedItemChange(index, item)
+            }
+        )
+    }
+}
+
+@Suppress("unused")
+@Composable
+private fun ColumnScope.DropdownMenuItems(
+    items: List<String>,
+    onItemClick: (index: Int, item: String) -> Unit
+) {
+    items.forEachIndexed { index, item ->
+        DropdownMenuItem(
+            onClick = { onItemClick(index, item) }
+        ) {
+            ProvideTextStyle(value = MaterialTheme.typography.h6) {
+                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
+                    Text(
+                        text = item,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
                 }
             }
         }
@@ -151,4 +166,22 @@ private fun TopAppBarDropdownMenuLongPreview() = AppTheme {
             }
         }
     )
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun TopAppBarDropdownMenuItemsPreview() = AppTheme {
+    Surface(shape = MaterialTheme.shapes.medium) {
+        Column {
+            DropdownMenuItems(
+                items = listOf(
+                    "First",
+                    "Second",
+                    "Very very very very very very very very very very very very very long item",
+                ),
+                onItemClick = { _, _ -> }
+            )
+        }
+    }
 }

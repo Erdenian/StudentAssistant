@@ -47,8 +47,9 @@ import java.time.format.FormatStyle
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.entity.Lesson
 import ru.erdenian.studentassistant.sampledata.Lessons
-import ru.erdenian.studentassistant.schedule.R
 import ru.erdenian.studentassistant.schedule.lessoneditor.LessonEditorViewModel.Error
+import ru.erdenian.studentassistant.strings.RA
+import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
@@ -78,9 +79,9 @@ fun LessonEditorScreen(
 
     val error by viewModel.error.collectAsState()
     val errorMessage = when (error) {
-        Error.EMPTY_SUBJECT_NAME -> R.string.le_error_empty_subject_name
-        Error.WRONG_TIMES -> R.string.le_error_wrong_time
-        Error.EMPTY_REPEAT -> R.string.le_error_empty_repeat
+        Error.EMPTY_SUBJECT_NAME -> RS.le_error_empty_subject_name
+        Error.WRONG_TIMES -> RS.le_error_wrong_time
+        Error.EMPTY_REPEAT -> RS.le_error_empty_repeat
         null -> null
     }?.let { stringResource(it) }
 
@@ -91,7 +92,7 @@ fun LessonEditorScreen(
     val subjectNameErrorMessage = errorMessage?.takeIf { (error == Error.EMPTY_SUBJECT_NAME) && isSubjectNameChanged }
 
     val type by viewModel.type.collectAsState()
-    val predefinedTypes = stringArrayResource(R.array.lesson_types).toList()
+    val predefinedTypes = stringArrayResource(RA.lesson_types).toList()
     val existingTypes by viewModel.existingTypes.collectAsState()
     val displayedTypes = (predefinedTypes + existingTypes.list).distinct()
 
@@ -111,7 +112,7 @@ fun LessonEditorScreen(
     val coroutineScope = rememberCoroutineScope()
 
     var customOperaionMessageId by remember { mutableStateOf<Int?>(null) }
-    customOperaionMessageId?.let { ProgressDialog { Text(text = stringResource(it)) } }
+    customOperaionMessageId?.let { ProgressDialog(stringResource(it)) }
 
     LessonEditorContent(
         operation = operation,
@@ -135,15 +136,15 @@ fun LessonEditorScreen(
             if (errorMessage != null) {
                 context.toast(errorMessage)
             } else {
-                customOperaionMessageId = R.string.le_rename_others_progress
+                customOperaionMessageId = RS.le_rename_others_progress
                 coroutineScope.launch {
                     if (viewModel.isSubjectNameChangedAndNotLast()) {
                         MaterialAlertDialogBuilder(context)
-                            .setTitle(R.string.le_rename_others_title)
-                            .setMessage(R.string.le_rename_others_message)
-                            .setPositiveButton(R.string.le_rename_others_yes) { _, _ -> viewModel.save(true) }
-                            .setNegativeButton(R.string.le_rename_others_no) { _, _ -> viewModel.save(false) }
-                            .setNeutralButton(R.string.le_rename_others_cancel, null)
+                            .setTitle(RS.le_rename_others_title)
+                            .setMessage(RS.le_rename_others_message)
+                            .setPositiveButton(RS.le_rename_others_yes) { _, _ -> viewModel.save(true) }
+                            .setNegativeButton(RS.le_rename_others_no) { _, _ -> viewModel.save(false) }
+                            .setNeutralButton(RS.le_rename_others_cancel, null)
                             .show()
                     } else viewModel.save()
                     customOperaionMessageId = null
@@ -151,21 +152,21 @@ fun LessonEditorScreen(
             }
         },
         onDeleteClick = {
-            customOperaionMessageId = R.string.le_delete_homeworks_progress
+            customOperaionMessageId = RS.le_delete_homeworks_progress
             coroutineScope.launch {
                 if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) {
                     MaterialAlertDialogBuilder(context)
-                        .setTitle(R.string.le_delete_homeworks_title)
-                        .setMessage(R.string.le_delete_homeworks_message)
-                        .setPositiveButton(R.string.le_delete_homeworks_yes) { _, _ -> viewModel.delete(true) }
-                        .setNegativeButton(R.string.le_delete_homeworks_no) { _, _ -> viewModel.delete(false) }
-                        .setNeutralButton(R.string.le_delete_homeworks_cancel, null)
+                        .setTitle(RS.le_delete_homeworks_title)
+                        .setMessage(RS.le_delete_homeworks_message)
+                        .setPositiveButton(RS.le_delete_homeworks_yes) { _, _ -> viewModel.delete(true) }
+                        .setNegativeButton(RS.le_delete_homeworks_no) { _, _ -> viewModel.delete(false) }
+                        .setNeutralButton(RS.le_delete_homeworks_cancel, null)
                         .show()
                 } else {
                     MaterialAlertDialogBuilder(context)
-                        .setMessage(R.string.le_delete_message)
-                        .setPositiveButton(R.string.le_delete_yes) { _, _ -> viewModel.delete() }
-                        .setNegativeButton(R.string.le_delete_no, null)
+                        .setMessage(RS.le_delete_message)
+                        .setPositiveButton(RS.le_delete_yes) { _, _ -> viewModel.delete() }
+                        .setNegativeButton(RS.le_delete_no, null)
                         .show()
                 }
                 customOperaionMessageId = null
@@ -223,11 +224,11 @@ private fun LessonEditorContent(
         }
         LessonEditorViewModel.Operation.SAVING -> {
             nonBlockingProgress = false
-            blockingProgressMessageId = R.string.le_save_progress
+            blockingProgressMessageId = RS.le_save_progress
         }
         LessonEditorViewModel.Operation.DELETING -> {
             nonBlockingProgress = false
-            blockingProgressMessageId = R.string.le_delete_progress
+            blockingProgressMessageId = RS.le_delete_progress
         }
         null -> {
             nonBlockingProgress = false
@@ -236,13 +237,13 @@ private fun LessonEditorContent(
     }
 
     if (blockingProgressMessageId != null) {
-        ProgressDialog { Text(text = stringResource(blockingProgressMessageId)) }
+        ProgressDialog(stringResource(blockingProgressMessageId))
     }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(if (isEditing) R.string.le_title_edit else R.string.le_title_new)) },
+                title = { Text(text = stringResource(if (isEditing) RS.le_title_edit else RS.le_title_new)) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
@@ -252,14 +253,14 @@ private fun LessonEditorContent(
                     TopAppBarActions(
                         actions = listOfNotNull(
                             ActionItem.AlwaysShow(
-                                name = stringResource(R.string.le_save),
+                                name = stringResource(RS.le_save),
                                 imageVector = AppIcons.Check,
                                 loading = nonBlockingProgress,
                                 onClick = onSaveClick
                             ),
                             if (isEditing) {
                                 ActionItem.NeverShow(
-                                    name = stringResource(R.string.le_delete),
+                                    name = stringResource(RS.le_delete),
                                     loading = nonBlockingProgress,
                                     onClick = onDeleteClick
                                 )
@@ -285,7 +286,7 @@ private fun LessonEditorContent(
                 items = existingSubjects,
                 onValueChange = onSubjectNameChange,
                 enabled = !nonBlockingProgress,
-                label = stringResource(R.string.le_subject_name),
+                label = stringResource(RS.le_subject_name),
                 error = subjectNameErrorMessage.orEmpty(),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
@@ -305,7 +306,7 @@ private fun LessonEditorContent(
                 items = existingTypes,
                 onValueChange = onTypeChange,
                 enabled = !nonBlockingProgress,
-                label = stringResource(R.string.le_type),
+                label = stringResource(RS.le_type),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
                     imeAction = ImeAction.Next
@@ -325,7 +326,7 @@ private fun LessonEditorContent(
                 items = existingTeachers,
                 onValueChange = onTeachersChange,
                 enabled = !nonBlockingProgress,
-                label = stringResource(R.string.le_teachers),
+                label = stringResource(RS.le_teachers),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Words,
                     imeAction = ImeAction.Next
@@ -345,7 +346,7 @@ private fun LessonEditorContent(
                 items = existingClassrooms,
                 onValueChange = onClassroomsChange,
                 enabled = !nonBlockingProgress,
-                label = stringResource(R.string.le_classrooms),
+                label = stringResource(RS.le_classrooms),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
                     imeAction = ImeAction.Done
@@ -369,7 +370,7 @@ private fun LessonEditorContent(
                 val context = LocalContext.current
 
                 Text(
-                    text = stringResource(R.string.le_start_time),
+                    text = stringResource(RS.le_start_time),
                     style = MaterialTheme.typography.body2,
                     modifier = Modifier.weight(1.0f)
                 )
@@ -394,7 +395,7 @@ private fun LessonEditorContent(
                 val context = LocalContext.current
 
                 Text(
-                    text = stringResource(R.string.le_end_time),
+                    text = stringResource(RS.le_end_time),
                     style = MaterialTheme.typography.body2,
                     modifier = Modifier.weight(1.0f)
                 )
