@@ -25,7 +25,7 @@ import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.uikit.layout.DelayedVisibility
 
 @Composable
-fun ProgressDialog(text: @Composable () -> Unit) {
+fun ProgressDialog(text: String) {
     val context = LocalContext.current
     val window = remember(context) {
         var currentContext = context
@@ -51,7 +51,7 @@ fun ProgressDialog(text: @Composable () -> Unit) {
 
 @Composable
 private fun ProgressDialogContent(
-    text: @Composable () -> Unit
+    text: String
 ) = Surface(shape = MaterialTheme.shapes.medium) {
     Column(
         verticalArrangement = Arrangement.Center,
@@ -59,7 +59,7 @@ private fun ProgressDialogContent(
         modifier = Modifier.padding(24.dp)
     ) {
         CircularProgressIndicator(modifier = Modifier.padding(bottom = 16.dp))
-        text()
+        Text(text = text)
     }
 }
 
@@ -67,5 +67,5 @@ private fun ProgressDialogContent(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ProgressDialogPreview() = AppTheme {
-    ProgressDialogContent { Text("Please wait") }
+    ProgressDialogContent("Please wait")
 }

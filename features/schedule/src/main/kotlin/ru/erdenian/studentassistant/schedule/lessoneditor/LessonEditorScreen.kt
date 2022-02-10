@@ -112,7 +112,7 @@ fun LessonEditorScreen(
     val coroutineScope = rememberCoroutineScope()
 
     var customOperaionMessageId by remember { mutableStateOf<Int?>(null) }
-    customOperaionMessageId?.let { ProgressDialog { Text(text = stringResource(it)) } }
+    customOperaionMessageId?.let { ProgressDialog(stringResource(it)) }
 
     LessonEditorContent(
         operation = operation,
@@ -237,7 +237,7 @@ private fun LessonEditorContent(
     }
 
     if (blockingProgressMessageId != null) {
-        ProgressDialog { Text(text = stringResource(blockingProgressMessageId)) }
+        ProgressDialog(stringResource(blockingProgressMessageId))
     }
 
     Scaffold(

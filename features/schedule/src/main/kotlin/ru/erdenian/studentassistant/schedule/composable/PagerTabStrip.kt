@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.schedule.composable
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
@@ -9,8 +10,10 @@ import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -25,17 +28,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
+import com.google.accompanist.pager.rememberPagerState
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
+import ru.erdenian.studentassistant.style.AppTheme
 
 @Composable
 internal fun PagerTabStrip(
@@ -191,4 +198,29 @@ private class DefaultPagerTabStripColors(
 
     @Composable
     override fun tabIndicatorColor() = rememberUpdatedState(tabIndicatorColor)
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun PagerTabStripPreview() = AppTheme {
+    Column(modifier = Modifier.background(MaterialTheme.colors.background)) {
+        val state = rememberPagerState()
+
+        PagerTabStrip(
+            state = state,
+            titleGetter = { "Page $it" }
+        )
+
+        HorizontalPager(
+            count = 10,
+            state = state,
+            modifier = Modifier.fillMaxSize()
+        ) { page ->
+            Text(
+                text = page.toString(),
+                modifier = Modifier.wrapContentSize()
+            )
+        }
+    }
 }

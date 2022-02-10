@@ -65,9 +65,10 @@ private fun StartEndRowPreview() {
     ) {
         StartEndRow(
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
             contentStart = {
                 Text(
-                    text = "asdf",
+                    text = "Start",
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
                 )
@@ -82,7 +83,7 @@ private fun StartEndRowPreview() {
             modifier = Modifier.fillMaxWidth(),
             contentStart = {
                 Text(
-                    text = "asdf",
+                    text = "Center",
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
                 )
@@ -97,7 +98,7 @@ private fun StartEndRowPreview() {
             modifier = Modifier.fillMaxWidth(),
             contentStart = {
                 Text(
-                    text = "asdf",
+                    text = "End",
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
                 )
@@ -110,7 +111,7 @@ private fun StartEndRowPreview() {
             verticalAlignment = Alignment.Bottom,
             contentStart = {
                 Text(
-                    text = "adfasdfasdfasdfasdfasdfasdf",
+                    text = "Very very long text",
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
                 )
@@ -119,5 +120,59 @@ private fun StartEndRowPreview() {
                 Icon(imageVector = AppIcons.LocationOn, contentDescription = null)
             }
         )
+    }
+}
+
+@Preview
+@Composable
+private fun DefaultRowPreview() {
+    Column(
+        modifier = Modifier.width(100.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(
+                text = "Start",
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+            Icon(imageVector = AppIcons.LocationOn, contentDescription = null)
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Center",
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+            Icon(imageVector = AppIcons.LocationOn, contentDescription = null)
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "End",
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+            Icon(imageVector = AppIcons.LocationOn, contentDescription = null)
+        }
+        Row(
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Text(
+                text = "Very very long text",
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+            Icon(imageVector = AppIcons.LocationOn, contentDescription = null)
+        }
     }
 }

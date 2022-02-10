@@ -2,10 +2,10 @@ package ru.erdenian.studentassistant.uikit.view
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.DropdownMenu
@@ -14,6 +14,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.filled.ArrowBack
@@ -24,11 +26,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.placeholder
+import com.google.accompanist.placeholder.material.shimmer
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 
@@ -104,28 +108,39 @@ private fun TopAppBarActionsContent(
                     expanded = expanded,
                     onDismissRequest = onDismissRequest
                 ) {
-                    neverShowActions.forEach { item ->
-                        DropdownMenuItem(
-                            onClick = {
-                                onDismissRequest()
-                                item.onClick()
-                            },
-                            enabled = !item.loading
-                        ) {
-                            AnimatedVisibility(visible = item.loading) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier
-                                        .padding(end = 8.dp)
-                                        .size(24.dp)
-                                        .align(Alignment.CenterVertically)
-                                )
-                            }
-
-                            Text(text = item.name)
+                    DropdownMenuItems(
+                        items = neverShowActions,
+                        onItemClick = { item ->
+                            onDismissRequest()
+                            item.onClick()
                         }
-                    }
+                    )
                 }
             }
+        }
+    }
+}
+
+@Suppress("unused")
+@Composable
+private fun ColumnScope.DropdownMenuItems(
+    items: List<ActionItem.NeverShow>,
+    onItemClick: (ActionItem.NeverShow) -> Unit
+) {
+    items.forEach { item ->
+        DropdownMenuItem(
+            onClick = { onItemClick(item) },
+            enabled = !item.loading
+        ) {
+            Text(
+                text = item.name,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+                modifier = Modifier.placeholder(
+                    visible = item.loading,
+                    highlight = PlaceholderHighlight.shimmer()
+                )
+            )
         }
     }
 }
@@ -149,6 +164,12 @@ private fun TopAppBarActionsPreview() = AppTheme {
                         imageVector = AppIcons.Check,
                         onClick = {}
                     ),
+                    ActionItem.AlwaysShow(
+                        name = "AlwaysShowLoading",
+                        imageVector = AppIcons.Check,
+                        loading = true,
+                        onClick = {}
+                    ),
                     ActionItem.NeverShow(
                         name = "NeverShow",
                         onClick = {}
@@ -162,31 +183,32 @@ private fun TopAppBarActionsPreview() = AppTheme {
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun TopAppBarActionsExpandedPreview() = AppTheme {
-    TopAppBar(
-        title = { Text(text = "Title") },
-        navigationIcon = {
-            IconButton(onClick = {}) {
-                Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
-            }
-        },
-        actions = {
-            TopAppBarActionsContent(
-                actions = listOf(
-                    ActionItem.AlwaysShow(
-                        name = "AlwaysShow",
-                        imageVector = AppIcons.Check,
+private fun TopAppBarActionsDropdownPreview() = AppTheme {
+    Surface(shape = MaterialTheme.shapes.medium) {
+        Column {
+            DropdownMenuItems(
+                items = listOf(
+                    ActionItem.NeverShow(
+                        name = "First",
                         onClick = {}
                     ),
                     ActionItem.NeverShow(
-                        name = "NeverShow",
+                        name = "Second",
+                        loading = true,
+                        onClick = {}
+                    ),
+                    ActionItem.NeverShow(
+                        name = "Very very very very very very very very very very very very very long item",
+                        onClick = {}
+                    ),
+                    ActionItem.NeverShow(
+                        name = "Very very very very very very very very very very very very very long loading item",
+                        loading = true,
                         onClick = {}
                     )
                 ),
-                expanded = true,
-                onExpandClick = {},
-                onDismissRequest = {}
+                onItemClick = {}
             )
         }
-    )
+    }
 }

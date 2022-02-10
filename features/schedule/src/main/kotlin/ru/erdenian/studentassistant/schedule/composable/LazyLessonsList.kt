@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.schedule.composable
 
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -89,7 +88,6 @@ internal fun LazyLessonsList(
 }
 
 @Preview(showSystemUi = true)
-@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun LazyLessonsListLoadingPreview() = AppTheme {
     LazyLessonsList(
@@ -99,7 +97,6 @@ private fun LazyLessonsListLoadingPreview() = AppTheme {
 }
 
 @Preview(showSystemUi = true)
-@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun LazyLessonsListEmptyPreview() = AppTheme {
     LazyLessonsList(
@@ -109,7 +106,6 @@ private fun LazyLessonsListEmptyPreview() = AppTheme {
 }
 
 @Preview(showSystemUi = true)
-@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun LazyLessonsListPreview() = AppTheme {
     LazyLessonsList(

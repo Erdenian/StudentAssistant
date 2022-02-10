@@ -78,9 +78,7 @@ fun ScheduleEditorScreen(
 
     var showHomeworksCounterOperation by remember { mutableStateOf(false) }
     if (showHomeworksCounterOperation) {
-        ProgressDialog {
-            Text(text = stringResource(RS.le_delete_homeworks_progress))
-        }
+        ProgressDialog(stringResource(RS.le_delete_homeworks_progress))
     }
 
     ScheduleEditorContent(
@@ -180,7 +178,7 @@ private fun ScheduleEditorContent(
             ScheduleEditorViewModel.Operation.DELETING_LESSON -> RS.sce_delete_lesson_progress
             ScheduleEditorViewModel.Operation.DELETING_SEMESTER -> RS.sce_delete_progress
         }
-        ProgressDialog { Text(text = stringResource(stringId)) }
+        ProgressDialog(stringResource(stringId))
     }
 
     Column(

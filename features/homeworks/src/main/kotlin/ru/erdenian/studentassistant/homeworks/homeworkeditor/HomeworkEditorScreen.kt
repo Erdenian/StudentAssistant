@@ -177,7 +177,7 @@ private fun HomeworkEditorContent(
     }
 
     if (blockingProgressMessageId != null) {
-        ProgressDialog { Text(text = stringResource(blockingProgressMessageId)) }
+        ProgressDialog(stringResource(blockingProgressMessageId))
     }
 
     Scaffold(
