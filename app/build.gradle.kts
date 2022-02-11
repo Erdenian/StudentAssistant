@@ -16,10 +16,10 @@ android {
     }
 
     lint {
-        isCheckDependencies = true
-        isCheckAllWarnings = true
+        checkDependencies = true
+        checkAllWarnings = true
         xmlReport = false
-        isCheckTestSources = true
+        checkTestSources = true
     }
 
     buildFeatures.compose = true
