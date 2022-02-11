@@ -16,7 +16,9 @@ include(
     ":data:entity",
 
     ":core:strings",
-    ":core:style"
+    ":core:style",
+
+    ":lint"
 )
 
 pluginManagement {

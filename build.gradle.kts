@@ -104,6 +104,10 @@ subprojects {
         }
 
         dependencies {
+            configurations.findByName("lintChecks")?.let { lintChecks ->
+                lintChecks(project(":lint"))
+            }
+
             configurations.findByName("coreLibraryDesugaring")?.let { coreLibraryDesugaring ->
                 val desugarJdkLibsVersion: String by project
                 coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:$desugarJdkLibsVersion")
