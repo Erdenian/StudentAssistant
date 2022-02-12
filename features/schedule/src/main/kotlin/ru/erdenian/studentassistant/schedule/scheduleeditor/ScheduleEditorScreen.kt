@@ -13,7 +13,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,9 +59,8 @@ fun ScheduleEditorScreen(
     navigateToCreateLesson: (semesterId: Long, dayOfWeek: DayOfWeek) -> Unit
 ) {
     val isDeleted by viewModel.isDeleted.collectAsState()
-    DisposableEffect(isDeleted) {
+    LaunchedEffect(isDeleted) {
         if (isDeleted) navigateBack()
-        onDispose {}
     }
 
     val coroutineScope = rememberCoroutineScope()
