@@ -19,7 +19,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import java.time.Duration
 import ru.erdenian.studentassistant.uikit.R
 
-private fun Duration.toMinutesPartCompat() = (toMinutes() % 60).toInt()
+private fun Duration.toMinutesPartCompat() = (toMinutes() % @Suppress("MagicNumber") 60).toInt()
 
 @Composable
 internal fun DurationPreference(

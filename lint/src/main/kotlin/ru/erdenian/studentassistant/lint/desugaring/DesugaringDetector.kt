@@ -33,63 +33,55 @@ internal class DesugaringDetector : Detector(), UastScanner {
         private val ignoredFunctions = listOf("let")
 
         override fun visitCallExpression(node: UCallExpression) {
-            try {
-                if (node.isConstructorCall().not()) return
+            if (node.isConstructorCall().not()) return
 
-                val className = node.classReference?.getQualifiedName() ?: return
-                val classMembers = classes[className] ?: return
-                val parameters = node.valueArguments.map { checkNotNull(it.getExpressionType()?.canonicalText) }
+            val className = node.classReference?.getQualifiedName() ?: return
+            val classMembers = classes[className] ?: return
+            val parameters = node.valueArguments.map { checkNotNull(it.getExpressionType()?.canonicalText) }
 
-                val message =
-                    if (classMembers.constructors.contains(parameters)) return
-                    else "This code calls an unavailable constructor $className(${parameters.joinToString()})"
-                context.report(ISSUE, node, context.getLocation(node), message)
-            } catch (e: Exception) {
-                context.log(e, null)
-            }
+            val message =
+                if (classMembers.constructors.contains(parameters)) return
+                else "This code calls an unavailable constructor $className(${parameters.joinToString()})"
+            context.report(ISSUE, node, context.getLocation(node), message)
         }
 
         override fun visitQualifiedReferenceExpression(node: UQualifiedReferenceExpression) {
-            try {
-                val receiverName = node.receiver.getExpressionType()?.canonicalText
-                    ?: (node.receiver as? UReferenceExpression)?.getQualifiedName()
-                    ?: return
+            val receiverName = node.receiver.getExpressionType()?.canonicalText
+                ?: (node.receiver as? UReferenceExpression)?.getQualifiedName()
+                ?: return
 
-                when (val selector = node.selector) {
-                    is UCallExpression -> {
-                        if (selector.isMethodCall().not()) return
+            when (val selector = node.selector) {
+                is UCallExpression -> {
+                    if (selector.isMethodCall().not()) return
 
-                        val instanceName = selector.receiverType?.canonicalText
-                        val isStatic = (instanceName == null)
-                        val className = instanceName ?: receiverName
-                        val classMembers = classes[className] ?: return
+                    val instanceName = selector.receiverType?.canonicalText
+                    val isStatic = (instanceName == null)
+                    val className = instanceName ?: receiverName
+                    val classMembers = classes[className] ?: return
 
-                        val returnType = checkNotNull(selector.getExpressionType()?.canonicalText)
-                        val methodName = checkNotNull(selector.methodName)
-                        if (methodName in ignoredFunctions) return
-                        val parameters = selector.valueArguments.map { checkNotNull(it.getExpressionType()?.canonicalText) }
+                    val returnType = checkNotNull(selector.getExpressionType()?.canonicalText)
+                    val methodName = checkNotNull(selector.methodName)
+                    if (methodName in ignoredFunctions) return
+                    val parameters = selector.valueArguments.map { checkNotNull(it.getExpressionType()?.canonicalText) }
 
-                        val message =
-                            if (classMembers.methods.contains(isStatic, returnType, methodName, parameters)) return
-                            else "This code calls an unavailable method $className.$methodName(${parameters.joinToString()})"
-                        context.report(ISSUE, selector, context.getLocation(node), message)
-                    }
-                    is UReferenceExpression -> {
-                        val classMembers = classes[receiverName] ?: return
-                        val selectorName = checkNotNull(node.selector.tryResolveNamed()?.name)
-                        val returnType = node.selector.getExpressionType()?.canonicalText.toString()
-
-                        val message =
-                            if (
-                                classMembers.fields.contains(true, receiverName, selectorName) ||
-                                classMembers.methods.contains(false, returnType, selectorName, emptyList())
-                            ) return
-                            else "This code accesses an unavailable field $receiverName.$selectorName})"
-                        context.report(ISSUE, selector, context.getLocation(node), message)
-                    }
+                    val message =
+                        if (classMembers.methods.contains(isStatic, returnType, methodName, parameters)) return
+                        else "This code calls an unavailable method $className.$methodName(${parameters.joinToString()})"
+                    context.report(ISSUE, selector, context.getLocation(node), message)
                 }
-            } catch (e: Exception) {
-                context.log(e, null)
+                is UReferenceExpression -> {
+                    val classMembers = classes[receiverName] ?: return
+                    val selectorName = checkNotNull(node.selector.tryResolveNamed()?.name)
+                    val returnType = node.selector.getExpressionType()?.canonicalText.toString()
+
+                    val message =
+                        if (
+                            classMembers.fields.contains(true, receiverName, selectorName) ||
+                            classMembers.methods.contains(false, returnType, selectorName, emptyList())
+                        ) return
+                        else "This code accesses an unavailable field $receiverName.$selectorName})"
+                    context.report(ISSUE, selector, context.getLocation(node), message)
+                }
             }
         }
     }
