@@ -30,7 +30,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -77,11 +78,10 @@ fun HomeworkEditorScreen(
 ) {
     var lessonNameToCreate by remember { mutableStateOf<String?>(null) }
     val done by viewModel.done.collectAsState()
-    if (done) {
-        DisposableEffect(done) {
+    LaunchedEffect(done) {
+        if (done) {
             navigateBack()
             lessonNameToCreate?.let { navigateToCreateLesson(viewModel.semesterId, it) }
-            onDispose {}
         }
     }
 
@@ -317,6 +317,7 @@ private fun SimpleTextField(
         enabled = enabled,
         textStyle = textStyle.merge(TextStyle(color = textColor)),
         keyboardOptions = keyboardOptions,
+        cursorBrush = SolidColor(MaterialTheme.colors.primary),
         modifier = modifier
     )
 

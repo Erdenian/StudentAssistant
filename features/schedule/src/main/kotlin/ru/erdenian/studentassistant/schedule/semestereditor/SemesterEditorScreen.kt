@@ -23,7 +23,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -63,6 +63,11 @@ fun SemesterEditorScreen(
     viewModel: SemesterEditorViewModel,
     navigateBack: () -> Unit
 ) {
+    val done by viewModel.done.collectAsState()
+    LaunchedEffect(done) {
+        if (done) navigateBack()
+    }
+
     var isNameChanged by rememberSaveable { mutableStateOf(false) }
 
     val operation by viewModel.operation.collectAsState()
@@ -76,18 +81,12 @@ fun SemesterEditorScreen(
     }?.let { stringResource(it) }
 
     val name by viewModel.name.collectAsState()
-    val nameErrorMessage = errorMessage?.takeIf {
-        (error == Error.EMPTY_NAME) && isNameChanged || (error == Error.SEMESTER_EXISTS)
-    }
+    val nameErrorMessage = errorMessage
+        ?.takeIf { (error == Error.EMPTY_NAME) && isNameChanged || (error == Error.SEMESTER_EXISTS) }
+        ?.takeIf { !done } // Error message flashes before navigating back if the database is fast enough
 
     val firstDay by viewModel.firstDay.collectAsState()
     val lastDay by viewModel.lastDay.collectAsState()
-
-    val done by viewModel.done.collectAsState()
-    DisposableEffect(done) {
-        if (done) navigateBack()
-        onDispose {}
-    }
 
     val context = LocalContext.current
 
