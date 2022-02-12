@@ -3,6 +3,7 @@ package ru.erdenian.studentassistant.lint
 import com.android.tools.lint.client.api.IssueRegistry
 import com.android.tools.lint.client.api.Vendor
 import com.android.tools.lint.detector.api.CURRENT_API
+import com.intellij.pom.java.LanguageLevel
 import ru.erdenian.studentassistant.lint.desugaring.DesugaringDetector
 
 @Suppress("UnstableApiUsage")
@@ -12,7 +13,7 @@ internal class StudentAssistantIssueRegistry : IssueRegistry() {
 
     override val api = CURRENT_API
 
-    override val minApi = 8
+    override val minApi = LanguageLevel.JDK_1_8.toJavaVersion().feature
 
     override val vendor: Vendor = Vendor(
         vendorName = "Erdenian",
