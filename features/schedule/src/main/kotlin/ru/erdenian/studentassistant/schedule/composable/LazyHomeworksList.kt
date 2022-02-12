@@ -78,10 +78,10 @@ internal fun LazyHomeworksList(
                                 description = homework.description,
                                 deadline = homework.deadline.format(deadlineFormatter),
                                 onClick = { onHomeworkClick(homework) },
-                                onLongClick = onLongHomeworkClick?.let {
+                                onLongClick = onLongHomeworkClick?.let { onLongClick ->
                                     {
                                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                        it(homework)
+                                        onLongClick(homework)
                                     }
                                 }
                             )
