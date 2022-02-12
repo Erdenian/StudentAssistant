@@ -18,6 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -69,13 +71,19 @@ internal fun LazyHomeworksList(
                             key = { _, item -> item.id }
                         ) { _, homework ->
                             val deadlineFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
+                            val haptic = LocalHapticFeedback.current
 
                             HomeworkCard(
                                 subjectName = homework.subjectName,
                                 description = homework.description,
                                 deadline = homework.deadline.format(deadlineFormatter),
                                 onClick = { onHomeworkClick(homework) },
-                                onLongClick = onLongHomeworkClick?.let { { it(homework) } }
+                                onLongClick = onLongHomeworkClick?.let {
+                                    {
+                                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                        it(homework)
+                                    }
+                                }
                             )
                         }
                     }

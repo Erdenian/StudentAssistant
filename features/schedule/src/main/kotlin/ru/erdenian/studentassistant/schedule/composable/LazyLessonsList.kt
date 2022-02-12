@@ -18,6 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -69,6 +71,7 @@ internal fun LazyLessonsList(
                             key = { _, item -> item.id }
                         ) { _, lesson ->
                             val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
+                            val haptic = LocalHapticFeedback.current
 
                             LessonCard(
                                 subjectName = lesson.subjectName,
@@ -78,7 +81,12 @@ internal fun LazyLessonsList(
                                 startTime = lesson.startTime.format(timeFormatter),
                                 endTime = lesson.endTime.format(timeFormatter),
                                 onClick = { onLessonClick(lesson) },
-                                onLongClick = onLongLessonClick?.let { { it(lesson) } }
+                                onLongClick = onLongLessonClick?.let {
+                                    {
+                                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                        it(lesson)
+                                    }
+                                }
                             )
                         }
                     }

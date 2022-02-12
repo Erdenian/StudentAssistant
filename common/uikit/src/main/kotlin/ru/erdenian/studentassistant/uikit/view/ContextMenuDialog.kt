@@ -38,7 +38,7 @@ data class ContextMenuItem(
 private fun ContextMenuDialogContent(
     items: List<ContextMenuItem>,
     title: String? = null
-) = Surface {
+) = Surface(shape = MaterialTheme.shapes.medium) {
     Column(
         modifier = Modifier.padding(vertical = 4.dp)
     ) {
