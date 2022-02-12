@@ -39,7 +39,13 @@ interface Lesson : Comparable<Lesson>, Parcelable {
         other,
         Lesson::startTime,
         Lesson::endTime,
-        Lesson::id
+        Lesson::subjectName,
+        Lesson::type,
+        { it.teachers.hashCode() },
+        { it.classrooms.hashCode() },
+        { it.lessonRepeat.hashCode() },
+        Lesson::id,
+        Lesson::semesterId
     )
 
     /**
