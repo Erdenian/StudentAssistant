@@ -26,7 +26,11 @@ interface Homework : Comparable<Homework>, Parcelable {
     override fun compareTo(other: Homework) = compareValuesBy(
         this,
         other,
+        Homework::isDone,
         Homework::deadline,
-        Homework::id
+        Homework::subjectName,
+        Homework::description,
+        Homework::id,
+        Homework::semesterId
     )
 }
