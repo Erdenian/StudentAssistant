@@ -81,10 +81,10 @@ internal fun LazyLessonsList(
                                 startTime = lesson.startTime.format(timeFormatter),
                                 endTime = lesson.endTime.format(timeFormatter),
                                 onClick = { onLessonClick(lesson) },
-                                onLongClick = onLongLessonClick?.let {
+                                onLongClick = onLongLessonClick?.let { onLongClick ->
                                     {
                                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                        it(lesson)
+                                        onLongClick(lesson)
                                     }
                                 }
                             )
