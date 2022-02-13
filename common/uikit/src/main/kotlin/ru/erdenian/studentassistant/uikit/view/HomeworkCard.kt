@@ -3,6 +3,7 @@ package ru.erdenian.studentassistant.uikit.view
 import android.content.res.Configuration
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
 import androidx.compose.material.ContentAlpha
@@ -58,7 +59,8 @@ fun HomeworkCard(
             text = description,
             overflow = TextOverflow.Ellipsis,
             maxLines = 3,
-            style = MaterialTheme.typography.body2
+            style = MaterialTheme.typography.body2,
+            modifier = Modifier.fillMaxWidth()
         )
 
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
@@ -87,6 +89,16 @@ private fun HomeworkCardLongPreview() = AppTheme {
     HomeworkCard(
         subjectName = "Интернет программирование программирование программирование программирование программирование",
         description = "Лабораторная работа" + " работа".repeat(100),
+        deadline = "21.08.2021"
+    )
+}
+
+@Preview
+@Composable
+private fun HomeworkCardMultilinePreview() = AppTheme {
+    HomeworkCard(
+        subjectName = "Интернет программирование программирование программирование программирование программирование",
+        description = "Лабораторная работа" + "\nЛабораторная работа".repeat(100),
         deadline = "21.08.2021"
     )
 }
