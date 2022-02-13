@@ -1,13 +1,18 @@
 package ru.erdenian.studentassistant
 
+import androidx.compose.animation.core.AnimationConstants
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
 import java.time.DayOfWeek
 import ru.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorScreen
 import ru.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorViewModel
@@ -32,14 +37,14 @@ internal fun StudentAssistantNavHost(
     navController: NavHostController,
     navGraph: StudentAssistantNavGraph,
     modifier: Modifier = Modifier
-) {
-    NavHost(
-        navController = navController,
-        startDestination = MainRoutes.SCHEDULE,
-        modifier = modifier,
-        builder = navGraph::build
-    )
-}
+) = AnimatedNavHost(
+    navController = navController,
+    startDestination = MainRoutes.SCHEDULE,
+    enterTransition = { fadeIn(tween(AnimationConstants.DefaultDurationMillis)) },
+    exitTransition = { fadeOut(snap(AnimationConstants.DefaultDurationMillis)) },
+    modifier = modifier,
+    builder = navGraph::build
+)
 
 internal object MainRoutes {
 
@@ -59,14 +64,14 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
 
     // region Schedule
 
-    fun navigateToSchedule() {
+    fun navigateToSchedule(restoreState: Boolean) {
         if (navController.currentBackStackEntry?.destination?.route != MainRoutes.SCHEDULE) {
             navController.navigate(MainRoutes.SCHEDULE) {
                 launchSingleTop = true
                 popUpTo(navController.graph.startDestinationId) {
-                    saveState = true
+                    saveState = restoreState
                 }
-                restoreState = true
+                this.restoreState = restoreState
             }
         }
     }
@@ -90,14 +95,14 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
 
     // region Homeworks
 
-    fun navigateToHomeworks() {
+    fun navigateToHomeworks(restoreState: Boolean) {
         if (navController.currentBackStackEntry?.destination?.route != MainRoutes.HOMEWORKS) {
             navController.navigate(MainRoutes.HOMEWORKS) {
                 launchSingleTop = true
                 popUpTo(navController.graph.startDestinationId) {
-                    saveState = true
+                    saveState = restoreState
                 }
-                restoreState = true
+                this.restoreState = restoreState
             }
         }
     }
@@ -120,14 +125,14 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
 
     // region Settings
 
-    fun navigateToSettings() {
+    fun navigateToSettings(restoreState: Boolean) {
         if (navController.currentBackStackEntry?.destination?.route != MainRoutes.SETTINGS) {
             navController.navigate(MainRoutes.SETTINGS) {
                 launchSingleTop = true
                 popUpTo(navController.graph.startDestinationId) {
-                    saveState = true
+                    saveState = restoreState
                 }
-                restoreState = true
+                this.restoreState = restoreState
             }
         }
     }

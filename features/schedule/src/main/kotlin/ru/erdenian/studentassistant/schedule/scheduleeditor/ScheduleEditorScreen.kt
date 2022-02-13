@@ -13,7 +13,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,9 +59,8 @@ fun ScheduleEditorScreen(
     navigateToCreateLesson: (semesterId: Long, dayOfWeek: DayOfWeek) -> Unit
 ) {
     val isDeleted by viewModel.isDeleted.collectAsState()
-    DisposableEffect(isDeleted) {
+    LaunchedEffect(isDeleted) {
         if (isDeleted) navigateBack()
-        onDispose {}
     }
 
     val coroutineScope = rememberCoroutineScope()
@@ -187,7 +186,9 @@ private fun ScheduleEditorContent(
         modifier = Modifier.fillMaxSize()
     ) {
         val daysOfWeek = remember {
-            DayOfWeek.values().map { it.getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault()) }
+            // TextStyle.FULL_STANDALONE returns number
+            // https://stackoverflow.com/questions/63415047
+            DayOfWeek.values().map { it.getDisplayName(TextStyle.FULL, Locale.getDefault()) }
         }
 
         PagerTabStrip(

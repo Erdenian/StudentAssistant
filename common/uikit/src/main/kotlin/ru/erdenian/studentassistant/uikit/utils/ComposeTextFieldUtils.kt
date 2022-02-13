@@ -90,8 +90,8 @@ internal fun EditText.update(singleLine: Boolean, keyboardOptions: KeyboardOptio
 
     imeOptions = imeOptions or EditorInfo.IME_FLAG_NO_FULLSCREEN
 
-    this.imeOptions = imeOptions
-    this.inputType = inputType // This line causes TextWatcher to be called
+    if (this.imeOptions != imeOptions) this.imeOptions = imeOptions
+    if (this.inputType != inputType) this.inputType = inputType // This line causes TextWatcher to be called
 
     // Here we return TextWatcher back
     addTextChangedListener(textWatcher)
