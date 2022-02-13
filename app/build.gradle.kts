@@ -122,6 +122,9 @@ dependencies {
     // endregion
 
     // region UI
+    val accompanistVersion: String by project
+    implementation("com.google.accompanist:accompanist-navigation-animation:$accompanistVersion")
+
     val keyboardVisibilityEventVersion: String by project
     implementation("net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:$keyboardVisibilityEventVersion")
 
