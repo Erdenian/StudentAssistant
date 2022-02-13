@@ -41,7 +41,9 @@ internal fun WeekdayPicker(
     val daysOfWeek = run {
         val locale = Locale.getDefault()
         remember(locale) {
-            DayOfWeek.values().associateWith { it.getDisplayName(TextStyle.NARROW_STANDALONE, locale) }
+            // TextStyle.NARROW_STANDALONE returns number
+            // https://stackoverflow.com/questions/63415047
+            DayOfWeek.values().associateWith { it.getDisplayName(TextStyle.NARROW, locale).uppercase(locale) }
         }
     }
 

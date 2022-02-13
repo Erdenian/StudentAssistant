@@ -19,7 +19,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -60,11 +60,8 @@ fun LessonInformationScreen(
     navigateToCreateHomework: (semesterId: Long, subjectName: String) -> Unit
 ) {
     val isDeleted by viewModel.isDeleted.collectAsState()
-    if (isDeleted) {
-        DisposableEffect(isDeleted) {
-            if (isDeleted) navigateBack()
-            onDispose {}
-        }
+    LaunchedEffect(isDeleted) {
+        if (isDeleted) navigateBack()
     }
 
     val operation by viewModel.operation.collectAsState()

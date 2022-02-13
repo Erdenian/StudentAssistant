@@ -17,12 +17,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppIcons
 
@@ -30,7 +31,7 @@ import ru.erdenian.studentassistant.style.AppIcons
 internal fun StudentAssistantApp(
     isBottomNavigationVisible: Boolean
 ) {
-    val navController = rememberNavController()
+    val navController = rememberAnimatedNavController()
     val navGraph = remember(navController) { StudentAssistantNavGraph(navController) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -64,7 +65,7 @@ private fun StudentAssistantBottomNavigation(
         val imageVector: ImageVector,
         @StringRes val labelId: Int,
         val route: String,
-        val onClick: () -> Unit
+        val onClick: (restoreState: Boolean) -> Unit
     )
 
     val items = remember(navGraph) {
@@ -90,7 +91,7 @@ private fun StudentAssistantBottomNavigation(
         )
     }
 
-    var selectedRoute by remember { mutableStateOf(MainRoutes.SCHEDULE) }
+    var selectedRoute by rememberSaveable { mutableStateOf(MainRoutes.SCHEDULE) }
     if (visible) {
         BottomNavigation(
             backgroundColor = MaterialTheme.colors.surface
@@ -105,8 +106,9 @@ private fun StudentAssistantBottomNavigation(
                         )
                     },
                     onClick = {
+                        val restoreState = (selectedRoute != item.route)
                         selectedRoute = item.route
-                        item.onClick()
+                        item.onClick(restoreState)
                     },
                     selectedContentColor = MaterialTheme.colors.primary,
                     unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.medium)

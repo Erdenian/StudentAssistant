@@ -19,7 +19,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -68,9 +68,8 @@ fun LessonEditorScreen(
     navigateBack: () -> Unit
 ) {
     val done by viewModel.done.collectAsState()
-    DisposableEffect(done) {
+    LaunchedEffect(done) {
         if (done) navigateBack()
-        onDispose {}
     }
 
     var isSubjectNameChanged by rememberSaveable { mutableStateOf(false) }

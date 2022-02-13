@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.delay
@@ -18,11 +18,13 @@ fun DelayedVisibility(
     delayMillis: Int = AnimationConstants.DefaultDurationMillis,
     content: @Composable () -> Unit
 ) {
-    var isVisible by remember { mutableStateOf(false) }
+    var isVisible by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        delay(delayMillis.toLong())
-        isVisible = true
+        if (!isVisible) {
+            delay(delayMillis.toLong())
+            isVisible = true
+        }
     }
 
     AnimatedVisibility(
