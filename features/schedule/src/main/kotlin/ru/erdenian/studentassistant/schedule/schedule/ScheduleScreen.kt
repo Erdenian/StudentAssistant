@@ -205,7 +205,7 @@ private fun ScheduleContent(
                 HorizontalPager(
                     count = pageCount,
                     state = state.pagerState,
-                    key = { state.semester to state.getDate(it) },
+                    key = { state.semester.id to state.getDate(it) },
                     modifier = Modifier.fillMaxSize()
                 ) { page ->
                     val lessons by rememberLessons(state.getDate(page))
