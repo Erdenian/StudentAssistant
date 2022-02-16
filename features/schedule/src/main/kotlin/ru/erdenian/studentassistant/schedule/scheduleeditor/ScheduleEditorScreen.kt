@@ -14,9 +14,11 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -32,9 +34,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.time.DayOfWeek
 import java.time.format.TextStyle
 import java.util.Locale
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.entity.Lesson
@@ -69,10 +68,12 @@ fun ScheduleEditorScreen(
 
     val operation by viewModel.operation.collectAsState()
 
-    val lessonsGetter = remember<(Int) -> Flow<List<Lesson>>>(viewModel) {
+    val rememberLessons = remember<@Composable (Int) -> State<List<Lesson>?>>(viewModel) {
         { page ->
-            val dayOfWeek = DayOfWeek.of(page + 1)
-            viewModel.getLessons(dayOfWeek).map { it.list }
+            produceState<List<Lesson>?>(null, page) {
+                val dayOfWeek = DayOfWeek.of(page + 1)
+                viewModel.getLessons(dayOfWeek).map { it.list }.collect { value = it }
+            }
         }
     }
 
@@ -84,7 +85,7 @@ fun ScheduleEditorScreen(
     ScheduleEditorContent(
         operation = operation,
         state = pagerState,
-        lessonsGetter = lessonsGetter,
+        rememberLessons = rememberLessons,
         onBackClick = navigateBack,
         onEditSemesterClick = { navigateToEditSemester(viewModel.semesterId) },
         onDeleteSemesterClick = {
@@ -134,7 +135,7 @@ fun ScheduleEditorScreen(
 private fun ScheduleEditorContent(
     operation: ScheduleEditorViewModel.Operation?,
     state: PagerState,
-    lessonsGetter: (page: Int) -> Flow<List<Lesson>>,
+    rememberLessons: @Composable (page: Int) -> State<List<Lesson>?>,
     onBackClick: () -> Unit,
     onEditSemesterClick: () -> Unit,
     onDeleteSemesterClick: () -> Unit,
@@ -190,19 +191,20 @@ private fun ScheduleEditorContent(
             // https://stackoverflow.com/questions/63415047
             DayOfWeek.values().map { it.getDisplayName(TextStyle.FULL, Locale.getDefault()) }
         }
+        val pageCount = daysOfWeek.size
 
         PagerTabStrip(
+            count = pageCount,
             state = state,
             titleGetter = { daysOfWeek[it] }
         )
 
         HorizontalPager(
-            count = daysOfWeek.size,
+            count = pageCount,
             state = state,
             modifier = Modifier.fillMaxSize()
         ) { page ->
-            val lessonsFlow = remember(lessonsGetter, page) { lessonsGetter(page) }
-            val lessons by lessonsFlow.collectAsState(null)
+            val lessons by rememberLessons(page)
             var contextMenuLesson by remember { mutableStateOf<Lesson?>(null) }
 
             LazyLessonsList(
@@ -238,7 +240,7 @@ private fun ScheduleEditorContentLoadingPreview() = AppTheme {
     ScheduleEditorContent(
         operation = null,
         state = rememberPagerState(),
-        lessonsGetter = { flow {} },
+        rememberLessons = { remember { mutableStateOf(null) } },
         onBackClick = {},
         onEditSemesterClick = {},
         onDeleteSemesterClick = {},
@@ -256,7 +258,7 @@ private fun ScheduleEditorContentNoLessonsPreview() = AppTheme {
     ScheduleEditorContent(
         operation = null,
         state = rememberPagerState(),
-        lessonsGetter = { flowOf(emptyList()) },
+        rememberLessons = { remember { mutableStateOf(emptyList()) } },
         onBackClick = {},
         onEditSemesterClick = {},
         onDeleteSemesterClick = {},
@@ -275,7 +277,7 @@ private fun ScheduleEditorContentPreview() = AppTheme {
     ScheduleEditorContent(
         operation = null,
         state = rememberPagerState(),
-        lessonsGetter = { flowOf(lessons) },
+        rememberLessons = { remember { mutableStateOf(lessons) } },
         onBackClick = {},
         onEditSemesterClick = {},
         onDeleteSemesterClick = {},

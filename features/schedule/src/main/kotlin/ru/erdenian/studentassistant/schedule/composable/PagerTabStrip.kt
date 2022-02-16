@@ -46,6 +46,7 @@ import ru.erdenian.studentassistant.style.AppTheme
 
 @Composable
 internal fun PagerTabStrip(
+    count: Int, // PagerState.pageCount returns 0 before the first frame, so we use this argument to avoid flickering
     state: PagerState,
     titleGetter: (page: Int) -> String,
     modifier: Modifier = Modifier,
@@ -72,7 +73,7 @@ internal fun PagerTabStrip(
                     }
                 ),
             content = {
-                val indices = 0 until state.pageCount
+                val indices = 0 until count
 
                 @Composable
                 fun createText(page: Int, color: Color) = Text(
@@ -208,6 +209,7 @@ private fun PagerTabStripPreview() = AppTheme {
         val state = rememberPagerState()
 
         PagerTabStrip(
+            count = 10,
             state = state,
             titleGetter = { "Page $it" }
         )
