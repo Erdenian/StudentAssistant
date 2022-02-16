@@ -191,8 +191,10 @@ private fun ScheduleContent(
             } else {
                 val shortTitleFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d MMMM") }
                 val fullTitleFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy") }
+                val pageCount = state.semester.length
 
                 PagerTabStrip(
+                    count = pageCount,
                     state = state.pagerState,
                     titleGetter = { page ->
                         val date = state.semester.firstDay.plusDays(page.toLong())
@@ -201,7 +203,7 @@ private fun ScheduleContent(
                 )
 
                 HorizontalPager(
-                    count = state.semester.length,
+                    count = pageCount,
                     state = state.pagerState,
                     key = { state.semester to state.getDate(it) },
                     modifier = Modifier.fillMaxSize()
