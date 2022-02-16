@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2022-02-16
+
+### Changed
+- Приложение полностью переписано на Jetpack Compose
+
+## [0.4.5] - 2021-04-15
+
 ### Fixed
 - Отображение длинных домашних заданий в карточке домашнего задания
 
@@ -42,7 +49,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Первый релиз в Google Play
 
-[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/0.4.4...develop
+[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/0.5.0...develop
+[0.5.0]: https://github.com/Erdenian/StudentAssistant/compare/0.4.5...0.5.0
+[0.4.5]: https://github.com/Erdenian/StudentAssistant/compare/0.4.4...0.4.5
 [0.4.4]: https://github.com/Erdenian/StudentAssistant/compare/0.4.3...0.4.4
 [0.4.3]: https://github.com/Erdenian/StudentAssistant/compare/0.4.2...0.4.3
 [0.4.2]: https://github.com/Erdenian/StudentAssistant/compare/0.4.1...0.4.2
@@ -58,5 +67,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.2.4]: https://github.com/Erdenian/StudentAssistant/compare/0.2.3...0.2.4
 [0.2.3]: https://github.com/Erdenian/StudentAssistant/compare/0.2.0...0.2.3
 [0.2.0]: https://github.com/Erdenian/StudentAssistant/compare/0.1.0...0.2.0
-[0.1.0]: https://github.com/Erdenian/StudentAssistant/compare/0.0.0...0.1.0
-[0.0.0]: https://github.com/Erdenian/StudentAssistant/releases/tag/0.0.0
+[0.1.0]: https://github.com/Erdenian/StudentAssistant/compare/e616d052ad609f694c1dd9c4492a758597fd8f3f...0.1.0

@@ -19,8 +19,8 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
       - uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
-          java-version: 16
+          distribution: 'temurin'
+          java-version: 17
       - name: Detekt
         run: ./gradlew detekt
       - uses: actions/upload-artifact@v2
@@ -30,12 +30,12 @@ jobs:
           path: "build/reports/detekt/detekt.html"
           if-no-files-found: error
       - name: Lint Release
-        run: ./gradlew lintRelease
+        run: ./gradlew :app:lintRelease
       - uses: actions/upload-artifact@v2
         if: always()
         with:
           name: Lint
-          path: "*/build/reports/lint-results*.html"
+          path: "**/build/reports/lint-results*.html"
           if-no-files-found: error
 
   test:
@@ -50,16 +50,22 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
       - uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
-          java-version: 16
+          distribution: 'temurin'
+          java-version: 17
       - name: Unit Test
         run: ./gradlew testReleaseUnitTest
       - uses: actions/upload-artifact@v2
         if: always()
         with:
           name: Unit Test
-          path: "*/build/reports/tests/"
+          path: "**/build/reports/tests/"
           if-no-files-found: error
+      - uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Unit Test Report
+          path: "**/build/test-results/test*/TEST-*.xml"
+          reporter: java-junit
 
   androidTest:
     runs-on: macos-latest
@@ -72,17 +78,27 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: 17
       - name: Android Test
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: 27
           script: ./gradlew connectedAndroidTest
       - uses: actions/upload-artifact@v2
         if: always()
         with:
           name: Android Test
-          path: "*/build/reports/androidTests/"
+          path: "**/build/reports/androidTests/"
           if-no-files-found: error
+      - uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Android Test Report
+          path: "**/build/outputs/androidTest-results/connected/TEST-*.xml"
+          reporter: java-junit
 
   build:
     needs: [analysis, test, androidTest]
@@ -101,8 +117,8 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
       - uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
-          java-version: 16
+          distribution: 'temurin'
+          java-version: 17
       - name: Assemble Release
         run: ./gradlew assembleRelease
       - uses: actions/upload-artifact@v2
@@ -144,7 +160,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
       - uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
-          java-version: 16
+          distribution: 'temurin'
+          java-version: 17
       - name: Publish
         run: ./gradlew publishReleaseBundle

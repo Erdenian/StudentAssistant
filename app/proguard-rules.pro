@@ -20,10 +20,12 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-# region AndroidX Navigation
--keepnames class androidx.navigation.fragment.NavHostFragment
+# region Kodein
+# Todo: remove after 7.11.0 release
+# https://github.com/Kodein-Framework/Kodein-DI/issues/309
+-keep, allowobfuscation, allowoptimization class org.kodein.type.TypeReference
+-keep, allowobfuscation, allowoptimization class org.kodein.type.JVMAbstractTypeToken$Companion$WrappingTest
 
--keepnames class ru.erdenian.studentassistant.entity.Semester
--keepnames class ru.erdenian.studentassistant.entity.Lesson
--keepnames class ru.erdenian.studentassistant.entity.Homework
+-keep, allowobfuscation, allowoptimization class * extends org.kodein.type.TypeReference
+-keep, allowobfuscation, allowoptimization class * extends org.kodein.type.JVMAbstractTypeToken$Companion$WrappingTest
 # endregion

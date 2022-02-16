@@ -1,31 +1,28 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("androidx.navigation.safeargs.kotlin")
-    id("com.github.triplet.play") version "3.4.0"
+
+    id("com.github.triplet.play") version "3.7.0"
     id("ru.erdenian.shrinkometer")
 }
 
 android {
-    val compileSdkVersion: String by project
-    val targetSdkVersion: String by project
-
-    compileSdkVersion(compileSdkVersion.toInt())
-
     defaultConfig {
         applicationId = "ru.erdenian.studentassistant"
-        versionCode = 18
-        versionName = "0.4.5"
-
-        minSdkVersion(21)
-        targetSdkVersion(targetSdkVersion.toInt())
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        versionCode = 19
+        versionName = "0.5.0"
 
         setProperty("archivesBaseName", "${rootProject.name}-$versionName")
     }
 
-    buildFeatures.viewBinding = true
+    lint {
+        checkDependencies = true
+        checkAllWarnings = true
+        xmlReport = false
+        checkTestSources = true
+    }
+
+    buildFeatures.compose = true
 
     signingConfigs {
         val localProperties = File("${rootDir.path}/local.properties").run {
@@ -33,9 +30,9 @@ android {
         }
         val environment = System.getenv()
         fun get(env: String, local: String) = environment[env] ?: run {
-            project.logger.warn("WARNING: No $env environmental variable")
+            project.logger.info("No $env environmental variable")
             localProperties?.getProperty(local) ?: run {
-                project.logger.warn("WARNING: No $local local property")
+                project.logger.info("No $local local property")
                 null
             }
         }
@@ -61,6 +58,11 @@ android {
             storePassword = "debugdebug"
             keyAlias = "debug"
             keyPassword = "debugdebug"
+
+            enableV1Signing = true
+            enableV2Signing = true
+            enableV3Signing = true
+            enableV4Signing = true
         }
 
         getReleaseKeystore()?.let { keystore ->
@@ -69,13 +71,18 @@ android {
                 storePassword = keystore.storePassword
                 keyAlias = keystore.keyAlias
                 keyPassword = keystore.keyPassword
+
+                enableV1Signing = true
+                enableV2Signing = true
+                enableV3Signing = true
+                enableV4Signing = true
             }
         } ?: project.logger.warn("WARNING: Can't create release signing config")
     }
 
     buildTypes {
         getByName("debug") {
-            signingConfig = checkNotNull(signingConfigs.findByName("debug"))
+            signingConfig = signingConfigs.getByName("debug")
         }
         getByName("release") {
             isMinifyEnabled = true
@@ -84,50 +91,45 @@ android {
             signingConfig = signingConfigs.findByName("release")
         }
     }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    sourceSets {
-        getByName("main").java.srcDirs("src/main/kotlin")
-        getByName("test").java.srcDirs("src/test/kotlin")
-        getByName("androidTest").java.srcDirs("src/androidTest/kotlin")
-
-        productFlavors.forEach { flavor ->
-            getByName(flavor.name).java.srcDirs("src/${flavor.name}/kotlin")
-            "test${flavor.name.capitalize()}".let { getByName(it).java.srcDirs("src/$it/kotlin") }
-            "androidTest${flavor.name.capitalize()}".let { getByName(it).java.srcDirs("src/$it/kotlin") }
-        }
-    }
 }
 
 dependencies {
     // region Private
-    implementation(project(":repository"))
-    implementation(project(":uikit"))
-    implementation(project(":utils"))
+    implementation(project(":core:style"))
+    implementation(project(":core:strings"))
+
+    implementation(project(":data:repository"))
+
+    implementation(project(":features:schedule"))
+    implementation(project(":features:homeworks"))
+    implementation(project(":features:settings"))
     // endregion
 
     // region AndroidX
+    val appcompatVersion: String by project
+    implementation("androidx.appcompat:appcompat:$appcompatVersion")
+    val activityVersion: String by project
+    implementation("androidx.activity:activity-compose:$activityVersion")
     val navigationVersion: String by project
-    implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
-    implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
-
-    implementation("androidx.constraintlayout:constraintlayout:2.0.4")
-    implementation("androidx.viewpager:viewpager:1.0.0")
+    implementation("androidx.navigation:navigation-compose:$navigationVersion")
+    val splashscreenVersion: String by project
+    implementation("androidx.core:core-splashscreen:$splashscreenVersion")
     // endregion
 
     // region Core
     val kodeinVersion: String by project
-    implementation("org.kodein.di:kodein-di-jvm:$kodeinVersion")
     implementation("org.kodein.di:kodein-di-framework-android-x:$kodeinVersion")
     // endregion
 
     // region UI
-    implementation("net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC3")
-    implementation("com.github.DavidProdinger:weekdays-selector:1.1.1")
+    val accompanistVersion: String by project
+    implementation("com.google.accompanist:accompanist-navigation-animation:$accompanistVersion")
+
+    val keyboardVisibilityEventVersion: String by project
+    implementation("net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:$keyboardVisibilityEventVersion")
+
+    val materialVersion: String by project
+    implementation("com.google.android.material:material:$materialVersion")
     // endregion
 }
 
