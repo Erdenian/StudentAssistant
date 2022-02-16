@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="status_bar">#323232</color>
+    <color name="navigation_bar">#323232</color>
+
+    <color name="splash_background">#323232</color>
+    <color name="ic_launcher_background">#60B0FF</color>
+
+    <!-- region Deprecated, will be deleted when there there are no Android Views -->
+    <color name="primary">#60B0FF</color>
+    <color name="secondary">#d81b60</color>
+    <!-- endregion -->
+
+</resources>
