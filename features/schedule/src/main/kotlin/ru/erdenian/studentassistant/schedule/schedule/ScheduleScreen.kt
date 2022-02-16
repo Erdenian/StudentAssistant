@@ -13,11 +13,12 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Today
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -33,9 +34,6 @@ import com.google.accompanist.pager.PagerState
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.entity.Lesson
@@ -44,9 +42,9 @@ import ru.erdenian.studentassistant.sampledata.Lessons
 import ru.erdenian.studentassistant.sampledata.Semesters
 import ru.erdenian.studentassistant.schedule.composable.LazyLessonsList
 import ru.erdenian.studentassistant.schedule.composable.PagerTabStrip
-import ru.erdenian.studentassistant.schedule.schedule.State.Companion.animateScrollToDate
-import ru.erdenian.studentassistant.schedule.schedule.State.Companion.currentDate
-import ru.erdenian.studentassistant.schedule.schedule.State.Companion.getDate
+import ru.erdenian.studentassistant.schedule.schedule.SemesterWithState.Companion.animateScrollToDate
+import ru.erdenian.studentassistant.schedule.schedule.SemesterWithState.Companion.currentDate
+import ru.erdenian.studentassistant.schedule.schedule.SemesterWithState.Companion.getDate
 import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
@@ -67,14 +65,18 @@ fun ScheduleScreen(
     val semestersNames by remember { derivedStateOf { semesters.map { it.name } } }
     val selectedSemester by viewModel.selectedSemester.collectAsState()
 
-    val lessonsGetter = remember<(LocalDate) -> Flow<List<Lesson>>>(viewModel) {
-        { date -> viewModel.getLessons(date).map { it.list } }
+    val rememberLessons = remember<@Composable (date: LocalDate) -> State<List<Lesson>?>>(viewModel) {
+        { date ->
+            produceState<List<Lesson>?>(null, date) {
+                viewModel.getLessons(date).map { it.list }.collect { value = it }
+            }
+        }
     }
 
     ScheduleContent(
         semestersNames = semestersNames,
         selectedSemester = selectedSemester,
-        lessonsGetter = lessonsGetter,
+        rememberLessons = rememberLessons,
         onSelectedSemesterChange = { index -> viewModel.selectSemester(semesters.list[index].id) },
         onAddSemesterClick = navigateToAddSemester,
         onEditSemesterClick = { navigateToEditSchedule(it.id) },
@@ -83,14 +85,15 @@ fun ScheduleScreen(
 }
 
 @Stable
-private data class State(val pagerState: PagerState, val semester: Semester) {
+private data class SemesterWithState(val semester: Semester, val pagerState: PagerState) {
 
-    constructor(semester: Semester, initialDate: LocalDate) : this(PagerState(semester.getPosition(initialDate)), semester)
+    constructor(semester: Semester, initialDate: LocalDate) : this(semester, PagerState(semester.getPosition(initialDate)))
 
     companion object {
-        val State.currentDate get() = getDate(pagerState.currentPage)
-        fun State.getDate(page: Int) = semester.getDate(page)
-        suspend fun State.animateScrollToDate(date: LocalDate) = pagerState.animateScrollToPage(semester.getPosition(date))
+        val SemesterWithState.currentDate get() = getDate(pagerState.currentPage)
+        fun SemesterWithState.getDate(page: Int) = semester.getDate(page)
+        suspend fun SemesterWithState.animateScrollToDate(date: LocalDate) =
+            pagerState.animateScrollToPage(semester.getPosition(date))
 
         private fun Semester.getDate(position: Int): LocalDate = firstDay.plusDays(position.toLong())
         private fun Semester.getPosition(date: LocalDate) = ChronoUnit.DAYS.between(firstDay, date.coerceIn(range)).toInt()
@@ -101,7 +104,7 @@ private data class State(val pagerState: PagerState, val semester: Semester) {
 private fun ScheduleContent(
     semestersNames: List<String>,
     selectedSemester: Semester?,
-    lessonsGetter: (date: LocalDate) -> Flow<List<Lesson>>,
+    rememberLessons: @Composable (date: LocalDate) -> State<List<Lesson>?>,
     onSelectedSemesterChange: (Int) -> Unit,
     onAddSemesterClick: () -> Unit,
     onEditSemesterClick: (semester: Semester) -> Unit,
@@ -111,7 +114,7 @@ private fun ScheduleContent(
 
     val state = remember(selectedSemester) {
         if (selectedSemester == null) null
-        else State(selectedSemester, currentDate ?: LocalDate.now())
+        else SemesterWithState(selectedSemester, currentDate ?: LocalDate.now())
     }
 
     currentDate = state?.currentDate
@@ -188,8 +191,10 @@ private fun ScheduleContent(
             } else {
                 val shortTitleFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d MMMM") }
                 val fullTitleFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy") }
+                val pageCount = state.semester.length
 
                 PagerTabStrip(
+                    count = pageCount,
                     state = state.pagerState,
                     titleGetter = { page ->
                         val date = state.semester.firstDay.plusDays(page.toLong())
@@ -197,17 +202,14 @@ private fun ScheduleContent(
                     }
                 )
 
-                key(state.semester) {
-                    HorizontalPager(
-                        count = state.semester.length,
-                        state = state.pagerState,
-                        modifier = Modifier.fillMaxSize()
-                    ) { page ->
-                        val lessonsFlow = remember(lessonsGetter, state, page) { lessonsGetter(state.getDate(page)) }
-                        val lessons by lessonsFlow.collectAsState(null)
-
-                        LazyLessonsList(lessons = lessons, onLessonClick = onLessonClick)
-                    }
+                HorizontalPager(
+                    count = pageCount,
+                    state = state.pagerState,
+                    key = { state.semester.id to state.getDate(it) },
+                    modifier = Modifier.fillMaxSize()
+                ) { page ->
+                    val lessons by rememberLessons(state.getDate(page))
+                    LazyLessonsList(lessons = lessons, onLessonClick = onLessonClick)
                 }
             }
         }
@@ -221,7 +223,7 @@ private fun ScheduleScreenNoSchedulePreview() = AppTheme {
     ScheduleContent(
         semestersNames = emptyList(),
         selectedSemester = null,
-        lessonsGetter = { flowOf(emptyList()) },
+        rememberLessons = { remember { mutableStateOf(emptyList()) } },
         onSelectedSemesterChange = {},
         onAddSemesterClick = {},
         onEditSemesterClick = {},
@@ -236,7 +238,7 @@ private fun ScheduleScreenLoadingPreview() = AppTheme {
     ScheduleContent(
         semestersNames = listOf(Semesters.regular.name),
         selectedSemester = Semesters.regular,
-        lessonsGetter = { flow {} },
+        rememberLessons = { remember { mutableStateOf(null) } },
         onSelectedSemesterChange = {},
         onAddSemesterClick = {},
         onEditSemesterClick = {},
@@ -251,7 +253,7 @@ private fun ScheduleScreenNoLessonsPreview() = AppTheme {
     ScheduleContent(
         semestersNames = listOf(Semesters.regular.name),
         selectedSemester = Semesters.regular,
-        lessonsGetter = { flowOf(emptyList()) },
+        rememberLessons = { remember { mutableStateOf(emptyList()) } },
         onSelectedSemesterChange = {},
         onAddSemesterClick = {},
         onEditSemesterClick = {},
@@ -267,7 +269,7 @@ private fun ScheduleScreenPreview() = AppTheme {
     ScheduleContent(
         semestersNames = listOf(Semesters.regular.name, Semesters.long.name),
         selectedSemester = Semesters.regular,
-        lessonsGetter = { flowOf(lessons) },
+        rememberLessons = { remember { mutableStateOf(lessons) } },
         onSelectedSemesterChange = {},
         onAddSemesterClick = {},
         onEditSemesterClick = {},
