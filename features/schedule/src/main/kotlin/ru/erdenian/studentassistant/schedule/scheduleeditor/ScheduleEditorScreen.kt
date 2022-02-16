@@ -191,14 +191,16 @@ private fun ScheduleEditorContent(
             // https://stackoverflow.com/questions/63415047
             DayOfWeek.values().map { it.getDisplayName(TextStyle.FULL, Locale.getDefault()) }
         }
+        val pageCount = daysOfWeek.size
 
         PagerTabStrip(
+            count = pageCount,
             state = state,
             titleGetter = { daysOfWeek[it] }
         )
 
         HorizontalPager(
-            count = daysOfWeek.size,
+            count = pageCount,
             state = state,
             modifier = Modifier.fillMaxSize()
         ) { page ->
