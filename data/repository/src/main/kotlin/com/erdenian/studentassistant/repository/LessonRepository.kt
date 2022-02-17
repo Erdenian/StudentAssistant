@@ -1,12 +1,5 @@
 package com.erdenian.studentassistant.repository
 
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.LocalTime
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import com.erdenian.studentassistant.database.dao.LessonDao
 import com.erdenian.studentassistant.database.entity.ByDateEntity
 import com.erdenian.studentassistant.database.entity.ByWeekdayEntity
@@ -18,6 +11,13 @@ import com.erdenian.studentassistant.entity.ImmutableSortedSet
 import com.erdenian.studentassistant.entity.Lesson
 import com.erdenian.studentassistant.entity.immutableSortedSetOf
 import com.erdenian.studentassistant.entity.toImmutableSortedSet
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.LocalTime
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 
 class LessonRepository(
     private val lessonDao: LessonDao,

@@ -3,6 +3,13 @@ package com.erdenian.studentassistant.homeworks.homeworks
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.erdenian.studentassistant.entity.Homework
+import com.erdenian.studentassistant.entity.ImmutableSortedSet
+import com.erdenian.studentassistant.entity.immutableSortedSetOfNotNull
+import com.erdenian.studentassistant.entity.toImmutableSortedSet
+import com.erdenian.studentassistant.repository.HomeworkRepository
+import com.erdenian.studentassistant.repository.SelectedSemesterRepository
+import com.erdenian.studentassistant.repository.SemesterRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,13 +21,6 @@ import kotlinx.coroutines.launch
 import org.kodein.di.DIAware
 import org.kodein.di.android.x.closestDI
 import org.kodein.di.instance
-import com.erdenian.studentassistant.entity.Homework
-import com.erdenian.studentassistant.entity.ImmutableSortedSet
-import com.erdenian.studentassistant.entity.immutableSortedSetOfNotNull
-import com.erdenian.studentassistant.entity.toImmutableSortedSet
-import com.erdenian.studentassistant.repository.HomeworkRepository
-import com.erdenian.studentassistant.repository.SelectedSemesterRepository
-import com.erdenian.studentassistant.repository.SemesterRepository
 
 class HomeworksViewModel(application: Application) : AndroidViewModel(application), DIAware {
 

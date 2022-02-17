@@ -2,6 +2,12 @@ package com.erdenian.studentassistant.repository.di
 
 import android.app.Application
 import android.content.Context
+import com.erdenian.studentassistant.database.di.databaseKodein
+import com.erdenian.studentassistant.repository.HomeworkRepository
+import com.erdenian.studentassistant.repository.LessonRepository
+import com.erdenian.studentassistant.repository.SelectedSemesterRepository
+import com.erdenian.studentassistant.repository.SemesterRepository
+import com.erdenian.studentassistant.repository.SettingsRepository
 import kotlinx.coroutines.CoroutineScope
 import org.kodein.di.DI
 import org.kodein.di.bind
@@ -9,12 +15,6 @@ import org.kodein.di.bindSingleton
 import org.kodein.di.instance
 import org.kodein.di.singleton
 import org.kodein.di.softReference
-import com.erdenian.studentassistant.database.di.databaseKodein
-import com.erdenian.studentassistant.repository.HomeworkRepository
-import com.erdenian.studentassistant.repository.LessonRepository
-import com.erdenian.studentassistant.repository.SelectedSemesterRepository
-import com.erdenian.studentassistant.repository.SemesterRepository
-import com.erdenian.studentassistant.repository.SettingsRepository
 
 fun repositoryModule(
     application: Application,

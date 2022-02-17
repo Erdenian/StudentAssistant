@@ -3,6 +3,10 @@ package com.erdenian.studentassistant.homeworks.homeworkeditor
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.erdenian.studentassistant.entity.immutableSortedSetOf
+import com.erdenian.studentassistant.repository.HomeworkRepository
+import com.erdenian.studentassistant.repository.LessonRepository
+import com.erdenian.studentassistant.repository.SemesterRepository
 import java.time.LocalDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -19,10 +23,6 @@ import kotlinx.coroutines.launch
 import org.kodein.di.DIAware
 import org.kodein.di.android.x.closestDI
 import org.kodein.di.instance
-import com.erdenian.studentassistant.entity.immutableSortedSetOf
-import com.erdenian.studentassistant.repository.HomeworkRepository
-import com.erdenian.studentassistant.repository.LessonRepository
-import com.erdenian.studentassistant.repository.SemesterRepository
 
 class HomeworkEditorViewModel private constructor(
     application: Application,

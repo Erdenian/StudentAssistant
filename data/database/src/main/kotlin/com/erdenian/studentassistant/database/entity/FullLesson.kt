@@ -3,11 +3,11 @@ package com.erdenian.studentassistant.database.entity
 import androidx.room.Embedded
 import androidx.room.Ignore
 import androidx.room.Relation
+import com.erdenian.studentassistant.entity.Lesson
+import com.erdenian.studentassistant.entity.toImmutableSortedSet
 import java.time.LocalDate
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
-import com.erdenian.studentassistant.entity.Lesson
-import com.erdenian.studentassistant.entity.toImmutableSortedSet
 
 @Parcelize
 data class FullLesson(

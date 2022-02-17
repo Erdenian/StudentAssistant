@@ -29,12 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.placeholder
-import com.google.accompanist.placeholder.material.shimmer
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import com.erdenian.studentassistant.entity.Homework
 import com.erdenian.studentassistant.entity.Lesson
 import com.erdenian.studentassistant.sampledata.Homeworks
@@ -50,6 +44,12 @@ import com.erdenian.studentassistant.uikit.view.ContextMenuItem
 import com.erdenian.studentassistant.uikit.view.LessonCard
 import com.erdenian.studentassistant.uikit.view.ProgressDialog
 import com.erdenian.studentassistant.uikit.view.TopAppBarActions
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.placeholder
+import com.google.accompanist.placeholder.material.shimmer
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 @Composable
 fun LessonInformationScreen(

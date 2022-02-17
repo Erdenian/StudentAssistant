@@ -2,6 +2,15 @@ package com.erdenian.studentassistant.database.dao
 
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.erdenian.studentassistant.database.ScheduleDatabase
+import com.erdenian.studentassistant.database.di.databaseKodein
+import com.erdenian.studentassistant.database.entity.ByDateEntity
+import com.erdenian.studentassistant.database.entity.ByWeekdayEntity
+import com.erdenian.studentassistant.database.entity.ClassroomEntity
+import com.erdenian.studentassistant.database.entity.FullLesson
+import com.erdenian.studentassistant.database.entity.LessonEntity
+import com.erdenian.studentassistant.database.entity.SemesterEntity
+import com.erdenian.studentassistant.database.entity.TeacherEntity
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
@@ -15,15 +24,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kodein.di.instance
-import com.erdenian.studentassistant.database.ScheduleDatabase
-import com.erdenian.studentassistant.database.di.databaseKodein
-import com.erdenian.studentassistant.database.entity.ByDateEntity
-import com.erdenian.studentassistant.database.entity.ByWeekdayEntity
-import com.erdenian.studentassistant.database.entity.ClassroomEntity
-import com.erdenian.studentassistant.database.entity.FullLesson
-import com.erdenian.studentassistant.database.entity.LessonEntity
-import com.erdenian.studentassistant.database.entity.SemesterEntity
-import com.erdenian.studentassistant.database.entity.TeacherEntity
 
 @RunWith(AndroidJUnit4::class)
 internal class LessonDaoAndroidTest {

@@ -23,9 +23,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.style.AppIcons
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
 @Composable
 internal fun StudentAssistantApp(

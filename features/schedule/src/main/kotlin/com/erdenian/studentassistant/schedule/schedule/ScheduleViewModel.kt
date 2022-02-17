@@ -3,16 +3,16 @@ package com.erdenian.studentassistant.schedule.schedule
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.erdenian.studentassistant.entity.immutableSortedSetOfNotNull
+import com.erdenian.studentassistant.repository.LessonRepository
+import com.erdenian.studentassistant.repository.SelectedSemesterRepository
+import com.erdenian.studentassistant.repository.SemesterRepository
 import java.time.LocalDate
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import org.kodein.di.DIAware
 import org.kodein.di.android.x.closestDI
 import org.kodein.di.instance
-import com.erdenian.studentassistant.entity.immutableSortedSetOfNotNull
-import com.erdenian.studentassistant.repository.LessonRepository
-import com.erdenian.studentassistant.repository.SelectedSemesterRepository
-import com.erdenian.studentassistant.repository.SemesterRepository
 
 class ScheduleViewModel(application: Application) : AndroidViewModel(application), DIAware {
 

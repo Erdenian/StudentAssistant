@@ -5,10 +5,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
+import com.erdenian.studentassistant.utils.showTimePicker
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import com.erdenian.studentassistant.utils.showTimePicker
 
 @Composable
 internal fun TimePreference(

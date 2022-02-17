@@ -5,9 +5,9 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.erdenian.studentassistant.database.entity.HomeworkEntity
 import java.time.LocalDate
 import kotlinx.coroutines.flow.Flow
-import com.erdenian.studentassistant.database.entity.HomeworkEntity
 
 @Dao
 interface HomeworkDao {

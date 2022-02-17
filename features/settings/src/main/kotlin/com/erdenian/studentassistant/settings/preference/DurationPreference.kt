@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
-import java.time.Duration
 import com.erdenian.studentassistant.uikit.R
+import java.time.Duration
 
 private fun Duration.toMinutesPartCompat() = (toMinutes() % @Suppress("MagicNumber") 60).toInt()
 

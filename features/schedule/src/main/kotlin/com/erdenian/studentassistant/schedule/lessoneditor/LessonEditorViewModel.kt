@@ -3,6 +3,13 @@ package com.erdenian.studentassistant.schedule.lessoneditor
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.erdenian.studentassistant.entity.Lesson
+import com.erdenian.studentassistant.entity.immutableSortedSetOf
+import com.erdenian.studentassistant.entity.toImmutableSortedSet
+import com.erdenian.studentassistant.repository.HomeworkRepository
+import com.erdenian.studentassistant.repository.LessonRepository
+import com.erdenian.studentassistant.repository.SettingsRepository
+import com.erdenian.studentassistant.utils.toSingleLine
 import java.time.DayOfWeek
 import java.time.Duration
 import java.time.LocalDate
@@ -22,13 +29,6 @@ import kotlinx.coroutines.withContext
 import org.kodein.di.DIAware
 import org.kodein.di.android.x.closestDI
 import org.kodein.di.instance
-import com.erdenian.studentassistant.entity.Lesson
-import com.erdenian.studentassistant.entity.immutableSortedSetOf
-import com.erdenian.studentassistant.entity.toImmutableSortedSet
-import com.erdenian.studentassistant.repository.HomeworkRepository
-import com.erdenian.studentassistant.repository.LessonRepository
-import com.erdenian.studentassistant.repository.SettingsRepository
-import com.erdenian.studentassistant.utils.toSingleLine
 
 class LessonEditorViewModel private constructor(
     application: Application,

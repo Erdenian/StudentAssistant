@@ -5,10 +5,10 @@ import android.content.SharedPreferences
 import androidx.test.core.app.ApplicationProvider
 import java.time.Duration
 import java.time.LocalTime
-import org.junit.Assert.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class SettingsRepositoryTest {

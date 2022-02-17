@@ -27,15 +27,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewModelScope
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.time.DayOfWeek
-import java.time.format.TextStyle
-import java.util.Locale
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import com.erdenian.studentassistant.entity.Lesson
 import com.erdenian.studentassistant.sampledata.Lessons
 import com.erdenian.studentassistant.schedule.composable.LazyLessonsList
@@ -48,6 +39,15 @@ import com.erdenian.studentassistant.uikit.view.ContextMenuDialog
 import com.erdenian.studentassistant.uikit.view.ContextMenuItem
 import com.erdenian.studentassistant.uikit.view.ProgressDialog
 import com.erdenian.studentassistant.uikit.view.TopAppBarActions
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.PagerState
+import com.google.accompanist.pager.rememberPagerState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.time.DayOfWeek
+import java.time.format.TextStyle
+import java.util.Locale
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 @Composable
 fun ScheduleEditorScreen(

@@ -1,5 +1,7 @@
 package com.erdenian.studentassistant.repository
 
+import com.erdenian.studentassistant.database.dao.SemesterDao
+import com.erdenian.studentassistant.entity.Semester
 import java.time.LocalDate
 import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.CoroutineScope
@@ -13,8 +15,6 @@ import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
-import com.erdenian.studentassistant.database.dao.SemesterDao
-import com.erdenian.studentassistant.entity.Semester
 
 class SelectedSemesterRepository(
     coroutineScope: CoroutineScope,

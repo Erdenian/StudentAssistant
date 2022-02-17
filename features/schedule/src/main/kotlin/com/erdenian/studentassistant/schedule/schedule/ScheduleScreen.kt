@@ -29,13 +29,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import com.erdenian.studentassistant.entity.Lesson
 import com.erdenian.studentassistant.entity.Semester
 import com.erdenian.studentassistant.sampledata.Lessons
@@ -53,6 +46,13 @@ import com.erdenian.studentassistant.uikit.view.ActionItem
 import com.erdenian.studentassistant.uikit.view.TopAppBarActions
 import com.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
 import com.erdenian.studentassistant.utils.showDatePicker
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.PagerState
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 @Composable
 fun ScheduleScreen(

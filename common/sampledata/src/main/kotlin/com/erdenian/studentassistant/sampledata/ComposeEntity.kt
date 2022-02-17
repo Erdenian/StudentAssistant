@@ -4,13 +4,13 @@ import android.annotation.SuppressLint
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.LocalTime
 import com.erdenian.studentassistant.entity.Homework
 import com.erdenian.studentassistant.entity.ImmutableSortedSet
 import com.erdenian.studentassistant.entity.Lesson
 import com.erdenian.studentassistant.entity.Semester
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.LocalTime
 
 private fun Any.getId() = System.identityHashCode(this).toLong()
 

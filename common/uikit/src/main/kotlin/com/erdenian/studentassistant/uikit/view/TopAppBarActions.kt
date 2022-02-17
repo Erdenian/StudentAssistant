@@ -30,11 +30,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import com.erdenian.studentassistant.style.AppIcons
+import com.erdenian.studentassistant.style.AppTheme
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
-import com.erdenian.studentassistant.style.AppIcons
-import com.erdenian.studentassistant.style.AppTheme
 
 @Suppress("unused")
 @Composable
