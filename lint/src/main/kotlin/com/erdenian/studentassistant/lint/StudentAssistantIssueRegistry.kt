@@ -3,8 +3,8 @@ package com.erdenian.studentassistant.lint
 import com.android.tools.lint.client.api.IssueRegistry
 import com.android.tools.lint.client.api.Vendor
 import com.android.tools.lint.detector.api.CURRENT_API
-import com.intellij.pom.java.LanguageLevel
 import com.erdenian.studentassistant.lint.desugaring.DesugaringDetector
+import com.intellij.pom.java.LanguageLevel
 
 @Suppress("UnstableApiUsage")
 internal class StudentAssistantIssueRegistry : IssueRegistry() {

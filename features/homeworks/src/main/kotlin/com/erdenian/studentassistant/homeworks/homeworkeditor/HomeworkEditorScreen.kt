@@ -49,13 +49,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.placeholder
-import com.google.accompanist.placeholder.material.shimmer
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import com.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorViewModel.Error
 import com.erdenian.studentassistant.sampledata.Homeworks
 import com.erdenian.studentassistant.strings.RS
@@ -69,6 +62,13 @@ import com.erdenian.studentassistant.uikit.view.TopAppBarActions
 import com.erdenian.studentassistant.utils.showDatePicker
 import com.erdenian.studentassistant.utils.toSingleLine
 import com.erdenian.studentassistant.utils.toast
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.placeholder
+import com.google.accompanist.placeholder.material.shimmer
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 @Composable
 fun HomeworkEditorScreen(

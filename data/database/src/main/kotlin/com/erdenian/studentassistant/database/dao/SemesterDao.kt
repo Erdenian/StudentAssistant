@@ -5,8 +5,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import kotlinx.coroutines.flow.Flow
 import com.erdenian.studentassistant.database.entity.SemesterEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SemesterDao {

@@ -11,9 +11,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
-import java.time.DayOfWeek
 import com.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorScreen
 import com.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorViewModel
 import com.erdenian.studentassistant.homeworks.homeworks.HomeworksScreen
@@ -31,6 +28,9 @@ import com.erdenian.studentassistant.schedule.semestereditor.SemesterEditorViewM
 import com.erdenian.studentassistant.settings.SettingsScreen
 import com.erdenian.studentassistant.settings.SettingsViewModel
 import com.erdenian.studentassistant.utils.viewModel
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import java.time.DayOfWeek
 
 @Composable
 internal fun StudentAssistantNavHost(

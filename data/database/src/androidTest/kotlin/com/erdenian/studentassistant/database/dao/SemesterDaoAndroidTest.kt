@@ -2,6 +2,9 @@ package com.erdenian.studentassistant.database.dao
 
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.erdenian.studentassistant.database.ScheduleDatabase
+import com.erdenian.studentassistant.database.di.databaseKodein
+import com.erdenian.studentassistant.database.entity.SemesterEntity
 import java.time.LocalDate
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -10,9 +13,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kodein.di.instance
-import com.erdenian.studentassistant.database.ScheduleDatabase
-import com.erdenian.studentassistant.database.di.databaseKodein
-import com.erdenian.studentassistant.database.entity.SemesterEntity
 
 @RunWith(AndroidJUnit4::class)
 internal class SemesterDaoAndroidTest {

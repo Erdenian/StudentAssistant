@@ -22,12 +22,12 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
-import com.google.android.material.textfield.MaterialAutoCompleteTextView
-import com.google.android.material.textfield.TextInputLayout
 import com.erdenian.studentassistant.style.AppTheme
 import com.erdenian.studentassistant.uikit.R
 import com.erdenian.studentassistant.uikit.utils.createOnEditorActionListener
 import com.erdenian.studentassistant.uikit.utils.update
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import com.google.android.material.textfield.TextInputLayout
 
 private class ExposedDropdownMenu @JvmOverloads constructor(
     context: Context,

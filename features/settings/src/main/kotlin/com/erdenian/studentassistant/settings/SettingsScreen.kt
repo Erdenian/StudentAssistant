@@ -10,12 +10,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import java.time.Duration
-import java.time.LocalTime
 import com.erdenian.studentassistant.settings.preference.DurationPreference
 import com.erdenian.studentassistant.settings.preference.TimePreference
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.style.AppTheme
+import java.time.Duration
+import java.time.LocalTime
 
 @Composable
 fun SettingsScreen(

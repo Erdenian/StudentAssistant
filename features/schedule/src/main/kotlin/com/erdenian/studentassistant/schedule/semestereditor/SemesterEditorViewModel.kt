@@ -3,6 +3,7 @@ package com.erdenian.studentassistant.schedule.semestereditor
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.erdenian.studentassistant.repository.SemesterRepository
 import java.time.LocalDate
 import java.time.Month
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +18,6 @@ import kotlinx.coroutines.launch
 import org.kodein.di.DIAware
 import org.kodein.di.android.x.closestDI
 import org.kodein.di.instance
-import com.erdenian.studentassistant.repository.SemesterRepository
 
 class SemesterEditorViewModel(
     application: Application,

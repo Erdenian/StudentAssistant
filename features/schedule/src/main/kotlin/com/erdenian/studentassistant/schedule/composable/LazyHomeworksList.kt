@@ -23,8 +23,6 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import com.erdenian.studentassistant.entity.Homework
 import com.erdenian.studentassistant.sampledata.Homeworks
 import com.erdenian.studentassistant.strings.RS
@@ -32,6 +30,8 @@ import com.erdenian.studentassistant.style.AppTheme
 import com.erdenian.studentassistant.style.dimensions
 import com.erdenian.studentassistant.uikit.layout.DelayedVisibility
 import com.erdenian.studentassistant.uikit.view.HomeworkCard
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 @Composable
 internal fun LazyHomeworksList(

@@ -3,6 +3,10 @@ package com.erdenian.studentassistant.schedule.lessoninformation
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.erdenian.studentassistant.entity.immutableSortedSetOf
+import com.erdenian.studentassistant.entity.toImmutableSortedSet
+import com.erdenian.studentassistant.repository.HomeworkRepository
+import com.erdenian.studentassistant.repository.LessonRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,10 +21,6 @@ import kotlinx.coroutines.launch
 import org.kodein.di.DIAware
 import org.kodein.di.android.x.closestDI
 import org.kodein.di.instance
-import com.erdenian.studentassistant.entity.immutableSortedSetOf
-import com.erdenian.studentassistant.entity.toImmutableSortedSet
-import com.erdenian.studentassistant.repository.HomeworkRepository
-import com.erdenian.studentassistant.repository.LessonRepository
 
 class LessonInformationViewModel(
     application: Application,

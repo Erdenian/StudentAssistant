@@ -4,9 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.erdenian.studentassistant.entity.Homework
 import java.time.LocalDate
 import kotlinx.parcelize.Parcelize
-import com.erdenian.studentassistant.entity.Homework
 
 @Entity(
     tableName = "homeworks",

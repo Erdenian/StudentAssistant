@@ -3,6 +3,11 @@ package com.erdenian.studentassistant.schedule.scheduleeditor
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.erdenian.studentassistant.entity.Lesson
+import com.erdenian.studentassistant.entity.toImmutableSortedSet
+import com.erdenian.studentassistant.repository.HomeworkRepository
+import com.erdenian.studentassistant.repository.LessonRepository
+import com.erdenian.studentassistant.repository.SemesterRepository
 import java.time.DayOfWeek
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -14,11 +19,6 @@ import kotlinx.coroutines.launch
 import org.kodein.di.DIAware
 import org.kodein.di.android.x.closestDI
 import org.kodein.di.instance
-import com.erdenian.studentassistant.entity.Lesson
-import com.erdenian.studentassistant.entity.toImmutableSortedSet
-import com.erdenian.studentassistant.repository.HomeworkRepository
-import com.erdenian.studentassistant.repository.LessonRepository
-import com.erdenian.studentassistant.repository.SemesterRepository
 
 class ScheduleEditorViewModel(
     application: Application,

@@ -21,7 +21,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.erdenian.studentassistant.entity.Homework
 import com.erdenian.studentassistant.entity.Semester
 import com.erdenian.studentassistant.homeworks.composable.LazyHomeworksList
@@ -37,6 +36,7 @@ import com.erdenian.studentassistant.uikit.view.ContextMenuItem
 import com.erdenian.studentassistant.uikit.view.ProgressDialog
 import com.erdenian.studentassistant.uikit.view.TopAppBarActions
 import com.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 @Composable
 fun HomeworksScreen(

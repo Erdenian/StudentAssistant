@@ -1,10 +1,10 @@
 package com.erdenian.studentassistant.sampledata
 
 import androidx.compose.runtime.Composable
+import com.erdenian.studentassistant.entity.immutableSortedSetOf
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
-import com.erdenian.studentassistant.entity.immutableSortedSetOf
 
 object Semesters {
 
