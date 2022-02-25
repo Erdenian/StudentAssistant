@@ -106,6 +106,7 @@ fun LessonEditorScreen(
 
     val dayOfWeek by viewModel.dayOfWeek.collectAsState()
     val weeks by viewModel.weeks.collectAsState()
+    val isAdvancedWeeksSelectorEnabled by viewModel.isAdvancedWeeksSelectorEnabled.collectAsState()
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -129,6 +130,7 @@ fun LessonEditorScreen(
         endTime = endTime,
         dayOfWeek = dayOfWeek,
         weeks = weeks,
+        isAdvancedWeeksSelectorEnabled = isAdvancedWeeksSelectorEnabled,
         onBackClick = navigateBack,
         onSaveClick = {
             isSubjectNameChanged = true
@@ -202,6 +204,7 @@ private fun LessonEditorContent(
     endTime: LocalTime,
     dayOfWeek: DayOfWeek,
     weeks: List<Boolean>,
+    isAdvancedWeeksSelectorEnabled: Boolean,
     onBackClick: () -> Unit,
     onSaveClick: () -> Unit,
     onDeleteClick: () -> Unit,
@@ -429,6 +432,7 @@ private fun LessonEditorContent(
             WeeksSelector(
                 weeks = weeks,
                 onWeeksChange = onWeeksChange,
+                isAdvancedMode = isAdvancedWeeksSelectorEnabled,
                 enabled = !nonBlockingProgress,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -461,6 +465,7 @@ private fun LessonEditorContentPreview() = AppTheme {
         endTime = Lessons.regular.endTime,
         dayOfWeek = (Lessons.regular.lessonRepeat as Lesson.Repeat.ByWeekday).dayOfWeek,
         weeks = (Lessons.regular.lessonRepeat as Lesson.Repeat.ByWeekday).weeks,
+        isAdvancedWeeksSelectorEnabled = true,
         onBackClick = {},
         onSaveClick = {},
         onDeleteClick = {},
