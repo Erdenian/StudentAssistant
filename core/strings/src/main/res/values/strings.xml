@@ -126,6 +126,8 @@
     <string name="st_default_start_time">Время начала первого занятия</string>
     <string name="st_default_lesson_duration">Длительность занятия</string>
     <string name="st_default_break_duration">Длительность перемены</string>
+    <string name="st_is_advanced_weeks_selector_enabled">Расширенный выбор недель</string>
+    <string name="st_is_advanced_weeks_selector_enabled_description">Более гибкий выбор недель для повторения занятия</string>
 
     <!-- endregion -->
 
