@@ -1,6 +1,7 @@
 package com.erdenian.studentassistant.settings.preference
 
 import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,11 +22,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
-import java.time.LocalTime
+import com.erdenian.studentassistant.uikit.layout.StartEndRow
 
 @Composable
 internal fun BasePreference(
@@ -33,7 +35,8 @@ internal fun BasePreference(
     description: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    icon: Painter? = null
+    icon: Painter? = null,
+    contentEnd: (@Composable () -> Unit)? = null
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -41,11 +44,12 @@ internal fun BasePreference(
             .fillMaxWidth()
             .defaultMinSize(minHeight = 73.dp)
             .clickable(onClick = onClick)
+            .padding(vertical = 12.dp)
     ) {
         Box(
             modifier = Modifier
                 .width(72.dp)
-                .padding(start = 16.dp, end = 16.dp)
+                .padding(horizontal = 16.dp)
         ) {
             if (icon != null) {
                 Icon(
@@ -55,17 +59,31 @@ internal fun BasePreference(
             }
         }
 
-        Column(
-            modifier = Modifier.padding(end = 16.dp)
-        ) {
-            Text(text = title)
-            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                Text(
-                    text = description,
-                    style = MaterialTheme.typography.body2
-                )
-            }
-        }
+        StartEndRow(
+            verticalAlignment = Alignment.CenterVertically,
+            contentStart = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 16.dp)
+                ) {
+                    Text(
+                        text = title,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
+                    CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                        Text(
+                            text = description,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 2,
+                            style = MaterialTheme.typography.body2
+                        )
+                    }
+                }
+            },
+            contentEnd = contentEnd ?: {}
+        )
     }
 }
 
@@ -76,7 +94,20 @@ private fun BasePreferencePreview() = AppTheme {
     BasePreference(
         title = "Title",
         icon = rememberVectorPainter(AppIcons.Timer),
-        description = LocalTime.now().toString(),
-        onClick = {}
+        description = "Description",
+        onClick = {},
+        modifier = Modifier.background(MaterialTheme.colors.background)
+    )
+}
+
+@Preview
+@Composable
+private fun BasePreferenceLongPreview() = AppTheme {
+    BasePreference(
+        title = "Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title",
+        icon = rememberVectorPainter(AppIcons.Timer),
+        description = "Description Description Description Description Description Description Description Description",
+        onClick = {},
+        modifier = Modifier.background(MaterialTheme.colors.background)
     )
 }
