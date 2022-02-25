@@ -12,6 +12,12 @@ import kotlinx.coroutines.flow.stateIn
 
 // regions Flows
 
+internal fun SharedPreferences.getBooleanFlow(
+    scope: CoroutineScope,
+    key: String,
+    defaultValue: Boolean
+): StateFlow<Boolean> = getFlow(scope, key) { getBoolean(key, defaultValue) }
+
 internal fun SharedPreferences.getLocalTimeFlow(
     scope: CoroutineScope,
     key: String,

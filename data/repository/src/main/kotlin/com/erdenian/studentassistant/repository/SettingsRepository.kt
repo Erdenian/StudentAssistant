@@ -17,6 +17,9 @@ class SettingsRepository(private val sharedPreferences: SharedPreferences) {
 
         private const val DEFAULT_BREAK_DURATION_KEY = "default_break_duration"
         private val DEFAULT_BREAK_DURATION = Duration.ofMinutes(10)
+
+        private const val IS_ADVANCED_WEEKS_SELECTOR_ENABLED_KEY = "is_advanced_weeks_selector_enabled"
+        private const val IS_ADVANCED_WEEKS_SELECTOR_ENABLED = false
     }
 
     // region Default start time
@@ -49,6 +52,17 @@ class SettingsRepository(private val sharedPreferences: SharedPreferences) {
 
     fun getDefaultBreakDurationFlow(scope: CoroutineScope): StateFlow<Duration> =
         sharedPreferences.getDurationFlow(scope, DEFAULT_BREAK_DURATION_KEY, DEFAULT_BREAK_DURATION)
+
+    // endregion
+
+    // region Advanced weeks selector
+
+    var isAdvancedWeeksSelectorEnabled: Boolean
+        get() = sharedPreferences.getBoolean(IS_ADVANCED_WEEKS_SELECTOR_ENABLED_KEY, IS_ADVANCED_WEEKS_SELECTOR_ENABLED)
+        set(value) = sharedPreferences.edit { putBoolean(IS_ADVANCED_WEEKS_SELECTOR_ENABLED_KEY, value) }
+
+    fun getAdvancedWeeksSelectorFlow(scope: CoroutineScope): StateFlow<Boolean> =
+        sharedPreferences.getBooleanFlow(scope, IS_ADVANCED_WEEKS_SELECTOR_ENABLED_KEY, IS_ADVANCED_WEEKS_SELECTOR_ENABLED)
 
     // endregion
 
