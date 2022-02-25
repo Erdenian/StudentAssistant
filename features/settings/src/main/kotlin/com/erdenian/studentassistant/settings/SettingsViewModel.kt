@@ -29,4 +29,9 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     fun setDefaultBreakDuration(duration: Duration) {
         settingsRepository.defaultBreakDuration = duration
     }
+
+    val isAdvancedWeeksSelectorEnabledFlow = settingsRepository.getAdvancedWeeksSelectorFlow(viewModelScope)
+    fun setAdvancedWeeksSelectorEnabled(enabled: Boolean) {
+        settingsRepository.isAdvancedWeeksSelectorEnabled = enabled
+    }
 }
