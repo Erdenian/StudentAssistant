@@ -8,7 +8,7 @@ plugins {
 
 android {
     defaultConfig {
-        applicationId = "ru.erdenian.studentassistant"
+        applicationId = "com.erdenian.studentassistant"
         versionCode = 19
         versionName = "0.5.0"
 
