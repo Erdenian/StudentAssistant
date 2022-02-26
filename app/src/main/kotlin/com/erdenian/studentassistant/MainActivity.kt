@@ -38,7 +38,10 @@ internal class MainActivity : AppCompatActivity() {
 
             val isKeyboardOpenFlow = remember {
                 callbackFlow {
-                    val listener = KeyboardVisibilityEventListener { isOpen -> trySend(isOpen) }
+                    val listener = KeyboardVisibilityEventListener { isOpen ->
+                        val result = trySend(isOpen)
+                        if (result.isFailure && !result.isClosed) result.getOrThrow()
+                    }
                     val unregistrar = KeyboardVisibilityEvent.registerEventListener(this@MainActivity, listener)
                     awaitClose { unregistrar.unregister() }
                 }

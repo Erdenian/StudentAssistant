@@ -14,12 +14,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.ExposedDropdownMenuBox
+import androidx.compose.material.ExposedDropdownMenuDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -44,9 +48,11 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorViewModel.Error
@@ -56,7 +62,6 @@ import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
 import com.erdenian.studentassistant.style.dimensions
 import com.erdenian.studentassistant.uikit.view.ActionItem
-import com.erdenian.studentassistant.uikit.view.ExposedDropdownMenu
 import com.erdenian.studentassistant.uikit.view.ProgressDialog
 import com.erdenian.studentassistant.uikit.view.TopAppBarActions
 import com.erdenian.studentassistant.utils.showDatePicker
@@ -226,27 +231,61 @@ private fun HomeworkEditorContent(
         ) {
             val descriptionFocusRequester = remember { FocusRequester() }
 
-            ExposedDropdownMenu(
-                value = subjectName,
-                items = existingSubjects,
-                onValueChange = onSubjectNameChange,
-                enabled = !nonBlockingProgress,
-                label = stringResource(RS.he_subject),
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Sentences,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { descriptionFocusRequester.requestFocus() }
-                ),
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .placeholder(
-                        visible = nonBlockingProgress,
-                        highlight = PlaceholderHighlight.shimmer()
-                    )
-            )
+            var expanded by remember { mutableStateOf(false) }
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = { expanded = it }
+            ) {
+                var textFieldValueState by remember { mutableStateOf(TextFieldValue(text = subjectName)) }
+                val textFieldValue = textFieldValueState.copy(text = subjectName)
+                OutlinedTextField(
+                    value = textFieldValue,
+                    onValueChange = { value ->
+                        textFieldValueState = value
+                        if (subjectName != value.text) onSubjectNameChange(value.text)
+                    },
+                    enabled = !nonBlockingProgress,
+                    label = { Text(text = stringResource(RS.he_subject)) },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Sentences,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { descriptionFocusRequester.requestFocus() }
+                    ),
+                    singleLine = true,
+                    colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .placeholder(
+                            visible = nonBlockingProgress,
+                            highlight = PlaceholderHighlight.shimmer()
+                        )
+                )
+
+                if (existingSubjects.isNotEmpty()) {
+                    ExposedDropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false }
+                    ) {
+                        existingSubjects.forEach { subject ->
+                            DropdownMenuItem(
+                                onClick = {
+                                    textFieldValueState = textFieldValueState.copy(
+                                        text = subject,
+                                        selection = TextRange(subject.length)
+                                    )
+                                    onSubjectNameChange(subject)
+                                    expanded = false
+                                }
+                            ) {
+                                Text(text = subject)
+                            }
+                        }
+                    }
+                }
+            }
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -382,6 +421,26 @@ private fun HomeworkEditorContentEmptyPreview() = AppTheme {
 private fun HomeworkEditorContentLongPreview() = AppTheme {
     HomeworkEditorContent(
         operation = null,
+        isEditing = true,
+        existingSubjects = emptyList(),
+        subjectName = Homeworks.long.subjectName,
+        deadline = Homeworks.long.deadline,
+        description = Homeworks.long.description,
+        semesterDates = LocalDate.of(2021, 9, 1)..LocalDate.of(2022, 6, 30),
+        onBackClick = {},
+        onSaveClick = {},
+        onDeleteClick = {},
+        onSubjectNameChange = {},
+        onDeadlineChange = {},
+        onDescriptionChange = {}
+    )
+}
+
+@Preview
+@Composable
+private fun HomeworkEditorContentLoadingPreview() = AppTheme {
+    HomeworkEditorContent(
+        operation = HomeworkEditorViewModel.Operation.LOADING,
         isEditing = true,
         existingSubjects = emptyList(),
         subjectName = Homeworks.long.subjectName,
