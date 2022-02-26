@@ -10,6 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.erdenian.studentassistant.settings.preference.BooleanPreference
 import com.erdenian.studentassistant.settings.preference.DurationPreference
 import com.erdenian.studentassistant.settings.preference.TimePreference
 import com.erdenian.studentassistant.strings.RS
@@ -24,14 +25,17 @@ fun SettingsScreen(
     val defaultStartTime by viewModel.defaultStartTimeFlow.collectAsState()
     val defaultLessonDuration by viewModel.defaultLessonDurationFlow.collectAsState()
     val defaultBreakDuration by viewModel.defaultBreakDurationFlow.collectAsState()
+    val isAdvancedWeeksSelectorEnabled by viewModel.isAdvancedWeeksSelectorEnabledFlow.collectAsState()
 
     SettingsContent(
         defaultStartTime = defaultStartTime,
-        onDefaultStartTimeChange = { viewModel.setDefaultStartTime(it) },
+        onDefaultStartTimeChange = viewModel::setDefaultStartTime,
         defaultLessonDuration = defaultLessonDuration,
-        onDefaultLessonDurationChange = { viewModel.setDefaultLessonDuration(it) },
+        onDefaultLessonDurationChange = viewModel::setDefaultLessonDuration,
         defaultBreakDuration = defaultBreakDuration,
-        onDefaultBreakDurationChange = { viewModel.setDefaultBreakDuration(it) }
+        onDefaultBreakDurationChange = viewModel::setDefaultBreakDuration,
+        isAdvancedWeeksSelectorEnabled = isAdvancedWeeksSelectorEnabled,
+        isAdvancedWeeksSelectorEnabledChange = viewModel::setAdvancedWeeksSelectorEnabled
     )
 }
 
@@ -42,7 +46,9 @@ private fun SettingsContent(
     defaultLessonDuration: Duration,
     onDefaultLessonDurationChange: (Duration) -> Unit,
     defaultBreakDuration: Duration,
-    onDefaultBreakDurationChange: (Duration) -> Unit
+    onDefaultBreakDurationChange: (Duration) -> Unit,
+    isAdvancedWeeksSelectorEnabled: Boolean,
+    isAdvancedWeeksSelectorEnabledChange: (Boolean) -> Unit
 ) = Scaffold(
     topBar = {
         TopAppBar(
@@ -66,6 +72,12 @@ private fun SettingsContent(
             value = defaultBreakDuration,
             onValueChange = onDefaultBreakDurationChange
         )
+        BooleanPreference(
+            title = stringResource(RS.st_is_advanced_weeks_selector_enabled),
+            description = stringResource(RS.st_is_advanced_weeks_selector_enabled_description),
+            value = isAdvancedWeeksSelectorEnabled,
+            onValueChange = isAdvancedWeeksSelectorEnabledChange
+        )
     }
 }
 
@@ -79,6 +91,8 @@ private fun SettingsPreview() = AppTheme {
         defaultLessonDuration = Duration.ZERO,
         onDefaultLessonDurationChange = {},
         defaultBreakDuration = Duration.ZERO,
-        onDefaultBreakDurationChange = {}
+        onDefaultBreakDurationChange = {},
+        isAdvancedWeeksSelectorEnabled = true,
+        isAdvancedWeeksSelectorEnabledChange = {}
     )
 }
