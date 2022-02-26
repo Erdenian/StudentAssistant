@@ -35,7 +35,12 @@ private fun <T> SharedPreferences.getFlow(
     key: String,
     getter: () -> T
 ): StateFlow<T> = callbackFlow {
-    val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, k -> if (k == key) trySend(getter()) }
+    send(getter())
+    val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, k ->
+        if (k != key) return@OnSharedPreferenceChangeListener
+        val result = trySend(getter())
+        if (result.isFailure && !result.isClosed) result.getOrThrow()
+    }
     registerOnSharedPreferenceChangeListener(listener)
     awaitClose { unregisterOnSharedPreferenceChangeListener(listener) }
 }.stateIn(scope, SharingStarted.WhileSubscribed(), getter())
