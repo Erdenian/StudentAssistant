@@ -1,6 +1,7 @@
 package com.erdenian.studentassistant.schedule.lessoneditor
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -45,7 +46,6 @@ import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
 import com.erdenian.studentassistant.style.dimensions
 import com.erdenian.studentassistant.uikit.view.ActionItem
-import com.erdenian.studentassistant.uikit.view.AutoCompleteTextField
 import com.erdenian.studentassistant.uikit.view.MultiAutoCompleteTextField
 import com.erdenian.studentassistant.uikit.view.ProgressDialog
 import com.erdenian.studentassistant.uikit.view.TopAppBarActions
@@ -288,8 +288,8 @@ private fun LessonEditorContent(
                 items = existingSubjects,
                 onValueChange = onSubjectNameChange,
                 enabled = !nonBlockingProgress,
-                label = stringResource(RS.le_subject_name),
-                error = subjectNameErrorMessage.orEmpty(),
+                label = { Text(text = stringResource(RS.le_subject_name)) },
+                isError = (subjectNameErrorMessage != null),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
                     imeAction = ImeAction.Next
@@ -303,12 +303,21 @@ private fun LessonEditorContent(
                     )
             )
 
+            AnimatedVisibility(subjectNameErrorMessage != null) {
+                Text(
+                    text = subjectNameErrorMessage.orEmpty(),
+                    color = MaterialTheme.colors.error,
+                    style = MaterialTheme.typography.caption,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+            }
+
             AutoCompleteTextField(
                 value = type,
                 items = existingTypes,
                 onValueChange = onTypeChange,
                 enabled = !nonBlockingProgress,
-                label = stringResource(RS.le_type),
+                label = { Text(text = stringResource(RS.le_type)) },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
                     imeAction = ImeAction.Next
