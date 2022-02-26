@@ -238,6 +238,7 @@ private fun HomeworkEditorContent(
             ) {
                 var textFieldValueState by remember { mutableStateOf(TextFieldValue(text = subjectName)) }
                 val textFieldValue = textFieldValueState.copy(text = subjectName)
+
                 OutlinedTextField(
                     value = textFieldValue,
                     onValueChange = { value ->
