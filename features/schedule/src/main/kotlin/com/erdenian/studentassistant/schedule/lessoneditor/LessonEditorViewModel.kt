@@ -115,6 +115,7 @@ class LessonEditorViewModel private constructor(
 
     val dayOfWeek = MutableStateFlow(DayOfWeek.MONDAY)
     val weeks = MutableStateFlow(listOf(true))
+    val isAdvancedWeeksSelectorEnabled = settingsRepository.getAdvancedWeeksSelectorFlow(viewModelScope)
     val dates = MutableStateFlow(immutableSortedSetOf<LocalDate>())
 
     val startTime = MutableStateFlow(settingsRepository.defaultStartTime)
