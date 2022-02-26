@@ -11,7 +11,7 @@ class Dimensions(
     val activityHorizontalMargin: Dp = 16.dp,
     val activityVerticalMargin: Dp = 16.dp,
 
-    val cardsSpacing: Dp = 10.dp,
+    val cardsSpacing: Dp = 12.dp,
 
     val cardMarginInside: Dp = 8.dp,
 
