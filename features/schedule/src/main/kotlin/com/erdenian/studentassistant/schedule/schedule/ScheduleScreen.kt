@@ -12,6 +12,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Today
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
@@ -23,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -117,7 +119,9 @@ private fun ScheduleContent(
         else SemesterWithState(selectedSemester, currentDate ?: LocalDate.now())
     }
 
-    currentDate = state?.currentDate
+    LaunchedEffect(state) {
+        snapshotFlow { state?.currentDate }.collect { currentDate = it }
+    }
 
     Scaffold(
         topBar = {
