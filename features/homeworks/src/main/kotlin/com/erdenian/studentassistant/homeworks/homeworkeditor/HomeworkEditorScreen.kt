@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExposedDropdownMenuBox
 import androidx.compose.material.ExposedDropdownMenuDefaults
@@ -39,6 +40,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -70,7 +72,6 @@ import com.erdenian.studentassistant.utils.toast
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -107,6 +108,37 @@ fun HomeworkEditorScreen(
     }?.let { stringResource(it) }
 
     val context = LocalContext.current
+    var showSaveDialog by rememberSaveable { mutableStateOf(false) }
+    if (showSaveDialog) {
+        AlertDialog(
+            onDismissRequest = { showSaveDialog = false },
+            title = { Text(text = stringResource(RS.he_unknown_lesson)) },
+            text = { Text(text = stringResource(RS.he_unknown_lesson_message)) },
+            dismissButton = {
+                TextButton(
+                    onClick = { showSaveDialog = false },
+                    content = { Text(text = stringResource(RS.he_unknown_lesson_no)) }
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        lessonNameToCreate = subjectName
+                        viewModel.save()
+                        showSaveDialog = false
+                    },
+                    content = { Text(text = stringResource(RS.he_unknown_lesson_yes_and_create)) }
+                )
+                TextButton(
+                    onClick = {
+                        viewModel.save()
+                        showSaveDialog = false
+                    },
+                    content = { Text(text = stringResource(RS.he_unknown_lesson_yes)) }
+                )
+            }
+        )
+    }
 
     HomeworkEditorContent(
         operation = operation,
@@ -118,23 +150,10 @@ fun HomeworkEditorScreen(
         semesterDates = semesterDatesRange,
         onBackClick = navigateBack,
         onSaveClick = {
-            if (errorMessage != null) {
-                context.toast(errorMessage)
-            } else {
-                if (viewModel.lessonExists) {
-                    viewModel.save()
-                } else {
-                    MaterialAlertDialogBuilder(context)
-                        .setTitle(RS.he_unknown_lesson)
-                        .setMessage(RS.he_unknown_lesson_message)
-                        .setPositiveButton(RS.he_unknown_lesson_yes) { _, _ -> viewModel.save() }
-                        .setNegativeButton(RS.he_unknown_lesson_no, null)
-                        .setNeutralButton(RS.he_unknown_lesson_yes_and_create) { _, _ ->
-                            lessonNameToCreate = subjectName
-                            viewModel.save()
-                        }
-                        .show()
-                }
+            when {
+                (errorMessage != null) -> context.toast(errorMessage)
+                viewModel.lessonExists -> viewModel.save()
+                else -> showSaveDialog = true
             }
         },
         onDeleteClick = { viewModel.delete() },
@@ -204,16 +223,29 @@ private fun HomeworkEditorContent(
                                 loading = nonBlockingProgress
                             ),
                             if (isEditing) {
-                                val context = LocalContext.current
+                                var showDeleteDialog by rememberSaveable { mutableStateOf(false) }
+                                if (showDeleteDialog) {
+                                    AlertDialog(
+                                        onDismissRequest = { showDeleteDialog = false },
+                                        text = { Text(text = stringResource(RS.he_delete_message)) },
+                                        dismissButton = {
+                                            TextButton(
+                                                onClick = { showDeleteDialog = false },
+                                                content = { Text(text = stringResource(RS.he_delete_no)) }
+                                            )
+                                        },
+                                        confirmButton = {
+                                            TextButton(
+                                                onClick = onDeleteClick,
+                                                content = { Text(text = stringResource(RS.he_delete_yes)) }
+                                            )
+                                        }
+                                    )
+                                }
+
                                 ActionItem.NeverShow(
                                     name = stringResource(RS.he_delete),
-                                    onClick = {
-                                        MaterialAlertDialogBuilder(context)
-                                            .setMessage(RS.he_delete_message)
-                                            .setPositiveButton(RS.he_delete_yes) { _, _ -> onDeleteClick() }
-                                            .setNegativeButton(RS.he_delete_no, null)
-                                            .show()
-                                    },
+                                    onClick = { showDeleteDialog = true },
                                     loading = nonBlockingProgress
                                 )
                             } else null

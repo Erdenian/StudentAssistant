@@ -4,11 +4,13 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
@@ -21,12 +23,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewModelScope
 import com.erdenian.studentassistant.entity.Lesson
 import com.erdenian.studentassistant.sampledata.Lessons
 import com.erdenian.studentassistant.schedule.composable.LazyLessonsList
@@ -42,7 +43,6 @@ import com.erdenian.studentassistant.uikit.view.TopAppBarActions
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.time.DayOfWeek
 import java.time.format.TextStyle
 import java.util.Locale
@@ -64,7 +64,6 @@ fun ScheduleEditorScreen(
 
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState()
-    val context = LocalContext.current
 
     val operation by viewModel.operation.collectAsState()
 
@@ -82,45 +81,97 @@ fun ScheduleEditorScreen(
         ProgressDialog(stringResource(RS.le_delete_homeworks_progress))
     }
 
+    var showDeleteSemesterDialog by rememberSaveable { mutableStateOf(false) }
+    if (showDeleteSemesterDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteSemesterDialog = false },
+            text = { Text(text = stringResource(RS.sce_delete_message)) },
+            dismissButton = {
+                TextButton(
+                    onClick = { showDeleteSemesterDialog = false },
+                    content = { Text(text = stringResource(RS.sce_delete_no)) }
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.deleteSemester()
+                        showDeleteSemesterDialog = false
+                    },
+                    content = { Text(text = stringResource(RS.sce_delete_yes)) }
+                )
+            }
+        )
+    }
+
+    var lessonForDeleteWithHomeworksDialog: Lesson? by rememberSaveable { mutableStateOf(null) }
+    lessonForDeleteWithHomeworksDialog?.let { lesson ->
+        AlertDialog(
+            onDismissRequest = { lessonForDeleteWithHomeworksDialog = null },
+            title = { Text(text = stringResource(RS.le_delete_homeworks_title)) },
+            text = { Text(text = stringResource(RS.le_delete_homeworks_message)) },
+            dismissButton = {
+                TextButton(
+                    onClick = { lessonForDeleteWithHomeworksDialog = null },
+                    content = { Text(text = stringResource(RS.le_delete_homeworks_cancel)) }
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.deleteLesson(lesson, false)
+                        lessonForDeleteWithHomeworksDialog = null
+                    },
+                    content = { Text(text = stringResource(RS.le_delete_homeworks_no)) }
+                )
+                TextButton(
+                    onClick = {
+                        viewModel.deleteLesson(lesson, true)
+                        lessonForDeleteWithHomeworksDialog = null
+                    },
+                    content = { Text(text = stringResource(RS.le_delete_homeworks_yes)) }
+                )
+            }
+        )
+    }
+
+    var lessonForDeleteWithoutHomeworksDialog: Lesson? by rememberSaveable { mutableStateOf(null) }
+    lessonForDeleteWithoutHomeworksDialog?.let { lesson ->
+        AlertDialog(
+            onDismissRequest = { lessonForDeleteWithoutHomeworksDialog = null },
+            text = { Text(text = stringResource(RS.le_delete_message)) },
+            dismissButton = {
+                TextButton(
+                    onClick = { lessonForDeleteWithoutHomeworksDialog = null },
+                    content = { Text(text = stringResource(RS.le_delete_no)) }
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.deleteLesson(lesson)
+                        lessonForDeleteWithoutHomeworksDialog = null
+                    },
+                    content = { Text(text = stringResource(RS.le_delete_yes)) }
+                )
+            }
+        )
+    }
+
     ScheduleEditorContent(
         operation = operation,
         state = pagerState,
         rememberLessons = rememberLessons,
         onBackClick = navigateBack,
         onEditSemesterClick = { navigateToEditSemester(viewModel.semesterId) },
-        onDeleteSemesterClick = {
-            MaterialAlertDialogBuilder(context)
-                .setMessage(RS.sce_delete_message)
-                .setPositiveButton(RS.sce_delete_yes) { _, _ -> viewModel.deleteSemester() }
-                .setNegativeButton(RS.sce_delete_no, null)
-                .show()
-        },
+        onDeleteSemesterClick = { showDeleteSemesterDialog = true },
         onLessonClick = { navigateToEditLesson(viewModel.semesterId, it.id, false) },
         onCopyLessonClick = { navigateToEditLesson(viewModel.semesterId, it.id, true) },
         onDeleteLessonClick = { lesson ->
             showHomeworksCounterOperation = true
             coroutineScope.launch {
-                if (viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson)) {
-                    MaterialAlertDialogBuilder(context)
-                        .setTitle(RS.le_delete_homeworks_title)
-                        .setMessage(RS.le_delete_homeworks_message)
-                        .setPositiveButton(RS.le_delete_homeworks_yes) { _, _ ->
-                            viewModel.deleteLesson(lesson, true)
-                        }
-                        .setNegativeButton(RS.le_delete_homeworks_no) { _, _ ->
-                            viewModel.deleteLesson(lesson, false)
-                        }
-                        .setNeutralButton(RS.le_delete_homeworks_cancel, null)
-                        .show()
-                } else {
-                    MaterialAlertDialogBuilder(context)
-                        .setMessage(RS.le_delete_message)
-                        .setPositiveButton(RS.le_delete_yes) { _, _ ->
-                            viewModel.viewModelScope.launch { viewModel.deleteLesson(lesson) }
-                        }
-                        .setNegativeButton(RS.le_delete_no, null)
-                        .show()
-                }
+                if (viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson)) lessonForDeleteWithHomeworksDialog = lesson
+                else lessonForDeleteWithoutHomeworksDialog = lesson
                 showHomeworksCounterOperation = false
             }
         },

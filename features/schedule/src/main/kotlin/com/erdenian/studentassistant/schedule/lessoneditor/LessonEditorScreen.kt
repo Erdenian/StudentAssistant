@@ -10,6 +10,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -56,7 +57,6 @@ import com.erdenian.studentassistant.utils.toast
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.time.DayOfWeek
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -115,6 +115,91 @@ fun LessonEditorScreen(
     var customOperaionMessageId by remember { mutableStateOf<Int?>(null) }
     customOperaionMessageId?.let { ProgressDialog(stringResource(it)) }
 
+    var showSaveDialog by rememberSaveable { mutableStateOf(false) }
+    if (showSaveDialog) {
+        AlertDialog(
+            onDismissRequest = { showSaveDialog = false },
+            title = { Text(text = stringResource(RS.le_rename_others_title)) },
+            text = { Text(text = stringResource(RS.le_rename_others_message)) },
+            dismissButton = {
+                TextButton(
+                    onClick = { showSaveDialog = false },
+                    content = { Text(text = stringResource(RS.le_rename_others_cancel)) }
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.save(false)
+                        showSaveDialog = false
+                    },
+                    content = { Text(text = stringResource(RS.le_rename_others_no)) }
+                )
+                TextButton(
+                    onClick = {
+                        viewModel.save(true)
+                        showSaveDialog = false
+                    },
+                    content = { Text(text = stringResource(RS.le_rename_others_yes)) }
+                )
+            }
+        )
+    }
+
+    var showDeleteWithHomeworksDialog by rememberSaveable { mutableStateOf(false) }
+    if (showDeleteWithHomeworksDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteWithHomeworksDialog = false },
+            title = { Text(text = stringResource(RS.le_delete_homeworks_title)) },
+            text = { Text(text = stringResource(RS.le_delete_homeworks_message)) },
+            dismissButton = {
+                TextButton(
+                    onClick = { showDeleteWithHomeworksDialog = false },
+                    content = { Text(text = stringResource(RS.le_delete_homeworks_cancel)) }
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.delete(false)
+                        showDeleteWithHomeworksDialog = false
+                    },
+                    content = { Text(text = stringResource(RS.le_delete_homeworks_no)) }
+                )
+                TextButton(
+                    onClick = {
+                        viewModel.delete(true)
+                        showDeleteWithHomeworksDialog = false
+                    },
+                    content = { Text(text = stringResource(RS.le_delete_homeworks_yes)) }
+                )
+            }
+        )
+    }
+
+    var showDeleteWithoutHomeworksDialog by rememberSaveable { mutableStateOf(false) }
+    if (showDeleteWithoutHomeworksDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteWithoutHomeworksDialog = false },
+            text = { Text(text = stringResource(RS.le_delete_message)) },
+            dismissButton = {
+                TextButton(
+                    onClick = { showDeleteWithoutHomeworksDialog = false },
+                    content = { Text(text = stringResource(RS.le_delete_no)) }
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.delete()
+                        showDeleteWithoutHomeworksDialog = false
+                    },
+                    content = { Text(text = stringResource(RS.le_delete_yes)) }
+                )
+            }
+        )
+    }
+
     LessonEditorContent(
         operation = operation,
         isEditing = isEditing,
@@ -140,15 +225,8 @@ fun LessonEditorScreen(
             } else {
                 customOperaionMessageId = RS.le_rename_others_progress
                 coroutineScope.launch {
-                    if (viewModel.isSubjectNameChangedAndNotLast()) {
-                        MaterialAlertDialogBuilder(context)
-                            .setTitle(RS.le_rename_others_title)
-                            .setMessage(RS.le_rename_others_message)
-                            .setPositiveButton(RS.le_rename_others_yes) { _, _ -> viewModel.save(true) }
-                            .setNegativeButton(RS.le_rename_others_no) { _, _ -> viewModel.save(false) }
-                            .setNeutralButton(RS.le_rename_others_cancel, null)
-                            .show()
-                    } else viewModel.save()
+                    if (viewModel.isSubjectNameChangedAndNotLast()) showSaveDialog = true
+                    else viewModel.save()
                     customOperaionMessageId = null
                 }
             }
@@ -156,21 +234,8 @@ fun LessonEditorScreen(
         onDeleteClick = {
             customOperaionMessageId = RS.le_delete_homeworks_progress
             coroutineScope.launch {
-                if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) {
-                    MaterialAlertDialogBuilder(context)
-                        .setTitle(RS.le_delete_homeworks_title)
-                        .setMessage(RS.le_delete_homeworks_message)
-                        .setPositiveButton(RS.le_delete_homeworks_yes) { _, _ -> viewModel.delete(true) }
-                        .setNegativeButton(RS.le_delete_homeworks_no) { _, _ -> viewModel.delete(false) }
-                        .setNeutralButton(RS.le_delete_homeworks_cancel, null)
-                        .show()
-                } else {
-                    MaterialAlertDialogBuilder(context)
-                        .setMessage(RS.le_delete_message)
-                        .setPositiveButton(RS.le_delete_yes) { _, _ -> viewModel.delete() }
-                        .setNegativeButton(RS.le_delete_no, null)
-                        .show()
-                }
+                if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) showDeleteWithHomeworksDialog = true
+                else showDeleteWithoutHomeworksDialog = true
                 customOperaionMessageId = null
             }
         },
