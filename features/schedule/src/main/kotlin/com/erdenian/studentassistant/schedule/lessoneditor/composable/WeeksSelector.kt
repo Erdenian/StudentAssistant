@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.schedule.lessoneditor
+package com.erdenian.studentassistant.schedule.lessoneditor.composable
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background

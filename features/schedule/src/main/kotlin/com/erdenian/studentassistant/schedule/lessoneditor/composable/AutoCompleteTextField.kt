@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.schedule.lessoneditor
+package com.erdenian.studentassistant.schedule.lessoneditor.composable
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.text.KeyboardActions
