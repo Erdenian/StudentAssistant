@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.with
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Divider
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -14,6 +15,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
@@ -24,9 +26,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.erdenian.studentassistant.entity.Homework
@@ -47,7 +49,6 @@ import com.erdenian.studentassistant.uikit.view.TopAppBarActions
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -166,19 +167,37 @@ private fun LessonInformationContent(
             onLongHomeworkClick = { contextMenuHomework = it }
         )
 
+        var homeworkForDeleteDialog: Homework? by rememberSaveable { mutableStateOf(null) }
+        homeworkForDeleteDialog?.let { homework ->
+            AlertDialog(
+                onDismissRequest = { homeworkForDeleteDialog = null },
+                text = { Text(text = stringResource(RS.li_delete_homework_message)) },
+                dismissButton = {
+                    TextButton(
+                        onClick = { homeworkForDeleteDialog = null },
+                        content = { Text(text = stringResource(RS.li_delete_homework_no)) }
+                    )
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            onDeleteHomeworkClick(homework)
+                            homeworkForDeleteDialog = null
+                        },
+                        content = { Text(text = stringResource(RS.li_delete_homework_yes)) }
+                    )
+                }
+            )
+        }
+
         contextMenuHomework?.let { homework ->
-            val context = LocalContext.current
             ContextMenuDialog(
                 onDismissRequest = { contextMenuHomework = null },
                 title = homework.subjectName,
                 items = listOf(
                     ContextMenuItem(stringResource(RS.li_delete_homework)) {
                         contextMenuHomework = null
-                        MaterialAlertDialogBuilder(context)
-                            .setMessage(RS.li_delete_homework_message)
-                            .setPositiveButton(RS.li_delete_homework_yes) { _, _ -> onDeleteHomeworkClick(homework) }
-                            .setNegativeButton(RS.li_delete_homework_no, null)
-                            .show()
+                        homeworkForDeleteDialog = homework
                     }
                 )
             )

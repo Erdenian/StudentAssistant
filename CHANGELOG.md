@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implementation of ExposedDropdownMenu rewritten to Compose
 - Implementation of AutoCompleteTextField rewritten to Compose
 - Implementation of MultiAutoCompleteTextField rewritten to Compose
+- MaterialAlertDialog usages rewritten to Compose
 
 ## [0.5.0] - 2022-02-16
 
