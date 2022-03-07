@@ -27,6 +27,7 @@ import com.erdenian.studentassistant.schedule.semestereditor.SemesterEditorScree
 import com.erdenian.studentassistant.schedule.semestereditor.SemesterEditorViewModel
 import com.erdenian.studentassistant.settings.SettingsScreen
 import com.erdenian.studentassistant.settings.SettingsViewModel
+import com.erdenian.studentassistant.utils.KeyboardPadding
 import com.erdenian.studentassistant.utils.viewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -55,7 +56,7 @@ internal object MainRoutes {
 
 internal class StudentAssistantNavGraph(private val navController: NavHostController) {
 
-    fun build(navGraphBuilder: NavGraphBuilder) = composables.forEach { it.invoke(navGraphBuilder) }
+    fun build(navGraphBuilder: NavGraphBuilder) = composables.forEach { it(navGraphBuilder) }
 
     private val composables = mutableListOf<NavGraphBuilder.() -> Unit>()
 
@@ -207,10 +208,12 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                 val semesterId = backStackEntry.arguments?.getLong("semester_id", -1L)?.takeIf { it >= 0 }
                 val viewModel = viewModel { SemesterEditorViewModel(it, semesterId) }
 
-                SemesterEditorScreen(
-                    viewModel = viewModel,
-                    navigateBack = { navController.popBackStack() }
-                )
+                KeyboardPadding {
+                    SemesterEditorScreen(
+                        viewModel = viewModel,
+                        navigateBack = { navController.popBackStack() }
+                    )
+                }
             }
         }
     }
@@ -312,10 +315,12 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                     }
                 }
 
-                LessonEditorScreen(
-                    viewModel = viewModel,
-                    navigateBack = { navController.popBackStack() }
-                )
+                KeyboardPadding {
+                    LessonEditorScreen(
+                        viewModel = viewModel,
+                        navigateBack = { navController.popBackStack() }
+                    )
+                }
             }
         }
     }
@@ -365,13 +370,15 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                     }
                 }
 
-                HomeworkEditorScreen(
-                    viewModel = viewModel,
-                    navigateBack = { navController.popBackStack() },
-                    navigateToCreateLesson = { semester, subject ->
-                        navigateToLessonEditor(semester, subjectName = subject)
-                    }
-                )
+                KeyboardPadding {
+                    HomeworkEditorScreen(
+                        viewModel = viewModel,
+                        navigateBack = { navController.popBackStack() },
+                        navigateToCreateLesson = { semester, subject ->
+                            navigateToLessonEditor(semester, subjectName = subject)
+                        }
+                    )
+                }
             }
         }
     }
