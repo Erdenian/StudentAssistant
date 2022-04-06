@@ -39,4 +39,4 @@ internal fun ProvideKeyboardPadding(
     )
 }
 
-internal val LocalKeyboardPadding = compositionLocalOf { 0.dp }
+private val LocalKeyboardPadding = compositionLocalOf { 0.dp }
