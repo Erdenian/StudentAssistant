@@ -186,7 +186,6 @@ private data class SemesterWithState(val semester: Semester, val pagerState: Pag
     }
 }
 
-
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
