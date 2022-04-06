@@ -48,6 +48,7 @@ internal class MainActivity : AppCompatActivity() {
                         // androidx.compose.foundation.layout.WindowInsetsHolder.incrementConsumers
                         // https://android-review.googlesource.com/c/platform/frameworks/support/+/1965577/19/compose/foundation/foundation/src/commonMain/kotlin/androidx/compose/foundation/gestures/Scrollable.kt#566
                         // https://issuetracker.google.com/issues/220119990
+                        // https://issuetracker.google.com/issues/217769672
                         ViewCompat.setWindowInsetsAnimationCallback(view, null)
                     }
                 }
