@@ -41,7 +41,6 @@ fun ScheduleEditorScreen(
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState()
 
-
     val rememberLessons = remember<@Composable (Int) -> State<List<Lesson>?>>(viewModel) {
         { page ->
             produceState<List<Lesson>?>(null, page) {
