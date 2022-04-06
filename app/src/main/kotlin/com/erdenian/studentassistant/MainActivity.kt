@@ -7,11 +7,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import com.erdenian.studentassistant.repository.SelectedSemesterRepository
 import com.erdenian.studentassistant.style.AppTheme
-import com.google.accompanist.insets.ProvideWindowInsets
 import org.kodein.di.android.closestDI
 import org.kodein.di.direct
 import org.kodein.di.instance
@@ -35,8 +36,20 @@ internal class MainActivity : AppCompatActivity() {
             }
 
             AppTheme {
-                ProvideWindowInsets {
-                    if (!showSplashScreen) StudentAssistantApp()
+                if (!showSplashScreen) {
+                    StudentAssistantApp()
+
+                    val view = LocalView.current
+                    LaunchedEffect(view) {
+                        // Scrollable composables don't keep focused view in view properly if insets are changing with animation
+                        // so we disable animations for now with this little hack.
+                        // See also:
+                        // androidx.compose.foundation.layout.WindowInsetsHolder.insetsListener
+                        // androidx.compose.foundation.layout.WindowInsetsHolder.incrementConsumers
+                        // https://android-review.googlesource.com/c/platform/frameworks/support/+/1965577/19/compose/foundation/foundation/src/commonMain/kotlin/androidx/compose/foundation/gestures/Scrollable.kt#566
+                        // https://issuetracker.google.com/issues/220119990
+                        ViewCompat.setWindowInsetsAnimationCallback(view, null)
+                    }
                 }
             }
         }
