@@ -3,6 +3,8 @@ package com.erdenian.studentassistant.settings
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -36,7 +38,9 @@ internal fun SettingsContent(
     }
 ) { paddingValues ->
     Column(
-        modifier = Modifier.padding(paddingValues)
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .padding(paddingValues)
     ) {
         TimePreference(
             title = stringResource(RS.st_default_start_time),
