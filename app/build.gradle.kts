@@ -9,8 +9,8 @@ plugins {
 android {
     defaultConfig {
         applicationId = "com.erdenian.studentassistant"
-        versionCode = 19
-        versionName = "0.5.0"
+        versionCode = 20
+        versionName = "0.5.1"
 
         setProperty("archivesBaseName", "${rootProject.name}-$versionName")
     }
