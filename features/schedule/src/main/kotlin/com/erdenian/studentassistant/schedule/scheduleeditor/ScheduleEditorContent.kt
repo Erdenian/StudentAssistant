@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -76,10 +77,12 @@ internal fun ScheduleEditorContent(
             Icon(imageVector = AppIcons.Add, contentDescription = null)
         }
     }
-) {
+) { paddingValues ->
     Column(
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)
     ) {
         val daysOfWeek = remember {
             // TextStyle.FULL_STANDALONE returns number

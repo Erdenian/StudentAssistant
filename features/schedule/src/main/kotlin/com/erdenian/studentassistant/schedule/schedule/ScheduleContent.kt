@@ -130,11 +130,13 @@ internal fun ScheduleContent(
                 }
             )
         }
-    ) {
+    ) { paddingValues ->
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
         ) {
             if (state == null) {
                 Text(

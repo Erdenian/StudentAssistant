@@ -113,12 +113,14 @@ internal fun HomeworkEditorContent(
             }
         )
     }
-) {
+) { paddingValues ->
     Column(
-        modifier = Modifier.padding(
-            horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
-            vertical = MaterialTheme.dimensions.activityVerticalMargin
-        )
+        modifier = Modifier
+            .padding(paddingValues)
+            .padding(
+                horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
+                vertical = MaterialTheme.dimensions.activityVerticalMargin
+            )
     ) {
         val descriptionFocusRequester = remember { FocusRequester() }
 

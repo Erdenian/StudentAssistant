@@ -68,10 +68,12 @@ internal fun HomeworksContent(
             }
         )
     }
-) {
+) { paddingValues ->
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .padding(paddingValues)
+            .fillMaxSize()
     ) {
         if (selectedSemester == null) {
             Text(
