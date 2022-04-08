@@ -80,8 +80,10 @@ internal fun LessonInformationContent(
             }
         }
     }
-) {
-    Column {
+) { paddingValues ->
+    Column(
+        modifier = Modifier.padding(paddingValues)
+    ) {
         val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
 
         AnimatedContent(

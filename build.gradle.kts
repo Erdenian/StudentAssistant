@@ -1,5 +1,5 @@
 plugins {
-    val androidPluginVersion = "7.1.2"
+    val androidPluginVersion = "7.1.3"
     id("com.android.application") version androidPluginVersion apply false
     id("com.android.library") version androidPluginVersion apply false
     id("org.jetbrains.kotlin.android") version "1.6.10" apply false

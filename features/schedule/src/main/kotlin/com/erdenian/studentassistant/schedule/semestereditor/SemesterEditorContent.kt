@@ -90,12 +90,14 @@ internal fun SemesterEditorContent(
             }
         )
     }
-) {
+) { paddingValues ->
     Column(
-        modifier = Modifier.padding(
-            horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
-            vertical = MaterialTheme.dimensions.activityVerticalMargin
-        )
+        modifier = Modifier
+            .padding(paddingValues)
+            .padding(
+                horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
+                vertical = MaterialTheme.dimensions.activityVerticalMargin
+            )
     ) {
         val dateFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
         val focusManager = LocalFocusManager.current

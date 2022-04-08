@@ -111,10 +111,11 @@ internal fun LessonEditorContent(
             }
         )
     }
-) {
+) { paddingValues ->
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
+            .padding(paddingValues)
             .padding(
                 horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
                 vertical = MaterialTheme.dimensions.activityVerticalMargin

@@ -36,7 +36,10 @@ internal class MainActivity : AppCompatActivity() {
             }
 
             AppTheme {
-                if (!showSplashScreen) {
+                // Temporarily disable this check to workaround a bug with insets
+                // https://issuetracker.google.com/issues/228588441
+                @Suppress("SimplifyBooleanWithConstants")
+                if (!showSplashScreen || true) {
                     StudentAssistantApp()
 
                     val view = LocalView.current
