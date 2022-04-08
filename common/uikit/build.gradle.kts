@@ -14,9 +14,6 @@ dependencies {
     // endregion
 
     // region UI
-    val materialVersion: String by project
-    api("com.google.android.material:material:$materialVersion")
-
     val accompanistVersion: String by project
     implementation("com.google.accompanist:accompanist-placeholder-material:$accompanistVersion")
     // endregion

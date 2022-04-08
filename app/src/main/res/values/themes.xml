@@ -17,12 +17,6 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryVariant">@color/primary</item>
         <item name="colorSecondary">@color/secondary</item>
-
-        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
-        <item name="autoCompleteTextViewStyle">@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox</item>
-        <item name="exposedDropdownMenuStyle">
-            @style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu
-        </item>
         <!-- endregion -->
     </style>
 

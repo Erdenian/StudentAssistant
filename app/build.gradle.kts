@@ -8,9 +8,9 @@ plugins {
 
 android {
     defaultConfig {
-        applicationId = "ru.erdenian.studentassistant"
-        versionCode = 19
-        versionName = "0.5.0"
+        applicationId = "com.erdenian.studentassistant"
+        versionCode = 20
+        versionName = "0.5.1"
 
         setProperty("archivesBaseName", "${rootProject.name}-$versionName")
     }
@@ -124,9 +124,6 @@ dependencies {
     // region UI
     val accompanistVersion: String by project
     implementation("com.google.accompanist:accompanist-navigation-animation:$accompanistVersion")
-
-    val keyboardVisibilityEventVersion: String by project
-    implementation("net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:$keyboardVisibilityEventVersion")
 
     val materialVersion: String by project
     implementation("com.google.android.material:material:$materialVersion")

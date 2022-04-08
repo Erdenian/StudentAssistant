@@ -1,5 +1,5 @@
 plugins {
-    val androidPluginVersion = "7.1.1"
+    val androidPluginVersion = "7.1.3"
     id("com.android.application") version androidPluginVersion apply false
     id("com.android.library") version androidPluginVersion apply false
     id("org.jetbrains.kotlin.android") version "1.6.10" apply false
@@ -34,6 +34,7 @@ subprojects {
                 "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
                 "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi",
                 "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
+                "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
                 "-opt-in=com.google.accompanist.pager.ExperimentalPagerApi"
             )
         }
