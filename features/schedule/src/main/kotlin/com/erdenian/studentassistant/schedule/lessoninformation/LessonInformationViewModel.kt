@@ -7,6 +7,9 @@ import com.erdenian.studentassistant.entity.immutableSortedSetOf
 import com.erdenian.studentassistant.entity.toImmutableSortedSet
 import com.erdenian.studentassistant.repository.HomeworkRepository
 import com.erdenian.studentassistant.repository.LessonRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,18 +21,18 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.kodein.di.DIAware
-import org.kodein.di.android.x.closestDI
-import org.kodein.di.instance
 
-class LessonInformationViewModel(
+class LessonInformationViewModel @AssistedInject constructor(
     application: Application,
-    lessonId: Long
-) : AndroidViewModel(application), DIAware {
+    lessonRepository: LessonRepository,
+    private val homeworkRepository: HomeworkRepository,
+    @Assisted lessonId: Long
+) : AndroidViewModel(application) {
 
-    override val di by closestDI()
-    private val lessonRepository by instance<LessonRepository>()
-    private val homeworkRepository by instance<HomeworkRepository>()
+    @AssistedFactory
+    interface Factory {
+        fun get(lessonId: Long): LessonInformationViewModel
+    }
 
     enum class Operation {
         DELETING_HOMEWORK

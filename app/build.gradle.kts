@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     kotlin("android")
+    kotlin("kapt")
 
     id("com.github.triplet.play") version "3.7.0"
     id("ru.erdenian.shrinkometer")
@@ -99,6 +100,7 @@ dependencies {
     implementation(project(":core:strings"))
 
     implementation(project(":data:repository"))
+    compileOnly(project(":data:database"))
 
     implementation(project(":features:schedule"))
     implementation(project(":features:homeworks"))
@@ -117,6 +119,10 @@ dependencies {
     // endregion
 
     // region Core
+    val daggerVersion: String by project
+    implementation("com.google.dagger:dagger:$daggerVersion")
+    kapt("com.google.dagger:dagger-compiler:$daggerVersion")
+
     val kodeinVersion: String by project
     implementation("org.kodein.di:kodein-di-framework-android-x:$kodeinVersion")
     // endregion
