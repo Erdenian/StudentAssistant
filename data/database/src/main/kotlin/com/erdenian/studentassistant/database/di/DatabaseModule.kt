@@ -8,7 +8,7 @@ import dagger.Provides
 
 @Module
 class DatabaseModule(
-    private val databaseName: String?
+    private val databaseName: String
 ) {
 
     // Avoid providing ScheduleDatabase through Dagger
@@ -17,13 +17,9 @@ class DatabaseModule(
     private fun getDatabase(application: Application): ScheduleDatabase =
         scheduleDatabase ?: synchronized(this) {
             scheduleDatabase ?: run {
-                val builder =
-                    if (databaseName == null) {
-                        Room.inMemoryDatabaseBuilder(application, ScheduleDatabase::class.java)
-                    } else {
-                        Room.databaseBuilder(application, ScheduleDatabase::class.java, databaseName)
-                    }
-                builder.build().also { scheduleDatabase = it }
+                Room.databaseBuilder(application, ScheduleDatabase::class.java, databaseName)
+                    .build()
+                    .also { scheduleDatabase = it }
             }
         }
 
