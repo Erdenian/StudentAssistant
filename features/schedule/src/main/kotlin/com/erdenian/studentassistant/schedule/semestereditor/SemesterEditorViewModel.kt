@@ -4,6 +4,9 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.erdenian.studentassistant.repository.SemesterRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import java.time.LocalDate
 import java.time.Month
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,17 +18,17 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.kodein.di.DIAware
-import org.kodein.di.android.x.closestDI
-import org.kodein.di.instance
 
-class SemesterEditorViewModel(
+class SemesterEditorViewModel @AssistedInject constructor(
     application: Application,
-    private val semesterId: Long?
-) : AndroidViewModel(application), DIAware {
+    private val semesterRepository: SemesterRepository,
+    @Assisted private val semesterId: Long?
+) : AndroidViewModel(application) {
 
-    override val di by closestDI()
-    private val semesterRepository by instance<SemesterRepository>()
+    @AssistedFactory
+    interface Factory {
+        fun get(semesterId: Long?): SemesterEditorViewModel
+    }
 
     enum class Error {
         EMPTY_NAME,

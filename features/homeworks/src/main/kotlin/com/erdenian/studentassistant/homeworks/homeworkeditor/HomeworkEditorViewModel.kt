@@ -29,21 +29,21 @@ class HomeworkEditorViewModel @AssistedInject constructor(
     semesterRepository: SemesterRepository,
     lessonRepository: LessonRepository,
     private val homeworkRepository: HomeworkRepository,
-    @Assisted("semesterId") val semesterId: Long,
-    @Assisted("homeworkId") private val homeworkId: Long?,
-    @Assisted("subjectName") subjectName: String?
+    @Assisted val semesterId: Long,
+    @Assisted private val homeworkId: Long?,
+    @Assisted subjectName: String?
 ) : AndroidViewModel(application) {
 
     @AssistedFactory
     abstract class Factory {
-        internal abstract fun createInternal(
-            @Assisted("semesterId") semesterId: Long,
-            @Assisted("homeworkId") homeworkId: Long?,
-            @Assisted("subjectName") subjectName: String?
+        internal abstract fun getInternal(
+            semesterId: Long,
+            homeworkId: Long? = null,
+            subjectName: String? = null
         ): HomeworkEditorViewModel
 
-        fun getCreate(semesterId: Long, subjectName: String? = null) = createInternal(semesterId, null, subjectName)
-        fun getEdit(semesterId: Long, homeworkId: Long) = createInternal(semesterId, homeworkId, null)
+        fun get(semesterId: Long, subjectName: String? = null) = getInternal(semesterId, subjectName = subjectName)
+        fun get(semesterId: Long, homeworkId: Long) = getInternal(semesterId, homeworkId = homeworkId)
     }
 
     enum class Error {

@@ -26,9 +26,6 @@ dependencies {
     val daggerVersion: String by project
     implementation("com.google.dagger:dagger:$daggerVersion")
     kapt("com.google.dagger:dagger-compiler:$daggerVersion")
-
-    val kodeinVersion: String by project
-    implementation("org.kodein.di:kodein-di-framework-android-x:$kodeinVersion")
     // endregion
 
     // region UI

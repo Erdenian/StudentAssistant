@@ -16,18 +16,14 @@ import com.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorScre
 import com.erdenian.studentassistant.homeworks.homeworks.HomeworksScreen
 import com.erdenian.studentassistant.schedule.di.ScheduleComponent
 import com.erdenian.studentassistant.schedule.lessoneditor.LessonEditorScreen
-import com.erdenian.studentassistant.schedule.lessoneditor.LessonEditorViewModel
 import com.erdenian.studentassistant.schedule.lessoninformation.LessonInformationScreen
 import com.erdenian.studentassistant.schedule.schedule.ScheduleScreen
 import com.erdenian.studentassistant.schedule.scheduleeditor.ScheduleEditorScreen
-import com.erdenian.studentassistant.schedule.scheduleeditor.ScheduleEditorViewModel
 import com.erdenian.studentassistant.schedule.semestereditor.SemesterEditorScreen
-import com.erdenian.studentassistant.schedule.semestereditor.SemesterEditorViewModel
 import com.erdenian.studentassistant.settings.SettingsScreen
 import com.erdenian.studentassistant.settings.di.SettingsComponent
 import com.erdenian.studentassistant.utils.KeyboardPadding
 import com.erdenian.studentassistant.utils.WeakReferenceComponentHolder
-import com.erdenian.studentassistant.utils.viewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import java.time.DayOfWeek
@@ -213,7 +209,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                 )
             ) { backStackEntry ->
                 val semesterId = backStackEntry.arguments?.getLong("semester_id", -1L)?.takeIf { it >= 0 }
-                val viewModel = viewModel { SemesterEditorViewModel(it, semesterId) }
+                val viewModel = scheduleComponentHolder.viewModel { semesterEditorViewModelFactory().get(semesterId) }
 
                 KeyboardPadding {
                     SemesterEditorScreen(
@@ -242,7 +238,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                 )
             ) { backStackEntry ->
                 val semesterId = checkNotNull(backStackEntry.arguments?.getLong("semester_id", -1L)?.takeIf { it >= 0 })
-                val viewModel = viewModel { ScheduleEditorViewModel(it, semesterId) }
+                val viewModel = scheduleComponentHolder.viewModel { scheduleEditorViewModelFactory().get(semesterId) }
 
                 ScheduleEditorScreen(
                     viewModel = viewModel,
@@ -313,11 +309,12 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                 val lessonId = arguments.getLong("lesson_id", -1L).takeIf { it >= 0 }
                 val copy = arguments.getBoolean("copy")
 
-                val viewModel = viewModel { application ->
+                val viewModel = scheduleComponentHolder.viewModel {
+                    val factory = lessonEditorViewModelFactory()
                     when {
-                        (dayOfWeek != null) -> LessonEditorViewModel(application, semesterId, dayOfWeek)
-                        (subjectName != null) -> LessonEditorViewModel(application, semesterId, subjectName)
-                        (lessonId != null) -> LessonEditorViewModel(application, semesterId, lessonId, copy)
+                        (dayOfWeek != null) -> factory.get(semesterId, dayOfWeek)
+                        (subjectName != null) -> factory.get(semesterId, subjectName)
+                        (lessonId != null) -> factory.get(semesterId, lessonId, copy)
                         else -> throw IllegalArgumentException("Wrong LessonEditor arguments")
                     }
                 }
@@ -372,9 +369,9 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                 val viewModel = homeworksComponentHolder.viewModel {
                     val factory = homeworkEditorViewModelFactory()
                     when {
-                        (homeworkId != null) -> factory.getEdit(semesterId, homeworkId)
-                        (subjectName != null) -> factory.getCreate(semesterId, subjectName)
-                        else -> factory.getCreate(semesterId)
+                        (homeworkId != null) -> factory.get(semesterId, homeworkId)
+                        (subjectName != null) -> factory.get(semesterId, subjectName)
+                        else -> factory.get(semesterId)
                     }
                 }
 

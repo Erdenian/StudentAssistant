@@ -8,6 +8,9 @@ import com.erdenian.studentassistant.entity.toImmutableSortedSet
 import com.erdenian.studentassistant.repository.HomeworkRepository
 import com.erdenian.studentassistant.repository.LessonRepository
 import com.erdenian.studentassistant.repository.SemesterRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import java.time.DayOfWeek
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -16,19 +19,19 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.kodein.di.DIAware
-import org.kodein.di.android.x.closestDI
-import org.kodein.di.instance
 
-class ScheduleEditorViewModel(
+class ScheduleEditorViewModel @AssistedInject constructor(
     application: Application,
-    val semesterId: Long
-) : AndroidViewModel(application), DIAware {
+    private val semesterRepository: SemesterRepository,
+    private val lessonRepository: LessonRepository,
+    private val homeworkRepository: HomeworkRepository,
+    @Assisted val semesterId: Long
+) : AndroidViewModel(application) {
 
-    override val di by closestDI()
-    private val semesterRepository by instance<SemesterRepository>()
-    private val lessonRepository by instance<LessonRepository>()
-    private val homeworkRepository by instance<HomeworkRepository>()
+    @AssistedFactory
+    interface Factory {
+        fun get(semesterId: Long): ScheduleEditorViewModel
+    }
 
     enum class Operation {
         DELETING_LESSON,
