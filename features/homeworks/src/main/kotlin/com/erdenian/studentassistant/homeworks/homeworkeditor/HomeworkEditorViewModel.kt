@@ -7,6 +7,9 @@ import com.erdenian.studentassistant.entity.immutableSortedSetOf
 import com.erdenian.studentassistant.repository.HomeworkRepository
 import com.erdenian.studentassistant.repository.LessonRepository
 import com.erdenian.studentassistant.repository.SemesterRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import java.time.LocalDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -20,21 +23,28 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.kodein.di.DIAware
-import org.kodein.di.android.x.closestDI
-import org.kodein.di.instance
 
-class HomeworkEditorViewModel private constructor(
+class HomeworkEditorViewModel @AssistedInject constructor(
     application: Application,
-    val semesterId: Long,
-    private val homeworkId: Long?,
-    subjectName: String?
-) : AndroidViewModel(application), DIAware {
+    semesterRepository: SemesterRepository,
+    lessonRepository: LessonRepository,
+    private val homeworkRepository: HomeworkRepository,
+    @Assisted("semesterId") val semesterId: Long,
+    @Assisted("homeworkId") private val homeworkId: Long?,
+    @Assisted("subjectName") subjectName: String?
+) : AndroidViewModel(application) {
 
-    override val di by closestDI()
-    private val semesterRepository by instance<SemesterRepository>()
-    private val lessonRepository by instance<LessonRepository>()
-    private val homeworkRepository by instance<HomeworkRepository>()
+    @AssistedFactory
+    abstract class Factory {
+        internal abstract fun createInternal(
+            @Assisted("semesterId") semesterId: Long,
+            @Assisted("homeworkId") homeworkId: Long?,
+            @Assisted("subjectName") subjectName: String?
+        ): HomeworkEditorViewModel
+
+        fun getCreate(semesterId: Long, subjectName: String? = null) = createInternal(semesterId, null, subjectName)
+        fun getEdit(semesterId: Long, homeworkId: Long) = createInternal(semesterId, homeworkId, null)
+    }
 
     enum class Error {
         EMPTY_SUBJECT,
@@ -46,12 +56,6 @@ class HomeworkEditorViewModel private constructor(
         SAVING,
         DELETING
     }
-
-    constructor(application: Application, semesterId: Long, subjectName: String? = null) :
-            this(application, semesterId, null, subjectName)
-
-    constructor(application: Application, semesterId: Long, homeworkId: Long) :
-            this(application, semesterId, homeworkId, null)
 
     private val isHomeworkLoaded = MutableStateFlow(homeworkId == null)
     private val areSubjectsLoaded = MutableStateFlow(false)
