@@ -4,12 +4,12 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import com.erdenian.studentassistant.MainApplication
-import com.erdenian.studentassistant.di.AppComponent
+import com.erdenian.studentassistant.di.MainComponent
 import java.lang.ref.WeakReference
 
-internal fun Context.findAppComponent() = (applicationContext as MainApplication).appComponent
+internal fun Context.findMainComponent() = (applicationContext as MainApplication).mainComponent
 
-internal class WeakReferenceComponentHolder<T>(private val creator: AppComponent.() -> T) {
+internal class WeakReferenceComponentHolder<T>(private val creator: MainComponent.() -> T) {
 
     private var reference: WeakReference<T>? = null
 
@@ -17,7 +17,7 @@ internal class WeakReferenceComponentHolder<T>(private val creator: AppComponent
         val fromReference = reference?.get()
         return if (fromReference != null) fromReference
         else {
-            val fromCreator = creator(context.findAppComponent())
+            val fromCreator = creator(context.findMainComponent())
             reference = WeakReference(fromCreator)
             fromCreator
         }
