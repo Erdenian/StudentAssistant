@@ -1,20 +1,32 @@
 package com.erdenian.studentassistant.di
 
+import android.app.Application
+import com.erdenian.studentassistant.database.di.DatabaseModule
 import com.erdenian.studentassistant.homeworks.di.HomeworksComponent
 import com.erdenian.studentassistant.repository.SelectedSemesterRepository
 import com.erdenian.studentassistant.repository.di.RepositoryModule
 import com.erdenian.studentassistant.schedule.di.ScheduleComponent
 import com.erdenian.studentassistant.settings.di.SettingsComponent
+import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [ApplicationModule::class, RepositoryModule::class])
+@Component(modules = [RepositoryModule::class])
 interface MainComponent {
 
-    fun selectedSemesterRepository(): SelectedSemesterRepository
+    @Component.Factory
+    interface Factory {
+        fun create(
+            @BindsInstance application: Application,
+            databaseModule: DatabaseModule,
+            repositoryModule: RepositoryModule
+        ): MainComponent
+    }
 
-    fun scheduleComponent(): ScheduleComponent
-    fun homeworksComponent(): HomeworksComponent
-    fun settingsComponent(): SettingsComponent
+    val selectedSemesterRepository: SelectedSemesterRepository
+
+    val scheduleComponent: ScheduleComponent
+    val homeworksComponent: HomeworksComponent
+    val settingsComponent: SettingsComponent
 }

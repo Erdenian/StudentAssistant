@@ -5,20 +5,20 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import com.erdenian.studentassistant.MainApplication
 import com.erdenian.studentassistant.di.MainComponent
-import java.lang.ref.WeakReference
+import java.lang.ref.SoftReference
 
 internal fun Context.findMainComponent() = (applicationContext as MainApplication).mainComponent
 
-internal class WeakReferenceComponentHolder<T>(private val creator: MainComponent.() -> T) {
+internal class SoftReferenceLazyComponentHolder<T>(private val creator: MainComponent.() -> T) {
 
-    private var reference: WeakReference<T>? = null
+    private var reference: SoftReference<T>? = null
 
     fun get(context: Context): T {
         val fromReference = reference?.get()
         return if (fromReference != null) fromReference
         else {
             val fromCreator = creator(context.findMainComponent())
-            reference = WeakReference(fromCreator)
+            reference = SoftReference(fromCreator)
             fromCreator
         }
     }

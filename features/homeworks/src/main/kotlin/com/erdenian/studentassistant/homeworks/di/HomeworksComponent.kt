@@ -6,6 +6,6 @@ import dagger.Subcomponent
 
 @Subcomponent
 interface HomeworksComponent {
-    fun homeworksViewModel(): HomeworksViewModel
-    fun homeworkEditorViewModelFactory(): HomeworkEditorViewModel.Factory
+    val homeworksViewModel: HomeworksViewModel
+    val homeworkEditorViewModelFactory: HomeworkEditorViewModel.Factory
 }
