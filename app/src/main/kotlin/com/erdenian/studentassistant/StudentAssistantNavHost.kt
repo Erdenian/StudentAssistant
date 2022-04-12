@@ -11,6 +11,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.erdenian.studentassistant.di.MainComponent
 import com.erdenian.studentassistant.homeworks.di.HomeworksComponent
 import com.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorScreen
 import com.erdenian.studentassistant.homeworks.homeworks.HomeworksScreen
@@ -23,7 +24,7 @@ import com.erdenian.studentassistant.schedule.semestereditor.SemesterEditorScree
 import com.erdenian.studentassistant.settings.SettingsScreen
 import com.erdenian.studentassistant.settings.di.SettingsComponent
 import com.erdenian.studentassistant.utils.KeyboardPadding
-import com.erdenian.studentassistant.utils.WeakReferenceComponentHolder
+import com.erdenian.studentassistant.utils.SoftReferenceLazyComponentHolder
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import java.time.DayOfWeek
@@ -60,9 +61,9 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
 
     // region DI
 
-    private val scheduleComponentHolder = WeakReferenceComponentHolder { scheduleComponent() }
-    private val homeworksComponentHolder = WeakReferenceComponentHolder { homeworksComponent() }
-    private val settingsComponentHolder = WeakReferenceComponentHolder { settingsComponent() }
+    private val scheduleComponentHolder = SoftReferenceLazyComponentHolder(MainComponent::scheduleComponent)
+    private val homeworksComponentHolder = SoftReferenceLazyComponentHolder(MainComponent::homeworksComponent)
+    private val settingsComponentHolder = SoftReferenceLazyComponentHolder(MainComponent::settingsComponent)
 
     // endregion
 
@@ -170,7 +171,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                 )
             ) { backStackEntry ->
                 val lessonId = checkNotNull(backStackEntry.arguments?.getLong("lesson_id", -1L)?.takeIf { it >= 0 })
-                val viewModel = scheduleComponentHolder.viewModel { lessonInformationViewModelFactory().get(lessonId) }
+                val viewModel = scheduleComponentHolder.viewModel { lessonInformationViewModelFactory.get(lessonId) }
 
                 LessonInformationScreen(
                     viewModel = viewModel,
@@ -209,7 +210,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                 )
             ) { backStackEntry ->
                 val semesterId = backStackEntry.arguments?.getLong("semester_id", -1L)?.takeIf { it >= 0 }
-                val viewModel = scheduleComponentHolder.viewModel { semesterEditorViewModelFactory().get(semesterId) }
+                val viewModel = scheduleComponentHolder.viewModel { semesterEditorViewModelFactory.get(semesterId) }
 
                 KeyboardPadding {
                     SemesterEditorScreen(
@@ -238,7 +239,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                 )
             ) { backStackEntry ->
                 val semesterId = checkNotNull(backStackEntry.arguments?.getLong("semester_id", -1L)?.takeIf { it >= 0 })
-                val viewModel = scheduleComponentHolder.viewModel { scheduleEditorViewModelFactory().get(semesterId) }
+                val viewModel = scheduleComponentHolder.viewModel { scheduleEditorViewModelFactory.get(semesterId) }
 
                 ScheduleEditorScreen(
                     viewModel = viewModel,
@@ -310,7 +311,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                 val copy = arguments.getBoolean("copy")
 
                 val viewModel = scheduleComponentHolder.viewModel {
-                    val factory = lessonEditorViewModelFactory()
+                    val factory = lessonEditorViewModelFactory
                     when {
                         (dayOfWeek != null) -> factory.get(semesterId, dayOfWeek)
                         (subjectName != null) -> factory.get(semesterId, subjectName)
@@ -367,7 +368,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                 val homeworkId = arguments.getLong("homework_id", -1L).takeIf { it >= 0 }
 
                 val viewModel = homeworksComponentHolder.viewModel {
-                    val factory = homeworkEditorViewModelFactory()
+                    val factory = homeworkEditorViewModelFactory
                     when {
                         (homeworkId != null) -> factory.get(semesterId, homeworkId)
                         (subjectName != null) -> factory.get(semesterId, subjectName)

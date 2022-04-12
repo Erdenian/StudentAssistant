@@ -9,9 +9,9 @@ import dagger.Subcomponent
 
 @Subcomponent
 interface ScheduleComponent {
-    fun scheduleViewModel(): ScheduleViewModel
-    fun lessonInformationViewModelFactory(): LessonInformationViewModel.Factory
-    fun semesterEditorViewModelFactory(): SemesterEditorViewModel.Factory
-    fun scheduleEditorViewModelFactory(): ScheduleEditorViewModel.Factory
-    fun lessonEditorViewModelFactory(): LessonEditorViewModel.Factory
+    val scheduleViewModel: ScheduleViewModel
+    val lessonInformationViewModelFactory: LessonInformationViewModel.Factory
+    val semesterEditorViewModelFactory: SemesterEditorViewModel.Factory
+    val scheduleEditorViewModelFactory: ScheduleEditorViewModel.Factory
+    val lessonEditorViewModelFactory: LessonEditorViewModel.Factory
 }

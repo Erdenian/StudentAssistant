@@ -5,5 +5,5 @@ import dagger.Subcomponent
 
 @Subcomponent
 interface SettingsComponent {
-    fun settingsViewModel(): SettingsViewModel
+    val settingsViewModel: SettingsViewModel
 }

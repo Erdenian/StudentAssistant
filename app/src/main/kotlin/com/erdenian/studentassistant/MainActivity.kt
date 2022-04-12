@@ -26,8 +26,7 @@ internal class MainActivity : AppCompatActivity() {
 
         setContent {
             LaunchedEffect(Unit) {
-                val selectedSemesterRepository = findMainComponent().selectedSemesterRepository()
-                selectedSemesterRepository.await()
+                findMainComponent().selectedSemesterRepository.await()
                 showSplashScreen = false
             }
 

@@ -5,30 +5,22 @@ import androidx.room.Room
 import com.erdenian.studentassistant.database.ScheduleDatabase
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 
 @Module
-class DatabaseModule(
-    private val databaseName: String
-) {
+class DatabaseModule(private val databaseName: String) {
 
-    // Avoid providing ScheduleDatabase through Dagger
-    // to overcome 'Supertypes of the following classes cannot be resolved' problem
-    private var scheduleDatabase: ScheduleDatabase? = null
-    private fun getDatabase(application: Application): ScheduleDatabase =
-        scheduleDatabase ?: synchronized(this) {
-            scheduleDatabase ?: run {
-                Room.databaseBuilder(application, ScheduleDatabase::class.java, databaseName)
-                    .build()
-                    .also { scheduleDatabase = it }
-            }
-        }
+    @Singleton
+    @Provides
+    internal fun scheduleDatabase(application: Application) =
+        Room.databaseBuilder(application, ScheduleDatabase::class.java, databaseName).build()
 
     @Provides
-    fun semesterDao(application: Application) = getDatabase(application).semesterDao
+    internal fun semesterDao(database: ScheduleDatabase) = database.semesterDao
 
     @Provides
-    fun lessonDao(application: Application) = getDatabase(application).lessonDao
+    internal fun lessonDao(database: ScheduleDatabase) = database.lessonDao
 
     @Provides
-    fun homeworkDao(application: Application) = getDatabase(application).homeworkDao
+    internal fun homeworkDao(database: ScheduleDatabase) = database.homeworkDao
 }
