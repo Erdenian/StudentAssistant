@@ -1,17 +1,21 @@
 package com.erdenian.studentassistant
 
 import android.app.Application
-import com.erdenian.studentassistant.repository.di.repositoryModule
+import com.erdenian.studentassistant.database.di.DatabaseModule
+import com.erdenian.studentassistant.di.DaggerMainComponent
+import com.erdenian.studentassistant.di.MainComponent
+import com.erdenian.studentassistant.repository.di.RepositoryModule
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
-import org.kodein.di.DI
-import org.kodein.di.DIAware
 
 @Suppress("unused")
-internal class MainApplication : Application(), DIAware {
+internal class MainApplication : Application() {
 
-    override val di by DI.lazy {
-        val app = this@MainApplication
-        import(repositoryModule(app, @OptIn(DelicateCoroutinesApi::class) GlobalScope, "schedule.db"))
+    val mainComponent: MainComponent by lazy {
+        DaggerMainComponent.factory().create(
+            this,
+            DatabaseModule("schedule.db"),
+            RepositoryModule(@OptIn(DelicateCoroutinesApi::class) GlobalScope, "settings")
+        )
     }
 }

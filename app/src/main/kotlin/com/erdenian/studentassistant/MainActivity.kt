@@ -11,11 +11,8 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
-import com.erdenian.studentassistant.repository.SelectedSemesterRepository
 import com.erdenian.studentassistant.style.AppTheme
-import org.kodein.di.android.closestDI
-import org.kodein.di.direct
-import org.kodein.di.instance
+import com.erdenian.studentassistant.utils.findMainComponent
 
 internal class MainActivity : AppCompatActivity() {
 
@@ -29,9 +26,7 @@ internal class MainActivity : AppCompatActivity() {
 
         setContent {
             LaunchedEffect(Unit) {
-                val di by closestDI(this@MainActivity)
-                val selectedSemesterRepository = di.direct.instance<SelectedSemesterRepository>()
-                selectedSemesterRepository.await()
+                findMainComponent().selectedSemesterRepository.await()
                 showSplashScreen = false
             }
 
