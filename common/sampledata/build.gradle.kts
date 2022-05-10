@@ -5,6 +5,7 @@ plugins {
 
 android {
     buildFeatures.compose = true
+    namespace = "com.erdenian.studentassistant.sampledata"
 }
 
 dependencies {

@@ -5,6 +5,7 @@ plugins {
 }
 
 android {
+    namespace = "com.erdenian.studentassistant.schedule"
     buildFeatures.compose = true
 }
 
@@ -12,7 +13,7 @@ dependencies {
     // region Private
     implementation(project(":common:uikit"))
     implementation(project(":common:utils"))
-    compileOnly(project(":common:sampledata"))
+    implementation(project(":common:sampledata"))
 
     implementation(project(":data:repository"))
     // endregion
