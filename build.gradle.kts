@@ -2,7 +2,7 @@ plugins {
     val androidPluginVersion = "7.2.0"
     id("com.android.application") version androidPluginVersion apply false
     id("com.android.library") version androidPluginVersion apply false
-    id("org.jetbrains.kotlin.android") version "1.6.20" apply false
+    id("org.jetbrains.kotlin.android") version "1.6.21" apply false
 
     id("io.gitlab.arturbosch.detekt") version "1.20.0"
     id("ru.erdenian.shrinkometer") version "0.3.1" apply false
