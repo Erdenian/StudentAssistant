@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.2] - 2022-06-22
+
+Нет видимых изменений
+
 ## [0.5.1] - 2022-04-09
 
 ### Added
@@ -60,7 +64,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Первый релиз в Google Play
 
-[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/0.5.1...develop
+[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/0.5.2...develop
+[0.5.2]: https://github.com/Erdenian/StudentAssistant/compare/0.5.1...0.5.2
 [0.5.1]: https://github.com/Erdenian/StudentAssistant/compare/0.5.0...0.5.1
 [0.5.0]: https://github.com/Erdenian/StudentAssistant/compare/0.4.5...0.5.0
 [0.4.5]: https://github.com/Erdenian/StudentAssistant/compare/0.4.4...0.4.5
