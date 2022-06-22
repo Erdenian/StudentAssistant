@@ -1,9 +1,7 @@
 package com.erdenian.studentassistant.database.dao
 
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.erdenian.studentassistant.database.ScheduleDatabase
-import com.erdenian.studentassistant.database.di.databaseKodein
+import com.erdenian.studentassistant.database.di.buildDatabase
 import com.erdenian.studentassistant.database.entity.ByDateEntity
 import com.erdenian.studentassistant.database.entity.ByWeekdayEntity
 import com.erdenian.studentassistant.database.entity.ClassroomEntity
@@ -23,19 +21,19 @@ import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.kodein.di.instance
 
 @RunWith(AndroidJUnit4::class)
 internal class LessonDaoAndroidTest {
 
-    private val di = databaseKodein(ApplicationProvider.getApplicationContext())
-    private val lessonDao: LessonDao = di.instance()
+    private val database = buildDatabase()
+    private val semesterDao = database.semesterDao
+    private val lessonDao = database.lessonDao
 
     private val semesterId = 1L
 
     @Before
     fun setUp(): Unit = runBlocking {
-        di.instance<SemesterDao>().insert(
+        semesterDao.insert(
             SemesterEntity(
                 "name",
                 LocalDate.of(2020, 1, 1),
@@ -46,7 +44,7 @@ internal class LessonDaoAndroidTest {
     }
 
     @After
-    fun tearDown() = di.instance<ScheduleDatabase>().close()
+    fun tearDown() = database.close()
 
     @Test
     fun insertTest() = runBlocking {

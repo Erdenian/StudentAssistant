@@ -10,6 +10,7 @@ import com.erdenian.studentassistant.entity.toImmutableSortedSet
 import com.erdenian.studentassistant.repository.HomeworkRepository
 import com.erdenian.studentassistant.repository.SelectedSemesterRepository
 import com.erdenian.studentassistant.repository.SemesterRepository
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,16 +19,13 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.kodein.di.DIAware
-import org.kodein.di.android.x.closestDI
-import org.kodein.di.instance
 
-class HomeworksViewModel(application: Application) : AndroidViewModel(application), DIAware {
-
-    override val di by closestDI()
-    private val selectedSemesterRepository by instance<SelectedSemesterRepository>()
-    private val semesterRepository by instance<SemesterRepository>()
-    private val homeworkRepository by instance<HomeworkRepository>()
+class HomeworksViewModel @Inject constructor(
+    application: Application,
+    private val selectedSemesterRepository: SelectedSemesterRepository,
+    semesterRepository: SemesterRepository,
+    private val homeworkRepository: HomeworkRepository
+) : AndroidViewModel(application) {
 
     enum class Operation {
         DELETING_HOMEWORK
