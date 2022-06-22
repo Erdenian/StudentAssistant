@@ -6,6 +6,7 @@ plugins {
 
 android {
     namespace = "com.erdenian.studentassistant.schedule"
+
     buildFeatures.compose = true
 }
 

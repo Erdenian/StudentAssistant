@@ -5,6 +5,7 @@ plugins {
 
 android {
     namespace = "com.erdenian.studentassistant.uikit"
+
     buildFeatures.compose = true
 }
 
