@@ -8,6 +8,8 @@ plugins {
 }
 
 android {
+    namespace = "com.erdenian.studentassistant"
+
     defaultConfig {
         applicationId = "com.erdenian.studentassistant"
         versionCode = 20
