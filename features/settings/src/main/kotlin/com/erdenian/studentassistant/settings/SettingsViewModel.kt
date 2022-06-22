@@ -6,14 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.erdenian.studentassistant.repository.SettingsRepository
 import java.time.Duration
 import java.time.LocalTime
-import org.kodein.di.DIAware
-import org.kodein.di.android.x.closestDI
-import org.kodein.di.instance
+import javax.inject.Inject
 
-class SettingsViewModel(application: Application) : AndroidViewModel(application), DIAware {
-
-    override val di by closestDI()
-    private val settingsRepository by di.instance<SettingsRepository>()
+class SettingsViewModel @Inject constructor(
+    application: Application,
+    private val settingsRepository: SettingsRepository
+) : AndroidViewModel(application) {
 
     val defaultStartTimeFlow = settingsRepository.getDefaultStartTimeFlow(viewModelScope)
     fun setDefaultStartTime(time: LocalTime) {

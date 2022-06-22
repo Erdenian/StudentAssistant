@@ -8,18 +8,16 @@ import com.erdenian.studentassistant.repository.LessonRepository
 import com.erdenian.studentassistant.repository.SelectedSemesterRepository
 import com.erdenian.studentassistant.repository.SemesterRepository
 import java.time.LocalDate
+import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
-import org.kodein.di.DIAware
-import org.kodein.di.android.x.closestDI
-import org.kodein.di.instance
 
-class ScheduleViewModel(application: Application) : AndroidViewModel(application), DIAware {
-
-    override val di by closestDI()
-    private val selectedSemesterRepository by instance<SelectedSemesterRepository>()
-    private val semesterRepository by instance<SemesterRepository>()
-    private val lessonRepository by instance<LessonRepository>()
+class ScheduleViewModel @Inject constructor(
+    application: Application,
+    private val selectedSemesterRepository: SelectedSemesterRepository,
+    semesterRepository: SemesterRepository,
+    private val lessonRepository: LessonRepository
+) : AndroidViewModel(application) {
 
     val selectedSemester = selectedSemesterRepository.selectedFlow
     val allSemesters = semesterRepository.allFlow

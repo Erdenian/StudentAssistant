@@ -11,24 +11,20 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.erdenian.studentassistant.di.MainComponent
+import com.erdenian.studentassistant.homeworks.di.HomeworksComponent
 import com.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorScreen
-import com.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorViewModel
 import com.erdenian.studentassistant.homeworks.homeworks.HomeworksScreen
-import com.erdenian.studentassistant.homeworks.homeworks.HomeworksViewModel
+import com.erdenian.studentassistant.schedule.di.ScheduleComponent
 import com.erdenian.studentassistant.schedule.lessoneditor.LessonEditorScreen
-import com.erdenian.studentassistant.schedule.lessoneditor.LessonEditorViewModel
 import com.erdenian.studentassistant.schedule.lessoninformation.LessonInformationScreen
-import com.erdenian.studentassistant.schedule.lessoninformation.LessonInformationViewModel
 import com.erdenian.studentassistant.schedule.schedule.ScheduleScreen
-import com.erdenian.studentassistant.schedule.schedule.ScheduleViewModel
 import com.erdenian.studentassistant.schedule.scheduleeditor.ScheduleEditorScreen
-import com.erdenian.studentassistant.schedule.scheduleeditor.ScheduleEditorViewModel
 import com.erdenian.studentassistant.schedule.semestereditor.SemesterEditorScreen
-import com.erdenian.studentassistant.schedule.semestereditor.SemesterEditorViewModel
 import com.erdenian.studentassistant.settings.SettingsScreen
-import com.erdenian.studentassistant.settings.SettingsViewModel
+import com.erdenian.studentassistant.settings.di.SettingsComponent
 import com.erdenian.studentassistant.utils.KeyboardPadding
-import com.erdenian.studentassistant.utils.viewModel
+import com.erdenian.studentassistant.utils.SoftReferenceLazyComponentHolder
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import java.time.DayOfWeek
@@ -63,6 +59,14 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
     private fun args(vararg arguments: Pair<String, Any?>) =
         arguments.asSequence().filter { it.second != null }.joinToString("&") { "${it.first}=${it.second}" }
 
+    // region DI
+
+    private val scheduleComponentHolder = SoftReferenceLazyComponentHolder(MainComponent::scheduleComponent)
+    private val homeworksComponentHolder = SoftReferenceLazyComponentHolder(MainComponent::homeworksComponent)
+    private val settingsComponentHolder = SoftReferenceLazyComponentHolder(MainComponent::settingsComponent)
+
+    // endregion
+
     // region Schedule
 
     fun navigateToSchedule(restoreState: Boolean) {
@@ -80,7 +84,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
     init {
         composables.add {
             composable(MainRoutes.SCHEDULE) {
-                val viewModel = viewModel<ScheduleViewModel>()
+                val viewModel = scheduleComponentHolder.viewModel(ScheduleComponent::scheduleViewModel)
 
                 ScheduleScreen(
                     viewModel = viewModel,
@@ -111,7 +115,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
     init {
         composables.add {
             composable(MainRoutes.HOMEWORKS) {
-                val viewModel = viewModel<HomeworksViewModel>()
+                val viewModel = homeworksComponentHolder.viewModel(HomeworksComponent::homeworksViewModel)
 
                 HomeworksScreen(
                     viewModel = viewModel,
@@ -141,7 +145,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
     init {
         composables.add {
             composable(MainRoutes.SETTINGS) {
-                val viewModel = viewModel<SettingsViewModel>()
+                val viewModel = settingsComponentHolder.viewModel(SettingsComponent::settingsViewModel)
 
                 SettingsScreen(
                     viewModel = viewModel
@@ -167,7 +171,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                 )
             ) { backStackEntry ->
                 val lessonId = checkNotNull(backStackEntry.arguments?.getLong("lesson_id", -1L)?.takeIf { it >= 0 })
-                val viewModel = viewModel { LessonInformationViewModel(it, lessonId) }
+                val viewModel = scheduleComponentHolder.viewModel { lessonInformationViewModelFactory.get(lessonId) }
 
                 LessonInformationScreen(
                     viewModel = viewModel,
@@ -206,7 +210,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                 )
             ) { backStackEntry ->
                 val semesterId = backStackEntry.arguments?.getLong("semester_id", -1L)?.takeIf { it >= 0 }
-                val viewModel = viewModel { SemesterEditorViewModel(it, semesterId) }
+                val viewModel = scheduleComponentHolder.viewModel { semesterEditorViewModelFactory.get(semesterId) }
 
                 KeyboardPadding {
                     SemesterEditorScreen(
@@ -235,7 +239,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                 )
             ) { backStackEntry ->
                 val semesterId = checkNotNull(backStackEntry.arguments?.getLong("semester_id", -1L)?.takeIf { it >= 0 })
-                val viewModel = viewModel { ScheduleEditorViewModel(it, semesterId) }
+                val viewModel = scheduleComponentHolder.viewModel { scheduleEditorViewModelFactory.get(semesterId) }
 
                 ScheduleEditorScreen(
                     viewModel = viewModel,
@@ -306,11 +310,12 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                 val lessonId = arguments.getLong("lesson_id", -1L).takeIf { it >= 0 }
                 val copy = arguments.getBoolean("copy")
 
-                val viewModel = viewModel { application ->
+                val viewModel = scheduleComponentHolder.viewModel {
+                    val factory = lessonEditorViewModelFactory
                     when {
-                        (dayOfWeek != null) -> LessonEditorViewModel(application, semesterId, dayOfWeek)
-                        (subjectName != null) -> LessonEditorViewModel(application, semesterId, subjectName)
-                        (lessonId != null) -> LessonEditorViewModel(application, semesterId, lessonId, copy)
+                        (dayOfWeek != null) -> factory.get(semesterId, dayOfWeek)
+                        (subjectName != null) -> factory.get(semesterId, subjectName)
+                        (lessonId != null) -> factory.get(semesterId, lessonId, copy)
                         else -> throw IllegalArgumentException("Wrong LessonEditor arguments")
                     }
                 }
@@ -362,11 +367,12 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                 val subjectName = arguments.getString("subject_name")
                 val homeworkId = arguments.getLong("homework_id", -1L).takeIf { it >= 0 }
 
-                val viewModel = viewModel { application ->
+                val viewModel = homeworksComponentHolder.viewModel {
+                    val factory = homeworkEditorViewModelFactory
                     when {
-                        (homeworkId != null) -> HomeworkEditorViewModel(application, semesterId, homeworkId)
-                        (subjectName != null) -> HomeworkEditorViewModel(application, semesterId, subjectName)
-                        else -> HomeworkEditorViewModel(application, semesterId)
+                        (homeworkId != null) -> factory.get(semesterId, homeworkId)
+                        (subjectName != null) -> factory.get(semesterId, subjectName)
+                        else -> factory.get(semesterId)
                     }
                 }
 

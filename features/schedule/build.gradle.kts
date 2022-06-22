@@ -1,9 +1,12 @@
 plugins {
     id("com.android.library")
     kotlin("android")
+    kotlin("kapt")
 }
 
 android {
+    namespace = "com.erdenian.studentassistant.schedule"
+
     buildFeatures.compose = true
 }
 
@@ -11,7 +14,7 @@ dependencies {
     // region Private
     implementation(project(":common:uikit"))
     implementation(project(":common:utils"))
-    compileOnly(project(":common:sampledata"))
+    implementation(project(":common:sampledata"))
 
     implementation(project(":data:repository"))
     // endregion
@@ -22,8 +25,9 @@ dependencies {
     // endregion
 
     // region Core
-    val kodeinVersion: String by project
-    implementation("org.kodein.di:kodein-di-framework-android-x:$kodeinVersion")
+    val daggerVersion: String by project
+    implementation("com.google.dagger:dagger:$daggerVersion")
+    kapt("com.google.dagger:dagger-compiler:$daggerVersion")
     // endregion
 
     // region UI

@@ -10,6 +10,9 @@ import com.erdenian.studentassistant.repository.HomeworkRepository
 import com.erdenian.studentassistant.repository.LessonRepository
 import com.erdenian.studentassistant.repository.SettingsRepository
 import com.erdenian.studentassistant.utils.toSingleLine
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import java.time.DayOfWeek
 import java.time.Duration
 import java.time.LocalDate
@@ -26,20 +29,33 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.kodein.di.DIAware
-import org.kodein.di.android.x.closestDI
-import org.kodein.di.instance
 
-class LessonEditorViewModel private constructor(
+class LessonEditorViewModel @AssistedInject constructor(
     application: Application,
-    private val semesterId: Long,
-    private val lessonId: Long?
-) : AndroidViewModel(application), DIAware {
+    private val lessonRepository: LessonRepository,
+    private val homeworkRepository: HomeworkRepository,
+    settingsRepository: SettingsRepository,
+    @Assisted private val semesterId: Long,
+    @Assisted lessonId: Long?,
+    @Assisted copy: Boolean,
+    @Assisted dayOfWeek: DayOfWeek?,
+    @Assisted subjectName: String?
+) : AndroidViewModel(application) {
 
-    override val di by closestDI()
-    private val lessonRepository by instance<LessonRepository>()
-    private val homeworkRepository by instance<HomeworkRepository>()
-    private val settingsRepository by instance<SettingsRepository>()
+    @AssistedFactory
+    abstract class Factory {
+        internal abstract fun getInternal(
+            semesterId: Long,
+            lessonId: Long? = null,
+            copy: Boolean = false,
+            dayOfWeek: DayOfWeek? = null,
+            subjectName: String? = null
+        ): LessonEditorViewModel
+
+        fun get(semesterId: Long, dayOfWeek: DayOfWeek) = getInternal(semesterId, dayOfWeek = dayOfWeek)
+        fun get(semesterId: Long, subjectName: String) = getInternal(semesterId, subjectName = subjectName)
+        fun get(semesterId: Long, lessonId: Long, copy: Boolean) = getInternal(semesterId, lessonId = lessonId, copy = copy)
+    }
 
     enum class Error {
         EMPTY_SUBJECT_NAME,
@@ -56,64 +72,14 @@ class LessonEditorViewModel private constructor(
     private val operationPrivate = MutableStateFlow<Operation?>(Operation.LOADING)
     val operation = operationPrivate.asStateFlow()
 
-    constructor(application: Application, semesterId: Long, dayOfWeek: DayOfWeek) : this(application, semesterId, null) {
-        this.dayOfWeek.value = dayOfWeek
-        viewModelScope.launch {
-            initTime(true)
-            operationPrivate.value = null
-        }
-    }
+    private val lessonId: Long? = if (copy) null else lessonId
 
-    constructor(application: Application, semesterId: Long, subjectName: String) : this(application, semesterId, null) {
-        this.subjectName.value = subjectName
-        viewModelScope.launch {
-            initTime(true)
-            operationPrivate.value = null
-        }
-    }
-
-    constructor(application: Application, semesterId: Long, lessonId: Long, copy: Boolean) : this(
-        application,
-        semesterId,
-        if (copy) null else lessonId
-    ) {
-        viewModelScope.launch {
-            val lesson = lessonRepository.get(lessonId) ?: run {
-                donePrivate.value = true
-                return@launch
-            }
-
-            subjectName.value = lesson.subjectName
-            if (!copy) initialSubjectName = lesson.subjectName
-
-            type.value = lesson.type
-            teachers.value = lesson.teachers.joinToString()
-            classrooms.value = lesson.classrooms.joinToString()
-            startTime.value = lesson.startTime
-            endTime.value = lesson.endTime
-            lessonRepeat.value = when (val lessonRepeat = lesson.lessonRepeat) {
-                is Lesson.Repeat.ByWeekday -> {
-                    dayOfWeek.value = lessonRepeat.dayOfWeek
-                    weeks.value = lessonRepeat.weeks
-                    Lesson.Repeat.ByWeekday::class
-                }
-                is Lesson.Repeat.ByDates -> {
-                    dates.value = lessonRepeat.dates.toImmutableSortedSet()
-                    Lesson.Repeat.ByDates::class
-                }
-            }
-
-            initTime(false)
-            operationPrivate.value = null
-        }
-    }
-
-    val subjectName = MutableStateFlow("")
+    val subjectName = MutableStateFlow(subjectName.orEmpty())
     val type = MutableStateFlow("")
     val teachers = MutableStateFlow("")
     val classrooms = MutableStateFlow("")
 
-    val dayOfWeek = MutableStateFlow(DayOfWeek.MONDAY)
+    val dayOfWeek = MutableStateFlow(dayOfWeek ?: DayOfWeek.MONDAY)
     val weeks = MutableStateFlow(listOf(true))
     val isAdvancedWeeksSelectorEnabled = settingsRepository.getAdvancedWeeksSelectorFlow(viewModelScope)
     val dates = MutableStateFlow(immutableSortedSetOf<LocalDate>())
@@ -121,22 +87,55 @@ class LessonEditorViewModel private constructor(
     val startTime = MutableStateFlow(settingsRepository.defaultStartTime)
     val endTime = MutableStateFlow<LocalTime>(startTime.value + settingsRepository.defaultLessonDuration)
 
-    private suspend fun initTime(loadDefaultStartTime: Boolean) {
-        viewModelScope.launch(start = CoroutineStart.UNDISPATCHED) {
-            var previousStartTime = startTime.value
-            startTime.collect { startTime ->
-                val difference = Duration.between(previousStartTime, endTime.value)
-                endTime.value = startTime + difference
-                previousStartTime = startTime
-            }
-        }
-        if (loadDefaultStartTime) startTime.value = lessonRepository.getNextStartTime(semesterId, dayOfWeek.value)
-    }
-
     val lessonRepeat = MutableStateFlow<KClass<out Lesson.Repeat>>(Lesson.Repeat.ByWeekday::class)
 
+    init {
+        viewModelScope.launch {
+            val vm = this@LessonEditorViewModel
+
+            if (lessonId != null) {
+                val lesson = lessonRepository.get(lessonId) ?: run {
+                    donePrivate.value = true
+                    return@launch
+                }
+
+                vm.subjectName.value = lesson.subjectName
+                if (!copy) initialSubjectName = lesson.subjectName
+
+                type.value = lesson.type
+                teachers.value = lesson.teachers.joinToString()
+                classrooms.value = lesson.classrooms.joinToString()
+                startTime.value = lesson.startTime
+                endTime.value = lesson.endTime
+                lessonRepeat.value = when (val lessonRepeat = lesson.lessonRepeat) {
+                    is Lesson.Repeat.ByWeekday -> {
+                        vm.dayOfWeek.value = lessonRepeat.dayOfWeek
+                        weeks.value = lessonRepeat.weeks
+                        Lesson.Repeat.ByWeekday::class
+                    }
+                    is Lesson.Repeat.ByDates -> {
+                        dates.value = lessonRepeat.dates.toImmutableSortedSet()
+                        Lesson.Repeat.ByDates::class
+                    }
+                }
+            }
+
+            viewModelScope.launch(start = CoroutineStart.UNDISPATCHED) {
+                var previousStartTime = startTime.value
+                startTime.collect { startTime ->
+                    val difference = Duration.between(previousStartTime, endTime.value)
+                    endTime.value = startTime + difference
+                    previousStartTime = startTime
+                }
+            }
+            if (lessonId == null) startTime.value = lessonRepository.getNextStartTime(semesterId, vm.dayOfWeek.value)
+
+            operationPrivate.value = null
+        }
+    }
+
     val error = combine(
-        subjectName,
+        this.subjectName,
         startTime,
         endTime,
         weeks,
