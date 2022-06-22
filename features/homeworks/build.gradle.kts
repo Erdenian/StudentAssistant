@@ -6,13 +6,15 @@ plugins {
 
 android {
     buildFeatures.compose = true
+
+    namespace = "com.erdenian.studentassistant.homeworks"
 }
 
 dependencies {
     // region Private
     implementation(project(":common:uikit"))
     implementation(project(":common:utils"))
-    compileOnly(project(":common:sampledata"))
+    implementation(project(":common:sampledata"))
 
     implementation(project(":data:repository"))
     // endregion

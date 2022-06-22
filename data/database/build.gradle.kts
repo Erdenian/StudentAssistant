@@ -6,6 +6,8 @@ plugins {
 }
 
 android {
+    namespace = "com.erdenian.studentassistant.database"
+
     defaultConfig {
         javaCompileOptions {
             annotationProcessorOptions {

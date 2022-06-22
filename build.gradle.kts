@@ -1,10 +1,10 @@
 plugins {
-    val androidPluginVersion = "7.1.3"
+    val androidPluginVersion = "7.2.1"
     id("com.android.application") version androidPluginVersion apply false
     id("com.android.library") version androidPluginVersion apply false
-    id("org.jetbrains.kotlin.android") version "1.6.10" apply false
+    id("org.jetbrains.kotlin.android") version "1.6.21" apply false
 
-    id("io.gitlab.arturbosch.detekt") version "1.19.0"
+    id("io.gitlab.arturbosch.detekt") version "1.20.0"
     id("ru.erdenian.shrinkometer") version "0.3.1" apply false
 }
 
@@ -14,7 +14,7 @@ detekt {
 }
 
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.19.0")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
 }
 
 tasks.register("clean", Delete::class) {

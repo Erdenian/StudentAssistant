@@ -4,6 +4,8 @@ plugins {
 }
 
 android {
+    namespace = "com.erdenian.studentassistant.style"
+
     buildFeatures.compose = true
 }
 

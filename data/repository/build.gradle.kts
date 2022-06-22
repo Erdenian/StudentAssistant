@@ -4,6 +4,10 @@ plugins {
     kotlin("kapt")
 }
 
+android {
+    namespace = "com.erdenian.studentassistant.repository"
+}
+
 dependencies {
     // region Private
     api(project(":data:entity"))

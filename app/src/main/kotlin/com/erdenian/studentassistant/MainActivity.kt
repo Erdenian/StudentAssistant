@@ -31,24 +31,19 @@ internal class MainActivity : AppCompatActivity() {
             }
 
             AppTheme {
-                // Temporarily disable this check to workaround a bug with insets
-                // https://issuetracker.google.com/issues/228588441
-                @Suppress("SimplifyBooleanWithConstants")
-                if (!showSplashScreen || true) {
-                    StudentAssistantApp()
+                StudentAssistantApp()
 
-                    val view = LocalView.current
-                    LaunchedEffect(view) {
-                        // Scrollable composables don't keep focused view in view properly if insets are changing with animation
-                        // so we disable animations for now with this little hack.
-                        // See also:
-                        // androidx.compose.foundation.layout.WindowInsetsHolder.insetsListener
-                        // androidx.compose.foundation.layout.WindowInsetsHolder.incrementConsumers
-                        // https://android-review.googlesource.com/c/platform/frameworks/support/+/1965577/19/compose/foundation/foundation/src/commonMain/kotlin/androidx/compose/foundation/gestures/Scrollable.kt#566
-                        // https://issuetracker.google.com/issues/220119990
-                        // https://issuetracker.google.com/issues/217769672
-                        ViewCompat.setWindowInsetsAnimationCallback(view, null)
-                    }
+                val view = LocalView.current
+                LaunchedEffect(view) {
+                    // Scrollable composables don't keep focused view in view properly if insets are changing with animation
+                    // so we disable animations for now with this little hack.
+                    // See also:
+                    // androidx.compose.foundation.layout.WindowInsetsHolder.insetsListener
+                    // androidx.compose.foundation.layout.WindowInsetsHolder.incrementConsumers
+                    // https://android-review.googlesource.com/c/platform/frameworks/support/+/1965577/19/compose/foundation/foundation/src/commonMain/kotlin/androidx/compose/foundation/gestures/Scrollable.kt#566
+                    // https://issuetracker.google.com/issues/220119990
+                    // https://issuetracker.google.com/issues/217769672
+                    ViewCompat.setWindowInsetsAnimationCallback(view, null)
                 }
             }
         }
