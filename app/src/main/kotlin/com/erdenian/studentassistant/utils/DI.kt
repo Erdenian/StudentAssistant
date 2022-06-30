@@ -24,6 +24,6 @@ internal class SoftReferenceLazyComponentHolder<T>(private val creator: MainComp
     }
 
     @Composable
-    inline fun <reified VM : ViewModel> viewModel(crossinline creator: T.() -> VM): VM =
-        com.erdenian.studentassistant.utils.viewModel { get(it).creator() }
+    inline fun <reified VM : ViewModel> viewModel(crossinline initializer: T.() -> VM): VM =
+        com.erdenian.studentassistant.utils.viewModel { get(it).initializer() }
 }
