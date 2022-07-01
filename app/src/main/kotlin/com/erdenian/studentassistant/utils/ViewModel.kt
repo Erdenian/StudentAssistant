@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 
 @Composable
@@ -14,16 +14,13 @@ internal inline fun <reified VM : ViewModel> viewModel(
         "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
     },
     key: String? = null,
-    crossinline creator: (Application) -> VM
+    crossinline initializer: CreationExtras.(Application) -> VM
 ): VM {
     val application = LocalContext.current.applicationContext as Application
     return androidx.lifecycle.viewmodel.compose.viewModel(
         viewModelStoreOwner = viewModelStoreOwner,
         key = key,
-        factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>): T = creator(application) as T
-        }
+        initializer = { initializer(application) }
     )
 }
 
