@@ -43,6 +43,7 @@ subprojects {
 typealias BaseExtension = com.android.build.gradle.BaseExtension
 typealias AppExtension = com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 typealias LibraryExtension = com.android.build.gradle.LibraryExtension
+typealias ManagedVirtualDevice = com.android.build.api.dsl.ManagedVirtualDevice
 subprojects {
     afterEvaluate {
         fun BaseExtension.ifApplication(action: AppExtension.() -> Unit) {
@@ -95,6 +96,29 @@ subprojects {
 
                 sourceCompatibility = JavaVersion.VERSION_1_8
                 targetCompatibility = JavaVersion.VERSION_1_8
+            }
+
+            run { // Setup device for testing if necessary
+                val androidTest = sourceSets.findByName("androidTest")
+                    ?.java
+                    ?.srcDirs
+                    ?.single()
+                    ?.absoluteFile
+                    ?.parentFile
+
+                if (androidTest?.walkTopDown()?.any { it.isFile } == true) {
+                    testOptions {
+                        managedDevices {
+                            devices {
+                                create<ManagedVirtualDevice>("testDevice") {
+                                    device = "Pixel 4"
+                                    apiLevel = 31
+                                    systemImageSource = "aosp"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
