@@ -85,11 +85,10 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
       - name: Android Test
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 27
-          script: ./gradlew connectedAndroidTest
+        run: ./gradlew testDeviceDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
       - uses: actions/upload-artifact@v2
         if: always()
         with:
@@ -100,7 +99,7 @@ jobs:
         if: always()
         with:
           name: Android Test Report
-          path: "**/build/outputs/androidTest-results/connected/TEST-*.xml"
+          path: "**/build/outputs/androidTest-results/managedDevice/testDevice/TEST-*.xml"
           reporter: java-junit
 
   build:
