@@ -37,6 +37,36 @@ dependencyResolutionManagement {
     }
 
     versionCatalogs {
+        create("libsPlugins") {
+            version("android", "7.2.1")
+            plugin("android-application", "com.android.application")
+                .versionRef("android")
+            plugin("android-library", "com.android.library")
+                .versionRef("android")
+
+            version("kotlin", "1.7.0")
+            plugin("kotlin-android", "org.jetbrains.kotlin.android")
+                .versionRef("kotlin")
+            plugin("kotlin-jvm", "org.jetbrains.kotlin.jvm")
+                .versionRef("kotlin")
+            plugin("kotlin-kapt", "org.jetbrains.kotlin.kapt")
+                .versionRef("kotlin")
+            plugin("kotlin-parcelize", "org.jetbrains.kotlin.plugin.parcelize")
+                .versionRef("kotlin")
+
+            version("detekt", "1.20.0")
+            plugin("detekt", "io.gitlab.arturbosch.detekt")
+                .versionRef("detekt")
+            library("detekt-formatting", "io.gitlab.arturbosch.detekt", "detekt-formatting")
+                .versionRef("detekt")
+
+            plugin("tripletPlay", "com.github.triplet.play")
+                .version("3.7.0")
+
+            plugin("shrinkometer", "ru.erdenian.shrinkometer")
+                .version("0.3.1")
+        }
+
         create("config") {
             version("minSdk", "21")
             version("compileSdk", "32")

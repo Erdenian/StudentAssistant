@@ -1,10 +1,11 @@
+@Suppress("DSL_SCOPE_VIOLATION") // https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
-    id("com.android.application")
-    kotlin("android")
-    kotlin("kapt")
+    id(libsPlugins.plugins.android.application.get().pluginId)
+    id(libsPlugins.plugins.kotlin.android.get().pluginId)
+    id(libsPlugins.plugins.kotlin.kapt.get().pluginId)
 
-    id("com.github.triplet.play") version "3.7.0"
-    id("ru.erdenian.shrinkometer")
+    alias(libsPlugins.plugins.tripletPlay)
+    alias(libsPlugins.plugins.shrinkometer)
 }
 
 android {
