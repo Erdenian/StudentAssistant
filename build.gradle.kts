@@ -1,11 +1,10 @@
+@Suppress("DSL_SCOPE_VIOLATION") // https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
-    val androidPluginVersion = "7.2.1"
-    id("com.android.application") version androidPluginVersion apply false
-    id("com.android.library") version androidPluginVersion apply false
-    id("org.jetbrains.kotlin.android") version "1.7.0" apply false
+    alias(libsPlugins.plugins.android.application) apply false
+    alias(libsPlugins.plugins.android.library) apply false
+    alias(libsPlugins.plugins.kotlin.android) apply false
 
-    id("io.gitlab.arturbosch.detekt") version "1.20.0"
-    id("ru.erdenian.shrinkometer") version "0.3.1" apply false
+    alias(libsPlugins.plugins.detekt)
 }
 
 detekt {
@@ -14,10 +13,10 @@ detekt {
 }
 
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
+    detektPlugins(libsPlugins.detekt.formatting)
 }
 
-tasks.register("clean", Delete::class) {
+tasks.register<Delete>("clean") {
     delete(rootProject.buildDir)
 }
 
