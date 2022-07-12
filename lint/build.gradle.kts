@@ -1,6 +1,7 @@
+@Suppress("DSL_SCOPE_VIOLATION") // https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
     id("java-library")
-    kotlin("jvm")
+    id(libsPlugins.plugins.kotlin.jvm.get().pluginId)
 }
 
 java {
@@ -9,7 +10,5 @@ java {
 }
 
 dependencies {
-    val lintVersion: String by project
-    compileOnly("com.android.tools.lint:lint-api:$lintVersion")
-    compileOnly("com.android.tools.lint:lint-checks:$lintVersion")
+    compileOnly(libsAndroidTools.bundles.lint)
 }

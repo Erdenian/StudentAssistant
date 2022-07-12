@@ -1,11 +1,10 @@
+@Suppress("DSL_SCOPE_VIOLATION") // https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
-    val androidPluginVersion = "7.2.1"
-    id("com.android.application") version androidPluginVersion apply false
-    id("com.android.library") version androidPluginVersion apply false
-    id("org.jetbrains.kotlin.android") version "1.7.0" apply false
+    alias(libsPlugins.plugins.android.application) apply false
+    alias(libsPlugins.plugins.android.library) apply false
+    alias(libsPlugins.plugins.kotlin.android) apply false
 
-    id("io.gitlab.arturbosch.detekt") version "1.20.0"
-    id("ru.erdenian.shrinkometer") version "0.3.1" apply false
+    alias(libsPlugins.plugins.detekt)
 }
 
 detekt {
@@ -14,10 +13,10 @@ detekt {
 }
 
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
+    detektPlugins(libsPlugins.detekt.formatting)
 }
 
-tasks.register("clean", Delete::class) {
+tasks.register<Delete>("clean") {
     delete(rootProject.buildDir)
 }
 
@@ -55,26 +54,22 @@ subprojects {
         }
 
         if (extensions.findByType<BaseExtension>() != null) extensions.configure<BaseExtension> {
-            val minSdkVersion: String by project
-            val compileSdkVersion: String by project
-            val targetSdkVersion: String by project
-
             ifApplication {
-                compileSdk = compileSdkVersion.toInt()
+                compileSdk = config.versions.compileSdk.get().toInt()
 
                 defaultConfig {
-                    minSdk = minSdkVersion.toInt()
-                    targetSdk = targetSdkVersion.toInt()
+                    minSdk = config.versions.minSdk.get().toInt()
+                    targetSdk = config.versions.targetSdk.get().toInt()
 
                     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                 }
             }
             ifLibrary {
-                compileSdk = compileSdkVersion.toInt()
+                compileSdk = config.versions.compileSdk.get().toInt()
 
                 defaultConfig {
-                    minSdk = minSdkVersion.toInt()
-                    targetSdk = targetSdkVersion.toInt()
+                    minSdk = config.versions.minSdk.get().toInt()
+                    targetSdk = config.versions.targetSdk.get().toInt()
 
                     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -83,8 +78,7 @@ subprojects {
             }
 
             composeOptions {
-                val composeCompilerVersion: String by project
-                kotlinCompilerExtensionVersion = composeCompilerVersion
+                kotlinCompilerExtensionVersion = libsAndroidx.versions.compose.compiler.get()
             }
 
             ifLibrary {
@@ -105,10 +99,7 @@ subprojects {
         }
 
         dependencies {
-            configurations.findByName("coreLibraryDesugaring")?.let { coreLibraryDesugaring ->
-                val desugarJdkLibsVersion: String by project
-                coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:$desugarJdkLibsVersion")
-            }
+            configurations.findByName("coreLibraryDesugaring")?.invoke(libsAndroidTools.desugarJdkLibs)
         }
     }
 }
