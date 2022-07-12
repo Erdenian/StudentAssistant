@@ -38,7 +38,7 @@ dependencyResolutionManagement {
 
     versionCatalogs {
         create("libsPlugins") {
-            version("android", "7.2.2")
+            version("android", "7.3.0-beta05")
             plugin("android-application", "com.android.application")
                 .versionRef("android")
             plugin("android-library", "com.android.library")
