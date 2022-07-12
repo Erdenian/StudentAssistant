@@ -55,26 +55,22 @@ subprojects {
         }
 
         if (extensions.findByType<BaseExtension>() != null) extensions.configure<BaseExtension> {
-            val minSdkVersion: String by project
-            val compileSdkVersion: String by project
-            val targetSdkVersion: String by project
-
             ifApplication {
-                compileSdk = compileSdkVersion.toInt()
+                compileSdk = config.versions.compileSdk.get().toInt()
 
                 defaultConfig {
-                    minSdk = minSdkVersion.toInt()
-                    targetSdk = targetSdkVersion.toInt()
+                    minSdk = config.versions.minSdk.get().toInt()
+                    targetSdk = config.versions.targetSdk.get().toInt()
 
                     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                 }
             }
             ifLibrary {
-                compileSdk = compileSdkVersion.toInt()
+                compileSdk = config.versions.compileSdk.get().toInt()
 
                 defaultConfig {
-                    minSdk = minSdkVersion.toInt()
-                    targetSdk = targetSdkVersion.toInt()
+                    minSdk = config.versions.minSdk.get().toInt()
+                    targetSdk = config.versions.targetSdk.get().toInt()
 
                     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -83,8 +79,7 @@ subprojects {
             }
 
             composeOptions {
-                val composeCompilerVersion: String by project
-                kotlinCompilerExtensionVersion = composeCompilerVersion
+                kotlinCompilerExtensionVersion = libsAndroidx.versions.compose.compiler.get()
             }
 
             ifLibrary {
@@ -105,10 +100,7 @@ subprojects {
         }
 
         dependencies {
-            configurations.findByName("coreLibraryDesugaring")?.let { coreLibraryDesugaring ->
-                val desugarJdkLibsVersion: String by project
-                coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:$desugarJdkLibsVersion")
-            }
+            configurations.findByName("coreLibraryDesugaring")?.invoke(libsAndroidTools.desugarJdkLibs)
         }
     }
 }

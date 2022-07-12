@@ -9,7 +9,5 @@ java {
 }
 
 dependencies {
-    val lintVersion: String by project
-    compileOnly("com.android.tools.lint:lint-api:$lintVersion")
-    compileOnly("com.android.tools.lint:lint-checks:$lintVersion")
+    compileOnly(libsAndroidTools.bundles.lint)
 }

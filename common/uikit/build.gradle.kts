@@ -16,7 +16,6 @@ dependencies {
     // endregion
 
     // region UI
-    val accompanistVersion: String by project
-    implementation("com.google.accompanist:accompanist-placeholder-material:$accompanistVersion")
+    implementation(libsUi.accompanist.placeholder)
     // endregion
 }

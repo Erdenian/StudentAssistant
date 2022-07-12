@@ -20,18 +20,15 @@ dependencies {
     // endregion
 
     // region AndroidX
-    val lifecycleVersion: String by project
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    implementation(libsAndroidx.lifecycle.viewmodel)
     // endregion
 
     // region Core
-    val daggerVersion: String by project
-    implementation("com.google.dagger:dagger:$daggerVersion")
-    kapt("com.google.dagger:dagger-compiler:$daggerVersion")
+    kapt(libsCore.dagger.compiler)
+    implementation(libsCore.dagger)
     // endregion
 
     // region UI
-    val accompanistVersion: String by project
-    implementation("com.google.accompanist:accompanist-placeholder-material:$accompanistVersion")
+    implementation(libsUi.accompanist.placeholder)
     // endregion
 }
