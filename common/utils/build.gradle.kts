@@ -1,6 +1,7 @@
+@Suppress("DSL_SCOPE_VIOLATION") // https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
-    id("com.android.library")
-    kotlin("android")
+    id(libsPlugins.plugins.android.library.get().pluginId)
+    id(libsPlugins.plugins.kotlin.android.get().pluginId)
 }
 
 android {
@@ -9,7 +10,6 @@ android {
 
 dependencies {
     // region Tests
-    val junitVersion: String by project
-    testImplementation("junit:junit:$junitVersion")
+    testImplementation(libsTest.junit)
     // endregion
 }
