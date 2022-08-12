@@ -100,7 +100,7 @@ dependencyResolutionManagement {
         }
 
         create("libsAndroidTools") {
-            version("desugarJdkLibs", "1.1.6")
+            version("desugarJdkLibs", "1.2.0")
             library("desugarJdkLibs", "com.android.tools", "desugar_jdk_libs")
                 .versionRef("desugarJdkLibs")
 
