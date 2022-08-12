@@ -177,7 +177,7 @@ private fun TopAppBarDropdownMenuItemsPreview() = AppTheme {
                 items = listOf(
                     "First",
                     "Second",
-                    "Very very very very very very very very very very very very very long item",
+                    "Very very very very very very very very very very very very very long item"
                 ),
                 onItemClick = { _, _ -> }
             )

@@ -120,7 +120,7 @@ internal fun SemesterEditorContent(
                 .fillMaxWidth()
                 .placeholder(
                     visible = isLoading,
-                    highlight = PlaceholderHighlight.shimmer(),
+                    highlight = PlaceholderHighlight.shimmer()
                 )
         )
 
@@ -149,7 +149,7 @@ internal fun SemesterEditorContent(
                 enabled = !isLoading,
                 modifier = Modifier.placeholder(
                     visible = isLoading,
-                    highlight = PlaceholderHighlight.shimmer(),
+                    highlight = PlaceholderHighlight.shimmer()
                 )
             ) {
                 Text(text = firstDay.format(dateFormatter))
@@ -172,7 +172,7 @@ internal fun SemesterEditorContent(
                 enabled = !isLoading,
                 modifier = Modifier.placeholder(
                     visible = isLoading,
-                    highlight = PlaceholderHighlight.shimmer(),
+                    highlight = PlaceholderHighlight.shimmer()
                 )
             ) {
                 Text(text = lastDay.format(dateFormatter))
