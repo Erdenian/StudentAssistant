@@ -43,7 +43,6 @@ import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
 import com.erdenian.studentassistant.style.dimensions
-import com.erdenian.studentassistant.uikit.layout.StartEndRow
 
 /**
  * View для выбора недель для повторения пары.
@@ -137,38 +136,37 @@ private fun WeeksSelectorSimpleContent(
     ) {
         Text(text = stringResource(RS.ws_variants_title))
 
-        StartEndRow(
+        Row(
             verticalAlignment = Alignment.Bottom,
             modifier = Modifier
                 .padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
-                .clickable(onClick = onSelectedRepeatVariantClick, enabled = enabled),
-            contentStart = {
-                Text(
-                    text = repeatVariants[selectedRepeatVariantIndex],
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
-                )
+                .clickable(onClick = onSelectedRepeatVariantClick, enabled = enabled)
+        ) {
+            Text(
+                text = repeatVariants[selectedRepeatVariantIndex],
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+                modifier = Modifier.weight(1.0f, false)
+            )
 
-                DropdownMenu(
-                    expanded = repeatVariantsExpanded,
-                    onDismissRequest = onRepeatVariantsDismissRequest
-                ) {
-                    repeatVariants.forEachIndexed { index, variant ->
-                        DropdownMenuItem(
-                            onClick = { onRepeatVariantClick(index) }
-                        ) {
-                            Text(text = variant)
-                        }
+            Icon(
+                imageVector = AppIcons.ArrowDropDown,
+                contentDescription = null
+            )
+
+            DropdownMenu(
+                expanded = repeatVariantsExpanded,
+                onDismissRequest = onRepeatVariantsDismissRequest
+            ) {
+                repeatVariants.forEachIndexed { index, variant ->
+                    DropdownMenuItem(
+                        onClick = { onRepeatVariantClick(index) }
+                    ) {
+                        Text(text = variant)
                     }
                 }
-            },
-            contentEnd = {
-                Icon(
-                    imageVector = AppIcons.ArrowDropDown,
-                    contentDescription = null
-                )
             }
-        )
+        }
     }
 }
 
@@ -194,38 +192,37 @@ private fun WeeksSelectorAdvancedContent(
     ) {
         Text(text = stringResource(RS.ws_variants_title))
 
-        StartEndRow(
+        Row(
             verticalAlignment = Alignment.Bottom,
             modifier = Modifier
                 .padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
-                .clickable(onClick = onSelectedRepeatVariantClick, enabled = enabled),
-            contentStart = {
-                Text(
-                    text = repeatVariants[selectedRepeatVariantIndex],
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
-                )
+                .clickable(onClick = onSelectedRepeatVariantClick, enabled = enabled)
+        ) {
+            Text(
+                text = repeatVariants[selectedRepeatVariantIndex],
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+                modifier = Modifier.weight(1.0f, false)
+            )
 
-                DropdownMenu(
-                    expanded = repeatVariantsExpanded,
-                    onDismissRequest = onRepeatVariantsDismissRequest
-                ) {
-                    repeatVariants.forEachIndexed { index, variant ->
-                        DropdownMenuItem(
-                            onClick = { onRepeatVariantClick(index) }
-                        ) {
-                            Text(text = variant)
-                        }
+            Icon(
+                imageVector = AppIcons.ArrowDropDown,
+                contentDescription = null
+            )
+
+            DropdownMenu(
+                expanded = repeatVariantsExpanded,
+                onDismissRequest = onRepeatVariantsDismissRequest
+            ) {
+                repeatVariants.forEachIndexed { index, variant ->
+                    DropdownMenuItem(
+                        onClick = { onRepeatVariantClick(index) }
+                    ) {
+                        Text(text = variant)
                     }
                 }
-            },
-            contentEnd = {
-                Icon(
-                    imageVector = AppIcons.ArrowDropDown,
-                    contentDescription = null
-                )
             }
-        )
+        }
     }
 
     Row(
