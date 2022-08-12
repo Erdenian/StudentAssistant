@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
@@ -20,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.style.TextOverflow
@@ -27,7 +29,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
-import com.erdenian.studentassistant.uikit.layout.StartEndRow
 
 @Composable
 internal fun BasePreference(
@@ -59,31 +60,30 @@ internal fun BasePreference(
             }
         }
 
-        StartEndRow(
-            verticalAlignment = Alignment.CenterVertically,
-            contentStart = {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 16.dp)
-                ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 16.dp)
+                    .weight(1.0f, false)
+            ) {
+                Text(
+                    text = title,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
+                )
+                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                     Text(
-                        text = title,
+                        text = description,
                         overflow = TextOverflow.Ellipsis,
-                        maxLines = 1
+                        maxLines = 2,
+                        style = MaterialTheme.typography.body2
                     )
-                    CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                        Text(
-                            text = description,
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 2,
-                            style = MaterialTheme.typography.body2
-                        )
-                    }
                 }
-            },
-            contentEnd = contentEnd ?: {}
-        )
+            }
+
+            contentEnd?.invoke()
+        }
     }
 }
 
@@ -107,6 +107,44 @@ private fun BasePreferenceLongPreview() = AppTheme {
         title = "Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title",
         icon = rememberVectorPainter(AppIcons.Timer),
         description = "Description Description Description Description Description Description Description Description",
+        onClick = {},
+        modifier = Modifier.background(MaterialTheme.colors.background)
+    )
+}
+
+@Preview
+@Composable
+private fun BasePreferenceWithContentEndPreview() = AppTheme {
+    BasePreference(
+        title = "Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title",
+        icon = rememberVectorPainter(AppIcons.Timer),
+        description = "Description Description Description Description Description Description Description Description",
+        contentEnd = {
+            Box(
+                Modifier
+                    .size(24.dp)
+                    .background(Color.Green)
+            )
+        },
+        onClick = {},
+        modifier = Modifier.background(MaterialTheme.colors.background)
+    )
+}
+
+@Preview
+@Composable
+private fun BasePreferenceWithContentEndLongPreview() = AppTheme {
+    BasePreference(
+        title = "Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title",
+        icon = rememberVectorPainter(AppIcons.Timer),
+        description = "Description Description Description Description Description Description Description Description",
+        contentEnd = {
+            Box(
+                Modifier
+                    .size(24.dp)
+                    .background(Color.Green)
+            )
+        },
         onClick = {},
         modifier = Modifier.background(MaterialTheme.colors.background)
     )
