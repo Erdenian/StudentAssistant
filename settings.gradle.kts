@@ -38,13 +38,13 @@ dependencyResolutionManagement {
 
     versionCatalogs {
         create("libsPlugins") {
-            version("android", "7.2.1")
+            version("android", "7.2.2")
             plugin("android-application", "com.android.application")
                 .versionRef("android")
             plugin("android-library", "com.android.library")
                 .versionRef("android")
 
-            version("kotlin", "1.7.0")
+            version("kotlin", "1.7.10")
             plugin("kotlin-android", "org.jetbrains.kotlin.android")
                 .versionRef("kotlin")
             plugin("kotlin-jvm", "org.jetbrains.kotlin.jvm")
@@ -54,7 +54,7 @@ dependencyResolutionManagement {
             plugin("kotlin-parcelize", "org.jetbrains.kotlin.plugin.parcelize")
                 .versionRef("kotlin")
 
-            version("detekt", "1.20.0")
+            version("detekt", "1.21.0")
             plugin("detekt", "io.gitlab.arturbosch.detekt")
                 .versionRef("detekt")
             library("detekt-formatting", "io.gitlab.arturbosch.detekt", "detekt-formatting")
@@ -94,17 +94,17 @@ dependencyResolutionManagement {
         }
 
         create("libsKotlinx") {
-            version("coroutines", "1.6.3")
+            version("coroutines", "1.6.4")
             library("coroutines", "org.jetbrains.kotlinx", "kotlinx-coroutines-android")
                 .versionRef("coroutines")
         }
 
         create("libsAndroidTools") {
-            version("desugarJdkLibs", "1.1.5")
+            version("desugarJdkLibs", "1.1.6")
             library("desugarJdkLibs", "com.android.tools", "desugar_jdk_libs")
                 .versionRef("desugarJdkLibs")
 
-            version("lint", "30.2.1")
+            version("lint", "30.2.2")
             library("lint-api", "com.android.tools.lint", "lint-api")
                 .versionRef("lint")
             library("lint-checks", "com.android.tools.lint", "lint-checks")
@@ -114,8 +114,8 @@ dependencyResolutionManagement {
 
         create("libsAndroidx") {
             // region Compose
-            version("compose-compiler", "1.2.0")
-            version("compose", "1.2.0-rc03")
+            version("compose-compiler", "1.3.0")
+            version("compose", "1.2.1")
 
             library("compose-ui", "androidx.compose.ui", "ui")
                 .versionRef("compose")
@@ -145,35 +145,35 @@ dependencyResolutionManagement {
             )
             // endregion
 
-            version("lifecycle", "2.5.0")
+            version("lifecycle", "2.5.1")
             library("lifecycle-viewmodel", "androidx.lifecycle", "lifecycle-viewmodel-ktx")
                 .versionRef("lifecycle")
 
-            version("room", "2.4.2")
+            version("room", "2.4.3")
             library("room-compiler", "androidx.room", "room-compiler")
                 .versionRef("room")
             library("room", "androidx.room", "room-ktx")
                 .versionRef("room")
 
-            version("appcompat", "1.4.2")
+            version("appcompat", "1.5.0")
             library("appcompat", "androidx.appcompat", "appcompat")
                 .versionRef("appcompat")
 
-            version("activity", "1.5.0")
+            version("activity", "1.5.1")
             library("activity", "androidx.activity", "activity-compose")
                 .versionRef("activity")
 
-            version("navigation", "2.5.0")
+            version("navigation", "2.5.1")
             library("navigation", "androidx.navigation", "navigation-compose")
                 .versionRef("navigation")
 
-            version("core-splashscreen", "1.0.0-rc01")
+            version("core-splashscreen", "1.0.0")
             library("core-splashscreen", "androidx.core", "core-splashscreen")
                 .versionRef("core-splashscreen")
         }
 
         create("libsCore") {
-            version("dagger", "2.42")
+            version("dagger", "2.43.2")
             library("dagger-compiler", "com.google.dagger", "dagger-compiler")
                 .versionRef("dagger")
             library("dagger", "com.google.dagger", "dagger")
@@ -186,7 +186,7 @@ dependencyResolutionManagement {
             library("material", "com.google.android.material", "material")
                 .versionRef("material")
 
-            version("accompanist", "0.24.13-rc")
+            version("accompanist", "0.25.1")
             library("accompanist-placeholder", "com.google.accompanist", "accompanist-placeholder-material")
                 .versionRef("accompanist")
             library("accompanist-pager", "com.google.accompanist", "accompanist-pager")
