@@ -1,7 +1,7 @@
 package com.erdenian.studentassistant.database.dao
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.erdenian.studentassistant.database.di.buildDatabase
+import com.erdenian.studentassistant.database.buildDatabase
 import com.erdenian.studentassistant.database.entity.ByDateEntity
 import com.erdenian.studentassistant.database.entity.ByWeekdayEntity
 import com.erdenian.studentassistant.database.entity.ClassroomEntity
