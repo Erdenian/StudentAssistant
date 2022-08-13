@@ -16,9 +16,7 @@ include(
     ":data:entity",
 
     ":core:strings",
-    ":core:style",
-
-    ":lint"
+    ":core:style"
 )
 
 pluginManagement {
@@ -103,13 +101,6 @@ dependencyResolutionManagement {
             version("desugarJdkLibs", "1.2.0")
             library("desugarJdkLibs", "com.android.tools", "desugar_jdk_libs")
                 .versionRef("desugarJdkLibs")
-
-            version("lint", "30.2.2")
-            library("lint-api", "com.android.tools.lint", "lint-api")
-                .versionRef("lint")
-            library("lint-checks", "com.android.tools.lint", "lint-checks")
-                .versionRef("lint")
-            bundle("lint", listOf("lint-api", "lint-checks"))
         }
 
         create("libsAndroidx") {
