@@ -20,8 +20,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.erdenian.studentassistant.uikit.R
 import java.time.Duration
 
-private fun Duration.toMinutesPartCompat() = (toMinutes() % @Suppress("MagicNumber") 60).toInt()
-
 @Composable
 internal fun DurationPreference(
     title: String,
@@ -34,7 +32,7 @@ internal fun DurationPreference(
 
     BasePreference(
         title = title,
-        description = String.format("%02d:%02d", value.toHours(), value.toMinutesPartCompat()),
+        description = String.format("%02d:%02d", value.toHours(), value.toMinutesPart()),
         icon = icon,
         onClick = { isShowDialog = true },
         modifier = modifier
@@ -102,9 +100,9 @@ private var TimePicker.duration: Duration
     set(value) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             hour = value.toHours().toInt()
-            minute = value.toMinutesPartCompat()
+            minute = value.toMinutesPart()
         } else {
             currentHour = value.toHours().toInt()
-            currentMinute = value.toMinutesPartCompat()
+            currentMinute = value.toMinutesPart()
         }
     }
