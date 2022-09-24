@@ -36,7 +36,7 @@ dependencyResolutionManagement {
 
     versionCatalogs {
         create("libsPlugins") {
-            version("android", "7.3.0-beta05")
+            version("android", "7.3.0")
             plugin("android-application", "com.android.application")
                 .versionRef("android")
             plugin("android-library", "com.android.library")
@@ -105,7 +105,7 @@ dependencyResolutionManagement {
 
         create("libsAndroidx") {
             // region Compose
-            version("compose-compiler", "1.3.0")
+            version("compose-compiler", "1.3.1")
             version("compose", "1.2.1")
 
             library("compose-ui", "androidx.compose.ui", "ui")
@@ -146,7 +146,7 @@ dependencyResolutionManagement {
             library("room", "androidx.room", "room-ktx")
                 .versionRef("room")
 
-            version("appcompat", "1.5.0")
+            version("appcompat", "1.5.1")
             library("appcompat", "androidx.appcompat", "appcompat")
                 .versionRef("appcompat")
 
@@ -154,7 +154,7 @@ dependencyResolutionManagement {
             library("activity", "androidx.activity", "activity-compose")
                 .versionRef("activity")
 
-            version("navigation", "2.5.1")
+            version("navigation", "2.5.2")
             library("navigation", "androidx.navigation", "navigation-compose")
                 .versionRef("navigation")
 
@@ -164,7 +164,7 @@ dependencyResolutionManagement {
         }
 
         create("libsCore") {
-            version("dagger", "2.43.2")
+            version("dagger", "2.44")
             library("dagger-compiler", "com.google.dagger", "dagger-compiler")
                 .versionRef("dagger")
             library("dagger", "com.google.dagger", "dagger")
