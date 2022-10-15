@@ -106,7 +106,7 @@ subprojects {
                     ?.absoluteFile
                     ?.parentFile
 
-                if (androidTest?.walkTopDown()?.any { it.isFile } == true) {
+                if (androidTest?.walk()?.any { it.isFile } == true) {
                     testOptions {
                         managedDevices {
                             devices {
