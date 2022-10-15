@@ -42,7 +42,7 @@ dependencyResolutionManagement {
             plugin("android-library", "com.android.library")
                 .versionRef("android")
 
-            version("kotlin", "1.7.10")
+            version("kotlin", "1.7.20")
             plugin("kotlin-android", "org.jetbrains.kotlin.android")
                 .versionRef("kotlin")
             plugin("kotlin-jvm", "org.jetbrains.kotlin.jvm")
@@ -67,8 +67,8 @@ dependencyResolutionManagement {
 
         create("config") {
             version("minSdk", "21")
-            version("compileSdk", "32")
-            version("targetSdk", "32")
+            version("compileSdk", "33")
+            version("targetSdk", "33")
         }
 
         create("libsTest") {
@@ -105,7 +105,7 @@ dependencyResolutionManagement {
 
         create("libsAndroidx") {
             // region Compose
-            version("compose-compiler", "1.3.1")
+            version("compose-compiler", "1.3.2")
             version("compose", "1.2.1")
 
             library("compose-ui", "androidx.compose.ui", "ui")
@@ -150,7 +150,7 @@ dependencyResolutionManagement {
             library("appcompat", "androidx.appcompat", "appcompat")
                 .versionRef("appcompat")
 
-            version("activity", "1.5.1")
+            version("activity", "1.6.0")
             library("activity", "androidx.activity", "activity-compose")
                 .versionRef("activity")
 
