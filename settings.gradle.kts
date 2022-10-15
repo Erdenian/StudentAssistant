@@ -67,8 +67,8 @@ dependencyResolutionManagement {
 
         create("config") {
             version("minSdk", "21")
-            version("compileSdk", "32")
-            version("targetSdk", "32")
+            version("compileSdk", "33")
+            version("targetSdk", "33")
         }
 
         create("libsTest") {
@@ -150,7 +150,7 @@ dependencyResolutionManagement {
             library("appcompat", "androidx.appcompat", "appcompat")
                 .versionRef("appcompat")
 
-            version("activity", "1.5.1")
+            version("activity", "1.6.0")
             library("activity", "androidx.activity", "activity-compose")
                 .versionRef("activity")
 
