@@ -11,19 +11,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.filled.Timer
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -55,7 +53,8 @@ internal fun BasePreference(
             if (icon != null) {
                 Icon(
                     painter = icon,
-                    contentDescription = null
+                    contentDescription = null,
+                    modifier = Modifier.align(Alignment.CenterEnd)
                 )
             }
         }
@@ -70,19 +69,21 @@ internal fun BasePreference(
                 Text(
                     text = title,
                     overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
+                    maxLines = 1,
+                    style = MaterialTheme.typography.bodyLarge
                 )
-                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                    Text(
-                        text = description,
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 2,
-                        style = MaterialTheme.typography.body2
-                    )
-                }
+
+                Text(
+                    text = description,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 2,
+                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Light)
+                )
             }
 
-            contentEnd?.invoke()
+            if (contentEnd != null) {
+                Box(modifier = Modifier.padding(end = 16.dp)) { contentEnd() }
+            }
         }
     }
 }
@@ -96,7 +97,7 @@ private fun BasePreferencePreview() = AppTheme {
         icon = rememberVectorPainter(AppIcons.Timer),
         description = "Description",
         onClick = {},
-        modifier = Modifier.background(MaterialTheme.colors.background)
+        modifier = Modifier.background(MaterialTheme.colorScheme.background)
     )
 }
 
@@ -108,7 +109,7 @@ private fun BasePreferenceLongPreview() = AppTheme {
         icon = rememberVectorPainter(AppIcons.Timer),
         description = "Description Description Description Description Description Description Description Description",
         onClick = {},
-        modifier = Modifier.background(MaterialTheme.colors.background)
+        modifier = Modifier.background(MaterialTheme.colorScheme.background)
     )
 }
 
@@ -127,7 +128,7 @@ private fun BasePreferenceWithContentEndPreview() = AppTheme {
             )
         },
         onClick = {},
-        modifier = Modifier.background(MaterialTheme.colors.background)
+        modifier = Modifier.background(MaterialTheme.colorScheme.background)
     )
 }
 
@@ -146,6 +147,6 @@ private fun BasePreferenceWithContentEndLongPreview() = AppTheme {
             )
         },
         onClick = {},
-        modifier = Modifier.background(MaterialTheme.colors.background)
+        modifier = Modifier.background(MaterialTheme.colorScheme.background)
     )
 }

@@ -3,16 +3,15 @@ package com.erdenian.studentassistant.uikit.view
 import android.content.res.Configuration
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Card
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Divider
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -33,8 +32,7 @@ fun HomeworkCard(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null
-) = Card(
-    elevation = 4.dp,
+) = ElevatedCard(
     modifier = modifier
 ) {
     Column(
@@ -50,25 +48,25 @@ fun HomeworkCard(
             text = subjectName,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.bodyLarge
         )
 
-        Divider(modifier = Modifier.padding(vertical = MaterialTheme.dimensions.dividerMarginTopBottom))
+        HorizontalDivider(modifier = Modifier.padding(vertical = MaterialTheme.dimensions.dividerMarginTopBottom))
 
         Text(
             text = description,
             overflow = TextOverflow.Ellipsis,
             maxLines = 3,
-            style = MaterialTheme.typography.body2,
+            style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.fillMaxWidth()
         )
 
-        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-            Text(
-                text = stringResource(RS.hc_deadline, deadline),
-                style = MaterialTheme.typography.body2
-            )
-        }
+        Spacer(modifier = Modifier.height(6.dp))
+
+        Text(
+            text = stringResource(RS.hc_deadline, deadline),
+            style = MaterialTheme.typography.bodySmall
+        )
     }
 }
 

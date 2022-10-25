@@ -6,7 +6,7 @@ import android.graphics.Typeface
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
@@ -147,10 +147,11 @@ object WeekdaysPickerDefaults {
 
     @Composable
     fun weekdaysPickerColors(
-        backgroundColor: Color = MaterialTheme.colors.onSurface.copy(alpha = 0.38f).compositeOver(MaterialTheme.colors.surface),
-        selectedBackgroundColor: Color = MaterialTheme.colors.primary,
-        textColor: Color = MaterialTheme.colors.onPrimary,
-        selectedTextColor: Color = MaterialTheme.colors.onPrimary
+        backgroundColor: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+            .compositeOver(MaterialTheme.colorScheme.surface),
+        selectedBackgroundColor: Color = MaterialTheme.colorScheme.primary,
+        textColor: Color = MaterialTheme.colorScheme.onPrimary,
+        selectedTextColor: Color = MaterialTheme.colorScheme.onPrimary
     ): WeekdaysPickerColors = DefaultWeekdaysPickerColors(
         backgroundColor = backgroundColor,
         selectedBackgroundColor = selectedBackgroundColor,
