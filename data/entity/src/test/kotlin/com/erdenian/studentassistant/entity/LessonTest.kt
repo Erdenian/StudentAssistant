@@ -11,6 +11,7 @@ import org.junit.Test
 class LessonTest {
 
     @SuppressLint("ParcelCreator")
+    @Suppress("NotImplementedDeclaration")
     private data class LessonEntity(
         override val subjectName: String,
         override val type: String,
@@ -27,6 +28,7 @@ class LessonTest {
     }
 
     @SuppressLint("ParcelCreator")
+    @Suppress("NotImplementedDeclaration")
     private data class ByWeekdayEntity(
         override val dayOfWeek: DayOfWeek,
         override val weeks: List<Boolean>
@@ -36,6 +38,7 @@ class LessonTest {
     }
 
     @SuppressLint("ParcelCreator")
+    @Suppress("NotImplementedDeclaration")
     private data class ByDatesEntity(
         override val dates: Set<LocalDate>
     ) : Lesson.Repeat.ByDates() {

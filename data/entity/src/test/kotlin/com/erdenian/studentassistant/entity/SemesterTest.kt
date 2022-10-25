@@ -9,6 +9,7 @@ import org.junit.Test
 class SemesterTest {
 
     @SuppressLint("ParcelCreator")
+    @Suppress("NotImplementedDeclaration")
     private data class SemesterEntity(
         override val name: String,
         override val firstDay: LocalDate,

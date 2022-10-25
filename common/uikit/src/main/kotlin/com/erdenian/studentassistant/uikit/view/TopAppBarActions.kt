@@ -7,20 +7,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.erdenian.studentassistant.style.AppIcons
@@ -90,7 +90,7 @@ private fun TopAppBarActionsContent(
                         Icon(imageVector = item.imageVector, contentDescription = item.name)
                     } else {
                         CircularProgressIndicator(
-                            color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
+                            color = LocalContentColor.current,
                             modifier = Modifier.size(item.imageVector.defaultWidth, item.imageVector.defaultHeight)
                         )
                     }
@@ -133,19 +133,21 @@ private fun ColumnScope.DropdownMenuItems(
 ) {
     items.forEach { item ->
         DropdownMenuItem(
+            text = {
+                Text(
+                    text = item.name,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal),
+                    modifier = Modifier.placeholder(
+                        visible = item.loading,
+                        highlight = PlaceholderHighlight.shimmer()
+                    )
+                )
+            },
             onClick = { onItemClick(item) },
             enabled = !item.loading
-        ) {
-            Text(
-                text = item.name,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1,
-                modifier = Modifier.placeholder(
-                    visible = item.loading,
-                    highlight = PlaceholderHighlight.shimmer()
-                )
-            )
-        }
+        )
     }
 }
 
