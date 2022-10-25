@@ -3,12 +3,14 @@ package com.erdenian.studentassistant.uikit.view
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -40,18 +42,23 @@ private fun ContextMenuDialogContent(
         if (title != null) {
             Text(
                 text = title,
-                color = MaterialTheme.colors.secondary,
-                style = MaterialTheme.typography.h6,
+                color = MaterialTheme.colorScheme.secondary,
+                style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             )
         }
 
         items.forEach { item ->
             DropdownMenuItem(
+                text = {
+                    Text(
+                        text = item.name,
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal)
+                    )
+                },
+                contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
                 onClick = item.onClick
-            ) {
-                Text(text = item.name)
-            }
+            )
         }
     }
 }

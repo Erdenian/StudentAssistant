@@ -4,14 +4,16 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,56 +41,61 @@ internal fun HomeworksContent(
     onAddHomeworkClick: (Semester) -> Unit,
     onHomeworkClick: (Homework) -> Unit,
     onLongHomeworkClick: (Homework) -> Unit
-) = Scaffold(
-    topBar = {
-        TopAppBar(
-            title = {
-                if ((selectedSemester == null) || (semesters.size <= 1)) {
-                    Text(text = stringResource(RS.h_title))
-                } else {
-                    TopAppBarDropdownMenu(
-                        items = semesters,
-                        selectedItem = selectedSemester.name,
-                        onSelectedItemChange = { index, _ -> onSelectedSemesterChange(index) }
+) {
+    val topAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    if ((selectedSemester == null) || (semesters.size <= 1)) {
+                        Text(text = stringResource(RS.h_title))
+                    } else {
+                        TopAppBarDropdownMenu(
+                            items = semesters,
+                            selectedItem = selectedSemester.name,
+                            onSelectedItemChange = { index, _ -> onSelectedSemesterChange(index) }
+                        )
+                    }
+                },
+                actions = {
+                    TopAppBarActions(
+                        actions = listOfNotNull(
+                            if (selectedSemester != null) {
+                                ActionItem.AlwaysShow(
+                                    name = stringResource(RS.h_add),
+                                    imageVector = AppIcons.Add,
+                                    onClick = { onAddHomeworkClick(selectedSemester) }
+                                )
+                            } else null
+                        )
                     )
-                }
-            },
-            actions = {
-                TopAppBarActions(
-                    actions = listOfNotNull(
-                        if (selectedSemester != null) {
-                            ActionItem.AlwaysShow(
-                                name = stringResource(RS.h_add),
-                                imageVector = AppIcons.Add,
-                                onClick = { onAddHomeworkClick(selectedSemester) }
-                            )
-                        } else null
-                    )
+                },
+                scrollBehavior = topAppBarScrollBehavior
+            )
+        }
+    ) { paddingValues ->
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+        ) {
+            if (selectedSemester == null) {
+                Text(
+                    text = stringResource(RS.h_no_schedule),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
+                )
+            } else {
+                LazyHomeworksList(
+                    overdueHomeworks = overdueHomeworks,
+                    actualHomeworks = actualHomeworks,
+                    pastHomeworks = pastHomeworks,
+                    onHomeworkClick = onHomeworkClick,
+                    onLongHomeworkClick = onLongHomeworkClick,
+                    modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
                 )
             }
-        )
-    }
-) { paddingValues ->
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .padding(paddingValues)
-            .fillMaxSize()
-    ) {
-        if (selectedSemester == null) {
-            Text(
-                text = stringResource(RS.h_no_schedule),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
-            )
-        } else {
-            LazyHomeworksList(
-                overdueHomeworks = overdueHomeworks,
-                actualHomeworks = actualHomeworks,
-                pastHomeworks = pastHomeworks,
-                onHomeworkClick = onHomeworkClick,
-                onLongHomeworkClick = onLongHomeworkClick
-            )
         }
     }
 }

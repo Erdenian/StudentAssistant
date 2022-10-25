@@ -12,5 +12,5 @@ android {
 dependencies {
     // region Compose
     api(libs.bundles.androidx.compose)
-    //endregion
+    // endregion
 }

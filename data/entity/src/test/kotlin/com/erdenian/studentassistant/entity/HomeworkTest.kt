@@ -9,6 +9,7 @@ import org.junit.Test
 class HomeworkTest {
 
     @SuppressLint("ParcelCreator")
+    @Suppress("NotImplementedDeclaration")
     private data class HomeworkEntity(
         override val subjectName: String,
         override val description: String,

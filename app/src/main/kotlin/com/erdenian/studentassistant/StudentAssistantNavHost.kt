@@ -25,7 +25,6 @@ import com.erdenian.studentassistant.schedule.scheduleeditor.ScheduleEditorScree
 import com.erdenian.studentassistant.schedule.semestereditor.SemesterEditorScreen
 import com.erdenian.studentassistant.settings.SettingsScreen
 import com.erdenian.studentassistant.settings.di.SettingsComponent
-import com.erdenian.studentassistant.utils.KeyboardPadding
 import com.erdenian.studentassistant.utils.SoftReferenceLazyComponentHolder
 import java.time.DayOfWeek
 
@@ -212,12 +211,10 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                 val semesterId = backStackEntry.arguments?.getLong("semester_id", -1L)?.takeIf { it >= 0 }
                 val viewModel = scheduleComponentHolder.viewModel { semesterEditorViewModelFactory.get(semesterId) }
 
-                KeyboardPadding {
-                    SemesterEditorScreen(
-                        viewModel = viewModel,
-                        navigateBack = { navController.popBackStack() }
-                    )
-                }
+                SemesterEditorScreen(
+                    viewModel = viewModel,
+                    navigateBack = { navController.popBackStack() }
+                )
             }
         }
     }
@@ -320,12 +317,10 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                     }
                 }
 
-                KeyboardPadding {
-                    LessonEditorScreen(
-                        viewModel = viewModel,
-                        navigateBack = { navController.popBackStack() }
-                    )
-                }
+                LessonEditorScreen(
+                    viewModel = viewModel,
+                    navigateBack = { navController.popBackStack() }
+                )
             }
         }
     }
@@ -376,15 +371,13 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                     }
                 }
 
-                KeyboardPadding {
-                    HomeworkEditorScreen(
-                        viewModel = viewModel,
-                        navigateBack = { navController.popBackStack() },
-                        navigateToCreateLesson = { semester, subject ->
-                            navigateToLessonEditor(semester, subjectName = subject)
-                        }
-                    )
-                }
+                HomeworkEditorScreen(
+                    viewModel = viewModel,
+                    navigateBack = { navController.popBackStack() },
+                    navigateToCreateLesson = { semester, subject ->
+                        navigateToLessonEditor(semester, subjectName = subject)
+                    }
+                )
             }
         }
     }

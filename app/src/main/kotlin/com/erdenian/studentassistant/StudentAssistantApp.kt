@@ -1,23 +1,16 @@
 package com.erdenian.studentassistant
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -33,7 +26,6 @@ import androidx.navigation.compose.rememberNavController
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AutoMirrored
-import com.erdenian.studentassistant.utils.ProvideKeyboardPadding
 
 @Composable
 internal fun StudentAssistantApp() {
@@ -46,26 +38,16 @@ internal fun StudentAssistantApp() {
     }
 
     Scaffold(
-        content = { paddingValues ->
-            ProvideKeyboardPadding(paddingValues) {
-                StudentAssistantNavHost(
-                    navController = navController,
-                    navGraph = navGraph,
-                    modifier = Modifier
-                        .windowInsetsPadding(
-                            WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top)
-                        )
-                        .padding(paddingValues)
-                )
-            }
-        },
-        bottomBar = {
-            StudentAssistantBottomNavigation(
-                navGraph = navGraph,
-                modifier = Modifier.navigationBarsPadding()
-            )
-        }
-    )
+        bottomBar = { StudentAssistantBottomNavigation(navGraph = navGraph) }
+    ) { paddingValues ->
+        StudentAssistantNavHost(
+            navController = navController,
+            navGraph = navGraph,
+            modifier = Modifier
+                .padding(paddingValues)
+                .consumeWindowInsets(paddingValues)
+        )
+    }
 }
 
 @Composable
@@ -104,26 +86,17 @@ private fun StudentAssistantBottomNavigation(
     }
 
     var selectedRoute by rememberSaveable { mutableStateOf(MainRoutes.SCHEDULE) }
-    BottomNavigation(
-        backgroundColor = MaterialTheme.colors.surface,
-        modifier = modifier
-    ) {
+    NavigationBar(modifier = modifier) {
         items.forEach { item ->
-            BottomNavigationItem(
+            NavigationBarItem(
                 selected = (selectedRoute == item.route),
-                icon = {
-                    Icon(
-                        imageVector = item.imageVector,
-                        contentDescription = stringResource(item.labelId)
-                    )
-                },
+                icon = { Icon(imageVector = item.imageVector, contentDescription = stringResource(item.labelId)) },
+                label = { Text(text = stringResource(item.labelId)) },
                 onClick = {
                     val restoreState = (selectedRoute != item.route)
                     selectedRoute = item.route
                     item.onClick(restoreState)
-                },
-                selectedContentColor = MaterialTheme.colors.primary,
-                unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+                }
             )
         }
     }
