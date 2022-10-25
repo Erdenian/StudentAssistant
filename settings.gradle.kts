@@ -36,7 +36,7 @@ dependencyResolutionManagement {
 
     versionCatalogs {
         create("libsPlugins") {
-            version("android", "7.3.0")
+            version("android", "7.3.1")
             plugin("android-application", "com.android.application")
                 .versionRef("android")
             plugin("android-library", "com.android.library")
@@ -52,7 +52,7 @@ dependencyResolutionManagement {
             plugin("kotlin-parcelize", "org.jetbrains.kotlin.plugin.parcelize")
                 .versionRef("kotlin")
 
-            version("detekt", "1.21.0")
+            version("detekt", "1.22.0")
             plugin("detekt", "io.gitlab.arturbosch.detekt")
                 .versionRef("detekt")
             library("detekt-formatting", "io.gitlab.arturbosch.detekt", "detekt-formatting")
@@ -76,15 +76,15 @@ dependencyResolutionManagement {
             library("junit", "junit", "junit")
                 .versionRef("junit")
 
-            version("androidx-junitKtx", "1.1.3")
+            version("androidx-junitKtx", "1.1.4")
             library("androidx-junitKtx", "androidx.test.ext", "junit-ktx")
                 .versionRef("androidx-junitKtx")
 
-            version("androidx-core", "1.4.0")
+            version("androidx-core", "1.5.0")
             library("androidx-core", "androidx.test", "core-ktx")
                 .versionRef("androidx-core")
 
-            version("androidx-runner", "1.4.0")
+            version("androidx-runner", "1.5.0")
             library("androidx-runner", "androidx.test", "runner")
                 .versionRef("androidx-runner")
 
@@ -106,7 +106,7 @@ dependencyResolutionManagement {
         create("libsAndroidx") {
             // region Compose
             version("compose-compiler", "1.3.2")
-            version("compose", "1.2.1")
+            version("compose", "1.3.1")
 
             library("compose-ui", "androidx.compose.ui", "ui")
                 .versionRef("compose")
@@ -150,11 +150,11 @@ dependencyResolutionManagement {
             library("appcompat", "androidx.appcompat", "appcompat")
                 .versionRef("appcompat")
 
-            version("activity", "1.6.0")
+            version("activity", "1.6.1")
             library("activity", "androidx.activity", "activity-compose")
                 .versionRef("activity")
 
-            version("navigation", "2.5.2")
+            version("navigation", "2.5.3")
             library("navigation", "androidx.navigation", "navigation-compose")
                 .versionRef("navigation")
 
@@ -164,7 +164,7 @@ dependencyResolutionManagement {
         }
 
         create("libsCore") {
-            version("dagger", "2.44")
+            version("dagger", "2.44.2")
             library("dagger-compiler", "com.google.dagger", "dagger-compiler")
                 .versionRef("dagger")
             library("dagger", "com.google.dagger", "dagger")
@@ -173,11 +173,11 @@ dependencyResolutionManagement {
 
         create("libsUi") {
             // Todo: switch to Compose completely to remove this dependency
-            version("material", "1.6.1")
+            version("material", "1.7.0")
             library("material", "com.google.android.material", "material")
                 .versionRef("material")
 
-            version("accompanist", "0.25.1")
+            version("accompanist", "0.28.0")
             library("accompanist-placeholder", "com.google.accompanist", "accompanist-placeholder-material")
                 .versionRef("accompanist")
             library("accompanist-pager", "com.google.accompanist", "accompanist-pager")
