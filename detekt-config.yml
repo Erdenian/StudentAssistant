@@ -11,6 +11,7 @@ build:
 config:
   validation: true
   warningsAsErrors: false
+  checkExhaustiveness: true
   # when writing own rules with new properties, exclude the property path e.g.: 'my_rule_set,.*>.*>[my_property]'
   excludes: ''
 
@@ -79,15 +80,21 @@ comments:
     searchInInnerClass: true
     searchInInnerObject: true
     searchInInnerInterface: true
+    searchInProtectedClass: true
   UndocumentedPublicFunction:
     active: false
     excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    searchProtectedFunction: true
   UndocumentedPublicProperty:
     active: false
     excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    searchProtectedProperty: true
 
 complexity:
   active: true
+  CognitiveComplexMethod:
+    active: true
+    threshold: 15
   ComplexCondition:
     active: true
     threshold: 4
@@ -96,7 +103,8 @@ complexity:
     threshold: 10
     includeStaticDeclarations: true
     includePrivateDeclarations: true
-  ComplexMethod:
+    ignoreOverloaded: true
+  CyclomaticComplexMethod:
     active: true
     threshold: 15
     ignoreSingleWhenExpression: false
@@ -394,6 +402,8 @@ performance:
   SpreadOperator:
     active: true
     excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+  UnnecessaryPartOfBinaryExpression:
+    active: true
   UnnecessaryTemporaryInstantiation:
     active: true
 
@@ -420,8 +430,6 @@ potential-bugs:
       - 'java.util.HashSet'
       - 'java.util.LinkedHashMap'
       - 'java.util.HashMap'
-  DuplicateCaseInWhenExpression:
-    active: true
   ElseCaseInsteadOfExhaustiveWhen:
     active: true
   EqualsAlwaysReturnsTrueOrFalse:
@@ -436,12 +444,16 @@ potential-bugs:
     active: true
   IgnoredReturnValue:
     active: true
-    restrictToAnnotatedMethods: true
+    restrictToConfig: true
     returnValueAnnotations:
       - '*.CheckResult'
       - '*.CheckReturnValue'
     ignoreReturnValueAnnotations:
       - '*.CanIgnoreReturnValue'
+    returnValueTypes:
+      - 'kotlin.sequences.Sequence'
+      - 'kotlinx.coroutines.flow.*Flow'
+      - 'java.util.stream.*Stream'
     ignoreFunctionCall: []
   ImplicitDefaultLocale:
     active: true
@@ -463,16 +475,13 @@ potential-bugs:
   MissingPackageDeclaration:
     active: true
     excludes: ['**/*.kts']
-  MissingWhenCase:
-    active: true
-    allowElseExpression: true
   NullCheckOnMutableProperty:
     active: true
   NullableToStringCall:
     active: true
-  RedundantElseInWhen:
-    active: true
   UnconditionalJumpStatementInLoop:
+    active: true
+  UnnecessaryNotNullCheck:
     active: true
   UnnecessaryNotNullOperator:
     active: true
@@ -496,6 +505,8 @@ potential-bugs:
 
 style:
   active: true
+  AlsoCouldBeApply:
+    active: true
   CanBeNonNullable:
     active: true
   CascadingCallWrapping:
@@ -507,7 +518,8 @@ style:
     active: true
   DataClassContainsFunctions:
     active: true
-    conversionFunctionPrefix: 'to'
+    conversionFunctionPrefix:
+      - 'to'
   DataClassShouldBeImmutable:
     active: true
   DestructuringDeclarationWithTooManyEntries:
@@ -539,14 +551,10 @@ style:
   ForbiddenMethodCall:
     active: true
     methods:
-      - 'kotlin.io.print'
-      - 'kotlin.io.println'
-  ForbiddenPublicDataClass:
-    active: true
-    excludes: ['**']
-    ignorePackages:
-      - '*.internal'
-      - '*.internal.*'
+      - reason: 'print does not allow you to configure the output stream. Use a logger instead.'
+        value: 'kotlin.io.print'
+      - reason: 'println does not allow you to configure the output stream. Use a logger instead.'
+        value: 'kotlin.io.println'
   ForbiddenSuppress:
     active: true
     rules: []
@@ -558,13 +566,7 @@ style:
     active: true
     ignoreOverridableFunction: true
     ignoreActualFunction: true
-    excludedFunctions: ''
-  LibraryCodeMustSpecifyReturnType:
-    active: true
-    excludes: ['**']
-  LibraryEntitiesShouldNotBePublic:
-    active: true
-    excludes: ['**']
+    excludedFunctions: []
   LoopWithTooManyJumpStatements:
     active: true
     maxJumpCount: 1
@@ -601,12 +603,16 @@ style:
     excludePackageStatements: true
     excludeImportStatements: true
     excludeCommentStatements: false
+    excludeRawStrings: true
   MayBeConst:
     active: true
   ModifierOrder:
     active: true
   MultilineLambdaItParameter:
     active: true
+  MultilineRawStringIndentation:
+    active: true
+    indentSize: 4
   NestedClassesVisibility:
     active: true
   NewLineAtEndOfFile:
@@ -636,7 +642,8 @@ style:
   ReturnCount:
     active: true
     max: 2
-    excludedFunctions: 'equals'
+    excludedFunctions:
+      - 'equals'
     excludeLabeled: false
     excludeReturnFromLambda: true
     excludeGuardClauses: false
@@ -651,6 +658,8 @@ style:
     max: 2
     excludeGuardClauses: false
   TrailingWhitespace:
+    active: true
+  TrimMultilineRawString:
     active: true
   UnderscoresInNumericLiterals:
     active: true
@@ -674,6 +683,7 @@ style:
     active: true
   UnnecessaryParentheses:
     active: false
+    allowForUnclearPrecedence: false
   UntilInsteadOfRangeTo:
     active: true
   UnusedImports:
@@ -708,6 +718,8 @@ style:
   UseRequire:
     active: true
   UseRequireNotNull:
+    active: true
+  UseSumOfInsteadOfFlatMapSize:
     active: true
   UselessCallOnNotNull:
     active: true
@@ -764,6 +776,19 @@ formatting:
   FunKeywordSpacing:
     active: true
     autoCorrect: true
+  FunctionReturnTypeSpacing:
+    active: true
+    autoCorrect: true
+  FunctionSignature:
+    active: false
+    autoCorrect: true
+    forceMultilineWhenParameterCountGreaterOrEqualThan: 2147483647
+    functionBodyExpressionWrapping: 'default'
+    maxLineLength: 130
+    indentSize: 4
+  FunctionStartOfBodySpacing:
+    active: true
+    autoCorrect: true
   FunctionTypeReferenceSpacing:
     active: true
     autoCorrect: true
@@ -790,9 +815,12 @@ formatting:
     active: true
     autoCorrect: true
   MultiLineIfElse:
-    active: true
+    active: false
     autoCorrect: true
   NoBlankLineBeforeRbrace:
+    active: true
+    autoCorrect: true
+  NoBlankLinesInChainedMethodCalls:
     active: true
     autoCorrect: true
   NoConsecutiveBlankLines:
@@ -828,7 +856,13 @@ formatting:
   NoWildcardImports:
     active: true
     packagesToUseImportOnDemandProperty: ''
+  NullableTypeSpacing:
+    active: true
+    autoCorrect: true
   PackageName:
+    active: true
+    autoCorrect: true
+  ParameterListSpacing:
     active: true
     autoCorrect: true
   ParameterListWrapping:
@@ -874,15 +908,24 @@ formatting:
   SpacingBetweenDeclarationsWithComments:
     active: true
     autoCorrect: true
+  SpacingBetweenFunctionNameAndOpeningParenthesis:
+    active: true
+    autoCorrect: true
   StringTemplate:
     active: true
     autoCorrect: true
-  TrailingComma:
+  TrailingCommaOnCallSite:
     active: true
     autoCorrect: true
-    allowTrailingComma: false
-    allowTrailingCommaOnCallSite: false
+    useTrailingCommaOnCallSite: false
+  TrailingCommaOnDeclarationSite:
+    active: true
+    autoCorrect: true
+    useTrailingCommaOnDeclarationSite: false
   TypeArgumentListSpacing:
+    active: true
+    autoCorrect: true
+  TypeParameterListSpacing:
     active: true
     autoCorrect: true
   UnnecessaryParenthesesBeforeTrailingLambda:
@@ -891,3 +934,4 @@ formatting:
   Wrapping:
     active: true
     autoCorrect: true
+    indentSize: 4
