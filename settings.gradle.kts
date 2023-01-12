@@ -30,8 +30,8 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        google()
         mavenCentral()
+        google()
     }
 
     versionCatalogs {
@@ -76,7 +76,7 @@ dependencyResolutionManagement {
             library("junit", "junit", "junit")
                 .versionRef("junit")
 
-            version("androidx-junitKtx", "1.1.4")
+            version("androidx-junitKtx", "1.1.5")
             library("androidx-junitKtx", "androidx.test.ext", "junit-ktx")
                 .versionRef("androidx-junitKtx")
 
@@ -84,7 +84,7 @@ dependencyResolutionManagement {
             library("androidx-core", "androidx.test", "core-ktx")
                 .versionRef("androidx-core")
 
-            version("androidx-runner", "1.5.0")
+            version("androidx-runner", "1.5.2")
             library("androidx-runner", "androidx.test", "runner")
                 .versionRef("androidx-runner")
 
@@ -140,13 +140,13 @@ dependencyResolutionManagement {
             library("lifecycle-viewmodel", "androidx.lifecycle", "lifecycle-viewmodel-ktx")
                 .versionRef("lifecycle")
 
-            version("room", "2.4.3")
+            version("room", "2.5.0")
             library("room-compiler", "androidx.room", "room-compiler")
                 .versionRef("room")
             library("room", "androidx.room", "room-ktx")
                 .versionRef("room")
 
-            version("appcompat", "1.5.1")
+            version("appcompat", "1.6.0")
             library("appcompat", "androidx.appcompat", "appcompat")
                 .versionRef("appcompat")
 
