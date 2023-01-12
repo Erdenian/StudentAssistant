@@ -208,7 +208,7 @@ private fun BaseAutoCompleteTextField(
 ) {
     ExposedDropdownMenuBox(
         expanded = expanded.value,
-        onExpandedChange = { if (!it) expanded.value = it }
+        onExpandedChange = { if (!it) expanded.value = false }
     ) {
         OutlinedTextField(
             value = value,
