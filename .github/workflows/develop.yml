@@ -9,8 +9,7 @@ on:
       - 'develop'
 
 jobs:
-
-  analysis:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -24,6 +23,9 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
+      # --------------------------------------
+      # Check
+      # --------------------------------------
       - name: Detekt
         run: ./gradlew detekt
       - uses: actions/upload-artifact@v3
@@ -32,6 +34,7 @@ jobs:
           name: Detekt
           path: "build/reports/detekt/detekt.html"
           if-no-files-found: error
+      # --------------------------------------
       - name: Lint Debug
         run: ./gradlew :app:lintDebug
       - uses: actions/upload-artifact@v3
@@ -40,21 +43,9 @@ jobs:
           name: Lint
           path: "**/build/reports/lint-results*.html"
           if-no-files-found: error
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: 17
+      # --------------------------------------
+      # Test
+      # --------------------------------------
       - name: Unit Test
         run: ./gradlew testDebugUnitTest
       - uses: actions/upload-artifact@v3
@@ -69,22 +60,7 @@ jobs:
           name: Unit Test Report
           path: "**/build/test-results/test*/TEST-*.xml"
           reporter: java-junit
-
-  androidTest:
-    runs-on: macos-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: 17
+      # --------------------------------------
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
       - name: Android Test
@@ -101,22 +77,9 @@ jobs:
           name: Android Test Report
           path: "**/build/outputs/androidTest-results/managedDevice/testDevice/TEST-*.xml"
           reporter: java-junit
-
-  build:
-    needs: [analysis, test, androidTest]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: 17
+      # --------------------------------------
+      # Build
+      # --------------------------------------
       - name: Assemble Debug
         run: ./gradlew assembleDebug
       - uses: actions/upload-artifact@v3
@@ -125,6 +88,7 @@ jobs:
           name: Assemble
           path: "app/build/outputs/apk/debug/*.apk"
           if-no-files-found: error
+      # --------------------------------------
       - name: Bundle Debug
         run: ./gradlew bundleDebug
       - uses: actions/upload-artifact@v3
