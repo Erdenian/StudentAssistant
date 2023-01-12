@@ -19,13 +19,3 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
-
-# region Kodein
-# Todo: remove after 7.11.0 release
-# https://github.com/Kodein-Framework/Kodein-DI/issues/309
--keep, allowobfuscation, allowoptimization class org.kodein.type.TypeReference
--keep, allowobfuscation, allowoptimization class org.kodein.type.JVMAbstractTypeToken$Companion$WrappingTest
-
--keep, allowobfuscation, allowoptimization class * extends org.kodein.type.TypeReference
--keep, allowobfuscation, allowoptimization class * extends org.kodein.type.JVMAbstractTypeToken$Companion$WrappingTest
-# endregion
