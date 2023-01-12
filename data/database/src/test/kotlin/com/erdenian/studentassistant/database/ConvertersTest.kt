@@ -6,6 +6,7 @@ import java.time.LocalTime
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
+@Suppress("MagicNumber")
 internal class ConvertersTest {
 
     private val converters = Converters
@@ -27,7 +28,7 @@ internal class ConvertersTest {
         val restored = converted.map { converters.longToLocalDate(it) }
 
         assertEquals(original, restored)
-        assertEquals(converted, listOf(-365243219162L, 365241780471L, 19358L, null))
+        assertEquals(converted, listOf(-365_243_219_162L, 365_241_780_471L, 19_358L, null))
     }
 
     @Test
@@ -37,7 +38,7 @@ internal class ConvertersTest {
         val restored = converted.map { converters.intToLocalTime(it) }
 
         assertEquals(original, restored)
-        assertEquals(converted, listOf(0L, 86399999999999L, 84335000000069L, null))
+        assertEquals(converted, listOf(0L, 86_399_999_999_999L, 84_335_000_000_069L, null))
     }
 
     @Test
