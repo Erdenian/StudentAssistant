@@ -25,11 +25,11 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
+      - name: Check
+        run: ./gradlew detekt :app:lintRelease testReleaseUnitTest testDeviceDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" assembleRelease bundleRelease
       # --------------------------------------
       # Check
       # --------------------------------------
-      - name: Detekt
-        run: ./gradlew detekt
       - uses: actions/upload-artifact@v3
         if: always()
         with:
@@ -37,8 +37,6 @@ jobs:
           path: "build/reports/detekt/detekt.html"
           if-no-files-found: error
       # --------------------------------------
-      - name: Lint Release
-        run: ./gradlew :app:lintRelease
       - uses: actions/upload-artifact@v3
         if: always()
         with:
@@ -48,8 +46,6 @@ jobs:
       # --------------------------------------
       # Test
       # --------------------------------------
-      - name: Unit Test
-        run: ./gradlew testReleaseUnitTest
       - uses: actions/upload-artifact@v3
         if: always()
         with:
@@ -63,10 +59,6 @@ jobs:
           path: "**/build/test-results/test*/TEST-*.xml"
           reporter: java-junit
       # --------------------------------------
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
-      - name: Android Test
-        run: ./gradlew testDeviceDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
       - uses: actions/upload-artifact@v3
         if: always()
         with:
@@ -82,8 +74,6 @@ jobs:
       # --------------------------------------
       # Build
       # --------------------------------------
-      - name: Assemble Release
-        run: ./gradlew assembleRelease
       - uses: actions/upload-artifact@v3
         if: success()
         with:
@@ -93,8 +83,6 @@ jobs:
             - "app/build/outputs/mapping/release/*.txt"
           if-no-files-found: error
       # --------------------------------------
-      - name: Bundle Release
-        run: ./gradlew bundleRelease
       - uses: actions/upload-artifact@v3
         if: success()
         with:

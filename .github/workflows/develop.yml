@@ -23,11 +23,11 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
+      - name: Check
+        run: ./gradlew detekt :app:lintDebug testDebugUnitTest testDeviceDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" assembleDebug bundleDebug
       # --------------------------------------
       # Check
       # --------------------------------------
-      - name: Detekt
-        run: ./gradlew detekt
       - uses: actions/upload-artifact@v3
         if: always()
         with:
@@ -35,8 +35,6 @@ jobs:
           path: "build/reports/detekt/detekt.html"
           if-no-files-found: error
       # --------------------------------------
-      - name: Lint Debug
-        run: ./gradlew :app:lintDebug
       - uses: actions/upload-artifact@v3
         if: always()
         with:
@@ -46,8 +44,6 @@ jobs:
       # --------------------------------------
       # Test
       # --------------------------------------
-      - name: Unit Test
-        run: ./gradlew testDebugUnitTest
       - uses: actions/upload-artifact@v3
         if: always()
         with:
@@ -61,10 +57,6 @@ jobs:
           path: "**/build/test-results/test*/TEST-*.xml"
           reporter: java-junit
       # --------------------------------------
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
-      - name: Android Test
-        run: ./gradlew testDeviceDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
       - uses: actions/upload-artifact@v3
         if: always()
         with:
@@ -80,8 +72,6 @@ jobs:
       # --------------------------------------
       # Build
       # --------------------------------------
-      - name: Assemble Debug
-        run: ./gradlew assembleDebug
       - uses: actions/upload-artifact@v3
         if: success()
         with:
@@ -89,8 +79,6 @@ jobs:
           path: "app/build/outputs/apk/debug/*.apk"
           if-no-files-found: error
       # --------------------------------------
-      - name: Bundle Debug
-        run: ./gradlew bundleDebug
       - uses: actions/upload-artifact@v3
         if: success()
         with:
