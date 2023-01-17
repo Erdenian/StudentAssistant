@@ -6,144 +6,8 @@ on:
       - 'master'
 
 jobs:
-
-  analysis:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: 17
-      - name: Detekt
-        run: ./gradlew detekt
-      - uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: Detekt
-          path: "build/reports/detekt/detekt.html"
-          if-no-files-found: error
-      - name: Lint Release
-        run: ./gradlew :app:lintRelease
-      - uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: Lint
-          path: "**/build/reports/lint-results*.html"
-          if-no-files-found: error
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: 17
-      - name: Unit Test
-        run: ./gradlew testReleaseUnitTest
-      - uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: Unit Test
-          path: "**/build/reports/tests/"
-          if-no-files-found: error
-      - uses: dorny/test-reporter@v1
-        if: always()
-        with:
-          name: Unit Test Report
-          path: "**/build/test-results/test*/TEST-*.xml"
-          reporter: java-junit
-
-  androidTest:
+  check:
     runs-on: macos-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: 17
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
-      - name: Android Test
-        run: ./gradlew testDeviceDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
-      - uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: Android Test
-          path: "**/build/reports/androidTests/"
-          if-no-files-found: error
-      - uses: dorny/test-reporter@v1
-        if: always()
-        with:
-          name: Android Test Report
-          path: "**/build/outputs/androidTest-results/managedDevice/testDevice/TEST-*.xml"
-          reporter: java-junit
-
-  build:
-    needs: [analysis, test, androidTest]
-    runs-on: ubuntu-latest
-    env:
-      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: 17
-      - name: Assemble Release
-        run: ./gradlew assembleRelease
-      - uses: actions/upload-artifact@v3
-        if: success()
-        with:
-          name: Assemble
-          path: "app/build/outputs/apk/release/*.apk"
-          if-no-files-found: error
-      - name: Bundle Release
-        run: ./gradlew bundleRelease
-      - uses: actions/upload-artifact@v3
-        if: success()
-        with:
-          name: Bundle
-          path: "app/build/outputs/bundle/release/*.aab"
-          if-no-files-found: error
-      - uses: actions/upload-artifact@v3
-        if: success()
-        with:
-          name: Mappings
-          path: "app/build/outputs/mapping/release/*.txt"
-          if-no-files-found: error
-
-  publish:
-    needs: [analysis, test, androidTest]
-    runs-on: ubuntu-latest
     env:
       ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
       ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
@@ -161,5 +25,74 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
+      - name: Check
+        run: ./gradlew detekt :app:lintRelease testReleaseUnitTest testDeviceDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" assembleRelease bundleRelease
+      # --------------------------------------
+      # Check
+      # --------------------------------------
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: Detekt
+          path: "build/reports/detekt/detekt.html"
+          if-no-files-found: error
+      # --------------------------------------
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: Lint
+          path: "**/build/reports/lint-results*.html"
+          if-no-files-found: error
+      # --------------------------------------
+      # Test
+      # --------------------------------------
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: Unit Test
+          path: "**/build/reports/tests/"
+          if-no-files-found: error
+      - uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Unit Test Report
+          path: "**/build/test-results/test*/TEST-*.xml"
+          reporter: java-junit
+      # --------------------------------------
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: Android Test
+          path: "**/build/reports/androidTests/"
+          if-no-files-found: error
+      - uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Android Test Report
+          path: "**/build/outputs/androidTest-results/managedDevice/testDevice/TEST-*.xml"
+          reporter: java-junit
+      # --------------------------------------
+      # Build
+      # --------------------------------------
+      - uses: actions/upload-artifact@v3
+        if: success()
+        with:
+          name: Assemble
+          path:
+            - "app/build/outputs/apk/release/*.apk"
+            - "app/build/outputs/mapping/release/*.txt"
+          if-no-files-found: error
+      # --------------------------------------
+      - uses: actions/upload-artifact@v3
+        if: success()
+        with:
+          name: Bundle
+          path:
+            - "app/build/outputs/bundle/release/*.aab"
+            - "app/build/outputs/mapping/release/*.txt"
+          if-no-files-found: error
+      # --------------------------------------
+      # Publish
+      # --------------------------------------
       - name: Publish
         run: ./gradlew publishReleaseBundle

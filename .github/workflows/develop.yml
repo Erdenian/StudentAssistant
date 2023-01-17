@@ -9,9 +9,8 @@ on:
       - 'develop'
 
 jobs:
-
-  analysis:
-    runs-on: ubuntu-latest
+  check:
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
@@ -24,39 +23,27 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
-      - name: Detekt
-        run: ./gradlew detekt
+      - name: Check
+        run: ./gradlew detekt :app:lintDebug testDebugUnitTest testDeviceDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" assembleDebug bundleDebug
+      # --------------------------------------
+      # Check
+      # --------------------------------------
       - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: Detekt
           path: "build/reports/detekt/detekt.html"
           if-no-files-found: error
-      - name: Lint Debug
-        run: ./gradlew :app:lintDebug
+      # --------------------------------------
       - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: Lint
           path: "**/build/reports/lint-results*.html"
           if-no-files-found: error
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: 17
-      - name: Unit Test
-        run: ./gradlew testDebugUnitTest
+      # --------------------------------------
+      # Test
+      # --------------------------------------
       - uses: actions/upload-artifact@v3
         if: always()
         with:
@@ -69,26 +56,7 @@ jobs:
           name: Unit Test Report
           path: "**/build/test-results/test*/TEST-*.xml"
           reporter: java-junit
-
-  androidTest:
-    runs-on: macos-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: 17
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
-      - name: Android Test
-        run: ./gradlew testDeviceDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+      # --------------------------------------
       - uses: actions/upload-artifact@v3
         if: always()
         with:
@@ -101,32 +69,16 @@ jobs:
           name: Android Test Report
           path: "**/build/outputs/androidTest-results/managedDevice/testDevice/TEST-*.xml"
           reporter: java-junit
-
-  build:
-    needs: [analysis, test, androidTest]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: 17
-      - name: Assemble Debug
-        run: ./gradlew assembleDebug
+      # --------------------------------------
+      # Build
+      # --------------------------------------
       - uses: actions/upload-artifact@v3
         if: success()
         with:
           name: Assemble
           path: "app/build/outputs/apk/debug/*.apk"
           if-no-files-found: error
-      - name: Bundle Debug
-        run: ./gradlew bundleDebug
+      # --------------------------------------
       - uses: actions/upload-artifact@v3
         if: success()
         with:

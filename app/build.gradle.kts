@@ -16,7 +16,7 @@ android {
         versionCode = 21
         versionName = "0.5.2"
 
-        resourceConfigurations.retainAll(listOf("ru"))
+        resourceConfigurations.retainAll(setOf("ru"))
         setProperty("archivesBaseName", "${rootProject.name}-$versionName")
     }
 
@@ -86,10 +86,10 @@ android {
     }
 
     buildTypes {
-        getByName("debug") {
+        debug {
             signingConfig = signingConfigs.getByName("debug")
         }
-        getByName("release") {
+        release {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
