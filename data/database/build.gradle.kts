@@ -4,6 +4,7 @@ plugins {
     id(libsPlugins.plugins.kotlin.android.get().pluginId)
     id(libsPlugins.plugins.kotlin.kapt.get().pluginId)
     id(libsPlugins.plugins.kotlin.parcelize.get().pluginId)
+    jacoco
 }
 
 android {
