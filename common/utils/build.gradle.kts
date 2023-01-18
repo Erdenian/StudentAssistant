@@ -2,6 +2,7 @@
 plugins {
     id(libsPlugins.plugins.android.library.get().pluginId)
     id(libsPlugins.plugins.kotlin.android.get().pluginId)
+    jacoco
 }
 
 android {
