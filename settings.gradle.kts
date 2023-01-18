@@ -42,7 +42,7 @@ dependencyResolutionManagement {
             plugin("android-library", "com.android.library")
                 .versionRef("android")
 
-            version("kotlin", "1.7.20")
+            version("kotlin", "1.8.0")
             plugin("kotlin-android", "org.jetbrains.kotlin.android")
                 .versionRef("kotlin")
             plugin("kotlin-jvm", "org.jetbrains.kotlin.jvm")
@@ -105,7 +105,7 @@ dependencyResolutionManagement {
 
         create("libsAndroidx") {
             // region Compose
-            version("compose-compiler", "1.3.2")
+            version("compose-compiler", "1.4.0")
             version("compose", "1.3.1")
 
             library("compose-ui", "androidx.compose.ui", "ui")
