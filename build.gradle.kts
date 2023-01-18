@@ -22,10 +22,9 @@ tasks.register<Delete>("clean") {
 
 subprojects {
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_1_8.toString()
-            @Suppress("SuspiciousCollectionReassignment")
-            freeCompilerArgs += listOf(
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+            freeCompilerArgs.addAll(
                 "-Xjvm-default=all",
                 "-opt-in=kotlin.RequiresOptIn",
 
@@ -94,8 +93,8 @@ subprojects {
             compileOptions {
                 isCoreLibraryDesugaringEnabled = true
 
-                sourceCompatibility = JavaVersion.VERSION_1_8
-                targetCompatibility = JavaVersion.VERSION_1_8
+                sourceCompatibility = JavaVersion.VERSION_11
+                targetCompatibility = JavaVersion.VERSION_11
             }
 
             run { // Setup device for testing if necessary
