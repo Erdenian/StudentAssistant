@@ -21,6 +21,26 @@ tasks.register<Delete>("clean") {
     delete(rootProject.buildDir)
 }
 
+// region Extensions
+
+fun subprojectsAfterEvaluate(action: Action<in Project>) = subprojects { afterEvaluate(action) }
+
+fun Project.configureAndroidIfExists(action: com.android.build.gradle.BaseExtension.() -> Unit) {
+    if (extensions.findByType<com.android.build.gradle.BaseExtension>() != null) extensions.configure(action)
+}
+
+fun com.android.build.gradle.BaseExtension.ifApplication(
+    action: com.android.build.gradle.internal.dsl.BaseAppModuleExtension.() -> Unit
+) = if (this is com.android.build.gradle.internal.dsl.BaseAppModuleExtension) action() else Unit
+
+fun com.android.build.gradle.BaseExtension.ifLibrary(
+    action: com.android.build.gradle.LibraryExtension.() -> Unit
+) = if (this is com.android.build.gradle.LibraryExtension) action() else Unit
+
+// endregion
+
+// region Kotlin
+
 subprojects {
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         compilerOptions {
@@ -40,21 +60,13 @@ subprojects {
     }
 }
 
-typealias BaseExtension = com.android.build.gradle.BaseExtension
-typealias AppExtension = com.android.build.gradle.internal.dsl.BaseAppModuleExtension
-typealias LibraryExtension = com.android.build.gradle.LibraryExtension
-typealias ManagedVirtualDevice = com.android.build.api.dsl.ManagedVirtualDevice
-subprojects {
-    afterEvaluate {
-        fun BaseExtension.ifApplication(action: AppExtension.() -> Unit) {
-            if (this is AppExtension) action()
-        }
+// endregion
 
-        fun BaseExtension.ifLibrary(action: LibraryExtension.() -> Unit) {
-            if (this is LibraryExtension) action()
-        }
+// region Android
 
-        if (extensions.findByType<BaseExtension>() != null) extensions.configure<BaseExtension> {
+run {
+    subprojectsAfterEvaluate {
+        configureAndroidIfExists {
             ifApplication {
                 compileSdk = config.versions.compileSdk.get().toInt()
 
@@ -110,7 +122,7 @@ subprojects {
                     testOptions {
                         managedDevices {
                             devices {
-                                create<ManagedVirtualDevice>("testDevice") {
+                                create<com.android.build.api.dsl.ManagedVirtualDevice>("testDevice") {
                                     device = "Pixel 4"
                                     apiLevel = 31
                                     systemImageSource = "aosp"
@@ -120,58 +132,52 @@ subprojects {
                     }
                 }
             }
-        }
 
-        dependencies {
-            configurations.findByName("coreLibraryDesugaring")?.invoke(libsAndroidTools.desugarJdkLibs)
-        }
-
-        if (extensions.findByType<BaseExtension>()?.buildFeatures?.compose == true) {
             dependencies {
-                val implementation by configurations
-                implementation(platform(libsAndroidx.compose.bom))
+                if (buildFeatures.compose == true) "implementation"(platform(libsAndroidx.compose.bom))
+
+                configurations.findByName("coreLibraryDesugaring")?.invoke(libsAndroidTools.desugarJdkLibs)
             }
         }
     }
 }
 
-typealias JacocoReport = org.gradle.testing.jacoco.tasks.JacocoReport
-typealias JacocoReportTask = com.android.build.gradle.internal.coverage.JacocoReportTask
-typealias BaseVariant = com.android.build.gradle.api.BaseVariant
-typealias AndroidUnitTest = com.android.build.gradle.tasks.factory.AndroidUnitTest
+// endregion
 
-val jacocoMergedReportTask = project.tasks.create("jacocoMergedReport", JacocoReport::class) {
-    group = "Reporting"
-    description = "Generates Jacoco coverage reports for all variants"
+// region Jacoco
 
-    reports {
-        html.required.set(true)
-        xml.required.set(false)
-        csv.required.set(false)
+run {
+    fun JacocoReport.setupReports(basePath: String) {
+        reports {
+            html.required.set(true)
+            xml.required.set(false)
+            csv.required.set(false)
 
-        val destination = "${project.buildDir}/reports/jacoco"
-        csv.outputLocation.set(File("$destination/jacoco.csv"))
-        html.outputLocation.set(File("$destination/jacocoHtml"))
-        xml.outputLocation.set(File("$destination/jacoco.xml"))
+            html.outputLocation.set(File("$basePath/jacocoHtml"))
+            xml.outputLocation.set(File("$basePath/jacoco.xml"))
+            csv.outputLocation.set(File("$basePath/jacoco.csv"))
+        }
     }
-}
-subprojects {
-    afterEvaluate {
-        fun BaseExtension.ifApplication(action: AppExtension.() -> Unit) {
-            if (this is AppExtension) action()
-        }
 
-        fun BaseExtension.ifLibrary(action: LibraryExtension.() -> Unit) {
-            if (this is LibraryExtension) action()
-        }
+    val jacocoMergedReportTask = project.tasks.create("jacocoMergedReport", JacocoReport::class) {
+        group = "Reporting"
+        description = "Generates Jacoco coverage reports for all variants"
 
+        setupReports("${project.buildDir}/reports/jacoco")
+    }
+
+    subprojectsAfterEvaluate {
         operator fun FileCollection?.plus(other: FileCollection?): FileCollection = when {
             (this == null) -> checkNotNull(other)
             (other == null) -> this
             else -> this + other
         }
 
-        fun createJacocoTasks(variant: BaseVariant, unitTestCoverage: Boolean, connectedTestCoverage: Boolean): JacocoReport {
+        fun createJacocoTasks(
+            variant: com.android.build.gradle.api.BaseVariant,
+            unitTestCoverage: Boolean,
+            connectedTestCoverage: Boolean
+        ): JacocoReport {
             val configuration = Action<JacocoReport> {
                 group = "Reporting"
 
@@ -195,7 +201,10 @@ subprojects {
             }
 
             val unitTest = if (unitTestCoverage) {
-                val unitTestTask = project.tasks.getByName("test${variant.name.capitalize()}UnitTest", AndroidUnitTest::class)
+                val unitTestTask = project.tasks.getByName(
+                    "test${variant.name.capitalize()}UnitTest",
+                    com.android.build.gradle.tasks.factory.AndroidUnitTest::class
+                )
 
                 project.tasks.create(
                     "jacoco${unitTestTask.name.capitalize()}Report",
@@ -208,24 +217,14 @@ subprojects {
                     val executionFilePath =
                         "${project.buildDir}/outputs/unit_test_code_coverage/${variant.name}UnitTest/test${variant.name.capitalize()}UnitTest.exec"
                     executionData.setFrom(project.file(executionFilePath))
-
-                    reports {
-                        html.required.set(true)
-                        xml.required.set(false)
-                        csv.required.set(false)
-
-                        val destination = "${project.buildDir}/reports/jacoco/${variant.name}/${unitTestTask.name}"
-                        html.outputLocation.set(File("$destination/jacocoHtml"))
-                        xml.outputLocation.set(File("$destination/jacoco.xml"))
-                        csv.outputLocation.set(File("$destination/jacoco.csv"))
-                    }
+                    setupReports("${project.buildDir}/reports/jacoco/${variant.name}/${unitTestTask.name}")
                 }
             } else null
 
             val connectedTest = if (connectedTestCoverage) {
                 val connectedTestTask = project.tasks.getByName(
                     "create${variant.name.capitalize()}AndroidTestCoverageReport",
-                    JacocoReportTask::class
+                    com.android.build.gradle.internal.coverage.JacocoReportTask::class
                 )
 
                 val taskBaseName = "connected${variant.name.capitalize()}AndroidTest"
@@ -238,17 +237,7 @@ subprojects {
                     dependsOn(connectedTestTask)
 
                     executionData.setFrom(connectedTestTask.jacocoConnectedTestsCoverageDir.asFileTree)
-
-                    reports {
-                        html.required.set(true)
-                        xml.required.set(false)
-                        csv.required.set(false)
-
-                        val destination = "${project.buildDir}/reports/jacoco/${variant.name}/$taskBaseName"
-                        html.outputLocation.set(File("$destination/jacocoHtml"))
-                        xml.outputLocation.set(File("$destination/jacoco.xml"))
-                        csv.outputLocation.set(File("$destination/jacoco.csv"))
-                    }
+                    setupReports("${project.buildDir}/reports/jacoco/${variant.name}/$taskBaseName")
                 }
             } else null
 
@@ -257,7 +246,6 @@ subprojects {
                 JacocoReport::class,
                 configuration
             ).apply {
-                group = "Reporting"
                 description = "Generates Jacoco coverage reports for the ${variant.name} variant"
 
                 enabled = (unitTest != null) || (connectedTest != null)
@@ -265,30 +253,19 @@ subprojects {
                 connectedTest?.let { dependsOn(it) }
 
                 if (enabled) executionData.setFrom(unitTest?.executionData + connectedTest?.executionData)
-
-                reports {
-                    html.required.set(true)
-                    xml.required.set(false)
-                    csv.required.set(false)
-
-                    val destination = "${project.buildDir}/reports/jacoco/${variant.name}"
-                    csv.outputLocation.set(File("$destination/jacoco.csv"))
-                    html.outputLocation.set(File("$destination/jacocoHtml"))
-                    xml.outputLocation.set(File("$destination/jacoco.xml"))
-                }
+                setupReports("${project.buildDir}/reports/jacoco/${variant.name}")
             }
         }
 
         val hasJacoco = project.plugins.hasPlugin("jacoco")
-        if (extensions.findByType<BaseExtension>() != null) extensions.configure<BaseExtension> {
-            ifApplication {
-                buildTypes {
-                    debug {
-                        enableUnitTestCoverage = hasJacoco
-                        enableAndroidTestCoverage = hasJacoco
-                    }
-                }
-                applicationVariants.all {
+        configureAndroidIfExists {
+            val buildTypeAction: com.android.build.api.dsl.BuildType.() -> Unit = {
+                enableUnitTestCoverage = hasJacoco
+                enableAndroidTestCoverage = hasJacoco
+            }
+
+            fun configure(variants: DomainObjectCollection<out com.android.build.gradle.api.BaseVariant>) {
+                variants.all {
                     if (!buildType.isDebuggable) return@all
                     val reportTask = createJacocoTasks(this, unitTestCoverage = hasJacoco, connectedTestCoverage = hasJacoco)
                     if (reportTask.isEnabled) jacocoMergedReportTask.dependsOn(reportTask)
@@ -299,24 +276,17 @@ subprojects {
                     }
                 }
             }
+
+            ifApplication {
+                buildTypes { debug(buildTypeAction) }
+                configure(applicationVariants)
+            }
             ifLibrary {
-                buildTypes {
-                    debug {
-                        enableUnitTestCoverage = hasJacoco
-                        enableAndroidTestCoverage = hasJacoco
-                    }
-                }
-                libraryVariants.all {
-                    if (!buildType.isDebuggable) return@all
-                    val reportTask = createJacocoTasks(this, unitTestCoverage = hasJacoco, connectedTestCoverage = hasJacoco)
-                    if (reportTask.isEnabled) jacocoMergedReportTask.dependsOn(reportTask)
-                    jacocoMergedReportTask.apply {
-                        sourceDirectories.setFrom(sourceDirectories + reportTask.sourceDirectories)
-                        classDirectories.setFrom(classDirectories + reportTask.classDirectories)
-                        executionData.setFrom(executionData + reportTask.executionData)
-                    }
-                }
+                buildTypes { debug(buildTypeAction) }
+                configure(libraryVariants)
             }
         }
     }
 }
+
+// endregion
