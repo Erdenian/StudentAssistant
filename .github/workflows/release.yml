@@ -8,6 +8,10 @@ on:
     branches:
       - 'master'
 
+env:
+  MIN_COVERAGE_OVERALL: 0
+  MIN_COVERAGE_CHANGED: 0
+
 jobs:
   check:
     runs-on: macos-latest
@@ -16,21 +20,21 @@ jobs:
       ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
       ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
+      # --------------------------------------
+      # Install
+      # --------------------------------------
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: 17
-      - name: Check
-        run: ./gradlew detekt :app:lintRelease testReleaseUnitTest testDeviceDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" assembleRelease bundleRelease
+      - uses: gradle/gradle-build-action@v2
       # --------------------------------------
-      # Check
+      # Run
+      # --------------------------------------
+      - uses: actions/checkout@v3
+      - run: ./gradlew detekt :app:lintRelease testReleaseUnitTest testDeviceDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" jacocoMergedReport assembleRelease bundleRelease
+      # --------------------------------------
+      # Analyze
       # --------------------------------------
       - uses: actions/upload-artifact@v3
         if: always()
@@ -73,6 +77,13 @@ jobs:
           name: Android Test Report
           path: "**/build/outputs/androidTest-results/managedDevice/testDevice/TEST-*.xml"
           reporter: java-junit
+      # --------------------------------------
+      - uses: madrapps/jacoco-report@v1.3
+        with:
+          paths: ${{ github.workspace }}/build/reports/jacoco/jacoco.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: ${{ env.MIN_COVERAGE_OVERALL }}
+          min-coverage-changed-files: ${{ env.MIN_COVERAGE_CHANGED }}
       # --------------------------------------
       # Build
       # --------------------------------------

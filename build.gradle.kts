@@ -90,9 +90,7 @@ run {
                 }
             }
 
-            composeOptions {
-                kotlinCompilerExtensionVersion = libsAndroidx.versions.compose.compiler.get()
-            }
+            composeOptions.kotlinCompilerExtensionVersion = libsAndroidx.versions.compose.compiler.get()
 
             ifLibrary {
                 buildTypes {
@@ -110,27 +108,10 @@ run {
                 targetCompatibility = JavaVersion.VERSION_11
             }
 
-            run { // Setup device for testing if necessary
-                val androidTest = sourceSets.findByName("androidTest")
-                    ?.java
-                    ?.srcDirs
-                    ?.single()
-                    ?.absoluteFile
-                    ?.parentFile
-
-                if (androidTest?.walk()?.any { it.isFile } == true) {
-                    testOptions {
-                        managedDevices {
-                            devices {
-                                create<com.android.build.api.dsl.ManagedVirtualDevice>("testDevice") {
-                                    device = "Pixel 4"
-                                    apiLevel = 31
-                                    systemImageSource = "aosp"
-                                }
-                            }
-                        }
-                    }
-                }
+            testOptions.managedDevices.devices.create<com.android.build.api.dsl.ManagedVirtualDevice>("testDevice") {
+                device = "Pixel 4"
+                apiLevel = 31
+                systemImageSource = "aosp"
             }
 
             dependencies {
@@ -138,6 +119,34 @@ run {
 
                 configurations.findByName("coreLibraryDesugaring")?.invoke(libsAndroidTools.desugarJdkLibs)
             }
+        }
+    }
+}
+
+subprojectsAfterEvaluate {
+    configureAndroidIfExists {
+        fun com.android.build.gradle.api.AndroidSourceSet?.hasFiles() = this
+            ?.java
+            ?.srcDirs
+            ?.single()
+            ?.absoluteFile
+            ?.parentFile
+            ?.walk()
+            ?.any { it.isFile } == true
+
+        val unitTestExists = sourceSets.findByName("test").hasFiles()
+        val androidTestExists = sourceSets.findByName("androidTest").hasFiles()
+
+        project.tasks.all {
+            val wasEnabled = enabled
+            when {
+                (this is com.android.build.gradle.tasks.factory.AndroidUnitTest) -> enabled = unitTestExists
+                (this is com.android.build.gradle.internal.tasks.ManagedDeviceSetupTask) ||
+                        (this is com.android.build.gradle.internal.tasks.ManagedDeviceInstrumentationTestTask) ||
+                        (this is com.android.build.gradle.internal.coverage.JacocoReportTask) ||
+                        name.contains("AndroidTest") -> enabled = androidTestExists
+            }
+            if (wasEnabled && !enabled) logger.info("Disabled ${project.path}:$name task")
         }
     }
 }
@@ -150,7 +159,7 @@ run {
     fun JacocoReport.setupReports(basePath: String) {
         reports {
             html.required.set(true)
-            xml.required.set(false)
+            xml.required.set(true)
             csv.required.set(false)
 
             html.outputLocation.set(File("$basePath/jacocoHtml"))
@@ -167,12 +176,6 @@ run {
     }
 
     subprojectsAfterEvaluate {
-        operator fun FileCollection?.plus(other: FileCollection?): FileCollection = when {
-            (this == null) -> checkNotNull(other)
-            (other == null) -> this
-            else -> this + other
-        }
-
         fun createJacocoTasks(
             variant: com.android.build.gradle.api.BaseVariant,
             unitTestCoverage: Boolean,
@@ -200,12 +203,10 @@ run {
                 classDirectories.setFrom(javaClassesTree + kotlinClassesTree)
             }
 
-            val unitTest = if (unitTestCoverage) {
-                val unitTestTask = project.tasks.getByName(
-                    "test${variant.name.capitalize()}UnitTest",
-                    com.android.build.gradle.tasks.factory.AndroidUnitTest::class
-                )
-
+            val unitTestTask = project.tasks.findByName(
+                "test${variant.name.capitalize()}UnitTest"
+            ) as com.android.build.gradle.tasks.factory.AndroidUnitTest?
+            val unitTestReportTask = if (unitTestCoverage && (unitTestTask?.enabled == true)) {
                 project.tasks.create(
                     "jacoco${unitTestTask.name.capitalize()}Report",
                     JacocoReport::class,
@@ -221,11 +222,13 @@ run {
                 }
             } else null
 
-            val connectedTest = if (connectedTestCoverage) {
-                val connectedTestTask = project.tasks.getByName(
-                    "create${variant.name.capitalize()}AndroidTestCoverageReport",
-                    com.android.build.gradle.internal.coverage.JacocoReportTask::class
-                )
+            val connectedTestTask = project.tasks.findByName(
+                "createManagedDevice${variant.name.capitalize()}AndroidTestCoverageReport",
+            ) as? com.android.build.gradle.internal.coverage.JacocoReportTask
+            val connectedTestReportTask = if (connectedTestCoverage && (connectedTestTask?.enabled == true)) {
+                connectedTestTask.doFirst {
+                    connectedTestTask.jacocoConnectedTestsCoverageDir.file("coverage.ec").get().asFile.createNewFile()
+                }
 
                 val taskBaseName = "connected${variant.name.capitalize()}AndroidTest"
                 project.tasks.create(
@@ -234,7 +237,7 @@ run {
                     configuration
                 ).apply {
                     description = "Generates Jacoco coverage reports for the ${variant.name} variant connected tests"
-                    dependsOn(connectedTestTask)
+                    dependsOn(connectedTestTask.taskDependencies)
 
                     executionData.setFrom(connectedTestTask.jacocoConnectedTestsCoverageDir.asFileTree)
                     setupReports("${project.buildDir}/reports/jacoco/${variant.name}/$taskBaseName")
@@ -248,11 +251,18 @@ run {
             ).apply {
                 description = "Generates Jacoco coverage reports for the ${variant.name} variant"
 
-                enabled = (unitTest != null) || (connectedTest != null)
-                unitTest?.let { dependsOn(it) }
-                connectedTest?.let { dependsOn(it) }
+                enabled = (unitTestReportTask != null) || (connectedTestReportTask != null)
+                unitTestReportTask?.let { dependsOn(it) }
+                connectedTestReportTask?.let { dependsOn(it) }
 
-                if (enabled) executionData.setFrom(unitTest?.executionData + connectedTest?.executionData)
+                if (enabled && (unitTestReportTask != null) || (connectedTestReportTask != null)) {
+                    operator fun FileCollection?.plus(other: FileCollection?): FileCollection = when {
+                        (this == null) -> checkNotNull(other)
+                        (other == null) -> this
+                        else -> this + other
+                    }
+                    executionData.setFrom(unitTestReportTask?.executionData + connectedTestReportTask?.executionData)
+                }
                 setupReports("${project.buildDir}/reports/jacoco/${variant.name}")
             }
         }
