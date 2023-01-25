@@ -98,7 +98,7 @@ dependencyResolutionManagement {
         }
 
         create("libsAndroidTools") {
-            version("desugarJdkLibs", "1.2.0")
+            version("desugarJdkLibs", "2.0.0")
             library("desugarJdkLibs", "com.android.tools", "desugar_jdk_libs")
                 .versionRef("desugarJdkLibs")
         }
@@ -106,22 +106,25 @@ dependencyResolutionManagement {
         create("libsAndroidx") {
             // region Compose
             version("compose-compiler", "1.4.0")
-            version("compose", "1.3.1")
+
+            version("compose-bom", "2023.01.00")
+            library("compose-bom", "androidx.compose", "compose-bom")
+                .versionRef("compose-bom")
 
             library("compose-ui", "androidx.compose.ui", "ui")
-                .versionRef("compose")
+                .withoutVersion()
             library("compose-ui-tooling", "androidx.compose.ui", "ui-tooling")
-                .versionRef("compose")
+                .withoutVersion()
 
             library("compose-foundation", "androidx.compose.foundation", "foundation")
-                .versionRef("compose")
+                .withoutVersion()
             library("compose-material", "androidx.compose.material", "material")
-                .versionRef("compose")
+                .withoutVersion()
 
             library("compose-material-icons-core", "androidx.compose.material", "material-icons-core")
-                .versionRef("compose")
+                .withoutVersion()
             library("compose-material-icons-extended", "androidx.compose.material", "material-icons-extended")
-                .versionRef("compose")
+                .withoutVersion()
 
             bundle(
                 "compose",
@@ -173,7 +176,7 @@ dependencyResolutionManagement {
 
         create("libsUi") {
             // Todo: switch to Compose completely to remove this dependency
-            version("material", "1.7.0")
+            version("material", "1.8.0")
             library("material", "com.google.android.material", "material")
                 .versionRef("material")
 
