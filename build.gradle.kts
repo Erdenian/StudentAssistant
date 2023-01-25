@@ -124,5 +124,12 @@ subprojects {
         dependencies {
             configurations.findByName("coreLibraryDesugaring")?.invoke(libsAndroidTools.desugarJdkLibs)
         }
+
+        if (extensions.findByType<BaseExtension>()?.buildFeatures?.compose == true) {
+            dependencies {
+                val implementation by configurations
+                implementation(platform(libsAndroidx.compose.bom))
+            }
+        }
     }
 }
