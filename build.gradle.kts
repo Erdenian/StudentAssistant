@@ -6,6 +6,8 @@ plugins {
 
     alias(libsPlugins.plugins.detekt)
     jacoco
+
+    alias(libsPlugins.plugins.gradleVersionsFilter)
 }
 
 detekt {
@@ -137,16 +139,23 @@ subprojectsAfterEvaluate {
         val unitTestExists = sourceSets.findByName("test").hasFiles()
         val androidTestExists = sourceSets.findByName("androidTest").hasFiles()
 
+        if (!androidTestExists) testOptions.managedDevices.devices.clear()
         project.tasks.all {
-            val wasEnabled = enabled
+            fun Task.removeIf(condition: Boolean) {
+                if (condition) {
+                    enabled = false
+                    dependsOn.clear()
+                    logger.info("Disabled ${project.path}:$name task")
+                }
+            }
+
             when {
-                (this is com.android.build.gradle.tasks.factory.AndroidUnitTest) -> enabled = unitTestExists
+                (this is com.android.build.gradle.tasks.factory.AndroidUnitTest) -> removeIf(!unitTestExists)
                 (this is com.android.build.gradle.internal.tasks.ManagedDeviceSetupTask) ||
                         (this is com.android.build.gradle.internal.tasks.ManagedDeviceInstrumentationTestTask) ||
                         (this is com.android.build.gradle.internal.coverage.JacocoReportTask) ||
-                        name.contains("AndroidTest") -> enabled = androidTestExists
+                        name.contains("AndroidTest") -> removeIf(!androidTestExists)
             }
-            if (wasEnabled && !enabled) logger.info("Disabled ${project.path}:$name task")
         }
     }
 }

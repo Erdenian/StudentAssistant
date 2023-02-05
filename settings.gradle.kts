@@ -36,7 +36,7 @@ dependencyResolutionManagement {
 
     versionCatalogs {
         create("libsPlugins") {
-            version("android", "7.4.0")
+            version("android", "7.4.1")
             plugin("android-application", "com.android.application")
                 .versionRef("android")
             plugin("android-library", "com.android.library")
@@ -59,10 +59,13 @@ dependencyResolutionManagement {
                 .versionRef("detekt")
 
             plugin("tripletPlay", "com.github.triplet.play")
-                .version("3.7.0")
+                .version("3.8.1")
 
             plugin("shrinkometer", "ru.erdenian.shrinkometer")
                 .version("0.3.1")
+
+            plugin("gradleVersionsFilter", "se.ascp.gradle.gradle-versions-filter")
+                .version("0.1.16")
         }
 
         create("config") {
@@ -98,7 +101,7 @@ dependencyResolutionManagement {
         }
 
         create("libsAndroidTools") {
-            version("desugarJdkLibs", "2.0.0")
+            version("desugarJdkLibs", "2.0.2")
             library("desugarJdkLibs", "com.android.tools", "desugar_jdk_libs")
                 .versionRef("desugarJdkLibs")
         }
