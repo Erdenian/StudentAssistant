@@ -28,7 +28,7 @@ jobs:
       # Run
       # --------------------------------------
       - uses: actions/checkout@v3
-      - run: ./gradlew detekt :app:lintDebug testDebugUnitTest testDeviceDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" jacocoMergedReport assembleDebug bundleDebug
+      - run: ./gradlew :detekt :app:lintDebug testDebugUnitTest testDeviceDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" :jacocoMergedReport :app:assembleDebug :app:bundleDebug
       # --------------------------------------
       # Analyze
       # --------------------------------------
