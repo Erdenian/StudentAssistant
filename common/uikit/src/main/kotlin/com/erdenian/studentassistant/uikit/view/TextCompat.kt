@@ -76,7 +76,7 @@ fun TextCompat(
             softWrap = softWrap,
             maxLines = maxLines,
             onTextLayout = onTextLayout,
-            style = style,
+            style = style
         )
     }
 }

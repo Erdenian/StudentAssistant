@@ -1,7 +1,9 @@
+@Suppress("DSL_SCOPE_VIOLATION") // https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
-    id("com.android.library")
-    kotlin("android")
-    kotlin("kapt")
+    id(libsPlugins.plugins.android.library.get().pluginId)
+    id(libsPlugins.plugins.kotlin.android.get().pluginId)
+    id(libsPlugins.plugins.kotlin.kapt.get().pluginId)
+    jacoco
 }
 
 android {
@@ -15,25 +17,16 @@ dependencies {
     // endregion
 
     // region Tests
-    val junitVersion: String by project
-    testImplementation("junit:junit:$junitVersion")
-
-    val junitKtxVersion: String by project
-    androidTestImplementation("androidx.test.ext:junit-ktx:$junitKtxVersion")
-
-    val androidxTestVersion: String by project
-    androidTestImplementation("androidx.test:core-ktx:$androidxTestVersion")
-    androidTestImplementation("androidx.test:runner:$androidxTestVersion")
+    testImplementation(libsTest.junit)
+    androidTestImplementation(libsTest.bundles.android)
     // endregion
 
     // region Kotlin
-    val coroutinesVersion: String by project
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
+    api(libsKotlinx.coroutines)
     // endregion
 
     // region Core
-    val daggerVersion: String by project
-    implementation("com.google.dagger:dagger:$daggerVersion")
-    kapt("com.google.dagger:dagger-compiler:$daggerVersion")
+    kapt(libsCore.dagger.compiler)
+    implementation(libsCore.dagger)
     // endregion
 }

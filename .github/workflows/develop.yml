@@ -8,56 +8,47 @@ on:
     branches:
       - 'develop'
 
-jobs:
+env:
+  MIN_COVERAGE_OVERALL: 4
+  MIN_COVERAGE_CHANGED: 0
 
-  analysis:
-    runs-on: ubuntu-latest
+jobs:
+  check:
+    runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/setup-java@v2
+      # --------------------------------------
+      # Install
+      # --------------------------------------
+      - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: 17
-      - name: Detekt
-        run: ./gradlew detekt
-      - uses: actions/upload-artifact@v2
+      - uses: gradle/gradle-build-action@v2
+      # --------------------------------------
+      # Run
+      # --------------------------------------
+      - uses: actions/checkout@v3
+      - run: ./gradlew :detekt :app:lintDebug testDebugUnitTest testDeviceDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" :jacocoMergedReport :app:assembleDebug :app:bundleDebug
+      # --------------------------------------
+      # Analyze
+      # --------------------------------------
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: Detekt
           path: "build/reports/detekt/detekt.html"
           if-no-files-found: error
-      - name: Lint Debug
-        run: ./gradlew :app:lintDebug
-      - uses: actions/upload-artifact@v2
+      # --------------------------------------
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: Lint
           path: "**/build/reports/lint-results*.html"
           if-no-files-found: error
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/setup-java@v2
-        with:
-          distribution: 'temurin'
-          java-version: 17
-      - name: Unit Test
-        run: ./gradlew testDebugUnitTest
-      - uses: actions/upload-artifact@v2
+      # --------------------------------------
+      # Test
+      # --------------------------------------
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: Unit Test
@@ -69,28 +60,8 @@ jobs:
           name: Unit Test Report
           path: "**/build/test-results/test*/TEST-*.xml"
           reporter: java-junit
-
-  androidTest:
-    runs-on: macos-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/setup-java@v2
-        with:
-          distribution: 'temurin'
-          java-version: 17
-      - name: Android Test
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 27
-          script: ./gradlew connectedAndroidTest
-      - uses: actions/upload-artifact@v2
+      # --------------------------------------
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: Android Test
@@ -100,35 +71,26 @@ jobs:
         if: always()
         with:
           name: Android Test Report
-          path: "**/build/outputs/androidTest-results/connected/TEST-*.xml"
+          path: "**/build/outputs/androidTest-results/managedDevice/testDevice/TEST-*.xml"
           reporter: java-junit
-
-  build:
-    needs: [analysis, test, androidTest]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
+      # --------------------------------------
+      - uses: madrapps/jacoco-report@v1.3
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/setup-java@v2
-        with:
-          distribution: 'temurin'
-          java-version: 17
-      - name: Assemble Debug
-        run: ./gradlew assembleDebug
-      - uses: actions/upload-artifact@v2
+          paths: ${{ github.workspace }}/build/reports/jacoco/jacoco.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: ${{ env.MIN_COVERAGE_OVERALL }}
+          min-coverage-changed-files: ${{ env.MIN_COVERAGE_CHANGED }}
+      # --------------------------------------
+      # Build
+      # --------------------------------------
+      - uses: actions/upload-artifact@v3
         if: success()
         with:
           name: Assemble
           path: "app/build/outputs/apk/debug/*.apk"
           if-no-files-found: error
-      - name: Bundle Debug
-        run: ./gradlew bundleDebug
-      - uses: actions/upload-artifact@v2
+      # --------------------------------------
+      - uses: actions/upload-artifact@v3
         if: success()
         with:
           name: Bundle
