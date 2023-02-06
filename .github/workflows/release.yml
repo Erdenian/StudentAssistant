@@ -91,16 +91,19 @@ jobs:
         if: success()
         with:
           name: Assemble
-          path:
-            - "app/build/outputs/apk/release/*.apk"
-            - "app/build/outputs/mapping/release/*.txt"
+          path: "app/build/outputs/apk/release/*.apk"
           if-no-files-found: error
       # --------------------------------------
       - uses: actions/upload-artifact@v3
         if: success()
         with:
           name: Bundle
-          path:
-            - "app/build/outputs/bundle/release/*.aab"
-            - "app/build/outputs/mapping/release/*.txt"
+          path: "app/build/outputs/bundle/release/*.aab"
+          if-no-files-found: error
+      # --------------------------------------
+      - uses: actions/upload-artifact@v3
+        if: success()
+        with:
+          name: Mapping
+          path: "app/build/outputs/mapping/release/*.txt"
           if-no-files-found: error
