@@ -309,3 +309,44 @@ subprojectsAfterEvaluate {
 }
 
 // endregion
+
+// region Release
+
+tasks.register("updateChangelog") {
+    doFirst {
+        val file = project.file("CHANGELOG.md")
+        val lines = file.readLines().toMutableList()
+        val lineSeparator = System.lineSeparator()
+
+        val android = subprojects
+            .first { it.name == "app" }
+            .extensions
+            .getByType<com.android.build.gradle.BaseExtension>()
+
+        val newVersion = checkNotNull(android.defaultConfig.versionName)
+        val oldVersion = lines
+            .first { it.startsWith("[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/") }
+            .removePrefix("[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/")
+            .removeSuffix("...develop")
+
+        lines.add(
+            lines.indexOf("## [Unreleased]") + 1,
+            "$lineSeparator## [$newVersion] - ${java.time.LocalDate.now()}"
+        )
+
+        lines.set(
+            lines.indexOf("[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/$oldVersion...develop"),
+            "[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/$newVersion...develop"
+        )
+
+        lines.add(
+            lines.indexOf("[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/$newVersion...develop") + 1,
+            "[$newVersion]: https://github.com/Erdenian/StudentAssistant/compare/$oldVersion...$newVersion"
+        )
+
+        file.delete()
+        file.writeText(lines.joinToString("$lineSeparator") + "$lineSeparator")
+    }
+}
+
+// endregion
