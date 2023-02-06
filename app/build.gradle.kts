@@ -13,8 +13,8 @@ android {
 
     defaultConfig {
         applicationId = "com.erdenian.studentassistant"
-        versionCode = 21
-        versionName = "0.5.2"
+        versionCode = 22
+        versionName = "0.5.3"
 
         resourceConfigurations.retainAll(setOf("ru"))
         setProperty("archivesBaseName", "${rootProject.name}-$versionName")
