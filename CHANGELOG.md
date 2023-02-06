@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.3] - 2023-02-06
+
+Нет видимых изменений
+
 ## [0.5.2] - 2022-06-22
 
 Нет видимых изменений
@@ -64,7 +68,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Первый релиз в Google Play
 
-[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/0.5.2...develop
+## [0.3.1] - 2019-08-18
+## [0.3.0] - 2019-08-04
+## [0.2.9] - 2019-01-22
+## [0.2.8] - 2018-10-14
+## [0.2.7] - 2017-09-24
+## [0.2.6] - 2017-03-23
+## [0.2.5] - 2017-03-23
+## [0.2.4] - 2017-03-21
+## [0.2.3] - 2017-03-13
+## [0.2.0] - 2016-12-22
+## [0.1.0] - 2016-12-19
+
+<!-- @formatter:off -->
+[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/0.5.3...develop
+[0.5.3]: https://github.com/Erdenian/StudentAssistant/compare/0.5.2...0.5.3
 [0.5.2]: https://github.com/Erdenian/StudentAssistant/compare/0.5.1...0.5.2
 [0.5.1]: https://github.com/Erdenian/StudentAssistant/compare/0.5.0...0.5.1
 [0.5.0]: https://github.com/Erdenian/StudentAssistant/compare/0.4.5...0.5.0
@@ -85,3 +103,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.2.3]: https://github.com/Erdenian/StudentAssistant/compare/0.2.0...0.2.3
 [0.2.0]: https://github.com/Erdenian/StudentAssistant/compare/0.1.0...0.2.0
 [0.1.0]: https://github.com/Erdenian/StudentAssistant/compare/e616d052ad609f694c1dd9c4492a758597fd8f3f...0.1.0
+<!-- @formatter:on -->
