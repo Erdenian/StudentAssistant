@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
     <issue id="InvalidPackage">
-        <!-- see https://github.com/Kotlin/kotlinx.coroutines/issues/3277 -->
-        <ignore regexp="kotlinx.coroutines.debug.AgentPremain" />
+        <ignore path="**/org.jacoco.agent-*-runtime.jar" />
     </issue>
 </lint>

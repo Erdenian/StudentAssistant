@@ -1,6 +1,7 @@
+@Suppress("DSL_SCOPE_VIOLATION") // https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
-    id("com.android.library")
-    kotlin("android")
+    id(libsPlugins.plugins.android.library.get().pluginId)
+    id(libsPlugins.plugins.kotlin.android.get().pluginId)
 }
 
 android {
@@ -11,15 +12,6 @@ android {
 
 dependencies {
     // region Compose
-    val composeVersion: String by project
-
-    api("androidx.compose.ui:ui:$composeVersion")
-    api("androidx.compose.ui:ui-tooling:$composeVersion")
-
-    api("androidx.compose.foundation:foundation:$composeVersion")
-    api("androidx.compose.material:material:$composeVersion")
-
-    api("androidx.compose.material:material-icons-core:$composeVersion")
-    api("androidx.compose.material:material-icons-extended:$composeVersion")
+    api(libsAndroidx.bundles.compose)
     //endregion
 }

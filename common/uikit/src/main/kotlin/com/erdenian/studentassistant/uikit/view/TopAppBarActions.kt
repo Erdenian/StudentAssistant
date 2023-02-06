@@ -39,7 +39,7 @@ import com.google.accompanist.placeholder.material.shimmer
 @Suppress("unused")
 @Composable
 fun RowScope.TopAppBarActions(
-    actions: List<ActionItem>,
+    actions: List<ActionItem>
 ) {
     var expanded by remember { mutableStateOf(false) }
     TopAppBarActionsContent(

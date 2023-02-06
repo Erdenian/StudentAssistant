@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
@@ -37,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
-import com.erdenian.studentassistant.uikit.layout.StartEndRow
 
 @Composable
 fun TopAppBarDropdownMenu(
@@ -66,26 +66,25 @@ private fun TopAppBarDropdownMenuContent(
     onClick: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
-    StartEndRow(
+    Row(
         verticalAlignment = Alignment.CenterVertically,
-        contentStart = {
-            Text(
-                text = selectedItem,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1
-            )
-        },
-        contentEnd = {
-            Icon(
-                imageVector = AppIcons.ArrowDropDown,
-                contentDescription = null,
-                modifier = Modifier.padding(start = 8.dp)
-            )
-        },
         modifier = Modifier
             .fillMaxHeight()
             .clickable(onClick = onClick)
-    )
+    ) {
+        Text(
+            text = selectedItem,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
+            modifier = Modifier.weight(1.0f, false)
+        )
+
+        Icon(
+            imageVector = AppIcons.ArrowDropDown,
+            contentDescription = null,
+            modifier = Modifier.padding(start = 8.dp)
+        )
+    }
 
     val xOffset = MenuDefaults
         .DropdownMenuItemContentPadding
@@ -178,7 +177,7 @@ private fun TopAppBarDropdownMenuItemsPreview() = AppTheme {
                 items = listOf(
                     "First",
                     "Second",
-                    "Very very very very very very very very very very very very very long item",
+                    "Very very very very very very very very very very very very very long item"
                 ),
                 onItemClick = { _, _ -> }
             )

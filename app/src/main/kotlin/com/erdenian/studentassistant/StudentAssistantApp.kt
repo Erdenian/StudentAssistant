@@ -98,7 +98,7 @@ private fun StudentAssistantBottomNavigation(
                 labelId = RS.st_title,
                 route = MainRoutes.SETTINGS,
                 onClick = navGraph::navigateToSettings
-            ),
+            )
         )
     }
 

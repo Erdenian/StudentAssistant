@@ -8,24 +8,26 @@ on:
       - 'release/*'
 
 jobs:
-
-  analysis:
-    runs-on: ubuntu-latest
+  check:
+    runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/setup-java@v2
+      # --------------------------------------
+      # Install
+      # --------------------------------------
+      - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: 17
-      - name: Detekt
-        run: ./gradlew detekt
-      - uses: actions/upload-artifact@v2
+      - uses: gradle/gradle-build-action@v2
+      # --------------------------------------
+      # Run
+      # --------------------------------------
+      - uses: actions/checkout@v3
+      - run: ./gradlew :detekt
+      # --------------------------------------
+      # Analyze
+      # --------------------------------------
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: Detekt

@@ -5,56 +5,52 @@ on:
     branches:
       - 'master'
 
-jobs:
+env:
+  MIN_COVERAGE_OVERALL: 0
+  MIN_COVERAGE_CHANGED: 0
 
-  analysis:
-    runs-on: ubuntu-latest
+jobs:
+  check:
+    runs-on: macos-latest
+    env:
+      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      ANDROID_PUBLISHER_CREDENTIALS: ${{ secrets.ANDROID_PUBLISHER_CREDENTIALS }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/setup-java@v2
+      # --------------------------------------
+      # Install
+      # --------------------------------------
+      - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: 17
-      - name: Detekt
-        run: ./gradlew detekt
-      - uses: actions/upload-artifact@v2
+      - uses: gradle/gradle-build-action@v2
+      # --------------------------------------
+      # Run
+      # --------------------------------------
+      - uses: actions/checkout@v3
+      - run: ./gradlew :detekt :app:lintRelease testReleaseUnitTest testDeviceDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" :jacocoMergedReport :app:assembleRelease :app:bundleRelease
+      # --------------------------------------
+      # Analyze
+      # --------------------------------------
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: Detekt
           path: "build/reports/detekt/detekt.html"
           if-no-files-found: error
-      - name: Lint Release
-        run: ./gradlew :app:lintRelease
-      - uses: actions/upload-artifact@v2
+      # --------------------------------------
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: Lint
           path: "**/build/reports/lint-results*.html"
           if-no-files-found: error
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/setup-java@v2
-        with:
-          distribution: 'temurin'
-          java-version: 17
-      - name: Unit Test
-        run: ./gradlew testReleaseUnitTest
-      - uses: actions/upload-artifact@v2
+      # --------------------------------------
+      # Test
+      # --------------------------------------
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: Unit Test
@@ -66,28 +62,8 @@ jobs:
           name: Unit Test Report
           path: "**/build/test-results/test*/TEST-*.xml"
           reporter: java-junit
-
-  androidTest:
-    runs-on: macos-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/setup-java@v2
-        with:
-          distribution: 'temurin'
-          java-version: 17
-      - name: Android Test
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 27
-          script: ./gradlew connectedAndroidTest
-      - uses: actions/upload-artifact@v2
+      # --------------------------------------
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: Android Test
@@ -97,70 +73,40 @@ jobs:
         if: always()
         with:
           name: Android Test Report
-          path: "**/build/outputs/androidTest-results/connected/TEST-*.xml"
+          path: "**/build/outputs/androidTest-results/managedDevice/testDevice/TEST-*.xml"
           reporter: java-junit
-
-  build:
-    needs: [analysis, test, androidTest]
-    runs-on: ubuntu-latest
-    env:
-      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
+      # --------------------------------------
+      - uses: madrapps/jacoco-report@v1.3
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/setup-java@v2
-        with:
-          distribution: 'temurin'
-          java-version: 17
-      - name: Assemble Release
-        run: ./gradlew assembleRelease
-      - uses: actions/upload-artifact@v2
+          paths: ${{ github.workspace }}/build/reports/jacoco/jacoco.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: ${{ env.MIN_COVERAGE_OVERALL }}
+          min-coverage-changed-files: ${{ env.MIN_COVERAGE_CHANGED }}
+      # --------------------------------------
+      # Build
+      # --------------------------------------
+      - uses: actions/upload-artifact@v3
         if: success()
         with:
           name: Assemble
           path: "app/build/outputs/apk/release/*.apk"
           if-no-files-found: error
-      - name: Bundle Release
-        run: ./gradlew bundleRelease
-      - uses: actions/upload-artifact@v2
+      # --------------------------------------
+      - uses: actions/upload-artifact@v3
         if: success()
         with:
           name: Bundle
           path: "app/build/outputs/bundle/release/*.aab"
           if-no-files-found: error
-      - uses: actions/upload-artifact@v2
+      # --------------------------------------
+      - uses: actions/upload-artifact@v3
         if: success()
         with:
-          name: Mappings
+          name: Mapping
           path: "app/build/outputs/mapping/release/*.txt"
           if-no-files-found: error
-
-  publish:
-    needs: [analysis, test, androidTest]
-    runs-on: ubuntu-latest
-    env:
-      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-      ANDROID_PUBLISHER_CREDENTIALS: ${{ secrets.ANDROID_PUBLISHER_CREDENTIALS }}
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle-wrapper.properties') }}
-      - uses: actions/setup-java@v2
-        with:
-          distribution: 'temurin'
-          java-version: 17
+      # --------------------------------------
+      # Publish
+      # --------------------------------------
       - name: Publish
         run: ./gradlew publishReleaseBundle
