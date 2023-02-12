@@ -10,6 +10,6 @@ android {
 
 dependencies {
     // region Tests
-    testImplementation(libs.test.junit)
+    testImplementation(libs.bundles.test.unit)
     // endregion
 }

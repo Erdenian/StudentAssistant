@@ -25,7 +25,7 @@ dependencies {
     // endregion
 
     // region Tests
-    testImplementation(libs.test.junit)
+    testImplementation(libs.bundles.test.unit)
     androidTestImplementation(libs.bundles.test.android)
     // endregion
 
