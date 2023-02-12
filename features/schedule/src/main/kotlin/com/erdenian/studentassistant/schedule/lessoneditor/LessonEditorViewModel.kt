@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.erdenian.studentassistant.entity.Lesson
+import com.erdenian.studentassistant.entity.emptyImmutableSortedSet
 import com.erdenian.studentassistant.entity.immutableSortedSetOf
 import com.erdenian.studentassistant.entity.toImmutableSortedSet
 import com.erdenian.studentassistant.repository.HomeworkRepository
@@ -153,13 +154,13 @@ class LessonEditorViewModel @AssistedInject constructor(
     val isEditing = (lessonId != null)
 
     val existingSubjects = lessonRepository.getSubjects(semesterId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), immutableSortedSetOf())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyImmutableSortedSet())
     val existingTypes = lessonRepository.getTypes(semesterId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), immutableSortedSetOf())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyImmutableSortedSet())
     val existingTeachers = lessonRepository.getTeachers(semesterId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), immutableSortedSetOf())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyImmutableSortedSet())
     val existingClassrooms = lessonRepository.getClassrooms(semesterId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), immutableSortedSetOf())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyImmutableSortedSet())
 
     private var initialSubjectName: String? = null
     private val isSubjectNameChanged
