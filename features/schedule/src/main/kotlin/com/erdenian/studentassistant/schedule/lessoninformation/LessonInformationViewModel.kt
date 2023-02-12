@@ -3,7 +3,7 @@ package com.erdenian.studentassistant.schedule.lessoninformation
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.erdenian.studentassistant.entity.immutableSortedSetOf
+import com.erdenian.studentassistant.entity.emptyImmutableSortedSet
 import com.erdenian.studentassistant.entity.toImmutableSortedSet
 import com.erdenian.studentassistant.repository.HomeworkRepository
 import com.erdenian.studentassistant.repository.LessonRepository
@@ -53,7 +53,7 @@ class LessonInformationViewModel @AssistedInject constructor(
     val homeworks = combine(
         lessonPrivate.flatMapLatest { lesson ->
             if (lesson != null) homeworkRepository.getActualFlow(lesson.subjectName)
-            else flowOf(immutableSortedSetOf())
+            else flowOf(emptyImmutableSortedSet())
         }.onEach { deletedHomeworkIds.value = emptySet() },
         deletedHomeworkIds
     ) { homeworks, deletedIds ->
