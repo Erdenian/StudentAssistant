@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.stateIn
 
-// regions Flows
+// region Boolean
 
 internal fun SharedPreferences.getBooleanFlow(
     scope: CoroutineScope,
@@ -18,17 +18,39 @@ internal fun SharedPreferences.getBooleanFlow(
     defaultValue: Boolean
 ): StateFlow<Boolean> = getFlow(scope, key) { getBoolean(key, defaultValue) }
 
+// endregion
+
+// region LocalTime
+
+internal fun SharedPreferences.getLocalTime(key: String, defaultValue: LocalTime): LocalTime =
+    LocalTime.ofNanoOfDay(getLong(key, defaultValue.toNanoOfDay()))
+
+internal fun SharedPreferences.Editor.putLocalTime(key: String, value: LocalTime): SharedPreferences.Editor =
+    putLong(key, value.toNanoOfDay())
+
 internal fun SharedPreferences.getLocalTimeFlow(
     scope: CoroutineScope,
     key: String,
     defaultValue: LocalTime
 ): StateFlow<LocalTime> = getFlow(scope, key) { getLocalTime(key, defaultValue) }
 
+// endregion
+
+// region Duration
+
+internal fun SharedPreferences.getDuration(key: String, defaultValue: Duration): Duration =
+    Duration.ofNanos(getLong(key, defaultValue.toNanos()))
+
+internal fun SharedPreferences.Editor.putDuration(key: String, value: Duration): SharedPreferences.Editor =
+    putLong(key, value.toNanos())
+
 internal fun SharedPreferences.getDurationFlow(
     scope: CoroutineScope,
     key: String,
     defaultValue: Duration
 ): StateFlow<Duration> = getFlow(scope, key) { getDuration(key, defaultValue) }
+
+// endregion
 
 private fun <T> SharedPreferences.getFlow(
     scope: CoroutineScope,
@@ -44,21 +66,3 @@ private fun <T> SharedPreferences.getFlow(
     registerOnSharedPreferenceChangeListener(listener)
     awaitClose { unregisterOnSharedPreferenceChangeListener(listener) }
 }.stateIn(scope, SharingStarted.WhileSubscribed(), getter())
-
-// endregion
-
-// region Extensions
-
-internal fun SharedPreferences.getLocalTime(key: String, defaultValue: LocalTime): LocalTime =
-    LocalTime.ofNanoOfDay(getLong(key, defaultValue.toNanoOfDay()))
-
-internal fun SharedPreferences.Editor.putLocalTime(key: String, value: LocalTime): SharedPreferences.Editor =
-    putLong(key, value.toNanoOfDay())
-
-internal fun SharedPreferences.getDuration(key: String, defaultValue: Duration): Duration =
-    Duration.ofNanos(getLong(key, defaultValue.toNanos()))
-
-internal fun SharedPreferences.Editor.putDuration(key: String, value: Duration): SharedPreferences.Editor =
-    putLong(key, value.toNanos())
-
-// endregion
