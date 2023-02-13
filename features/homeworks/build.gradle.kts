@@ -1,8 +1,8 @@
 @Suppress("DSL_SCOPE_VIOLATION") // https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
-    id(libsPlugins.plugins.android.library.get().pluginId)
-    id(libsPlugins.plugins.kotlin.android.get().pluginId)
-    id(libsPlugins.plugins.kotlin.kapt.get().pluginId)
+    id(libs.plugins.android.library.get().pluginId)
+    id(libs.plugins.kotlin.android.get().pluginId)
+    id(libs.plugins.kotlin.kapt.get().pluginId)
 }
 
 android {
@@ -21,15 +21,15 @@ dependencies {
     // endregion
 
     // region AndroidX
-    implementation(libsAndroidx.lifecycle.viewmodel)
+    implementation(libs.androidx.lifecycle.viewmodel)
     // endregion
 
     // region Core
-    kapt(libsCore.dagger.compiler)
-    implementation(libsCore.dagger)
+    kapt(libs.core.dagger.compiler)
+    implementation(libs.core.dagger)
     // endregion
 
     // region UI
-    implementation(libsUi.accompanist.placeholder)
+    implementation(libs.ui.accompanist.placeholder)
     // endregion
 }
