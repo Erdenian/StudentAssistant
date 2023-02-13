@@ -42,7 +42,7 @@ dependencyResolutionManagement {
             plugin("android-library", "com.android.library")
                 .versionRef("android")
 
-            version("kotlin", "1.8.0")
+            version("kotlin", "1.8.10")
             plugin("kotlin-android", "org.jetbrains.kotlin.android")
                 .versionRef("kotlin")
             plugin("kotlin-jvm", "org.jetbrains.kotlin.jvm")
@@ -75,44 +75,35 @@ dependencyResolutionManagement {
         }
 
         create("libsTest") {
-            version("junit", "4.13.2")
             library("junit", "junit", "junit")
-                .versionRef("junit")
+                .version("4.13.2")
 
-            version("androidx-junitKtx", "1.1.5")
             library("androidx-junitKtx", "androidx.test.ext", "junit-ktx")
-                .versionRef("androidx-junitKtx")
-
-            version("androidx-core", "1.5.0")
+                .version("1.1.5")
             library("androidx-core", "androidx.test", "core-ktx")
-                .versionRef("androidx-core")
-
-            version("androidx-runner", "1.5.2")
+                .version("1.5.0")
             library("androidx-runner", "androidx.test", "runner")
-                .versionRef("androidx-runner")
+                .version("1.5.2")
 
             bundle("android", listOf("androidx-junitKtx", "androidx-core", "androidx-runner"))
         }
 
         create("libsKotlinx") {
-            version("coroutines", "1.6.4")
             library("coroutines", "org.jetbrains.kotlinx", "kotlinx-coroutines-android")
-                .versionRef("coroutines")
+                .version("1.6.4")
         }
 
         create("libsAndroidTools") {
-            version("desugarJdkLibs", "2.0.2")
             library("desugarJdkLibs", "com.android.tools", "desugar_jdk_libs")
-                .versionRef("desugarJdkLibs")
+                .version("2.0.2")
         }
 
         create("libsAndroidx") {
             // region Compose
-            version("compose-compiler", "1.4.0")
+            version("compose-compiler", "1.4.2")
 
-            version("compose-bom", "2023.01.00")
             library("compose-bom", "androidx.compose", "compose-bom")
-                .versionRef("compose-bom")
+                .version("2023.01.00")
 
             library("compose-ui", "androidx.compose.ui", "ui")
                 .withoutVersion()
@@ -142,9 +133,8 @@ dependencyResolutionManagement {
             )
             // endregion
 
-            version("lifecycle", "2.5.1")
             library("lifecycle-viewmodel", "androidx.lifecycle", "lifecycle-viewmodel-ktx")
-                .versionRef("lifecycle")
+                .version("2.5.1")
 
             version("room", "2.5.0")
             library("room-compiler", "androidx.room", "room-compiler")
@@ -152,25 +142,21 @@ dependencyResolutionManagement {
             library("room", "androidx.room", "room-ktx")
                 .versionRef("room")
 
-            version("appcompat", "1.6.0")
             library("appcompat", "androidx.appcompat", "appcompat")
-                .versionRef("appcompat")
+                .version("1.6.1")
 
-            version("activity", "1.6.1")
             library("activity", "androidx.activity", "activity-compose")
-                .versionRef("activity")
+                .version("1.6.1")
 
-            version("navigation", "2.5.3")
             library("navigation", "androidx.navigation", "navigation-compose")
-                .versionRef("navigation")
+                .version("2.5.3")
 
-            version("core-splashscreen", "1.0.0")
             library("core-splashscreen", "androidx.core", "core-splashscreen")
-                .versionRef("core-splashscreen")
+                .version("1.0.0")
         }
 
         create("libsCore") {
-            version("dagger", "2.44.2")
+            version("dagger", "2.45")
             library("dagger-compiler", "com.google.dagger", "dagger-compiler")
                 .versionRef("dagger")
             library("dagger", "com.google.dagger", "dagger")
@@ -179,9 +165,8 @@ dependencyResolutionManagement {
 
         create("libsUi") {
             // Todo: switch to Compose completely to remove this dependency
-            version("material", "1.8.0")
             library("material", "com.google.android.material", "material")
-                .versionRef("material")
+                .version("1.8.0")
 
             version("accompanist", "0.28.0")
             library("accompanist-placeholder", "com.google.accompanist", "accompanist-placeholder-material")
