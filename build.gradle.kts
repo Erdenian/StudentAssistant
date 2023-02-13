@@ -1,13 +1,13 @@
 @Suppress("DSL_SCOPE_VIOLATION") // https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
-    alias(libsPlugins.plugins.android.application) apply false
-    alias(libsPlugins.plugins.android.library) apply false
-    alias(libsPlugins.plugins.kotlin.android) apply false
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.android) apply false
 
-    alias(libsPlugins.plugins.detekt)
+    alias(libs.plugins.detekt)
     jacoco
 
-    alias(libsPlugins.plugins.gradleVersionsFilter)
+    alias(libs.plugins.gradleVersionsFilter)
 }
 
 detekt {
@@ -16,7 +16,7 @@ detekt {
 }
 
 dependencies {
-    detektPlugins(libsPlugins.detekt.formatting)
+    detektPlugins(libs.detekt.formatting)
 }
 
 tasks.register<Delete>("clean") {
@@ -90,7 +90,7 @@ subprojectsAfterEvaluate {
             }
         }
 
-        composeOptions.kotlinCompilerExtensionVersion = libsAndroidx.versions.compose.compiler.get()
+        composeOptions.kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
 
         ifLibrary {
             buildTypes {
@@ -115,9 +115,9 @@ subprojectsAfterEvaluate {
         }
 
         dependencies {
-            if (buildFeatures.compose == true) "implementation"(platform(libsAndroidx.compose.bom))
+            if (buildFeatures.compose == true) "implementation"(platform(libs.androidx.compose.bom))
 
-            configurations.findByName("coreLibraryDesugaring")?.invoke(libsAndroidTools.desugarJdkLibs)
+            configurations.findByName("coreLibraryDesugaring")?.invoke(libs.androidTools.desugarJdkLibs)
         }
     }
 }
