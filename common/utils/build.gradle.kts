@@ -1,7 +1,7 @@
 @Suppress("DSL_SCOPE_VIOLATION") // https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
-    id(libsPlugins.plugins.android.library.get().pluginId)
-    id(libsPlugins.plugins.kotlin.android.get().pluginId)
+    id(libs.plugins.android.library.get().pluginId)
+    id(libs.plugins.kotlin.android.get().pluginId)
     jacoco
 }
 
@@ -11,6 +11,6 @@ android {
 
 dependencies {
     // region Tests
-    testImplementation(libsTest.junit)
+    testImplementation(libs.test.junit)
     // endregion
 }
