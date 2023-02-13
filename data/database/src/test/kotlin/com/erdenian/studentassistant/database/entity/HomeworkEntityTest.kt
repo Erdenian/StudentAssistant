@@ -47,4 +47,14 @@ internal class HomeworkEntityTest {
             )
         }
     }
+
+    @Test
+    fun successfulTest() {
+        HomeworkEntity(
+            "name",
+            "description",
+            LocalDate.now(),
+            semesterId
+        )
+    }
 }
