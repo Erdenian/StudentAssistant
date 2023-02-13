@@ -49,7 +49,7 @@ class SelectedSemesterRepository(
 
         suspend fun selectDefault() {
             val now = LocalDate.now()
-            fun Collection<Semester>.default() = find { now in it.range } ?: lastOrNull()
+            fun Collection<Semester>.default() = find { (it.firstDay <= now) && (now <= it.lastDay) } ?: lastOrNull()
 
             val default = semesters.default()
             val previousId = selectedSemesterIdFlow.getAndUpdate { default?.id }

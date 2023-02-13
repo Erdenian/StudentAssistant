@@ -30,8 +30,6 @@ interface Semester : Comparable<Semester>, Parcelable {
      */
     val length: Int get() = ChronoUnit.DAYS.between(firstDay, lastDay).toInt() + 1
 
-    val range: ClosedRange<LocalDate> get() = firstDay..lastDay
-
     /**
      * Дата понедельника в неделе, содержащей [firstDay].
      *

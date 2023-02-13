@@ -184,7 +184,8 @@ private data class SemesterWithState(val semester: Semester, val pagerState: Pag
             pagerState.animateScrollToPage(semester.getPosition(date))
 
         private fun Semester.getDate(position: Int): LocalDate = firstDay.plusDays(position.toLong())
-        private fun Semester.getPosition(date: LocalDate) = ChronoUnit.DAYS.between(firstDay, date.coerceIn(range)).toInt()
+        private fun Semester.getPosition(date: LocalDate) =
+            ChronoUnit.DAYS.between(firstDay, date.coerceIn(firstDay, lastDay)).toInt()
     }
 }
 

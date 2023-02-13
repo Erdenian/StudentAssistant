@@ -13,7 +13,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
@@ -32,7 +32,7 @@ internal class LessonDaoAndroidTest {
     private val semesterId = 1L
 
     @Before
-    fun setUp(): Unit = runBlocking {
+    fun setUp() = runTest {
         semesterDao.insert(
             SemesterEntity(
                 "name",
@@ -47,7 +47,7 @@ internal class LessonDaoAndroidTest {
     fun tearDown() = database.close()
 
     @Test
-    fun insertTest() = runBlocking {
+    fun insertTest() = runTest {
         assertEquals(emptyList<SemesterEntity>(), lessonDao.getAllFlow(semesterId).first())
 
         val lesson = FullLesson(
@@ -83,7 +83,7 @@ internal class LessonDaoAndroidTest {
     }
 
     @Test
-    fun insertNoAutoincrementTest() = runBlocking {
+    fun insertNoAutoincrementTest() = runTest {
         assertEquals(emptyList<SemesterEntity>(), lessonDao.getAllFlow(semesterId).first())
 
         val lesson = FullLesson(
@@ -112,7 +112,7 @@ internal class LessonDaoAndroidTest {
     }
 
     @Test
-    fun getNextStartTimeTest() = runBlocking {
+    fun getNextStartTimeTest() = runTest {
         assertEquals(emptyList<SemesterEntity>(), lessonDao.getAllFlow(semesterId).first())
         assertNull(lessonDao.getLastEndTime(semesterId, DayOfWeek.MONDAY))
 

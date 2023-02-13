@@ -5,7 +5,7 @@ import com.erdenian.studentassistant.database.buildDatabase
 import com.erdenian.studentassistant.database.entity.SemesterEntity
 import java.time.LocalDate
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -21,7 +21,7 @@ internal class SemesterDaoAndroidTest {
     fun tearDown() = database.close()
 
     @Test
-    fun insertTest() = runBlocking {
+    fun insertTest() = runTest {
         assertEquals(emptyList<SemesterEntity>(), semesterDao.getAllFlow().first())
         val semester = SemesterEntity("name", LocalDate.now().minusDays(1), LocalDate.now().minusDays(0))
         val id = semesterDao.insert(semester)
@@ -29,7 +29,7 @@ internal class SemesterDaoAndroidTest {
     }
 
     @Test
-    fun getNamesTest() = runBlocking {
+    fun getNamesTest() = runTest {
         assertEquals(emptyList<SemesterEntity>(), semesterDao.getAllFlow().first())
         val semesters = listOf(
             SemesterEntity("name1", LocalDate.now().minusDays(500), LocalDate.now().minusDays(400), 1L),
