@@ -35,28 +35,35 @@ dependencyResolutionManagement {
     }
 
     versionCatalogs {
-        create("libsPlugins") {
-            version("android", "7.4.1")
+        create("config") {
+            version("minSdk", "21")
+            version("compileSdk", "33")
+            version("targetSdk", "33")
+        }
+
+        create("libs") {
+            // region Plugins
+            version("plugins.android", "7.4.1")
             plugin("android-application", "com.android.application")
-                .versionRef("android")
+                .versionRef("plugins.android")
             plugin("android-library", "com.android.library")
-                .versionRef("android")
+                .versionRef("plugins.android")
 
-            version("kotlin", "1.8.0")
+            version("plugins-kotlin", "1.8.10")
             plugin("kotlin-android", "org.jetbrains.kotlin.android")
-                .versionRef("kotlin")
+                .versionRef("plugins-kotlin")
             plugin("kotlin-jvm", "org.jetbrains.kotlin.jvm")
-                .versionRef("kotlin")
+                .versionRef("plugins-kotlin")
             plugin("kotlin-kapt", "org.jetbrains.kotlin.kapt")
-                .versionRef("kotlin")
+                .versionRef("plugins-kotlin")
             plugin("kotlin-parcelize", "org.jetbrains.kotlin.plugin.parcelize")
-                .versionRef("kotlin")
+                .versionRef("plugins-kotlin")
 
-            version("detekt", "1.22.0")
+            version("plugins-detekt", "1.22.0")
             plugin("detekt", "io.gitlab.arturbosch.detekt")
-                .versionRef("detekt")
+                .versionRef("plugins-detekt")
             library("detekt-formatting", "io.gitlab.arturbosch.detekt", "detekt-formatting")
-                .versionRef("detekt")
+                .versionRef("plugins-detekt")
 
             plugin("tripletPlay", "com.github.triplet.play")
                 .version("3.8.1")
@@ -66,130 +73,110 @@ dependencyResolutionManagement {
 
             plugin("gradleVersionsFilter", "se.ascp.gradle.gradle-versions-filter")
                 .version("0.1.16")
-        }
+            // endregion
 
-        create("config") {
-            version("minSdk", "21")
-            version("compileSdk", "33")
-            version("targetSdk", "33")
-        }
+            // region Testing
+            library("test-junit", "junit", "junit")
+                .version("4.13.2")
 
-        create("libsTest") {
-            version("junit", "4.13.2")
-            library("junit", "junit", "junit")
-                .versionRef("junit")
+            library("test-androidx-junitKtx", "androidx.test.ext", "junit-ktx")
+                .version("1.1.5")
+            library("test-androidx-core", "androidx.test", "core-ktx")
+                .version("1.5.0")
+            library("test-androidx-runner", "androidx.test", "runner")
+                .version("1.5.2")
 
-            version("androidx-junitKtx", "1.1.5")
-            library("androidx-junitKtx", "androidx.test.ext", "junit-ktx")
-                .versionRef("androidx-junitKtx")
+            bundle("test-android", listOf("test-androidx-junitKtx", "test-androidx-core", "test-androidx-runner"))
+            // endregion
 
-            version("androidx-core", "1.5.0")
-            library("androidx-core", "androidx.test", "core-ktx")
-                .versionRef("androidx-core")
+            // region KotlinX
+            library("kotlinx-coroutines", "org.jetbrains.kotlinx", "kotlinx-coroutines-android")
+                .version("1.6.4")
+            // endregion
 
-            version("androidx-runner", "1.5.2")
-            library("androidx-runner", "androidx.test", "runner")
-                .versionRef("androidx-runner")
+            // region Android Tools
+            library("androidTools-desugarJdkLibs", "com.android.tools", "desugar_jdk_libs")
+                .version("2.0.2")
+            // endregion
 
-            bundle("android", listOf("androidx-junitKtx", "androidx-core", "androidx-runner"))
-        }
-
-        create("libsKotlinx") {
-            version("coroutines", "1.6.4")
-            library("coroutines", "org.jetbrains.kotlinx", "kotlinx-coroutines-android")
-                .versionRef("coroutines")
-        }
-
-        create("libsAndroidTools") {
-            version("desugarJdkLibs", "2.0.2")
-            library("desugarJdkLibs", "com.android.tools", "desugar_jdk_libs")
-                .versionRef("desugarJdkLibs")
-        }
-
-        create("libsAndroidx") {
             // region Compose
-            version("compose-compiler", "1.4.0")
+            version("androidx-compose-compiler", "1.4.2")
 
-            version("compose-bom", "2023.01.00")
-            library("compose-bom", "androidx.compose", "compose-bom")
-                .versionRef("compose-bom")
+            library("androidx-compose-bom", "androidx.compose", "compose-bom")
+                .version("2023.01.00")
 
-            library("compose-ui", "androidx.compose.ui", "ui")
+            library("androidx-compose-ui", "androidx.compose.ui", "ui")
                 .withoutVersion()
-            library("compose-ui-tooling", "androidx.compose.ui", "ui-tooling")
-                .withoutVersion()
-
-            library("compose-foundation", "androidx.compose.foundation", "foundation")
-                .withoutVersion()
-            library("compose-material", "androidx.compose.material", "material")
+            library("androidx-compose-ui-tooling", "androidx.compose.ui", "ui-tooling")
                 .withoutVersion()
 
-            library("compose-material-icons-core", "androidx.compose.material", "material-icons-core")
+            library("androidx-compose-foundation", "androidx.compose.foundation", "foundation")
                 .withoutVersion()
-            library("compose-material-icons-extended", "androidx.compose.material", "material-icons-extended")
+            library("androidx-compose-material", "androidx.compose.material", "material")
+                .withoutVersion()
+
+            library("androidx-compose-material-icons-core", "androidx.compose.material", "material-icons-core")
+                .withoutVersion()
+            library("androidx-compose-material-icons-extended", "androidx.compose.material", "material-icons-extended")
                 .withoutVersion()
 
             bundle(
-                "compose",
+                "androidx-compose",
                 listOf(
-                    "compose-ui",
-                    "compose-ui-tooling",
-                    "compose-foundation",
-                    "compose-material",
-                    "compose-material-icons-core",
-                    "compose-material-icons-extended"
+                    "androidx-compose-ui",
+                    "androidx-compose-ui-tooling",
+                    "androidx-compose-foundation",
+                    "androidx-compose-material",
+                    "androidx-compose-material-icons-core",
+                    "androidx-compose-material-icons-extended"
                 )
             )
             // endregion
 
-            version("lifecycle", "2.5.1")
-            library("lifecycle-viewmodel", "androidx.lifecycle", "lifecycle-viewmodel-ktx")
-                .versionRef("lifecycle")
+            // region AndroidX
+            library("androidx-lifecycle-viewmodel", "androidx.lifecycle", "lifecycle-viewmodel-ktx")
+                .version("2.5.1")
 
-            version("room", "2.5.0")
-            library("room-compiler", "androidx.room", "room-compiler")
-                .versionRef("room")
-            library("room", "androidx.room", "room-ktx")
-                .versionRef("room")
+            version("androidx-room", "2.5.0")
+            library("androidx-room-compiler", "androidx.room", "room-compiler")
+                .versionRef("androidx-room")
+            library("androidx-room", "androidx.room", "room-ktx")
+                .versionRef("androidx-room")
 
-            version("appcompat", "1.6.0")
-            library("appcompat", "androidx.appcompat", "appcompat")
-                .versionRef("appcompat")
+            library("androidx-appcompat", "androidx.appcompat", "appcompat")
+                .version("1.6.1")
 
-            version("activity", "1.6.1")
-            library("activity", "androidx.activity", "activity-compose")
-                .versionRef("activity")
+            library("androidx-activity", "androidx.activity", "activity-compose")
+                .version("1.6.1")
 
-            version("navigation", "2.5.3")
-            library("navigation", "androidx.navigation", "navigation-compose")
-                .versionRef("navigation")
+            library("androidx-navigation", "androidx.navigation", "navigation-compose")
+                .version("2.5.3")
 
-            version("core-splashscreen", "1.0.0")
-            library("core-splashscreen", "androidx.core", "core-splashscreen")
-                .versionRef("core-splashscreen")
-        }
+            library("androidx-core-splashscreen", "androidx.core", "core-splashscreen")
+                .version("1.0.0")
+            // endregion
 
-        create("libsCore") {
-            version("dagger", "2.44.2")
-            library("dagger-compiler", "com.google.dagger", "dagger-compiler")
-                .versionRef("dagger")
-            library("dagger", "com.google.dagger", "dagger")
-                .versionRef("dagger")
-        }
+            // region Core
+            version("core-dagger", "2.45")
+            library("core-dagger-compiler", "com.google.dagger", "dagger-compiler")
+                .versionRef("core-dagger")
+            library("core-dagger", "com.google.dagger", "dagger")
+                .versionRef("core-dagger")
+            // endregion
 
-        create("libsUi") {
+            // region UI
             // Todo: switch to Compose completely to remove this dependency
-            version("material", "1.8.0")
-            library("material", "com.google.android.material", "material")
-                .versionRef("material")
+            library("ui-material", "com.google.android.material", "material")
+                .version("1.8.0")
 
-            version("accompanist", "0.28.0")
-            library("accompanist-placeholder", "com.google.accompanist", "accompanist-placeholder-material")
-                .versionRef("accompanist")
-            library("accompanist-pager", "com.google.accompanist", "accompanist-pager")
-                .versionRef("accompanist")
-            library("accompanist-navigationAnimation", "com.google.accompanist", "accompanist-navigation-animation")
-                .versionRef("accompanist")
+            version("ui-accompanist", "0.28.0")
+            library("ui-accompanist-placeholder", "com.google.accompanist", "accompanist-placeholder-material")
+                .versionRef("ui-accompanist")
+            library("ui-accompanist-pager", "com.google.accompanist", "accompanist-pager")
+                .versionRef("ui-accompanist")
+            library("ui-accompanist-navigationAnimation", "com.google.accompanist", "accompanist-navigation-animation")
+                .versionRef("ui-accompanist")
+            // endregion
         }
     }
 }
