@@ -55,7 +55,7 @@ internal class SharedPreferencesExtensionsTest {
     @Test
     fun localTimeTest() = runTest {
         val key = "KEY"
-        val defaultValue = LocalTime.MIDNIGHT
+        val defaultValue = LocalTime.of(10, 0)
         val newValue = LocalTime.of(17, 8, 17)
 
         val flowScope = TestScope(UnconfinedTestDispatcher(testScheduler))
