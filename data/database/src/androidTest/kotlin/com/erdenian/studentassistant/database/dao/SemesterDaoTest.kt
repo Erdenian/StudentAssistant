@@ -17,7 +17,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-internal class SemesterDaoAndroidTest {
+internal class SemesterDaoTest {
 
     private val database = buildDatabase()
     private val semesterDao = database.semesterDao
