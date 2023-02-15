@@ -14,14 +14,7 @@ internal class FullLessonTest {
     @Test
     fun byWeekdayTest() {
         FullLesson(
-            LessonEntity(
-                "name",
-                "type",
-                LocalTime.MIDNIGHT,
-                LocalTime.MIDNIGHT.plusHours(2),
-                1L,
-                10L
-            ),
+            LessonEntity("name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), 1L, 10L),
             listOf(TeacherEntity("teacher", 10L)),
             listOf(ClassroomEntity("classroom", 10L)),
             ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
@@ -32,14 +25,7 @@ internal class FullLessonTest {
     @Test
     fun byDatesTest() {
         FullLesson(
-            LessonEntity(
-                "name",
-                "type",
-                LocalTime.MIDNIGHT,
-                LocalTime.MIDNIGHT.plusHours(2),
-                1L,
-                10L
-            ),
+            LessonEntity("name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), 1L, 10L),
             listOf(TeacherEntity("teacher", 10L)),
             listOf(ClassroomEntity("classroom", 10L)),
             null,
@@ -51,14 +37,7 @@ internal class FullLessonTest {
     fun noRepeatsTest() {
         assertThrows(IllegalArgumentException::class.java) {
             FullLesson(
-                LessonEntity(
-                    "name",
-                    "type",
-                    LocalTime.MIDNIGHT,
-                    LocalTime.MIDNIGHT.plusHours(2),
-                    1L,
-                    10L
-                ),
+                LessonEntity("name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), 1L, 10L),
                 listOf(TeacherEntity("teacher", 10L)),
                 listOf(ClassroomEntity("classroom", 10L)),
                 null,
@@ -71,14 +50,7 @@ internal class FullLessonTest {
     fun multipleRepeatsTest() {
         assertThrows(IllegalArgumentException::class.java) {
             FullLesson(
-                LessonEntity(
-                    "name",
-                    "type",
-                    LocalTime.MIDNIGHT,
-                    LocalTime.MIDNIGHT.plusHours(2),
-                    1L,
-                    10L
-                ),
+                LessonEntity("name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), 1L, 10L),
                 listOf(TeacherEntity("teacher", 10L)),
                 listOf(ClassroomEntity("classroom", 10L)),
                 ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
@@ -91,12 +63,7 @@ internal class FullLessonTest {
     fun propertiesTest() {
         val lesson1 = FullLesson(
             LessonEntity(
-                "name",
-                "type",
-                LocalTime.MIDNIGHT,
-                LocalTime.MIDNIGHT.plusHours(2),
-                1L,
-                10L
+                "name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), 1L, 10L
             ),
             listOf(TeacherEntity("teacher", 10L)),
             listOf(ClassroomEntity("classroom", 10L)),
@@ -105,8 +72,8 @@ internal class FullLessonTest {
         )
         assertEquals("name", lesson1.subjectName)
         assertEquals("type", lesson1.type)
-        assertEquals(LocalTime.MIDNIGHT, lesson1.startTime)
-        assertEquals(LocalTime.MIDNIGHT.plusHours(2), lesson1.endTime)
+        assertEquals(LocalTime.of(10, 0), lesson1.startTime)
+        assertEquals(LocalTime.of(12, 0), lesson1.endTime)
         assertEquals(1L, lesson1.semesterId)
         assertEquals(10L, lesson1.id)
         assertEquals(immutableSortedSetOf("teacher"), lesson1.teachers)
@@ -115,14 +82,7 @@ internal class FullLessonTest {
         assertEquals(listOf(true), (lesson1.lessonRepeat as Lesson.Repeat.ByWeekday).weeks)
 
         val lesson2 = FullLesson(
-            LessonEntity(
-                "name",
-                "type",
-                LocalTime.MIDNIGHT,
-                LocalTime.MIDNIGHT.plusHours(2),
-                1L,
-                10L
-            ),
+            LessonEntity("name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), 1L, 10L),
             listOf(TeacherEntity("teacher", 10L)),
             listOf(ClassroomEntity("classroom", 10L)),
             null,
