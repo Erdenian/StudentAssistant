@@ -14,7 +14,7 @@ internal class HomeworkEntityTest {
             HomeworkEntity(
                 "",
                 "description",
-                LocalDate.now(),
+                LocalDate.of(2023, 2, 15),
                 semesterId
             )
         }
@@ -22,7 +22,7 @@ internal class HomeworkEntityTest {
             HomeworkEntity(
                 "    ",
                 "description",
-                LocalDate.now(),
+                LocalDate.of(2023, 2, 15),
                 semesterId
             )
         }
@@ -34,7 +34,7 @@ internal class HomeworkEntityTest {
             HomeworkEntity(
                 "name",
                 "",
-                LocalDate.now(),
+                LocalDate.of(2023, 2, 15),
                 semesterId
             )
         }
@@ -42,7 +42,7 @@ internal class HomeworkEntityTest {
             HomeworkEntity(
                 "name",
                 "     ",
-                LocalDate.now(),
+                LocalDate.of(2023, 2, 15),
                 semesterId
             )
         }
@@ -53,7 +53,7 @@ internal class HomeworkEntityTest {
         HomeworkEntity(
             "name",
             "description",
-            LocalDate.now(),
+            LocalDate.of(2023, 2, 15),
             semesterId
         )
     }

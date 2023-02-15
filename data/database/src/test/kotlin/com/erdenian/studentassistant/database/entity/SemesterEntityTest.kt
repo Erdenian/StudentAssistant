@@ -9,18 +9,18 @@ internal class SemesterEntityTest {
     @Test
     fun nameTest() {
         assertThrows(IllegalArgumentException::class.java) {
-            SemesterEntity("", LocalDate.now().minusDays(1), LocalDate.now())
+            SemesterEntity("", LocalDate.of(2023, 2, 14), LocalDate.of(2023, 2, 15))
         }
         assertThrows(IllegalArgumentException::class.java) {
-            SemesterEntity("    ", LocalDate.now().minusDays(1), LocalDate.now())
+            SemesterEntity("    ", LocalDate.of(2023, 2, 14), LocalDate.of(2023, 2, 15))
         }
     }
 
     @Test
     fun datesTest() {
         assertThrows(IllegalArgumentException::class.java) {
-            SemesterEntity("name", LocalDate.now(), LocalDate.now().minusDays(1))
+            SemesterEntity("name", LocalDate.of(2023, 2, 15), LocalDate.of(2023, 2, 14))
         }
-        SemesterEntity("name", LocalDate.now(), LocalDate.now())
+        SemesterEntity("name", LocalDate.of(2023, 2, 15), LocalDate.of(2023, 2, 15))
     }
 }
