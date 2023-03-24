@@ -1,5 +1,6 @@
 package com.erdenian.studentassistant.schedule.scheduleeditor
 
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -20,7 +21,6 @@ import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.uikit.view.ContextMenuDialog
 import com.erdenian.studentassistant.uikit.view.ContextMenuItem
 import com.erdenian.studentassistant.uikit.view.ProgressDialog
-import com.google.accompanist.pager.rememberPagerState
 import java.time.DayOfWeek
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch

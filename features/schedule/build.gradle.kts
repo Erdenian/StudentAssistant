@@ -31,6 +31,5 @@ dependencies {
 
     // region UI
     implementation(libs.ui.accompanist.placeholder)
-    implementation(libs.ui.accompanist.pager)
     // endregion
 }

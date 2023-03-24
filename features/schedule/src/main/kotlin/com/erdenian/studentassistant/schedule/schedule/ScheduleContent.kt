@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -45,8 +47,6 @@ import com.erdenian.studentassistant.uikit.view.ActionItem
 import com.erdenian.studentassistant.uikit.view.TopAppBarActions
 import com.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
 import com.erdenian.studentassistant.utils.showDatePicker
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -159,7 +159,7 @@ internal fun ScheduleContent(
                 )
 
                 HorizontalPager(
-                    count = pageCount,
+                    pageCount = pageCount,
                     state = state.pagerState,
                     key = { state.semester.id to state.getDate(it) },
                     modifier = Modifier.fillMaxSize()
