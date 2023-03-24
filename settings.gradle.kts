@@ -100,10 +100,10 @@ dependencyResolutionManagement {
             // endregion
 
             // region Compose
-            version("androidx.compose.compiler", "1.4.3")
+            version("androidx.compose.compiler", "1.4.4")
 
             library("androidx.compose.bom", "androidx.compose", "compose-bom")
-                .version("2023.01.00")
+                .version("2023.03.00")
 
             library("androidx.compose.ui", "androidx.compose.ui", "ui")
                 .withoutVersion()
@@ -135,9 +135,9 @@ dependencyResolutionManagement {
 
             // region AndroidX
             library("androidx.lifecycle.viewmodel", "androidx.lifecycle", "lifecycle-viewmodel-ktx")
-                .version("2.5.1")
+                .version("2.6.1")
 
-            version("androidx.room", "2.5.0")
+            version("androidx.room", "2.5.1")
             library("androidx.room.compiler", "androidx.room", "room-compiler")
                 .versionRef("androidx.room")
             library("androidx.room", "androidx.room", "room-ktx")
@@ -147,7 +147,7 @@ dependencyResolutionManagement {
                 .version("1.6.1")
 
             library("androidx.activity", "androidx.activity", "activity-compose")
-                .version("1.6.1")
+                .version("1.7.0")
 
             library("androidx.navigation", "androidx.navigation", "navigation-compose")
                 .version("2.5.3")
@@ -169,7 +169,7 @@ dependencyResolutionManagement {
             library("ui.material", "com.google.android.material", "material")
                 .version("1.8.0")
 
-            version("ui.accompanist", "0.28.0")
+            version("ui.accompanist", "0.30.0")
             library("ui.accompanist.placeholder", "com.google.accompanist", "accompanist-placeholder-material")
                 .versionRef("ui.accompanist")
             library("ui.accompanist.pager", "com.google.accompanist", "accompanist-pager")
