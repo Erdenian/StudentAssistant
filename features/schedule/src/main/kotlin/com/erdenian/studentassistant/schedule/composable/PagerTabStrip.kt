@@ -14,6 +14,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -35,9 +38,6 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.erdenian.studentassistant.style.AppTheme
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -69,7 +69,7 @@ internal fun PagerTabStrip(
                         scrollCoroutineScope.launch { state.scrollBy(-delta) }
                     },
                     onDragStopped = {
-                        launch { state.animateScrollToPage(state.currentPage + state.currentPageOffset.roundToInt()) }
+                        launch { state.animateScrollToPage(state.currentPage + state.currentPageOffsetFraction.roundToInt()) }
                     }
                 ),
             content = {
@@ -94,8 +94,8 @@ internal fun PagerTabStrip(
                 val textColor = colors.textColor().value
                 val tabIndicatorColor = colors.tabIndicatorColor().value
 
-                val page = state.currentPage + state.currentPageOffset.roundToInt()
-                val offset = abs(abs(state.currentPageOffset) % 1 - 0.5f) * 2.0f
+                val page = state.currentPage + state.currentPageOffsetFraction.roundToInt()
+                val offset = abs(abs(state.currentPageOffsetFraction) % 1 - 0.5f) * 2.0f
                 val animatedCurrentTextAlpha = otherTabsAlpha + (textColor.alpha - otherTabsAlpha) * offset
                 val animatedUnderscoreAlpha = tabIndicatorColor.alpha * offset
 
@@ -135,7 +135,7 @@ internal fun PagerTabStrip(
                 val contentWidth = width - currentPlaceable.width
 
                 val currOffset = run {
-                    val offset = (state.currentPageOffset + 0.5f) % 1
+                    val offset = (state.currentPageOffsetFraction + 0.5f) % 1
                     if (offset >= 0.0f) offset else offset + 1.0f
                 }
 
@@ -215,7 +215,7 @@ private fun PagerTabStripPreview() = AppTheme {
         )
 
         HorizontalPager(
-            count = 10,
+            pageCount = 10,
             state = state,
             modifier = Modifier.fillMaxSize()
         ) { page ->

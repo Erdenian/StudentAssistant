@@ -172,8 +172,6 @@ dependencyResolutionManagement {
             version("ui.accompanist", "0.30.0")
             library("ui.accompanist.placeholder", "com.google.accompanist", "accompanist-placeholder-material")
                 .versionRef("ui.accompanist")
-            library("ui.accompanist.pager", "com.google.accompanist", "accompanist-pager")
-                .versionRef("ui.accompanist")
             library("ui.accompanist.navigationAnimation", "com.google.accompanist", "accompanist-navigation-animation")
                 .versionRef("ui.accompanist")
             // endregion
