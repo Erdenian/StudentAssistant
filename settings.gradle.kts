@@ -49,7 +49,7 @@ dependencyResolutionManagement {
             plugin("android.library", "com.android.library")
                 .versionRef("plugins.android")
 
-            version("plugins.kotlin", "1.8.10")
+            version("plugins.kotlin", "1.8.20")
             plugin("kotlin.android", "org.jetbrains.kotlin.android")
                 .versionRef("plugins.kotlin")
             plugin("kotlin.jvm", "org.jetbrains.kotlin.jvm")
@@ -64,6 +64,8 @@ dependencyResolutionManagement {
                 .versionRef("plugins.detekt")
             library("detekt.formatting", "io.gitlab.arturbosch.detekt", "detekt-formatting")
                 .versionRef("plugins.detekt")
+
+            version("plugins.jacoco", "0.8.9")
 
             plugin("tripletPlay", "com.github.triplet.play")
                 .version("3.8.1")
@@ -96,14 +98,14 @@ dependencyResolutionManagement {
 
             // region Android Tools
             library("androidTools.desugarJdkLibs", "com.android.tools", "desugar_jdk_libs")
-                .version("2.0.2")
+                .version("2.0.3")
             // endregion
 
             // region Compose
-            version("androidx.compose.compiler", "1.4.4")
+            version("androidx.compose.compiler", "1.4.5")
 
             library("androidx.compose.bom", "androidx.compose", "compose-bom")
-                .version("2023.03.00")
+                .version("2023.04.00")
 
             library("androidx.compose.ui", "androidx.compose.ui", "ui")
                 .withoutVersion()
@@ -169,7 +171,7 @@ dependencyResolutionManagement {
             library("ui.material", "com.google.android.material", "material")
                 .version("1.8.0")
 
-            version("ui.accompanist", "0.30.0")
+            version("ui.accompanist", "0.30.1")
             library("ui.accompanist.placeholder", "com.google.accompanist", "accompanist-placeholder-material")
                 .versionRef("ui.accompanist")
             library("ui.accompanist.navigationAnimation", "com.google.accompanist", "accompanist-navigation-animation")
