@@ -160,6 +160,9 @@ subprojectsAfterEvaluate {
 
 // region Jacoco
 
+jacoco.toolVersion = libs.versions.plugins.jacoco.get()
+val jacocoIgnoredFlavors = listOf<String>()
+
 fun JacocoReport.setupReports(basePath: String) {
     reports {
         html.required.set(true)
@@ -179,8 +182,6 @@ val jacocoMergedReportTask = project.tasks.create("jacocoMergedReport", JacocoRe
     setupReports("${project.buildDir}/reports/jacoco")
     doLast { project.logger.lifecycle("View coverage report at ${reports.html.outputLocation.file("index.html").get()}") }
 }
-
-val jacocoIgnoredFlavors = listOf<String>()
 
 subprojectsAfterEvaluate {
     fun createJacocoTasks(
