@@ -43,7 +43,7 @@ dependencyResolutionManagement {
 
         create("libs") {
             // region Plugins
-            version("plugins.android", "7.4.2")
+            version("plugins.android", "8.0.0")
             plugin("android.application", "com.android.application")
                 .versionRef("plugins.android")
             plugin("android.library", "com.android.library")
