@@ -43,13 +43,13 @@ dependencyResolutionManagement {
 
         create("libs") {
             // region Plugins
-            version("plugins.android", "8.0.0")
+            version("plugins.android", "8.0.1")
             plugin("android.application", "com.android.application")
                 .versionRef("plugins.android")
             plugin("android.library", "com.android.library")
                 .versionRef("plugins.android")
 
-            version("plugins.kotlin", "1.8.20")
+            version("plugins.kotlin", "1.8.21")
             plugin("kotlin.android", "org.jetbrains.kotlin.android")
                 .versionRef("plugins.kotlin")
             plugin("kotlin.jvm", "org.jetbrains.kotlin.jvm")
@@ -68,7 +68,7 @@ dependencyResolutionManagement {
             version("plugins.jacoco", "0.8.9")
 
             plugin("tripletPlay", "com.github.triplet.play")
-                .version("3.8.1")
+                .version("3.8.3")
 
             plugin("shrinkometer", "ru.erdenian.shrinkometer")
                 .version("0.3.1")
@@ -93,7 +93,7 @@ dependencyResolutionManagement {
 
             // region KotlinX
             library("kotlinx.coroutines", "org.jetbrains.kotlinx", "kotlinx-coroutines-android")
-                .version("1.6.4")
+                .version("1.7.1")
             // endregion
 
             // region Android Tools
@@ -102,10 +102,10 @@ dependencyResolutionManagement {
             // endregion
 
             // region Compose
-            version("androidx.compose.compiler", "1.4.5")
+            version("androidx.compose.compiler", "1.4.7")
 
             library("androidx.compose.bom", "androidx.compose", "compose-bom")
-                .version("2023.04.00")
+                .version("2023.05.01")
 
             library("androidx.compose.ui", "androidx.compose.ui", "ui")
                 .withoutVersion()
@@ -149,17 +149,17 @@ dependencyResolutionManagement {
                 .version("1.6.1")
 
             library("androidx.activity", "androidx.activity", "activity-compose")
-                .version("1.7.0")
+                .version("1.7.1")
 
             library("androidx.navigation", "androidx.navigation", "navigation-compose")
                 .version("2.5.3")
 
             library("androidx.core.splashscreen", "androidx.core", "core-splashscreen")
-                .version("1.0.0")
+                .version("1.0.1")
             // endregion
 
             // region Core
-            version("core.dagger", "2.45")
+            version("core.dagger", "2.46.1")
             library("core.dagger.compiler", "com.google.dagger", "dagger-compiler")
                 .versionRef("core.dagger")
             library("core.dagger", "com.google.dagger", "dagger")
@@ -169,7 +169,7 @@ dependencyResolutionManagement {
             // region UI
             // Todo: switch to Compose completely to remove this dependency
             library("ui.material", "com.google.android.material", "material")
-                .version("1.8.0")
+                .version("1.9.0")
 
             version("ui.accompanist", "0.30.1")
             library("ui.accompanist.placeholder", "com.google.accompanist", "accompanist-placeholder-material")
