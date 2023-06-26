@@ -10,8 +10,8 @@ plugins {
 }
 
 detekt {
-    config = files("detekt-config.yml")
-    source = files(*subprojects.map { "${it.projectDir}/src" }.toTypedArray())
+    config.setFrom("detekt-config.yml")
+    source.setFrom(files(*subprojects.map { "${it.projectDir}/src" }.toTypedArray()))
 }
 
 dependencies {
