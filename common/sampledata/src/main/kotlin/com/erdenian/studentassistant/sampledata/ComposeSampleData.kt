@@ -1,6 +1,7 @@
 package com.erdenian.studentassistant.sampledata
 
 import androidx.compose.runtime.Composable
+import com.erdenian.studentassistant.entity.emptyImmutableSortedSet
 import com.erdenian.studentassistant.entity.immutableSortedSetOf
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -40,8 +41,8 @@ object Lessons {
         @Composable get() = Lesson(
             subjectName = "Интернет программирование",
             type = "",
-            teachers = immutableSortedSetOf(),
-            classrooms = immutableSortedSetOf(),
+            teachers = emptyImmutableSortedSet(),
+            classrooms = emptyImmutableSortedSet(),
             startTime = LocalTime.of(9, 0),
             endTime = LocalTime.of(10, 30),
             lessonRepeat = ByWeekday(dayOfWeek = DayOfWeek.MONDAY, weeks = listOf(true))

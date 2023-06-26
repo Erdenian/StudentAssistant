@@ -31,6 +31,6 @@ data class SemesterEntity(
 
     init {
         require(name.isNotBlank()) { "Пустое название" }
-        require(firstDay < lastDay) { "Неверно заданы даты: $firstDay - $lastDay" }
+        require(firstDay <= lastDay) { "Неверно заданы даты: $firstDay - $lastDay" }
     }
 }
