@@ -14,7 +14,7 @@ env:
 
 jobs:
   check:
-    runs-on: macos-latest
+    runs-on: self-hosted
     env:
       ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
       ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
@@ -27,6 +27,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
+      - uses: android-actions/setup-android@v2
       - uses: gradle/gradle-build-action@v2
       # --------------------------------------
       # Run
