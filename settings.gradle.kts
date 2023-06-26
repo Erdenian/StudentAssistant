@@ -78,8 +78,13 @@ dependencyResolutionManagement {
             // endregion
 
             // region Testing
+            library("test.coroutines", "org.jetbrains.kotlinx", "kotlinx-coroutines-test")
+                .versionRef("kotlinx-coroutines")
+
             library("test.junit", "junit", "junit")
                 .version("4.13.2")
+            library("test.mockk", "io.mockk", "mockk")
+                .version("1.13.4")
 
             library("test.androidx.junitKtx", "androidx.test.ext", "junit-ktx")
                 .version("1.1.5")
@@ -88,12 +93,29 @@ dependencyResolutionManagement {
             library("test.androidx.runner", "androidx.test", "runner")
                 .version("1.5.2")
 
-            bundle("test.android", listOf("test.androidx.junitKtx", "test.androidx.core", "test.androidx.runner"))
+            bundle(
+                "test.unit",
+                listOf(
+                    "test.coroutines",
+                    "test.junit",
+                    "test.mockk"
+                )
+            )
+            bundle(
+                "test.android",
+                listOf(
+                    "test.coroutines",
+                    "test.androidx.junitKtx",
+                    "test.androidx.core",
+                    "test.androidx.runner"
+                )
+            )
             // endregion
 
             // region KotlinX
+            version("kotlinx.coroutines", "1.7.1")
             library("kotlinx.coroutines", "org.jetbrains.kotlinx", "kotlinx-coroutines-android")
-                .version("1.7.1")
+                .versionRef("kotlinx.coroutines")
             // endregion
 
             // region Android Tools

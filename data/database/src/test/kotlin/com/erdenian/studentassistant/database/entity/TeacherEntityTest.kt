@@ -1,19 +1,18 @@
 package com.erdenian.studentassistant.database.entity
 
-import java.time.DayOfWeek
 import org.junit.Assert.assertThrows
 import org.junit.Test
 
-internal class ByWeekdayEntityTest {
+internal class TeacherEntityTest {
 
     @Test
-    fun byWeekdayTest() {
+    fun teacherTest() {
         assertThrows(IllegalArgumentException::class.java) {
-            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(false))
+            TeacherEntity("")
         }
         assertThrows(IllegalArgumentException::class.java) {
-            ByWeekdayEntity(DayOfWeek.MONDAY, listOf())
+            TeacherEntity("   ")
         }
-        ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true))
+        TeacherEntity("1204")
     }
 }
