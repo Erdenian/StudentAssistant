@@ -43,7 +43,7 @@ dependencyResolutionManagement {
 
         create("libs") {
             // region Plugins
-            version("plugins.android", "8.0.1")
+            version("plugins.android", "8.0.2")
             plugin("android.application", "com.android.application")
                 .versionRef("plugins.android")
             plugin("android.library", "com.android.library")
@@ -59,7 +59,7 @@ dependencyResolutionManagement {
             plugin("kotlin.parcelize", "org.jetbrains.kotlin.plugin.parcelize")
                 .versionRef("plugins.kotlin")
 
-            version("plugins.detekt", "1.22.0")
+            version("plugins.detekt", "1.23.0")
             plugin("detekt", "io.gitlab.arturbosch.detekt")
                 .versionRef("plugins.detekt")
             library("detekt.formatting", "io.gitlab.arturbosch.detekt", "detekt-formatting")
@@ -84,7 +84,7 @@ dependencyResolutionManagement {
             library("test.junit", "junit", "junit")
                 .version("4.13.2")
             library("test.mockk", "io.mockk", "mockk")
-                .version("1.13.4")
+                .version("1.13.5")
 
             library("test.androidx.junitKtx", "androidx.test.ext", "junit-ktx")
                 .version("1.1.5")
@@ -127,7 +127,7 @@ dependencyResolutionManagement {
             version("androidx.compose.compiler", "1.4.7")
 
             library("androidx.compose.bom", "androidx.compose", "compose-bom")
-                .version("2023.05.01")
+                .version("2023.06.01")
 
             library("androidx.compose.ui", "androidx.compose.ui", "ui")
                 .withoutVersion()
@@ -161,7 +161,7 @@ dependencyResolutionManagement {
             library("androidx.lifecycle.viewmodel", "androidx.lifecycle", "lifecycle-viewmodel-ktx")
                 .version("2.6.1")
 
-            version("androidx.room", "2.5.1")
+            version("androidx.room", "2.5.2")
             library("androidx.room.compiler", "androidx.room", "room-compiler")
                 .versionRef("androidx.room")
             library("androidx.room", "androidx.room", "room-ktx")
@@ -171,10 +171,10 @@ dependencyResolutionManagement {
                 .version("1.6.1")
 
             library("androidx.activity", "androidx.activity", "activity-compose")
-                .version("1.7.1")
+                .version("1.7.2")
 
             library("androidx.navigation", "androidx.navigation", "navigation-compose")
-                .version("2.5.3")
+                .version("2.6.0")
 
             library("androidx.core.splashscreen", "androidx.core", "core-splashscreen")
                 .version("1.0.1")
