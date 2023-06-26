@@ -14,7 +14,7 @@ env:
 
 jobs:
   check:
-    runs-on: macos-latest
+    runs-on: self-hosted
     steps:
       # --------------------------------------
       # Install
@@ -23,6 +23,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
+      - uses: android-actions/setup-android@v2
       - uses: gradle/gradle-build-action@v2
       # --------------------------------------
       # Run
@@ -74,7 +75,7 @@ jobs:
           path: "**/build/outputs/androidTest-results/managedDevice/testDevice/TEST-*.xml"
           reporter: java-junit
       # --------------------------------------
-      - uses: madrapps/jacoco-report@v1.3
+      - uses: madrapps/jacoco-report@v1.4
         with:
           paths: ${{ github.workspace }}/build/reports/jacoco/jacoco.xml
           token: ${{ secrets.GITHUB_TOKEN }}
