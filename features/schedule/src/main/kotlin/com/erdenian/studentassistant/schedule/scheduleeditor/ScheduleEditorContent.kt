@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -39,76 +38,80 @@ import java.util.Locale
 
 @Composable
 internal fun ScheduleEditorContent(
-    state: PagerState,
     rememberLessons: @Composable (page: Int) -> State<List<Lesson>?>,
     onBackClick: () -> Unit,
     onEditSemesterClick: () -> Unit,
     onDeleteSemesterClick: () -> Unit,
     onLessonClick: (Lesson) -> Unit,
     onLongLessonClick: (Lesson) -> Unit,
-    onAddLessonClick: () -> Unit
-) = Scaffold(
-    topBar = {
-        TopAppBar(
-            title = { Text(text = stringResource(RS.sce_title)) },
-            navigationIcon = {
-                IconButton(onClick = onBackClick) {
-                    Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
-                }
-            },
-            actions = {
-                TopAppBarActions(
-                    actions = listOf(
-                        ActionItem.NeverShow(
-                            name = stringResource(RS.sce_edit),
-                            onClick = onEditSemesterClick
-                        ),
-                        ActionItem.NeverShow(
-                            name = stringResource(RS.sce_delete),
-                            onClick = onDeleteSemesterClick
+    onAddLessonClick: (DayOfWeek) -> Unit
+) {
+    val daysOfWeekTitles = remember {
+        // TextStyle.FULL_STANDALONE returns number
+        // https://stackoverflow.com/questions/63415047
+        DayOfWeek.values().map { it.getDisplayName(TextStyle.FULL, Locale.getDefault()) }
+    }
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        initialPageOffsetFraction = 0f,
+        pageCount = { daysOfWeekTitles.size }
+    )
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = stringResource(RS.sce_title)) },
+                navigationIcon = {
+                    IconButton(onClick = onBackClick) {
+                        Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
+                    }
+                },
+                actions = {
+                    TopAppBarActions(
+                        actions = listOf(
+                            ActionItem.NeverShow(
+                                name = stringResource(RS.sce_edit),
+                                onClick = onEditSemesterClick
+                            ),
+                            ActionItem.NeverShow(
+                                name = stringResource(RS.sce_delete),
+                                onClick = onDeleteSemesterClick
+                            )
                         )
                     )
+                }
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = { onAddLessonClick(DayOfWeek.of(pagerState.currentPage + 1)) }) {
+                Icon(imageVector = AppIcons.Add, contentDescription = null)
+            }
+        }
+    ) { paddingValues ->
+        Column(
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+
+            PagerTabStrip(
+                state = pagerState,
+                titleGetter = { daysOfWeekTitles[it] }
+            )
+
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxSize()
+            ) { page ->
+                val lessons by rememberLessons(page)
+
+                LazyLessonsList(
+                    lessons = lessons,
+                    onLessonClick = onLessonClick,
+                    onLongLessonClick = onLongLessonClick
                 )
             }
-        )
-    },
-    floatingActionButton = {
-        FloatingActionButton(onClick = onAddLessonClick) {
-            Icon(imageVector = AppIcons.Add, contentDescription = null)
-        }
-    }
-) { paddingValues ->
-    Column(
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)
-    ) {
-        val daysOfWeek = remember {
-            // TextStyle.FULL_STANDALONE returns number
-            // https://stackoverflow.com/questions/63415047
-            DayOfWeek.values().map { it.getDisplayName(TextStyle.FULL, Locale.getDefault()) }
-        }
-        val pageCount = daysOfWeek.size
-
-        PagerTabStrip(
-            count = pageCount,
-            state = state,
-            titleGetter = { daysOfWeek[it] }
-        )
-
-        HorizontalPager(
-            pageCount = pageCount,
-            state = state,
-            modifier = Modifier.fillMaxSize()
-        ) { page ->
-            val lessons by rememberLessons(page)
-
-            LazyLessonsList(
-                lessons = lessons,
-                onLessonClick = onLessonClick,
-                onLongLessonClick = onLongLessonClick
-            )
         }
     }
 }
@@ -118,7 +121,6 @@ internal fun ScheduleEditorContent(
 @Composable
 private fun ScheduleEditorContentLoadingPreview() = AppTheme {
     ScheduleEditorContent(
-        state = rememberPagerState(),
         rememberLessons = { remember { mutableStateOf(null) } },
         onBackClick = {},
         onEditSemesterClick = {},
@@ -134,7 +136,6 @@ private fun ScheduleEditorContentLoadingPreview() = AppTheme {
 @Composable
 private fun ScheduleEditorContentNoLessonsPreview() = AppTheme {
     ScheduleEditorContent(
-        state = rememberPagerState(),
         rememberLessons = { remember { mutableStateOf(emptyList()) } },
         onBackClick = {},
         onEditSemesterClick = {},
@@ -151,7 +152,6 @@ private fun ScheduleEditorContentNoLessonsPreview() = AppTheme {
 private fun ScheduleEditorContentPreview() = AppTheme {
     val lessons = List(10) { Lessons.regular }
     ScheduleEditorContent(
-        state = rememberPagerState(),
         rememberLessons = { remember { mutableStateOf(lessons) } },
         onBackClick = {},
         onEditSemesterClick = {},
