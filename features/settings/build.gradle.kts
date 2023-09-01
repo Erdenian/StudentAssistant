@@ -1,7 +1,7 @@
 plugins {
     id(libs.plugins.android.library.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
-    id(libs.plugins.kotlin.kapt.get().pluginId)
+    id(libs.plugins.kotlin.ksp.get().pluginId)
 }
 
 android {
@@ -22,7 +22,7 @@ dependencies {
     // endregion
 
     // region Core
-    kapt(libs.core.dagger.compiler)
+    ksp(libs.core.dagger.compiler)
     implementation(libs.core.dagger)
     // endregion
 }

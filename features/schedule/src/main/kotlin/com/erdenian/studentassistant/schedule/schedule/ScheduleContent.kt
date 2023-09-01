@@ -147,10 +147,8 @@ internal fun ScheduleContent(
             } else {
                 val shortTitleFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d MMMM") }
                 val fullTitleFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy") }
-                val pageCount = state.semester.length
 
                 PagerTabStrip(
-                    count = pageCount,
                     state = state.pagerState,
                     titleGetter = { page ->
                         val date = state.semester.firstDay.plusDays(page.toLong())
@@ -159,7 +157,6 @@ internal fun ScheduleContent(
                 )
 
                 HorizontalPager(
-                    pageCount = pageCount,
                     state = state.pagerState,
                     key = { state.semester.id to state.getDate(it) },
                     modifier = Modifier.fillMaxSize()
@@ -175,7 +172,13 @@ internal fun ScheduleContent(
 @Stable
 private data class SemesterWithState(val semester: Semester, val pagerState: PagerState) {
 
-    constructor(semester: Semester, initialDate: LocalDate) : this(semester, PagerState(semester.getPosition(initialDate)))
+    constructor(semester: Semester, initialDate: LocalDate) : this(
+        semester,
+        PagerStateImpl(
+            initialPage = semester.getPosition(initialDate),
+            updatedPageCount = { semester.length }
+        )
+    )
 
     companion object {
         val SemesterWithState.currentDate get() = getDate(pagerState.currentPage)
@@ -186,6 +189,15 @@ private data class SemesterWithState(val semester: Semester, val pagerState: Pag
         private fun Semester.getDate(position: Int): LocalDate = firstDay.plusDays(position.toLong())
         private fun Semester.getPosition(date: LocalDate) =
             ChronoUnit.DAYS.between(firstDay, date.coerceIn(firstDay, lastDay)).toInt()
+    }
+
+    private class PagerStateImpl(
+        initialPage: Int = 0,
+        initialPageOffsetFraction: Float = 0.0f,
+        updatedPageCount: () -> Int
+    ) : PagerState(initialPage, initialPageOffsetFraction) {
+        var pageCountState = mutableStateOf(updatedPageCount)
+        override val pageCount: Int get() = pageCountState.value.invoke()
     }
 }
 

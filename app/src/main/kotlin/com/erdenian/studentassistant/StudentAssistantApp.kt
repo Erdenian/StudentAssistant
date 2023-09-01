@@ -29,14 +29,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.compose.rememberNavController
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.utils.ProvideKeyboardPadding
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
 @Composable
 internal fun StudentAssistantApp() {
-    val navController = rememberAnimatedNavController()
+    val navController = rememberNavController()
     val navGraph = remember(navController) { StudentAssistantNavGraph(navController) }
     val keyboardController = LocalSoftwareKeyboardController.current
 

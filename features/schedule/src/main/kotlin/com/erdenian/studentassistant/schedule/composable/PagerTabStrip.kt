@@ -46,7 +46,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 internal fun PagerTabStrip(
-    count: Int, // PagerState.pageCount returns 0 before the first frame, so we use this argument to avoid flickering
     state: PagerState,
     titleGetter: (page: Int) -> String,
     modifier: Modifier = Modifier,
@@ -73,7 +72,7 @@ internal fun PagerTabStrip(
                     }
                 ),
             content = {
-                val indices = 0 until count
+                val indices = 0 until state.pageCount
 
                 @Composable
                 fun createText(page: Int, color: Color) = Text(
@@ -206,16 +205,14 @@ private class DefaultPagerTabStripColors(
 @Composable
 private fun PagerTabStripPreview() = AppTheme {
     Column(modifier = Modifier.background(MaterialTheme.colors.background)) {
-        val state = rememberPagerState()
+        val state = rememberPagerState { 10 }
 
         PagerTabStrip(
-            count = 10,
             state = state,
             titleGetter = { "Page $it" }
         )
 
         HorizontalPager(
-            pageCount = 10,
             state = state,
             modifier = Modifier.fillMaxSize()
         ) { page ->
