@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.erdenian.studentassistant.di.MainComponent
 import com.erdenian.studentassistant.homeworks.di.HomeworksComponent
@@ -25,8 +27,6 @@ import com.erdenian.studentassistant.settings.SettingsScreen
 import com.erdenian.studentassistant.settings.di.SettingsComponent
 import com.erdenian.studentassistant.utils.KeyboardPadding
 import com.erdenian.studentassistant.utils.SoftReferenceLazyComponentHolder
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
 import java.time.DayOfWeek
 
 @Composable
@@ -34,7 +34,7 @@ internal fun StudentAssistantNavHost(
     navController: NavHostController,
     navGraph: StudentAssistantNavGraph,
     modifier: Modifier = Modifier
-) = AnimatedNavHost(
+) = NavHost(
     navController = navController,
     startDestination = MainRoutes.SCHEDULE,
     enterTransition = { fadeIn(tween(AnimationConstants.DefaultDurationMillis)) },

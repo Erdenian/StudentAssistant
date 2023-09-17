@@ -3,7 +3,7 @@ package com.erdenian.studentassistant.homeworks.composable
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -46,8 +46,9 @@ internal fun LazyHomeworksList(
 ) {
     AnimatedContent(
         targetState = Triple(overdueHomeworks, actualHomeworks, pastHomeworks),
-        transitionSpec = { fadeIn() with fadeOut() },
+        transitionSpec = { fadeIn() togetherWith fadeOut() },
         contentAlignment = Alignment.Center,
+        label = "LazyHomeworksList",
         modifier = modifier
     ) { (overdueHomeworksState, actualHomeworksState, pastHomeworksState) ->
         Box(

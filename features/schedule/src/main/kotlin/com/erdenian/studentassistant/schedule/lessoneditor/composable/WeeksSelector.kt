@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.Remove
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -71,7 +72,7 @@ internal fun WeeksSelector(
 
     var selectedRepeatVariantIndex by rememberSaveable {
         val index = weeksVariants.indexOf(weeks).takeIf { it >= 0 } ?: weeksVariants.size
-        mutableStateOf(index)
+        mutableIntStateOf(index)
     }
     var repeatVariantsExpanded by remember { mutableStateOf(false) }
 

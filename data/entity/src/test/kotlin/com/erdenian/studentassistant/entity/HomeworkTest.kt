@@ -1,5 +1,6 @@
 package com.erdenian.studentassistant.entity
 
+import android.annotation.SuppressLint
 import android.os.Parcel
 import java.time.LocalDate
 import org.junit.Assert.assertEquals
@@ -7,6 +8,7 @@ import org.junit.Test
 
 class HomeworkTest {
 
+    @SuppressLint("ParcelCreator")
     private data class HomeworkEntity(
         override val subjectName: String,
         override val description: String,

@@ -37,29 +37,29 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("config") {
             version("minSdk", "21")
-            version("compileSdk", "33")
-            version("targetSdk", "33")
+            version("compileSdk", "34")
+            version("targetSdk", "34")
         }
 
         create("libs") {
             // region Plugins
-            version("plugins.android", "8.0.2")
+            version("plugins.android", "8.1.1")
             plugin("android.application", "com.android.application")
                 .versionRef("plugins.android")
             plugin("android.library", "com.android.library")
                 .versionRef("plugins.android")
 
-            version("plugins.kotlin", "1.8.21")
+            version("plugins.kotlin", "1.9.10")
             plugin("kotlin.android", "org.jetbrains.kotlin.android")
                 .versionRef("plugins.kotlin")
             plugin("kotlin.jvm", "org.jetbrains.kotlin.jvm")
                 .versionRef("plugins.kotlin")
-            plugin("kotlin.kapt", "org.jetbrains.kotlin.kapt")
-                .versionRef("plugins.kotlin")
             plugin("kotlin.parcelize", "org.jetbrains.kotlin.plugin.parcelize")
                 .versionRef("plugins.kotlin")
+            plugin("kotlin.ksp", "com.google.devtools.ksp")
+                .version("1.9.10-1.0.13")
 
-            version("plugins.detekt", "1.23.0")
+            version("plugins.detekt", "1.23.1")
             plugin("detekt", "io.gitlab.arturbosch.detekt")
                 .versionRef("plugins.detekt")
             library("detekt.formatting", "io.gitlab.arturbosch.detekt", "detekt-formatting")
@@ -68,7 +68,7 @@ dependencyResolutionManagement {
             version("plugins.jacoco", "0.8.9")
 
             plugin("tripletPlay", "com.github.triplet.play")
-                .version("3.8.3")
+                .version("3.8.4")
 
             plugin("shrinkometer", "ru.erdenian.shrinkometer")
                 .version("0.3.1")
@@ -84,7 +84,7 @@ dependencyResolutionManagement {
             library("test.junit", "junit", "junit")
                 .version("4.13.2")
             library("test.mockk", "io.mockk", "mockk")
-                .version("1.13.5")
+                .version("1.13.7")
 
             library("test.androidx.junitKtx", "androidx.test.ext", "junit-ktx")
                 .version("1.1.5")
@@ -113,7 +113,7 @@ dependencyResolutionManagement {
             // endregion
 
             // region KotlinX
-            version("kotlinx.coroutines", "1.7.1")
+            version("kotlinx.coroutines", "1.7.3")
             library("kotlinx.coroutines", "org.jetbrains.kotlinx", "kotlinx-coroutines-android")
                 .versionRef("kotlinx.coroutines")
             // endregion
@@ -124,10 +124,10 @@ dependencyResolutionManagement {
             // endregion
 
             // region Compose
-            version("androidx.compose.compiler", "1.4.7")
+            version("androidx.compose.compiler", "1.5.3")
 
             library("androidx.compose.bom", "androidx.compose", "compose-bom")
-                .version("2023.06.01")
+                .version("2023.09.00")
 
             library("androidx.compose.ui", "androidx.compose.ui", "ui")
                 .withoutVersion()
@@ -159,7 +159,7 @@ dependencyResolutionManagement {
 
             // region AndroidX
             library("androidx.lifecycle.viewmodel", "androidx.lifecycle", "lifecycle-viewmodel-ktx")
-                .version("2.6.1")
+                .version("2.6.2")
 
             version("androidx.room", "2.5.2")
             library("androidx.room.compiler", "androidx.room", "room-compiler")
@@ -174,14 +174,14 @@ dependencyResolutionManagement {
                 .version("1.7.2")
 
             library("androidx.navigation", "androidx.navigation", "navigation-compose")
-                .version("2.6.0")
+                .version("2.7.2")
 
             library("androidx.core.splashscreen", "androidx.core", "core-splashscreen")
                 .version("1.0.1")
             // endregion
 
             // region Core
-            version("core.dagger", "2.46.1")
+            version("core.dagger", "2.48")
             library("core.dagger.compiler", "com.google.dagger", "dagger-compiler")
                 .versionRef("core.dagger")
             library("core.dagger", "com.google.dagger", "dagger")
@@ -195,8 +195,6 @@ dependencyResolutionManagement {
 
             version("ui.accompanist", "0.30.1")
             library("ui.accompanist.placeholder", "com.google.accompanist", "accompanist-placeholder-material")
-                .versionRef("ui.accompanist")
-            library("ui.accompanist.navigationAnimation", "com.google.accompanist", "accompanist-navigation-animation")
                 .versionRef("ui.accompanist")
             // endregion
         }

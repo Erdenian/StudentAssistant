@@ -1,5 +1,6 @@
 package com.erdenian.studentassistant.entity
 
+import android.annotation.SuppressLint
 import android.os.Parcel
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -9,6 +10,7 @@ import org.junit.Test
 
 class LessonTest {
 
+    @SuppressLint("ParcelCreator")
     private data class LessonEntity(
         override val subjectName: String,
         override val type: String,
@@ -24,6 +26,7 @@ class LessonTest {
         override fun writeToParcel(dest: Parcel, flags: Int) = TODO("Not yet implemented")
     }
 
+    @SuppressLint("ParcelCreator")
     private data class ByWeekdayEntity(
         override val dayOfWeek: DayOfWeek,
         override val weeks: List<Boolean>
@@ -32,6 +35,7 @@ class LessonTest {
         override fun writeToParcel(dest: Parcel, flags: Int) = TODO("Not yet implemented")
     }
 
+    @SuppressLint("ParcelCreator")
     private data class ByDatesEntity(
         override val dates: Set<LocalDate>
     ) : Lesson.Repeat.ByDates() {
