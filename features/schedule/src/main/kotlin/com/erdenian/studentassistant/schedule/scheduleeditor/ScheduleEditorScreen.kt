@@ -1,6 +1,5 @@
 package com.erdenian.studentassistant.schedule.scheduleeditor
 
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -37,9 +36,6 @@ fun ScheduleEditorScreen(
     LaunchedEffect(isDeleted) {
         if (isDeleted) navigateBack()
     }
-
-    val coroutineScope = rememberCoroutineScope()
-    val pagerState = rememberPagerState()
 
     val rememberLessons = remember<@Composable (Int) -> State<List<Lesson>?>>(viewModel) {
         { page ->
@@ -139,6 +135,7 @@ fun ScheduleEditorScreen(
         )
     }
 
+    val coroutineScope = rememberCoroutineScope()
     var contextMenuLesson by rememberSaveable { mutableStateOf<Lesson?>(null) }
     contextMenuLesson?.let { lesson ->
         ContextMenuDialog(
@@ -163,16 +160,12 @@ fun ScheduleEditorScreen(
     }
 
     ScheduleEditorContent(
-        state = pagerState,
         rememberLessons = rememberLessons,
         onBackClick = navigateBack,
         onEditSemesterClick = { navigateToEditSemester(viewModel.semesterId) },
         onDeleteSemesterClick = { showDeleteSemesterDialog = true },
         onLessonClick = { navigateToEditLesson(viewModel.semesterId, it.id, false) },
         onLongLessonClick = { contextMenuLesson = it },
-        onAddLessonClick = {
-            val dayOfWeek = DayOfWeek.of(pagerState.currentPage + 1)
-            navigateToCreateLesson(viewModel.semesterId, dayOfWeek)
-        }
+        onAddLessonClick = { navigateToCreateLesson(viewModel.semesterId, it) }
     )
 }

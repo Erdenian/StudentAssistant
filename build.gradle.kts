@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.ksp) apply false
 
     alias(libs.plugins.detekt)
     jacoco
@@ -345,7 +346,7 @@ tasks.register("updateChangelog") {
         )
 
         file.delete()
-        file.writeText(lines.joinToString("$lineSeparator") + "$lineSeparator")
+        file.writeText(lines.joinToString(lineSeparator) + lineSeparator)
     }
 }
 

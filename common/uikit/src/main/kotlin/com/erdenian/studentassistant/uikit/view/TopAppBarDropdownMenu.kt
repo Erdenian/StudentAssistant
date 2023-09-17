@@ -105,7 +105,7 @@ private fun TopAppBarDropdownMenuContent(
     }
 }
 
-@Suppress("unused")
+@Suppress("UnusedReceiverParameter")
 @Composable
 private fun ColumnScope.DropdownMenuItems(
     items: List<String>,
