@@ -36,7 +36,7 @@ import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
 
-@Suppress("unused")
+@Suppress("UnusedReceiverParameter")
 @Composable
 fun RowScope.TopAppBarActions(
     actions: List<ActionItem>
@@ -81,7 +81,10 @@ private fun TopAppBarActionsContent(
 
         alwaysShowActions.forEach { item ->
             IconButton(onClick = item.onClick, enabled = !item.loading) {
-                AnimatedContent(targetState = item.loading) { loading ->
+                AnimatedContent(
+                    targetState = item.loading,
+                    label = "TopAppBarActions"
+                ) { loading ->
                     if (!loading) {
                         Icon(imageVector = item.imageVector, contentDescription = item.name)
                     } else {
@@ -121,7 +124,7 @@ private fun TopAppBarActionsContent(
     }
 }
 
-@Suppress("unused")
+@Suppress("UnusedReceiverParameter")
 @Composable
 private fun ColumnScope.DropdownMenuItems(
     items: List<ActionItem.NeverShow>,

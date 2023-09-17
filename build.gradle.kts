@@ -346,7 +346,7 @@ tasks.register("updateChangelog") {
         )
 
         file.delete()
-        file.writeText(lines.joinToString("$lineSeparator") + "$lineSeparator")
+        file.writeText(lines.joinToString(lineSeparator) + lineSeparator)
     }
 }
 

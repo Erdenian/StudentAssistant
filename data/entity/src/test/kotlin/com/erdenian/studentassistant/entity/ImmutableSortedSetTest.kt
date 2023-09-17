@@ -25,6 +25,7 @@ class ImmutableSortedSetTest {
         class Test(val hashCode: Int) : Comparable<Test> {
             override fun compareTo(other: Test) = this.hashCode.compareTo(other.hashCode)
             override fun hashCode() = hashCode
+            override fun equals(other: Any?) = ((other as? Test)?.hashCode == hashCode)
         }
 
         assertEquals(0, emptyImmutableSortedSet<Test>().hashCode())
