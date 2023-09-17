@@ -4,7 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
@@ -88,7 +88,8 @@ internal fun LessonInformationContent(
 
         AnimatedContent(
             targetState = lesson,
-            transitionSpec = { fadeIn() with fadeOut() }
+            transitionSpec = { fadeIn() togetherWith fadeOut() },
+            label = "LessonInformationLessonCard"
         ) { lessonState ->
             // Random non-empty string to make LessonCard larger. User will not see it behind the shimmer
             val emptyText = "Loading..."

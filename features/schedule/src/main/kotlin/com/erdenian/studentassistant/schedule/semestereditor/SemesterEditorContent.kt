@@ -5,7 +5,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -73,8 +73,9 @@ internal fun SemesterEditorContent(
             actions = {
                 AnimatedContent(
                     targetState = isLoading,
-                    transitionSpec = { fadeIn() with fadeOut() },
-                    contentAlignment = Alignment.Center
+                    transitionSpec = { fadeIn() togetherWith fadeOut() },
+                    contentAlignment = Alignment.Center,
+                    label = "SemesterEditorTopAppbar"
                 ) { isLoading ->
                     TopAppBarActions(
                         actions = listOf(

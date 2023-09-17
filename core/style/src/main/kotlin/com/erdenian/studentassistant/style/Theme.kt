@@ -25,7 +25,7 @@ fun AppTheme(
     }
 }
 
-@Suppress("unused")
+@Suppress("UnusedReceiverParameter")
 val MaterialTheme.dimensions: Dimensions
     @Composable
     @ReadOnlyComposable
