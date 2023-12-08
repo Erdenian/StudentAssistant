@@ -64,7 +64,7 @@ abstract class LessonDao {
     protected abstract suspend fun insert(
         teachers: List<TeacherEntity>,
         classrooms: List<ClassroomEntity>,
-        byWeekday: ByWeekdayEntity?
+        byWeekday: ByWeekdayEntity
     )
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
