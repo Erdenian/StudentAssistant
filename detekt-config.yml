@@ -346,7 +346,7 @@ naming:
     excludeClassPattern: '$^'
   InvalidPackageDeclaration:
     active: true
-    rootPackage: ''
+    rootPackage: 'com.erdenian.studentassistant'
     requireRootInDeclaration: true
   LambdaParameterNaming:
     active: true
@@ -672,8 +672,6 @@ style:
     active: true
   OptionalUnit:
     active: false
-  OptionalWhenBraces:
-    active: true
   PreferToOverPairSyntax:
     active: true
   ProtectedMemberInFinalClass:
