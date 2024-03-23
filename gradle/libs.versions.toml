@@ -1,17 +1,16 @@
 [versions]
 
-plugins_android = "8.2.0"
-plugins_kotlin = "1.9.21"
-plugins_detekt = "1.23.4"
+plugins_android = "8.3.1"
+plugins_kotlin = "1.9.23"
+plugins_detekt = "1.23.5"
 plugins_jacoco = "0.8.9"
 
-kotlinx_coroutines = "1.7.3"
+kotlinx_coroutines = "1.8.0"
 
-androidx_compose_compiler = "1.5.6"
+androidx_compose_compiler = "1.5.11"
 androidx_room = "2.6.1"
 
-core_dagger = "2.49"
-ui_accompanist = "0.30.1"
+core_dagger = "2.51"
 
 [plugins]
 
@@ -21,10 +20,10 @@ android_library = { id = "com.android.library", version.ref = "plugins_android" 
 kotlin_android = { id = "org.jetbrains.kotlin.android", version.ref = "plugins_kotlin" }
 kotlin_jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "plugins_kotlin" }
 kotlin_parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "plugins_kotlin" }
-kotlin_ksp = { id = "com.google.devtools.ksp", version = "1.9.21-1.0.15" }
+kotlin_ksp = { id = "com.google.devtools.ksp", version = "1.9.23-1.0.19" }
 
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "plugins_detekt" }
-tripletPlay = { id = "com.github.triplet.play", version = "3.8.6" }
+tripletPlay = { id = "com.github.triplet.play", version = "3.9.1" }
 shrinkometer = { id = "ru.erdenian.shrinkometer", version = "0.3.1" }
 gradleVersionsFilter = { id = "se.ascp.gradle.gradle-versions-filter", version = "0.1.16" }
 
@@ -35,7 +34,7 @@ detekt_formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-form
 # region Testing
 test_coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx_coroutines" }
 test_junit = { group = "junit", name = "junit", version = "4.13.2" }
-test_mockk = { group = "io.mockk", name = "mockk", version = "1.13.8" }
+test_mockk = { group = "io.mockk", name = "mockk", version = "1.13.10" }
 test_androidx_junitKtx = { group = "androidx.test.ext", name = "junit-ktx", version = "1.1.5" }
 test_androidx_core = { group = "androidx.test", name = "core-ktx", version = "1.5.0" }
 test_androidx_runner = { group = "androidx.test", name = "runner", version = "1.5.2" }
@@ -50,22 +49,22 @@ androidTools_desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk
 # endregion
 
 # region Compose
-androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version = "2023.10.01" }
-androidx_compose_ui = { group = "androidx.compose.ui", name = "ui" } #).withoutVersion()
-androidx_compose_ui_tooling = { group = "androidx.compose.ui", name = "ui-tooling" } #).withoutVersion()
-androidx_compose_foundation = { group = "androidx.compose.foundation", name = "foundation" } #).withoutVersion()
-androidx_compose_material = { group = "androidx.compose.material", name = "material" } #).withoutVersion()
-androidx_compose_material_icons_core = { group = "androidx.compose.material", name = "material-icons-core" } #).withoutVersion()
-androidx_compose_material_icons_extended = { group = "androidx.compose.material", name = "material-icons-extended" } #).withoutVersion()
+androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version = "2024.03.00" }
+androidx_compose_ui = { group = "androidx.compose.ui", name = "ui" }
+androidx_compose_ui_tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx_compose_foundation = { group = "androidx.compose.foundation", name = "foundation" }
+androidx_compose_material = { group = "androidx.compose.material", name = "material" }
+androidx_compose_material_icons_core = { group = "androidx.compose.material", name = "material-icons-core" }
+androidx_compose_material_icons_extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 # endregion
 
 # region AndroidX
-androidx_lifecycle_viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version = "2.6.2" }
+androidx_lifecycle_viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version = "2.7.0" }
 androidx_room_compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx_room" }
 androidx_room = { group = "androidx.room", name = "room-ktx", version.ref = "androidx_room" }
 androidx_appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.1" }
-androidx_activity = { group = "androidx.activity", name = "activity-compose", version = "1.8.1" }
-androidx_navigation = { group = "androidx.navigation", name = "navigation-compose", version = "2.7.5" }
+androidx_activity = { group = "androidx.activity", name = "activity-compose", version = "1.8.2" }
+androidx_navigation = { group = "androidx.navigation", name = "navigation-compose", version = "2.7.7" }
 androidx_core_splashscreen = { group = "androidx.core", name = "core-splashscreen", version = "1.0.1" }
 # endregion
 
@@ -76,8 +75,8 @@ core_dagger = { group = "com.google.dagger", name = "dagger", version.ref = "cor
 
 # region UI
 # Todo: switch to Compose completely to remove this dependency
-ui_material = { group = "com.google.android.material", name = "material", version = "1.9.0" }
-ui_accompanist_placeholder = { group = "com.google.accompanist", name = "accompanist-placeholder-material", version.ref = "ui_accompanist" }
+ui_material = { group = "com.google.android.material", name = "material", version = "1.11.0" }
+ui_accompanist_placeholder = { group = "com.google.accompanist", name = "accompanist-placeholder-material", version = "0.34.0" }
 # endregion
 
 [bundles]
