@@ -20,7 +20,7 @@ import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
+import com.erdenian.studentassistant.style.AutoMirrored
 
 @Composable
 fun TopAppBarDropdownMenu(
@@ -142,7 +143,7 @@ private fun TopAppBarDropdownMenuPreview() = AppTheme {
         },
         navigationIcon = {
             IconButton(onClick = {}) {
-                Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
+                Icon(imageVector = AppIcons.AutoMirrored.ArrowBack, contentDescription = null)
             }
         }
     )
@@ -161,7 +162,7 @@ private fun TopAppBarDropdownMenuLongPreview() = AppTheme {
         },
         navigationIcon = {
             IconButton(onClick = {}) {
-                Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
+                Icon(imageVector = AppIcons.AutoMirrored.ArrowBack, contentDescription = null)
             }
         }
     )

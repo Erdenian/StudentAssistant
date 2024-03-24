@@ -15,7 +15,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.icons.filled.MenuBook
+import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.rememberNavController
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.style.AppIcons
+import com.erdenian.studentassistant.style.AutoMirrored
 import com.erdenian.studentassistant.utils.ProvideKeyboardPadding
 
 @Composable
@@ -88,7 +89,7 @@ private fun StudentAssistantBottomNavigation(
                 onClick = navGraph::navigateToSchedule
             ),
             Item(
-                imageVector = AppIcons.MenuBook,
+                imageVector = AppIcons.AutoMirrored.MenuBook,
                 labelId = RS.h_title,
                 route = MainRoutes.HOMEWORKS,
                 onClick = navGraph::navigateToHomeworks

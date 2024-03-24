@@ -13,8 +13,8 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -30,6 +30,7 @@ import com.erdenian.studentassistant.schedule.composable.PagerTabStrip
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
+import com.erdenian.studentassistant.style.AutoMirrored
 import com.erdenian.studentassistant.uikit.view.ActionItem
 import com.erdenian.studentassistant.uikit.view.TopAppBarActions
 import java.time.DayOfWeek
@@ -49,7 +50,7 @@ internal fun ScheduleEditorContent(
     val daysOfWeekTitles = remember {
         // TextStyle.FULL_STANDALONE returns number
         // https://stackoverflow.com/questions/63415047
-        DayOfWeek.values().map { it.getDisplayName(TextStyle.FULL, Locale.getDefault()) }
+        DayOfWeek.entries.map { it.getDisplayName(TextStyle.FULL, Locale.getDefault()) }
     }
     val pagerState = rememberPagerState(
         initialPage = 0,
@@ -63,7 +64,7 @@ internal fun ScheduleEditorContent(
                 title = { Text(text = stringResource(RS.sce_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
+                        Icon(imageVector = AppIcons.AutoMirrored.ArrowBack, contentDescription = null)
                     }
                 },
                 actions = {
