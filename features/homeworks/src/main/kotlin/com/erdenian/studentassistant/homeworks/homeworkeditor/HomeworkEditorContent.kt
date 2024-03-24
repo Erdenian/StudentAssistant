@@ -30,7 +30,7 @@ import androidx.compose.material.TextButton
 import androidx.compose.material.TextFieldColors
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -57,6 +57,7 @@ import com.erdenian.studentassistant.sampledata.Homeworks
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
+import com.erdenian.studentassistant.style.AutoMirrored
 import com.erdenian.studentassistant.style.dimensions
 import com.erdenian.studentassistant.uikit.view.ActionItem
 import com.erdenian.studentassistant.uikit.view.TopAppBarActions
@@ -89,7 +90,7 @@ internal fun HomeworkEditorContent(
             title = { Text(text = stringResource(RS.he_title)) },
             navigationIcon = {
                 IconButton(onClick = onBackClick) {
-                    Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
+                    Icon(imageVector = AppIcons.AutoMirrored.ArrowBack, contentDescription = null)
                 }
             },
             actions = {

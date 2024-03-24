@@ -43,7 +43,7 @@ internal fun WeekdayPicker(
         remember(locale) {
             // TextStyle.NARROW_STANDALONE returns number
             // https://stackoverflow.com/questions/63415047
-            DayOfWeek.values().associateWith { it.getDisplayName(TextStyle.NARROW, locale).uppercase(locale) }
+            DayOfWeek.entries.associateWith { it.getDisplayName(TextStyle.NARROW, locale).uppercase(locale) }
         }
     }
 

@@ -18,7 +18,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
+import com.erdenian.studentassistant.style.AutoMirrored
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
@@ -156,7 +157,7 @@ private fun TopAppBarActionsPreview() = AppTheme {
         title = { Text(text = "Title") },
         navigationIcon = {
             IconButton(onClick = {}) {
-                Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
+                Icon(imageVector = AppIcons.AutoMirrored.ArrowBack, contentDescription = null)
             }
         },
         actions = {

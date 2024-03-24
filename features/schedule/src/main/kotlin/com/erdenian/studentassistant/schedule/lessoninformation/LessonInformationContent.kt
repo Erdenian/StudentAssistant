@@ -15,8 +15,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -31,6 +31,7 @@ import com.erdenian.studentassistant.schedule.composable.LazyHomeworksList
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
+import com.erdenian.studentassistant.style.AutoMirrored
 import com.erdenian.studentassistant.style.dimensions
 import com.erdenian.studentassistant.uikit.view.ActionItem
 import com.erdenian.studentassistant.uikit.view.LessonCard
@@ -56,7 +57,7 @@ internal fun LessonInformationContent(
             title = { Text(stringResource(RS.li_title)) },
             navigationIcon = {
                 IconButton(onClick = onBackClick) {
-                    Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
+                    Icon(imageVector = AppIcons.AutoMirrored.ArrowBack, contentDescription = null)
                 }
             },
             actions = {

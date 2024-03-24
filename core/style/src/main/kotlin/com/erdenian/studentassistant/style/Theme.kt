@@ -32,3 +32,6 @@ val MaterialTheme.dimensions: Dimensions
     get() = LocalDimensions.current
 
 typealias AppIcons = Icons.Filled
+
+@Suppress("UnusedReceiverParameter")
+val AppIcons.AutoMirrored get() = Icons.AutoMirrored.Filled
