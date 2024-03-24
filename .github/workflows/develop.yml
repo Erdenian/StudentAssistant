@@ -19,28 +19,28 @@ jobs:
       # --------------------------------------
       # Install
       # --------------------------------------
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: 17
-      - uses: android-actions/setup-android@v2
-      - uses: gradle/gradle-build-action@v2
+          java-version: 21
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v3
       # --------------------------------------
       # Run
       # --------------------------------------
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: ./gradlew :detekt :app:lintDebug testDebugUnitTest testDeviceDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" :jacocoMergedReport :app:assembleDebug :app:bundleDebug
       # --------------------------------------
       # Analyze
       # --------------------------------------
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: Detekt
           path: "build/reports/detekt/detekt.html"
           if-no-files-found: error
       # --------------------------------------
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: Lint
@@ -49,7 +49,7 @@ jobs:
       # --------------------------------------
       # Test
       # --------------------------------------
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: Unit Test
@@ -62,7 +62,7 @@ jobs:
           path: "**/build/test-results/test*/TEST-*.xml"
           reporter: java-junit
       # --------------------------------------
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: Android Test
@@ -75,7 +75,7 @@ jobs:
           path: "**/build/outputs/androidTest-results/managedDevice/debug/testDevice/TEST-*.xml"
           reporter: java-junit
       # --------------------------------------
-      - uses: madrapps/jacoco-report@v1.4
+      - uses: madrapps/jacoco-report@v1.6.1
         with:
           paths: ${{ github.workspace }}/build/reports/jacoco/jacoco.xml
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -84,14 +84,14 @@ jobs:
       # --------------------------------------
       # Build
       # --------------------------------------
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: success()
         with:
           name: Assemble
           path: "app/build/outputs/apk/debug/*.apk"
           if-no-files-found: error
       # --------------------------------------
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: success()
         with:
           name: Bundle
