@@ -2,6 +2,7 @@ plugins {
     id(libs.plugins.android.application.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
     id(libs.plugins.kotlin.ksp.get().pluginId)
+    id(libs.plugins.kover.get().pluginId)
 
     alias(libs.plugins.tripletPlay)
     alias(libs.plugins.shrinkometer)
@@ -128,6 +129,14 @@ dependencies {
     // region UI
     implementation(libs.ui.material)
     // endregion
+}
+
+dependencies {
+    rootProject.subprojects {
+        afterEvaluate {
+            if (plugins.hasPlugin(libs.plugins.kover.get().pluginId)) kover(project(path))
+        }
+    }
 }
 
 play {
