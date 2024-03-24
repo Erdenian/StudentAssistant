@@ -3,7 +3,6 @@
 plugins_android = "8.3.1"
 plugins_kotlin = "1.9.23"
 plugins_detekt = "1.23.5"
-plugins_jacoco = "0.8.9"
 
 kotlinx_coroutines = "1.8.0"
 
@@ -23,6 +22,7 @@ kotlin_parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref =
 kotlin_ksp = { id = "com.google.devtools.ksp", version = "1.9.23-1.0.19" }
 
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "plugins_detekt" }
+kover = { id = "org.jetbrains.kotlinx.kover", version = "0.8.0-Beta" }
 tripletPlay = { id = "com.github.triplet.play", version = "3.9.1" }
 shrinkometer = { id = "ru.erdenian.shrinkometer", version = "0.3.1" }
 gradleVersionsFilter = { id = "se.ascp.gradle.gradle-versions-filter", version = "0.1.16" }

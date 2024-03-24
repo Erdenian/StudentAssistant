@@ -29,7 +29,7 @@ jobs:
       # Run
       # --------------------------------------
       - uses: actions/checkout@v4
-      - run: ./gradlew :detekt :app:lintDebug testDebugUnitTest testDeviceDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" :jacocoMergedReport :app:assembleDebug :app:bundleDebug
+      - run: ./gradlew :detekt :app:lintDebug testDebugUnitTest testDeviceDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" :app:koverHtmlReportDebug :app:koverXmlReportDebug :app:assembleDebug :app:bundleDebug
       # --------------------------------------
       # Analyze
       # --------------------------------------
@@ -75,12 +75,19 @@ jobs:
           path: "**/build/outputs/androidTest-results/managedDevice/debug/testDevice/TEST-*.xml"
           reporter: java-junit
       # --------------------------------------
-      - uses: madrapps/jacoco-report@v1.6.1
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          paths: ${{ github.workspace }}/build/reports/jacoco/jacoco.xml
+          name: Coverage
+          path: "**/build/reports/kover/html*/"
+          if-no-files-found: error
+      - uses: mi-kas/kover-report@v1
+        with:
+          path: ${{ github.workspace }}/app/build/reports/kover/reportDebug.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: ${{ env.MIN_COVERAGE_OVERALL }}
           min-coverage-changed-files: ${{ env.MIN_COVERAGE_CHANGED }}
+          coverage-counter-type: INSTRUCTION
       # --------------------------------------
       # Build
       # --------------------------------------
