@@ -17,7 +17,7 @@ android {
         versionName = "0.5.3"
 
         resourceConfigurations.retainAll(setOf("ru"))
-        setProperty("archivesBaseName", "${rootProject.name}-$versionName")
+        base.archivesName = "${rootProject.name}-$versionName"
     }
 
     lint {
