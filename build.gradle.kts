@@ -82,7 +82,8 @@ subprojectsAfterEvaluate {
 
             defaultConfig {
                 minSdk = config.versions.minSdk.get().toInt()
-                targetSdk = config.versions.targetSdk.get().toInt()
+                lint.targetSdk = config.versions.targetSdk.get().toInt()
+                testOptions.targetSdk = config.versions.targetSdk.get().toInt()
 
                 testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
