@@ -111,7 +111,7 @@ subprojectsAfterEvaluate {
 
         testOptions.managedDevices.devices.create<com.android.build.api.dsl.ManagedVirtualDevice>("testDevice") {
             device = "Pixel 4"
-            apiLevel = 31
+            apiLevel = 34
             systemImageSource = "aosp"
         }
 
