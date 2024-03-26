@@ -158,7 +158,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
 
     // region Lesson Information
 
-    fun navigateToLessonInformation(lessonId: Long) = navController.navigate("lessons/$lessonId")
+    private fun navigateToLessonInformation(lessonId: Long) = navController.navigate("lessons/$lessonId")
 
     init {
         composables.add {
@@ -194,7 +194,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
 
     // region Semester Editor
 
-    fun navigateToSemesterEditor(semesterId: Long? = null) = navController.navigate(
+    private fun navigateToSemesterEditor(semesterId: Long? = null) = navController.navigate(
         "semester_editor?${args("semester_id" to semesterId)}"
     )
 
@@ -226,7 +226,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
 
     // region Schedule Editor
 
-    fun navigateToScheduleEditor(semesterId: Long) = navController.navigate("schedule_editor/$semesterId")
+    private fun navigateToScheduleEditor(semesterId: Long) = navController.navigate("schedule_editor/$semesterId")
 
     init {
         composables.add {
@@ -260,7 +260,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
 
     // region Lesson Editor
 
-    fun navigateToLessonEditor(
+    private fun navigateToLessonEditor(
         semesterId: Long,
         dayOfWeek: DayOfWeek? = null,
         subjectName: String? = null,
@@ -334,7 +334,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
 
     // region Homework Editor
 
-    fun navigateToHomeworkEditor(semesterId: Long, homeworkId: Long? = null, subjectName: String? = null) {
+    private fun navigateToHomeworkEditor(semesterId: Long, homeworkId: Long? = null, subjectName: String? = null) {
         val arguments = args(
             "semester_id" to semesterId,
             "homework_id" to homeworkId,

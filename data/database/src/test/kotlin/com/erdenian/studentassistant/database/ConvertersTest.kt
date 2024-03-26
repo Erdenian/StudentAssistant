@@ -13,7 +13,7 @@ internal class ConvertersTest {
 
     @Test
     fun dayOfWeekTest() {
-        val original = DayOfWeek.values().toList() + null
+        val original = DayOfWeek.entries + null
         val converted = original.map { converters.dayOfWeekToInt(it) }
         val restored = converted.map { converters.intToDayOfWeek(it) }
 
