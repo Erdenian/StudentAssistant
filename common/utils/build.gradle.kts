@@ -1,7 +1,7 @@
 plugins {
     id(libs.plugins.android.library.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
-    jacoco
+    id(libs.plugins.kover.get().pluginId)
 }
 
 android {

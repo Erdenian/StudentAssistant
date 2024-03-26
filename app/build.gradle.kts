@@ -2,6 +2,7 @@ plugins {
     id(libs.plugins.android.application.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
     id(libs.plugins.kotlin.ksp.get().pluginId)
+    id(libs.plugins.kover.get().pluginId)
 
     alias(libs.plugins.tripletPlay)
     alias(libs.plugins.shrinkometer)
@@ -16,7 +17,7 @@ android {
         versionName = "0.5.3"
 
         resourceConfigurations.retainAll(setOf("ru"))
-        setProperty("archivesBaseName", "${rootProject.name}-$versionName")
+        base.archivesName = "${rootProject.name}-$versionName"
     }
 
     lint {
@@ -130,8 +131,53 @@ dependencies {
     // endregion
 }
 
+dependencies {
+    rootProject.subprojects {
+        afterEvaluate {
+            if (plugins.hasPlugin(libs.plugins.kover.get().pluginId)) kover(project(path))
+        }
+    }
+}
+
 play {
     track.set("beta")
     releaseStatus.set(com.github.triplet.gradle.androidpublisher.ReleaseStatus.DRAFT)
     defaultToAppBundles.set(true)
 }
+
+// region Release
+
+rootProject.tasks.register("updateChangelog") {
+    val changelogFile = rootProject.file("CHANGELOG.md")
+    val newVersion = checkNotNull(android.defaultConfig.versionName)
+
+    doFirst {
+        val lines = changelogFile.readLines().toMutableList()
+        val lineSeparator = System.lineSeparator()
+
+        val oldVersion = lines
+            .first { it.startsWith("[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/") }
+            .removePrefix("[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/")
+            .removeSuffix("...develop")
+
+        lines.add(
+            lines.indexOf("## [Unreleased]") + 1,
+            "$lineSeparator## [$newVersion] - ${`java.time`.LocalDate.now()}"
+        )
+
+        lines.set(
+            lines.indexOf("[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/$oldVersion...develop"),
+            "[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/$newVersion...develop"
+        )
+
+        lines.add(
+            lines.indexOf("[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/$newVersion...develop") + 1,
+            "[$newVersion]: https://github.com/Erdenian/StudentAssistant/compare/$oldVersion...$newVersion"
+        )
+
+        changelogFile.delete()
+        changelogFile.writeText(lines.joinToString(lineSeparator) + lineSeparator)
+    }
+}
+
+// endregion
