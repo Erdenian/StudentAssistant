@@ -56,13 +56,13 @@ internal fun LazyLessonsList(
                 lessonsState.isEmpty() -> Text(
                     text = stringResource(RS.lll_free_day),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
+                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal)
                 )
                 else ->
                     LazyColumn(
                         contentPadding = PaddingValues(
-                            horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
-                            vertical = MaterialTheme.dimensions.activityVerticalMargin
+                            horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
+                            vertical = MaterialTheme.dimensions.screenPaddingVertical
                         ),
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.cardsSpacing),
                         modifier = Modifier.fillMaxSize()
