@@ -18,8 +18,6 @@ import androidx.compose.ui.res.stringResource
 import com.erdenian.studentassistant.entity.Lesson
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
-import com.erdenian.studentassistant.uikit.view.ContextMenuDialog
-import com.erdenian.studentassistant.uikit.view.ContextMenuItem
 import java.time.DayOfWeek
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -136,28 +134,6 @@ fun ScheduleEditorScreen(
     }
 
     val coroutineScope = rememberCoroutineScope()
-    var contextMenuLesson by rememberSaveable { mutableStateOf<Lesson?>(null) }
-    contextMenuLesson?.let { lesson ->
-        ContextMenuDialog(
-            onDismissRequest = { contextMenuLesson = null },
-            title = lesson.subjectName,
-            items = listOf(
-                ContextMenuItem(stringResource(RS.sce_copy_lesson)) {
-                    contextMenuLesson = null
-                    navigateToEditLesson(viewModel.semesterId, lesson.id, true)
-                },
-                ContextMenuItem(stringResource(RS.sce_delete_lesson)) {
-                    contextMenuLesson = null
-                    showHomeworksCounterOperation = true
-                    coroutineScope.launch {
-                        if (viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson)) lessonForDeleteWithHomeworksDialog = lesson
-                        else lessonForDeleteWithoutHomeworksDialog = lesson
-                        showHomeworksCounterOperation = false
-                    }
-                }
-            )
-        )
-    }
 
     ScheduleEditorContent(
         rememberLessons = rememberLessons,
@@ -165,7 +141,15 @@ fun ScheduleEditorScreen(
         onEditSemesterClick = { navigateToEditSemester(viewModel.semesterId) },
         onDeleteSemesterClick = { showDeleteSemesterDialog = true },
         onLessonClick = { navigateToEditLesson(viewModel.semesterId, it.id, false) },
-        onLongLessonClick = { contextMenuLesson = it },
+        onCopyLessonClick = { navigateToEditLesson(viewModel.semesterId, it.id, true) },
+        onDeleteLessonClick = { lesson ->
+            showHomeworksCounterOperation = true
+            coroutineScope.launch {
+                if (viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson)) lessonForDeleteWithHomeworksDialog = lesson
+                else lessonForDeleteWithoutHomeworksDialog = lesson
+                showHomeworksCounterOperation = false
+            }
+        },
         onAddLessonClick = { navigateToCreateLesson(viewModel.semesterId, it) }
     )
 }
