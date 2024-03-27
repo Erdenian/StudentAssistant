@@ -49,7 +49,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.takeOrElse
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
@@ -65,9 +64,9 @@ import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
 import com.erdenian.studentassistant.style.AutoMirrored
 import com.erdenian.studentassistant.style.dimensions
+import com.erdenian.studentassistant.uikit.dialog.DatePickerDialog
 import com.erdenian.studentassistant.uikit.view.ActionItem
 import com.erdenian.studentassistant.uikit.view.TopAppBarActions
-import com.erdenian.studentassistant.utils.showDatePicker
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
@@ -196,21 +195,16 @@ internal fun HomeworkEditorContent(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(vertical = 8.dp)
         ) {
-            val context = LocalContext.current
+            var showDatePicker by remember { mutableStateOf(false) }
 
             Text(
                 text = stringResource(RS.he_deadline_label),
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.weight(1.0f)
             )
+
             TextButton(
-                onClick = {
-                    context.showDatePicker(
-                        deadline,
-                        semesterDates.start,
-                        semesterDates.endInclusive
-                    ) { onDeadlineChange(it) }
-                },
+                onClick = { showDatePicker = true },
                 enabled = !isProgress,
                 modifier = Modifier.placeholder(
                     visible = isProgress,
@@ -219,6 +213,18 @@ internal fun HomeworkEditorContent(
             ) {
                 val deadlineFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
                 Text(text = deadline.format(deadlineFormatter))
+            }
+
+            if (showDatePicker) {
+                DatePickerDialog(
+                    onConfirm = { newValue ->
+                        showDatePicker = false
+                        onDeadlineChange(newValue)
+                    },
+                    onDismiss = { showDatePicker = false },
+                    initialSelectedDate = deadline,
+                    datesRange = semesterDates
+                )
             }
         }
 
