@@ -34,6 +34,14 @@ interface Lesson : Comparable<Lesson>, Parcelable {
     val semesterId: Long
     val id: Long
 
+    /**
+     * ClosedRange из начального и конечного времени пары.
+     *
+     * @author Ilya Solovyov
+     * @since 0.5.4
+     */
+    val timeRange: ClosedRange<LocalTime> get() = startTime..endTime
+
     override fun compareTo(other: Lesson) = compareValuesBy(
         this,
         other,
