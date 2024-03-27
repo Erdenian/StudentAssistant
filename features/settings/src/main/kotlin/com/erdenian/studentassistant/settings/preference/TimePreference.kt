@@ -1,11 +1,13 @@
 package com.erdenian.studentassistant.settings.preference
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalContext
-import com.erdenian.studentassistant.utils.showTimePicker
+import com.erdenian.studentassistant.uikit.dialog.TimePickerDialog
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -19,13 +21,24 @@ internal fun TimePreference(
     icon: Painter? = null
 ) {
     val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
-    val context = LocalContext.current
+    var showTimePicker by remember { mutableStateOf(false) }
 
     BasePreference(
         title = title,
         description = value.format(timeFormatter),
         icon = icon,
-        onClick = { context.showTimePicker(value) { onValueChange(it) } },
+        onClick = { showTimePicker = true },
         modifier = modifier
     )
+
+    if (showTimePicker) {
+        TimePickerDialog(
+            onConfirm = { newValue ->
+                showTimePicker = false
+                onValueChange(newValue)
+            },
+            onDismiss = { showTimePicker = false },
+            initialTime = value
+        )
+    }
 }
