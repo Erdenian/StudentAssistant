@@ -28,7 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,10 +44,10 @@ import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
 import com.erdenian.studentassistant.style.dimensions
+import com.erdenian.studentassistant.uikit.dialog.DatePickerDialog
 import com.erdenian.studentassistant.uikit.view.ActionItem
 import com.erdenian.studentassistant.uikit.view.TopAppBarActions
 import com.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
-import com.erdenian.studentassistant.utils.showDatePicker
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -90,23 +89,16 @@ internal fun ScheduleContent(
                     }
                 },
                 actions = {
-                    val context = LocalContext.current
                     val coroutineScope = rememberCoroutineScope()
+                    var showDatePicker by remember { mutableStateOf(false) }
+
                     TopAppBarActions(
                         actions = listOfNotNull(
                             if (state != null) {
                                 ActionItem.AlwaysShow(
                                     name = stringResource(RS.s_calendar),
                                     imageVector = AppIcons.Today,
-                                    onClick = {
-                                        context.showDatePicker(
-                                            state.currentDate,
-                                            state.semester.firstDay,
-                                            state.semester.lastDay
-                                        ) { date ->
-                                            coroutineScope.launch { state.animateScrollToDate(date) }
-                                        }
-                                    }
+                                    onClick = { showDatePicker = true }
                                 )
                             } else null,
                             if (selectedSemester == null) {
@@ -129,6 +121,18 @@ internal fun ScheduleContent(
                             } else null
                         )
                     )
+
+                    if (state != null && showDatePicker) {
+                        DatePickerDialog(
+                            onConfirm = { newValue ->
+                                showDatePicker = false
+                                coroutineScope.launch { state.animateScrollToDate(newValue) }
+                            },
+                            onDismiss = { showDatePicker = false },
+                            initialSelectedDate = state.currentDate,
+                            datesRange = state.semester.dateRange
+                        )
+                    }
                 }
             )
         }
