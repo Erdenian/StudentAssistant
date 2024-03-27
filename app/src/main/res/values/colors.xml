@@ -7,9 +7,4 @@
     <color name="splash_background">#1976d2</color>
     <color name="ic_launcher_background">#1976d2</color>
 
-    <!-- region Deprecated, will be deleted when there there are no Android Views -->
-    <color name="primary">#1976d2</color>
-    <color name="secondary">#d81b60</color>
-    <!-- endregion -->
-
 </resources>
