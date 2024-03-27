@@ -14,8 +14,6 @@ import androidx.compose.ui.res.stringResource
 import com.erdenian.studentassistant.entity.Homework
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
-import com.erdenian.studentassistant.uikit.view.ContextMenuDialog
-import com.erdenian.studentassistant.uikit.view.ContextMenuItem
 
 @Composable
 fun LessonInformationScreen(
@@ -62,20 +60,6 @@ fun LessonInformationScreen(
         )
     }
 
-    var contextMenuHomework by rememberSaveable { mutableStateOf<Homework?>(null) }
-    contextMenuHomework?.let { homework ->
-        ContextMenuDialog(
-            onDismissRequest = { contextMenuHomework = null },
-            title = homework.subjectName,
-            items = listOf(
-                ContextMenuItem(stringResource(RS.li_delete_homework)) {
-                    contextMenuHomework = null
-                    homeworkForDeleteDialog = homework
-                }
-            )
-        )
-    }
-
     LessonInformationContent(
         lesson = lesson,
         homeworks = homeworks?.list,
@@ -83,6 +67,6 @@ fun LessonInformationScreen(
         onEditClick = { navigateToEditLesson(it.semesterId, it.id) },
         onHomeworkClick = { navigateToEditHomework(it.semesterId, it.id) },
         onAddHomeworkClick = { navigateToCreateHomework(it.semesterId, it.subjectName) },
-        onLongHomeworkClick = { contextMenuHomework = it }
+        onDeleteHomeworkClick = { homeworkForDeleteDialog = it }
     )
 }
