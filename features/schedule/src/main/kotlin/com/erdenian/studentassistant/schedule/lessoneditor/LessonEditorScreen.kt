@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import com.erdenian.studentassistant.schedule.lessoneditor.LessonEditorViewModel.Error
 import com.erdenian.studentassistant.strings.RA
 import com.erdenian.studentassistant.strings.RS
-import com.erdenian.studentassistant.uikit.view.ProgressDialog
+import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
 import com.erdenian.studentassistant.utils.toSingleLine
 import com.erdenian.studentassistant.utils.toast
 import kotlinx.coroutines.launch
