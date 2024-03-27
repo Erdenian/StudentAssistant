@@ -23,11 +23,13 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -45,9 +47,9 @@ import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
 import com.erdenian.studentassistant.style.AutoMirrored
 import com.erdenian.studentassistant.style.dimensions
+import com.erdenian.studentassistant.uikit.dialog.TimePickerDialog
 import com.erdenian.studentassistant.uikit.view.ActionItem
 import com.erdenian.studentassistant.uikit.view.TopAppBarActions
-import com.erdenian.studentassistant.utils.showTimePicker
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
@@ -131,6 +133,7 @@ internal fun LessonEditorContent(
                 )
         ) {
             val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
+            var timePickerData: Pair<LocalTime, (LocalTime) -> Unit>? by remember { mutableStateOf(null) }
 
             AutoCompleteTextField(
                 value = subjectName,
@@ -231,15 +234,13 @@ internal fun LessonEditorContent(
                     .fillMaxWidth()
                     .padding(top = 8.dp)
             ) {
-                val context = LocalContext.current
-
                 Text(
                     text = stringResource(RS.le_start_time),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.weight(1.0f)
                 )
                 TextButton(
-                    onClick = { context.showTimePicker(preselectedTime = startTime, onTimeSet = onStartTimeChange) },
+                    onClick = { timePickerData = startTime to onStartTimeChange },
                     enabled = !isProgress,
                     modifier = Modifier.placeholder(
                         visible = isProgress,
@@ -256,15 +257,13 @@ internal fun LessonEditorContent(
                     .fillMaxWidth()
                     .padding(top = 8.dp)
             ) {
-                val context = LocalContext.current
-
                 Text(
                     text = stringResource(RS.le_end_time),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.weight(1.0f)
                 )
                 TextButton(
-                    onClick = { context.showTimePicker(preselectedTime = endTime, onTimeSet = onEndTimeChange) },
+                    onClick = { timePickerData = endTime to onEndTimeChange },
                     enabled = !isProgress,
                     modifier = Modifier.placeholder(
                         visible = isProgress,
@@ -303,6 +302,17 @@ internal fun LessonEditorContent(
                         highlight = PlaceholderHighlight.shimmer()
                     )
             )
+
+            timePickerData?.let { (initialTime, onConfirm) ->
+                TimePickerDialog(
+                    onConfirm = { newValue ->
+                        timePickerData = null
+                        onConfirm(newValue)
+                    },
+                    onDismiss = { timePickerData = null },
+                    initialTime = initialTime
+                )
+            }
         }
     }
 }

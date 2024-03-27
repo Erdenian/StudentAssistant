@@ -139,6 +139,10 @@
     <!-- WeeksSelector -->
     <string name="ws_variants_title">Повторять</string>
 
+    <!-- TimePickerDialog -->
+    <string name="tpd_select_time">Выберите время</string>
+    <string name="tpd_enter_time">Введите время</string>
+
     <!-- endregion -->
 
 </resources>
