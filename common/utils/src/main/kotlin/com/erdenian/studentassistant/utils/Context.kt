@@ -1,11 +1,9 @@
 package com.erdenian.studentassistant.utils
 
 import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.content.Context
 import android.widget.Toast
 import java.time.LocalDate
-import java.time.LocalTime
 import java.time.ZoneId
 
 fun Context.toast(text: CharSequence, length: Int = Toast.LENGTH_SHORT) = Toast.makeText(this, text, length).show()
@@ -40,27 +38,4 @@ fun Context.showDatePicker(
         minDate?.let { datePicker.minDate = it.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli() }
         maxDate?.let { datePicker.maxDate = it.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli() }
     }.show()
-}
-
-/**
- * Отображает [TimePickerDialog].
- *
- * @param preselectedTime изначально выбранное время (если null, используется текущее время)
- * @param onTimeSet обработчик результата выбора
- * @author Ilya Solovyov
- * @since 0.0.0
- */
-fun Context.showTimePicker(
-    preselectedTime: LocalTime? = null,
-    onTimeSet: (selected: LocalTime) -> Unit
-) {
-    val preselected = preselectedTime ?: LocalTime.now()
-
-    TimePickerDialog(
-        this,
-        { _, hourOfDay, minute -> onTimeSet.invoke(LocalTime.of(hourOfDay, minute)) },
-        preselected.hour,
-        preselected.minute,
-        true
-    ).show()
 }
