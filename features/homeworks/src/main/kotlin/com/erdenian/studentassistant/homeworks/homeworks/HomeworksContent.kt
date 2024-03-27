@@ -84,7 +84,7 @@ internal fun HomeworksContent(
                 Text(
                     text = stringResource(RS.h_no_schedule),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
+                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal)
                 )
             } else {
                 LazyHomeworksList(

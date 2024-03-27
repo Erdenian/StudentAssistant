@@ -53,7 +53,7 @@ fun LessonCard(
                 onLongClick = onLongClick,
                 onClick = onClick ?: {}
             )
-            .padding(MaterialTheme.dimensions.cardMarginInside)
+            .padding(MaterialTheme.dimensions.cardContentPadding)
     ) {
         Row(
             verticalAlignment = Alignment.Bottom
@@ -91,7 +91,7 @@ fun LessonCard(
             }
         }
 
-        HorizontalDivider(modifier = Modifier.padding(vertical = MaterialTheme.dimensions.dividerMarginTopBottom))
+        HorizontalDivider(modifier = Modifier.padding(vertical = MaterialTheme.dimensions.dividerPaddingVertical))
 
         if (type.isNotBlank()) {
             Text(

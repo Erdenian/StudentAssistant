@@ -140,7 +140,7 @@ private fun WeeksSelectorSimpleContent(
         Row(
             verticalAlignment = Alignment.Bottom,
             modifier = Modifier
-                .padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
+                .padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal)
                 .clickable(onClick = onSelectedRepeatVariantClick, enabled = enabled)
         ) {
             Text(
@@ -195,7 +195,7 @@ private fun WeeksSelectorAdvancedContent(
         Row(
             verticalAlignment = Alignment.Bottom,
             modifier = Modifier
-                .padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
+                .padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal)
                 .clickable(onClick = onSelectedRepeatVariantClick, enabled = enabled)
         ) {
             Text(

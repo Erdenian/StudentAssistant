@@ -97,8 +97,8 @@ internal fun SemesterEditorContent(
         modifier = Modifier
             .padding(paddingValues)
             .padding(
-                horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
-                vertical = MaterialTheme.dimensions.activityVerticalMargin
+                horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
+                vertical = MaterialTheme.dimensions.screenPaddingVertical
             )
     ) {
         val dateFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
