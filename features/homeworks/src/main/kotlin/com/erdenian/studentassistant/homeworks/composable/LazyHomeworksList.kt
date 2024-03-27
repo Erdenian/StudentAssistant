@@ -61,15 +61,15 @@ internal fun LazyHomeworksList(
                 overdueHomeworksState.isEmpty() && actualHomeworksState.isEmpty() && pastHomeworksState.isEmpty() -> Text(
                     text = stringResource(RS.lhl_no_homeworks),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
+                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal)
                 )
                 else -> {
                     val deadlineFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
 
                     LazyColumn(
                         contentPadding = PaddingValues(
-                            horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
-                            vertical = MaterialTheme.dimensions.activityVerticalMargin
+                            horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
+                            vertical = MaterialTheme.dimensions.screenPaddingVertical
                         ),
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.cardsSpacing),
                         modifier = Modifier.fillMaxSize()

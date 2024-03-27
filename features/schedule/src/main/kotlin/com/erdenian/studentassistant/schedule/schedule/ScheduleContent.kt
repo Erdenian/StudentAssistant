@@ -144,7 +144,7 @@ internal fun ScheduleContent(
                 Text(
                     text = stringResource(RS.s_no_schedule),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
+                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal)
                 )
             } else {
                 val shortTitleFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d MMMM") }

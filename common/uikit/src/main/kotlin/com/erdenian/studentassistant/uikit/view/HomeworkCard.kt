@@ -42,7 +42,7 @@ fun HomeworkCard(
                 onLongClick = onLongClick,
                 onClick = onClick ?: {}
             )
-            .padding(MaterialTheme.dimensions.cardMarginInside)
+            .padding(MaterialTheme.dimensions.cardContentPadding)
     ) {
         Text(
             text = subjectName,
@@ -51,7 +51,7 @@ fun HomeworkCard(
             style = MaterialTheme.typography.bodyLarge
         )
 
-        HorizontalDivider(modifier = Modifier.padding(vertical = MaterialTheme.dimensions.dividerMarginTopBottom))
+        HorizontalDivider(modifier = Modifier.padding(vertical = MaterialTheme.dimensions.dividerPaddingVertical))
 
         Text(
             text = description,

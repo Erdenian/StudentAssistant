@@ -103,8 +103,8 @@ internal fun LessonInformationContent(
                 endTime = lessonState?.endTime?.format(timeFormatter) ?: emptyText,
                 modifier = Modifier
                     .padding(
-                        horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
-                        vertical = MaterialTheme.dimensions.activityVerticalMargin
+                        horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
+                        vertical = MaterialTheme.dimensions.screenPaddingVertical
                     )
                     .placeholder(
                         visible = (lessonState == null),

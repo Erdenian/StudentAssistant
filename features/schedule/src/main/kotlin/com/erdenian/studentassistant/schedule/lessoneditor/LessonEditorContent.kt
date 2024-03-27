@@ -126,8 +126,8 @@ internal fun LessonEditorContent(
                 .verticalScroll(rememberScrollState())
                 .padding(paddingValues)
                 .padding(
-                    horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
-                    vertical = MaterialTheme.dimensions.activityVerticalMargin
+                    horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
+                    vertical = MaterialTheme.dimensions.screenPaddingVertical
                 )
         ) {
             val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
