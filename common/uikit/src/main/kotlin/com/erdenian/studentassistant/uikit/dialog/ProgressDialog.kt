@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.uikit.view
+package com.erdenian.studentassistant.uikit.dialog
 
 import android.app.Activity
 import android.content.ContextWrapper

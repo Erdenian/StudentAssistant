@@ -13,9 +13,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import com.erdenian.studentassistant.entity.Homework
 import com.erdenian.studentassistant.strings.RS
+import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
 import com.erdenian.studentassistant.uikit.view.ContextMenuDialog
 import com.erdenian.studentassistant.uikit.view.ContextMenuItem
-import com.erdenian.studentassistant.uikit.view.ProgressDialog
 
 @Composable
 fun LessonInformationScreen(
