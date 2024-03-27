@@ -74,8 +74,6 @@ core_dagger = { group = "com.google.dagger", name = "dagger", version.ref = "cor
 # endregion
 
 # region UI
-# Todo: switch to Compose completely to remove this dependency
-ui_material = { group = "com.google.android.material", name = "material", version = "1.11.0" }
 ui_accompanist_placeholder = { group = "com.google.accompanist", name = "accompanist-placeholder-material", version = "0.34.0" }
 # endregion
 
