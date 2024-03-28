@@ -17,9 +17,8 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
@@ -51,7 +50,7 @@ internal fun PagerTabStrip(
     modifier: Modifier = Modifier,
     fontSize: TextUnit = 12.sp,
     textSpacing: Dp = 32.dp,
-    otherTabsAlpha: Float = ContentAlpha.medium,
+    otherTabsAlpha: Float = 0.4f,
     underscoreHeight: Dp = 2.dp,
     colors: PagerTabStripColors = PagerTabStripDefaults.pagerTabStripColors()
 ) {
@@ -169,8 +168,8 @@ internal object PagerTabStripDefaults {
 
     @Composable
     fun pagerTabStripColors(
-        textColor: Color = MaterialTheme.colors.primary,
-        tabIndicatorColor: Color = MaterialTheme.colors.primary
+        textColor: Color = MaterialTheme.colorScheme.primary,
+        tabIndicatorColor: Color = MaterialTheme.colorScheme.primary
     ): PagerTabStripColors = DefaultPagerTabStripColors(
         textColor = textColor,
         tabIndicatorColor = tabIndicatorColor
@@ -204,7 +203,7 @@ private class DefaultPagerTabStripColors(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun PagerTabStripPreview() = AppTheme {
-    Column(modifier = Modifier.background(MaterialTheme.colors.background)) {
+    Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
         val state = rememberPagerState { 10 }
 
         PagerTabStrip(

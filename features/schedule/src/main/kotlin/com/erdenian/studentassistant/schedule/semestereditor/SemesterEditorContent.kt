@@ -12,21 +12,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -39,9 +41,9 @@ import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
 import com.erdenian.studentassistant.style.AutoMirrored
 import com.erdenian.studentassistant.style.dimensions
+import com.erdenian.studentassistant.uikit.dialog.DatePickerDialog
 import com.erdenian.studentassistant.uikit.view.ActionItem
 import com.erdenian.studentassistant.uikit.view.TopAppBarActions
-import com.erdenian.studentassistant.utils.showDatePicker
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
@@ -97,12 +99,13 @@ internal fun SemesterEditorContent(
         modifier = Modifier
             .padding(paddingValues)
             .padding(
-                horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
-                vertical = MaterialTheme.dimensions.activityVerticalMargin
+                horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
+                vertical = MaterialTheme.dimensions.screenPaddingVertical
             )
     ) {
         val dateFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
         val focusManager = LocalFocusManager.current
+        var datePickerData: Pair<LocalDate, (LocalDate) -> Unit>? by remember { mutableStateOf(null) }
 
         OutlinedTextField(
             value = name,
@@ -129,8 +132,8 @@ internal fun SemesterEditorContent(
         AnimatedVisibility(errorMessage != null) {
             Text(
                 text = errorMessage.orEmpty(),
-                color = MaterialTheme.colors.error,
-                style = MaterialTheme.typography.caption,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(start = 16.dp)
             )
         }
@@ -139,15 +142,13 @@ internal fun SemesterEditorContent(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(top = 8.dp)
         ) {
-            val context = LocalContext.current
-
             Text(
                 text = stringResource(RS.se_first_day),
-                style = MaterialTheme.typography.body2,
+                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.weight(1.0f)
             )
             TextButton(
-                onClick = { context.showDatePicker(preselectedDate = firstDay, onDateSet = onFirstDayChange) },
+                onClick = { datePickerData = firstDay to onFirstDayChange },
                 enabled = !isLoading,
                 modifier = Modifier.placeholder(
                     visible = isLoading,
@@ -162,15 +163,13 @@ internal fun SemesterEditorContent(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(top = 8.dp)
         ) {
-            val context = LocalContext.current
-
             Text(
                 text = stringResource(RS.se_last_day),
-                style = MaterialTheme.typography.body2,
+                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.weight(1.0f)
             )
             TextButton(
-                onClick = { context.showDatePicker(preselectedDate = lastDay, onDateSet = onLastDayChange) },
+                onClick = { datePickerData = lastDay to onLastDayChange },
                 enabled = !isLoading,
                 modifier = Modifier.placeholder(
                     visible = isLoading,
@@ -179,6 +178,17 @@ internal fun SemesterEditorContent(
             ) {
                 Text(text = lastDay.format(dateFormatter))
             }
+        }
+
+        datePickerData?.let { (initialDate, onConfirm) ->
+            DatePickerDialog(
+                onConfirm = { newValue ->
+                    datePickerData = null
+                    onConfirm(newValue)
+                },
+                onDismiss = { datePickerData = null },
+                initialSelectedDate = initialDate
+            )
         }
     }
 }
