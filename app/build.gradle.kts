@@ -125,10 +125,6 @@ dependencies {
     compileOnly(project(":data:database"))
     compileOnly(libs.androidx.room)
     // endregion
-
-    // region UI
-    implementation(libs.ui.material)
-    // endregion
 }
 
 dependencies {

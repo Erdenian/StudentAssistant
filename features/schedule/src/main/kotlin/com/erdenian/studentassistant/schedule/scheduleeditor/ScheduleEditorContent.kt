@@ -7,19 +7,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,6 +33,7 @@ import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
 import com.erdenian.studentassistant.style.AutoMirrored
+import com.erdenian.studentassistant.uikit.layout.ContextMenuBox
 import com.erdenian.studentassistant.uikit.view.ActionItem
 import com.erdenian.studentassistant.uikit.view.TopAppBarActions
 import java.time.DayOfWeek
@@ -44,7 +47,8 @@ internal fun ScheduleEditorContent(
     onEditSemesterClick: () -> Unit,
     onDeleteSemesterClick: () -> Unit,
     onLessonClick: (Lesson) -> Unit,
-    onLongLessonClick: (Lesson) -> Unit,
+    onCopyLessonClick: (Lesson) -> Unit,
+    onDeleteLessonClick: (Lesson) -> Unit,
     onAddLessonClick: (DayOfWeek) -> Unit
 ) {
     val daysOfWeekTitles = remember {
@@ -95,7 +99,6 @@ internal fun ScheduleEditorContent(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-
             PagerTabStrip(
                 state = pagerState,
                 titleGetter = { daysOfWeekTitles[it] }
@@ -106,12 +109,36 @@ internal fun ScheduleEditorContent(
                 modifier = Modifier.fillMaxSize()
             ) { page ->
                 val lessons by rememberLessons(page)
+                var contextMenuLesson by remember { mutableStateOf<Lesson?>(null) }
 
-                LazyLessonsList(
-                    lessons = lessons,
-                    onLessonClick = onLessonClick,
-                    onLongLessonClick = onLongLessonClick
-                )
+                ContextMenuBox(
+                    expanded = (contextMenuLesson != null),
+                    onDismissRequest = { contextMenuLesson = null },
+                    contextMenu = {
+                        DropdownMenuItem(
+                            text = { Text(stringResource(RS.sce_copy_lesson)) },
+                            onClick = {
+                                val homework = checkNotNull(contextMenuLesson)
+                                contextMenuLesson = null
+                                onCopyLessonClick(homework)
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text(stringResource(RS.sce_delete_lesson)) },
+                            onClick = {
+                                val homework = checkNotNull(contextMenuLesson)
+                                contextMenuLesson = null
+                                onDeleteLessonClick(homework)
+                            }
+                        )
+                    }
+                ) {
+                    LazyLessonsList(
+                        lessons = lessons,
+                        onLessonClick = onLessonClick,
+                        onLongLessonClick = { contextMenuLesson = it }
+                    )
+                }
             }
         }
     }
@@ -127,7 +154,8 @@ private fun ScheduleEditorContentLoadingPreview() = AppTheme {
         onEditSemesterClick = {},
         onDeleteSemesterClick = {},
         onLessonClick = {},
-        onLongLessonClick = {},
+        onCopyLessonClick = {},
+        onDeleteLessonClick = {},
         onAddLessonClick = {}
     )
 }
@@ -142,7 +170,8 @@ private fun ScheduleEditorContentNoLessonsPreview() = AppTheme {
         onEditSemesterClick = {},
         onDeleteSemesterClick = {},
         onLessonClick = {},
-        onLongLessonClick = {},
+        onCopyLessonClick = {},
+        onDeleteLessonClick = {},
         onAddLessonClick = {}
     )
 }
@@ -158,7 +187,8 @@ private fun ScheduleEditorContentPreview() = AppTheme {
         onEditSemesterClick = {},
         onDeleteSemesterClick = {},
         onLessonClick = {},
-        onLongLessonClick = {},
+        onCopyLessonClick = {},
+        onDeleteLessonClick = {},
         onAddLessonClick = {}
     )
 }

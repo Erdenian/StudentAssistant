@@ -77,7 +77,7 @@ class HomeworkEditorViewModel @AssistedInject constructor(
     val semesterDatesRange = semesterRepository.getFlow(semesterId)
         .filterNotNull()
         .onEach { isSemesterLoaded.value = true }
-        .map { it.firstDay..it.lastDay }
+        .map { it.dateRange }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), LocalDate.now()..LocalDate.now())
 
     val error = combine(this.subjectName, description) { subjectName, description ->

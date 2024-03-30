@@ -5,11 +5,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.erdenian.studentassistant.settings.preference.BooleanPreference
@@ -30,39 +32,44 @@ internal fun SettingsContent(
     onDefaultBreakDurationChange: (Duration) -> Unit,
     isAdvancedWeeksSelectorEnabled: Boolean,
     isAdvancedWeeksSelectorEnabledChange: (Boolean) -> Unit
-) = Scaffold(
-    topBar = {
-        TopAppBar(
-            title = { Text(text = stringResource(RS.st_title)) }
-        )
-    }
-) { paddingValues ->
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .padding(paddingValues)
-    ) {
-        TimePreference(
-            title = stringResource(RS.st_default_start_time),
-            value = defaultStartTime,
-            onValueChange = onDefaultStartTimeChange
-        )
-        DurationPreference(
-            title = stringResource(RS.st_default_lesson_duration),
-            value = defaultLessonDuration,
-            onValueChange = onDefaultLessonDurationChange
-        )
-        DurationPreference(
-            title = stringResource(RS.st_default_break_duration),
-            value = defaultBreakDuration,
-            onValueChange = onDefaultBreakDurationChange
-        )
-        BooleanPreference(
-            title = stringResource(RS.st_is_advanced_weeks_selector_enabled),
-            description = stringResource(RS.st_is_advanced_weeks_selector_enabled_description),
-            value = isAdvancedWeeksSelectorEnabled,
-            onValueChange = isAdvancedWeeksSelectorEnabledChange
-        )
+) {
+    val topAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = stringResource(RS.st_title)) },
+                scrollBehavior = topAppBarScrollBehavior
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
+                .verticalScroll(rememberScrollState())
+                .padding(paddingValues)
+        ) {
+            TimePreference(
+                title = stringResource(RS.st_default_start_time),
+                value = defaultStartTime,
+                onValueChange = onDefaultStartTimeChange
+            )
+            DurationPreference(
+                title = stringResource(RS.st_default_lesson_duration),
+                value = defaultLessonDuration,
+                onValueChange = onDefaultLessonDurationChange
+            )
+            DurationPreference(
+                title = stringResource(RS.st_default_break_duration),
+                value = defaultBreakDuration,
+                onValueChange = onDefaultBreakDurationChange
+            )
+            BooleanPreference(
+                title = stringResource(RS.st_is_advanced_weeks_selector_enabled),
+                description = stringResource(RS.st_is_advanced_weeks_selector_enabled_description),
+                value = isAdvancedWeeksSelectorEnabled,
+                onValueChange = isAdvancedWeeksSelectorEnabledChange
+            )
+        }
     }
 }
 

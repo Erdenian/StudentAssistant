@@ -7,19 +7,23 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,6 +37,7 @@ import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
 import com.erdenian.studentassistant.style.AutoMirrored
 import com.erdenian.studentassistant.style.dimensions
+import com.erdenian.studentassistant.uikit.layout.ContextMenuBox
 import com.erdenian.studentassistant.uikit.view.ActionItem
 import com.erdenian.studentassistant.uikit.view.LessonCard
 import com.erdenian.studentassistant.uikit.view.TopAppBarActions
@@ -50,7 +55,7 @@ internal fun LessonInformationContent(
     onEditClick: (Lesson) -> Unit,
     onHomeworkClick: (Homework) -> Unit,
     onAddHomeworkClick: (Lesson) -> Unit,
-    onLongHomeworkClick: (Homework) -> Unit
+    onDeleteHomeworkClick: (Homework) -> Unit
 ) = Scaffold(
     topBar = {
         TopAppBar(
@@ -103,8 +108,8 @@ internal fun LessonInformationContent(
                 endTime = lessonState?.endTime?.format(timeFormatter) ?: emptyText,
                 modifier = Modifier
                     .padding(
-                        horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
-                        vertical = MaterialTheme.dimensions.activityVerticalMargin
+                        horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
+                        vertical = MaterialTheme.dimensions.screenPaddingVertical
                     )
                     .placeholder(
                         visible = (lessonState == null),
@@ -113,13 +118,29 @@ internal fun LessonInformationContent(
             )
         }
 
-        Divider()
+        HorizontalDivider()
 
-        LazyHomeworksList(
-            homeworks = homeworks,
-            onHomeworkClick = onHomeworkClick,
-            onLongHomeworkClick = onLongHomeworkClick
-        )
+        var contextMenuHomework by remember { mutableStateOf<Homework?>(null) }
+        ContextMenuBox(
+            expanded = (contextMenuHomework != null),
+            onDismissRequest = { contextMenuHomework = null },
+            contextMenu = {
+                DropdownMenuItem(
+                    text = { Text(stringResource(RS.li_delete_homework)) },
+                    onClick = {
+                        val homework = checkNotNull(contextMenuHomework)
+                        contextMenuHomework = null
+                        onDeleteHomeworkClick(homework)
+                    }
+                )
+            }
+        ) {
+            LazyHomeworksList(
+                homeworks = homeworks,
+                onHomeworkClick = onHomeworkClick,
+                onLongHomeworkClick = { contextMenuHomework = it }
+            )
+        }
     }
 }
 
@@ -134,7 +155,7 @@ private fun LessonInformationContentLoadingPreview() = AppTheme {
         onEditClick = {},
         onHomeworkClick = {},
         onAddHomeworkClick = {},
-        onLongHomeworkClick = {}
+        onDeleteHomeworkClick = {}
     )
 }
 
@@ -149,7 +170,7 @@ private fun LessonInformationContentNoHomeworksPreview() = AppTheme {
         onEditClick = {},
         onHomeworkClick = {},
         onAddHomeworkClick = {},
-        onLongHomeworkClick = {}
+        onDeleteHomeworkClick = {}
     )
 }
 
@@ -164,6 +185,6 @@ private fun LessonInformationContentPreview() = AppTheme {
         onEditClick = {},
         onHomeworkClick = {},
         onAddHomeworkClick = {},
-        onLongHomeworkClick = {}
+        onDeleteHomeworkClick = {}
     )
 }

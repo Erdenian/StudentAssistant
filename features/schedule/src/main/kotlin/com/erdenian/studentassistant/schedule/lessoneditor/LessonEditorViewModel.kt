@@ -164,7 +164,7 @@ class LessonEditorViewModel @AssistedInject constructor(
 
     private var initialSubjectName: String? = null
     private val isSubjectNameChanged
-        get() = initialSubjectName?.let { it != subjectName.value } ?: false
+        get() = initialSubjectName?.let { it != subjectName.value.trim() } ?: false
 
     suspend fun isSubjectNameChangedAndNotLast() = withContext(Dispatchers.IO) {
         isSubjectNameChanged && lessonRepository.getCount(semesterId, initialSubjectName ?: return@withContext false) > 1
@@ -178,8 +178,8 @@ class LessonEditorViewModel @AssistedInject constructor(
 
         operationPrivate.value = Operation.SAVING
         viewModelScope.launch {
-            val subjectName = subjectName.value
-            val type = type.value
+            val subjectName = subjectName.value.trim()
+            val type = type.value.trim()
             val teachers = teachers.value
                 .toSingleLine()
                 .split(',')
