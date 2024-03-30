@@ -1,8 +1,8 @@
 package com.erdenian.studentassistant.homeworks.homeworkeditor
 
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorViewModel.Error
 import com.erdenian.studentassistant.strings.RS
-import com.erdenian.studentassistant.uikit.view.ProgressDialog
+import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
 import com.erdenian.studentassistant.utils.toSingleLine
 import com.erdenian.studentassistant.utils.toast
 
