@@ -172,7 +172,8 @@ internal fun HomeworkEditorContent(
 
             ExposedDropdownMenu(
                 expanded = expanded,
-                onDismissRequest = { expanded = false }
+                onDismissRequest = { expanded = false },
+                focusable = false
             ) {
                 existingSubjects.forEach { subject ->
                     DropdownMenuItem(
