@@ -34,8 +34,8 @@ import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
 import com.erdenian.studentassistant.style.AutoMirrored
 import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.placeholder
-import com.google.accompanist.placeholder.material.shimmer
+import com.google.accompanist.placeholder.material3.placeholder
+import com.google.accompanist.placeholder.material3.shimmer
 
 @Suppress("UnusedReceiverParameter")
 @Composable

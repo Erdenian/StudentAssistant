@@ -42,8 +42,8 @@ import com.erdenian.studentassistant.uikit.view.ActionItem
 import com.erdenian.studentassistant.uikit.view.LessonCard
 import com.erdenian.studentassistant.uikit.view.TopAppBarActions
 import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.placeholder
-import com.google.accompanist.placeholder.material.shimmer
+import com.google.accompanist.placeholder.material3.placeholder
+import com.google.accompanist.placeholder.material3.shimmer
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
