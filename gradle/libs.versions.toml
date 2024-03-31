@@ -74,7 +74,7 @@ core_dagger = { group = "com.google.dagger", name = "dagger", version.ref = "cor
 # endregion
 
 # region UI
-ui_accompanist_placeholder = { group = "com.google.accompanist", name = "accompanist-placeholder-material", version = "0.34.0" }
+ui_accompanist_placeholder = { group = "com.google.accompanist", name = "accompanist-placeholder-material3", version = "0.34.0" }
 # endregion
 
 [bundles]
