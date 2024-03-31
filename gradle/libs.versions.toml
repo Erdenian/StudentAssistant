@@ -73,10 +73,6 @@ core_dagger_compiler = { group = "com.google.dagger", name = "dagger-compiler", 
 core_dagger = { group = "com.google.dagger", name = "dagger", version.ref = "core_dagger" }
 # endregion
 
-# region UI
-ui_accompanist_placeholder = { group = "com.google.accompanist", name = "accompanist-placeholder-material", version = "0.34.0" }
-# endregion
-
 [bundles]
 
 test_unit = [
