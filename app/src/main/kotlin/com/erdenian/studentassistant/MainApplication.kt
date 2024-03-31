@@ -8,7 +8,6 @@ import com.erdenian.studentassistant.repository.di.RepositoryModule
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 
-@Suppress("unused")
 internal class MainApplication : Application() {
 
     val mainComponent: MainComponent by lazy {

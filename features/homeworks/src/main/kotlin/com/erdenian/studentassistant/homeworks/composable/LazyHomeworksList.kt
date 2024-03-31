@@ -3,7 +3,7 @@ package com.erdenian.studentassistant.homeworks.composable
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,10 +12,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -46,8 +46,9 @@ internal fun LazyHomeworksList(
 ) {
     AnimatedContent(
         targetState = Triple(overdueHomeworks, actualHomeworks, pastHomeworks),
-        transitionSpec = { fadeIn() with fadeOut() },
+        transitionSpec = { fadeIn() togetherWith fadeOut() },
         contentAlignment = Alignment.Center,
+        label = "LazyHomeworksList",
         modifier = modifier
     ) { (overdueHomeworksState, actualHomeworksState, pastHomeworksState) ->
         Box(
@@ -60,15 +61,15 @@ internal fun LazyHomeworksList(
                 overdueHomeworksState.isEmpty() && actualHomeworksState.isEmpty() && pastHomeworksState.isEmpty() -> Text(
                     text = stringResource(RS.lhl_no_homeworks),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
+                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal)
                 )
                 else -> {
                     val deadlineFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
 
                     LazyColumn(
                         contentPadding = PaddingValues(
-                            horizontal = MaterialTheme.dimensions.activityHorizontalMargin,
-                            vertical = MaterialTheme.dimensions.activityVerticalMargin
+                            horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
+                            vertical = MaterialTheme.dimensions.screenPaddingVertical
                         ),
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.cardsSpacing),
                         modifier = Modifier.fillMaxSize()
@@ -97,11 +98,11 @@ internal fun LazyHomeworksList(
                             overdueHomeworksState.isNotEmpty() &&
                             (actualHomeworksState.isNotEmpty() || pastHomeworksState.isNotEmpty())
                         ) {
-                            item { Divider() }
+                            item { HorizontalDivider() }
                         }
                         createList(actualHomeworksState)
                         if (actualHomeworksState.isNotEmpty() && pastHomeworksState.isNotEmpty()) {
-                            item { Divider() }
+                            item { HorizontalDivider() }
                         }
                         createList(pastHomeworksState)
                     }

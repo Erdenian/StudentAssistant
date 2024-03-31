@@ -1,15 +1,16 @@
 package com.erdenian.studentassistant
 
-import androidx.compose.animation.core.AnimationConstants
-import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.erdenian.studentassistant.di.MainComponent
 import com.erdenian.studentassistant.homeworks.di.HomeworksComponent
@@ -23,10 +24,7 @@ import com.erdenian.studentassistant.schedule.scheduleeditor.ScheduleEditorScree
 import com.erdenian.studentassistant.schedule.semestereditor.SemesterEditorScreen
 import com.erdenian.studentassistant.settings.SettingsScreen
 import com.erdenian.studentassistant.settings.di.SettingsComponent
-import com.erdenian.studentassistant.utils.KeyboardPadding
 import com.erdenian.studentassistant.utils.SoftReferenceLazyComponentHolder
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
 import java.time.DayOfWeek
 
 @Composable
@@ -34,11 +32,11 @@ internal fun StudentAssistantNavHost(
     navController: NavHostController,
     navGraph: StudentAssistantNavGraph,
     modifier: Modifier = Modifier
-) = AnimatedNavHost(
+) = NavHost(
     navController = navController,
     startDestination = MainRoutes.SCHEDULE,
-    enterTransition = { fadeIn(tween(AnimationConstants.DefaultDurationMillis)) },
-    exitTransition = { fadeOut(snap(AnimationConstants.DefaultDurationMillis)) },
+    enterTransition = { fadeIn(tween()) },
+    exitTransition = { fadeOut(tween()) },
     modifier = modifier,
     builder = navGraph::build
 )
@@ -73,7 +71,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
         if (navController.currentBackStackEntry?.destination?.route != MainRoutes.SCHEDULE) {
             navController.navigate(MainRoutes.SCHEDULE) {
                 launchSingleTop = true
-                popUpTo(navController.graph.startDestinationId) {
+                popUpTo(navController.graph.findStartDestination().id) {
                     saveState = restoreState
                 }
                 this.restoreState = restoreState
@@ -104,7 +102,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
         if (navController.currentBackStackEntry?.destination?.route != MainRoutes.HOMEWORKS) {
             navController.navigate(MainRoutes.HOMEWORKS) {
                 launchSingleTop = true
-                popUpTo(navController.graph.startDestinationId) {
+                popUpTo(navController.graph.findStartDestination().id) {
                     saveState = restoreState
                 }
                 this.restoreState = restoreState
@@ -134,7 +132,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
         if (navController.currentBackStackEntry?.destination?.route != MainRoutes.SETTINGS) {
             navController.navigate(MainRoutes.SETTINGS) {
                 launchSingleTop = true
-                popUpTo(navController.graph.startDestinationId) {
+                popUpTo(navController.graph.findStartDestination().id) {
                     saveState = restoreState
                 }
                 this.restoreState = restoreState
@@ -158,7 +156,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
 
     // region Lesson Information
 
-    fun navigateToLessonInformation(lessonId: Long) = navController.navigate("lessons/$lessonId")
+    private fun navigateToLessonInformation(lessonId: Long) = navController.navigate("lessons/$lessonId")
 
     init {
         composables.add {
@@ -194,7 +192,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
 
     // region Semester Editor
 
-    fun navigateToSemesterEditor(semesterId: Long? = null) = navController.navigate(
+    private fun navigateToSemesterEditor(semesterId: Long? = null) = navController.navigate(
         "semester_editor?${args("semester_id" to semesterId)}"
     )
 
@@ -212,12 +210,10 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                 val semesterId = backStackEntry.arguments?.getLong("semester_id", -1L)?.takeIf { it >= 0 }
                 val viewModel = scheduleComponentHolder.viewModel { semesterEditorViewModelFactory.get(semesterId) }
 
-                KeyboardPadding {
-                    SemesterEditorScreen(
-                        viewModel = viewModel,
-                        navigateBack = { navController.popBackStack() }
-                    )
-                }
+                SemesterEditorScreen(
+                    viewModel = viewModel,
+                    navigateBack = { navController.popBackStack() }
+                )
             }
         }
     }
@@ -226,7 +222,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
 
     // region Schedule Editor
 
-    fun navigateToScheduleEditor(semesterId: Long) = navController.navigate("schedule_editor/$semesterId")
+    private fun navigateToScheduleEditor(semesterId: Long) = navController.navigate("schedule_editor/$semesterId")
 
     init {
         composables.add {
@@ -260,7 +256,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
 
     // region Lesson Editor
 
-    fun navigateToLessonEditor(
+    private fun navigateToLessonEditor(
         semesterId: Long,
         dayOfWeek: DayOfWeek? = null,
         subjectName: String? = null,
@@ -320,12 +316,10 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                     }
                 }
 
-                KeyboardPadding {
-                    LessonEditorScreen(
-                        viewModel = viewModel,
-                        navigateBack = { navController.popBackStack() }
-                    )
-                }
+                LessonEditorScreen(
+                    viewModel = viewModel,
+                    navigateBack = { navController.popBackStack() }
+                )
             }
         }
     }
@@ -334,7 +328,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
 
     // region Homework Editor
 
-    fun navigateToHomeworkEditor(semesterId: Long, homeworkId: Long? = null, subjectName: String? = null) {
+    private fun navigateToHomeworkEditor(semesterId: Long, homeworkId: Long? = null, subjectName: String? = null) {
         val arguments = args(
             "semester_id" to semesterId,
             "homework_id" to homeworkId,
@@ -376,15 +370,13 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                     }
                 }
 
-                KeyboardPadding {
-                    HomeworkEditorScreen(
-                        viewModel = viewModel,
-                        navigateBack = { navController.popBackStack() },
-                        navigateToCreateLesson = { semester, subject ->
-                            navigateToLessonEditor(semester, subjectName = subject)
-                        }
-                    )
-                }
+                HomeworkEditorScreen(
+                    viewModel = viewModel,
+                    navigateBack = { navController.popBackStack() },
+                    navigateToCreateLesson = { semester, subject ->
+                        navigateToLessonEditor(semester, subjectName = subject)
+                    }
+                )
             }
         }
     }

@@ -5,25 +5,22 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.MenuDefaults
-import androidx.compose.material.ProvideTextStyle
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
+import com.erdenian.studentassistant.style.AutoMirrored
 
 @Composable
 fun TopAppBarDropdownMenu(
@@ -69,7 +67,10 @@ private fun TopAppBarDropdownMenuContent(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .fillMaxHeight()
+            // https://issuetracker.google.com/issues/300953236
+            // Todo: remove workaround, it's fixed
+            //.fillMaxHeight()
+            .height(64.dp)
             .clickable(onClick = onClick)
     ) {
         Text(
@@ -79,11 +80,9 @@ private fun TopAppBarDropdownMenuContent(
             modifier = Modifier.weight(1.0f, false)
         )
 
-        Icon(
-            imageVector = AppIcons.ArrowDropDown,
-            contentDescription = null,
-            modifier = Modifier.padding(start = 8.dp)
-        )
+        Spacer(modifier = Modifier.width(8.dp))
+
+        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
     }
 
     val xOffset = MenuDefaults
@@ -105,7 +104,7 @@ private fun TopAppBarDropdownMenuContent(
     }
 }
 
-@Suppress("unused")
+@Suppress("UnusedReceiverParameter")
 @Composable
 private fun ColumnScope.DropdownMenuItems(
     items: List<String>,
@@ -113,18 +112,16 @@ private fun ColumnScope.DropdownMenuItems(
 ) {
     items.forEachIndexed { index, item ->
         DropdownMenuItem(
+            text = {
+                Text(
+                    text = item,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                    style = MaterialTheme.typography.titleLarge
+                )
+            },
             onClick = { onItemClick(index, item) }
-        ) {
-            ProvideTextStyle(value = MaterialTheme.typography.h6) {
-                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
-                    Text(
-                        text = item,
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1
-                    )
-                }
-            }
-        }
+        )
     }
 }
 
@@ -142,7 +139,7 @@ private fun TopAppBarDropdownMenuPreview() = AppTheme {
         },
         navigationIcon = {
             IconButton(onClick = {}) {
-                Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
+                Icon(imageVector = AppIcons.AutoMirrored.ArrowBack, contentDescription = null)
             }
         }
     )
@@ -161,7 +158,7 @@ private fun TopAppBarDropdownMenuLongPreview() = AppTheme {
         },
         navigationIcon = {
             IconButton(onClick = {}) {
-                Icon(imageVector = AppIcons.ArrowBack, contentDescription = null)
+                Icon(imageVector = AppIcons.AutoMirrored.ArrowBack, contentDescription = null)
             }
         }
     )

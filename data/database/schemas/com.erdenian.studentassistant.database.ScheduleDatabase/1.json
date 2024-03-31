@@ -34,10 +34,10 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": true,
           "columnNames": [
             "_id"
-          ],
-          "autoGenerate": true
+          ]
         },
         "indices": [
           {
@@ -46,6 +46,7 @@
             "columnNames": [
               "name"
             ],
+            "orders": [],
             "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_semesters_name` ON `${TABLE_NAME}` (`name`)"
           }
         ],
@@ -93,10 +94,10 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": true,
           "columnNames": [
             "_id"
-          ],
-          "autoGenerate": true
+          ]
         },
         "indices": [
           {
@@ -105,6 +106,7 @@
             "columnNames": [
               "subject_name"
             ],
+            "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_lessons_subject_name` ON `${TABLE_NAME}` (`subject_name`)"
           },
           {
@@ -113,6 +115,7 @@
             "columnNames": [
               "semester_id"
             ],
+            "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_lessons_semester_id` ON `${TABLE_NAME}` (`semester_id`)"
           }
         ],
@@ -154,10 +157,10 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": true,
           "columnNames": [
             "_id"
-          ],
-          "autoGenerate": true
+          ]
         },
         "indices": [
           {
@@ -166,6 +169,7 @@
             "columnNames": [
               "lesson_id"
             ],
+            "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_teachers_lesson_id` ON `${TABLE_NAME}` (`lesson_id`)"
           }
         ],
@@ -207,10 +211,10 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": true,
           "columnNames": [
             "_id"
-          ],
-          "autoGenerate": true
+          ]
         },
         "indices": [
           {
@@ -219,6 +223,7 @@
             "columnNames": [
               "lesson_id"
             ],
+            "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_classrooms_lesson_id` ON `${TABLE_NAME}` (`lesson_id`)"
           }
         ],
@@ -260,10 +265,10 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": false,
           "columnNames": [
             "lesson_id"
-          ],
-          "autoGenerate": false
+          ]
         },
         "indices": [
           {
@@ -272,6 +277,7 @@
             "columnNames": [
               "lesson_id"
             ],
+            "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_by_weekday_lesson_id` ON `${TABLE_NAME}` (`lesson_id`)"
           }
         ],
@@ -307,11 +313,11 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": false,
           "columnNames": [
             "lesson_id",
             "date"
-          ],
-          "autoGenerate": false
+          ]
         },
         "indices": [
           {
@@ -320,6 +326,7 @@
             "columnNames": [
               "lesson_id"
             ],
+            "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_by_date_lesson_id` ON `${TABLE_NAME}` (`lesson_id`)"
           }
         ],
@@ -379,10 +386,10 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": true,
           "columnNames": [
             "_id"
-          ],
-          "autoGenerate": true
+          ]
         },
         "indices": [
           {
@@ -391,6 +398,7 @@
             "columnNames": [
               "subject_name"
             ],
+            "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_homeworks_subject_name` ON `${TABLE_NAME}` (`subject_name`)"
           },
           {
@@ -399,6 +407,7 @@
             "columnNames": [
               "semester_id"
             ],
+            "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_homeworks_semester_id` ON `${TABLE_NAME}` (`semester_id`)"
           }
         ],
