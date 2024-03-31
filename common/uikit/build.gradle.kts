@@ -14,8 +14,4 @@ dependencies {
     implementation(project(":core:strings"))
     implementation(project(":core:style"))
     // endregion
-
-    // region UI
-    implementation(libs.ui.accompanist.placeholder)
-    // endregion
 }

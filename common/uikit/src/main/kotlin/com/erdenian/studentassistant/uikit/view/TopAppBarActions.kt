@@ -33,9 +33,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
 import com.erdenian.studentassistant.style.AutoMirrored
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.placeholder
-import com.google.accompanist.placeholder.material.shimmer
+import com.erdenian.studentassistant.uikit.placeholder.PlaceholderHighlight
+import com.erdenian.studentassistant.uikit.placeholder.fade
+import com.erdenian.studentassistant.uikit.placeholder.placeholder
 
 @Suppress("UnusedReceiverParameter")
 @Composable
@@ -141,7 +141,7 @@ private fun ColumnScope.DropdownMenuItems(
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal),
                     modifier = Modifier.placeholder(
                         visible = item.loading,
-                        highlight = PlaceholderHighlight.shimmer()
+                        highlight = PlaceholderHighlight.fade()
                     )
                 )
             },

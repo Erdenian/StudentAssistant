@@ -42,11 +42,11 @@ import com.erdenian.studentassistant.style.AppTheme
 import com.erdenian.studentassistant.style.AutoMirrored
 import com.erdenian.studentassistant.style.dimensions
 import com.erdenian.studentassistant.uikit.dialog.DatePickerDialog
+import com.erdenian.studentassistant.uikit.placeholder.PlaceholderHighlight
+import com.erdenian.studentassistant.uikit.placeholder.fade
+import com.erdenian.studentassistant.uikit.placeholder.placeholder
 import com.erdenian.studentassistant.uikit.view.ActionItem
 import com.erdenian.studentassistant.uikit.view.TopAppBarActions
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.placeholder
-import com.google.accompanist.placeholder.material.shimmer
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -125,7 +125,7 @@ internal fun SemesterEditorContent(
                 .fillMaxWidth()
                 .placeholder(
                     visible = isLoading,
-                    highlight = PlaceholderHighlight.shimmer()
+                    highlight = PlaceholderHighlight.fade()
                 )
         )
 
@@ -152,7 +152,7 @@ internal fun SemesterEditorContent(
                 enabled = !isLoading,
                 modifier = Modifier.placeholder(
                     visible = isLoading,
-                    highlight = PlaceholderHighlight.shimmer()
+                    highlight = PlaceholderHighlight.fade()
                 )
             ) {
                 Text(text = firstDay.format(dateFormatter))
@@ -173,7 +173,7 @@ internal fun SemesterEditorContent(
                 enabled = !isLoading,
                 modifier = Modifier.placeholder(
                     visible = isLoading,
-                    highlight = PlaceholderHighlight.shimmer()
+                    highlight = PlaceholderHighlight.fade()
                 )
             ) {
                 Text(text = lastDay.format(dateFormatter))
