@@ -80,6 +80,7 @@ jobs:
           path: "**/build/reports/kover/html*/"
           if-no-files-found: error
       - uses: mi-kas/kover-report@v1
+        if: always()
         with:
           path: ${{ github.workspace }}/app/build/reports/kover/reportDebug.xml
           token: ${{ secrets.GITHUB_TOKEN }}
