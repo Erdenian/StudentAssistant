@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2024-03-31
+
+### Fixed
+- Навигация нижнего бара
+- Видимость кнопки удаления в редакторе занятия
+
+### Changed
+- Дизайн приложения обновлен до Material 3
+
 ## [0.5.3] - 2023-02-06
 
 Нет видимых изменений
@@ -20,10 +29,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Упрощенный выбор недель для повторения занятия
 
 ### Changed
-- Implementation of ExposedDropdownMenu rewritten to Compose
-- Implementation of AutoCompleteTextField rewritten to Compose
-- Implementation of MultiAutoCompleteTextField rewritten to Compose
-- MaterialAlertDialog usages rewritten to Compose
+- ExposedDropdownMenu переписан на Compose
+- AutoCompleteTextField переписан на Compose
+- MultiAutoCompleteTextField переписан на Compose
+- Использование MaterialAlertDialog переписано на Compose
 
 ## [0.5.0] - 2022-02-16
 
@@ -81,7 +90,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2016-12-19
 
 <!-- @formatter:off -->
-[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/0.5.3...develop
+[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/0.6.0...develop
+[0.6.0]: https://github.com/Erdenian/StudentAssistant/compare/0.5.3...0.6.0
 [0.5.3]: https://github.com/Erdenian/StudentAssistant/compare/0.5.2...0.5.3
 [0.5.2]: https://github.com/Erdenian/StudentAssistant/compare/0.5.1...0.5.2
 [0.5.1]: https://github.com/Erdenian/StudentAssistant/compare/0.5.0...0.5.1
