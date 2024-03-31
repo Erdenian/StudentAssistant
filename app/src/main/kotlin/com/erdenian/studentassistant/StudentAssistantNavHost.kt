@@ -1,12 +1,11 @@
 package com.erdenian.studentassistant
 
-import androidx.compose.animation.core.AnimationConstants
-import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -36,8 +35,8 @@ internal fun StudentAssistantNavHost(
 ) = NavHost(
     navController = navController,
     startDestination = MainRoutes.SCHEDULE,
-    enterTransition = { fadeIn(tween(AnimationConstants.DefaultDurationMillis)) },
-    exitTransition = { fadeOut(snap(AnimationConstants.DefaultDurationMillis)) },
+    enterTransition = { fadeIn(tween()) },
+    exitTransition = { fadeOut(tween()) },
     modifier = modifier,
     builder = navGraph::build
 )
@@ -72,7 +71,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
         if (navController.currentBackStackEntry?.destination?.route != MainRoutes.SCHEDULE) {
             navController.navigate(MainRoutes.SCHEDULE) {
                 launchSingleTop = true
-                popUpTo(navController.graph.startDestinationId) {
+                popUpTo(navController.graph.findStartDestination().id) {
                     saveState = restoreState
                 }
                 this.restoreState = restoreState
@@ -103,7 +102,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
         if (navController.currentBackStackEntry?.destination?.route != MainRoutes.HOMEWORKS) {
             navController.navigate(MainRoutes.HOMEWORKS) {
                 launchSingleTop = true
-                popUpTo(navController.graph.startDestinationId) {
+                popUpTo(navController.graph.findStartDestination().id) {
                     saveState = restoreState
                 }
                 this.restoreState = restoreState
@@ -133,7 +132,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
         if (navController.currentBackStackEntry?.destination?.route != MainRoutes.SETTINGS) {
             navController.navigate(MainRoutes.SETTINGS) {
                 launchSingleTop = true
-                popUpTo(navController.graph.startDestinationId) {
+                popUpTo(navController.graph.findStartDestination().id) {
                     saveState = restoreState
                 }
                 this.restoreState = restoreState

@@ -247,7 +247,8 @@ private fun BaseAutoCompleteTextField(
 
         ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
+            focusable = false
         ) {
             autoCompleteItems.forEach { item ->
                 DropdownMenuItem(
