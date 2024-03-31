@@ -1,7 +1,0 @@
-<resources>
-
-    <dimen name="activity_horizontal_margin">64dp</dimen>
-
-    <dimen name="nav_item_padding_horizontal">24dp</dimen>
-
-</resources>
