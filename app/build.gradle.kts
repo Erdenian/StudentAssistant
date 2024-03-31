@@ -20,6 +20,11 @@ android {
         base.archivesName = "${rootProject.name}-$versionName"
     }
 
+    // Workaround for: Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so.
+    // https://issuetracker.google.com/issues/237187538
+    // https://issuetracker.google.com/issues/271316809
+    ndkVersion = "26.2.11394342"
+
     lint {
         checkDependencies = true
         checkAllWarnings = true
@@ -82,7 +87,7 @@ android {
                 enableV3Signing = true
                 enableV4Signing = true
             }
-        } ?: project.logger.warn("WARNING: Can't create release signing config")
+        } ?: project.logger.warn("w: Can't create release signing config")
     }
 
     buildTypes {

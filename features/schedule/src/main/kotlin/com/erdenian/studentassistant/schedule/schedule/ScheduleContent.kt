@@ -1,5 +1,3 @@
-@file:OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
-
 package com.erdenian.studentassistant.schedule.schedule
 
 import android.content.res.Configuration

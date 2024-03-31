@@ -22,6 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.style.AppIcons
@@ -30,6 +33,7 @@ import com.erdenian.studentassistant.style.AutoMirrored
 @Composable
 internal fun StudentAssistantApp() {
     val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
     val navGraph = remember(navController) { StudentAssistantNavGraph(navController) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -38,21 +42,28 @@ internal fun StudentAssistantApp() {
     }
 
     Scaffold(
-        bottomBar = { StudentAssistantBottomNavigation(navGraph = navGraph) }
-    ) { paddingValues ->
-        StudentAssistantNavHost(
-            navController = navController,
-            navGraph = navGraph,
-            modifier = Modifier
-                .padding(paddingValues)
-                .consumeWindowInsets(paddingValues)
-        )
-    }
+        content = { paddingValues ->
+            StudentAssistantNavHost(
+                navController = navController,
+                navGraph = navGraph,
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .consumeWindowInsets(paddingValues)
+            )
+        },
+        bottomBar = {
+            StudentAssistantBottomNavigation(
+                navBackStackEntry = navBackStackEntry,
+                navGraph = navGraph
+            )
+        }
+    )
 }
 
 @Composable
 private fun StudentAssistantBottomNavigation(
     navGraph: StudentAssistantNavGraph,
+    navBackStackEntry: NavBackStackEntry?,
     modifier: Modifier = Modifier
 ) {
     data class Item(
@@ -89,7 +100,7 @@ private fun StudentAssistantBottomNavigation(
     NavigationBar(modifier = modifier) {
         items.forEach { item ->
             NavigationBarItem(
-                selected = (selectedRoute == item.route),
+                selected = (navBackStackEntry?.destination?.hierarchy?.any { it.route == item.route } == true),
                 icon = { Icon(imageVector = item.imageVector, contentDescription = stringResource(item.labelId)) },
                 label = { Text(text = stringResource(item.labelId)) },
                 onClick = {
