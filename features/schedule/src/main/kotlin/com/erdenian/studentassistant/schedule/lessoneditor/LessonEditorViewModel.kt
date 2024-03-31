@@ -151,7 +151,7 @@ class LessonEditorViewModel @AssistedInject constructor(
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-    val isEditing = (lessonId != null)
+    val isEditing = (this.lessonId != null)
 
     val existingSubjects = lessonRepository.getSubjects(semesterId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyImmutableSortedSet())
