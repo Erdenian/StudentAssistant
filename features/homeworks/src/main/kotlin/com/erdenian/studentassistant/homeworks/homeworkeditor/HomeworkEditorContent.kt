@@ -66,8 +66,8 @@ import com.erdenian.studentassistant.style.AutoMirrored
 import com.erdenian.studentassistant.style.dimensions
 import com.erdenian.studentassistant.uikit.dialog.DatePickerDialog
 import com.erdenian.studentassistant.uikit.placeholder.PlaceholderHighlight
+import com.erdenian.studentassistant.uikit.placeholder.fade
 import com.erdenian.studentassistant.uikit.placeholder.placeholder
-import com.erdenian.studentassistant.uikit.placeholder.shimmer
 import com.erdenian.studentassistant.uikit.view.ActionItem
 import com.erdenian.studentassistant.uikit.view.TopAppBarActions
 import java.time.LocalDate
@@ -166,7 +166,7 @@ internal fun HomeworkEditorContent(
                     .fillMaxWidth()
                     .placeholder(
                         visible = isProgress,
-                        highlight = PlaceholderHighlight.shimmer()
+                        highlight = PlaceholderHighlight.fade()
                     )
             )
 
@@ -209,7 +209,7 @@ internal fun HomeworkEditorContent(
                 enabled = !isProgress,
                 modifier = Modifier.placeholder(
                     visible = isProgress,
-                    highlight = PlaceholderHighlight.shimmer()
+                    highlight = PlaceholderHighlight.fade()
                 )
             ) {
                 val deadlineFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
