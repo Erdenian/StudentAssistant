@@ -1,23 +1,16 @@
 package com.erdenian.studentassistant
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.icons.filled.MenuBook
+import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -29,14 +22,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.style.AppIcons
-import com.erdenian.studentassistant.utils.ProvideKeyboardPadding
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.erdenian.studentassistant.style.AutoMirrored
 
 @Composable
 internal fun StudentAssistantApp() {
-    val navController = rememberAnimatedNavController()
+    val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
     val navGraph = remember(navController) { StudentAssistantNavGraph(navController) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -46,22 +43,18 @@ internal fun StudentAssistantApp() {
 
     Scaffold(
         content = { paddingValues ->
-            ProvideKeyboardPadding(paddingValues) {
-                StudentAssistantNavHost(
-                    navController = navController,
-                    navGraph = navGraph,
-                    modifier = Modifier
-                        .windowInsetsPadding(
-                            WindowInsets.systemBars.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top)
-                        )
-                        .padding(paddingValues)
-                )
-            }
+            StudentAssistantNavHost(
+                navController = navController,
+                navGraph = navGraph,
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .consumeWindowInsets(paddingValues)
+            )
         },
         bottomBar = {
             StudentAssistantBottomNavigation(
-                navGraph = navGraph,
-                modifier = Modifier.navigationBarsPadding()
+                navBackStackEntry = navBackStackEntry,
+                navGraph = navGraph
             )
         }
     )
@@ -70,6 +63,7 @@ internal fun StudentAssistantApp() {
 @Composable
 private fun StudentAssistantBottomNavigation(
     navGraph: StudentAssistantNavGraph,
+    navBackStackEntry: NavBackStackEntry?,
     modifier: Modifier = Modifier
 ) {
     data class Item(
@@ -88,7 +82,7 @@ private fun StudentAssistantBottomNavigation(
                 onClick = navGraph::navigateToSchedule
             ),
             Item(
-                imageVector = AppIcons.MenuBook,
+                imageVector = AppIcons.AutoMirrored.MenuBook,
                 labelId = RS.h_title,
                 route = MainRoutes.HOMEWORKS,
                 onClick = navGraph::navigateToHomeworks
@@ -103,26 +97,17 @@ private fun StudentAssistantBottomNavigation(
     }
 
     var selectedRoute by rememberSaveable { mutableStateOf(MainRoutes.SCHEDULE) }
-    BottomNavigation(
-        backgroundColor = MaterialTheme.colors.surface,
-        modifier = modifier
-    ) {
+    NavigationBar(modifier = modifier) {
         items.forEach { item ->
-            BottomNavigationItem(
-                selected = (selectedRoute == item.route),
-                icon = {
-                    Icon(
-                        imageVector = item.imageVector,
-                        contentDescription = stringResource(item.labelId)
-                    )
-                },
+            NavigationBarItem(
+                selected = (navBackStackEntry?.destination?.hierarchy?.any { it.route == item.route } == true),
+                icon = { Icon(imageVector = item.imageVector, contentDescription = stringResource(item.labelId)) },
+                label = { Text(text = stringResource(item.labelId)) },
                 onClick = {
                     val restoreState = (selectedRoute != item.route)
                     selectedRoute = item.route
                     item.onClick(restoreState)
-                },
-                selectedContentColor = MaterialTheme.colors.primary,
-                unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+                }
             )
         }
     }

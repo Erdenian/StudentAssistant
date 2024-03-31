@@ -11,7 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.erdenian.studentassistant.schedule.semestereditor.SemesterEditorViewModel.Error
 import com.erdenian.studentassistant.strings.RS
-import com.erdenian.studentassistant.uikit.view.ProgressDialog
+import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
 import com.erdenian.studentassistant.utils.toSingleLine
 import com.erdenian.studentassistant.utils.toast
 

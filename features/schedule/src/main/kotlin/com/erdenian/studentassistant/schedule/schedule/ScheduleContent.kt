@@ -5,12 +5,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Today
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -24,7 +26,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,12 +42,10 @@ import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
 import com.erdenian.studentassistant.style.dimensions
+import com.erdenian.studentassistant.uikit.dialog.DatePickerDialog
 import com.erdenian.studentassistant.uikit.view.ActionItem
 import com.erdenian.studentassistant.uikit.view.TopAppBarActions
 import com.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
-import com.erdenian.studentassistant.utils.showDatePicker
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -88,23 +87,16 @@ internal fun ScheduleContent(
                     }
                 },
                 actions = {
-                    val context = LocalContext.current
                     val coroutineScope = rememberCoroutineScope()
+                    var showDatePicker by remember { mutableStateOf(false) }
+
                     TopAppBarActions(
                         actions = listOfNotNull(
                             if (state != null) {
                                 ActionItem.AlwaysShow(
                                     name = stringResource(RS.s_calendar),
                                     imageVector = AppIcons.Today,
-                                    onClick = {
-                                        context.showDatePicker(
-                                            state.currentDate,
-                                            state.semester.firstDay,
-                                            state.semester.lastDay
-                                        ) { date ->
-                                            coroutineScope.launch { state.animateScrollToDate(date) }
-                                        }
-                                    }
+                                    onClick = { showDatePicker = true }
                                 )
                             } else null,
                             if (selectedSemester == null) {
@@ -127,6 +119,18 @@ internal fun ScheduleContent(
                             } else null
                         )
                     )
+
+                    if (state != null && showDatePicker) {
+                        DatePickerDialog(
+                            onConfirm = { newValue ->
+                                showDatePicker = false
+                                coroutineScope.launch { state.animateScrollToDate(newValue) }
+                            },
+                            onDismiss = { showDatePicker = false },
+                            initialSelectedDate = state.currentDate,
+                            datesRange = state.semester.dateRange
+                        )
+                    }
                 }
             )
         }
@@ -142,15 +146,13 @@ internal fun ScheduleContent(
                 Text(
                     text = stringResource(RS.s_no_schedule),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
+                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal)
                 )
             } else {
                 val shortTitleFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d MMMM") }
                 val fullTitleFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy") }
-                val pageCount = state.semester.length
 
                 PagerTabStrip(
-                    count = pageCount,
                     state = state.pagerState,
                     titleGetter = { page ->
                         val date = state.semester.firstDay.plusDays(page.toLong())
@@ -159,7 +161,6 @@ internal fun ScheduleContent(
                 )
 
                 HorizontalPager(
-                    count = pageCount,
                     state = state.pagerState,
                     key = { state.semester.id to state.getDate(it) },
                     modifier = Modifier.fillMaxSize()
@@ -175,7 +176,13 @@ internal fun ScheduleContent(
 @Stable
 private data class SemesterWithState(val semester: Semester, val pagerState: PagerState) {
 
-    constructor(semester: Semester, initialDate: LocalDate) : this(semester, PagerState(semester.getPosition(initialDate)))
+    constructor(semester: Semester, initialDate: LocalDate) : this(
+        semester,
+        PagerStateImpl(
+            initialPage = semester.getPosition(initialDate),
+            updatedPageCount = { semester.length }
+        )
+    )
 
     companion object {
         val SemesterWithState.currentDate get() = getDate(pagerState.currentPage)
@@ -184,7 +191,17 @@ private data class SemesterWithState(val semester: Semester, val pagerState: Pag
             pagerState.animateScrollToPage(semester.getPosition(date))
 
         private fun Semester.getDate(position: Int): LocalDate = firstDay.plusDays(position.toLong())
-        private fun Semester.getPosition(date: LocalDate) = ChronoUnit.DAYS.between(firstDay, date.coerceIn(range)).toInt()
+        private fun Semester.getPosition(date: LocalDate) =
+            ChronoUnit.DAYS.between(firstDay, date.coerceIn(firstDay, lastDay)).toInt()
+    }
+
+    private class PagerStateImpl(
+        initialPage: Int = 0,
+        initialPageOffsetFraction: Float = 0.0f,
+        updatedPageCount: () -> Int
+    ) : PagerState(initialPage, initialPageOffsetFraction) {
+        var pageCountState = mutableStateOf(updatedPageCount)
+        override val pageCount: Int get() = pageCountState.value.invoke()
     }
 }
 

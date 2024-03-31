@@ -5,28 +5,29 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Checkbox
-import androidx.compose.material.Divider
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -71,7 +72,7 @@ internal fun WeeksSelector(
 
     var selectedRepeatVariantIndex by rememberSaveable {
         val index = weeksVariants.indexOf(weeks).takeIf { it >= 0 } ?: weeksVariants.size
-        mutableStateOf(index)
+        mutableIntStateOf(index)
     }
     var repeatVariantsExpanded by remember { mutableStateOf(false) }
 
@@ -139,7 +140,7 @@ private fun WeeksSelectorSimpleContent(
         Row(
             verticalAlignment = Alignment.Bottom,
             modifier = Modifier
-                .padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
+                .padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal)
                 .clickable(onClick = onSelectedRepeatVariantClick, enabled = enabled)
         ) {
             Text(
@@ -160,10 +161,9 @@ private fun WeeksSelectorSimpleContent(
             ) {
                 repeatVariants.forEachIndexed { index, variant ->
                     DropdownMenuItem(
+                        text = { Text(text = variant) },
                         onClick = { onRepeatVariantClick(index) }
-                    ) {
-                        Text(text = variant)
-                    }
+                    )
                 }
             }
         }
@@ -195,7 +195,7 @@ private fun WeeksSelectorAdvancedContent(
         Row(
             verticalAlignment = Alignment.Bottom,
             modifier = Modifier
-                .padding(horizontal = MaterialTheme.dimensions.activityHorizontalMargin)
+                .padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal)
                 .clickable(onClick = onSelectedRepeatVariantClick, enabled = enabled)
         ) {
             Text(
@@ -216,10 +216,9 @@ private fun WeeksSelectorAdvancedContent(
             ) {
                 repeatVariants.forEachIndexed { index, variant ->
                     DropdownMenuItem(
+                        text = { Text(text = variant) },
                         onClick = { onRepeatVariantClick(index) }
-                    ) {
-                        Text(text = variant)
-                    }
+                    )
                 }
             }
         }
@@ -239,13 +238,10 @@ private fun WeeksSelectorAdvancedContent(
             )
         }
 
-        Divider(
-            modifier = Modifier
-                .height(40.dp)
-                .width(1.dp)
-        )
+        VerticalDivider(modifier = Modifier.height(40.dp))
 
         LazyRow(
+            contentPadding = PaddingValues(horizontal = 6.dp),
             horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.weight(1.0f)
@@ -260,11 +256,7 @@ private fun WeeksSelectorAdvancedContent(
             }
         }
 
-        Divider(
-            modifier = Modifier
-                .height(40.dp)
-                .width(1.dp)
-        )
+        VerticalDivider(modifier = Modifier.height(40.dp))
 
         IconButton(
             onClick = onPlusClick,
@@ -386,12 +378,12 @@ private fun CheckBoxWithTextDisabledPreview() = AppTheme {
 @Preview(name = "Dark theme", group = "CheckBoxWithText", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun CheckBoxWithTextDarkPreview() = AppTheme {
-    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.onBackground) {
+    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onBackground) {
         CheckBoxWithText(
             true,
             "Dark",
             null,
-            modifier = Modifier.background(MaterialTheme.colors.background)
+            modifier = Modifier.background(MaterialTheme.colorScheme.background)
         )
     }
 }

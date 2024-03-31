@@ -1,8 +1,8 @@
 package com.erdenian.studentassistant.schedule.scheduleeditor
 
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
@@ -17,10 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import com.erdenian.studentassistant.entity.Lesson
 import com.erdenian.studentassistant.strings.RS
-import com.erdenian.studentassistant.uikit.view.ContextMenuDialog
-import com.erdenian.studentassistant.uikit.view.ContextMenuItem
-import com.erdenian.studentassistant.uikit.view.ProgressDialog
-import com.google.accompanist.pager.rememberPagerState
+import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
 import java.time.DayOfWeek
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -37,9 +34,6 @@ fun ScheduleEditorScreen(
     LaunchedEffect(isDeleted) {
         if (isDeleted) navigateBack()
     }
-
-    val coroutineScope = rememberCoroutineScope()
-    val pagerState = rememberPagerState()
 
     val rememberLessons = remember<@Composable (Int) -> State<List<Lesson>?>>(viewModel) {
         { page ->
@@ -139,40 +133,23 @@ fun ScheduleEditorScreen(
         )
     }
 
-    var contextMenuLesson by rememberSaveable { mutableStateOf<Lesson?>(null) }
-    contextMenuLesson?.let { lesson ->
-        ContextMenuDialog(
-            onDismissRequest = { contextMenuLesson = null },
-            title = lesson.subjectName,
-            items = listOf(
-                ContextMenuItem(stringResource(RS.sce_copy_lesson)) {
-                    contextMenuLesson = null
-                    navigateToEditLesson(viewModel.semesterId, lesson.id, true)
-                },
-                ContextMenuItem(stringResource(RS.sce_delete_lesson)) {
-                    contextMenuLesson = null
-                    showHomeworksCounterOperation = true
-                    coroutineScope.launch {
-                        if (viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson)) lessonForDeleteWithHomeworksDialog = lesson
-                        else lessonForDeleteWithoutHomeworksDialog = lesson
-                        showHomeworksCounterOperation = false
-                    }
-                }
-            )
-        )
-    }
+    val coroutineScope = rememberCoroutineScope()
 
     ScheduleEditorContent(
-        state = pagerState,
         rememberLessons = rememberLessons,
         onBackClick = navigateBack,
         onEditSemesterClick = { navigateToEditSemester(viewModel.semesterId) },
         onDeleteSemesterClick = { showDeleteSemesterDialog = true },
         onLessonClick = { navigateToEditLesson(viewModel.semesterId, it.id, false) },
-        onLongLessonClick = { contextMenuLesson = it },
-        onAddLessonClick = {
-            val dayOfWeek = DayOfWeek.of(pagerState.currentPage + 1)
-            navigateToCreateLesson(viewModel.semesterId, dayOfWeek)
-        }
+        onCopyLessonClick = { navigateToEditLesson(viewModel.semesterId, it.id, true) },
+        onDeleteLessonClick = { lesson ->
+            showHomeworksCounterOperation = true
+            coroutineScope.launch {
+                if (viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson)) lessonForDeleteWithHomeworksDialog = lesson
+                else lessonForDeleteWithoutHomeworksDialog = lesson
+                showHomeworksCounterOperation = false
+            }
+        },
+        onAddLessonClick = { navigateToCreateLesson(viewModel.semesterId, it) }
     )
 }

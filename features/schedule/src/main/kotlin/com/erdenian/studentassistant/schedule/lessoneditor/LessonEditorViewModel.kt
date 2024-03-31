@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.erdenian.studentassistant.entity.Lesson
+import com.erdenian.studentassistant.entity.emptyImmutableSortedSet
 import com.erdenian.studentassistant.entity.immutableSortedSetOf
 import com.erdenian.studentassistant.entity.toImmutableSortedSet
 import com.erdenian.studentassistant.repository.HomeworkRepository
@@ -150,20 +151,20 @@ class LessonEditorViewModel @AssistedInject constructor(
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-    val isEditing = (lessonId != null)
+    val isEditing = (this.lessonId != null)
 
     val existingSubjects = lessonRepository.getSubjects(semesterId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), immutableSortedSetOf())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyImmutableSortedSet())
     val existingTypes = lessonRepository.getTypes(semesterId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), immutableSortedSetOf())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyImmutableSortedSet())
     val existingTeachers = lessonRepository.getTeachers(semesterId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), immutableSortedSetOf())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyImmutableSortedSet())
     val existingClassrooms = lessonRepository.getClassrooms(semesterId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), immutableSortedSetOf())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyImmutableSortedSet())
 
     private var initialSubjectName: String? = null
     private val isSubjectNameChanged
-        get() = initialSubjectName?.let { it != subjectName.value } ?: false
+        get() = initialSubjectName?.let { it != subjectName.value.trim() } ?: false
 
     suspend fun isSubjectNameChangedAndNotLast() = withContext(Dispatchers.IO) {
         isSubjectNameChanged && lessonRepository.getCount(semesterId, initialSubjectName ?: return@withContext false) > 1
@@ -177,8 +178,8 @@ class LessonEditorViewModel @AssistedInject constructor(
 
         operationPrivate.value = Operation.SAVING
         viewModelScope.launch {
-            val subjectName = subjectName.value
-            val type = type.value
+            val subjectName = subjectName.value.trim()
+            val type = type.value.trim()
             val teachers = teachers.value
                 .toSingleLine()
                 .split(',')

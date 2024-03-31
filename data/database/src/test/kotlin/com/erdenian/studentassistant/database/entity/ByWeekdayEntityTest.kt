@@ -9,10 +9,11 @@ internal class ByWeekdayEntityTest {
     @Test
     fun byWeekdayTest() {
         assertThrows(IllegalArgumentException::class.java) {
-            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(false), -1L)
+            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(false))
         }
         assertThrows(IllegalArgumentException::class.java) {
-            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(), -1L)
+            ByWeekdayEntity(DayOfWeek.MONDAY, listOf())
         }
+        ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true))
     }
 }

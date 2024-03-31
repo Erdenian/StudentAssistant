@@ -9,7 +9,7 @@ import com.erdenian.studentassistant.database.entity.LessonEntity
 import com.erdenian.studentassistant.database.entity.TeacherEntity
 import com.erdenian.studentassistant.entity.ImmutableSortedSet
 import com.erdenian.studentassistant.entity.Lesson
-import com.erdenian.studentassistant.entity.immutableSortedSetOf
+import com.erdenian.studentassistant.entity.emptyImmutableSortedSet
 import com.erdenian.studentassistant.entity.toImmutableSortedSet
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -106,14 +106,14 @@ class LessonRepository(
     fun getFlow(id: Long): Flow<Lesson?> = lessonDao.getFlow(id)
 
     val allFlow: Flow<ImmutableSortedSet<Lesson>> = selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
-        semester?.id?.let { lessonDao.getAllFlow(it).map() } ?: flowOf(immutableSortedSetOf())
+        semester?.id?.let { lessonDao.getAllFlow(it).map() } ?: flowOf(emptyImmutableSortedSet())
     }
 
     fun getAllFlow(day: LocalDate): Flow<ImmutableSortedSet<Lesson>> =
         selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
             val allLessons = semester?.id?.let(lessonDao::getAllFlow) ?: flowOf(emptyList())
             allLessons.map { lessons ->
-                val weekNumber = semester?.getWeekNumber(day) ?: return@map immutableSortedSetOf()
+                val weekNumber = semester?.getWeekNumber(day) ?: return@map emptyImmutableSortedSet()
                 lessons.asSequence().filter { it.lessonRepeat.repeatsOnDay(day, weekNumber) }.toImmutableSortedSet()
             }
         }
