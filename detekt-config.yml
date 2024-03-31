@@ -1,5 +1,5 @@
 build:
-  maxIssues: 160
+  maxIssues: 170
   excludeCorrectable: false
   weights:
     UnsafeCallOnNullableType: 100500

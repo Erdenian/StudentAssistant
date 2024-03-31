@@ -128,7 +128,7 @@ private fun PickerDialog(
 ) {
     Surface(
         shape = MaterialTheme.shapes.extraLarge,
-        tonalElevation = 6.dp,
+        tonalElevation = 6.dp
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurfaceVariant) {

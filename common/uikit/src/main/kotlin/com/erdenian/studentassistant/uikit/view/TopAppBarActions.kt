@@ -33,9 +33,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AppTheme
 import com.erdenian.studentassistant.style.AutoMirrored
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material3.placeholder
-import com.google.accompanist.placeholder.material3.shimmer
+import com.erdenian.studentassistant.uikit.placeholder.PlaceholderHighlight
+import com.erdenian.studentassistant.uikit.placeholder.placeholder
+import com.erdenian.studentassistant.uikit.placeholder.shimmer
 
 @Suppress("UnusedReceiverParameter")
 @Composable
