@@ -27,8 +27,4 @@ dependencies {
     ksp(libs.core.dagger.compiler)
     implementation(libs.core.dagger)
     // endregion
-
-    // region UI
-    implementation(libs.ui.accompanist.placeholder)
-    // endregion
 }
