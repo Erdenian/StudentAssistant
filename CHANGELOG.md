@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Отображение текстовки "Домашние задания" в строке навигации
+
 ## [0.6.0] - 2024-03-31
 
 ### Fixed
