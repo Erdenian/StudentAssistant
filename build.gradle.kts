@@ -121,4 +121,22 @@ subprojectsAfterEvaluate {
     }
 }
 
+subprojectsAfterEvaluate {
+    configureAndroidIfExists {
+        fun com.android.build.gradle.api.AndroidSourceSet?.hasFiles() = this
+            ?.java
+            ?.srcDirs
+            ?.single()
+            ?.absoluteFile
+            ?.parentFile
+            ?.walk()
+            ?.any { it.isFile } == true
+
+        val unitTestExists = sourceSets.findByName("test").hasFiles()
+        val androidTestExists = sourceSets.findByName("androidTest").hasFiles()
+
+        if (!androidTestExists) testOptions.managedDevices.devices.clear()
+    }
+}
+
 // endregion
