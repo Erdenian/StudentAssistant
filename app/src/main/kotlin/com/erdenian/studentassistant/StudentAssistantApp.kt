@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -102,7 +103,13 @@ private fun StudentAssistantBottomNavigation(
             NavigationBarItem(
                 selected = (navBackStackEntry?.destination?.hierarchy?.any { it.route == item.route } == true),
                 icon = { Icon(imageVector = item.imageVector, contentDescription = stringResource(item.labelId)) },
-                label = { Text(text = stringResource(item.labelId)) },
+                label = {
+                    Text(
+                        text = stringResource(item.labelId),
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
+                },
                 onClick = {
                     val restoreState = (selectedRoute != item.route)
                     selectedRoute = item.route
