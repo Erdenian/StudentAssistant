@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.ksp) apply false
+    alias(libs.plugins.kotlin.compose) apply false
 
     alias(libs.plugins.detekt)
     alias(libs.plugins.kover)
@@ -89,8 +90,6 @@ subprojectsAfterEvaluate {
             }
         }
 
-        composeOptions.kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
-
         ifLibrary {
             buildTypes {
                 release {
@@ -114,7 +113,9 @@ subprojectsAfterEvaluate {
         }
 
         dependencies {
-            if (buildFeatures.compose == true) "implementation"(platform(libs.androidx.compose.bom))
+            if (project.plugins.hasPlugin(libs.plugins.kotlin.compose.get().pluginId)) {
+                "implementation"(platform(libs.androidx.compose.bom))
+            }
 
             configurations.findByName("coreLibraryDesugaring")?.invoke(libs.androidTools.desugarJdkLibs)
         }
