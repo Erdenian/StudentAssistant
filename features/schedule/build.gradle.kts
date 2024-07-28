@@ -2,12 +2,11 @@ plugins {
     id(libs.plugins.android.library.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
     id(libs.plugins.kotlin.ksp.get().pluginId)
+    id(libs.plugins.kotlin.compose.get().pluginId)
 }
 
 android {
     namespace = "com.erdenian.studentassistant.schedule"
-
-    buildFeatures.compose = true
 }
 
 dependencies {

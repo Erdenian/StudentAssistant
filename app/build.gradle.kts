@@ -2,10 +2,10 @@ plugins {
     id(libs.plugins.android.application.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
     id(libs.plugins.kotlin.ksp.get().pluginId)
+    id(libs.plugins.kotlin.compose.get().pluginId)
     id(libs.plugins.kover.get().pluginId)
 
     alias(libs.plugins.tripletPlay)
-    alias(libs.plugins.shrinkometer)
 }
 
 android {
@@ -31,8 +31,6 @@ android {
         xmlReport = false
         checkTestSources = true
     }
-
-    buildFeatures.compose = true
 
     signingConfigs {
         val localProperties = File("${rootDir.path}/local.properties").run {
