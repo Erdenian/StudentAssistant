@@ -6,7 +6,6 @@ plugins {
     id(libs.plugins.kover.get().pluginId)
 
     alias(libs.plugins.tripletPlay)
-    alias(libs.plugins.shrinkometer)
 }
 
 android {
