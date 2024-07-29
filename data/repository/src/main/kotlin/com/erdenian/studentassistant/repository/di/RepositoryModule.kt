@@ -15,24 +15,21 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import javax.inject.Singleton
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
 
 @Module(includes = [DatabaseModule::class])
-class RepositoryModule(
-    private val applicationCoroutineScope: CoroutineScope,
-    private val settingsPreferencesName: String
-) {
+class RepositoryModule {
 
     @Singleton
     @Provides
     fun selectedSemesterRepository(
         semesterDao: SemesterDao
-    ) = SelectedSemesterRepository(applicationCoroutineScope, semesterDao)
+    ) = SelectedSemesterRepository(GlobalScope, semesterDao)
 
     @Reusable
     @Provides
     fun settingsRepository(application: Application) =
-        SettingsRepository(application.getSharedPreferences(settingsPreferencesName, Context.MODE_PRIVATE))
+        SettingsRepository(application.getSharedPreferences("settings", Context.MODE_PRIVATE))
 
     @Reusable
     @Provides

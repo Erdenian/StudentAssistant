@@ -45,7 +45,7 @@ class LessonEditorViewModel @AssistedInject constructor(
 
     @AssistedFactory
     abstract class Factory {
-        internal abstract fun getInternal(
+        abstract fun getInternal(
             semesterId: Long,
             lessonId: Long? = null,
             copy: Boolean = false,

@@ -11,6 +11,7 @@ android {
 
 dependencies {
     // region Private
+    implementation(project(":core:mediator"))
     api(project(":data:entity"))
     implementation(project(":data:database"))
     // endregion

@@ -11,6 +11,9 @@ android {
 
 dependencies {
     // region Private
+    implementation(project(":features:settings:api"))
+
+    implementation(project(":core:mediator"))
     implementation(project(":data:repository"))
     implementation(project(":common:uikit"))
     implementation(project(":common:utils"))
@@ -18,6 +21,10 @@ dependencies {
 
     // region AndroidX
     implementation(libs.androidx.lifecycle.viewmodel)
+    // endregion
+
+    // region Navigation
+    implementation(libs.navigation.voyager.navigator)
     // endregion
 
     // region Core

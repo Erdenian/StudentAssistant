@@ -36,7 +36,7 @@ class HomeworkEditorViewModel @AssistedInject constructor(
 
     @AssistedFactory
     abstract class Factory {
-        internal abstract fun getInternal(
+        abstract fun getInternal(
             semesterId: Long,
             homeworkId: Long? = null,
             subjectName: String? = null

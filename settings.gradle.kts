@@ -4,8 +4,11 @@ include(
     ":app",
 
     ":features:schedule",
+    ":features:schedule:api",
     ":features:homeworks",
+    ":features:homeworks:api",
     ":features:settings",
+    ":features:settings:api",
 
     ":common:uikit",
     ":common:utils",
@@ -15,6 +18,7 @@ include(
     ":data:database",
     ":data:entity",
 
+    ":core:mediator",
     ":core:strings",
     ":core:style"
 )

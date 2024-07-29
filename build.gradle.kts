@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.ksp) apply false
     alias(libs.plugins.kotlin.compose) apply false
@@ -56,6 +57,16 @@ subprojects {
                 "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
                 "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
             )
+        }
+    }
+}
+
+subprojects {
+    afterEvaluate {
+        if (extensions.findByType<JavaPluginExtension>() == null) return@afterEvaluate
+        extensions.configure<JavaPluginExtension> {
+            sourceCompatibility = JavaVersion.VERSION_11
+            targetCompatibility = JavaVersion.VERSION_11
         }
     }
 }

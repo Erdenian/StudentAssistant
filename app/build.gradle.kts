@@ -103,21 +103,29 @@ android {
 
 dependencies {
     // region Private
+    implementation(project(":core:mediator"))
     implementation(project(":core:style"))
     implementation(project(":core:strings"))
 
     implementation(project(":data:repository"))
 
     implementation(project(":features:schedule"))
+    implementation(project(":features:schedule:api"))
     implementation(project(":features:homeworks"))
+    implementation(project(":features:homeworks:api"))
     implementation(project(":features:settings"))
+    implementation(project(":features:settings:api"))
     // endregion
 
     // region AndroidX
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
-    implementation(libs.androidx.navigation)
     implementation(libs.androidx.core.splashscreen)
+    // endregion
+
+    // region Navigation
+    implementation(libs.navigation.voyager.navigator)
+    implementation(libs.navigation.voyager.tabNavigator)
     // endregion
 
     // region Core

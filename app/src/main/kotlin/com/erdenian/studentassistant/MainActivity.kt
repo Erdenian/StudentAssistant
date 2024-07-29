@@ -9,8 +9,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
+import com.erdenian.studentassistant.mediator.mediators.RepositoryMediator
 import com.erdenian.studentassistant.style.AppTheme
-import com.erdenian.studentassistant.utils.findMainComponent
 
 internal class MainActivity : AppCompatActivity() {
 
@@ -24,7 +24,7 @@ internal class MainActivity : AppCompatActivity() {
 
         setContent {
             LaunchedEffect(Unit) {
-                findMainComponent().selectedSemesterRepository.await()
+                RepositoryMediator.api.selectedSemesterRepository.await()
                 showSplashScreen = false
             }
 

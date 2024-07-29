@@ -11,62 +11,83 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
+import cafe.adriel.voyager.core.registry.ScreenRegistry
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.erdenian.studentassistant.entity.Homework
+import com.erdenian.studentassistant.homeworks.api.HomeworkScreen
+import com.erdenian.studentassistant.mediator.findComponent
+import com.erdenian.studentassistant.schedule.ScheduleApi
+import com.erdenian.studentassistant.schedule.api.ScheduleScreen
+import com.erdenian.studentassistant.schedule.di.ScheduleComponent
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
 
-@Composable
-fun LessonInformationScreen(
-    viewModel: LessonInformationViewModel,
-    navigateBack: () -> Unit,
-    navigateToEditLesson: (semesterId: Long, lessonId: Long) -> Unit,
-    navigateToEditHomework: (semesterId: Long, homeworkId: Long) -> Unit,
-    navigateToCreateHomework: (semesterId: Long, subjectName: String) -> Unit
-) {
-    val isDeleted by viewModel.isDeleted.collectAsState()
-    LaunchedEffect(isDeleted) {
-        if (isDeleted) navigateBack()
-    }
+internal class LessonInformationScreen(private val arguments: ScheduleScreen.LessonInformation) : Screen {
 
-    val lesson by viewModel.lesson.collectAsState()
-    val homeworks by viewModel.homeworks.collectAsState()
+    @Composable
+    override fun Content() {
+        val viewModel = viewModel {
+            findComponent<ScheduleApi, ScheduleComponent>().lessonInformationViewModelFactory.get(arguments.lessonId)
+        }
+        val navigator = LocalNavigator.currentOrThrow
 
-    val operation by viewModel.operation.collectAsState()
-    when (operation) {
-        LessonInformationViewModel.Operation.DELETING_HOMEWORK -> RS.li_delete_homework_progress
-        null -> null
-    }?.let { ProgressDialog(stringResource(it)) }
+        val isDeleted by viewModel.isDeleted.collectAsState()
+        LaunchedEffect(isDeleted) {
+            if (isDeleted) navigator.pop()
+        }
 
-    var homeworkForDeleteDialog: Homework? by rememberSaveable { mutableStateOf(null) }
-    homeworkForDeleteDialog?.let { homework ->
-        AlertDialog(
-            onDismissRequest = { homeworkForDeleteDialog = null },
-            text = { Text(text = stringResource(RS.li_delete_homework_message)) },
-            dismissButton = {
-                TextButton(
-                    onClick = { homeworkForDeleteDialog = null },
-                    content = { Text(text = stringResource(RS.li_delete_homework_no)) }
+        val lesson by viewModel.lesson.collectAsState()
+        val homeworks by viewModel.homeworks.collectAsState()
+
+        val operation by viewModel.operation.collectAsState()
+        when (operation) {
+            LessonInformationViewModel.Operation.DELETING_HOMEWORK -> RS.li_delete_homework_progress
+            null -> null
+        }?.let { ProgressDialog(stringResource(it)) }
+
+        var homeworkForDeleteDialog: Homework? by rememberSaveable { mutableStateOf(null) }
+        homeworkForDeleteDialog?.let { homework ->
+            AlertDialog(
+                onDismissRequest = { homeworkForDeleteDialog = null },
+                text = { Text(text = stringResource(RS.li_delete_homework_message)) },
+                dismissButton = {
+                    TextButton(
+                        onClick = { homeworkForDeleteDialog = null },
+                        content = { Text(text = stringResource(RS.li_delete_homework_no)) }
+                    )
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            viewModel.deleteHomework(homework.id)
+                            homeworkForDeleteDialog = null
+                        },
+                        content = { Text(text = stringResource(RS.li_delete_homework_yes)) }
+                    )
+                }
+            )
+        }
+
+        LessonInformationContent(
+            lesson = lesson,
+            homeworks = homeworks?.list,
+            onBackClick = navigator::pop,
+            onEditClick = { navigator.push(ScreenRegistry.get(ScheduleScreen.LessonEditor(it.semesterId, it.id))) },
+            onHomeworkClick = { navigator.push(ScreenRegistry.get(HomeworkScreen.HomeworkEditor(it.semesterId, it.id))) },
+            onAddHomeworkClick = {
+                navigator.push(
+                    ScreenRegistry.get(
+                        HomeworkScreen.HomeworkEditor(
+                            it.semesterId,
+                            it.subjectName
+                        )
+                    )
                 )
             },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        viewModel.deleteHomework(homework.id)
-                        homeworkForDeleteDialog = null
-                    },
-                    content = { Text(text = stringResource(RS.li_delete_homework_yes)) }
-                )
-            }
+            onDeleteHomeworkClick = { homeworkForDeleteDialog = it }
         )
     }
-
-    LessonInformationContent(
-        lesson = lesson,
-        homeworks = homeworks?.list,
-        onBackClick = navigateBack,
-        onEditClick = { navigateToEditLesson(it.semesterId, it.id) },
-        onHomeworkClick = { navigateToEditHomework(it.semesterId, it.id) },
-        onAddHomeworkClick = { navigateToCreateHomework(it.semesterId, it.subjectName) },
-        onDeleteHomeworkClick = { homeworkForDeleteDialog = it }
-    )
 }

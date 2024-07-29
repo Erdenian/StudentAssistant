@@ -1,20 +1,25 @@
 package com.erdenian.studentassistant
 
 import android.app.Application
-import com.erdenian.studentassistant.database.di.DatabaseModule
-import com.erdenian.studentassistant.di.DaggerMainComponent
-import com.erdenian.studentassistant.di.MainComponent
-import com.erdenian.studentassistant.repository.di.RepositoryModule
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
+import cafe.adriel.voyager.core.registry.ScreenRegistry
+import com.erdenian.studentassistant.mediator.mediators.HomeworksMediator
+import com.erdenian.studentassistant.mediator.mediators.ScheduleMediator
+import com.erdenian.studentassistant.mediator.mediators.SettingsMediator
 
 internal class MainApplication : Application() {
 
-    val mainComponent: MainComponent by lazy {
-        DaggerMainComponent.factory().create(
-            this,
-            DatabaseModule("schedule.db"),
-            RepositoryModule(@OptIn(DelicateCoroutinesApi::class) GlobalScope, "settings")
-        )
+    companion object {
+        lateinit var instance: MainApplication
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        instance = this
+
+        ScreenRegistry {
+            ScheduleMediator.api.screenModule(this)
+            HomeworksMediator.api.screenModule(this)
+            SettingsMediator.api.screenModule(this)
+        }
     }
 }

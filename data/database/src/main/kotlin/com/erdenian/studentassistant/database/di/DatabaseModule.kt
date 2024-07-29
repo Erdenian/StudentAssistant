@@ -8,12 +8,12 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class DatabaseModule(private val databaseName: String) {
+class DatabaseModule {
 
     @Singleton
     @Provides
     internal fun scheduleDatabase(application: Application) =
-        Room.databaseBuilder(application, ScheduleDatabase::class.java, databaseName).build()
+        Room.databaseBuilder(application, ScheduleDatabase::class.java, "schedule.db").build()
 
     @Provides
     internal fun semesterDao(database: ScheduleDatabase) = database.semesterDao

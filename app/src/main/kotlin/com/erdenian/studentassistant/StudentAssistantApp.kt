@@ -1,6 +1,6 @@
 package com.erdenian.studentassistant
 
-import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.automirrored.filled.MenuBook
@@ -12,110 +12,122 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import cafe.adriel.voyager.core.registry.ScreenRegistry
+import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.navigator.tab.CurrentTab
+import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
+import cafe.adriel.voyager.navigator.tab.Tab
+import cafe.adriel.voyager.navigator.tab.TabNavigator
+import cafe.adriel.voyager.navigator.tab.TabOptions
+import com.erdenian.studentassistant.homeworks.api.HomeworkScreen
+import com.erdenian.studentassistant.schedule.api.ScheduleScreen
+import com.erdenian.studentassistant.settings.api.SettingsScreen
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AutoMirrored
 
 @Composable
 internal fun StudentAssistantApp() {
-    val navController = rememberNavController()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val navGraph = remember(navController) { StudentAssistantNavGraph(navController) }
-    val keyboardController = LocalSoftwareKeyboardController.current
+    /*val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(navController, keyboardController) {
         navController.currentBackStackEntryFlow.collect { keyboardController?.hide() }
-    }
+    }*/
 
-    Scaffold(
-        content = { paddingValues ->
-            StudentAssistantNavHost(
-                navController = navController,
-                navGraph = navGraph,
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .consumeWindowInsets(paddingValues)
-            )
-        },
-        bottomBar = {
-            StudentAssistantBottomNavigation(
-                navBackStackEntry = navBackStackEntry,
-                navGraph = navGraph
-            )
-        }
-    )
+    TabNavigator(ScheduleTab) {
+        Scaffold(
+            content = { paddingValues ->
+                Box(
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .consumeWindowInsets(paddingValues)
+                ) { CurrentTab() }
+            },
+            bottomBar = { StudentAssistantBottomNavigation() }
+        )
+    }
 }
 
 @Composable
 private fun StudentAssistantBottomNavigation(
-    navGraph: StudentAssistantNavGraph,
-    navBackStackEntry: NavBackStackEntry?,
     modifier: Modifier = Modifier
 ) {
-    data class Item(
-        val imageVector: ImageVector,
-        @StringRes val labelId: Int,
-        val route: String,
-        val onClick: (restoreState: Boolean) -> Unit
-    )
-
-    val items = remember(navGraph) {
+    val tabs = remember {
         listOf(
-            Item(
-                imageVector = AppIcons.Schedule,
-                labelId = RS.s_title,
-                route = MainRoutes.SCHEDULE,
-                onClick = navGraph::navigateToSchedule
-            ),
-            Item(
-                imageVector = AppIcons.AutoMirrored.MenuBook,
-                labelId = RS.h_title,
-                route = MainRoutes.HOMEWORKS,
-                onClick = navGraph::navigateToHomeworks
-            ),
-            Item(
-                imageVector = AppIcons.Settings,
-                labelId = RS.st_title,
-                route = MainRoutes.SETTINGS,
-                onClick = navGraph::navigateToSettings
-            )
+            ScheduleTab,
+            HomeworksTab,
+            SettingsTab
         )
     }
 
-    var selectedRoute by rememberSaveable { mutableStateOf(MainRoutes.SCHEDULE) }
+    val tabNavigator = LocalTabNavigator.current
     NavigationBar(modifier = modifier) {
-        items.forEach { item ->
+        tabs.forEach { tab ->
             NavigationBarItem(
-                selected = (navBackStackEntry?.destination?.hierarchy?.any { it.route == item.route } == true),
-                icon = { Icon(imageVector = item.imageVector, contentDescription = stringResource(item.labelId)) },
+                selected = (tabNavigator.current == tab),
+                icon = { Icon(painter = checkNotNull(tab.options.icon), contentDescription = tab.options.title) },
                 label = {
                     Text(
-                        text = stringResource(item.labelId),
+                        text = tab.options.title,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1
                     )
                 },
-                onClick = {
-                    val restoreState = (selectedRoute != item.route)
-                    selectedRoute = item.route
-                    item.onClick(restoreState)
-                }
+                onClick = { tabNavigator.current = tab }
             )
         }
+    }
+}
+
+private object ScheduleTab : Tab {
+
+    override val options: TabOptions
+        @Composable
+        get() {
+            val title = stringResource(RS.s_title)
+            val icon = rememberVectorPainter(AppIcons.Schedule)
+            return remember { TabOptions(0u, title, icon) }
+        }
+
+    @Composable
+    override fun Content() {
+        Navigator(ScreenRegistry.get(ScheduleScreen.Schedule))
+    }
+}
+
+private object HomeworksTab : Tab {
+
+    override val options: TabOptions
+        @Composable
+        get() {
+            val title = stringResource(RS.h_title)
+            val icon = rememberVectorPainter(AppIcons.AutoMirrored.MenuBook)
+            return remember { TabOptions(0u, title, icon) }
+        }
+
+    @Composable
+    override fun Content() {
+        Navigator(ScreenRegistry.get(HomeworkScreen.Homeworks))
+    }
+}
+
+private object SettingsTab : Tab {
+
+    override val options: TabOptions
+        @Composable
+        get() {
+            val title = stringResource(RS.st_title)
+            val icon = rememberVectorPainter(AppIcons.Settings)
+            return remember { TabOptions(0u, title, icon) }
+        }
+
+    @Composable
+    override fun Content() {
+        Navigator(ScreenRegistry.get(SettingsScreen.Settings))
     }
 }
