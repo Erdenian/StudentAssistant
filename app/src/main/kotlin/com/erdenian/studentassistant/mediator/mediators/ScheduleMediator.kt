@@ -4,13 +4,13 @@ import com.erdenian.studentassistant.MainApplication
 import com.erdenian.studentassistant.mediator.Mediator
 import com.erdenian.studentassistant.mediator.componentRegistry
 import com.erdenian.studentassistant.schedule.ScheduleApi
-import com.erdenian.studentassistant.schedule.ScheduleApiHolder
+import com.erdenian.studentassistant.schedule.ScheduleApiComponentHolder
 import com.erdenian.studentassistant.schedule.ScheduleDependencies
 
 object ScheduleMediator : Mediator<ScheduleApi>() {
 
-    override val apiHolder by componentRegistry<ScheduleApi, ScheduleApiHolder> {
-        ScheduleApiHolder(object : ScheduleDependencies {
+    override val apiComponentHolder by componentRegistry<ScheduleApi, ScheduleApiComponentHolder> {
+        ScheduleApiComponentHolder(object : ScheduleDependencies {
             override val application get() = MainApplication.instance
             override val selectedSemesterRepository get() = RepositoryMediator.api.selectedSemesterRepository
             override val semesterRepository get() = RepositoryMediator.api.semesterRepository

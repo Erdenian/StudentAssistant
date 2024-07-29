@@ -2,7 +2,7 @@ package com.erdenian.studentassistant.settings
 
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.registry.screenModule
-import com.erdenian.studentassistant.mediator.ApiHolder
+import com.erdenian.studentassistant.mediator.ApiComponentHolder
 import com.erdenian.studentassistant.settings.api.SettingsScreen
 import com.erdenian.studentassistant.settings.di.DaggerSettingsComponent
 import javax.inject.Inject
@@ -17,6 +17,6 @@ internal class SettingsApiImpl @Inject constructor() : SettingsApi {
     }
 }
 
-class SettingsApiHolder(dependencies: SettingsDependencies) : ApiHolder<SettingsApi>(
+class SettingsApiComponentHolder(dependencies: SettingsDependencies) : ApiComponentHolder<SettingsApi>(
     DaggerSettingsComponent.factory().create(dependencies)
 )

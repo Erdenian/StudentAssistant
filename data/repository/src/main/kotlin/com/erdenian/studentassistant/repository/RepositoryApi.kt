@@ -1,6 +1,6 @@
 package com.erdenian.studentassistant.repository
 
-import com.erdenian.studentassistant.mediator.ApiHolder
+import com.erdenian.studentassistant.mediator.ApiComponentHolder
 import com.erdenian.studentassistant.repository.di.DaggerRepositoryComponent
 import javax.inject.Inject
 
@@ -20,6 +20,6 @@ internal class RepositoryApiImpl @Inject constructor(
     override val settingsRepository: SettingsRepository
 ) : RepositoryApi
 
-class RepositoryApiHolder(dependencies: RepositoryDependencies) : ApiHolder<RepositoryApi>(
+class RepositoryApiComponentHolder(dependencies: RepositoryDependencies) : ApiComponentHolder<RepositoryApi>(
     DaggerRepositoryComponent.factory().create(dependencies)
 )

@@ -6,7 +6,7 @@ import com.erdenian.studentassistant.homeworks.api.HomeworkScreen
 import com.erdenian.studentassistant.homeworks.di.DaggerHomeworksComponent
 import com.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorScreen
 import com.erdenian.studentassistant.homeworks.homeworks.HomeworksScreen
-import com.erdenian.studentassistant.mediator.ApiHolder
+import com.erdenian.studentassistant.mediator.ApiComponentHolder
 import javax.inject.Inject
 
 interface HomeworksApi {
@@ -20,6 +20,6 @@ internal class HomeworksApiImpl @Inject constructor() : HomeworksApi {
     }
 }
 
-class HomeworksApiHolder(dependencies: HomeworksDependencies) : ApiHolder<HomeworksApi>(
+class HomeworksApiComponentHolder(dependencies: HomeworksDependencies) : ApiComponentHolder<HomeworksApi>(
     DaggerHomeworksComponent.factory().create(dependencies)
 )

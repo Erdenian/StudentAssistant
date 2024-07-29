@@ -2,7 +2,7 @@ package com.erdenian.studentassistant.schedule
 
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.registry.screenModule
-import com.erdenian.studentassistant.mediator.ApiHolder
+import com.erdenian.studentassistant.mediator.ApiComponentHolder
 import com.erdenian.studentassistant.schedule.api.ScheduleScreen
 import com.erdenian.studentassistant.schedule.di.DaggerScheduleComponent
 import com.erdenian.studentassistant.schedule.lessoneditor.LessonEditorScreen
@@ -25,6 +25,6 @@ internal class ScheduleApiImpl @Inject constructor() : ScheduleApi {
     }
 }
 
-class ScheduleApiHolder(dependencies: ScheduleDependencies) : ApiHolder<ScheduleApi>(
+class ScheduleApiComponentHolder(dependencies: ScheduleDependencies) : ApiComponentHolder<ScheduleApi>(
     DaggerScheduleComponent.factory().create(dependencies)
 )

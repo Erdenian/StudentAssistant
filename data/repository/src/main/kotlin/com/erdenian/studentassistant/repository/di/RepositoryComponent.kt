@@ -1,6 +1,6 @@
 package com.erdenian.studentassistant.repository.di
 
-import com.erdenian.studentassistant.mediator.ApiProvider
+import com.erdenian.studentassistant.mediator.ApiComponent
 import com.erdenian.studentassistant.repository.HomeworkRepository
 import com.erdenian.studentassistant.repository.LessonRepository
 import com.erdenian.studentassistant.repository.RepositoryApi
@@ -15,7 +15,7 @@ import javax.inject.Singleton
     modules = [RepositoryApiModule::class, RepositoryModule::class],
     dependencies = [RepositoryDependencies::class]
 )
-internal interface RepositoryComponent : ApiProvider<RepositoryApi> {
+internal interface RepositoryComponent : ApiComponent<RepositoryApi> {
 
     @Component.Factory
     interface Factory {

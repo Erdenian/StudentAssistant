@@ -1,6 +1,6 @@
 package com.erdenian.studentassistant.schedule.di
 
-import com.erdenian.studentassistant.mediator.ApiProvider
+import com.erdenian.studentassistant.mediator.ApiComponent
 import com.erdenian.studentassistant.schedule.ScheduleApi
 import com.erdenian.studentassistant.schedule.ScheduleDependencies
 import com.erdenian.studentassistant.schedule.lessoneditor.LessonEditorViewModel
@@ -14,7 +14,7 @@ import dagger.Component
     modules = [ScheduleApiModule::class],
     dependencies = [ScheduleDependencies::class]
 )
-internal interface ScheduleComponent : ApiProvider<ScheduleApi> {
+internal interface ScheduleComponent : ApiComponent<ScheduleApi> {
 
     @Component.Factory
     interface Factory {

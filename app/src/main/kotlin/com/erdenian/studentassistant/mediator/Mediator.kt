@@ -2,7 +2,7 @@ package com.erdenian.studentassistant.mediator
 
 abstract class Mediator<Api> {
 
-    abstract val apiHolder: ApiHolder<Api>
+    protected abstract val apiComponentHolder: ApiComponentHolder<Api>
 
-    val api: Api get() = apiHolder.api
+    val api: Api get() = apiComponentHolder.api
 }

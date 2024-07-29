@@ -4,14 +4,14 @@ import com.erdenian.studentassistant.homeworks.HomeworksApi
 import com.erdenian.studentassistant.homeworks.HomeworksDependencies
 import com.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorViewModel
 import com.erdenian.studentassistant.homeworks.homeworks.HomeworksViewModel
-import com.erdenian.studentassistant.mediator.ApiProvider
+import com.erdenian.studentassistant.mediator.ApiComponent
 import dagger.Component
 
 @Component(
     modules = [HomeworksApiModule::class],
     dependencies = [HomeworksDependencies::class]
 )
-internal interface HomeworksComponent : ApiProvider<HomeworksApi> {
+internal interface HomeworksComponent : ApiComponent<HomeworksApi> {
 
     @Component.Factory
     interface Factory {
