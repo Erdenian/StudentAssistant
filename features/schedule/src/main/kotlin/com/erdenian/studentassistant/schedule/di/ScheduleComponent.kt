@@ -14,7 +14,7 @@ import dagger.Component
     modules = [ScheduleApiModule::class],
     dependencies = [ScheduleDependencies::class]
 )
-interface ScheduleComponent : ApiProvider<ScheduleApi> {
+internal interface ScheduleComponent : ApiProvider<ScheduleApi> {
 
     @Component.Factory
     interface Factory {

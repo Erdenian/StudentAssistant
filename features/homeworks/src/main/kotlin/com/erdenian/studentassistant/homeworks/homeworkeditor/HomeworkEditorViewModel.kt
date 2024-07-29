@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class HomeworkEditorViewModel @AssistedInject constructor(
+internal class HomeworkEditorViewModel @AssistedInject constructor(
     application: Application,
     semesterRepository: SemesterRepository,
     lessonRepository: LessonRepository,

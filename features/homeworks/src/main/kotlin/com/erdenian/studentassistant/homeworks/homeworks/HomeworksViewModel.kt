@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class HomeworksViewModel @Inject constructor(
+internal class HomeworksViewModel @Inject constructor(
     application: Application,
     private val selectedSemesterRepository: SelectedSemesterRepository,
     semesterRepository: SemesterRepository,

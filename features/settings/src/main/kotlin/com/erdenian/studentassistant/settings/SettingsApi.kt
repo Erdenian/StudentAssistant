@@ -13,7 +13,7 @@ interface SettingsApi {
 
 internal class SettingsApiImpl @Inject constructor() : SettingsApi {
     override val screenModule = screenModule {
-        register<SettingsScreen.Settings> { SettingsScreen() }
+        register<SettingsScreen.Settings> { com.erdenian.studentassistant.settings.settings.SettingsScreen() }
     }
 }
 

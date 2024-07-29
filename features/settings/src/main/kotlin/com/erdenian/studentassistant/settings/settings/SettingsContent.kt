@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.settings
+package com.erdenian.studentassistant.settings.settings
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column

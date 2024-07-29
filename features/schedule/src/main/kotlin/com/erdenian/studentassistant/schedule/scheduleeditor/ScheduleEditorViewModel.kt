@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class ScheduleEditorViewModel @AssistedInject constructor(
+internal class ScheduleEditorViewModel @AssistedInject constructor(
     application: Application,
     private val semesterRepository: SemesterRepository,
     private val lessonRepository: LessonRepository,

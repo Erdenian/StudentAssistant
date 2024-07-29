@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class LessonInformationViewModel @AssistedInject constructor(
+internal class LessonInformationViewModel @AssistedInject constructor(
     application: Application,
     lessonRepository: LessonRepository,
     private val homeworkRepository: HomeworkRepository,

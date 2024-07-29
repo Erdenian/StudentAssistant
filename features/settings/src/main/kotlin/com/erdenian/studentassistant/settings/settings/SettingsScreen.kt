@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.settings
+package com.erdenian.studentassistant.settings.settings
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import com.erdenian.studentassistant.mediator.findComponent
+import com.erdenian.studentassistant.settings.SettingsApi
 import com.erdenian.studentassistant.settings.di.SettingsComponent
 
 internal class SettingsScreen : Screen {
