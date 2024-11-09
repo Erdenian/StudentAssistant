@@ -30,7 +30,7 @@ jobs:
       - uses: android-actions/setup-android@v3
       - uses: nttld/setup-ndk@v1
         with:
-          ndk-version: r26c
+          ndk-version: r26d
           link-to-sdk: true
       - uses: gradle/actions/setup-gradle@v3
       # --------------------------------------
