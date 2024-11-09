@@ -16,6 +16,7 @@ dependencies {
     implementation(project(":common:sampledata"))
 
     implementation(project(":data:repository"))
+    implementation(project(":features:schedule:api"))
     // endregion
 
     // region AndroidX

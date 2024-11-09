@@ -109,8 +109,11 @@ dependencies {
     implementation(project(":data:repository"))
 
     implementation(project(":features:schedule"))
+    implementation(project(":features:schedule:api"))
     implementation(project(":features:homeworks"))
+    implementation(project(":features:homeworks:api"))
     implementation(project(":features:settings"))
+    implementation(project(":features:settings:api"))
     // endregion
 
     // region AndroidX

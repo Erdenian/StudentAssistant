@@ -1,4 +1,6 @@
+val featuresProject = project
 subprojects {
+    if (parent !== featuresProject) return@subprojects
     afterEvaluate {
         dependencies {
             val implementation by configurations
