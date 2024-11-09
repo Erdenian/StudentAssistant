@@ -11,13 +11,33 @@ plugins {
     alias(libs.plugins.gradleVersionsFilter)
 }
 
-detekt {
-    config.setFrom("detekt-config.yml")
-    source.setFrom(files(*subprojects.map { "${it.projectDir}/src" }.toTypedArray()))
+val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
+    output.set(rootProject.layout.buildDirectory.file("reports/detekt/report.xml"))
 }
 
-dependencies {
-    detektPlugins(libs.detekt.formatting)
+subprojects {
+    apply(plugin = "io.gitlab.arturbosch.detekt")
+
+    dependencies {
+        detektPlugins(rootProject.libs.detekt.formatting)
+    }
+
+    detekt {
+        parallel = true
+        config.setFrom("${project.rootDir}/detekt-config.yml")
+    }
+
+    tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+        reports {
+            sarif.required.set(false)
+            txt.required.set(false)
+            html.required.set(true)
+            xml.required.set(true)
+        }
+        finalizedBy(reportMerge)
+    }
+
+    reportMerge { input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.xmlReportFile }) }
 }
 
 tasks.register<Delete>("clean") {
