@@ -1,5 +1,6 @@
 package com.erdenian.studentassistant.schedule.schedule
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
@@ -24,6 +25,8 @@ fun ScheduleScreen(
 
     val rememberLessons = remember<@Composable (date: LocalDate) -> State<List<Lesson>?>>(viewModel) {
         { date ->
+            // https://issuetracker.google.com/issues/368420773
+            @SuppressLint("ProduceStateDoesNotAssignValue")
             produceState<List<Lesson>?>(null, date) {
                 viewModel.getLessons(date).map { it.list }.collect { value = it }
             }
