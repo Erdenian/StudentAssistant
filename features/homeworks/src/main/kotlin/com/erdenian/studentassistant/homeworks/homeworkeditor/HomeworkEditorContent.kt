@@ -27,6 +27,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -113,7 +114,9 @@ internal fun HomeworkEditorContent(
                                 onClick = onDeleteClick,
                                 loading = isProgress,
                             )
-                        } else null,
+                        } else {
+                            null
+                        },
                     ),
                 )
             },
@@ -149,8 +152,9 @@ internal fun HomeworkEditorContent(
                 enabled = !isProgress,
                 label = { Text(text = stringResource(RS.he_subject)) },
                 trailingIcon = {
-                    if (existingSubjects.isNotEmpty())
+                    if (existingSubjects.isNotEmpty()) {
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                    }
                 },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
@@ -162,7 +166,7 @@ internal fun HomeworkEditorContent(
                 singleLine = true,
                 colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
                 modifier = Modifier
-                    .menuAnchor()
+                    .menuAnchor(MenuAnchorType.PrimaryEditable)
                     .fillMaxWidth()
                     .placeholder(
                         visible = isProgress,
@@ -173,7 +177,6 @@ internal fun HomeworkEditorContent(
             ExposedDropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
-                focusable = false,
             ) {
                 existingSubjects.forEach { subject ->
                     DropdownMenuItem(
@@ -291,10 +294,7 @@ private fun SimpleTextField(
     if (value.isEmpty() && (label != null)) {
         @Composable
         fun TextFieldColors.labelColor(enabled: Boolean): State<Color> {
-            val targetValue = when {
-                !enabled -> disabledLabelColor
-                else -> unfocusedLabelColor
-            }
+            val targetValue = if (enabled) unfocusedLabelColor else disabledLabelColor
             return rememberUpdatedState(targetValue)
         }
 

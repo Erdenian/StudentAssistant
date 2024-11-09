@@ -67,7 +67,9 @@ internal fun PagerTabStrip(
                         scrollCoroutineScope.launch { state.scrollBy(-delta) }
                     },
                     onDragStopped = {
-                        launch { state.animateScrollToPage(state.currentPage + state.currentPageOffsetFraction.roundToInt()) }
+                        launch {
+                            state.animateScrollToPage(state.currentPage + state.currentPageOffsetFraction.roundToInt())
+                        }
                     },
                 ),
             content = {
@@ -213,10 +215,10 @@ private fun Color.transitionTo(color: Color, progress: Float): Color {
     val invertedProgress = 1 - progress
     fun Float.square() = this * this
     return Color(
-        sqrt(this.red.square() * invertedProgress + color.red.square() * progress),
-        sqrt(this.green.square() * invertedProgress + color.green.square() * progress),
-        sqrt(this.blue.square() * invertedProgress + color.blue.square() * progress),
-        sqrt(this.alpha.square() * invertedProgress + color.alpha.square() * progress),
+        red = sqrt(this.red.square() * invertedProgress + color.red.square() * progress),
+        green = sqrt(this.green.square() * invertedProgress + color.green.square() * progress),
+        blue = sqrt(this.blue.square() * invertedProgress + color.blue.square() * progress),
+        alpha = sqrt(this.alpha.square() * invertedProgress + color.alpha.square() * progress),
     )
 }
 

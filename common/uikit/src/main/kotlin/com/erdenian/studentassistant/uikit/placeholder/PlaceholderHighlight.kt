@@ -141,25 +141,21 @@ private data class Shimmer(
             highlightColor.copy(alpha = 0f),
         ),
         center = Offset(x = 0f, y = 0f),
-        radius = (max(size.width, size.height) * progress * 2).coerceAtLeast(0.01f),
+        radius = (max(size.width, size.height) * progress * 2).coerceAtLeast(@Suppress("MagicNumber") 0.01f),
     )
 
-    override fun alpha(progress: Float): Float = when {
-        // From 0f...ProgressForOpaqueAlpha we animate from 0..1
-        progress <= progressForMaxAlpha -> {
+    override fun alpha(progress: Float): Float =
+        if (progress <= progressForMaxAlpha) { // From 0f...ProgressForOpaqueAlpha we animate from 0..1
             lerp(
                 start = 0f,
                 stop = 1f,
                 fraction = progress / progressForMaxAlpha,
             )
-        }
-        // From ProgressForOpaqueAlpha..1f we animate from 1..0
-        else -> {
+        } else { // From ProgressForOpaqueAlpha..1f we animate from 1..0
             lerp(
                 start = 1f,
                 stop = 0f,
                 fraction = (progress - progressForMaxAlpha) / (1f - progressForMaxAlpha),
             )
         }
-    }
 }

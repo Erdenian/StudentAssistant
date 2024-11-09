@@ -33,12 +33,12 @@ class SemesterEditorViewModel @AssistedInject constructor(
     enum class Error {
         EMPTY_NAME,
         SEMESTER_EXISTS,
-        WRONG_DATES
+        WRONG_DATES,
     }
 
     enum class Operation {
         LOADING,
-        SAVING
+        SAVING,
     }
 
     private val isSemesterLoaded = MutableStateFlow(false)
@@ -90,10 +90,10 @@ class SemesterEditorViewModel @AssistedInject constructor(
     }
 
     val error = combine(
-        name,
-        firstDay,
-        lastDay,
-        semesterRepository.namesFlow.onEach { areNamesLoaded.value = true },
+        flow = name,
+        flow2 = firstDay,
+        flow3 = lastDay,
+        flow4 = semesterRepository.namesFlow.onEach { areNamesLoaded.value = true },
     ) { name, firstDay, lastDay, semestersNames ->
         when {
             name.isBlank() -> Error.EMPTY_NAME
@@ -114,8 +114,10 @@ class SemesterEditorViewModel @AssistedInject constructor(
         operationPrivate.value = Operation.SAVING
         viewModelScope.launch {
             semesterId?.let { id ->
-                semesterRepository.update(id, name.value, firstDay.value, lastDay.value)
-            } ?: semesterRepository.insert(name.value, firstDay.value, lastDay.value)
+                semesterRepository.update(
+                    id = id, name = name.value, firstDay = firstDay.value, lastDay = lastDay.value,
+                )
+            } ?: semesterRepository.insert(name = name.value, firstDay = firstDay.value, lastDay = lastDay.value)
             donePrivate.value = true
             operationPrivate.value = null
         }

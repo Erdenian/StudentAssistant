@@ -15,8 +15,9 @@ internal class SoftReferenceLazyComponentHolder<T>(private val creator: MainComp
 
     fun get(context: Context): T {
         val fromReference = reference?.get()
-        return if (fromReference != null) fromReference
-        else {
+        return if (fromReference != null) {
+            fromReference
+        } else {
             val fromCreator = creator(context.findMainComponent())
             reference = SoftReference(fromCreator)
             fromCreator

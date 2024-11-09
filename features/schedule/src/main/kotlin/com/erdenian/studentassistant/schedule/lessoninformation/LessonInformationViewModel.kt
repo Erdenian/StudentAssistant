@@ -35,7 +35,7 @@ class LessonInformationViewModel @AssistedInject constructor(
     }
 
     enum class Operation {
-        DELETING_HOMEWORK
+        DELETING_HOMEWORK,
     }
 
     private val operationPrivate = MutableStateFlow<Operation?>(null)
@@ -53,13 +53,19 @@ class LessonInformationViewModel @AssistedInject constructor(
 
     val homeworks = combine(
         lessonPrivate.flatMapLatest { lesson ->
-            if (lesson != null) homeworkRepository.getActualFlow(lesson.subjectName)
-            else flowOf(emptyImmutableSortedSet())
+            if (lesson != null) {
+                homeworkRepository.getActualFlow(lesson.subjectName)
+            } else {
+                flowOf(emptyImmutableSortedSet())
+            }
         }.onEach { deletedHomeworkIds.value = emptySet() },
         deletedHomeworkIds,
     ) { homeworks, deletedIds ->
-        if (deletedIds.isEmpty()) homeworks
-        else homeworks.asSequence().filter { it.id !in deletedIds }.toImmutableSortedSet()
+        if (deletedIds.isEmpty()) {
+            homeworks
+        } else {
+            homeworks.asSequence().filter { it.id !in deletedIds }.toImmutableSortedSet()
+        }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     fun deleteHomework(id: Long) {

@@ -28,7 +28,7 @@ class HomeworksViewModel @Inject constructor(
 ) : AndroidViewModel(application) {
 
     enum class Operation {
-        DELETING_HOMEWORK
+        DELETING_HOMEWORK,
     }
 
     private val operationPrivate = MutableStateFlow<Operation?>(null)
@@ -46,8 +46,11 @@ class HomeworksViewModel @Inject constructor(
             this.onEach { deletedHomeworksIds.value = emptySet() },
             deletedHomeworksIds,
         ) { homeworks, deletedIds ->
-            if (deletedIds.isEmpty()) homeworks
-            else homeworks.asSequence().filter { it.id !in deletedIds }.toImmutableSortedSet()
+            if (deletedIds.isEmpty()) {
+                homeworks
+            } else {
+                homeworks.asSequence().filter { it.id !in deletedIds }.toImmutableSortedSet()
+            }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     val overdue = homeworkRepository.overdueFlow.stateWithDeleted()

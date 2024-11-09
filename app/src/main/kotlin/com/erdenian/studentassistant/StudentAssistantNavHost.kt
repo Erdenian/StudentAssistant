@@ -48,12 +48,14 @@ internal object MainRoutes {
     const val SETTINGS = "settings"
 }
 
+@Suppress("StringLiteralDuplication", "MaxLineLength")
 internal class StudentAssistantNavGraph(private val navController: NavHostController) {
 
     fun build(navGraphBuilder: NavGraphBuilder) = composables.forEach { it(navGraphBuilder) }
 
     private val composables = mutableListOf<NavGraphBuilder.() -> Unit>()
 
+    @Suppress("NullableToStringCall")
     private fun args(vararg arguments: Pair<String, Any?>) =
         arguments.asSequence().filter { it.second != null }.joinToString("&") { "${it.first}=${it.second}" }
 

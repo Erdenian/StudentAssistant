@@ -103,6 +103,7 @@ fun Modifier.placeholder(
  * @param contentFadeTransitionSpec The transition spec to use when fading the content
  * on/off screen. The boolean parameter defined for the transition is [visible].
  */
+@Suppress("MagicNumber")
 private fun Modifier.placeholderFoundation(
     visible: Boolean,
     color: Color,

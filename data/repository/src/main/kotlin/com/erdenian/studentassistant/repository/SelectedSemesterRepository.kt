@@ -33,7 +33,7 @@ class SelectedSemesterRepository(
         selectedSemesterIdFlow.value = null // To select default semester
     }
 
-    private var selectedSemesterIdFlow = MutableStateFlow<Long?>(null)
+    private val selectedSemesterIdFlow = MutableStateFlow<Long?>(null)
 
     private val selectedSharedFlow: SharedFlow<Semester?> = combineTransform(
         selectedSemesterIdFlow,

@@ -21,7 +21,7 @@ class SemesterRepository(
     }
 
     suspend fun update(id: Long, name: String, firstDay: LocalDate, lastDay: LocalDate): Unit =
-        semesterDao.update(SemesterEntity(name, firstDay, lastDay, id))
+        semesterDao.update(SemesterEntity(name = name, firstDay = firstDay, lastDay = lastDay, id = id))
 
     suspend fun delete(id: Long) {
         semesterDao.delete(id)

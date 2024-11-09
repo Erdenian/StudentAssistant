@@ -64,8 +64,7 @@ internal fun ScheduleContent(
     var currentDate: LocalDate? by rememberSaveable { mutableStateOf(null) }
 
     val state = remember(selectedSemester) {
-        if (selectedSemester == null) null
-        else SemesterWithState(selectedSemester, currentDate ?: LocalDate.now())
+        selectedSemester?.let { SemesterWithState(it, currentDate ?: LocalDate.now()) }
     }
 
     LaunchedEffect(state) {
@@ -92,13 +91,13 @@ internal fun ScheduleContent(
 
                     TopAppBarActions(
                         actions = listOfNotNull(
-                            if (state != null) {
+                            state?.let { _ ->
                                 ActionItem.AlwaysShow(
                                     name = stringResource(RS.s_calendar),
                                     imageVector = AppIcons.Today,
                                     onClick = { showDatePicker = true },
                                 )
-                            } else null,
+                            },
                             if (selectedSemester == null) {
                                 ActionItem.AlwaysShow(
                                     name = stringResource(RS.s_add),
@@ -111,12 +110,12 @@ internal fun ScheduleContent(
                                     onClick = onAddSemesterClick,
                                 )
                             },
-                            if (selectedSemester != null) {
+                            selectedSemester?.let { semester ->
                                 ActionItem.NeverShow(
                                     name = stringResource(RS.s_edit),
-                                    onClick = { onEditSemesterClick(selectedSemester) },
+                                    onClick = { onEditSemesterClick(semester) },
                                 )
-                            } else null,
+                            },
                         ),
                     )
 

@@ -20,11 +20,26 @@ class HomeworkRepository(
     // region Primary actions
 
     suspend fun insert(subjectName: String, description: String, deadline: LocalDate, semesterId: Long) {
-        homeworkDao.insert(HomeworkEntity(subjectName, description, deadline, semesterId))
+        homeworkDao.insert(
+            HomeworkEntity(
+                subjectName = subjectName,
+                description = description,
+                deadline = deadline,
+                semesterId = semesterId,
+            ),
+        )
     }
 
     suspend fun update(id: Long, subjectName: String, description: String, deadline: LocalDate, semesterId: Long) =
-        homeworkDao.update(HomeworkEntity(subjectName, description, deadline, semesterId, id))
+        homeworkDao.update(
+            HomeworkEntity(
+                subjectName = subjectName,
+                description = description,
+                deadline = deadline,
+                semesterId = semesterId,
+                id = id,
+            ),
+        )
 
     suspend fun delete(id: Long): Unit = homeworkDao.delete(id)
 

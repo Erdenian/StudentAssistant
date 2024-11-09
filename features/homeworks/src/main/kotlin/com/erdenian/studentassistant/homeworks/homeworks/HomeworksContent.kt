@@ -66,13 +66,13 @@ internal fun HomeworksContent(
                 actions = {
                     TopAppBarActions(
                         actions = listOfNotNull(
-                            if (selectedSemester != null) {
+                            selectedSemester?.let { semester ->
                                 ActionItem.AlwaysShow(
                                     name = stringResource(RS.h_add),
                                     imageVector = AppIcons.Add,
-                                    onClick = { onAddHomeworkClick(selectedSemester) },
+                                    onClick = { onAddHomeworkClick(semester) },
                                 )
-                            } else null,
+                            },
                         ),
                     )
                 },

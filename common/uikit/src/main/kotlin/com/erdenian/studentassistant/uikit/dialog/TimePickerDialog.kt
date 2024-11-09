@@ -142,7 +142,9 @@ private fun PickerDialog(
                 }
             }
 
-            CompositionLocalProvider(value = LocalContentColor provides AlertDialogDefaults.textContentColor) { content() }
+            CompositionLocalProvider(value = LocalContentColor provides AlertDialogDefaults.textContentColor) {
+                content()
+            }
 
             CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.primary) {
                 ProvideTextStyle(MaterialTheme.typography.labelLarge) {

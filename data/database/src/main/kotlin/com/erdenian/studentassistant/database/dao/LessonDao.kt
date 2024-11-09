@@ -82,7 +82,7 @@ abstract class LessonDao {
         byWeekday: ByWeekdayEntity,
     ): Unit = withContext(Dispatchers.IO) {
         delete(lesson.id)
-        insert(lesson, teachers, classrooms, byWeekday)
+        insert(lesson = lesson, teachers = teachers, classrooms = classrooms, byWeekday = byWeekday)
     }
 
     @Transaction
@@ -93,7 +93,7 @@ abstract class LessonDao {
         byDates: List<ByDateEntity>,
     ): Unit = withContext(Dispatchers.IO) {
         delete(lesson.id)
-        insert(lesson, teachers, classrooms, byDates)
+        insert(lesson = lesson, teachers = teachers, classrooms = classrooms, byDates = byDates)
     }
 
     @Query("DELETE FROM lessons WHERE _id = :id")

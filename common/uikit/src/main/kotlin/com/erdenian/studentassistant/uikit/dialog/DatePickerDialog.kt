@@ -39,7 +39,7 @@ fun DatePickerDialog(
             }
 
             override fun isSelectableYear(year: Int) = year in yearRange
-            override fun isSelectableDate(utcTimeMillis: Long) = millisRange?.let { utcTimeMillis in it } ?: true
+            override fun isSelectableDate(utcTimeMillis: Long) = millisRange?.let { utcTimeMillis in it } != false
         },
     )
     DatePickerDialog(

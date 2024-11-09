@@ -206,8 +206,11 @@ fun LessonEditorScreen(
             } else {
                 customOperaionMessageId = RS.le_rename_others_progress
                 coroutineScope.launch {
-                    if (viewModel.isSubjectNameChangedAndNotLast()) showSaveDialog = true
-                    else viewModel.save()
+                    if (viewModel.isSubjectNameChangedAndNotLast()) {
+                        showSaveDialog = true
+                    } else {
+                        viewModel.save()
+                    }
                     customOperaionMessageId = null
                 }
             }
@@ -215,8 +218,11 @@ fun LessonEditorScreen(
         onDeleteClick = {
             customOperaionMessageId = RS.le_delete_homeworks_progress
             coroutineScope.launch {
-                if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) showDeleteWithHomeworksDialog = true
-                else showDeleteWithoutHomeworksDialog = true
+                if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) {
+                    showDeleteWithHomeworksDialog = true
+                } else {
+                    showDeleteWithoutHomeworksDialog = true
+                }
                 customOperaionMessageId = null
             }
         },

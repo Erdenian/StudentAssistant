@@ -8,6 +8,7 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -58,8 +59,11 @@ internal fun AutoCompleteTextField(
 
     val autocompleteItems = remember(items, textFieldValue.text) {
         val text = textFieldValue.text.trim()
-        if (text.length < LENGTH_TO_EXPAND) emptyList()
-        else items.filter { it.contains(text, ignoreCase = true) && (it.length > text.length) }
+        if (text.length < LENGTH_TO_EXPAND) {
+            emptyList()
+        } else {
+            items.filter { it.contains(text, ignoreCase = true) && (it.length > text.length) }
+        }
     }
 
     BaseAutoCompleteTextField(
@@ -134,8 +138,11 @@ internal fun MultiAutoCompleteTextField(
 
     val autoCompleteItems = remember(items, textFieldValue.text, autoCompleteRange) {
         val text = textFieldValue.text.substring(autoCompleteRange).trim()
-        if (text.length < LENGTH_TO_EXPAND) emptyList()
-        else items.filter { it.contains(text, ignoreCase = true) && (it.length > text.length) }
+        if (text.length < LENGTH_TO_EXPAND) {
+            emptyList()
+        } else {
+            items.filter { it.contains(text, ignoreCase = true) && (it.length > text.length) }
+        }
     }
 
     BaseAutoCompleteTextField(
@@ -222,7 +229,7 @@ private fun BaseAutoCompleteTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = modifier
-                .menuAnchor()
+                .menuAnchor(MenuAnchorType.PrimaryEditable)
                 .onFocusChanged { focusState ->
                     hasFocus = focusState.hasFocus
                     expanded = false
@@ -248,7 +255,6 @@ private fun BaseAutoCompleteTextField(
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            focusable = false,
         ) {
             autoCompleteItems.forEach { item ->
                 DropdownMenuItem(

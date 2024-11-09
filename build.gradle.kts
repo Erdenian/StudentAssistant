@@ -53,11 +53,11 @@ fun Project.configureAndroidIfExists(action: com.android.build.gradle.BaseExtens
 }
 
 fun com.android.build.gradle.BaseExtension.ifApplication(
-    action: com.android.build.gradle.internal.dsl.BaseAppModuleExtension.() -> Unit
+    action: com.android.build.gradle.internal.dsl.BaseAppModuleExtension.() -> Unit,
 ) = if (this is com.android.build.gradle.internal.dsl.BaseAppModuleExtension) action() else Unit
 
 fun com.android.build.gradle.BaseExtension.ifLibrary(
-    action: com.android.build.gradle.LibraryExtension.() -> Unit
+    action: com.android.build.gradle.LibraryExtension.() -> Unit,
 ) = if (this is com.android.build.gradle.LibraryExtension) action() else Unit
 
 // endregion
@@ -74,7 +74,7 @@ subprojects {
 
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
-                "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
+                "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
             )
         }
     }

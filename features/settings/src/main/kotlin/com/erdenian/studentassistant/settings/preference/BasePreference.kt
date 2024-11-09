@@ -105,7 +105,7 @@ private fun BasePreferencePreview() = AppTheme {
 @Composable
 private fun BasePreferenceLongPreview() = AppTheme {
     BasePreference(
-        title = "Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title",
+        title = "Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title",
         icon = rememberVectorPainter(AppIcons.Timer),
         description = "Description Description Description Description Description Description Description Description",
         onClick = {},
@@ -117,7 +117,7 @@ private fun BasePreferenceLongPreview() = AppTheme {
 @Composable
 private fun BasePreferenceWithContentEndPreview() = AppTheme {
     BasePreference(
-        title = "Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title",
+        title = "Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title",
         icon = rememberVectorPainter(AppIcons.Timer),
         description = "Description Description Description Description Description Description Description Description",
         contentEnd = {
@@ -136,7 +136,7 @@ private fun BasePreferenceWithContentEndPreview() = AppTheme {
 @Composable
 private fun BasePreferenceWithContentEndLongPreview() = AppTheme {
     BasePreference(
-        title = "Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title",
+        title = "Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title",
         icon = rememberVectorPainter(AppIcons.Timer),
         description = "Description Description Description Description Description Description Description Description",
         contentEnd = {

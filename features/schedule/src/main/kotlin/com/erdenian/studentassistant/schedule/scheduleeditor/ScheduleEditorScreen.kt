@@ -148,8 +148,11 @@ fun ScheduleEditorScreen(
         onDeleteLessonClick = { lesson ->
             showHomeworksCounterOperation = true
             coroutineScope.launch {
-                if (viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson)) lessonForDeleteWithHomeworksDialog = lesson
-                else lessonForDeleteWithoutHomeworksDialog = lesson
+                if (viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson)) {
+                    lessonForDeleteWithHomeworksDialog = lesson
+                } else {
+                    lessonForDeleteWithoutHomeworksDialog = lesson
+                }
                 showHomeworksCounterOperation = false
             }
         },

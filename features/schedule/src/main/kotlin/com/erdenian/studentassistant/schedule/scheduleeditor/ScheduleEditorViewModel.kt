@@ -35,7 +35,7 @@ class ScheduleEditorViewModel @AssistedInject constructor(
 
     enum class Operation {
         DELETING_LESSON,
-        DELETING_SEMESTER
+        DELETING_SEMESTER,
     }
 
     private val operationPrivate = MutableStateFlow<Operation?>(null)
@@ -50,8 +50,11 @@ class ScheduleEditorViewModel @AssistedInject constructor(
         lessonRepository.getAllFlow(semesterId, dayOfWeek).onEach { deletedLessonIds.value = emptySet() },
         deletedLessonIds.asStateFlow(),
     ) { lessons, deletedIds ->
-        if (deletedIds.isEmpty()) lessons
-        else lessons.asSequence().filter { it.id !in deletedIds }.toImmutableSortedSet()
+        if (deletedIds.isEmpty()) {
+            lessons
+        } else {
+            lessons.asSequence().filter { it.id !in deletedIds }.toImmutableSortedSet()
+        }
     }
 
     fun deleteSemester() {

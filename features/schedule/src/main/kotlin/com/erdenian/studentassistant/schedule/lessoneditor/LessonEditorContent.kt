@@ -113,7 +113,9 @@ internal fun LessonEditorContent(
                                     loading = isProgress,
                                     onClick = onDeleteClick,
                                 )
-                            } else null,
+                            } else {
+                                null
+                            },
                         ),
                     )
                 },

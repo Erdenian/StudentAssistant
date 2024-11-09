@@ -49,15 +49,15 @@ internal fun StudentAssistantApp() {
                 navGraph = navGraph,
                 modifier = Modifier
                     .padding(paddingValues)
-                    .consumeWindowInsets(paddingValues)
+                    .consumeWindowInsets(paddingValues),
             )
         },
         bottomBar = {
             StudentAssistantBottomNavigation(
                 navBackStackEntry = navBackStackEntry,
-                navGraph = navGraph
+                navGraph = navGraph,
             )
-        }
+        },
     )
 }
 
@@ -65,13 +65,13 @@ internal fun StudentAssistantApp() {
 private fun StudentAssistantBottomNavigation(
     navGraph: StudentAssistantNavGraph,
     navBackStackEntry: NavBackStackEntry?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     data class Item(
         val imageVector: ImageVector,
         @StringRes val labelId: Int,
         val route: String,
-        val onClick: (restoreState: Boolean) -> Unit
+        val onClick: (restoreState: Boolean) -> Unit,
     )
 
     val items = remember(navGraph) {
@@ -80,20 +80,20 @@ private fun StudentAssistantBottomNavigation(
                 imageVector = AppIcons.Schedule,
                 labelId = RS.s_title,
                 route = MainRoutes.SCHEDULE,
-                onClick = navGraph::navigateToSchedule
+                onClick = navGraph::navigateToSchedule,
             ),
             Item(
                 imageVector = AppIcons.AutoMirrored.MenuBook,
                 labelId = RS.h_title,
                 route = MainRoutes.HOMEWORKS,
-                onClick = navGraph::navigateToHomeworks
+                onClick = navGraph::navigateToHomeworks,
             ),
             Item(
                 imageVector = AppIcons.Settings,
                 labelId = RS.st_title,
                 route = MainRoutes.SETTINGS,
-                onClick = navGraph::navigateToSettings
-            )
+                onClick = navGraph::navigateToSettings,
+            ),
         )
     }
 
@@ -107,14 +107,14 @@ private fun StudentAssistantBottomNavigation(
                     Text(
                         text = stringResource(item.labelId),
                         overflow = TextOverflow.Ellipsis,
-                        maxLines = 1
+                        maxLines = 1,
                     )
                 },
                 onClick = {
                     val restoreState = (selectedRoute != item.route)
                     selectedRoute = item.route
                     item.onClick(restoreState)
-                }
+                },
             )
         }
     }

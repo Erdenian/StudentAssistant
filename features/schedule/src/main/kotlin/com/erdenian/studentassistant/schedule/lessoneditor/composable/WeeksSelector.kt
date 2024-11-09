@@ -372,7 +372,7 @@ private fun CheckBoxWithTextLongPreview() = AppTheme {
 @Preview(name = "Disabled", group = "CheckBoxWithText", showBackground = true)
 @Composable
 private fun CheckBoxWithTextDisabledPreview() = AppTheme {
-    CheckBoxWithText(true, "Disabled", null, enabled = false)
+    CheckBoxWithText(checked = true, text = "Disabled", onCheckedChange = null, enabled = false)
 }
 
 @Preview(
@@ -382,9 +382,9 @@ private fun CheckBoxWithTextDisabledPreview() = AppTheme {
 private fun CheckBoxWithTextDarkPreview() = AppTheme {
     CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onBackground) {
         CheckBoxWithText(
-            true,
-            "Dark",
-            null,
+            checked = true,
+            text = "Dark",
+            onCheckedChange = null,
             modifier = Modifier.background(MaterialTheme.colorScheme.background),
         )
     }

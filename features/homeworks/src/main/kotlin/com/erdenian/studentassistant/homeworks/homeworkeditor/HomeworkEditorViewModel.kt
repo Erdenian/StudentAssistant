@@ -48,13 +48,13 @@ class HomeworkEditorViewModel @AssistedInject constructor(
 
     enum class Error {
         EMPTY_SUBJECT,
-        EMPTY_DESCRIPTION
+        EMPTY_DESCRIPTION,
     }
 
     enum class Operation {
         LOADING,
         SAVING,
-        DELETING
+        DELETING,
     }
 
     private val isHomeworkLoaded = MutableStateFlow(homeworkId == null)
@@ -128,9 +128,20 @@ class HomeworkEditorViewModel @AssistedInject constructor(
         operationPrivate.value = Operation.SAVING
         viewModelScope.launch {
             if (homeworkId != null) {
-                homeworkRepository.update(homeworkId, subjectName.value, description.value, deadline.value, semesterId)
+                homeworkRepository.update(
+                    id = homeworkId,
+                    subjectName = subjectName.value,
+                    description = description.value,
+                    deadline = deadline.value,
+                    semesterId = semesterId,
+                )
             } else {
-                homeworkRepository.insert(subjectName.value, description.value, deadline.value, semesterId)
+                homeworkRepository.insert(
+                    subjectName = subjectName.value,
+                    description = description.value,
+                    deadline = deadline.value,
+                    semesterId = semesterId,
+                )
             }
 
             operationPrivate.value = null

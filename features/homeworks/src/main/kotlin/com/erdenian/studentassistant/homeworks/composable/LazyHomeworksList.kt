@@ -56,13 +56,16 @@ internal fun LazyHomeworksList(
             modifier = Modifier.fillMaxSize(),
         ) {
             when {
-                (overdueHomeworksState == null) || (actualHomeworksState == null) || (pastHomeworksState == null) ->
+                (overdueHomeworksState == null) || (actualHomeworksState == null) || (pastHomeworksState == null) -> {
                     DelayedVisibility { CircularProgressIndicator() }
-                overdueHomeworksState.isEmpty() && actualHomeworksState.isEmpty() && pastHomeworksState.isEmpty() -> Text(
-                    text = stringResource(RS.lhl_no_homeworks),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal),
-                )
+                }
+                overdueHomeworksState.isEmpty() && actualHomeworksState.isEmpty() && pastHomeworksState.isEmpty() -> {
+                    Text(
+                        text = stringResource(RS.lhl_no_homeworks),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal),
+                    )
+                }
                 else -> {
                     val deadlineFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
 
