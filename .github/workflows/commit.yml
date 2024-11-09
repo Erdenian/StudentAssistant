@@ -32,5 +32,5 @@ jobs:
         if: always()
         with:
           name: Detekt
-          path: "**/build/reports/detekt/detekt.html"
+          path: "**/build/reports/detekt/"
           if-no-files-found: error
