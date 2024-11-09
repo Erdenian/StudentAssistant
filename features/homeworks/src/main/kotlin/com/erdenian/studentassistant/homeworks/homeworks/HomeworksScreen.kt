@@ -18,7 +18,7 @@ import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
 fun HomeworksScreen(
     viewModel: HomeworksViewModel,
     navigateToCreateHomework: (semesterId: Long) -> Unit,
-    navigateToEditHomework: (semesterId: Long, homeworkId: Long) -> Unit
+    navigateToEditHomework: (semesterId: Long, homeworkId: Long) -> Unit,
 ) {
     val semesters by viewModel.allSemesters.collectAsState()
     val selectedSemester by viewModel.selectedSemester.collectAsState()
@@ -41,7 +41,7 @@ fun HomeworksScreen(
             dismissButton = {
                 TextButton(
                     onClick = { homeworkForDeleteDialog = null },
-                    content = { Text(text = stringResource(RS.h_delete_no)) }
+                    content = { Text(text = stringResource(RS.h_delete_no)) },
                 )
             },
             confirmButton = {
@@ -50,9 +50,9 @@ fun HomeworksScreen(
                         viewModel.deleteHomework(homework.id)
                         homeworkForDeleteDialog = null
                     },
-                    content = { Text(text = stringResource(RS.h_delete_yes)) }
+                    content = { Text(text = stringResource(RS.h_delete_yes)) },
                 )
-            }
+            },
         )
     }
 
@@ -65,6 +65,6 @@ fun HomeworksScreen(
         onSelectedSemesterChange = { viewModel.selectSemester(semesters.list[it].id) },
         onAddHomeworkClick = { navigateToCreateHomework(it.id) },
         onHomeworkClick = { navigateToEditHomework(it.semesterId, it.id) },
-        onDeleteHomeworkClick = { homeworkForDeleteDialog = it }
+        onDeleteHomeworkClick = { homeworkForDeleteDialog = it },
     )
 }

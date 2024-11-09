@@ -53,7 +53,7 @@ interface Lesson : Comparable<Lesson>, Parcelable {
         { it.classrooms.hashCode() },
         { it.lessonRepeat.hashCode() },
         Lesson::id,
-        Lesson::semesterId
+        Lesson::semesterId,
     )
 
     /**

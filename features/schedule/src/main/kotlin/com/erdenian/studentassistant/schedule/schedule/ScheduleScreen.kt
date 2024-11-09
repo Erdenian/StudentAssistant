@@ -16,7 +16,7 @@ fun ScheduleScreen(
     viewModel: ScheduleViewModel,
     navigateToAddSemester: () -> Unit,
     navigateToEditSchedule: (semesterId: Long) -> Unit,
-    navigateToShowLessonInformation: (lessonId: Long) -> Unit
+    navigateToShowLessonInformation: (lessonId: Long) -> Unit,
 ) {
     val semesters by viewModel.allSemesters.collectAsState()
     val semestersNames by remember { derivedStateOf { semesters.map { it.name } } }
@@ -37,6 +37,6 @@ fun ScheduleScreen(
         onSelectedSemesterChange = { index -> viewModel.selectSemester(semesters.list[index].id) },
         onAddSemesterClick = navigateToAddSemester,
         onEditSemesterClick = { navigateToEditSchedule(it.id) },
-        onLessonClick = { navigateToShowLessonInformation(it.id) }
+        onLessonClick = { navigateToShowLessonInformation(it.id) },
     )
 }

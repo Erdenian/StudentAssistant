@@ -65,6 +65,6 @@ interface Semester : Comparable<Semester>, Parcelable {
         Semester::lastDay,
         Semester::firstDay,
         Semester::name,
-        Semester::id
+        Semester::id,
     )
 }

@@ -24,7 +24,7 @@ class HomeworksViewModel @Inject constructor(
     application: Application,
     private val selectedSemesterRepository: SelectedSemesterRepository,
     semesterRepository: SemesterRepository,
-    private val homeworkRepository: HomeworkRepository
+    private val homeworkRepository: HomeworkRepository,
 ) : AndroidViewModel(application) {
 
     enum class Operation {
@@ -44,7 +44,7 @@ class HomeworksViewModel @Inject constructor(
     private fun Flow<ImmutableSortedSet<Homework>>.stateWithDeleted() =
         combine(
             this.onEach { deletedHomeworksIds.value = emptySet() },
-            deletedHomeworksIds
+            deletedHomeworksIds,
         ) { homeworks, deletedIds ->
             if (deletedIds.isEmpty()) homeworks
             else homeworks.asSequence().filter { it.id !in deletedIds }.toImmutableSortedSet()

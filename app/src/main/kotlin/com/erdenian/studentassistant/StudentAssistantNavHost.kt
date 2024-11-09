@@ -31,14 +31,14 @@ import java.time.DayOfWeek
 internal fun StudentAssistantNavHost(
     navController: NavHostController,
     navGraph: StudentAssistantNavGraph,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) = NavHost(
     navController = navController,
     startDestination = MainRoutes.SCHEDULE,
     enterTransition = { fadeIn(tween()) },
     exitTransition = { fadeOut(tween()) },
     modifier = modifier,
-    builder = navGraph::build
+    builder = navGraph::build,
 )
 
 internal object MainRoutes {
@@ -88,7 +88,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                     viewModel = viewModel,
                     navigateToAddSemester = ::navigateToSemesterEditor,
                     navigateToEditSchedule = ::navigateToScheduleEditor,
-                    navigateToShowLessonInformation = ::navigateToLessonInformation
+                    navigateToShowLessonInformation = ::navigateToLessonInformation,
                 )
             }
         }
@@ -118,7 +118,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                 HomeworksScreen(
                     viewModel = viewModel,
                     navigateToCreateHomework = ::navigateToHomeworkEditor,
-                    navigateToEditHomework = ::navigateToHomeworkEditor
+                    navigateToEditHomework = ::navigateToHomeworkEditor,
                 )
             }
         }
@@ -146,7 +146,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                 val viewModel = settingsComponentHolder.viewModel(SettingsComponent::settingsViewModel)
 
                 SettingsScreen(
-                    viewModel = viewModel
+                    viewModel = viewModel,
                 )
             }
         }
@@ -165,8 +165,8 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                 arguments = listOf(
                     navArgument("lesson_id") {
                         type = NavType.LongType
-                    }
-                )
+                    },
+                ),
             ) { backStackEntry ->
                 val lessonId = checkNotNull(backStackEntry.arguments?.getLong("lesson_id", -1L)?.takeIf { it >= 0 })
                 val viewModel = scheduleComponentHolder.viewModel { lessonInformationViewModelFactory.get(lessonId) }
@@ -182,7 +182,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                     },
                     navigateToCreateHomework = { semesterId, subjectName ->
                         navigateToHomeworkEditor(semesterId, subjectName = subjectName)
-                    }
+                    },
                 )
             }
         }
@@ -193,7 +193,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
     // region Semester Editor
 
     private fun navigateToSemesterEditor(semesterId: Long? = null) = navController.navigate(
-        "semester_editor?${args("semester_id" to semesterId)}"
+        "semester_editor?${args("semester_id" to semesterId)}",
     )
 
     init {
@@ -204,15 +204,15 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                     navArgument("semester_id") {
                         type = NavType.LongType
                         defaultValue = -1L
-                    }
-                )
+                    },
+                ),
             ) { backStackEntry ->
                 val semesterId = backStackEntry.arguments?.getLong("semester_id", -1L)?.takeIf { it >= 0 }
                 val viewModel = scheduleComponentHolder.viewModel { semesterEditorViewModelFactory.get(semesterId) }
 
                 SemesterEditorScreen(
                     viewModel = viewModel,
-                    navigateBack = { navController.popBackStack() }
+                    navigateBack = { navController.popBackStack() },
                 )
             }
         }
@@ -231,8 +231,8 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                 arguments = listOf(
                     navArgument("semester_id") {
                         type = NavType.LongType
-                    }
-                )
+                    },
+                ),
             ) { backStackEntry ->
                 val semesterId = checkNotNull(backStackEntry.arguments?.getLong("semester_id", -1L)?.takeIf { it >= 0 })
                 val viewModel = scheduleComponentHolder.viewModel { scheduleEditorViewModelFactory.get(semesterId) }
@@ -246,7 +246,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                     },
                     navigateToCreateLesson = { semester, dayOfWeek ->
                         navigateToLessonEditor(semester, dayOfWeek = dayOfWeek)
-                    }
+                    },
                 )
             }
         }
@@ -261,13 +261,13 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
         dayOfWeek: DayOfWeek? = null,
         subjectName: String? = null,
         lessonId: Long? = null,
-        copy: Boolean? = null
+        copy: Boolean? = null,
     ) {
         val arguments = args(
             "day_of_week" to dayOfWeek?.value,
             "subject_name" to subjectName,
             "lesson_id" to lessonId,
-            "copy" to copy
+            "copy" to copy,
         )
         navController.navigate("lesson_editor/$semesterId?$arguments")
     }
@@ -296,8 +296,8 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                     navArgument("copy") {
                         type = NavType.BoolType
                         defaultValue = false
-                    }
-                )
+                    },
+                ),
             ) { backStackEntry ->
                 val arguments = checkNotNull(backStackEntry.arguments)
                 val semesterId = checkNotNull(arguments.getLong("semester_id", -1L).takeIf { it >= 0 })
@@ -318,7 +318,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
 
                 LessonEditorScreen(
                     viewModel = viewModel,
-                    navigateBack = { navController.popBackStack() }
+                    navigateBack = { navController.popBackStack() },
                 )
             }
         }
@@ -332,7 +332,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
         val arguments = args(
             "semester_id" to semesterId,
             "homework_id" to homeworkId,
-            "subject_name" to subjectName
+            "subject_name" to subjectName,
         )
         navController.navigate("homework_editor?$arguments")
     }
@@ -353,8 +353,8 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                     navArgument("homework_id") {
                         type = NavType.LongType
                         defaultValue = -1L
-                    }
-                )
+                    },
+                ),
             ) { backStackEntry ->
                 val arguments = checkNotNull(backStackEntry.arguments)
                 val semesterId = checkNotNull(arguments.getLong("semester_id", -1L).takeIf { it >= 0 })
@@ -375,7 +375,7 @@ internal class StudentAssistantNavGraph(private val navController: NavHostContro
                     navigateBack = { navController.popBackStack() },
                     navigateToCreateLesson = { semester, subject ->
                         navigateToLessonEditor(semester, subjectName = subject)
-                    }
+                    },
                 )
             }
         }

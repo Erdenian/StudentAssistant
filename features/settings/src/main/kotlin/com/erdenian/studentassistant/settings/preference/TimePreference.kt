@@ -18,7 +18,7 @@ internal fun TimePreference(
     value: LocalTime,
     onValueChange: (LocalTime) -> Unit,
     modifier: Modifier = Modifier,
-    icon: Painter? = null
+    icon: Painter? = null,
 ) {
     val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
     var showTimePicker by remember { mutableStateOf(false) }
@@ -28,7 +28,7 @@ internal fun TimePreference(
         description = value.format(timeFormatter),
         icon = icon,
         onClick = { showTimePicker = true },
-        modifier = modifier
+        modifier = modifier,
     )
 
     if (showTimePicker) {
@@ -38,7 +38,7 @@ internal fun TimePreference(
                 onValueChange(newValue)
             },
             onDismiss = { showTimePicker = false },
-            initialTime = value
+            initialTime = value,
         )
     }
 }

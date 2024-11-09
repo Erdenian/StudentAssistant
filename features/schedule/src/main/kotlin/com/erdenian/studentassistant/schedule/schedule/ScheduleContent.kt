@@ -59,7 +59,7 @@ internal fun ScheduleContent(
     onSelectedSemesterChange: (Int) -> Unit,
     onAddSemesterClick: () -> Unit,
     onEditSemesterClick: (semester: Semester) -> Unit,
-    onLessonClick: (Lesson) -> Unit
+    onLessonClick: (Lesson) -> Unit,
 ) {
     var currentDate: LocalDate? by rememberSaveable { mutableStateOf(null) }
 
@@ -82,7 +82,7 @@ internal fun ScheduleContent(
                         TopAppBarDropdownMenu(
                             items = semestersNames,
                             selectedItem = selectedSemester.name,
-                            onSelectedItemChange = { index, _ -> onSelectedSemesterChange(index) }
+                            onSelectedItemChange = { index, _ -> onSelectedSemesterChange(index) },
                         )
                     }
                 },
@@ -96,28 +96,28 @@ internal fun ScheduleContent(
                                 ActionItem.AlwaysShow(
                                     name = stringResource(RS.s_calendar),
                                     imageVector = AppIcons.Today,
-                                    onClick = { showDatePicker = true }
+                                    onClick = { showDatePicker = true },
                                 )
                             } else null,
                             if (selectedSemester == null) {
                                 ActionItem.AlwaysShow(
                                     name = stringResource(RS.s_add),
                                     imageVector = AppIcons.Add,
-                                    onClick = onAddSemesterClick
+                                    onClick = onAddSemesterClick,
                                 )
                             } else {
                                 ActionItem.NeverShow(
                                     name = stringResource(RS.s_add),
-                                    onClick = onAddSemesterClick
+                                    onClick = onAddSemesterClick,
                                 )
                             },
                             if (selectedSemester != null) {
                                 ActionItem.NeverShow(
                                     name = stringResource(RS.s_edit),
-                                    onClick = { onEditSemesterClick(selectedSemester) }
+                                    onClick = { onEditSemesterClick(selectedSemester) },
                                 )
-                            } else null
-                        )
+                            } else null,
+                        ),
                     )
 
                     if (state != null && showDatePicker) {
@@ -128,25 +128,25 @@ internal fun ScheduleContent(
                             },
                             onDismiss = { showDatePicker = false },
                             initialSelectedDate = state.currentDate,
-                            datesRange = state.semester.dateRange
+                            datesRange = state.semester.dateRange,
                         )
                     }
-                }
+                },
             )
-        }
+        },
     ) { paddingValues ->
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(paddingValues),
         ) {
             if (state == null) {
                 Text(
                     text = stringResource(RS.s_no_schedule),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal)
+                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal),
                 )
             } else {
                 val shortTitleFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d MMMM") }
@@ -157,13 +157,13 @@ internal fun ScheduleContent(
                     titleGetter = { page ->
                         val date = state.semester.firstDay.plusDays(page.toLong())
                         date.format(if (date.year == LocalDate.now().year) shortTitleFormatter else fullTitleFormatter)
-                    }
+                    },
                 )
 
                 HorizontalPager(
                     state = state.pagerState,
                     key = { state.semester.id to state.getDate(it) },
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
                 ) { page ->
                     val lessons by rememberLessons(state.getDate(page))
                     LazyLessonsList(lessons = lessons, onLessonClick = onLessonClick)
@@ -180,8 +180,8 @@ private data class SemesterWithState(val semester: Semester, val pagerState: Pag
         semester,
         PagerStateImpl(
             initialPage = semester.getPosition(initialDate),
-            updatedPageCount = { semester.length }
-        )
+            updatedPageCount = { semester.length },
+        ),
     )
 
     companion object {
@@ -198,7 +198,7 @@ private data class SemesterWithState(val semester: Semester, val pagerState: Pag
     private class PagerStateImpl(
         initialPage: Int = 0,
         initialPageOffsetFraction: Float = 0.0f,
-        updatedPageCount: () -> Int
+        updatedPageCount: () -> Int,
     ) : PagerState(initialPage, initialPageOffsetFraction) {
         var pageCountState = mutableStateOf(updatedPageCount)
         override val pageCount: Int get() = pageCountState.value.invoke()
@@ -216,7 +216,7 @@ private fun ScheduleScreenNoSchedulePreview() = AppTheme {
         onSelectedSemesterChange = {},
         onAddSemesterClick = {},
         onEditSemesterClick = {},
-        onLessonClick = {}
+        onLessonClick = {},
     )
 }
 
@@ -231,7 +231,7 @@ private fun ScheduleScreenLoadingPreview() = AppTheme {
         onSelectedSemesterChange = {},
         onAddSemesterClick = {},
         onEditSemesterClick = {},
-        onLessonClick = {}
+        onLessonClick = {},
     )
 }
 
@@ -246,7 +246,7 @@ private fun ScheduleScreenNoLessonsPreview() = AppTheme {
         onSelectedSemesterChange = {},
         onAddSemesterClick = {},
         onEditSemesterClick = {},
-        onLessonClick = {}
+        onLessonClick = {},
     )
 }
 
@@ -262,6 +262,6 @@ private fun ScheduleScreenPreview() = AppTheme {
         onSelectedSemesterChange = {},
         onAddSemesterClick = {},
         onEditSemesterClick = {},
-        onLessonClick = {}
+        onLessonClick = {},
     )
 }

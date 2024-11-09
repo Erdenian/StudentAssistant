@@ -18,7 +18,7 @@ import com.erdenian.studentassistant.utils.toast
 @Composable
 fun SemesterEditorScreen(
     viewModel: SemesterEditorViewModel,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
 ) {
     val done by viewModel.done.collectAsState()
     LaunchedEffect(done) {
@@ -83,6 +83,6 @@ fun SemesterEditorScreen(
             viewModel.name.value = value.toSingleLine()
         },
         onFirstDayChange = { viewModel.firstDay.value = it },
-        onLastDayChange = { viewModel.lastDay.value = it }
+        onLastDayChange = { viewModel.lastDay.value = it },
     )
 }

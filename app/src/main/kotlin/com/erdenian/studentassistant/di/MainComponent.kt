@@ -20,7 +20,7 @@ interface MainComponent {
         fun create(
             @BindsInstance application: Application,
             databaseModule: DatabaseModule,
-            repositoryModule: RepositoryModule
+            repositoryModule: RepositoryModule,
         ): MainComponent
     }
 

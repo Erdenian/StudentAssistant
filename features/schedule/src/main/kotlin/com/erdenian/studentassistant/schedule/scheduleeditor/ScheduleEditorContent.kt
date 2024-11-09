@@ -49,7 +49,7 @@ internal fun ScheduleEditorContent(
     onLessonClick: (Lesson) -> Unit,
     onCopyLessonClick: (Lesson) -> Unit,
     onDeleteLessonClick: (Lesson) -> Unit,
-    onAddLessonClick: (DayOfWeek) -> Unit
+    onAddLessonClick: (DayOfWeek) -> Unit,
 ) {
     val daysOfWeekTitles = remember {
         // TextStyle.FULL_STANDALONE returns number
@@ -59,7 +59,7 @@ internal fun ScheduleEditorContent(
     val pagerState = rememberPagerState(
         initialPage = 0,
         initialPageOffsetFraction = 0f,
-        pageCount = { daysOfWeekTitles.size }
+        pageCount = { daysOfWeekTitles.size },
     )
 
     Scaffold(
@@ -76,37 +76,37 @@ internal fun ScheduleEditorContent(
                         actions = listOf(
                             ActionItem.NeverShow(
                                 name = stringResource(RS.sce_edit),
-                                onClick = onEditSemesterClick
+                                onClick = onEditSemesterClick,
                             ),
                             ActionItem.NeverShow(
                                 name = stringResource(RS.sce_delete),
-                                onClick = onDeleteSemesterClick
-                            )
-                        )
+                                onClick = onDeleteSemesterClick,
+                            ),
+                        ),
                     )
-                }
+                },
             )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { onAddLessonClick(DayOfWeek.of(pagerState.currentPage + 1)) }) {
                 Icon(imageVector = AppIcons.Add, contentDescription = null)
             }
-        }
+        },
     ) { paddingValues ->
         Column(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(paddingValues),
         ) {
             PagerTabStrip(
                 state = pagerState,
-                titleGetter = { daysOfWeekTitles[it] }
+                titleGetter = { daysOfWeekTitles[it] },
             )
 
             HorizontalPager(
                 state = pagerState,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             ) { page ->
                 val lessons by rememberLessons(page)
                 var contextMenuLesson by remember { mutableStateOf<Lesson?>(null) }
@@ -121,7 +121,7 @@ internal fun ScheduleEditorContent(
                                 val homework = checkNotNull(contextMenuLesson)
                                 contextMenuLesson = null
                                 onCopyLessonClick(homework)
-                            }
+                            },
                         )
                         DropdownMenuItem(
                             text = { Text(stringResource(RS.sce_delete_lesson)) },
@@ -129,14 +129,14 @@ internal fun ScheduleEditorContent(
                                 val homework = checkNotNull(contextMenuLesson)
                                 contextMenuLesson = null
                                 onDeleteLessonClick(homework)
-                            }
+                            },
                         )
-                    }
+                    },
                 ) {
                     LazyLessonsList(
                         lessons = lessons,
                         onLessonClick = onLessonClick,
-                        onLongLessonClick = { contextMenuLesson = it }
+                        onLongLessonClick = { contextMenuLesson = it },
                     )
                 }
             }
@@ -156,7 +156,7 @@ private fun ScheduleEditorContentLoadingPreview() = AppTheme {
         onLessonClick = {},
         onCopyLessonClick = {},
         onDeleteLessonClick = {},
-        onAddLessonClick = {}
+        onAddLessonClick = {},
     )
 }
 
@@ -172,7 +172,7 @@ private fun ScheduleEditorContentNoLessonsPreview() = AppTheme {
         onLessonClick = {},
         onCopyLessonClick = {},
         onDeleteLessonClick = {},
-        onAddLessonClick = {}
+        onAddLessonClick = {},
     )
 }
 
@@ -189,6 +189,6 @@ private fun ScheduleEditorContentPreview() = AppTheme {
         onLessonClick = {},
         onCopyLessonClick = {},
         onDeleteLessonClick = {},
-        onAddLessonClick = {}
+        onAddLessonClick = {},
     )
 }

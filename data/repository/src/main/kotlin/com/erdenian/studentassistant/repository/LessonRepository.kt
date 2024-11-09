@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.map
 class LessonRepository(
     private val lessonDao: LessonDao,
     private val selectedSemesterRepository: SelectedSemesterRepository,
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
 ) {
 
     // region Primary actions
@@ -36,7 +36,7 @@ class LessonRepository(
         endTime: LocalTime,
         semesterId: Long,
         dayOfWeek: DayOfWeek,
-        weeks: List<Boolean>
+        weeks: List<Boolean>,
     ) {
         val lessonEntity = LessonEntity(subjectName, type, startTime, endTime, semesterId)
         val teachersEntity = teachers.map { TeacherEntity(it) }
@@ -52,7 +52,7 @@ class LessonRepository(
         startTime: LocalTime,
         endTime: LocalTime,
         semesterId: Long,
-        dates: ImmutableSortedSet<LocalDate>
+        dates: ImmutableSortedSet<LocalDate>,
     ) {
         val lessonEntity = LessonEntity(subjectName, type, startTime, endTime, semesterId)
         val teachersEntity = teachers.map { TeacherEntity(it) }
@@ -70,7 +70,7 @@ class LessonRepository(
         endTime: LocalTime,
         semesterId: Long,
         dayOfWeek: DayOfWeek,
-        weeks: List<Boolean>
+        weeks: List<Boolean>,
     ) {
         val lessonEntity = LessonEntity(subjectName, type, startTime, endTime, semesterId, id)
         val teachersEntity = teachers.map { TeacherEntity(it, id) }
@@ -87,7 +87,7 @@ class LessonRepository(
         startTime: LocalTime,
         endTime: LocalTime,
         semesterId: Long,
-        dates: ImmutableSortedSet<LocalDate>
+        dates: ImmutableSortedSet<LocalDate>,
     ) {
         val lessonEntity = LessonEntity(subjectName, type, startTime, endTime, semesterId, id)
         val teachersEntity = teachers.map { TeacherEntity(it, id) }
@@ -146,7 +146,8 @@ class LessonRepository(
 
     fun getTeachers(semesterId: Long): Flow<ImmutableSortedSet<String>> = lessonDao.getTeachersFlow(semesterId).map()
 
-    fun getClassrooms(semesterId: Long): Flow<ImmutableSortedSet<String>> = lessonDao.getClassroomsFlow(semesterId).map()
+    fun getClassrooms(semesterId: Long): Flow<ImmutableSortedSet<String>> =
+        lessonDao.getClassroomsFlow(semesterId).map()
 
     suspend fun getNextStartTime(semesterId: Long, dayOfWeek: DayOfWeek): LocalTime =
         lessonDao.getLastEndTime(semesterId, dayOfWeek)

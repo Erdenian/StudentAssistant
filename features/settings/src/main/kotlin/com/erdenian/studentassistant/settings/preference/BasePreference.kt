@@ -35,7 +35,7 @@ internal fun BasePreference(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     icon: Painter? = null,
-    contentEnd: (@Composable () -> Unit)? = null
+    contentEnd: (@Composable () -> Unit)? = null,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -43,18 +43,18 @@ internal fun BasePreference(
             .fillMaxWidth()
             .defaultMinSize(minHeight = 73.dp)
             .clickable(onClick = onClick)
-            .padding(vertical = 12.dp)
+            .padding(vertical = 12.dp),
     ) {
         Box(
             modifier = Modifier
                 .width(72.dp)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 16.dp),
         ) {
             if (icon != null) {
                 Icon(
                     painter = icon,
                     contentDescription = null,
-                    modifier = Modifier.align(Alignment.CenterEnd)
+                    modifier = Modifier.align(Alignment.CenterEnd),
                 )
             }
         }
@@ -64,20 +64,20 @@ internal fun BasePreference(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(end = 16.dp)
-                    .weight(1.0f, false)
+                    .weight(1.0f, false),
             ) {
                 Text(
                     text = title,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.bodyLarge,
                 )
 
                 Text(
                     text = description,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 2,
-                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Light)
+                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Light),
                 )
             }
 
@@ -97,7 +97,7 @@ private fun BasePreferencePreview() = AppTheme {
         icon = rememberVectorPainter(AppIcons.Timer),
         description = "Description",
         onClick = {},
-        modifier = Modifier.background(MaterialTheme.colorScheme.background)
+        modifier = Modifier.background(MaterialTheme.colorScheme.background),
     )
 }
 
@@ -109,7 +109,7 @@ private fun BasePreferenceLongPreview() = AppTheme {
         icon = rememberVectorPainter(AppIcons.Timer),
         description = "Description Description Description Description Description Description Description Description",
         onClick = {},
-        modifier = Modifier.background(MaterialTheme.colorScheme.background)
+        modifier = Modifier.background(MaterialTheme.colorScheme.background),
     )
 }
 
@@ -124,11 +124,11 @@ private fun BasePreferenceWithContentEndPreview() = AppTheme {
             Box(
                 Modifier
                     .size(24.dp)
-                    .background(Color.Green)
+                    .background(Color.Green),
             )
         },
         onClick = {},
-        modifier = Modifier.background(MaterialTheme.colorScheme.background)
+        modifier = Modifier.background(MaterialTheme.colorScheme.background),
     )
 }
 
@@ -143,10 +143,10 @@ private fun BasePreferenceWithContentEndLongPreview() = AppTheme {
             Box(
                 Modifier
                     .size(24.dp)
-                    .background(Color.Green)
+                    .background(Color.Green),
             )
         },
         onClick = {},
-        modifier = Modifier.background(MaterialTheme.colorScheme.background)
+        modifier = Modifier.background(MaterialTheme.colorScheme.background),
     )
 }

@@ -63,7 +63,7 @@ internal fun SemesterEditorContent(
     onSaveClick: () -> Unit,
     onNameChange: (String) -> Unit,
     onFirstDayChange: (LocalDate) -> Unit,
-    onLastDayChange: (LocalDate) -> Unit
+    onLastDayChange: (LocalDate) -> Unit,
 ) = Scaffold(
     topBar = {
         TopAppBar(
@@ -78,7 +78,7 @@ internal fun SemesterEditorContent(
                     targetState = isLoading,
                     transitionSpec = { fadeIn() togetherWith fadeOut() },
                     contentAlignment = Alignment.Center,
-                    label = "SemesterEditorTopAppbar"
+                    label = "SemesterEditorTopAppbar",
                 ) { isLoading ->
                     TopAppBarActions(
                         actions = listOf(
@@ -86,22 +86,22 @@ internal fun SemesterEditorContent(
                                 name = stringResource(RS.se_save),
                                 imageVector = AppIcons.Check,
                                 loading = isLoading,
-                                onClick = onSaveClick
-                            )
-                        )
+                                onClick = onSaveClick,
+                            ),
+                        ),
                     )
                 }
-            }
+            },
         )
-    }
+    },
 ) { paddingValues ->
     Column(
         modifier = Modifier
             .padding(paddingValues)
             .padding(
                 horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
-                vertical = MaterialTheme.dimensions.screenPaddingVertical
-            )
+                vertical = MaterialTheme.dimensions.screenPaddingVertical,
+            ),
     ) {
         val dateFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
         val focusManager = LocalFocusManager.current
@@ -115,18 +115,18 @@ internal fun SemesterEditorContent(
             isError = (errorMessage != null),
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Done,
             ),
             keyboardActions = KeyboardActions(
-                onDone = { focusManager.clearFocus() }
+                onDone = { focusManager.clearFocus() },
             ),
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .placeholder(
                     visible = isLoading,
-                    highlight = PlaceholderHighlight.fade()
-                )
+                    highlight = PlaceholderHighlight.fade(),
+                ),
         )
 
         AnimatedVisibility(errorMessage != null) {
@@ -134,26 +134,26 @@ internal fun SemesterEditorContent(
                 text = errorMessage.orEmpty(),
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(start = 16.dp)
+                modifier = Modifier.padding(start = 16.dp),
             )
         }
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(top = 8.dp)
+            modifier = Modifier.padding(top = 8.dp),
         ) {
             Text(
                 text = stringResource(RS.se_first_day),
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.weight(1.0f)
+                modifier = Modifier.weight(1.0f),
             )
             TextButton(
                 onClick = { datePickerData = firstDay to onFirstDayChange },
                 enabled = !isLoading,
                 modifier = Modifier.placeholder(
                     visible = isLoading,
-                    highlight = PlaceholderHighlight.fade()
-                )
+                    highlight = PlaceholderHighlight.fade(),
+                ),
             ) {
                 Text(text = firstDay.format(dateFormatter))
             }
@@ -161,20 +161,20 @@ internal fun SemesterEditorContent(
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(top = 8.dp)
+            modifier = Modifier.padding(top = 8.dp),
         ) {
             Text(
                 text = stringResource(RS.se_last_day),
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.weight(1.0f)
+                modifier = Modifier.weight(1.0f),
             )
             TextButton(
                 onClick = { datePickerData = lastDay to onLastDayChange },
                 enabled = !isLoading,
                 modifier = Modifier.placeholder(
                     visible = isLoading,
-                    highlight = PlaceholderHighlight.fade()
-                )
+                    highlight = PlaceholderHighlight.fade(),
+                ),
             ) {
                 Text(text = lastDay.format(dateFormatter))
             }
@@ -187,7 +187,7 @@ internal fun SemesterEditorContent(
                     onConfirm(newValue)
                 },
                 onDismiss = { datePickerData = null },
-                initialSelectedDate = initialDate
+                initialSelectedDate = initialDate,
             )
         }
     }
@@ -208,7 +208,7 @@ private fun SemesterEditorLoadingPreview() = AppTheme {
         onSaveClick = {},
         onNameChange = {},
         onFirstDayChange = {},
-        onLastDayChange = {}
+        onLastDayChange = {},
     )
 }
 
@@ -227,7 +227,7 @@ private fun SemesterEditorPreview() = AppTheme {
         onSaveClick = {},
         onNameChange = {},
         onFirstDayChange = {},
-        onLastDayChange = {}
+        onLastDayChange = {},
     )
 }
 
@@ -245,6 +245,6 @@ private fun SemesterEditorLongPreview() = AppTheme {
         onSaveClick = {},
         onNameChange = {},
         onFirstDayChange = {},
-        onLastDayChange = {}
+        onLastDayChange = {},
     )
 }

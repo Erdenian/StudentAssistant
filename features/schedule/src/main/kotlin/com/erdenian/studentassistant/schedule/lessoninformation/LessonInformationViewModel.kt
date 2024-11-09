@@ -26,7 +26,7 @@ class LessonInformationViewModel @AssistedInject constructor(
     application: Application,
     lessonRepository: LessonRepository,
     private val homeworkRepository: HomeworkRepository,
-    @Assisted lessonId: Long
+    @Assisted lessonId: Long,
 ) : AndroidViewModel(application) {
 
     @AssistedFactory
@@ -44,7 +44,8 @@ class LessonInformationViewModel @AssistedInject constructor(
     private val lessonPrivate = lessonRepository.getFlow(lessonId)
         .shareIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed())
 
-    val lesson = lessonPrivate.stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(), initialValue = null)
+    val lesson =
+        lessonPrivate.stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(), initialValue = null)
 
     val isDeleted = lessonPrivate.map { it == null }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
 
@@ -55,7 +56,7 @@ class LessonInformationViewModel @AssistedInject constructor(
             if (lesson != null) homeworkRepository.getActualFlow(lesson.subjectName)
             else flowOf(emptyImmutableSortedSet())
         }.onEach { deletedHomeworkIds.value = emptySet() },
-        deletedHomeworkIds
+        deletedHomeworkIds,
     ) { homeworks, deletedIds ->
         if (deletedIds.isEmpty()) homeworks
         else homeworks.asSequence().filter { it.id !in deletedIds }.toImmutableSortedSet()

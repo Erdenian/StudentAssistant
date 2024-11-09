@@ -44,19 +44,19 @@ fun ProgressDialog(text: String) {
         Dialog(
             onDismissRequest = {},
             properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
-            content = { ProgressDialogContent(text) }
+            content = { ProgressDialogContent(text) },
         )
     }
 }
 
 @Composable
 private fun ProgressDialogContent(
-    text: String
+    text: String,
 ) = Surface(shape = MaterialTheme.shapes.medium) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(24.dp)
+        modifier = Modifier.padding(24.dp),
     ) {
         CircularProgressIndicator(modifier = Modifier.padding(bottom = 16.dp))
         Text(text = text)

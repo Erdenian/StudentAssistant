@@ -6,7 +6,7 @@ import androidx.compose.runtime.getValue
 
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsViewModel
+    viewModel: SettingsViewModel,
 ) {
     val defaultStartTime by viewModel.defaultStartTimeFlow.collectAsState()
     val defaultLessonDuration by viewModel.defaultLessonDurationFlow.collectAsState()
@@ -21,6 +21,6 @@ fun SettingsScreen(
         defaultBreakDuration = defaultBreakDuration,
         onDefaultBreakDurationChange = viewModel::setDefaultBreakDuration,
         isAdvancedWeeksSelectorEnabled = isAdvancedWeeksSelectorEnabled,
-        isAdvancedWeeksSelectorEnabledChange = viewModel::setAdvancedWeeksSelectorEnabled
+        isAdvancedWeeksSelectorEnabledChange = viewModel::setAdvancedWeeksSelectorEnabled,
     )
 }

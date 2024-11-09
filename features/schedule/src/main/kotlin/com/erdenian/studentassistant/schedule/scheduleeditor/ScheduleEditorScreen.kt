@@ -28,7 +28,7 @@ fun ScheduleEditorScreen(
     navigateBack: () -> Unit,
     navigateToEditSemester: (semesterId: Long) -> Unit,
     navigateToEditLesson: (semesterId: Long, lessonId: Long, copy: Boolean) -> Unit,
-    navigateToCreateLesson: (semesterId: Long, dayOfWeek: DayOfWeek) -> Unit
+    navigateToCreateLesson: (semesterId: Long, dayOfWeek: DayOfWeek) -> Unit,
 ) {
     val isDeleted by viewModel.isDeleted.collectAsState()
     LaunchedEffect(isDeleted) {
@@ -64,7 +64,7 @@ fun ScheduleEditorScreen(
             dismissButton = {
                 TextButton(
                     onClick = { showDeleteSemesterDialog = false },
-                    content = { Text(text = stringResource(RS.sce_delete_no)) }
+                    content = { Text(text = stringResource(RS.sce_delete_no)) },
                 )
             },
             confirmButton = {
@@ -73,9 +73,9 @@ fun ScheduleEditorScreen(
                         viewModel.deleteSemester()
                         showDeleteSemesterDialog = false
                     },
-                    content = { Text(text = stringResource(RS.sce_delete_yes)) }
+                    content = { Text(text = stringResource(RS.sce_delete_yes)) },
                 )
-            }
+            },
         )
     }
 
@@ -88,7 +88,7 @@ fun ScheduleEditorScreen(
             dismissButton = {
                 TextButton(
                     onClick = { lessonForDeleteWithHomeworksDialog = null },
-                    content = { Text(text = stringResource(RS.le_delete_homeworks_cancel)) }
+                    content = { Text(text = stringResource(RS.le_delete_homeworks_cancel)) },
                 )
             },
             confirmButton = {
@@ -97,16 +97,16 @@ fun ScheduleEditorScreen(
                         viewModel.deleteLesson(lesson, false)
                         lessonForDeleteWithHomeworksDialog = null
                     },
-                    content = { Text(text = stringResource(RS.le_delete_homeworks_no)) }
+                    content = { Text(text = stringResource(RS.le_delete_homeworks_no)) },
                 )
                 TextButton(
                     onClick = {
                         viewModel.deleteLesson(lesson, true)
                         lessonForDeleteWithHomeworksDialog = null
                     },
-                    content = { Text(text = stringResource(RS.le_delete_homeworks_yes)) }
+                    content = { Text(text = stringResource(RS.le_delete_homeworks_yes)) },
                 )
-            }
+            },
         )
     }
 
@@ -118,7 +118,7 @@ fun ScheduleEditorScreen(
             dismissButton = {
                 TextButton(
                     onClick = { lessonForDeleteWithoutHomeworksDialog = null },
-                    content = { Text(text = stringResource(RS.le_delete_no)) }
+                    content = { Text(text = stringResource(RS.le_delete_no)) },
                 )
             },
             confirmButton = {
@@ -127,9 +127,9 @@ fun ScheduleEditorScreen(
                         viewModel.deleteLesson(lesson)
                         lessonForDeleteWithoutHomeworksDialog = null
                     },
-                    content = { Text(text = stringResource(RS.le_delete_yes)) }
+                    content = { Text(text = stringResource(RS.le_delete_yes)) },
                 )
-            }
+            },
         )
     }
 
@@ -150,6 +150,6 @@ fun ScheduleEditorScreen(
                 showHomeworksCounterOperation = false
             }
         },
-        onAddLessonClick = { navigateToCreateLesson(viewModel.semesterId, it) }
+        onAddLessonClick = { navigateToCreateLesson(viewModel.semesterId, it) },
     )
 }

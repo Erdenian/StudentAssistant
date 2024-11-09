@@ -40,7 +40,7 @@ class LessonEditorViewModel @AssistedInject constructor(
     @Assisted lessonId: Long?,
     @Assisted copy: Boolean,
     @Assisted dayOfWeek: DayOfWeek?,
-    @Assisted subjectName: String?
+    @Assisted subjectName: String?,
 ) : AndroidViewModel(application) {
 
     @AssistedFactory
@@ -50,12 +50,13 @@ class LessonEditorViewModel @AssistedInject constructor(
             lessonId: Long? = null,
             copy: Boolean = false,
             dayOfWeek: DayOfWeek? = null,
-            subjectName: String? = null
+            subjectName: String? = null,
         ): LessonEditorViewModel
 
         fun get(semesterId: Long, dayOfWeek: DayOfWeek) = getInternal(semesterId, dayOfWeek = dayOfWeek)
         fun get(semesterId: Long, subjectName: String) = getInternal(semesterId, subjectName = subjectName)
-        fun get(semesterId: Long, lessonId: Long, copy: Boolean) = getInternal(semesterId, lessonId = lessonId, copy = copy)
+        fun get(semesterId: Long, lessonId: Long, copy: Boolean) =
+            getInternal(semesterId, lessonId = lessonId, copy = copy)
     }
 
     enum class Error {
@@ -140,7 +141,7 @@ class LessonEditorViewModel @AssistedInject constructor(
         startTime,
         endTime,
         weeks,
-        dates
+        dates,
     ) { subjectName, startTime, endTime, weeks, dates ->
         when {
             subjectName.isBlank() -> Error.EMPTY_SUBJECT_NAME
@@ -167,7 +168,10 @@ class LessonEditorViewModel @AssistedInject constructor(
         get() = initialSubjectName?.let { it != subjectName.value.trim() } ?: false
 
     suspend fun isSubjectNameChangedAndNotLast() = withContext(Dispatchers.IO) {
-        isSubjectNameChanged && lessonRepository.getCount(semesterId, initialSubjectName ?: return@withContext false) > 1
+        isSubjectNameChanged && lessonRepository.getCount(
+            semesterId,
+            initialSubjectName ?: return@withContext false,
+        ) > 1
     }
 
     private val donePrivate = MutableStateFlow(false)
@@ -213,12 +217,12 @@ class LessonEditorViewModel @AssistedInject constructor(
                     if (lessonId != null) {
                         lessonRepository.update(
                             lessonId, subjectName, type, teachers, classrooms, startTime, endTime, semesterId,
-                            dayOfWeek.value, weeksValue
+                            dayOfWeek.value, weeksValue,
                         )
                     } else {
                         lessonRepository.insert(
                             subjectName, type, teachers, classrooms, startTime, endTime, semesterId,
-                            dayOfWeek.value, weeksValue
+                            dayOfWeek.value, weeksValue,
                         )
                     }
                 }
@@ -226,12 +230,12 @@ class LessonEditorViewModel @AssistedInject constructor(
                     if (lessonId != null) {
                         lessonRepository.update(
                             lessonId, subjectName, type, teachers, classrooms, startTime, endTime, semesterId,
-                            dates.value
+                            dates.value,
                         )
                     } else {
                         lessonRepository.insert(
                             subjectName, type, teachers, classrooms, startTime, endTime, semesterId,
-                            dates.value
+                            dates.value,
                         )
                     }
                 }

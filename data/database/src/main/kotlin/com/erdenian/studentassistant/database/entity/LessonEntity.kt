@@ -16,9 +16,9 @@ import kotlinx.parcelize.Parcelize
             parentColumns = ["_id"],
             childColumns = ["semester_id"],
             onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE
-        )
-    ]
+            onUpdate = ForeignKey.CASCADE,
+        ),
+    ],
 )
 @Parcelize
 data class LessonEntity(
@@ -40,7 +40,7 @@ data class LessonEntity(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id")
-    val id: Long = 0L
+    val id: Long = 0L,
 ) : Parcelable {
 
     init {

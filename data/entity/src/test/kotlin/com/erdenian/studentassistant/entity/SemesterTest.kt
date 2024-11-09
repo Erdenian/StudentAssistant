@@ -14,7 +14,7 @@ class SemesterTest {
         override val name: String,
         override val firstDay: LocalDate,
         override val lastDay: LocalDate,
-        override val id: Long
+        override val id: Long,
     ) : Semester {
         override fun describeContents() = TODO("Not yet implemented")
         override fun writeToParcel(dest: Parcel, flags: Int) = TODO("Not yet implemented")

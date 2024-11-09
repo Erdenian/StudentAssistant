@@ -25,7 +25,7 @@ class ScheduleEditorViewModel @AssistedInject constructor(
     private val semesterRepository: SemesterRepository,
     private val lessonRepository: LessonRepository,
     private val homeworkRepository: HomeworkRepository,
-    @Assisted val semesterId: Long
+    @Assisted val semesterId: Long,
 ) : AndroidViewModel(application) {
 
     @AssistedFactory
@@ -48,7 +48,7 @@ class ScheduleEditorViewModel @AssistedInject constructor(
 
     fun getLessons(dayOfWeek: DayOfWeek) = combine(
         lessonRepository.getAllFlow(semesterId, dayOfWeek).onEach { deletedLessonIds.value = emptySet() },
-        deletedLessonIds.asStateFlow()
+        deletedLessonIds.asStateFlow(),
     ) { lessons, deletedIds ->
         if (deletedIds.isEmpty()) lessons
         else lessons.asSequence().filter { it.id !in deletedIds }.toImmutableSortedSet()

@@ -43,7 +43,9 @@ internal class ConvertersTest {
 
     @Test
     fun booleanListTest() {
-        val original = listOf(emptyList(), listOf(true), listOf(false), listOf(true, false), listOf(true, false, true), null)
+        val original = listOf(
+            emptyList(), listOf(true), listOf(false), listOf(true, false), listOf(true, false, true), null,
+        )
         val converted = original.map { converters.booleanListToString(it) }
         val restored = converted.map { converters.stringToBooleanList(it) }
 

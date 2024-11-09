@@ -26,7 +26,7 @@ internal fun DurationPreference(
     value: Duration,
     onValueChange: (Duration) -> Unit,
     modifier: Modifier = Modifier,
-    icon: Painter? = null
+    icon: Painter? = null,
 ) {
     var isShowDialog by rememberSaveable { mutableStateOf(false) }
 
@@ -35,7 +35,7 @@ internal fun DurationPreference(
         description = String.format("%02d:%02d", value.toHours(), value.toMinutesPart()),
         icon = icon,
         onClick = { isShowDialog = true },
-        modifier = modifier
+        modifier = modifier,
     )
 
     if (isShowDialog) {
@@ -48,7 +48,8 @@ internal fun DurationPreference(
                 AndroidView(
                     factory = { context ->
                         @SuppressLint("InflateParams")
-                        val timePicker = LayoutInflater.from(context).inflate(R.layout.spinner_time_picker, null) as TimePicker
+                        val timePicker =
+                            LayoutInflater.from(context).inflate(R.layout.spinner_time_picker, null) as TimePicker
                         timePicker.apply {
                             setIs24HourView(true)
                             duration = value
@@ -57,7 +58,7 @@ internal fun DurationPreference(
                             }
                         }
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
             },
             confirmButton = {
@@ -65,18 +66,18 @@ internal fun DurationPreference(
                     onClick = {
                         onValueChange(selectedDuration)
                         isShowDialog = false
-                    }
+                    },
                 ) {
                     Text(text = stringResource(android.R.string.ok))
                 }
             },
             dismissButton = {
                 TextButton(
-                    onClick = { isShowDialog = false }
+                    onClick = { isShowDialog = false },
                 ) {
                     Text(text = stringResource(android.R.string.cancel))
                 }
-            }
+            },
         )
     }
 }

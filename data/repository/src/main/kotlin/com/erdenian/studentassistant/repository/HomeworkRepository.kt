@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.map
 
 class HomeworkRepository(
     private val homeworkDao: HomeworkDao,
-    private val selectedSemesterRepository: SelectedSemesterRepository
+    private val selectedSemesterRepository: SelectedSemesterRepository,
 ) {
 
     // region Primary actions
@@ -43,7 +43,8 @@ class HomeworkRepository(
             semester?.id?.let { homeworkDao.getAllFlow(it).map() } ?: flowOf(emptyImmutableSortedSet())
         }
 
-    suspend fun getCount(): Int = selectedSemesterRepository.selectedFlow.value?.id?.let { homeworkDao.getCount(it) } ?: 0
+    suspend fun getCount(): Int =
+        selectedSemesterRepository.selectedFlow.value?.id?.let { homeworkDao.getCount(it) } ?: 0
 
     // endregion
 

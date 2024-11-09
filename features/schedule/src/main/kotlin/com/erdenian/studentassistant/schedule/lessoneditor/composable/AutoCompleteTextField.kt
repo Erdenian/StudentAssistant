@@ -51,7 +51,7 @@ internal fun AutoCompleteTextField(
     maxLines: Int = Int.MAX_VALUE,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = MaterialTheme.shapes.small,
-    colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
 ) {
     var textFieldValueState by remember { mutableStateOf(TextFieldValue(text = value)) }
     val textFieldValue = textFieldValueState.copy(text = value)
@@ -73,7 +73,7 @@ internal fun AutoCompleteTextField(
             textFieldValueState = textFieldValueState.copy(
                 text = item,
                 selection = TextRange(item.length),
-                composition = null
+                composition = null,
             )
             onValueChange(item)
         },
@@ -93,7 +93,7 @@ internal fun AutoCompleteTextField(
         maxLines = maxLines,
         interactionSource = interactionSource,
         shape = shape,
-        colors = colors
+        colors = colors,
     )
 }
 
@@ -118,7 +118,7 @@ internal fun MultiAutoCompleteTextField(
     maxLines: Int = Int.MAX_VALUE,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = MaterialTheme.shapes.small,
-    colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
 ) {
     var textFieldValueState by remember { mutableStateOf(TextFieldValue(text = value)) }
     val textFieldValue = textFieldValueState.copy(text = value)
@@ -153,7 +153,7 @@ internal fun MultiAutoCompleteTextField(
             textFieldValueState = textFieldValueState.copy(
                 text = textFieldValue.text.replaceRange(autoCompleteRange, itemWithComma),
                 selection = TextRange(autoCompleteRange.first + itemWithComma.length),
-                composition = null
+                composition = null,
             )
             onValueChange(textFieldValueState.text)
             recalculateAutoCompleteRange(textFieldValueState)
@@ -174,7 +174,7 @@ internal fun MultiAutoCompleteTextField(
         maxLines = maxLines,
         interactionSource = interactionSource,
         shape = shape,
-        colors = colors
+        colors = colors,
     )
 }
 
@@ -200,7 +200,7 @@ private fun BaseAutoCompleteTextField(
     maxLines: Int = Int.MAX_VALUE,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = MaterialTheme.shapes.small,
-    colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
 ) {
     var expanded by remember { mutableStateOf(false) }
     var hasFocus by remember { mutableStateOf(false) }
@@ -216,7 +216,7 @@ private fun BaseAutoCompleteTextField(
 
     ExposedDropdownMenuBox(
         expanded = expanded,
-        onExpandedChange = { if (!it) expanded = false }
+        onExpandedChange = { if (!it) expanded = false },
     ) {
         OutlinedTextField(
             value = value,
@@ -242,13 +242,13 @@ private fun BaseAutoCompleteTextField(
             maxLines = maxLines,
             interactionSource = interactionSource,
             shape = shape,
-            colors = colors
+            colors = colors,
         )
 
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            focusable = false
+            focusable = false,
         ) {
             autoCompleteItems.forEach { item ->
                 DropdownMenuItem(
@@ -257,7 +257,7 @@ private fun BaseAutoCompleteTextField(
                     onClick = {
                         onItemClick(item)
                         expanded = false
-                    }
+                    },
                 )
             }
         }

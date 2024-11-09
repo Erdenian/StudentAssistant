@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(
     application: Application,
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
 ) : AndroidViewModel(application) {
 
     val defaultStartTimeFlow = settingsRepository.getDefaultStartTimeFlow(viewModelScope)

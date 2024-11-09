@@ -16,9 +16,9 @@ import kotlinx.parcelize.Parcelize
             parentColumns = ["_id"],
             childColumns = ["lesson_id"],
             onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE
-        )
-    ]
+            onUpdate = ForeignKey.CASCADE,
+        ),
+    ],
 )
 @Parcelize
 data class ByWeekdayEntity(
@@ -32,7 +32,7 @@ data class ByWeekdayEntity(
     @Suppress("DataClassShouldBeImmutable")
     @PrimaryKey
     @ColumnInfo(name = "lesson_id", index = true)
-    var lessonId: Long = 0L
+    var lessonId: Long = 0L,
 ) : Lesson.Repeat.ByWeekday() {
 
     init {

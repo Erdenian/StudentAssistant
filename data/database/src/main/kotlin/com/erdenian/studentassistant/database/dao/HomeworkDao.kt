@@ -72,7 +72,7 @@ interface HomeworkDao {
     fun getActualFlow(
         semesterId: Long,
         subjectName: String,
-        today: LocalDate = LocalDate.now()
+        today: LocalDate = LocalDate.now(),
     ): Flow<List<HomeworkEntity>>
 
     // endregion

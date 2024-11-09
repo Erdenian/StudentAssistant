@@ -10,7 +10,7 @@ import kotlinx.parcelize.Parcelize
 
 @Entity(
     tableName = "semesters",
-    indices = [Index("name", unique = true)]
+    indices = [Index("name", unique = true)],
 )
 @Parcelize
 data class SemesterEntity(
@@ -26,7 +26,7 @@ data class SemesterEntity(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "_id")
-    override val id: Long = 0L
+    override val id: Long = 0L,
 ) : Semester {
 
     init {

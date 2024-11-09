@@ -15,7 +15,7 @@ internal class HomeworkEntityTest {
                 "",
                 "description",
                 LocalDate.of(2023, 2, 15),
-                semesterId
+                semesterId,
             )
         }
         assertThrows(IllegalArgumentException::class.java) {
@@ -23,7 +23,7 @@ internal class HomeworkEntityTest {
                 "    ",
                 "description",
                 LocalDate.of(2023, 2, 15),
-                semesterId
+                semesterId,
             )
         }
     }
@@ -35,7 +35,7 @@ internal class HomeworkEntityTest {
                 "name",
                 "",
                 LocalDate.of(2023, 2, 15),
-                semesterId
+                semesterId,
             )
         }
         assertThrows(IllegalArgumentException::class.java) {
@@ -43,7 +43,7 @@ internal class HomeworkEntityTest {
                 "name",
                 "     ",
                 LocalDate.of(2023, 2, 15),
-                semesterId
+                semesterId,
             )
         }
     }
@@ -54,7 +54,7 @@ internal class HomeworkEntityTest {
             "name",
             "description",
             LocalDate.of(2023, 2, 15),
-            semesterId
+            semesterId,
         )
     }
 }

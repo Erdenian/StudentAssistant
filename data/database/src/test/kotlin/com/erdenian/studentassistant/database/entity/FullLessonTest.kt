@@ -18,7 +18,7 @@ internal class FullLessonTest {
             listOf(TeacherEntity("teacher", 10L)),
             listOf(ClassroomEntity("classroom", 10L)),
             ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
-            emptyList()
+            emptyList(),
         )
     }
 
@@ -29,7 +29,7 @@ internal class FullLessonTest {
             listOf(TeacherEntity("teacher", 10L)),
             listOf(ClassroomEntity("classroom", 10L)),
             null,
-            listOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L))
+            listOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L)),
         )
     }
 
@@ -41,7 +41,7 @@ internal class FullLessonTest {
                 listOf(TeacherEntity("teacher", 10L)),
                 listOf(ClassroomEntity("classroom", 10L)),
                 null,
-                emptyList()
+                emptyList(),
             )
         }
     }
@@ -54,7 +54,7 @@ internal class FullLessonTest {
                 listOf(TeacherEntity("teacher", 10L)),
                 listOf(ClassroomEntity("classroom", 10L)),
                 ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
-                listOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L))
+                listOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L)),
             )
         }
     }
@@ -63,12 +63,12 @@ internal class FullLessonTest {
     fun propertiesTest() {
         val lesson1 = FullLesson(
             LessonEntity(
-                "name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), 1L, 10L
+                "name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), 1L, 10L,
             ),
             listOf(TeacherEntity("teacher", 10L)),
             listOf(ClassroomEntity("classroom", 10L)),
             ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
-            emptyList()
+            emptyList(),
         )
         assertEquals("name", lesson1.subjectName)
         assertEquals("type", lesson1.type)
@@ -86,7 +86,7 @@ internal class FullLessonTest {
             listOf(TeacherEntity("teacher", 10L)),
             listOf(ClassroomEntity("classroom", 10L)),
             null,
-            listOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L))
+            listOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L)),
         )
         assertEquals(setOf(LocalDate.of(2020, 4, 25)), (lesson2.lessonRepeat as Lesson.Repeat.ByDates).dates)
     }

@@ -41,10 +41,14 @@ internal class SemesterDaoTest {
         assertEquals(123L, semesterDao.insert(semester2))
         assertEquals(listOf(semester1.copy(id = id1), semester2), semesterDao.getAllFlow().first())
         assertThrows(SQLiteConstraintException::class.java) {
-            runBlocking { semesterDao.insert(SemesterEntity("name3", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 2, 1), 123L)) }
+            runBlocking {
+                semesterDao.insert(SemesterEntity("name3", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 2, 1), 123L))
+            }
         }
         assertThrows(SQLiteConstraintException::class.java) {
-            runBlocking { semesterDao.insert(SemesterEntity("name2", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 2, 1))) }
+            runBlocking {
+                semesterDao.insert(SemesterEntity("name2", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 2, 1)))
+            }
         }
     }
 
@@ -72,7 +76,7 @@ internal class SemesterDaoTest {
             LessonEntity("name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), semester1.id),
             listOf(TeacherEntity("teacher")),
             listOf(ClassroomEntity("classroom")),
-            listOf(ByDateEntity(LocalDate.of(2020, 4, 25)))
+            listOf(ByDateEntity(LocalDate.of(2020, 4, 25))),
         )
         assertEquals(1, database.lessonDao.getAllFlow(semester1.id).first().size)
 
@@ -85,7 +89,7 @@ internal class SemesterDaoTest {
             LessonEntity("name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), semester2.id),
             listOf(TeacherEntity("teacher")),
             listOf(ClassroomEntity("classroom")),
-            listOf(ByDateEntity(LocalDate.of(2020, 4, 25)))
+            listOf(ByDateEntity(LocalDate.of(2020, 4, 25))),
         )
         assertEquals(1, database.lessonDao.getAllFlow(semester2.id).first().size)
 

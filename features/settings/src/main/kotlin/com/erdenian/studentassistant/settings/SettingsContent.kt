@@ -31,43 +31,43 @@ internal fun SettingsContent(
     defaultBreakDuration: Duration,
     onDefaultBreakDurationChange: (Duration) -> Unit,
     isAdvancedWeeksSelectorEnabled: Boolean,
-    isAdvancedWeeksSelectorEnabledChange: (Boolean) -> Unit
+    isAdvancedWeeksSelectorEnabledChange: (Boolean) -> Unit,
 ) {
     val topAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(text = stringResource(RS.st_title)) },
-                scrollBehavior = topAppBarScrollBehavior
+                scrollBehavior = topAppBarScrollBehavior,
             )
-        }
+        },
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
                 .verticalScroll(rememberScrollState())
-                .padding(paddingValues)
+                .padding(paddingValues),
         ) {
             TimePreference(
                 title = stringResource(RS.st_default_start_time),
                 value = defaultStartTime,
-                onValueChange = onDefaultStartTimeChange
+                onValueChange = onDefaultStartTimeChange,
             )
             DurationPreference(
                 title = stringResource(RS.st_default_lesson_duration),
                 value = defaultLessonDuration,
-                onValueChange = onDefaultLessonDurationChange
+                onValueChange = onDefaultLessonDurationChange,
             )
             DurationPreference(
                 title = stringResource(RS.st_default_break_duration),
                 value = defaultBreakDuration,
-                onValueChange = onDefaultBreakDurationChange
+                onValueChange = onDefaultBreakDurationChange,
             )
             BooleanPreference(
                 title = stringResource(RS.st_is_advanced_weeks_selector_enabled),
                 description = stringResource(RS.st_is_advanced_weeks_selector_enabled_description),
                 value = isAdvancedWeeksSelectorEnabled,
-                onValueChange = isAdvancedWeeksSelectorEnabledChange
+                onValueChange = isAdvancedWeeksSelectorEnabledChange,
             )
         }
     }
@@ -85,6 +85,6 @@ private fun SettingsPreview() = AppTheme {
         defaultBreakDuration = Duration.ZERO,
         onDefaultBreakDurationChange = {},
         isAdvancedWeeksSelectorEnabled = true,
-        isAdvancedWeeksSelectorEnabledChange = {}
+        isAdvancedWeeksSelectorEnabledChange = {},
     )
 }

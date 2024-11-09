@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.map
 
 class SemesterRepository(
     private val semesterDao: SemesterDao,
-    private val selectedSemesterRepository: SelectedSemesterRepository
+    private val selectedSemesterRepository: SelectedSemesterRepository,
 ) {
 
     suspend fun insert(name: String, firstDay: LocalDate, lastDay: LocalDate) {

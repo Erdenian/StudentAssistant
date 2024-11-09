@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 class SemesterEditorViewModel @AssistedInject constructor(
     application: Application,
     private val semesterRepository: SemesterRepository,
-    @Assisted private val semesterId: Long?
+    @Assisted private val semesterId: Long?,
 ) : AndroidViewModel(application) {
 
     @AssistedFactory
@@ -48,7 +48,7 @@ class SemesterEditorViewModel @AssistedInject constructor(
 
     private val semestersRanges = listOf(
         Month.FEBRUARY..Month.MAY,
-        Month.SEPTEMBER..Month.DECEMBER
+        Month.SEPTEMBER..Month.DECEMBER,
     )
 
     val name = MutableStateFlow("")
@@ -61,7 +61,9 @@ class SemesterEditorViewModel @AssistedInject constructor(
         val today = LocalDate.now().withDayOfMonth(1)
         val range = semestersRanges.find { today.month <= it.endInclusive } ?: semestersRanges.first()
         firstDay = MutableStateFlow(today.withMonth(range.start.value))
-        lastDay = MutableStateFlow(today.withMonth(range.endInclusive.value).withDayOfMonth(range.endInclusive.maxLength()))
+        lastDay = MutableStateFlow(
+            today.withMonth(range.endInclusive.value).withDayOfMonth(range.endInclusive.maxLength()),
+        )
 
         if (semesterId != null) {
             viewModelScope.launch {
@@ -91,7 +93,7 @@ class SemesterEditorViewModel @AssistedInject constructor(
         name,
         firstDay,
         lastDay,
-        semesterRepository.namesFlow.onEach { areNamesLoaded.value = true }
+        semesterRepository.namesFlow.onEach { areNamesLoaded.value = true },
     ) { name, firstDay, lastDay, semestersNames ->
         when {
             name.isBlank() -> Error.EMPTY_NAME

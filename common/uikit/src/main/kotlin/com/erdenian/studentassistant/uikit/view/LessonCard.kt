@@ -42,32 +42,32 @@ fun LessonCard(
     endTime: String,
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
-    onLongClick: (() -> Unit)? = null
+    onLongClick: (() -> Unit)? = null,
 ) = ElevatedCard(
-    modifier = modifier
+    modifier = modifier,
 ) {
     Column(
         modifier = Modifier
             .combinedClickable(
                 enabled = (onClick != null) || (onLongClick != null),
                 onLongClick = onLongClick,
-                onClick = onClick ?: {}
+                onClick = onClick ?: {},
             )
-            .padding(MaterialTheme.dimensions.cardContentPadding)
+            .padding(MaterialTheme.dimensions.cardContentPadding),
     ) {
         Row(
-            verticalAlignment = Alignment.Bottom
+            verticalAlignment = Alignment.Bottom,
         ) {
             Text(
                 text = startTime,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
             )
 
             Text(text = " - ")
 
             Text(
                 text = endTime,
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Light)
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Light),
             )
 
             if (classrooms.isNotEmpty()) {
@@ -79,13 +79,13 @@ fun LessonCard(
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Light),
                     modifier = Modifier
                         .weight(1.0f)
-                        .padding(start = 32.dp)
+                        .padding(start = 32.dp),
                 )
 
                 CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurfaceVariant) {
                     Icon(
                         imageVector = AppIcons.LocationOn,
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 }
             }
@@ -98,7 +98,7 @@ fun LessonCard(
                 text = type,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Light)
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Light),
             )
 
             Spacer(modifier = Modifier.height(2.dp))
@@ -107,7 +107,7 @@ fun LessonCard(
             text = subjectName,
             overflow = TextOverflow.Ellipsis,
             maxLines = 2,
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
         )
 
         teachers.forEach { teacher ->
@@ -115,12 +115,12 @@ fun LessonCard(
                 Spacer(modifier = Modifier.height(2.dp))
 
                 Row(
-                    verticalAlignment = Alignment.Bottom
+                    verticalAlignment = Alignment.Bottom,
                 ) {
                     CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurfaceVariant) {
                         Icon(
                             imageVector = AppIcons.Person,
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
 
@@ -128,7 +128,7 @@ fun LessonCard(
                         text = teacher,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,
-                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Light)
+                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Light),
                     )
                 }
             }
@@ -146,7 +146,7 @@ private fun LessonCardPreview() = AppTheme {
         teachers = listOf("Кожухов Игорь Борисович"),
         classrooms = listOf("4212а", "4212б"),
         startTime = "09:00",
-        endTime = "10:30"
+        endTime = "10:30",
     )
 }
 
@@ -159,7 +159,7 @@ private fun LessonCardMinimalPreview() = AppTheme {
         teachers = emptyList(),
         classrooms = emptyList(),
         startTime = "09:00",
-        endTime = "10:30"
+        endTime = "10:30",
     )
 }
 
@@ -172,10 +172,12 @@ private fun LessonCardLongPreview() = AppTheme {
         teachers = listOf(
             "Кожухов Игорь Борисович Борисович Борисович Борисович Борисович Борисович Борисович Борисович",
             "Кожухов Игорь Борисович Борисович Борисович Борисович Борисович Борисович Борисович Борисович",
-            "Кожухов Игорь Борисович Борисович Борисович Борисович Борисович Борисович Борисович Борисович"
+            "Кожухов Игорь Борисович Борисович Борисович Борисович Борисович Борисович Борисович Борисович",
         ),
-        classrooms = listOf("4212а", "4212б", "4212в", "4212г", "4212д", "4212е", "4212ё", "4212ж", "4212з", "4212и", "4212й"),
+        classrooms = listOf(
+            "4212а", "4212б", "4212в", "4212г", "4212д", "4212е", "4212ё", "4212ж", "4212з", "4212и", "4212й",
+        ),
         startTime = "09:00",
-        endTime = "10:30"
+        endTime = "10:30",
     )
 }

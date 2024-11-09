@@ -31,7 +31,7 @@ class HomeworkEditorViewModel @AssistedInject constructor(
     private val homeworkRepository: HomeworkRepository,
     @Assisted val semesterId: Long,
     @Assisted private val homeworkId: Long?,
-    @Assisted subjectName: String?
+    @Assisted subjectName: String?,
 ) : AndroidViewModel(application) {
 
     @AssistedFactory
@@ -39,7 +39,7 @@ class HomeworkEditorViewModel @AssistedInject constructor(
         internal abstract fun getInternal(
             semesterId: Long,
             homeworkId: Long? = null,
-            subjectName: String? = null
+            subjectName: String? = null,
         ): HomeworkEditorViewModel
 
         fun get(semesterId: Long, subjectName: String? = null) = getInternal(semesterId, subjectName = subjectName)
@@ -72,7 +72,7 @@ class HomeworkEditorViewModel @AssistedInject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
-            initialValue = emptyImmutableSortedSet()
+            initialValue = emptyImmutableSortedSet(),
         )
     val semesterDatesRange = semesterRepository.getFlow(semesterId)
         .filterNotNull()
@@ -89,7 +89,7 @@ class HomeworkEditorViewModel @AssistedInject constructor(
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
-        initialValue = null
+        initialValue = null,
     )
 
     val isEditing get() = (homeworkId != null)

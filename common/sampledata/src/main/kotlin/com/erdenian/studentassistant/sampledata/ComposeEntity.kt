@@ -19,7 +19,7 @@ private fun Any.getId() = System.identityHashCode(this).toLong()
 fun Semester(
     name: String,
     firstDay: LocalDate,
-    lastDay: LocalDate
+    lastDay: LocalDate,
 ): Semester = object : Semester, NoOpParcelable {
 
     override val name = name
@@ -38,7 +38,7 @@ fun Lesson(
     classrooms: ImmutableSortedSet<String>,
     startTime: LocalTime,
     endTime: LocalTime,
-    lessonRepeat: Lesson.Repeat
+    lessonRepeat: Lesson.Repeat,
 ): Lesson = object : Lesson, NoOpParcelable {
 
     override val subjectName = subjectName
@@ -73,7 +73,7 @@ fun Homework(
     subjectName: String,
     description: String,
     deadline: LocalDate,
-    isDone: Boolean
+    isDone: Boolean,
 ): Homework = object : Homework, NoOpParcelable {
 
     override val subjectName get() = subjectName
