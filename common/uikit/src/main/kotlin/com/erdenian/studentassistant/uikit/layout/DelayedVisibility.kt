@@ -16,7 +16,7 @@ import kotlinx.coroutines.delay
 fun DelayedVisibility(
     modifier: Modifier = Modifier,
     delayMillis: Int = AnimationConstants.DefaultDurationMillis,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     var isVisible by rememberSaveable { mutableStateOf(false) }
 
@@ -31,6 +31,6 @@ fun DelayedVisibility(
         visible = isVisible,
         enter = fadeIn(),
         modifier = modifier,
-        content = { content() }
+        content = { content() },
     )
 }

@@ -23,7 +23,7 @@ import com.erdenian.studentassistant.utils.toast
 fun HomeworkEditorScreen(
     viewModel: HomeworkEditorViewModel,
     navigateBack: () -> Unit,
-    navigateToCreateLesson: (semesterId: Long, subjectName: String) -> Unit
+    navigateToCreateLesson: (semesterId: Long, subjectName: String) -> Unit,
 ) {
     var lessonNameToCreate by remember { mutableStateOf<String?>(null) }
     val done by viewModel.done.collectAsState()
@@ -84,7 +84,7 @@ fun HomeworkEditorScreen(
             dismissButton = {
                 TextButton(
                     onClick = { showSaveDialog = false },
-                    content = { Text(text = stringResource(RS.he_unknown_lesson_no)) }
+                    content = { Text(text = stringResource(RS.he_unknown_lesson_no)) },
                 )
             },
             confirmButton = {
@@ -94,16 +94,16 @@ fun HomeworkEditorScreen(
                         viewModel.save()
                         showSaveDialog = false
                     },
-                    content = { Text(text = stringResource(RS.he_unknown_lesson_yes_and_create)) }
+                    content = { Text(text = stringResource(RS.he_unknown_lesson_yes_and_create)) },
                 )
                 TextButton(
                     onClick = {
                         viewModel.save()
                         showSaveDialog = false
                     },
-                    content = { Text(text = stringResource(RS.he_unknown_lesson_yes)) }
+                    content = { Text(text = stringResource(RS.he_unknown_lesson_yes)) },
                 )
-            }
+            },
         )
     }
 
@@ -115,7 +115,7 @@ fun HomeworkEditorScreen(
             dismissButton = {
                 TextButton(
                     onClick = { showDeleteDialog = false },
-                    content = { Text(text = stringResource(RS.he_delete_no)) }
+                    content = { Text(text = stringResource(RS.he_delete_no)) },
                 )
             },
             confirmButton = {
@@ -124,9 +124,9 @@ fun HomeworkEditorScreen(
                         viewModel.delete()
                         showDeleteDialog = false
                     },
-                    content = { Text(text = stringResource(RS.he_delete_yes)) }
+                    content = { Text(text = stringResource(RS.he_delete_yes)) },
                 )
-            }
+            },
         )
     }
 
@@ -150,6 +150,6 @@ fun HomeworkEditorScreen(
         onDeleteClick = { showDeleteDialog = true },
         onSubjectNameChange = { viewModel.subjectName.value = it.toSingleLine() },
         onDeadlineChange = { viewModel.deadline.value = it },
-        onDescriptionChange = { viewModel.description.value = it }
+        onDescriptionChange = { viewModel.description.value = it },
     )
 }

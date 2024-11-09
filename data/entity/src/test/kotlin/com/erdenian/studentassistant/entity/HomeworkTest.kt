@@ -16,7 +16,7 @@ class HomeworkTest {
         override val deadline: LocalDate,
         override val isDone: Boolean,
         override val semesterId: Long,
-        override val id: Long
+        override val id: Long,
     ) : Homework {
         override fun describeContents() = TODO("Not yet implemented")
         override fun writeToParcel(dest: Parcel, flags: Int) = TODO("Not yet implemented")

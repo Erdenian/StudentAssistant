@@ -12,12 +12,12 @@ internal fun BooleanPreference(
     value: Boolean,
     onValueChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    icon: Painter? = null
+    icon: Painter? = null,
 ) = BasePreference(
     title = title,
     description = description,
     icon = icon,
     contentEnd = { Switch(checked = value, onCheckedChange = onValueChange) },
     onClick = { onValueChange(!value) },
-    modifier = modifier
+    modifier = modifier,
 )

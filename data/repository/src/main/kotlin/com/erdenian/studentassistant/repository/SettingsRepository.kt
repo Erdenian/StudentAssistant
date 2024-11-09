@@ -62,7 +62,11 @@ class SettingsRepository(private val sharedPreferences: SharedPreferences) {
         set(value) = sharedPreferences.edit { putBoolean(IS_ADVANCED_WEEKS_SELECTOR_ENABLED_KEY, value) }
 
     fun getAdvancedWeeksSelectorFlow(scope: CoroutineScope): StateFlow<Boolean> =
-        sharedPreferences.getBooleanFlow(scope, IS_ADVANCED_WEEKS_SELECTOR_ENABLED_KEY, IS_ADVANCED_WEEKS_SELECTOR_ENABLED)
+        sharedPreferences.getBooleanFlow(
+            scope,
+            IS_ADVANCED_WEEKS_SELECTOR_ENABLED_KEY,
+            IS_ADVANCED_WEEKS_SELECTOR_ENABLED,
+        )
 
     // endregion
 

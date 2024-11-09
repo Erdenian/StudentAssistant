@@ -49,7 +49,7 @@ android {
             val storeFile: File,
             val storePassword: String,
             val keyAlias: String,
-            val keyPassword: String
+            val keyPassword: String,
         )
 
         fun getReleaseKeystore(): Keystore? {
@@ -57,7 +57,7 @@ android {
                 rootProject.file("signing/release.jks"),
                 get("ANDROID_KEYSTORE_PASSWORD", "signing.keystorePassword") ?: return null,
                 get("ANDROID_KEY_ALIAS", "signing.keyAlias") ?: return null,
-                get("ANDROID_KEY_PASSWORD", "signing.keyPassword") ?: return null
+                get("ANDROID_KEY_PASSWORD", "signing.keyPassword") ?: return null,
             )
         }
 
@@ -161,17 +161,17 @@ rootProject.tasks.register("updateChangelog") {
 
         lines.add(
             lines.indexOf("## [Unreleased]") + 1,
-            "$lineSeparator## [$newVersion] - ${`java.time`.LocalDate.now()}"
+            "$lineSeparator## [$newVersion] - ${`java.time`.LocalDate.now()}",
         )
 
         lines.set(
             lines.indexOf("[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/$oldVersion...develop"),
-            "[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/$newVersion...develop"
+            "[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/$newVersion...develop",
         )
 
         lines.add(
             lines.indexOf("[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/$newVersion...develop") + 1,
-            "[$newVersion]: https://github.com/Erdenian/StudentAssistant/compare/$oldVersion...$newVersion"
+            "[$newVersion]: https://github.com/Erdenian/StudentAssistant/compare/$oldVersion...$newVersion",
         )
 
         changelogFile.delete()

@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.map
 class LessonRepository(
     private val lessonDao: LessonDao,
     private val selectedSemesterRepository: SelectedSemesterRepository,
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
 ) {
 
     // region Primary actions
@@ -36,12 +36,23 @@ class LessonRepository(
         endTime: LocalTime,
         semesterId: Long,
         dayOfWeek: DayOfWeek,
-        weeks: List<Boolean>
+        weeks: List<Boolean>,
     ) {
-        val lessonEntity = LessonEntity(subjectName, type, startTime, endTime, semesterId)
+        val lessonEntity = LessonEntity(
+            subjectName = subjectName,
+            type = type,
+            startTime = startTime,
+            endTime = endTime,
+            semesterId = semesterId,
+        )
         val teachersEntity = teachers.map { TeacherEntity(it) }
         val classroomsEntity = classrooms.map { ClassroomEntity(it) }
-        lessonDao.insert(lessonEntity, teachersEntity, classroomsEntity, ByWeekdayEntity(dayOfWeek, weeks))
+        lessonDao.insert(
+            lesson = lessonEntity,
+            teachers = teachersEntity,
+            classrooms = classroomsEntity,
+            byWeekday = ByWeekdayEntity(dayOfWeek, weeks),
+        )
     }
 
     suspend fun insert(
@@ -52,12 +63,23 @@ class LessonRepository(
         startTime: LocalTime,
         endTime: LocalTime,
         semesterId: Long,
-        dates: ImmutableSortedSet<LocalDate>
+        dates: ImmutableSortedSet<LocalDate>,
     ) {
-        val lessonEntity = LessonEntity(subjectName, type, startTime, endTime, semesterId)
+        val lessonEntity = LessonEntity(
+            subjectName = subjectName,
+            type = type,
+            startTime = startTime,
+            endTime = endTime,
+            semesterId = semesterId,
+        )
         val teachersEntity = teachers.map { TeacherEntity(it) }
         val classroomsEntity = classrooms.map { ClassroomEntity(it) }
-        lessonDao.insert(lessonEntity, teachersEntity, classroomsEntity, dates.map { ByDateEntity(it) })
+        lessonDao.insert(
+            lesson = lessonEntity,
+            teachers = teachersEntity,
+            classrooms = classroomsEntity,
+            byDates = dates.map { ByDateEntity(it) },
+        )
     }
 
     suspend fun update(
@@ -70,12 +92,24 @@ class LessonRepository(
         endTime: LocalTime,
         semesterId: Long,
         dayOfWeek: DayOfWeek,
-        weeks: List<Boolean>
+        weeks: List<Boolean>,
     ) {
-        val lessonEntity = LessonEntity(subjectName, type, startTime, endTime, semesterId, id)
+        val lessonEntity = LessonEntity(
+            subjectName = subjectName,
+            type = type,
+            startTime = startTime,
+            endTime = endTime,
+            semesterId = semesterId,
+            id = id,
+        )
         val teachersEntity = teachers.map { TeacherEntity(it, id) }
         val classroomsEntity = classrooms.map { ClassroomEntity(it, id) }
-        lessonDao.update(lessonEntity, teachersEntity, classroomsEntity, ByWeekdayEntity(dayOfWeek, weeks, id))
+        lessonDao.update(
+            lesson = lessonEntity,
+            teachers = teachersEntity,
+            classrooms = classroomsEntity,
+            byWeekday = ByWeekdayEntity(dayOfWeek, weeks, id),
+        )
     }
 
     suspend fun update(
@@ -87,12 +121,24 @@ class LessonRepository(
         startTime: LocalTime,
         endTime: LocalTime,
         semesterId: Long,
-        dates: ImmutableSortedSet<LocalDate>
+        dates: ImmutableSortedSet<LocalDate>,
     ) {
-        val lessonEntity = LessonEntity(subjectName, type, startTime, endTime, semesterId, id)
+        val lessonEntity = LessonEntity(
+            subjectName = subjectName,
+            type = type,
+            startTime = startTime,
+            endTime = endTime,
+            semesterId = semesterId,
+            id = id,
+        )
         val teachersEntity = teachers.map { TeacherEntity(it, id) }
         val classroomsEntity = classrooms.map { ClassroomEntity(it, id) }
-        lessonDao.update(lessonEntity, teachersEntity, classroomsEntity, dates.map { ByDateEntity(it) })
+        lessonDao.update(
+            lesson = lessonEntity,
+            teachers = teachersEntity,
+            classrooms = classroomsEntity,
+            byDates = dates.map { ByDateEntity(it) },
+        )
     }
 
     suspend fun delete(id: Long): Unit = lessonDao.delete(id)
@@ -146,7 +192,8 @@ class LessonRepository(
 
     fun getTeachers(semesterId: Long): Flow<ImmutableSortedSet<String>> = lessonDao.getTeachersFlow(semesterId).map()
 
-    fun getClassrooms(semesterId: Long): Flow<ImmutableSortedSet<String>> = lessonDao.getClassroomsFlow(semesterId).map()
+    fun getClassrooms(semesterId: Long): Flow<ImmutableSortedSet<String>> =
+        lessonDao.getClassroomsFlow(semesterId).map()
 
     suspend fun getNextStartTime(semesterId: Long, dayOfWeek: DayOfWeek): LocalTime =
         lessonDao.getLastEndTime(semesterId, dayOfWeek)

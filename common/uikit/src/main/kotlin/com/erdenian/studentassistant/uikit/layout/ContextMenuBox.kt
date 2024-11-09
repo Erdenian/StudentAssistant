@@ -24,7 +24,7 @@ fun ContextMenuBox(
     onDismissRequest: () -> Unit,
     contextMenu: @Composable ColumnScope.() -> Unit,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     var clickPosition by remember { mutableStateOf(Offset.Zero) }
     var contentSize by remember { mutableStateOf(IntSize.Zero) }
@@ -36,7 +36,7 @@ fun ContextMenuBox(
                 awaitEachGesture {
                     clickPosition = awaitFirstDown(requireUnconsumed = false).position
                 }
-            }
+            },
     ) { content() }
 
     val density = LocalDensity.current
@@ -47,7 +47,7 @@ fun ContextMenuBox(
             val yOffset = clickPosition.y - contentSize.height
             DpOffset(
                 (if (contentSize.width - xOffset >= menuSize.width) xOffset else xOffset - menuSize.width).toDp(),
-                (if (-yOffset >= menuSize.height) yOffset else yOffset - menuSize.height).toDp()
+                (if (-yOffset >= menuSize.height) yOffset else yOffset - menuSize.height).toDp(),
             )
         }
     }
@@ -57,6 +57,6 @@ fun ContextMenuBox(
         onDismissRequest = onDismissRequest,
         offset = menuOffset,
         modifier = Modifier.onSizeChanged { menuSize = it },
-        content = contextMenu
+        content = contextMenu,
     )
 }

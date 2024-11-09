@@ -36,7 +36,7 @@ internal fun WeekdayPicker(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     editable: Boolean = true,
-    colors: WeekdaysPickerColors = WeekdaysPickerDefaults.weekdaysPickerColors()
+    colors: WeekdaysPickerColors = WeekdaysPickerDefaults.weekdaysPickerColors(),
 ) {
     val daysOfWeek = run {
         val locale = Locale.getDefault()
@@ -111,7 +111,7 @@ internal fun WeekdayPicker(
 
                             onValueChange(DayOfWeek.of(clickedIndex + 1))
                         }
-                    }
+                    },
             ) {
                 val spacingSum = spacingPx * (daysOfWeek.size - 1)
                 val dayWidth = (size.width - spacingSum) / 7.0f
@@ -123,7 +123,7 @@ internal fun WeekdayPicker(
                     drawCircle(
                         color = if (isSelected) selectedBackgroundColor else backgroundColor,
                         radius = dayRadius,
-                        center = center
+                        center = center,
                     )
 
                     drawIntoCanvas { canvas ->
@@ -134,12 +134,12 @@ internal fun WeekdayPicker(
                             name,
                             center.x,
                             center.y + textVerticalOffset,
-                            if (isSelected) selectedPaint else unselectedPaint
+                            if (isSelected) selectedPaint else unselectedPaint,
                         )
                     }
                 }
             }
-        }
+        },
     )
 }
 
@@ -151,12 +151,12 @@ object WeekdaysPickerDefaults {
             .compositeOver(MaterialTheme.colorScheme.surface),
         selectedBackgroundColor: Color = MaterialTheme.colorScheme.primary,
         textColor: Color = MaterialTheme.colorScheme.onPrimary,
-        selectedTextColor: Color = MaterialTheme.colorScheme.onPrimary
+        selectedTextColor: Color = MaterialTheme.colorScheme.onPrimary,
     ): WeekdaysPickerColors = DefaultWeekdaysPickerColors(
         backgroundColor = backgroundColor,
         selectedBackgroundColor = selectedBackgroundColor,
         textColor = textColor,
-        selectedTextColor = selectedTextColor
+        selectedTextColor = selectedTextColor,
     )
 }
 
@@ -181,7 +181,7 @@ private class DefaultWeekdaysPickerColors(
     private val backgroundColor: Color,
     private val selectedBackgroundColor: Color,
     private val textColor: Color,
-    private val selectedTextColor: Color
+    private val selectedTextColor: Color,
 ) : WeekdaysPickerColors {
 
     @Composable

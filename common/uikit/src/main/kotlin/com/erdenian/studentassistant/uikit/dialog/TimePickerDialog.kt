@@ -49,7 +49,7 @@ fun TimePickerDialog(
     onConfirm: (LocalTime) -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
-    initialTime: LocalTime = LocalTime.of(0, 0)
+    initialTime: LocalTime = LocalTime.of(0, 0),
 ) {
     var mode: DisplayMode by remember { mutableStateOf(DisplayMode.Picker) }
     val state: TimePickerState = rememberTimePickerState(initialTime.hour, initialTime.minute)
@@ -66,8 +66,8 @@ fun TimePickerDialog(
                         DisplayMode.Picker -> RS.tpd_select_time
                         DisplayMode.Input -> RS.tpd_enter_time
                         else -> RS.tpd_enter_time
-                    }
-                )
+                    },
+                ),
             )
         },
         buttons = {
@@ -77,7 +77,7 @@ fun TimePickerDialog(
                     DisplayMode.Picker -> fun() { mode = DisplayMode.Input }
                     DisplayMode.Input -> fun() { mode = DisplayMode.Picker }
                     else -> fun() { mode = DisplayMode.Picker }
-                }
+                },
             ) {
                 Icon(
                     imageVector = when (mode) {
@@ -85,24 +85,24 @@ fun TimePickerDialog(
                         DisplayMode.Input -> AppIcons.Schedule
                         else -> AppIcons.Schedule
                     },
-                    contentDescription = ""
+                    contentDescription = "",
                 )
             }
 
             Spacer(Modifier.weight(1f))
 
             TextButton(
-                onClick = onDismiss
+                onClick = onDismiss,
             ) {
                 Text(text = stringResource(android.R.string.cancel))
             }
 
             TextButton(
-                onClick = { onConfirm(LocalTime.of(state.hour, state.minute)) }
+                onClick = { onConfirm(LocalTime.of(state.hour, state.minute)) },
             ) {
                 Text(text = stringResource(android.R.string.ok))
             }
-        }
+        },
     ) {
         val contentModifier = Modifier.padding(horizontal = 24.dp)
         when (mode) {
@@ -118,17 +118,17 @@ private fun PickerDialog(
     title: @Composable () -> Unit,
     buttons: @Composable RowScope.() -> Unit,
     modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable ColumnScope.() -> Unit,
 ) = BasicAlertDialog(
     onDismissRequest = onDismissRequest,
     modifier = modifier
         .width(IntrinsicSize.Min)
         .height(IntrinsicSize.Min),
-    properties = DialogProperties(usePlatformDefaultWidth = false)
+    properties = DialogProperties(usePlatformDefaultWidth = false),
 ) {
     Surface(
         shape = MaterialTheme.shapes.extraLarge,
-        tonalElevation = 6.dp
+        tonalElevation = 6.dp,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurfaceVariant) {
@@ -137,12 +137,14 @@ private fun PickerDialog(
                         modifier = Modifier
                             .align(Alignment.Start)
                             .padding(horizontal = 24.dp)
-                            .padding(top = 16.dp, bottom = 20.dp)
+                            .padding(top = 16.dp, bottom = 20.dp),
                     ) { title() }
                 }
             }
 
-            CompositionLocalProvider(value = LocalContentColor provides AlertDialogDefaults.textContentColor) { content() }
+            CompositionLocalProvider(value = LocalContentColor provides AlertDialogDefaults.textContentColor) {
+                content()
+            }
 
             CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.primary) {
                 ProvideTextStyle(MaterialTheme.typography.labelLarge) {
@@ -153,7 +155,7 @@ private fun PickerDialog(
                             .fillMaxWidth()
                             .padding(bottom = 8.dp)
                             .padding(horizontal = 6.dp),
-                        content = buttons
+                        content = buttons,
                     )
                 }
             }

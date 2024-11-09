@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.map
 
 class SemesterRepository(
     private val semesterDao: SemesterDao,
-    private val selectedSemesterRepository: SelectedSemesterRepository
+    private val selectedSemesterRepository: SelectedSemesterRepository,
 ) {
 
     suspend fun insert(name: String, firstDay: LocalDate, lastDay: LocalDate) {
@@ -21,7 +21,7 @@ class SemesterRepository(
     }
 
     suspend fun update(id: Long, name: String, firstDay: LocalDate, lastDay: LocalDate): Unit =
-        semesterDao.update(SemesterEntity(name, firstDay, lastDay, id))
+        semesterDao.update(SemesterEntity(name = name, firstDay = firstDay, lastDay = lastDay, id = id))
 
     suspend fun delete(id: Long) {
         semesterDao.delete(id)

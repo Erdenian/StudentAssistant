@@ -55,7 +55,7 @@ internal fun LessonInformationContent(
     onEditClick: (Lesson) -> Unit,
     onHomeworkClick: (Homework) -> Unit,
     onAddHomeworkClick: (Lesson) -> Unit,
-    onDeleteHomeworkClick: (Homework) -> Unit
+    onDeleteHomeworkClick: (Homework) -> Unit,
 ) = Scaffold(
     topBar = {
         TopAppBar(
@@ -72,11 +72,11 @@ internal fun LessonInformationContent(
                             name = stringResource(RS.li_edit),
                             imageVector = AppIcons.Edit,
                             loading = (lesson == null),
-                            onClick = { lesson?.let(onEditClick) }
-                        )
-                    )
+                            onClick = { lesson?.let(onEditClick) },
+                        ),
+                    ),
                 )
-            }
+            },
         )
     },
     floatingActionButton = {
@@ -85,36 +85,36 @@ internal fun LessonInformationContent(
                 Icon(imageVector = AppIcons.Add, contentDescription = null)
             }
         }
-    }
+    },
 ) { paddingValues ->
     Column(
-        modifier = Modifier.padding(paddingValues)
+        modifier = Modifier.padding(paddingValues),
     ) {
         val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
 
         AnimatedContent(
             targetState = lesson,
             transitionSpec = { fadeIn() togetherWith fadeOut() },
-            label = "LessonInformationLessonCard"
+            label = "LessonInformationLessonCard",
         ) { lessonState ->
             // Random non-empty string to make LessonCard larger. User will not see it behind the shimmer
             val emptyText = "Loading..."
             LessonCard(
                 subjectName = lessonState?.subjectName ?: emptyText,
                 type = lessonState?.type ?: emptyText,
-                teachers = lessonState?.teachers?.list ?: emptyList(),
+                teachers = lessonState?.teachers?.list.orEmpty(),
                 classrooms = lessonState?.classrooms?.list ?: listOf(emptyText),
                 startTime = lessonState?.startTime?.format(timeFormatter) ?: emptyText,
                 endTime = lessonState?.endTime?.format(timeFormatter) ?: emptyText,
                 modifier = Modifier
                     .padding(
                         horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
-                        vertical = MaterialTheme.dimensions.screenPaddingVertical
+                        vertical = MaterialTheme.dimensions.screenPaddingVertical,
                     )
                     .placeholder(
                         visible = (lessonState == null),
-                        highlight = PlaceholderHighlight.fade()
-                    )
+                        highlight = PlaceholderHighlight.fade(),
+                    ),
             )
         }
 
@@ -131,14 +131,14 @@ internal fun LessonInformationContent(
                         val homework = checkNotNull(contextMenuHomework)
                         contextMenuHomework = null
                         onDeleteHomeworkClick(homework)
-                    }
+                    },
                 )
-            }
+            },
         ) {
             LazyHomeworksList(
                 homeworks = homeworks,
                 onHomeworkClick = onHomeworkClick,
-                onLongHomeworkClick = { contextMenuHomework = it }
+                onLongHomeworkClick = { contextMenuHomework = it },
             )
         }
     }
@@ -155,7 +155,7 @@ private fun LessonInformationContentLoadingPreview() = AppTheme {
         onEditClick = {},
         onHomeworkClick = {},
         onAddHomeworkClick = {},
-        onDeleteHomeworkClick = {}
+        onDeleteHomeworkClick = {},
     )
 }
 
@@ -170,7 +170,7 @@ private fun LessonInformationContentNoHomeworksPreview() = AppTheme {
         onEditClick = {},
         onHomeworkClick = {},
         onAddHomeworkClick = {},
-        onDeleteHomeworkClick = {}
+        onDeleteHomeworkClick = {},
     )
 }
 
@@ -185,6 +185,6 @@ private fun LessonInformationContentPreview() = AppTheme {
         onEditClick = {},
         onHomeworkClick = {},
         onAddHomeworkClick = {},
-        onDeleteHomeworkClick = {}
+        onDeleteHomeworkClick = {},
     )
 }

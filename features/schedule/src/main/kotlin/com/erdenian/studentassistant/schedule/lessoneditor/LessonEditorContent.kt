@@ -86,7 +86,7 @@ internal fun LessonEditorContent(
     onStartTimeChange: (LocalTime) -> Unit,
     onEndTimeChange: (LocalTime) -> Unit,
     onDayOfWeekChange: (DayOfWeek) -> Unit,
-    onWeeksChange: (List<Boolean>) -> Unit
+    onWeeksChange: (List<Boolean>) -> Unit,
 ) {
     val topAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
@@ -105,22 +105,24 @@ internal fun LessonEditorContent(
                                 name = stringResource(RS.le_save),
                                 imageVector = AppIcons.Check,
                                 loading = isProgress,
-                                onClick = onSaveClick
+                                onClick = onSaveClick,
                             ),
                             if (isEditing) {
                                 ActionItem.NeverShow(
                                     name = stringResource(RS.le_delete),
                                     loading = isProgress,
-                                    onClick = onDeleteClick
+                                    onClick = onDeleteClick,
                                 )
-                            } else null
-                        )
+                            } else {
+                                null
+                            },
+                        ),
                     )
                 },
-                scrollBehavior = topAppBarScrollBehavior
+                scrollBehavior = topAppBarScrollBehavior,
             )
         },
-        modifier = Modifier.imePadding()
+        modifier = Modifier.imePadding(),
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -129,8 +131,8 @@ internal fun LessonEditorContent(
                 .padding(paddingValues)
                 .padding(
                     horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
-                    vertical = MaterialTheme.dimensions.screenPaddingVertical
-                )
+                    vertical = MaterialTheme.dimensions.screenPaddingVertical,
+                ),
         ) {
             val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
             var timePickerData: Pair<LocalTime, (LocalTime) -> Unit>? by remember { mutableStateOf(null) }
@@ -144,15 +146,15 @@ internal fun LessonEditorContent(
                 isError = (subjectNameErrorMessage != null),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
-                    imeAction = ImeAction.Next
+                    imeAction = ImeAction.Next,
                 ),
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
                     .placeholder(
                         visible = isProgress,
-                        highlight = PlaceholderHighlight.fade()
-                    )
+                        highlight = PlaceholderHighlight.fade(),
+                    ),
             )
 
             AnimatedVisibility(subjectNameErrorMessage != null) {
@@ -160,7 +162,7 @@ internal fun LessonEditorContent(
                     text = subjectNameErrorMessage.orEmpty(),
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(start = 16.dp)
+                    modifier = Modifier.padding(start = 16.dp),
                 )
             }
 
@@ -172,7 +174,7 @@ internal fun LessonEditorContent(
                 label = { Text(text = stringResource(RS.le_type)) },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
-                    imeAction = ImeAction.Next
+                    imeAction = ImeAction.Next,
                 ),
                 singleLine = true,
                 modifier = Modifier
@@ -180,8 +182,8 @@ internal fun LessonEditorContent(
                     .padding(top = 8.dp)
                     .placeholder(
                         visible = isProgress,
-                        highlight = PlaceholderHighlight.fade()
-                    )
+                        highlight = PlaceholderHighlight.fade(),
+                    ),
             )
 
             MultiAutoCompleteTextField(
@@ -192,7 +194,7 @@ internal fun LessonEditorContent(
                 label = { Text(text = stringResource(RS.le_teachers)) },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Words,
-                    imeAction = ImeAction.Next
+                    imeAction = ImeAction.Next,
                 ),
                 singleLine = true,
                 modifier = Modifier
@@ -200,8 +202,8 @@ internal fun LessonEditorContent(
                     .padding(top = 8.dp)
                     .placeholder(
                         visible = isProgress,
-                        highlight = PlaceholderHighlight.fade()
-                    )
+                        highlight = PlaceholderHighlight.fade(),
+                    ),
             )
 
             val focusManager = LocalFocusManager.current
@@ -213,10 +215,10 @@ internal fun LessonEditorContent(
                 label = { Text(text = stringResource(RS.le_classrooms)) },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
-                    imeAction = ImeAction.Done
+                    imeAction = ImeAction.Done,
                 ),
                 keyboardActions = KeyboardActions(
-                    onDone = { focusManager.clearFocus() }
+                    onDone = { focusManager.clearFocus() },
                 ),
                 singleLine = true,
                 modifier = Modifier
@@ -224,28 +226,28 @@ internal fun LessonEditorContent(
                     .padding(top = 8.dp)
                     .placeholder(
                         visible = isProgress,
-                        highlight = PlaceholderHighlight.fade()
-                    )
+                        highlight = PlaceholderHighlight.fade(),
+                    ),
             )
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp)
+                    .padding(top = 8.dp),
             ) {
                 Text(
                     text = stringResource(RS.le_start_time),
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.weight(1.0f)
+                    modifier = Modifier.weight(1.0f),
                 )
                 TextButton(
                     onClick = { timePickerData = startTime to onStartTimeChange },
                     enabled = !isProgress,
                     modifier = Modifier.placeholder(
                         visible = isProgress,
-                        highlight = PlaceholderHighlight.fade()
-                    )
+                        highlight = PlaceholderHighlight.fade(),
+                    ),
                 ) {
                     Text(text = startTime.format(timeFormatter))
                 }
@@ -255,20 +257,20 @@ internal fun LessonEditorContent(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp)
+                    .padding(top = 8.dp),
             ) {
                 Text(
                     text = stringResource(RS.le_end_time),
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.weight(1.0f)
+                    modifier = Modifier.weight(1.0f),
                 )
                 TextButton(
                     onClick = { timePickerData = endTime to onEndTimeChange },
                     enabled = !isProgress,
                     modifier = Modifier.placeholder(
                         visible = isProgress,
-                        highlight = PlaceholderHighlight.fade()
-                    )
+                        highlight = PlaceholderHighlight.fade(),
+                    ),
                 ) {
                     Text(text = endTime.format(timeFormatter))
                 }
@@ -284,8 +286,8 @@ internal fun LessonEditorContent(
                     .fillMaxWidth()
                     .placeholder(
                         visible = isProgress,
-                        highlight = PlaceholderHighlight.fade()
-                    )
+                        highlight = PlaceholderHighlight.fade(),
+                    ),
             )
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
@@ -299,8 +301,8 @@ internal fun LessonEditorContent(
                     .fillMaxWidth()
                     .placeholder(
                         visible = isProgress,
-                        highlight = PlaceholderHighlight.fade()
-                    )
+                        highlight = PlaceholderHighlight.fade(),
+                    ),
             )
 
             timePickerData?.let { (initialTime, onConfirm) ->
@@ -310,7 +312,7 @@ internal fun LessonEditorContent(
                         onConfirm(newValue)
                     },
                     onDismiss = { timePickerData = null },
-                    initialTime = initialTime
+                    initialTime = initialTime,
                 )
             }
         }
@@ -348,7 +350,7 @@ private fun LessonEditorContentPreview() = AppTheme {
         onStartTimeChange = {},
         onEndTimeChange = {},
         onDayOfWeekChange = {},
-        onWeeksChange = {}
+        onWeeksChange = {},
     )
 }
 
@@ -382,7 +384,7 @@ private fun LessonEditorContentLongPreview() = AppTheme {
         onStartTimeChange = {},
         onEndTimeChange = {},
         onDayOfWeekChange = {},
-        onWeeksChange = {}
+        onWeeksChange = {},
     )
 }
 
@@ -416,6 +418,6 @@ private fun LessonEditorContentLoadingPreview() = AppTheme {
         onStartTimeChange = {},
         onEndTimeChange = {},
         onDayOfWeekChange = {},
-        onWeeksChange = {}
+        onWeeksChange = {},
     )
 }

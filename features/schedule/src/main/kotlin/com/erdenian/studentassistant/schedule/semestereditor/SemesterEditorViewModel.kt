@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 class SemesterEditorViewModel @AssistedInject constructor(
     application: Application,
     private val semesterRepository: SemesterRepository,
-    @Assisted private val semesterId: Long?
+    @Assisted private val semesterId: Long?,
 ) : AndroidViewModel(application) {
 
     @AssistedFactory
@@ -33,12 +33,12 @@ class SemesterEditorViewModel @AssistedInject constructor(
     enum class Error {
         EMPTY_NAME,
         SEMESTER_EXISTS,
-        WRONG_DATES
+        WRONG_DATES,
     }
 
     enum class Operation {
         LOADING,
-        SAVING
+        SAVING,
     }
 
     private val isSemesterLoaded = MutableStateFlow(false)
@@ -48,7 +48,7 @@ class SemesterEditorViewModel @AssistedInject constructor(
 
     private val semestersRanges = listOf(
         Month.FEBRUARY..Month.MAY,
-        Month.SEPTEMBER..Month.DECEMBER
+        Month.SEPTEMBER..Month.DECEMBER,
     )
 
     val name = MutableStateFlow("")
@@ -61,7 +61,9 @@ class SemesterEditorViewModel @AssistedInject constructor(
         val today = LocalDate.now().withDayOfMonth(1)
         val range = semestersRanges.find { today.month <= it.endInclusive } ?: semestersRanges.first()
         firstDay = MutableStateFlow(today.withMonth(range.start.value))
-        lastDay = MutableStateFlow(today.withMonth(range.endInclusive.value).withDayOfMonth(range.endInclusive.maxLength()))
+        lastDay = MutableStateFlow(
+            today.withMonth(range.endInclusive.value).withDayOfMonth(range.endInclusive.maxLength()),
+        )
 
         if (semesterId != null) {
             viewModelScope.launch {
@@ -88,10 +90,10 @@ class SemesterEditorViewModel @AssistedInject constructor(
     }
 
     val error = combine(
-        name,
-        firstDay,
-        lastDay,
-        semesterRepository.namesFlow.onEach { areNamesLoaded.value = true }
+        flow = name,
+        flow2 = firstDay,
+        flow3 = lastDay,
+        flow4 = semesterRepository.namesFlow.onEach { areNamesLoaded.value = true },
     ) { name, firstDay, lastDay, semestersNames ->
         when {
             name.isBlank() -> Error.EMPTY_NAME
@@ -112,8 +114,10 @@ class SemesterEditorViewModel @AssistedInject constructor(
         operationPrivate.value = Operation.SAVING
         viewModelScope.launch {
             semesterId?.let { id ->
-                semesterRepository.update(id, name.value, firstDay.value, lastDay.value)
-            } ?: semesterRepository.insert(name.value, firstDay.value, lastDay.value)
+                semesterRepository.update(
+                    id = id, name = name.value, firstDay = firstDay.value, lastDay = lastDay.value,
+                )
+            } ?: semesterRepository.insert(name = name.value, firstDay = firstDay.value, lastDay = lastDay.value)
             donePrivate.value = true
             operationPrivate.value = null
         }

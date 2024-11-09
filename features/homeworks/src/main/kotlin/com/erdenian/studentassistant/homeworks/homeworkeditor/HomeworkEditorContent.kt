@@ -27,6 +27,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -88,7 +89,7 @@ internal fun HomeworkEditorContent(
     onDeleteClick: () -> Unit,
     onSubjectNameChange: (String) -> Unit,
     onDeadlineChange: (LocalDate) -> Unit,
-    onDescriptionChange: (String) -> Unit
+    onDescriptionChange: (String) -> Unit,
 ) = Scaffold(
     topBar = {
         TopAppBar(
@@ -105,29 +106,31 @@ internal fun HomeworkEditorContent(
                             name = stringResource(RS.he_save),
                             imageVector = AppIcons.Check,
                             onClick = onSaveClick,
-                            loading = isProgress
+                            loading = isProgress,
                         ),
                         if (isEditing) {
                             ActionItem.NeverShow(
                                 name = stringResource(RS.he_delete),
                                 onClick = onDeleteClick,
-                                loading = isProgress
+                                loading = isProgress,
                             )
-                        } else null
-                    )
+                        } else {
+                            null
+                        },
+                    ),
                 )
-            }
+            },
         )
     },
-    modifier = Modifier.imePadding()
+    modifier = Modifier.imePadding(),
 ) { paddingValues ->
     Column(
         modifier = Modifier
             .padding(paddingValues)
             .padding(
                 horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
-                vertical = MaterialTheme.dimensions.screenPaddingVertical
-            )
+                vertical = MaterialTheme.dimensions.screenPaddingVertical,
+            ),
     ) {
         val descriptionFocusRequester = remember { FocusRequester() }
         val currentExistingSubjects by rememberUpdatedState(existingSubjects)
@@ -135,7 +138,7 @@ internal fun HomeworkEditorContent(
         var expanded by remember { mutableStateOf(false) }
         ExposedDropdownMenuBox(
             expanded = expanded,
-            onExpandedChange = { expanded = !expanded && currentExistingSubjects.isNotEmpty() }
+            onExpandedChange = { expanded = !expanded && currentExistingSubjects.isNotEmpty() },
         ) {
             var textFieldValueState by remember { mutableStateOf(TextFieldValue(text = subjectName)) }
             val textFieldValue = textFieldValueState.copy(text = subjectName)
@@ -149,31 +152,31 @@ internal fun HomeworkEditorContent(
                 enabled = !isProgress,
                 label = { Text(text = stringResource(RS.he_subject)) },
                 trailingIcon = {
-                    if (existingSubjects.isNotEmpty())
+                    if (existingSubjects.isNotEmpty()) {
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                    }
                 },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
-                    imeAction = ImeAction.Next
+                    imeAction = ImeAction.Next,
                 ),
                 keyboardActions = KeyboardActions(
-                    onNext = { descriptionFocusRequester.requestFocus() }
+                    onNext = { descriptionFocusRequester.requestFocus() },
                 ),
                 singleLine = true,
                 colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
                 modifier = Modifier
-                    .menuAnchor()
+                    .menuAnchor(MenuAnchorType.PrimaryEditable)
                     .fillMaxWidth()
                     .placeholder(
                         visible = isProgress,
-                        highlight = PlaceholderHighlight.fade()
-                    )
+                        highlight = PlaceholderHighlight.fade(),
+                    ),
             )
 
             ExposedDropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
-                focusable = false
             ) {
                 existingSubjects.forEach { subject ->
                     DropdownMenuItem(
@@ -182,11 +185,11 @@ internal fun HomeworkEditorContent(
                         onClick = {
                             textFieldValueState = textFieldValueState.copy(
                                 text = subject,
-                                selection = TextRange(subject.length)
+                                selection = TextRange(subject.length),
                             )
                             onSubjectNameChange(subject)
                             expanded = false
-                        }
+                        },
                     )
                 }
             }
@@ -194,14 +197,14 @@ internal fun HomeworkEditorContent(
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = 8.dp),
         ) {
             var showDatePicker by remember { mutableStateOf(false) }
 
             Text(
                 text = stringResource(RS.he_deadline_label),
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.weight(1.0f)
+                modifier = Modifier.weight(1.0f),
             )
 
             TextButton(
@@ -209,8 +212,8 @@ internal fun HomeworkEditorContent(
                 enabled = !isProgress,
                 modifier = Modifier.placeholder(
                     visible = isProgress,
-                    highlight = PlaceholderHighlight.fade()
-                )
+                    highlight = PlaceholderHighlight.fade(),
+                ),
             ) {
                 val deadlineFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
                 Text(text = deadline.format(deadlineFormatter))
@@ -224,7 +227,7 @@ internal fun HomeworkEditorContent(
                     },
                     onDismiss = { showDatePicker = false },
                     initialSelectedDate = deadline,
-                    datesRange = semesterDates
+                    datesRange = semesterDates,
                 )
             }
         }
@@ -232,7 +235,7 @@ internal fun HomeworkEditorContent(
         AnimatedVisibility(
             visible = !isProgress,
             enter = fadeIn(),
-            exit = fadeOut()
+            exit = fadeOut(),
         ) {
             SimpleTextField(
                 value = description,
@@ -242,7 +245,7 @@ internal fun HomeworkEditorContent(
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
                 modifier = Modifier
                     .fillMaxSize()
-                    .focusRequester(descriptionFocusRequester)
+                    .focusRequester(descriptionFocusRequester),
             )
         }
     }
@@ -257,12 +260,12 @@ private fun SimpleTextField(
     enabled: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions(),
     colors: TextFieldColors = TextFieldDefaults.colors(),
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) = Box {
     @Composable
     fun TextFieldColors.textColor(
         enabled: Boolean,
-        interactionSource: InteractionSource
+        interactionSource: InteractionSource,
     ): State<Color> {
         val focused by interactionSource.collectIsFocusedAsState()
 
@@ -285,23 +288,20 @@ private fun SimpleTextField(
         keyboardOptions = keyboardOptions,
         cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
         interactionSource = interactionSource,
-        modifier = modifier
+        modifier = modifier,
     )
 
     if (value.isEmpty() && (label != null)) {
         @Composable
         fun TextFieldColors.labelColor(enabled: Boolean): State<Color> {
-            val targetValue = when {
-                !enabled -> disabledLabelColor
-                else -> unfocusedLabelColor
-            }
+            val targetValue = if (enabled) unfocusedLabelColor else disabledLabelColor
             return rememberUpdatedState(targetValue)
         }
 
         val contentColor = colors.labelColor(enabled).value
         CompositionLocalProvider(
             LocalContentColor provides contentColor,
-            content = label
+            content = label,
         )
     }
 }
@@ -323,7 +323,7 @@ private fun HomeworkEditorContentRegularPreview() = AppTheme {
         onDeleteClick = {},
         onSubjectNameChange = {},
         onDeadlineChange = {},
-        onDescriptionChange = {}
+        onDescriptionChange = {},
     )
 }
 
@@ -344,7 +344,7 @@ private fun HomeworkEditorContentEmptyPreview() = AppTheme {
         onDeleteClick = {},
         onSubjectNameChange = {},
         onDeadlineChange = {},
-        onDescriptionChange = {}
+        onDescriptionChange = {},
     )
 }
 
@@ -364,7 +364,7 @@ private fun HomeworkEditorContentLongPreview() = AppTheme {
         onDeleteClick = {},
         onSubjectNameChange = {},
         onDeadlineChange = {},
-        onDescriptionChange = {}
+        onDescriptionChange = {},
     )
 }
 
@@ -384,6 +384,6 @@ private fun HomeworkEditorContentLoadingPreview() = AppTheme {
         onDeleteClick = {},
         onSubjectNameChange = {},
         onDeadlineChange = {},
-        onDescriptionChange = {}
+        onDescriptionChange = {},
     )
 }

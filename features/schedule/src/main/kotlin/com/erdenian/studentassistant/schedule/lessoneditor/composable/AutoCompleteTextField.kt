@@ -8,6 +8,7 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -51,15 +52,18 @@ internal fun AutoCompleteTextField(
     maxLines: Int = Int.MAX_VALUE,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = MaterialTheme.shapes.small,
-    colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
 ) {
     var textFieldValueState by remember { mutableStateOf(TextFieldValue(text = value)) }
     val textFieldValue = textFieldValueState.copy(text = value)
 
     val autocompleteItems = remember(items, textFieldValue.text) {
         val text = textFieldValue.text.trim()
-        if (text.length < LENGTH_TO_EXPAND) emptyList()
-        else items.filter { it.contains(text, ignoreCase = true) && (it.length > text.length) }
+        if (text.length < LENGTH_TO_EXPAND) {
+            emptyList()
+        } else {
+            items.filter { it.contains(text, ignoreCase = true) && (it.length > text.length) }
+        }
     }
 
     BaseAutoCompleteTextField(
@@ -73,7 +77,7 @@ internal fun AutoCompleteTextField(
             textFieldValueState = textFieldValueState.copy(
                 text = item,
                 selection = TextRange(item.length),
-                composition = null
+                composition = null,
             )
             onValueChange(item)
         },
@@ -93,7 +97,7 @@ internal fun AutoCompleteTextField(
         maxLines = maxLines,
         interactionSource = interactionSource,
         shape = shape,
-        colors = colors
+        colors = colors,
     )
 }
 
@@ -118,7 +122,7 @@ internal fun MultiAutoCompleteTextField(
     maxLines: Int = Int.MAX_VALUE,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = MaterialTheme.shapes.small,
-    colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
 ) {
     var textFieldValueState by remember { mutableStateOf(TextFieldValue(text = value)) }
     val textFieldValue = textFieldValueState.copy(text = value)
@@ -134,8 +138,11 @@ internal fun MultiAutoCompleteTextField(
 
     val autoCompleteItems = remember(items, textFieldValue.text, autoCompleteRange) {
         val text = textFieldValue.text.substring(autoCompleteRange).trim()
-        if (text.length < LENGTH_TO_EXPAND) emptyList()
-        else items.filter { it.contains(text, ignoreCase = true) && (it.length > text.length) }
+        if (text.length < LENGTH_TO_EXPAND) {
+            emptyList()
+        } else {
+            items.filter { it.contains(text, ignoreCase = true) && (it.length > text.length) }
+        }
     }
 
     BaseAutoCompleteTextField(
@@ -153,7 +160,7 @@ internal fun MultiAutoCompleteTextField(
             textFieldValueState = textFieldValueState.copy(
                 text = textFieldValue.text.replaceRange(autoCompleteRange, itemWithComma),
                 selection = TextRange(autoCompleteRange.first + itemWithComma.length),
-                composition = null
+                composition = null,
             )
             onValueChange(textFieldValueState.text)
             recalculateAutoCompleteRange(textFieldValueState)
@@ -174,7 +181,7 @@ internal fun MultiAutoCompleteTextField(
         maxLines = maxLines,
         interactionSource = interactionSource,
         shape = shape,
-        colors = colors
+        colors = colors,
     )
 }
 
@@ -200,7 +207,7 @@ private fun BaseAutoCompleteTextField(
     maxLines: Int = Int.MAX_VALUE,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = MaterialTheme.shapes.small,
-    colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
 ) {
     var expanded by remember { mutableStateOf(false) }
     var hasFocus by remember { mutableStateOf(false) }
@@ -216,13 +223,13 @@ private fun BaseAutoCompleteTextField(
 
     ExposedDropdownMenuBox(
         expanded = expanded,
-        onExpandedChange = { if (!it) expanded = false }
+        onExpandedChange = { if (!it) expanded = false },
     ) {
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = modifier
-                .menuAnchor()
+                .menuAnchor(MenuAnchorType.PrimaryEditable)
                 .onFocusChanged { focusState ->
                     hasFocus = focusState.hasFocus
                     expanded = false
@@ -242,13 +249,12 @@ private fun BaseAutoCompleteTextField(
             maxLines = maxLines,
             interactionSource = interactionSource,
             shape = shape,
-            colors = colors
+            colors = colors,
         )
 
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            focusable = false
         ) {
             autoCompleteItems.forEach { item ->
                 DropdownMenuItem(
@@ -257,7 +263,7 @@ private fun BaseAutoCompleteTextField(
                     onClick = {
                         onItemClick(item)
                         expanded = false
-                    }
+                    },
                 )
             }
         }

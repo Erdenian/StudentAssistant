@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun LessonEditorScreen(
     viewModel: LessonEditorViewModel,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
 ) {
     val done by viewModel.done.collectAsState()
     LaunchedEffect(done) {
@@ -105,7 +105,7 @@ fun LessonEditorScreen(
             dismissButton = {
                 TextButton(
                     onClick = { showSaveDialog = false },
-                    content = { Text(text = stringResource(RS.le_rename_others_cancel)) }
+                    content = { Text(text = stringResource(RS.le_rename_others_cancel)) },
                 )
             },
             confirmButton = {
@@ -114,16 +114,16 @@ fun LessonEditorScreen(
                         viewModel.save(false)
                         showSaveDialog = false
                     },
-                    content = { Text(text = stringResource(RS.le_rename_others_no)) }
+                    content = { Text(text = stringResource(RS.le_rename_others_no)) },
                 )
                 TextButton(
                     onClick = {
                         viewModel.save(true)
                         showSaveDialog = false
                     },
-                    content = { Text(text = stringResource(RS.le_rename_others_yes)) }
+                    content = { Text(text = stringResource(RS.le_rename_others_yes)) },
                 )
-            }
+            },
         )
     }
 
@@ -136,7 +136,7 @@ fun LessonEditorScreen(
             dismissButton = {
                 TextButton(
                     onClick = { showDeleteWithHomeworksDialog = false },
-                    content = { Text(text = stringResource(RS.le_delete_homeworks_cancel)) }
+                    content = { Text(text = stringResource(RS.le_delete_homeworks_cancel)) },
                 )
             },
             confirmButton = {
@@ -145,16 +145,16 @@ fun LessonEditorScreen(
                         viewModel.delete(false)
                         showDeleteWithHomeworksDialog = false
                     },
-                    content = { Text(text = stringResource(RS.le_delete_homeworks_no)) }
+                    content = { Text(text = stringResource(RS.le_delete_homeworks_no)) },
                 )
                 TextButton(
                     onClick = {
                         viewModel.delete(true)
                         showDeleteWithHomeworksDialog = false
                     },
-                    content = { Text(text = stringResource(RS.le_delete_homeworks_yes)) }
+                    content = { Text(text = stringResource(RS.le_delete_homeworks_yes)) },
                 )
-            }
+            },
         )
     }
 
@@ -166,7 +166,7 @@ fun LessonEditorScreen(
             dismissButton = {
                 TextButton(
                     onClick = { showDeleteWithoutHomeworksDialog = false },
-                    content = { Text(text = stringResource(RS.le_delete_no)) }
+                    content = { Text(text = stringResource(RS.le_delete_no)) },
                 )
             },
             confirmButton = {
@@ -175,9 +175,9 @@ fun LessonEditorScreen(
                         viewModel.delete()
                         showDeleteWithoutHomeworksDialog = false
                     },
-                    content = { Text(text = stringResource(RS.le_delete_yes)) }
+                    content = { Text(text = stringResource(RS.le_delete_yes)) },
                 )
-            }
+            },
         )
     }
 
@@ -206,8 +206,11 @@ fun LessonEditorScreen(
             } else {
                 customOperaionMessageId = RS.le_rename_others_progress
                 coroutineScope.launch {
-                    if (viewModel.isSubjectNameChangedAndNotLast()) showSaveDialog = true
-                    else viewModel.save()
+                    if (viewModel.isSubjectNameChangedAndNotLast()) {
+                        showSaveDialog = true
+                    } else {
+                        viewModel.save()
+                    }
                     customOperaionMessageId = null
                 }
             }
@@ -215,8 +218,11 @@ fun LessonEditorScreen(
         onDeleteClick = {
             customOperaionMessageId = RS.le_delete_homeworks_progress
             coroutineScope.launch {
-                if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) showDeleteWithHomeworksDialog = true
-                else showDeleteWithoutHomeworksDialog = true
+                if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) {
+                    showDeleteWithHomeworksDialog = true
+                } else {
+                    showDeleteWithoutHomeworksDialog = true
+                }
                 customOperaionMessageId = null
             }
         },
@@ -230,6 +236,6 @@ fun LessonEditorScreen(
         onStartTimeChange = { viewModel.startTime.value = it },
         onEndTimeChange = { viewModel.endTime.value = it },
         onDayOfWeekChange = { viewModel.dayOfWeek.value = it },
-        onWeeksChange = { viewModel.weeks.value = it }
+        onWeeksChange = { viewModel.weeks.value = it },
     )
 }

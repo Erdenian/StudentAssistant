@@ -20,13 +20,13 @@ import kotlinx.coroutines.CoroutineScope
 @Module(includes = [DatabaseModule::class])
 class RepositoryModule(
     private val applicationCoroutineScope: CoroutineScope,
-    private val settingsPreferencesName: String
+    private val settingsPreferencesName: String,
 ) {
 
     @Singleton
     @Provides
     fun selectedSemesterRepository(
-        semesterDao: SemesterDao
+        semesterDao: SemesterDao,
     ) = SelectedSemesterRepository(applicationCoroutineScope, semesterDao)
 
     @Reusable
@@ -38,7 +38,7 @@ class RepositoryModule(
     @Provides
     fun semesterRepository(
         semesterDao: SemesterDao,
-        selectedSemesterRepository: SelectedSemesterRepository
+        selectedSemesterRepository: SelectedSemesterRepository,
     ) = SemesterRepository(semesterDao, selectedSemesterRepository)
 
     @Reusable
@@ -46,13 +46,13 @@ class RepositoryModule(
     fun lessonRepository(
         lessonDao: LessonDao,
         selectedSemesterRepository: SelectedSemesterRepository,
-        settingsRepository: SettingsRepository
+        settingsRepository: SettingsRepository,
     ) = LessonRepository(lessonDao, selectedSemesterRepository, settingsRepository)
 
     @Reusable
     @Provides
     fun homeworkRepository(
         homeworkDao: HomeworkDao,
-        selectedSemesterRepository: SelectedSemesterRepository
+        selectedSemesterRepository: SelectedSemesterRepository,
     ) = HomeworkRepository(homeworkDao, selectedSemesterRepository)
 }

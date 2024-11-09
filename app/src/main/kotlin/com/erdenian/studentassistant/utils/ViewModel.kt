@@ -14,13 +14,13 @@ internal inline fun <reified VM : ViewModel> viewModel(
         "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
     },
     key: String? = null,
-    crossinline initializer: CreationExtras.(Application) -> VM
+    crossinline initializer: CreationExtras.(Application) -> VM,
 ): VM {
     val application = LocalContext.current.applicationContext as Application
     return androidx.lifecycle.viewmodel.compose.viewModel(
         viewModelStoreOwner = viewModelStoreOwner,
         key = key,
-        initializer = { initializer(application) }
+        initializer = { initializer(application) },
     )
 }
 
@@ -29,8 +29,8 @@ internal inline fun <reified VM : ViewModel> viewModel(
     viewModelStoreOwner: ViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current) {
         "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
     },
-    key: String? = null
+    key: String? = null,
 ): VM = androidx.lifecycle.viewmodel.compose.viewModel(
     viewModelStoreOwner = viewModelStoreOwner,
-    key = key
+    key = key,
 )

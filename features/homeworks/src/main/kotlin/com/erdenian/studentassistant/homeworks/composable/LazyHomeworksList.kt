@@ -42,41 +42,44 @@ internal fun LazyHomeworksList(
     pastHomeworks: List<Homework>?,
     onHomeworkClick: (Homework) -> Unit,
     modifier: Modifier = Modifier,
-    onLongHomeworkClick: ((Homework) -> Unit)? = null
+    onLongHomeworkClick: ((Homework) -> Unit)? = null,
 ) {
     AnimatedContent(
         targetState = Triple(overdueHomeworks, actualHomeworks, pastHomeworks),
         transitionSpec = { fadeIn() togetherWith fadeOut() },
         contentAlignment = Alignment.Center,
         label = "LazyHomeworksList",
-        modifier = modifier
+        modifier = modifier,
     ) { (overdueHomeworksState, actualHomeworksState, pastHomeworksState) ->
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
             when {
-                (overdueHomeworksState == null) || (actualHomeworksState == null) || (pastHomeworksState == null) ->
+                (overdueHomeworksState == null) || (actualHomeworksState == null) || (pastHomeworksState == null) -> {
                     DelayedVisibility { CircularProgressIndicator() }
-                overdueHomeworksState.isEmpty() && actualHomeworksState.isEmpty() && pastHomeworksState.isEmpty() -> Text(
-                    text = stringResource(RS.lhl_no_homeworks),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal)
-                )
+                }
+                overdueHomeworksState.isEmpty() && actualHomeworksState.isEmpty() && pastHomeworksState.isEmpty() -> {
+                    Text(
+                        text = stringResource(RS.lhl_no_homeworks),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal),
+                    )
+                }
                 else -> {
                     val deadlineFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
 
                     LazyColumn(
                         contentPadding = PaddingValues(
                             horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
-                            vertical = MaterialTheme.dimensions.screenPaddingVertical
+                            vertical = MaterialTheme.dimensions.screenPaddingVertical,
                         ),
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.cardsSpacing),
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
                     ) {
                         fun LazyListScope.createList(homeworks: List<Homework>) = itemsIndexed(
                             items = homeworks,
-                            key = { _, item -> item.id }
+                            key = { _, item -> item.id },
                         ) { _, homework ->
                             val haptic = LocalHapticFeedback.current
                             HomeworkCard(
@@ -89,7 +92,7 @@ internal fun LazyHomeworksList(
                                         onLongClick(homework)
                                     }
                                 },
-                                onClick = { onHomeworkClick(homework) }
+                                onClick = { onHomeworkClick(homework) },
                             )
                         }
 
@@ -119,7 +122,7 @@ private fun LazyHomeworksListLoadingPreview() = AppTheme {
         overdueHomeworks = null,
         actualHomeworks = null,
         pastHomeworks = null,
-        onHomeworkClick = {}
+        onHomeworkClick = {},
     )
 }
 
@@ -130,7 +133,7 @@ private fun LazyHomeworksListEmptyPreview() = AppTheme {
         overdueHomeworks = emptyList(),
         actualHomeworks = emptyList(),
         pastHomeworks = emptyList(),
-        onHomeworkClick = {}
+        onHomeworkClick = {},
     )
 }
 
@@ -141,6 +144,6 @@ private fun LazyHomeworksListPreview() = AppTheme {
         overdueHomeworks = List(4) { Homeworks.regular },
         actualHomeworks = List(4) { Homeworks.regular },
         pastHomeworks = List(4) { Homeworks.regular },
-        onHomeworkClick = {}
+        onHomeworkClick = {},
     )
 }

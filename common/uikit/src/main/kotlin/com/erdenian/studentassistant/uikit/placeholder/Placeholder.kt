@@ -65,7 +65,7 @@ fun Modifier.placeholder(
     shape: Shape? = null,
     highlight: PlaceholderHighlight? = null,
     placeholderFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
-    contentFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() }
+    contentFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
 ): Modifier = composed {
     Modifier.placeholderFoundation(
         visible = visible,
@@ -73,7 +73,7 @@ fun Modifier.placeholder(
         shape = shape ?: MaterialTheme.shapes.small,
         highlight = highlight,
         placeholderFadeTransitionSpec = placeholderFadeTransitionSpec,
-        contentFadeTransitionSpec = contentFadeTransitionSpec
+        contentFadeTransitionSpec = contentFadeTransitionSpec,
     )
 }
 
@@ -103,13 +103,14 @@ fun Modifier.placeholder(
  * @param contentFadeTransitionSpec The transition spec to use when fading the content
  * on/off screen. The boolean parameter defined for the transition is [visible].
  */
+@Suppress("MagicNumber")
 private fun Modifier.placeholderFoundation(
     visible: Boolean,
     color: Color,
     shape: Shape = RectangleShape,
     highlight: PlaceholderHighlight? = null,
     placeholderFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
-    contentFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() }
+    contentFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
 ): Modifier = composed(
     inspectorInfo = debugInspectorInfo {
         name = "placeholder"
@@ -118,7 +119,7 @@ private fun Modifier.placeholderFoundation(
         properties["color"] = color
         properties["highlight"] = highlight
         properties["shape"] = shape
-    }
+    },
 ) {
     // Values used for caching purposes
     val lastSize = remember { Ref<Size>() }
@@ -137,12 +138,12 @@ private fun Modifier.placeholderFoundation(
     val placeholderAlpha by transition.animateFloat(
         transitionSpec = placeholderFadeTransitionSpec,
         label = "placeholder_fade",
-        targetValueByState = { placeholderVisible -> if (placeholderVisible) 1f else 0f }
+        targetValueByState = { placeholderVisible -> if (placeholderVisible) 1f else 0f },
     )
     val contentAlpha by transition.animateFloat(
         transitionSpec = contentFadeTransitionSpec,
         label = "content_fade",
-        targetValueByState = { placeholderVisible -> if (placeholderVisible) 0f else 1f }
+        targetValueByState = { placeholderVisible -> if (placeholderVisible) 0f else 1f },
     )
 
     // Run the optional animation spec and update the progress if the placeholder is visible
@@ -153,7 +154,7 @@ private fun Modifier.placeholderFoundation(
             initialValue = 0f,
             targetValue = 1f,
             animationSpec = animationSpec,
-            label = "placeholder_highlight_animation"
+            label = "placeholder_highlight_animation",
         ).value
     }
 
@@ -187,7 +188,7 @@ private fun Modifier.placeholderFoundation(
                         progress = highlightProgress,
                         lastOutline = lastOutline.value,
                         lastLayoutDirection = lastLayoutDirection.value,
-                        lastSize = lastSize.value
+                        lastSize = lastSize.value,
                     )
                 }
             } else if (placeholderAlpha >= 0.99f) {
@@ -199,7 +200,7 @@ private fun Modifier.placeholderFoundation(
                     progress = highlightProgress,
                     lastOutline = lastOutline.value,
                     lastLayoutDirection = lastLayoutDirection.value,
-                    lastSize = lastSize.value
+                    lastSize = lastSize.value,
                 )
             }
 
@@ -217,7 +218,7 @@ private fun DrawScope.drawPlaceholder(
     progress: Float,
     lastOutline: Outline?,
     lastLayoutDirection: LayoutDirection?,
-    lastSize: Size?
+    lastSize: Size?,
 ): Outline? {
     // shortcut to avoid Outline calculation and allocation
     if (shape === RectangleShape) {
@@ -227,7 +228,7 @@ private fun DrawScope.drawPlaceholder(
         if (highlight != null) {
             drawRect(
                 brush = highlight.brush(progress, size),
-                alpha = highlight.alpha(progress)
+                alpha = highlight.alpha(progress),
             )
         }
         // We didn't create an outline so return null
@@ -246,7 +247,7 @@ private fun DrawScope.drawPlaceholder(
         drawOutline(
             outline = outline,
             brush = highlight.brush(progress, size),
-            alpha = highlight.alpha(progress)
+            alpha = highlight.alpha(progress),
         )
     }
 
@@ -256,7 +257,7 @@ private fun DrawScope.drawPlaceholder(
 
 private inline fun DrawScope.withLayer(
     paint: Paint,
-    drawBlock: DrawScope.() -> Unit
+    drawBlock: DrawScope.() -> Unit,
 ) = drawIntoCanvas { canvas ->
     canvas.saveLayer(size.toRect(), paint)
     drawBlock()

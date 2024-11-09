@@ -38,38 +38,38 @@ internal fun LazyLessonsList(
     lessons: List<Lesson>?,
     onLessonClick: (Lesson) -> Unit,
     modifier: Modifier = Modifier,
-    onLongLessonClick: ((Lesson) -> Unit)? = null
+    onLongLessonClick: ((Lesson) -> Unit)? = null,
 ) {
     AnimatedContent(
         targetState = lessons,
         transitionSpec = { fadeIn() togetherWith fadeOut() },
         contentAlignment = Alignment.Center,
         label = "LazyLessonsList",
-        modifier = modifier
+        modifier = modifier,
     ) { lessonsState ->
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
             when {
                 (lessonsState == null) -> DelayedVisibility { CircularProgressIndicator() }
                 lessonsState.isEmpty() -> Text(
                     text = stringResource(RS.lll_free_day),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal)
+                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal),
                 )
                 else ->
                     LazyColumn(
                         contentPadding = PaddingValues(
                             horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
-                            vertical = MaterialTheme.dimensions.screenPaddingVertical
+                            vertical = MaterialTheme.dimensions.screenPaddingVertical,
                         ),
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.cardsSpacing),
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
                     ) {
                         itemsIndexed(
                             items = lessonsState,
-                            key = { _, item -> item.id }
+                            key = { _, item -> item.id },
                         ) { _, lesson ->
                             val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
                             val haptic = LocalHapticFeedback.current
@@ -87,7 +87,7 @@ internal fun LazyLessonsList(
                                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                         onLongClick(lesson)
                                     }
-                                }
+                                },
                             )
                         }
                     }
@@ -101,7 +101,7 @@ internal fun LazyLessonsList(
 private fun LazyLessonsListLoadingPreview() = AppTheme {
     LazyLessonsList(
         lessons = null,
-        onLessonClick = {}
+        onLessonClick = {},
     )
 }
 
@@ -110,7 +110,7 @@ private fun LazyLessonsListLoadingPreview() = AppTheme {
 private fun LazyLessonsListEmptyPreview() = AppTheme {
     LazyLessonsList(
         lessons = emptyList(),
-        onLessonClick = {}
+        onLessonClick = {},
     )
 }
 
@@ -119,6 +119,6 @@ private fun LazyLessonsListEmptyPreview() = AppTheme {
 private fun LazyLessonsListPreview() = AppTheme {
     LazyLessonsList(
         lessons = List(10) { Lessons.regular },
-        onLessonClick = {}
+        onLessonClick = {},
     )
 }

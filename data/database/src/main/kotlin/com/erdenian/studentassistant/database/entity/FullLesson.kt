@@ -17,27 +17,27 @@ data class FullLesson(
 
     @Relation(
         parentColumn = "_id",
-        entityColumn = "lesson_id"
+        entityColumn = "lesson_id",
     )
     val lessonTeachers: List<TeacherEntity>,
 
     @Relation(
         parentColumn = "_id",
-        entityColumn = "lesson_id"
+        entityColumn = "lesson_id",
     )
     val lessonClassrooms: List<ClassroomEntity>,
 
     @Relation(
         parentColumn = "_id",
-        entityColumn = "lesson_id"
+        entityColumn = "lesson_id",
     )
     val byWeekday: ByWeekdayEntity?,
 
     @Relation(
         parentColumn = "_id",
-        entityColumn = "lesson_id"
+        entityColumn = "lesson_id",
     )
-    val byDates: List<ByDateEntity>
+    val byDates: List<ByDateEntity>,
 ) : Lesson {
 
     override val subjectName get() = lesson.subjectName

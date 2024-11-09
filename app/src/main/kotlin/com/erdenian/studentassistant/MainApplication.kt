@@ -14,7 +14,7 @@ internal class MainApplication : Application() {
         DaggerMainComponent.factory().create(
             this,
             DatabaseModule("schedule.db"),
-            RepositoryModule(@OptIn(DelicateCoroutinesApi::class) GlobalScope, "settings")
+            RepositoryModule(@OptIn(DelicateCoroutinesApi::class) GlobalScope, "settings"),
         )
     }
 }

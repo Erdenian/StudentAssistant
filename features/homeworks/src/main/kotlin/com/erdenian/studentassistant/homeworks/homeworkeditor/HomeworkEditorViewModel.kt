@@ -31,7 +31,7 @@ class HomeworkEditorViewModel @AssistedInject constructor(
     private val homeworkRepository: HomeworkRepository,
     @Assisted val semesterId: Long,
     @Assisted private val homeworkId: Long?,
-    @Assisted subjectName: String?
+    @Assisted subjectName: String?,
 ) : AndroidViewModel(application) {
 
     @AssistedFactory
@@ -39,7 +39,7 @@ class HomeworkEditorViewModel @AssistedInject constructor(
         internal abstract fun getInternal(
             semesterId: Long,
             homeworkId: Long? = null,
-            subjectName: String? = null
+            subjectName: String? = null,
         ): HomeworkEditorViewModel
 
         fun get(semesterId: Long, subjectName: String? = null) = getInternal(semesterId, subjectName = subjectName)
@@ -48,13 +48,13 @@ class HomeworkEditorViewModel @AssistedInject constructor(
 
     enum class Error {
         EMPTY_SUBJECT,
-        EMPTY_DESCRIPTION
+        EMPTY_DESCRIPTION,
     }
 
     enum class Operation {
         LOADING,
         SAVING,
-        DELETING
+        DELETING,
     }
 
     private val isHomeworkLoaded = MutableStateFlow(homeworkId == null)
@@ -72,7 +72,7 @@ class HomeworkEditorViewModel @AssistedInject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
-            initialValue = emptyImmutableSortedSet()
+            initialValue = emptyImmutableSortedSet(),
         )
     val semesterDatesRange = semesterRepository.getFlow(semesterId)
         .filterNotNull()
@@ -89,7 +89,7 @@ class HomeworkEditorViewModel @AssistedInject constructor(
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
-        initialValue = null
+        initialValue = null,
     )
 
     val isEditing get() = (homeworkId != null)
@@ -128,9 +128,20 @@ class HomeworkEditorViewModel @AssistedInject constructor(
         operationPrivate.value = Operation.SAVING
         viewModelScope.launch {
             if (homeworkId != null) {
-                homeworkRepository.update(homeworkId, subjectName.value, description.value, deadline.value, semesterId)
+                homeworkRepository.update(
+                    id = homeworkId,
+                    subjectName = subjectName.value,
+                    description = description.value,
+                    deadline = deadline.value,
+                    semesterId = semesterId,
+                )
             } else {
-                homeworkRepository.insert(subjectName.value, description.value, deadline.value, semesterId)
+                homeworkRepository.insert(
+                    subjectName = subjectName.value,
+                    description = description.value,
+                    deadline = deadline.value,
+                    semesterId = semesterId,
+                )
             }
 
             operationPrivate.value = null

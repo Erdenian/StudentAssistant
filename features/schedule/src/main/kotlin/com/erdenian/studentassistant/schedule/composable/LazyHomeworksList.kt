@@ -38,38 +38,38 @@ internal fun LazyHomeworksList(
     homeworks: List<Homework>?,
     onHomeworkClick: (Homework) -> Unit,
     modifier: Modifier = Modifier,
-    onLongHomeworkClick: ((Homework) -> Unit)? = null
+    onLongHomeworkClick: ((Homework) -> Unit)? = null,
 ) {
     AnimatedContent(
         targetState = homeworks,
         transitionSpec = { fadeIn() togetherWith fadeOut() },
         contentAlignment = Alignment.Center,
         label = "LazyHomeworksList",
-        modifier = modifier
+        modifier = modifier,
     ) { homeworksState ->
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
             when {
                 (homeworksState == null) -> DelayedVisibility { CircularProgressIndicator() }
                 homeworksState.isEmpty() -> Text(
                     text = stringResource(RS.lhl_no_homeworks),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal)
+                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal),
                 )
                 else ->
                     LazyColumn(
                         contentPadding = PaddingValues(
                             horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
-                            vertical = MaterialTheme.dimensions.screenPaddingVertical
+                            vertical = MaterialTheme.dimensions.screenPaddingVertical,
                         ),
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.cardsSpacing),
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
                     ) {
                         itemsIndexed(
                             items = homeworksState,
-                            key = { _, item -> item.id }
+                            key = { _, item -> item.id },
                         ) { _, homework ->
                             val deadlineFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
                             val haptic = LocalHapticFeedback.current
@@ -84,7 +84,7 @@ internal fun LazyHomeworksList(
                                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                         onLongClick(homework)
                                     }
-                                }
+                                },
                             )
                         }
                     }
@@ -98,7 +98,7 @@ internal fun LazyHomeworksList(
 private fun LazyHomeworksListLoadingPreview() = AppTheme {
     LazyHomeworksList(
         homeworks = null,
-        onHomeworkClick = {}
+        onHomeworkClick = {},
     )
 }
 
@@ -107,7 +107,7 @@ private fun LazyHomeworksListLoadingPreview() = AppTheme {
 private fun LazyHomeworksListEmptyPreview() = AppTheme {
     LazyHomeworksList(
         homeworks = emptyList(),
-        onHomeworkClick = {}
+        onHomeworkClick = {},
     )
 }
 
@@ -116,6 +116,6 @@ private fun LazyHomeworksListEmptyPreview() = AppTheme {
 private fun LazyHomeworksListPreview() = AppTheme {
     LazyHomeworksList(
         homeworks = List(10) { Homeworks.regular },
-        onHomeworkClick = {}
+        onHomeworkClick = {},
     )
 }

@@ -16,9 +16,9 @@ import kotlinx.parcelize.Parcelize
             parentColumns = ["_id"],
             childColumns = ["semester_id"],
             onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE
-        )
-    ]
+            onUpdate = ForeignKey.CASCADE,
+        ),
+    ],
 )
 @Parcelize
 data class HomeworkEntity(
@@ -40,7 +40,7 @@ data class HomeworkEntity(
     override val id: Long = 0L,
 
     @ColumnInfo(name = "is_done")
-    override val isDone: Boolean = false
+    override val isDone: Boolean = false,
 ) : Homework {
 
     init {

@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 @Composable
 fun AppTheme(
     isDarkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val dimensions = if (LocalConfiguration.current.screenWidthDp <= 820) DefaultDimensions else LargeScreenDimensions
     val isDynamicColor = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
@@ -31,7 +31,7 @@ fun AppTheme(
     CompositionLocalProvider(LocalDimensions provides dimensions) {
         MaterialTheme(
             colorScheme = colorScheme,
-            content = content
+            content = content,
         )
     }
 }

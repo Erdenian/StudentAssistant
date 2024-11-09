@@ -27,13 +27,13 @@ abstract class LessonDao {
         lesson: LessonEntity,
         teachers: List<TeacherEntity>,
         classrooms: List<ClassroomEntity>,
-        byWeekday: ByWeekdayEntity
+        byWeekday: ByWeekdayEntity,
     ): Long = withContext(Dispatchers.IO) {
         val id = insert(lesson)
         insert(
             teachers.onEach { it.lessonId = id },
             classrooms.onEach { it.lessonId = id },
-            byWeekday.apply { lessonId = id }
+            byWeekday.apply { lessonId = id },
         )
         id
     }
@@ -43,7 +43,7 @@ abstract class LessonDao {
         lesson: LessonEntity,
         teachers: List<TeacherEntity>,
         classrooms: List<ClassroomEntity>,
-        byDates: List<ByDateEntity>
+        byDates: List<ByDateEntity>,
     ): Long {
         require(byDates.isNotEmpty()) { "Dates list must contain at least one item" }
         return withContext(Dispatchers.IO) {
@@ -51,7 +51,7 @@ abstract class LessonDao {
             insert(
                 teachers.onEach { it.lessonId = id },
                 classrooms.onEach { it.lessonId = id },
-                byDates.onEach { it.lessonId = id }
+                byDates.onEach { it.lessonId = id },
             )
             id
         }
@@ -64,14 +64,14 @@ abstract class LessonDao {
     protected abstract suspend fun insert(
         teachers: List<TeacherEntity>,
         classrooms: List<ClassroomEntity>,
-        byWeekday: ByWeekdayEntity
+        byWeekday: ByWeekdayEntity,
     )
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     protected abstract suspend fun insert(
         teachers: List<TeacherEntity>,
         classrooms: List<ClassroomEntity>,
-        byDates: List<ByDateEntity>
+        byDates: List<ByDateEntity>,
     )
 
     @Transaction
@@ -79,10 +79,10 @@ abstract class LessonDao {
         lesson: LessonEntity,
         teachers: List<TeacherEntity>,
         classrooms: List<ClassroomEntity>,
-        byWeekday: ByWeekdayEntity
+        byWeekday: ByWeekdayEntity,
     ): Unit = withContext(Dispatchers.IO) {
         delete(lesson.id)
-        insert(lesson, teachers, classrooms, byWeekday)
+        insert(lesson = lesson, teachers = teachers, classrooms = classrooms, byWeekday = byWeekday)
     }
 
     @Transaction
@@ -90,10 +90,10 @@ abstract class LessonDao {
         lesson: LessonEntity,
         teachers: List<TeacherEntity>,
         classrooms: List<ClassroomEntity>,
-        byDates: List<ByDateEntity>
+        byDates: List<ByDateEntity>,
     ): Unit = withContext(Dispatchers.IO) {
         delete(lesson.id)
-        insert(lesson, teachers, classrooms, byDates)
+        insert(lesson = lesson, teachers = teachers, classrooms = classrooms, byDates = byDates)
     }
 
     @Query("DELETE FROM lessons WHERE _id = :id")

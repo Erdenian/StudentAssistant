@@ -16,7 +16,7 @@ class ScheduleViewModel @Inject constructor(
     application: Application,
     private val selectedSemesterRepository: SelectedSemesterRepository,
     semesterRepository: SemesterRepository,
-    private val lessonRepository: LessonRepository
+    private val lessonRepository: LessonRepository,
 ) : AndroidViewModel(application) {
 
     val selectedSemester = selectedSemesterRepository.selectedFlow

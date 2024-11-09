@@ -40,33 +40,33 @@ import com.erdenian.studentassistant.uikit.placeholder.placeholder
 @Suppress("UnusedReceiverParameter")
 @Composable
 fun RowScope.TopAppBarActions(
-    actions: List<ActionItem>
+    actions: List<ActionItem>,
 ) {
     var expanded by remember { mutableStateOf(false) }
     TopAppBarActionsContent(
         actions = actions,
         expanded = expanded,
         onExpandClick = { expanded = !expanded },
-        onDismissRequest = { expanded = false }
+        onDismissRequest = { expanded = false },
     )
 }
 
 sealed class ActionItem(
     val name: String,
     val loading: Boolean = false,
-    val onClick: () -> Unit
+    val onClick: () -> Unit,
 ) {
     class AlwaysShow(
         name: String,
         val imageVector: ImageVector,
         loading: Boolean = false,
-        onClick: () -> Unit
+        onClick: () -> Unit,
     ) : ActionItem(name, loading, onClick)
 
     class NeverShow(
         name: String,
         loading: Boolean = false,
-        onClick: () -> Unit
+        onClick: () -> Unit,
     ) : ActionItem(name, loading, onClick)
 }
 
@@ -75,7 +75,7 @@ private fun TopAppBarActionsContent(
     actions: List<ActionItem>,
     expanded: Boolean,
     onExpandClick: () -> Unit,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
 ) {
     run {
         val alwaysShowActions = remember(actions) { actions.filterIsInstance<ActionItem.AlwaysShow>() }
@@ -84,14 +84,14 @@ private fun TopAppBarActionsContent(
             IconButton(onClick = item.onClick, enabled = !item.loading) {
                 AnimatedContent(
                     targetState = item.loading,
-                    label = "TopAppBarActions"
+                    label = "TopAppBarActions",
                 ) { loading ->
                     if (!loading) {
                         Icon(imageVector = item.imageVector, contentDescription = item.name)
                     } else {
                         CircularProgressIndicator(
                             color = LocalContentColor.current,
-                            modifier = Modifier.size(item.imageVector.defaultWidth, item.imageVector.defaultHeight)
+                            modifier = Modifier.size(item.imageVector.defaultWidth, item.imageVector.defaultHeight),
                         )
                     }
                 }
@@ -110,14 +110,14 @@ private fun TopAppBarActionsContent(
 
                 DropdownMenu(
                     expanded = expanded,
-                    onDismissRequest = onDismissRequest
+                    onDismissRequest = onDismissRequest,
                 ) {
                     DropdownMenuItems(
                         items = neverShowActions,
                         onItemClick = { item ->
                             onDismissRequest()
                             item.onClick()
-                        }
+                        },
                     )
                 }
             }
@@ -129,7 +129,7 @@ private fun TopAppBarActionsContent(
 @Composable
 private fun ColumnScope.DropdownMenuItems(
     items: List<ActionItem.NeverShow>,
-    onItemClick: (ActionItem.NeverShow) -> Unit
+    onItemClick: (ActionItem.NeverShow) -> Unit,
 ) {
     items.forEach { item ->
         DropdownMenuItem(
@@ -141,12 +141,12 @@ private fun ColumnScope.DropdownMenuItems(
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal),
                     modifier = Modifier.placeholder(
                         visible = item.loading,
-                        highlight = PlaceholderHighlight.fade()
-                    )
+                        highlight = PlaceholderHighlight.fade(),
+                    ),
                 )
             },
             onClick = { onItemClick(item) },
-            enabled = !item.loading
+            enabled = !item.loading,
         )
     }
 }
@@ -168,21 +168,21 @@ private fun TopAppBarActionsPreview() = AppTheme {
                     ActionItem.AlwaysShow(
                         name = "AlwaysShow",
                         imageVector = AppIcons.Check,
-                        onClick = {}
+                        onClick = {},
                     ),
                     ActionItem.AlwaysShow(
                         name = "AlwaysShowLoading",
                         imageVector = AppIcons.Check,
                         loading = true,
-                        onClick = {}
+                        onClick = {},
                     ),
                     ActionItem.NeverShow(
                         name = "NeverShow",
-                        onClick = {}
-                    )
-                )
+                        onClick = {},
+                    ),
+                ),
             )
-        }
+        },
     )
 }
 
@@ -196,24 +196,24 @@ private fun TopAppBarActionsDropdownPreview() = AppTheme {
                 items = listOf(
                     ActionItem.NeverShow(
                         name = "First",
-                        onClick = {}
+                        onClick = {},
                     ),
                     ActionItem.NeverShow(
                         name = "Second",
                         loading = true,
-                        onClick = {}
+                        onClick = {},
                     ),
                     ActionItem.NeverShow(
                         name = "Very very very very very very very very very very very very very long item",
-                        onClick = {}
+                        onClick = {},
                     ),
                     ActionItem.NeverShow(
                         name = "Very very very very very very very very very very very very very long loading item",
                         loading = true,
-                        onClick = {}
-                    )
+                        onClick = {},
+                    ),
                 ),
-                onItemClick = {}
+                onItemClick = {},
             )
         }
     }

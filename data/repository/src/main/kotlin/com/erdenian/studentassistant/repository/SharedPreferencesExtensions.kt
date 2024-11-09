@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.stateIn
 internal fun SharedPreferences.getBooleanFlow(
     scope: CoroutineScope,
     key: String,
-    defaultValue: Boolean
+    defaultValue: Boolean,
 ): StateFlow<Boolean> = getFlow(scope, key) { getBoolean(key, defaultValue) }
 
 // endregion
@@ -31,7 +31,7 @@ internal fun SharedPreferences.Editor.putLocalTime(key: String, value: LocalTime
 internal fun SharedPreferences.getLocalTimeFlow(
     scope: CoroutineScope,
     key: String,
-    defaultValue: LocalTime
+    defaultValue: LocalTime,
 ): StateFlow<LocalTime> = getFlow(scope, key) { getLocalTime(key, defaultValue) }
 
 // endregion
@@ -47,7 +47,7 @@ internal fun SharedPreferences.Editor.putDuration(key: String, value: Duration):
 internal fun SharedPreferences.getDurationFlow(
     scope: CoroutineScope,
     key: String,
-    defaultValue: Duration
+    defaultValue: Duration,
 ): StateFlow<Duration> = getFlow(scope, key) { getDuration(key, defaultValue) }
 
 // endregion
@@ -55,7 +55,7 @@ internal fun SharedPreferences.getDurationFlow(
 private fun <T> SharedPreferences.getFlow(
     scope: CoroutineScope,
     key: String,
-    getter: () -> T
+    getter: () -> T,
 ): StateFlow<T> = callbackFlow {
     send(getter())
     val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, k ->

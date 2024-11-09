@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.stateIn
 
 class SelectedSemesterRepository(
     coroutineScope: CoroutineScope,
-    semesterDao: SemesterDao
+    semesterDao: SemesterDao,
 ) {
 
     private val insertedSemesters = AtomicReference<Set<Semester>>(emptySet())
@@ -33,7 +33,7 @@ class SelectedSemesterRepository(
         selectedSemesterIdFlow.value = null // To select default semester
     }
 
-    private var selectedSemesterIdFlow = MutableStateFlow<Long?>(null)
+    private val selectedSemesterIdFlow = MutableStateFlow<Long?>(null)
 
     private val selectedSharedFlow: SharedFlow<Semester?> = combineTransform(
         selectedSemesterIdFlow,
@@ -41,7 +41,7 @@ class SelectedSemesterRepository(
             // We received actual list from database, clear inserted and deleted cache
             insertedSemesters.set(emptySet())
             deletedSemesterIds.set(emptySet())
-        }
+        },
     ) { id, database ->
         val inserted = insertedSemesters.get()
         val deleted = deletedSemesterIds.get()
@@ -72,7 +72,7 @@ class SelectedSemesterRepository(
     val selectedFlow: StateFlow<Semester?> = selectedSharedFlow.stateIn(
         scope = coroutineScope,
         started = SharingStarted.Eagerly,
-        initialValue = null
+        initialValue = null,
     )
 
     suspend fun await() {

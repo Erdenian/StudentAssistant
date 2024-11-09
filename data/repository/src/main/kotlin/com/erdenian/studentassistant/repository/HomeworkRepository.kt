@@ -14,17 +14,32 @@ import kotlinx.coroutines.flow.map
 
 class HomeworkRepository(
     private val homeworkDao: HomeworkDao,
-    private val selectedSemesterRepository: SelectedSemesterRepository
+    private val selectedSemesterRepository: SelectedSemesterRepository,
 ) {
 
     // region Primary actions
 
     suspend fun insert(subjectName: String, description: String, deadline: LocalDate, semesterId: Long) {
-        homeworkDao.insert(HomeworkEntity(subjectName, description, deadline, semesterId))
+        homeworkDao.insert(
+            HomeworkEntity(
+                subjectName = subjectName,
+                description = description,
+                deadline = deadline,
+                semesterId = semesterId,
+            ),
+        )
     }
 
     suspend fun update(id: Long, subjectName: String, description: String, deadline: LocalDate, semesterId: Long) =
-        homeworkDao.update(HomeworkEntity(subjectName, description, deadline, semesterId, id))
+        homeworkDao.update(
+            HomeworkEntity(
+                subjectName = subjectName,
+                description = description,
+                deadline = deadline,
+                semesterId = semesterId,
+                id = id,
+            ),
+        )
 
     suspend fun delete(id: Long): Unit = homeworkDao.delete(id)
 
@@ -43,7 +58,8 @@ class HomeworkRepository(
             semester?.id?.let { homeworkDao.getAllFlow(it).map() } ?: flowOf(emptyImmutableSortedSet())
         }
 
-    suspend fun getCount(): Int = selectedSemesterRepository.selectedFlow.value?.id?.let { homeworkDao.getCount(it) } ?: 0
+    suspend fun getCount(): Int =
+        selectedSemesterRepository.selectedFlow.value?.id?.let { homeworkDao.getCount(it) } ?: 0
 
     // endregion
 

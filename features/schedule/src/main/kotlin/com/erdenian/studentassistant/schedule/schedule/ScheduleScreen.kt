@@ -1,5 +1,6 @@
 package com.erdenian.studentassistant.schedule.schedule
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
@@ -16,7 +17,7 @@ fun ScheduleScreen(
     viewModel: ScheduleViewModel,
     navigateToAddSemester: () -> Unit,
     navigateToEditSchedule: (semesterId: Long) -> Unit,
-    navigateToShowLessonInformation: (lessonId: Long) -> Unit
+    navigateToShowLessonInformation: (lessonId: Long) -> Unit,
 ) {
     val semesters by viewModel.allSemesters.collectAsState()
     val semestersNames by remember { derivedStateOf { semesters.map { it.name } } }
@@ -24,6 +25,8 @@ fun ScheduleScreen(
 
     val rememberLessons = remember<@Composable (date: LocalDate) -> State<List<Lesson>?>>(viewModel) {
         { date ->
+            // https://issuetracker.google.com/issues/368420773
+            @SuppressLint("ProduceStateDoesNotAssignValue")
             produceState<List<Lesson>?>(null, date) {
                 viewModel.getLessons(date).map { it.list }.collect { value = it }
             }
@@ -37,6 +40,6 @@ fun ScheduleScreen(
         onSelectedSemesterChange = { index -> viewModel.selectSemester(semesters.list[index].id) },
         onAddSemesterClick = navigateToAddSemester,
         onEditSemesterClick = { navigateToEditSchedule(it.id) },
-        onLessonClick = { navigateToShowLessonInformation(it.id) }
+        onLessonClick = { navigateToShowLessonInformation(it.id) },
     )
 }

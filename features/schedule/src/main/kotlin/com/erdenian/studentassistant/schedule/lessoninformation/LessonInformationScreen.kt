@@ -21,7 +21,7 @@ fun LessonInformationScreen(
     navigateBack: () -> Unit,
     navigateToEditLesson: (semesterId: Long, lessonId: Long) -> Unit,
     navigateToEditHomework: (semesterId: Long, homeworkId: Long) -> Unit,
-    navigateToCreateHomework: (semesterId: Long, subjectName: String) -> Unit
+    navigateToCreateHomework: (semesterId: Long, subjectName: String) -> Unit,
 ) {
     val isDeleted by viewModel.isDeleted.collectAsState()
     LaunchedEffect(isDeleted) {
@@ -45,7 +45,7 @@ fun LessonInformationScreen(
             dismissButton = {
                 TextButton(
                     onClick = { homeworkForDeleteDialog = null },
-                    content = { Text(text = stringResource(RS.li_delete_homework_no)) }
+                    content = { Text(text = stringResource(RS.li_delete_homework_no)) },
                 )
             },
             confirmButton = {
@@ -54,9 +54,9 @@ fun LessonInformationScreen(
                         viewModel.deleteHomework(homework.id)
                         homeworkForDeleteDialog = null
                     },
-                    content = { Text(text = stringResource(RS.li_delete_homework_yes)) }
+                    content = { Text(text = stringResource(RS.li_delete_homework_yes)) },
                 )
-            }
+            },
         )
     }
 
@@ -67,6 +67,6 @@ fun LessonInformationScreen(
         onEditClick = { navigateToEditLesson(it.semesterId, it.id) },
         onHomeworkClick = { navigateToEditHomework(it.semesterId, it.id) },
         onAddHomeworkClick = { navigateToCreateHomework(it.semesterId, it.subjectName) },
-        onDeleteHomeworkClick = { homeworkForDeleteDialog = it }
+        onDeleteHomeworkClick = { homeworkForDeleteDialog = it },
     )
 }

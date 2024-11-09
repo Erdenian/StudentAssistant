@@ -22,7 +22,7 @@ fun DatePickerDialog(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     initialSelectedDate: LocalDate? = null,
-    datesRange: ClosedRange<LocalDate>? = null
+    datesRange: ClosedRange<LocalDate>? = null,
 ) {
     fun LocalDate.toEpochMillisecondUtc() = toEpochSecond(LocalTime.MIN, ZoneOffset.UTC) * 1000
 
@@ -34,11 +34,13 @@ fun DatePickerDialog(
         initialSelectedDateMillis = initialSelectedDate?.toEpochMillisecondUtc(),
         yearRange = yearRange,
         selectableDates = object : SelectableDates {
-            private val millisRange = datesRange?.run { start.toEpochMillisecondUtc()..endInclusive.toEpochMillisecondUtc() }
+            private val millisRange = datesRange?.run {
+                start.toEpochMillisecondUtc()..endInclusive.toEpochMillisecondUtc()
+            }
 
             override fun isSelectableYear(year: Int) = year in yearRange
-            override fun isSelectableDate(utcTimeMillis: Long) = millisRange?.let { utcTimeMillis in it } ?: true
-        }
+            override fun isSelectableDate(utcTimeMillis: Long) = millisRange?.let { utcTimeMillis in it } != false
+        },
     )
     DatePickerDialog(
         onDismissRequest = onDismiss,
@@ -48,21 +50,21 @@ fun DatePickerDialog(
                 onClick = {
                     val newValue = LocalDate.ofInstant(
                         Instant.ofEpochMilli(checkNotNull(state.selectedDateMillis)),
-                        ZoneOffset.UTC
+                        ZoneOffset.UTC,
                     )
                     onConfirm(newValue)
-                }
+                },
             ) {
                 Text(text = stringResource(android.R.string.ok))
             }
         },
         dismissButton = {
             TextButton(
-                onClick = onDismiss
+                onClick = onDismiss,
             ) {
                 Text(text = stringResource(android.R.string.cancel))
             }
         },
-        modifier = modifier
+        modifier = modifier,
     ) { DatePicker(state = state) }
 }

@@ -15,7 +15,7 @@ class Dimensions(
 
     val cardContentPadding: Dp = 8.dp,
 
-    val dividerPaddingVertical: Dp = 4.dp
+    val dividerPaddingVertical: Dp = 4.dp,
 )
 
 internal val LocalDimensions = staticCompositionLocalOf { DefaultDimensions }
@@ -23,5 +23,5 @@ internal val LocalDimensions = staticCompositionLocalOf { DefaultDimensions }
 internal val DefaultDimensions = Dimensions()
 
 internal val LargeScreenDimensions = Dimensions(
-    screenPaddingHorizontal = 64.dp
+    screenPaddingHorizontal = 64.dp,
 )

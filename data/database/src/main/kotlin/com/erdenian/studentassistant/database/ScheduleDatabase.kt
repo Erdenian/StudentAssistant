@@ -22,9 +22,9 @@ import com.erdenian.studentassistant.database.entity.TeacherEntity
         ClassroomEntity::class,
         ByWeekdayEntity::class,
         ByDateEntity::class,
-        HomeworkEntity::class
+        HomeworkEntity::class,
     ],
-    version = 1
+    version = 1,
 )
 @TypeConverters(Converters::class)
 internal abstract class ScheduleDatabase : RoomDatabase() {

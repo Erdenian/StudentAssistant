@@ -1,0 +1,8 @@
+[*]
+insert_final_newline = true
+
+[{*.kt,*.kts}]
+# Этот параметр не работает, поэтому оставляем настройки форматирования в Project.xml
+# https://youtrack.jetbrains.com/issue/KTIJ-22516
+# ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true

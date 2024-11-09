@@ -31,6 +31,6 @@ interface Homework : Comparable<Homework>, Parcelable {
         Homework::subjectName,
         Homework::description,
         Homework::id,
-        Homework::semesterId
+        Homework::semesterId,
     )
 }
