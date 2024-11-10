@@ -2,8 +2,11 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.ksp) apply false
     alias(libs.plugins.kotlin.compose) apply false
+    alias(libs.plugins.kotlin.parcelize) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
 
     alias(libs.plugins.detekt)
     alias(libs.plugins.kover)
@@ -77,6 +80,26 @@ subprojects {
                 "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
             )
         }
+    }
+}
+
+subprojects {
+    afterEvaluate {
+        if (extensions.findByType<JavaPluginExtension>() == null) return@afterEvaluate
+        extensions.configure<JavaPluginExtension> {
+            sourceCompatibility = JavaVersion.VERSION_11
+            targetCompatibility = JavaVersion.VERSION_11
+        }
+    }
+}
+
+// endregion
+
+// region Lint
+
+subprojectsAfterEvaluate {
+    if (project.plugins.hasPlugin(libs.plugins.kotlin.jvm.get().pluginId)) {
+        project.plugins.apply(libs.plugins.android.lint.get().pluginId)
     }
 }
 

@@ -16,6 +16,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -23,10 +24,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.erdenian.studentassistant.homeworks.api.HomeworksRoute
+import com.erdenian.studentassistant.schedule.api.ScheduleRoute
+import com.erdenian.studentassistant.settings.api.SettingsRoute
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AutoMirrored
@@ -34,8 +39,6 @@ import com.erdenian.studentassistant.style.AutoMirrored
 @Composable
 internal fun StudentAssistantApp() {
     val navController = rememberNavController()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val navGraph = remember(navController) { StudentAssistantNavGraph(navController) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(navController, keyboardController) {
@@ -46,62 +49,61 @@ internal fun StudentAssistantApp() {
         content = { paddingValues ->
             StudentAssistantNavHost(
                 navController = navController,
-                navGraph = navGraph,
                 modifier = Modifier
                     .padding(paddingValues)
                     .consumeWindowInsets(paddingValues),
             )
         },
-        bottomBar = {
-            StudentAssistantBottomNavigation(
-                navBackStackEntry = navBackStackEntry,
-                navGraph = navGraph,
-            )
-        },
+        bottomBar = { StudentAssistantBottomNavigation(navController = navController) },
     )
 }
 
 @Composable
 private fun StudentAssistantBottomNavigation(
-    navGraph: StudentAssistantNavGraph,
-    navBackStackEntry: NavBackStackEntry?,
+    navController: NavController,
     modifier: Modifier = Modifier,
 ) {
     data class Item(
         val imageVector: ImageVector,
         @StringRes val labelId: Int,
-        val route: String,
-        val onClick: (restoreState: Boolean) -> Unit,
+        val route: Any,
     )
 
-    val items = remember(navGraph) {
+    val items = remember(navController) {
         listOf(
             Item(
                 imageVector = AppIcons.Schedule,
                 labelId = RS.s_title,
-                route = MainRoutes.SCHEDULE,
-                onClick = navGraph::navigateToSchedule,
+                route = ScheduleRoute,
             ),
             Item(
                 imageVector = AppIcons.AutoMirrored.MenuBook,
                 labelId = RS.h_title,
-                route = MainRoutes.HOMEWORKS,
-                onClick = navGraph::navigateToHomeworks,
+                route = HomeworksRoute,
             ),
             Item(
                 imageVector = AppIcons.Settings,
                 labelId = RS.st_title,
-                route = MainRoutes.SETTINGS,
-                onClick = navGraph::navigateToSettings,
+                route = SettingsRoute,
             ),
         )
     }
 
-    var selectedRoute by rememberSaveable { mutableStateOf(MainRoutes.SCHEDULE) }
+    var selectedRoute: Any by rememberSaveable(
+        saver = Saver(
+            save = { it.value::class.qualifiedName },
+            restore = { value -> mutableStateOf(items.first { it.route::class.qualifiedName == value }.route) },
+        ),
+    ) { mutableStateOf(ScheduleRoute) }
+
     NavigationBar(modifier = modifier) {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+
         items.forEach { item ->
             NavigationBarItem(
-                selected = (navBackStackEntry?.destination?.hierarchy?.any { it.route == item.route } == true),
+                selected = (navBackStackEntry?.destination?.hierarchy?.any {
+                    it.route == item.route::class.qualifiedName
+                } == true),
                 icon = { Icon(imageVector = item.imageVector, contentDescription = stringResource(item.labelId)) },
                 label = {
                     Text(
@@ -111,9 +113,18 @@ private fun StudentAssistantBottomNavigation(
                     )
                 },
                 onClick = {
-                    val restoreState = (selectedRoute != item.route)
+                    val restoreState = (selectedRoute != item.route::class.qualifiedName)
                     selectedRoute = item.route
-                    item.onClick(restoreState)
+
+                    if (navController.currentBackStackEntry?.destination?.route != item.route::class.qualifiedName) {
+                        navController.navigate(item.route) {
+                            launchSingleTop = true
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = restoreState
+                            }
+                            this.restoreState = restoreState
+                        }
+                    }
                 },
             )
         }
