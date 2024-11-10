@@ -10,6 +10,7 @@ include(
     ":features:settings",
     ":features:settings:api",
 
+    ":common:navigation",
     ":common:uikit",
     ":common:utils",
     ":common:sampledata",
