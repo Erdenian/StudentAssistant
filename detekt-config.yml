@@ -686,7 +686,7 @@ style:
     active: true
   RedundantVisibilityModifierRule:
     active: true
-    excludes: ['**/features/*/impl/**']
+    excludes: ['**/features/**/*ApiImpl.kt', '**/features/**/*Dependencies.kt']
   ReturnCount:
     active: true
     max: 2

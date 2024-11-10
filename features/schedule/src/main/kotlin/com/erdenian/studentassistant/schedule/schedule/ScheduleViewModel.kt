@@ -12,7 +12,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 
-class ScheduleViewModel @Inject constructor(
+internal class ScheduleViewModel @Inject constructor(
     application: Application,
     private val selectedSemesterRepository: SelectedSemesterRepository,
     semesterRepository: SemesterRepository,

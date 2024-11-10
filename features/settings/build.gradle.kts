@@ -14,6 +14,7 @@ dependencies {
     implementation(project(":data:repository"))
     implementation(project(":common:uikit"))
     implementation(project(":common:utils"))
+    implementation(project(":common:navigation"))
 
     implementation(project(":features:settings:api"))
     // endregion

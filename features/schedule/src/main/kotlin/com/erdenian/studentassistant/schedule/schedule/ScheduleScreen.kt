@@ -13,7 +13,7 @@ import java.time.LocalDate
 import kotlinx.coroutines.flow.map
 
 @Composable
-fun ScheduleScreen(
+internal fun ScheduleScreen(
     viewModel: ScheduleViewModel,
     navigateToAddSemester: () -> Unit,
     navigateToEditSchedule: (semesterId: Long) -> Unit,

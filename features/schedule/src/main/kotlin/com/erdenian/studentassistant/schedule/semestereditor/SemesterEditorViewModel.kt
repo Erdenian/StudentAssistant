@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class SemesterEditorViewModel @AssistedInject constructor(
+internal class SemesterEditorViewModel @AssistedInject constructor(
     application: Application,
     private val semesterRepository: SemesterRepository,
     @Assisted private val semesterId: Long?,

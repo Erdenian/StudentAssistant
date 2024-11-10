@@ -4,7 +4,7 @@ subprojects {
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         compilerOptions {
-            //freeCompilerArgs.addAll("-Xexplicit-api=strict")
+            freeCompilerArgs.addAll("-Xexplicit-api=strict")
         }
     }
 

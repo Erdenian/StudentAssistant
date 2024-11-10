@@ -143,7 +143,7 @@ internal fun WeekdayPicker(
     )
 }
 
-object WeekdaysPickerDefaults {
+internal object WeekdaysPickerDefaults {
 
     @Composable
     fun weekdaysPickerColors(
@@ -161,7 +161,7 @@ object WeekdaysPickerDefaults {
 }
 
 @Stable
-interface WeekdaysPickerColors {
+internal interface WeekdaysPickerColors {
 
     @Composable
     fun backgroundColor(): State<Color>

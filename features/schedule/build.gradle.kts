@@ -14,9 +14,11 @@ dependencies {
     implementation(project(":common:uikit"))
     implementation(project(":common:utils"))
     implementation(project(":common:sampledata"))
+    implementation(project(":common:navigation"))
 
     implementation(project(":data:repository"))
     implementation(project(":features:schedule:api"))
+    implementation(project(":features:homeworks:api"))
     // endregion
 
     // region AndroidX

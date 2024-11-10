@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.settings
+package com.erdenian.studentassistant.settings.ui
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -8,7 +8,7 @@ import java.time.Duration
 import java.time.LocalTime
 import javax.inject.Inject
 
-class SettingsViewModel @Inject constructor(
+internal class SettingsViewModel @Inject constructor(
     application: Application,
     private val settingsRepository: SettingsRepository,
 ) : AndroidViewModel(application) {

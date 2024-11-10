@@ -16,7 +16,7 @@ import com.erdenian.studentassistant.utils.toSingleLine
 import com.erdenian.studentassistant.utils.toast
 
 @Composable
-fun SemesterEditorScreen(
+internal fun SemesterEditorScreen(
     viewModel: SemesterEditorViewModel,
     navigateBack: () -> Unit,
 ) {

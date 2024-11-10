@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @Composable
-fun ScheduleEditorScreen(
+internal fun ScheduleEditorScreen(
     viewModel: ScheduleEditorViewModel,
     navigateBack: () -> Unit,
     navigateToEditSemester: (semesterId: Long) -> Unit,

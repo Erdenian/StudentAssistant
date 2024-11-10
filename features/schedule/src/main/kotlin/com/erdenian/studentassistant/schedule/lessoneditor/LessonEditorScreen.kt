@@ -24,7 +24,7 @@ import com.erdenian.studentassistant.utils.toast
 import kotlinx.coroutines.launch
 
 @Composable
-fun LessonEditorScreen(
+internal fun LessonEditorScreen(
     viewModel: LessonEditorViewModel,
     navigateBack: () -> Unit,
 ) {

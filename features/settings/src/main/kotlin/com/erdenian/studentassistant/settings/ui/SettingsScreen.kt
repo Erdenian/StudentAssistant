@@ -1,11 +1,11 @@
-package com.erdenian.studentassistant.settings
+package com.erdenian.studentassistant.settings.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 
 @Composable
-fun SettingsScreen(
+internal fun SettingsScreen(
     viewModel: SettingsViewModel,
 ) {
     val defaultStartTime by viewModel.defaultStartTimeFlow.collectAsState()

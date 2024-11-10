@@ -1,6 +1,9 @@
 package com.erdenian.studentassistant
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.automirrored.filled.MenuBook
@@ -27,9 +30,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.erdenian.studentassistant.di.MainComponentHolder
 import com.erdenian.studentassistant.homeworks.api.HomeworksRoute
+import com.erdenian.studentassistant.navigation.Route
 import com.erdenian.studentassistant.schedule.api.ScheduleRoute
 import com.erdenian.studentassistant.settings.api.SettingsRoute
 import com.erdenian.studentassistant.strings.RS
@@ -47,12 +53,19 @@ internal fun StudentAssistantApp() {
 
     Scaffold(
         content = { paddingValues ->
-            StudentAssistantNavHost(
+            NavHost(
                 navController = navController,
+                startDestination = ScheduleRoute.Schedule,
+                enterTransition = { fadeIn(tween()) },
+                exitTransition = { fadeOut(tween()) },
                 modifier = Modifier
                     .padding(paddingValues)
                     .consumeWindowInsets(paddingValues),
-            )
+            ) {
+                MainComponentHolder.instance.scheduleApi.apply { composable(navController) }
+                MainComponentHolder.instance.homeworksApi.apply { composable(navController) }
+                MainComponentHolder.instance.settingsApi.apply { composable(navController) }
+            }
         },
         bottomBar = { StudentAssistantBottomNavigation(navController = navController) },
     )
@@ -66,7 +79,7 @@ private fun StudentAssistantBottomNavigation(
     data class Item(
         val imageVector: ImageVector,
         @StringRes val labelId: Int,
-        val route: Any,
+        val route: Route,
     )
 
     val items = remember(navController) {
@@ -74,27 +87,27 @@ private fun StudentAssistantBottomNavigation(
             Item(
                 imageVector = AppIcons.Schedule,
                 labelId = RS.s_title,
-                route = ScheduleRoute,
+                route = ScheduleRoute.Schedule,
             ),
             Item(
                 imageVector = AppIcons.AutoMirrored.MenuBook,
                 labelId = RS.h_title,
-                route = HomeworksRoute,
+                route = HomeworksRoute.Homeworks,
             ),
             Item(
                 imageVector = AppIcons.Settings,
                 labelId = RS.st_title,
-                route = SettingsRoute,
+                route = SettingsRoute.Settings,
             ),
         )
     }
 
-    var selectedRoute: Any by rememberSaveable(
+    var selectedRoute: Route by rememberSaveable(
         saver = Saver(
             save = { it.value::class.qualifiedName },
             restore = { value -> mutableStateOf(items.first { it.route::class.qualifiedName == value }.route) },
         ),
-    ) { mutableStateOf(ScheduleRoute) }
+    ) { mutableStateOf(items.first().route) }
 
     NavigationBar(modifier = modifier) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -113,7 +126,7 @@ private fun StudentAssistantBottomNavigation(
                     )
                 },
                 onClick = {
-                    val restoreState = (selectedRoute != item.route::class.qualifiedName)
+                    val restoreState = (selectedRoute != item.route)
                     selectedRoute = item.route
 
                     if (navController.currentBackStackEntry?.destination?.route != item.route::class.qualifiedName) {

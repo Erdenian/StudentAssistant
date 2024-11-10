@@ -106,6 +106,8 @@ dependencies {
     implementation(project(":core:style"))
     implementation(project(":core:strings"))
 
+    implementation(project(":common:navigation"))
+
     implementation(project(":data:repository"))
 
     implementation(project(":features:schedule"))

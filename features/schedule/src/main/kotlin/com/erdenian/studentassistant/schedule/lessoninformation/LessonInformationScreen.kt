@@ -16,7 +16,7 @@ import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
 
 @Composable
-fun LessonInformationScreen(
+internal fun LessonInformationScreen(
     viewModel: LessonInformationViewModel,
     navigateBack: () -> Unit,
     navigateToEditLesson: (semesterId: Long, lessonId: Long) -> Unit,

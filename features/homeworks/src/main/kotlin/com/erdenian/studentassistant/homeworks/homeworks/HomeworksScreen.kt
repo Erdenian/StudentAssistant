@@ -15,7 +15,7 @@ import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
 
 @Composable
-fun HomeworksScreen(
+internal fun HomeworksScreen(
     viewModel: HomeworksViewModel,
     navigateToCreateHomework: (semesterId: Long) -> Unit,
     navigateToEditHomework: (semesterId: Long, homeworkId: Long) -> Unit,

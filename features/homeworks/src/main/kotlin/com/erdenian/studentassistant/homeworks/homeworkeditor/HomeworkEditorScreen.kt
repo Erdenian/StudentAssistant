@@ -20,7 +20,7 @@ import com.erdenian.studentassistant.utils.toSingleLine
 import com.erdenian.studentassistant.utils.toast
 
 @Composable
-fun HomeworkEditorScreen(
+internal fun HomeworkEditorScreen(
     viewModel: HomeworkEditorViewModel,
     navigateBack: () -> Unit,
     navigateToCreateLesson: (semesterId: Long, subjectName: String) -> Unit,
