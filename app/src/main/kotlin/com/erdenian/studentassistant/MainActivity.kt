@@ -24,7 +24,7 @@ internal class MainActivity : AppCompatActivity() {
 
         setContent {
             LaunchedEffect(Unit) {
-                MainComponentHolder.instance.selectedSemesterRepository.await()
+                MainComponentHolder.instance.repositoryApi.selectedSemesterRepository.await()
                 showSplashScreen = false
             }
 

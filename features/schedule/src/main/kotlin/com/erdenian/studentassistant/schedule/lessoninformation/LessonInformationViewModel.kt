@@ -5,8 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.erdenian.studentassistant.entity.emptyImmutableSortedSet
 import com.erdenian.studentassistant.entity.toImmutableSortedSet
-import com.erdenian.studentassistant.repository.HomeworkRepository
-import com.erdenian.studentassistant.repository.LessonRepository
+import com.erdenian.studentassistant.repository.api.RepositoryApi
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -24,10 +23,12 @@ import kotlinx.coroutines.launch
 
 internal class LessonInformationViewModel @AssistedInject constructor(
     application: Application,
-    lessonRepository: LessonRepository,
-    private val homeworkRepository: HomeworkRepository,
+    repositoryApi: RepositoryApi,
     @Assisted lessonId: Long,
 ) : AndroidViewModel(application) {
+
+    private val lessonRepository = repositoryApi.lessonRepository
+    private val homeworkRepository = repositoryApi.homeworkRepository
 
     @AssistedFactory
     interface Factory {

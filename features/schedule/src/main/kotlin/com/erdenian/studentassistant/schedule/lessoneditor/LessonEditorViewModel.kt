@@ -7,9 +7,7 @@ import com.erdenian.studentassistant.entity.Lesson
 import com.erdenian.studentassistant.entity.emptyImmutableSortedSet
 import com.erdenian.studentassistant.entity.immutableSortedSetOf
 import com.erdenian.studentassistant.entity.toImmutableSortedSet
-import com.erdenian.studentassistant.repository.HomeworkRepository
-import com.erdenian.studentassistant.repository.LessonRepository
-import com.erdenian.studentassistant.repository.SettingsRepository
+import com.erdenian.studentassistant.repository.api.RepositoryApi
 import com.erdenian.studentassistant.utils.toSingleLine
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -33,15 +31,17 @@ import kotlinx.coroutines.withContext
 
 internal class LessonEditorViewModel @AssistedInject constructor(
     application: Application,
-    private val lessonRepository: LessonRepository,
-    private val homeworkRepository: HomeworkRepository,
-    settingsRepository: SettingsRepository,
+    repositoryApi: RepositoryApi,
     @Assisted private val semesterId: Long,
     @Assisted lessonId: Long?,
     @Assisted copy: Boolean,
     @Assisted dayOfWeek: DayOfWeek?,
     @Assisted subjectName: String?,
 ) : AndroidViewModel(application) {
+
+    private val lessonRepository = repositoryApi.lessonRepository
+    private val homeworkRepository = repositoryApi.homeworkRepository
+    private val settingsRepository = repositoryApi.settingsRepository
 
     @AssistedFactory
     abstract class Factory {

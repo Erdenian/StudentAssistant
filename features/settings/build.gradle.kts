@@ -11,11 +11,11 @@ android {
 
 dependencies {
     // region Private
-    implementation(project(":data:repository"))
     implementation(project(":common:uikit"))
     implementation(project(":common:utils"))
     implementation(project(":common:navigation"))
 
+    implementation(project(":features:repository:api"))
     implementation(project(":features:settings:api"))
     // endregion
 
