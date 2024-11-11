@@ -16,22 +16,23 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.erdenian.studentassistant.di.MainComponentHolder
 import com.erdenian.studentassistant.homeworks.api.HomeworksRoute
@@ -41,6 +42,7 @@ import com.erdenian.studentassistant.settings.api.SettingsRoute
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.style.AppIcons
 import com.erdenian.studentassistant.style.AutoMirrored
+import kotlinx.serialization.Serializable
 
 @Composable
 internal fun StudentAssistantApp() {
@@ -53,33 +55,61 @@ internal fun StudentAssistantApp() {
 
     Scaffold(
         content = { paddingValues ->
-            NavHost(
+            StudentAssistantNavHost(
                 navController = navController,
-                startDestination = ScheduleRoute.Schedule,
-                enterTransition = { fadeIn(tween()) },
-                exitTransition = { fadeOut(tween()) },
                 modifier = Modifier
                     .padding(paddingValues)
                     .consumeWindowInsets(paddingValues),
-            ) {
-                MainComponentHolder.instance.scheduleApi.apply { composable(navController) }
-                MainComponentHolder.instance.homeworksApi.apply { composable(navController) }
-                MainComponentHolder.instance.settingsApi.apply { composable(navController) }
-            }
+            )
         },
         bottomBar = { StudentAssistantBottomNavigation(navController = navController) },
     )
+}
+
+@Serializable
+private sealed class RootRoute(val startDestination: Route) : Route {
+
+    @Serializable
+    data object Schedule : RootRoute(ScheduleRoute.Schedule)
+
+    @Serializable
+    data object Homeworks : RootRoute(HomeworksRoute.Homeworks)
+
+    @Serializable
+    data object Settings : RootRoute(SettingsRoute.Settings)
+}
+
+@Composable
+private fun StudentAssistantNavHost(
+    navController: NavHostController,
+    modifier: Modifier,
+) = NavHost(
+    navController = navController,
+    startDestination = RootRoute.Schedule,
+    enterTransition = { fadeIn(tween()) },
+    exitTransition = { fadeOut(tween()) },
+    modifier = modifier,
+) {
+    val builder: NavGraphBuilder.() -> Unit = {
+        MainComponentHolder.instance.scheduleApi.apply { composable(navController) }
+        MainComponentHolder.instance.homeworksApi.apply { composable(navController) }
+        MainComponentHolder.instance.settingsApi.apply { composable(navController) }
+    }
+
+    navigation<RootRoute.Schedule>(RootRoute.Schedule.startDestination, builder = builder)
+    navigation<RootRoute.Homeworks>(RootRoute.Homeworks.startDestination, builder = builder)
+    navigation<RootRoute.Settings>(RootRoute.Settings.startDestination, builder = builder)
 }
 
 @Composable
 private fun StudentAssistantBottomNavigation(
     navController: NavController,
     modifier: Modifier = Modifier,
-) {
+) = NavigationBar(modifier = modifier) {
     data class Item(
         val imageVector: ImageVector,
         @StringRes val labelId: Int,
-        val route: Route,
+        val route: RootRoute,
     )
 
     val items = remember(navController) {
@@ -87,59 +117,55 @@ private fun StudentAssistantBottomNavigation(
             Item(
                 imageVector = AppIcons.Schedule,
                 labelId = RS.s_title,
-                route = ScheduleRoute.Schedule,
+                route = RootRoute.Schedule,
             ),
             Item(
                 imageVector = AppIcons.AutoMirrored.MenuBook,
                 labelId = RS.h_title,
-                route = HomeworksRoute.Homeworks,
+                route = RootRoute.Homeworks,
             ),
             Item(
                 imageVector = AppIcons.Settings,
                 labelId = RS.st_title,
-                route = SettingsRoute.Settings,
+                route = RootRoute.Settings,
             ),
         )
     }
 
-    var selectedRoute: Route by rememberSaveable(
-        saver = Saver(
-            save = { it.value::class.qualifiedName },
-            restore = { value -> mutableStateOf(items.first { it.route::class.qualifiedName == value }.route) },
-        ),
-    ) { mutableStateOf(items.first().route) }
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-    NavigationBar(modifier = modifier) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-
-        items.forEach { item ->
-            NavigationBarItem(
-                selected = (navBackStackEntry?.destination?.hierarchy?.any {
-                    it.route == item.route::class.qualifiedName
-                } == true),
-                icon = { Icon(imageVector = item.imageVector, contentDescription = stringResource(item.labelId)) },
-                label = {
-                    Text(
-                        text = stringResource(item.labelId),
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1,
-                    )
-                },
-                onClick = {
-                    val restoreState = (selectedRoute != item.route)
-                    selectedRoute = item.route
-
-                    if (navController.currentBackStackEntry?.destination?.route != item.route::class.qualifiedName) {
-                        navController.navigate(item.route) {
-                            launchSingleTop = true
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = restoreState
-                            }
-                            this.restoreState = restoreState
-                        }
-                    }
-                },
-            )
+    val selectedItem by remember {
+        derivedStateOf {
+            val hierarchy = navBackStackEntry?.destination?.hierarchy
+            items.find { item -> hierarchy?.any { it.hasRoute(item.route::class) } == true }
         }
+    }
+
+    items.forEach { item ->
+        NavigationBarItem(
+            selected = (item == selectedItem),
+            icon = { Icon(imageVector = item.imageVector, contentDescription = stringResource(item.labelId)) },
+            label = {
+                Text(
+                    text = stringResource(item.labelId),
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                )
+            },
+            onClick = {
+                val destination = navController.currentBackStackEntry?.destination
+                if (destination?.hasRoute(item.route.startDestination::class) == true) return@NavigationBarItem
+
+                navController.navigate(item.route) {
+                    launchSingleTop = true
+
+                    val saveAndRestore = (item != selectedItem)
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = saveAndRestore
+                    }
+                    restoreState = saveAndRestore
+                }
+            },
+        )
     }
 }

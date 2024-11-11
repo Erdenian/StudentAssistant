@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kover)
 
     alias(libs.plugins.tripletPlay)
@@ -116,6 +117,10 @@ dependencies {
     implementation(project(":features:homeworks:api"))
     implementation(project(":features:settings"))
     implementation(project(":features:settings:api"))
+    // endregion
+
+    // region Kotlin
+    implementation(libs.kotlinx.serialization)
     // endregion
 
     // region AndroidX
