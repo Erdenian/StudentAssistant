@@ -21,7 +21,7 @@ public fun createScheduleApi(dependencies: ScheduleDependencies): ScheduleApi =
 
 internal class ScheduleApiImpl @Inject constructor() : ScheduleApi {
     override fun NavGraphBuilder.composable(navController: NavHostController) {
-        composable<ScheduleRoute.Schedule> {
+        composable<ScheduleRoute.Schedule> { _ ->
             val viewModel = viewModel { ScheduleComponentHolder.instance.scheduleViewModel }
 
             ScheduleScreen(
