@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class LessonEditorViewModel @AssistedInject constructor(
+internal class LessonEditorViewModel @AssistedInject constructor(
     application: Application,
     private val lessonRepository: LessonRepository,
     private val homeworkRepository: HomeworkRepository,

@@ -1,9 +1,10 @@
 plugins {
-    id(libs.plugins.android.application.get().pluginId)
-    id(libs.plugins.kotlin.android.get().pluginId)
-    id(libs.plugins.kotlin.ksp.get().pluginId)
-    id(libs.plugins.kotlin.compose.get().pluginId)
-    id(libs.plugins.kover.get().pluginId)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kover)
 
     alias(libs.plugins.tripletPlay)
 }
@@ -106,11 +107,20 @@ dependencies {
     implementation(project(":core:style"))
     implementation(project(":core:strings"))
 
+    implementation(project(":common:navigation"))
+
     implementation(project(":data:repository"))
 
     implementation(project(":features:schedule"))
+    implementation(project(":features:schedule:api"))
     implementation(project(":features:homeworks"))
+    implementation(project(":features:homeworks:api"))
     implementation(project(":features:settings"))
+    implementation(project(":features:settings:api"))
+    // endregion
+
+    // region Kotlin
+    implementation(libs.kotlinx.serialization)
     // endregion
 
     // region AndroidX

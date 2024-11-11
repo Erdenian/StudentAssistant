@@ -14,11 +14,13 @@ core_dagger = "2.52"
 
 android_application = { id = "com.android.application", version.ref = "plugins_android" }
 android_library = { id = "com.android.library", version.ref = "plugins_android" }
+android_lint = { id = "com.android.lint", version.ref = "plugins_android" }
 
 kotlin_android = { id = "org.jetbrains.kotlin.android", version.ref = "plugins_kotlin" }
 kotlin_jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "plugins_kotlin" }
 kotlin_compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "plugins_kotlin" }
 kotlin_parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "plugins_kotlin" }
+kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "plugins_kotlin" }
 kotlin_ksp = { id = "com.google.devtools.ksp", version = "2.0.21-1.0.27" }
 
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "plugins_detekt" }
@@ -41,6 +43,7 @@ test_androidx_runner = { group = "androidx.test", name = "runner", version = "1.
 
 # region KotlinX
 kotlinx_coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx_coroutines" }
+kotlinx_serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.7.1" }
 # endregion
 
 # region Android Tools

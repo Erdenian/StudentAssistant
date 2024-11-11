@@ -1,9 +1,22 @@
 package com.erdenian.studentassistant.settings.di
 
-import com.erdenian.studentassistant.settings.SettingsViewModel
-import dagger.Subcomponent
+import com.erdenian.studentassistant.settings.SettingsDependencies
+import com.erdenian.studentassistant.settings.api.SettingsApi
+import com.erdenian.studentassistant.settings.ui.SettingsViewModel
+import dagger.Component
 
-@Subcomponent
-interface SettingsComponent {
+@Component(
+    modules = [SettingsApiModule::class],
+    dependencies = [SettingsDependencies::class],
+)
+internal interface SettingsComponent {
+
+    @Component.Factory
+    interface Factory {
+        fun create(dependencies: SettingsDependencies): SettingsComponent
+    }
+
+    val api: SettingsApi
+
     val settingsViewModel: SettingsViewModel
 }

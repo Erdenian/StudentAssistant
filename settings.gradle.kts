@@ -4,9 +4,13 @@ include(
     ":app",
 
     ":features:schedule",
+    ":features:schedule:api",
     ":features:homeworks",
+    ":features:homeworks:api",
     ":features:settings",
+    ":features:settings:api",
 
+    ":common:navigation",
     ":common:uikit",
     ":common:utils",
     ":common:sampledata",

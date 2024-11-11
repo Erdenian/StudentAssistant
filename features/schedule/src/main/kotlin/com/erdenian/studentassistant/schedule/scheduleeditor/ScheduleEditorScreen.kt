@@ -16,7 +16,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.erdenian.studentassistant.entity.Lesson
+import com.erdenian.studentassistant.navigation.LocalNavController
+import com.erdenian.studentassistant.schedule.api.ScheduleRoute
+import com.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
 import java.time.DayOfWeek
@@ -24,18 +28,18 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @Composable
-fun ScheduleEditorScreen(
-    viewModel: ScheduleEditorViewModel,
-    navigateBack: () -> Unit,
-    navigateToEditSemester: (semesterId: Long) -> Unit,
-    navigateToEditLesson: (semesterId: Long, lessonId: Long, copy: Boolean) -> Unit,
-    navigateToCreateLesson: (semesterId: Long, dayOfWeek: DayOfWeek) -> Unit,
-) {
+internal fun ScheduleEditorScreen(route: ScheduleRoute.ScheduleEditor) {
+    val viewModel = viewModel {
+        ScheduleComponentHolder.instance.scheduleEditorViewModelFactory.get(route.semesterId)
+    }
+    val navController = LocalNavController.current
+
     val isDeleted by viewModel.isDeleted.collectAsState()
     LaunchedEffect(isDeleted) {
-        if (isDeleted) navigateBack()
+        if (isDeleted) navController.popBackStack()
     }
 
+    @Suppress("Wrapping")
     val rememberLessons = remember<@Composable (Int) -> State<List<Lesson>?>>(viewModel) {
         { page ->
             // https://issuetracker.google.com/issues/368420773
@@ -140,11 +144,21 @@ fun ScheduleEditorScreen(
 
     ScheduleEditorContent(
         rememberLessons = rememberLessons,
-        onBackClick = navigateBack,
-        onEditSemesterClick = { navigateToEditSemester(viewModel.semesterId) },
+        onBackClick = navController::popBackStack,
+        onEditSemesterClick = {
+            navController.navigate(ScheduleRoute.SemesterEditor(semesterId = viewModel.semesterId))
+        },
         onDeleteSemesterClick = { showDeleteSemesterDialog = true },
-        onLessonClick = { navigateToEditLesson(viewModel.semesterId, it.id, false) },
-        onCopyLessonClick = { navigateToEditLesson(viewModel.semesterId, it.id, true) },
+        onLessonClick = { lesson ->
+            navController.navigate(
+                ScheduleRoute.LessonEditor(semesterId = viewModel.semesterId, lessonId = lesson.id, copy = false),
+            )
+        },
+        onCopyLessonClick = { lesson ->
+            navController.navigate(
+                ScheduleRoute.LessonEditor(semesterId = viewModel.semesterId, lessonId = lesson.id, copy = true),
+            )
+        },
         onDeleteLessonClick = { lesson ->
             showHomeworksCounterOperation = true
             coroutineScope.launch {
@@ -156,6 +170,10 @@ fun ScheduleEditorScreen(
                 showHomeworksCounterOperation = false
             }
         },
-        onAddLessonClick = { navigateToCreateLesson(viewModel.semesterId, it) },
+        onAddLessonClick = { dayOfWeek ->
+            navController.navigate(
+                ScheduleRoute.LessonEditor(semesterId = viewModel.semesterId, dayOfWeekValue = dayOfWeek.value),
+            )
+        },
     )
 }

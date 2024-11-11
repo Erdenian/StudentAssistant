@@ -2,18 +2,34 @@ package com.erdenian.studentassistant.di
 
 import android.app.Application
 import com.erdenian.studentassistant.database.di.DatabaseModule
-import com.erdenian.studentassistant.homeworks.di.HomeworksComponent
+import com.erdenian.studentassistant.di.features.HomeworksModule
+import com.erdenian.studentassistant.di.features.ScheduleModule
+import com.erdenian.studentassistant.di.features.SettingsModule
+import com.erdenian.studentassistant.homeworks.HomeworksDependencies
+import com.erdenian.studentassistant.homeworks.api.HomeworksApi
 import com.erdenian.studentassistant.repository.SelectedSemesterRepository
 import com.erdenian.studentassistant.repository.di.RepositoryModule
-import com.erdenian.studentassistant.schedule.di.ScheduleComponent
-import com.erdenian.studentassistant.settings.di.SettingsComponent
+import com.erdenian.studentassistant.schedule.ScheduleDependencies
+import com.erdenian.studentassistant.schedule.api.ScheduleApi
+import com.erdenian.studentassistant.settings.SettingsDependencies
+import com.erdenian.studentassistant.settings.api.SettingsApi
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [RepositoryModule::class])
-interface MainComponent {
+@Component(
+    modules = [
+        RepositoryModule::class,
+        ScheduleModule::class,
+        HomeworksModule::class,
+        SettingsModule::class,
+    ],
+)
+internal interface MainComponent :
+    ScheduleDependencies,
+    HomeworksDependencies,
+    SettingsDependencies {
 
     @Component.Factory
     interface Factory {
@@ -24,9 +40,9 @@ interface MainComponent {
         ): MainComponent
     }
 
-    val selectedSemesterRepository: SelectedSemesterRepository
+    override val selectedSemesterRepository: SelectedSemesterRepository
 
-    val scheduleComponent: ScheduleComponent
-    val homeworksComponent: HomeworksComponent
-    val settingsComponent: SettingsComponent
+    val scheduleApi: ScheduleApi
+    val homeworksApi: HomeworksApi
+    val settingsApi: SettingsApi
 }
