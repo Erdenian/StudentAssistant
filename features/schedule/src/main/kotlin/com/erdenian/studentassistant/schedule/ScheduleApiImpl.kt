@@ -17,11 +17,11 @@ public fun createScheduleApi(dependencies: ScheduleDependencies): ScheduleApi =
     ScheduleComponentHolder.create(dependencies).api
 
 internal class ScheduleApiImpl @Inject constructor() : ScheduleApi {
-    override fun NavGraphBuilder.composable() {
-        composable<ScheduleRoute.Schedule> { ScheduleScreen() }
-        composable<ScheduleRoute.SemesterEditor> { SemesterEditorScreen(it.toRoute()) }
-        composable<ScheduleRoute.ScheduleEditor> { ScheduleEditorScreen(it.toRoute()) }
-        composable<ScheduleRoute.LessonEditor> { LessonEditorScreen(it.toRoute()) }
-        composable<ScheduleRoute.LessonInformation> { LessonInformationScreen(it.toRoute()) }
+    override fun addToGraph(builder: NavGraphBuilder) {
+        builder.composable<ScheduleRoute.Schedule> { ScheduleScreen() }
+        builder.composable<ScheduleRoute.SemesterEditor> { SemesterEditorScreen(it.toRoute()) }
+        builder.composable<ScheduleRoute.ScheduleEditor> { ScheduleEditorScreen(it.toRoute()) }
+        builder.composable<ScheduleRoute.LessonEditor> { LessonEditorScreen(it.toRoute()) }
+        builder.composable<ScheduleRoute.LessonInformation> { LessonInformationScreen(it.toRoute()) }
     }
 }

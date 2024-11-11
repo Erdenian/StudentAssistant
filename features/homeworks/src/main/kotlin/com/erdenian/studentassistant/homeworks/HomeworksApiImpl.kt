@@ -14,8 +14,8 @@ public fun createHomeworksApi(dependencies: HomeworksDependencies): HomeworksApi
     HomeworksComponentHolder.create(dependencies).api
 
 internal class HomeworksApiImpl @Inject constructor() : HomeworksApi {
-    override fun NavGraphBuilder.composable() {
-        composable<HomeworksRoute.Homeworks> { HomeworksScreen() }
-        composable<HomeworksRoute.HomeworkEditor> { HomeworkEditorScreen(it.toRoute()) }
+    override fun addToGraph(builder: NavGraphBuilder) {
+        builder.composable<HomeworksRoute.Homeworks> { HomeworksScreen() }
+        builder.composable<HomeworksRoute.HomeworkEditor> { HomeworkEditorScreen(it.toRoute()) }
     }
 }

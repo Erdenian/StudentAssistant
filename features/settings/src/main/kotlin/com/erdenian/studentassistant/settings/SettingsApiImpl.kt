@@ -12,7 +12,7 @@ public fun createSettingsApi(dependencies: SettingsDependencies): SettingsApi =
     SettingsComponentHolder.create(dependencies).api
 
 internal class SettingsApiImpl @Inject constructor() : SettingsApi {
-    override fun NavGraphBuilder.composable() {
-        composable<SettingsRoute.Settings> { SettingsScreen() }
+    override fun addToGraph(builder: NavGraphBuilder) {
+        builder.composable<SettingsRoute.Settings> { SettingsScreen() }
     }
 }

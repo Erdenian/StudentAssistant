@@ -91,9 +91,9 @@ private fun StudentAssistantNavHost(
     modifier = modifier,
 ) {
     val builder: NavGraphBuilder.() -> Unit = {
-        MainComponentHolder.instance.scheduleApi.apply { composable() }
-        MainComponentHolder.instance.homeworksApi.apply { composable() }
-        MainComponentHolder.instance.settingsApi.apply { composable() }
+        MainComponentHolder.instance.scheduleApi.addToGraph(this)
+        MainComponentHolder.instance.homeworksApi.addToGraph(this)
+        MainComponentHolder.instance.settingsApi.addToGraph(this)
     }
 
     navigation<RootRoute.Schedule>(RootRoute.Schedule.startDestination, builder = builder)
