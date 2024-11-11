@@ -15,6 +15,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.erdenian.studentassistant.navigation.LocalNavController
+import com.erdenian.studentassistant.schedule.api.ScheduleRoute
+import com.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
 import com.erdenian.studentassistant.schedule.lessoneditor.LessonEditorViewModel.Error
 import com.erdenian.studentassistant.strings.RA
 import com.erdenian.studentassistant.strings.RS
@@ -24,13 +28,27 @@ import com.erdenian.studentassistant.utils.toast
 import kotlinx.coroutines.launch
 
 @Composable
-internal fun LessonEditorScreen(
-    viewModel: LessonEditorViewModel,
-    navigateBack: () -> Unit,
-) {
+internal fun LessonEditorScreen(route: ScheduleRoute.LessonEditor) {
+    val viewModel = viewModel {
+        val semesterId = route.semesterId
+        val dayOfWeek = route.dayOfWeek
+        val subjectName = route.subjectName
+        val lessonId = route.lessonId
+        val copy = route.copy
+
+        val factory = ScheduleComponentHolder.instance.lessonEditorViewModelFactory
+        when {
+            (dayOfWeek != null) -> factory.get(semesterId, dayOfWeek)
+            (subjectName != null) -> factory.get(semesterId, subjectName)
+            (lessonId != null) -> factory.get(semesterId, lessonId, copy == true)
+            else -> throw IllegalArgumentException("Wrong LessonEditor arguments")
+        }
+    }
+    val navController = LocalNavController.current
+
     val done by viewModel.done.collectAsState()
     LaunchedEffect(done) {
-        if (done) navigateBack()
+        if (done) navController.popBackStack()
     }
 
     var isSubjectNameChanged by rememberSaveable { mutableStateOf(false) }
@@ -198,7 +216,7 @@ internal fun LessonEditorScreen(
         dayOfWeek = dayOfWeek,
         weeks = weeks,
         isAdvancedWeeksSelectorEnabled = isAdvancedWeeksSelectorEnabled,
-        onBackClick = navigateBack,
+        onBackClick = navController::popBackStack,
         onSaveClick = {
             isSubjectNameChanged = true
             if (errorMessage != null) {

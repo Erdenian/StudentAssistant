@@ -11,21 +11,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.erdenian.studentassistant.entity.Homework
+import com.erdenian.studentassistant.homeworks.api.HomeworksRoute
+import com.erdenian.studentassistant.navigation.LocalNavController
+import com.erdenian.studentassistant.schedule.api.ScheduleRoute
+import com.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
 
 @Composable
-internal fun LessonInformationScreen(
-    viewModel: LessonInformationViewModel,
-    navigateBack: () -> Unit,
-    navigateToEditLesson: (semesterId: Long, lessonId: Long) -> Unit,
-    navigateToEditHomework: (semesterId: Long, homeworkId: Long) -> Unit,
-    navigateToCreateHomework: (semesterId: Long, subjectName: String) -> Unit,
-) {
+internal fun LessonInformationScreen(route: ScheduleRoute.LessonInformation) {
+    val viewModel = viewModel {
+        ScheduleComponentHolder.instance.lessonInformationViewModelFactory.get(route.lessonId)
+    }
+    val navController = LocalNavController.current
+
     val isDeleted by viewModel.isDeleted.collectAsState()
     LaunchedEffect(isDeleted) {
-        if (isDeleted) navigateBack()
+        if (isDeleted) navController.popBackStack()
     }
 
     val lesson by viewModel.lesson.collectAsState()
@@ -63,10 +67,20 @@ internal fun LessonInformationScreen(
     LessonInformationContent(
         lesson = lesson,
         homeworks = homeworks?.list,
-        onBackClick = navigateBack,
-        onEditClick = { navigateToEditLesson(it.semesterId, it.id) },
-        onHomeworkClick = { navigateToEditHomework(it.semesterId, it.id) },
-        onAddHomeworkClick = { navigateToCreateHomework(it.semesterId, it.subjectName) },
+        onBackClick = navController::popBackStack,
+        onEditClick = { lesson ->
+            navController.navigate(ScheduleRoute.LessonEditor(semesterId = lesson.semesterId, lessonId = lesson.id))
+        },
+        onHomeworkClick = { homework ->
+            navController.navigate(
+                HomeworksRoute.HomeworkEditor(semesterId = homework.semesterId, homeworkId = homework.id),
+            )
+        },
+        onAddHomeworkClick = { lesson ->
+            navController.navigate(
+                HomeworksRoute.HomeworkEditor(semesterId = lesson.semesterId, subjectName = lesson.subjectName),
+            )
+        },
         onDeleteHomeworkClick = { homeworkForDeleteDialog = it },
     )
 }

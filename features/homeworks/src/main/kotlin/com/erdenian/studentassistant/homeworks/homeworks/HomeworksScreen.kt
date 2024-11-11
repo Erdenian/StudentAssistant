@@ -10,16 +10,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.erdenian.studentassistant.entity.Homework
+import com.erdenian.studentassistant.homeworks.api.HomeworksRoute
+import com.erdenian.studentassistant.homeworks.di.HomeworksComponentHolder
+import com.erdenian.studentassistant.navigation.LocalNavController
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
 
 @Composable
-internal fun HomeworksScreen(
-    viewModel: HomeworksViewModel,
-    navigateToCreateHomework: (semesterId: Long) -> Unit,
-    navigateToEditHomework: (semesterId: Long, homeworkId: Long) -> Unit,
-) {
+internal fun HomeworksScreen() {
+    val viewModel = viewModel { HomeworksComponentHolder.instance.homeworksViewModel }
+    val navController = LocalNavController.current
+
     val semesters by viewModel.allSemesters.collectAsState()
     val selectedSemester by viewModel.selectedSemester.collectAsState()
 
@@ -63,8 +66,12 @@ internal fun HomeworksScreen(
         actualHomeworks = actualHomeworks?.list,
         pastHomeworks = pastHomeworks?.list,
         onSelectedSemesterChange = { viewModel.selectSemester(semesters.list[it].id) },
-        onAddHomeworkClick = { navigateToCreateHomework(it.id) },
-        onHomeworkClick = { navigateToEditHomework(it.semesterId, it.id) },
+        onAddHomeworkClick = { navController.navigate(HomeworksRoute.HomeworkEditor(semesterId = it.id)) },
+        onHomeworkClick = { homework ->
+            navController.navigate(
+                HomeworksRoute.HomeworkEditor(semesterId = homework.semesterId, homeworkId = homework.id),
+            )
+        },
         onDeleteHomeworkClick = { homeworkForDeleteDialog = it },
     )
 }

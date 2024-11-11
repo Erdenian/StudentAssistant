@@ -8,17 +8,19 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.erdenian.studentassistant.entity.Lesson
+import com.erdenian.studentassistant.navigation.LocalNavController
+import com.erdenian.studentassistant.schedule.api.ScheduleRoute
+import com.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
 import java.time.LocalDate
 import kotlinx.coroutines.flow.map
 
 @Composable
-internal fun ScheduleScreen(
-    viewModel: ScheduleViewModel,
-    navigateToAddSemester: () -> Unit,
-    navigateToEditSchedule: (semesterId: Long) -> Unit,
-    navigateToShowLessonInformation: (lessonId: Long) -> Unit,
-) {
+internal fun ScheduleScreen() {
+    val viewModel = viewModel { ScheduleComponentHolder.instance.scheduleViewModel }
+    val navController = LocalNavController.current
+
     val semesters by viewModel.allSemesters.collectAsState()
     val semestersNames by remember { derivedStateOf { semesters.map { it.name } } }
     val selectedSemester by viewModel.selectedSemester.collectAsState()
@@ -39,8 +41,8 @@ internal fun ScheduleScreen(
         selectedSemester = selectedSemester,
         rememberLessons = rememberLessons,
         onSelectedSemesterChange = { index -> viewModel.selectSemester(semesters.list[index].id) },
-        onAddSemesterClick = navigateToAddSemester,
-        onEditSemesterClick = { navigateToEditSchedule(it.id) },
-        onLessonClick = { navigateToShowLessonInformation(it.id) },
+        onAddSemesterClick = { navController.navigate(ScheduleRoute.SemesterEditor()) },
+        onEditScheduleClick = { navController.navigate(ScheduleRoute.ScheduleEditor(semesterId = it.id)) },
+        onLessonClick = { navController.navigate(ScheduleRoute.LessonInformation(lessonId = it.id)) },
     )
 }

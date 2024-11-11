@@ -58,7 +58,7 @@ internal fun ScheduleContent(
     rememberLessons: @Composable (date: LocalDate) -> State<List<Lesson>?>,
     onSelectedSemesterChange: (Int) -> Unit,
     onAddSemesterClick: () -> Unit,
-    onEditSemesterClick: (semester: Semester) -> Unit,
+    onEditScheduleClick: (semester: Semester) -> Unit,
     onLessonClick: (Lesson) -> Unit,
 ) {
     var currentDate: LocalDate? by rememberSaveable { mutableStateOf(null) }
@@ -113,7 +113,7 @@ internal fun ScheduleContent(
                             selectedSemester?.let { semester ->
                                 ActionItem.NeverShow(
                                     name = stringResource(RS.s_edit),
-                                    onClick = { onEditSemesterClick(semester) },
+                                    onClick = { onEditScheduleClick(semester) },
                                 )
                             },
                         ),
@@ -214,7 +214,7 @@ private fun ScheduleScreenNoSchedulePreview() = AppTheme {
         rememberLessons = { remember { mutableStateOf(emptyList()) } },
         onSelectedSemesterChange = {},
         onAddSemesterClick = {},
-        onEditSemesterClick = {},
+        onEditScheduleClick = {},
         onLessonClick = {},
     )
 }
@@ -229,7 +229,7 @@ private fun ScheduleScreenLoadingPreview() = AppTheme {
         rememberLessons = { remember { mutableStateOf(null) } },
         onSelectedSemesterChange = {},
         onAddSemesterClick = {},
-        onEditSemesterClick = {},
+        onEditScheduleClick = {},
         onLessonClick = {},
     )
 }
@@ -244,7 +244,7 @@ private fun ScheduleScreenNoLessonsPreview() = AppTheme {
         rememberLessons = { remember { mutableStateOf(emptyList()) } },
         onSelectedSemesterChange = {},
         onAddSemesterClick = {},
-        onEditSemesterClick = {},
+        onEditScheduleClick = {},
         onLessonClick = {},
     )
 }
@@ -260,7 +260,7 @@ private fun ScheduleScreenPreview() = AppTheme {
         rememberLessons = { remember { mutableStateOf(lessons) } },
         onSelectedSemesterChange = {},
         onAddSemesterClick = {},
-        onEditSemesterClick = {},
+        onEditScheduleClick = {},
         onLessonClick = {},
     )
 }

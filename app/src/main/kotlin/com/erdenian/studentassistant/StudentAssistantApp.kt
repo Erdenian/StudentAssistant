@@ -15,6 +15,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -24,18 +25,17 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.erdenian.studentassistant.di.MainComponentHolder
 import com.erdenian.studentassistant.homeworks.api.HomeworksRoute
+import com.erdenian.studentassistant.navigation.LocalNavController
 import com.erdenian.studentassistant.navigation.Route
 import com.erdenian.studentassistant.schedule.api.ScheduleRoute
 import com.erdenian.studentassistant.settings.api.SettingsRoute
@@ -53,17 +53,18 @@ internal fun StudentAssistantApp() {
         navController.currentBackStackEntryFlow.collect { keyboardController?.hide() }
     }
 
-    Scaffold(
-        content = { paddingValues ->
-            StudentAssistantNavHost(
-                navController = navController,
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .consumeWindowInsets(paddingValues),
-            )
-        },
-        bottomBar = { StudentAssistantBottomNavigation(navController = navController) },
-    )
+    CompositionLocalProvider(LocalNavController provides navController) {
+        Scaffold(
+            content = { paddingValues ->
+                StudentAssistantNavHost(
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .consumeWindowInsets(paddingValues),
+                )
+            },
+            bottomBar = { StudentAssistantBottomNavigation() },
+        )
+    }
 }
 
 @Serializable
@@ -81,19 +82,18 @@ private sealed class RootRoute(val startDestination: Route) : Route {
 
 @Composable
 private fun StudentAssistantNavHost(
-    navController: NavHostController,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
 ) = NavHost(
-    navController = navController,
+    navController = LocalNavController.current,
     startDestination = RootRoute.Schedule,
     enterTransition = { fadeIn(tween()) },
     exitTransition = { fadeOut(tween()) },
     modifier = modifier,
 ) {
     val builder: NavGraphBuilder.() -> Unit = {
-        MainComponentHolder.instance.scheduleApi.apply { composable(navController) }
-        MainComponentHolder.instance.homeworksApi.apply { composable(navController) }
-        MainComponentHolder.instance.settingsApi.apply { composable(navController) }
+        MainComponentHolder.instance.scheduleApi.apply { composable() }
+        MainComponentHolder.instance.homeworksApi.apply { composable() }
+        MainComponentHolder.instance.settingsApi.apply { composable() }
     }
 
     navigation<RootRoute.Schedule>(RootRoute.Schedule.startDestination, builder = builder)
@@ -103,9 +103,10 @@ private fun StudentAssistantNavHost(
 
 @Composable
 private fun StudentAssistantBottomNavigation(
-    navController: NavController,
     modifier: Modifier = Modifier,
 ) = NavigationBar(modifier = modifier) {
+    val navController = LocalNavController.current
+
     data class Item(
         val imageVector: ImageVector,
         @StringRes val labelId: Int,
