@@ -1,16 +1,9 @@
-package com.erdenian.studentassistant.repository
+package com.erdenian.studentassistant.repository.impl
 
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.erdenian.studentassistant.repository.impl.getBooleanFlow
-import com.erdenian.studentassistant.repository.impl.getDuration
-import com.erdenian.studentassistant.repository.impl.getDurationFlow
-import com.erdenian.studentassistant.repository.impl.getLocalTime
-import com.erdenian.studentassistant.repository.impl.getLocalTimeFlow
-import com.erdenian.studentassistant.repository.impl.putDuration
-import com.erdenian.studentassistant.repository.impl.putLocalTime
 import java.time.Duration
 import java.time.LocalTime
 import kotlinx.coroutines.flow.take

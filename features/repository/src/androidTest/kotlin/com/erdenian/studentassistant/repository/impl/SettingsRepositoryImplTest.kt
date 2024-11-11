@@ -1,10 +1,9 @@
-package com.erdenian.studentassistant.repository
+package com.erdenian.studentassistant.repository.impl
 
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.erdenian.studentassistant.repository.impl.SettingsRepositoryImpl
 import java.time.Duration
 import java.time.LocalTime
 import kotlinx.coroutines.flow.take
@@ -20,7 +19,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-internal class SettingsRepositoryTest {
+internal class SettingsRepositoryImplTest {
 
     private val sharedPreferences = ApplicationProvider
         .getApplicationContext<Context>()

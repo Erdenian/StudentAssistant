@@ -28,7 +28,6 @@ import com.erdenian.studentassistant.repository.database.entity.TeacherEntity
 )
 @TypeConverters(Converters::class)
 internal abstract class ScheduleDatabase : RoomDatabase() {
-
     abstract val semesterDao: SemesterDao
     abstract val lessonDao: LessonDao
     abstract val homeworkDao: HomeworkDao
