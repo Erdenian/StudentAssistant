@@ -4,6 +4,7 @@ import android.os.Parcelable
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 /**
  * Класс семестра (четверти).
@@ -16,10 +17,13 @@ import kotlinx.parcelize.Parcelize
  * @author Ilya Solovyov
  * @since 0.0.0
  */
+@Serializable
 @Parcelize
 data class Semester(
     val name: String,
+    @Serializable(with = LocalDateSerializer::class)
     val firstDay: LocalDate,
+    @Serializable(with = LocalDateSerializer::class)
     val lastDay: LocalDate,
     val id: Long,
 ) : Comparable<Semester>, Parcelable {

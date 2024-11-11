@@ -11,6 +11,7 @@ android {
 dependencies {
     // region Private
     implementation(project(":common:navigation"))
+    implementation(project(":features:repository:api"))
     // endregion
 
     // region Kotlin

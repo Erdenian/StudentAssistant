@@ -1,6 +1,7 @@
 package com.erdenian.studentassistant
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -36,6 +37,7 @@ import androidx.navigation.compose.rememberNavController
 import com.erdenian.studentassistant.di.MainComponentHolder
 import com.erdenian.studentassistant.homeworks.api.HomeworksRoute
 import com.erdenian.studentassistant.navigation.LocalNavController
+import com.erdenian.studentassistant.navigation.LocalSharedTransitionScope
 import com.erdenian.studentassistant.navigation.Route
 import com.erdenian.studentassistant.schedule.api.ScheduleRoute
 import com.erdenian.studentassistant.settings.api.SettingsRoute
@@ -56,11 +58,15 @@ internal fun StudentAssistantApp() {
     CompositionLocalProvider(LocalNavController provides navController) {
         Scaffold(
             content = { paddingValues ->
-                StudentAssistantNavHost(
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .consumeWindowInsets(paddingValues),
-                )
+                SharedTransitionLayout {
+                    CompositionLocalProvider(LocalSharedTransitionScope provides this) {
+                        StudentAssistantNavHost(
+                            modifier = Modifier
+                                .padding(paddingValues)
+                                .consumeWindowInsets(paddingValues),
+                        )
+                    }
+                }
             },
             bottomBar = { StudentAssistantBottomNavigation() },
         )

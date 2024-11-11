@@ -1,6 +1,7 @@
 package com.erdenian.studentassistant.schedule.api
 
 import com.erdenian.studentassistant.navigation.Route
+import com.erdenian.studentassistant.repository.api.entity.Lesson
 import java.time.DayOfWeek
 import kotlinx.serialization.Serializable
 
@@ -27,5 +28,5 @@ sealed interface ScheduleRoute : Route {
     }
 
     @Serializable
-    data class LessonInformation(val lessonId: Long) : ScheduleRoute
+    data class LessonInformation(@Serializable val lesson: Lesson) : ScheduleRoute
 }

@@ -23,7 +23,7 @@ import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
 @Composable
 internal fun LessonInformationScreen(route: ScheduleRoute.LessonInformation) {
     val viewModel = viewModel {
-        ScheduleComponentHolder.instance.lessonInformationViewModelFactory.get(route.lessonId)
+        ScheduleComponentHolder.instance.lessonInformationViewModelFactory.get(route.lesson)
     }
     val navController = LocalNavController.current
 
@@ -65,7 +65,7 @@ internal fun LessonInformationScreen(route: ScheduleRoute.LessonInformation) {
     }
 
     LessonInformationContent(
-        lesson = lesson,
+        lesson = lesson ?: return,
         homeworks = homeworks,
         onBackClick = navController::popBackStack,
         onEditClick = { lesson ->

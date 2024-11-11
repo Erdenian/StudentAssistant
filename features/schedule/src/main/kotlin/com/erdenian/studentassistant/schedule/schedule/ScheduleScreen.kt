@@ -42,6 +42,6 @@ internal fun ScheduleScreen() {
         onSelectedSemesterChange = { index -> viewModel.selectSemester(semesters[index].id) },
         onAddSemesterClick = { navController.navigate(ScheduleRoute.SemesterEditor()) },
         onEditScheduleClick = { navController.navigate(ScheduleRoute.ScheduleEditor(semesterId = it.id)) },
-        onLessonClick = { navController.navigate(ScheduleRoute.LessonInformation(lessonId = it.id)) },
+        onLessonClick = { navController.navigate(ScheduleRoute.LessonInformation(lesson = it)) },
     )
 }
