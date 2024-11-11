@@ -29,7 +29,7 @@ inline fun <reified T : Route> NavGraphBuilder.composableAnimated(
 }
 
 /**
- * https://issuetracker.google.com/issues/308445387
+ * Workaround for https://issuetracker.google.com/issues/308445387
  */
 @Composable
 inline fun <reified T : Route> DisableUserInteractionOnNavigation(

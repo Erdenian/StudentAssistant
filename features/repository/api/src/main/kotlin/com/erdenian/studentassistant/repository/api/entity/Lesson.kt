@@ -122,6 +122,7 @@ data class Lesson(
          */
         @Serializable
         data class ByDates(
+            @Suppress("AnnotationOnSeparateLine")
             val dates: Set<@Serializable(with = LocalDateSerializer::class) LocalDate>,
         ) : Repeat() {
 
