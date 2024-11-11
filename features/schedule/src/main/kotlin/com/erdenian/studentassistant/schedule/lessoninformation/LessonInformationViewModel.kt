@@ -3,8 +3,6 @@ package com.erdenian.studentassistant.schedule.lessoninformation
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.erdenian.studentassistant.entity.emptyImmutableSortedSet
-import com.erdenian.studentassistant.entity.toImmutableSortedSet
 import com.erdenian.studentassistant.repository.api.RepositoryApi
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -54,19 +52,11 @@ internal class LessonInformationViewModel @AssistedInject constructor(
 
     val homeworks = combine(
         lessonPrivate.flatMapLatest { lesson ->
-            if (lesson != null) {
-                homeworkRepository.getActualFlow(lesson.subjectName)
-            } else {
-                flowOf(emptyImmutableSortedSet())
-            }
+            lesson?.let { homeworkRepository.getActualFlow(it.subjectName) } ?: flowOf(emptyList())
         }.onEach { deletedHomeworkIds.value = emptySet() },
         deletedHomeworkIds,
     ) { homeworks, deletedIds ->
-        if (deletedIds.isEmpty()) {
-            homeworks
-        } else {
-            homeworks.asSequence().filter { it.id !in deletedIds }.toImmutableSortedSet()
-        }
+        if (deletedIds.isEmpty()) homeworks else homeworks.filter { it.id !in deletedIds }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     fun deleteHomework(id: Long) {

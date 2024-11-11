@@ -55,15 +55,15 @@ internal class LessonDaoTest {
         )
         val id1 = lessonDao.insert(
             lesson1.lesson,
-            lesson1.lessonTeachers,
-            lesson1.lessonClassrooms,
+            lesson1.teachers,
+            lesson1.classrooms,
             checkNotNull(lesson1.byWeekday),
         )
         assertNotEquals(0, id1)
         val expected1 = FullLesson(
             lesson1.lesson.copy(id = id1),
-            lesson1.lessonTeachers.map { it.copy(lessonId = id1, id = 1L) },
-            lesson1.lessonClassrooms.map { it.copy(lessonId = id1, id = 1L) },
+            lesson1.teachers.map { it.copy(lessonId = id1, id = 1L) },
+            lesson1.classrooms.map { it.copy(lessonId = id1, id = 1L) },
             checkNotNull(lesson1.byWeekday).copy(lessonId = id1),
             emptyList(),
         )
@@ -78,8 +78,8 @@ internal class LessonDaoTest {
         )
         val id2 = lessonDao.insert(
             lesson2.lesson,
-            lesson2.lessonTeachers,
-            lesson2.lessonClassrooms,
+            lesson2.teachers,
+            lesson2.classrooms,
             lesson2.byDates,
         )
         assertEquals(10L, id2)
@@ -154,8 +154,8 @@ internal class LessonDaoTest {
         )
         lessonDao.insert(
             lesson1.lesson,
-            lesson1.lessonTeachers,
-            lesson1.lessonClassrooms,
+            lesson1.teachers,
+            lesson1.classrooms,
             lesson1.byDates,
         )
         assertEquals(listOf(lesson1), lessonDao.getAllFlow(semesterId).first())
@@ -166,8 +166,8 @@ internal class LessonDaoTest {
         )
         lessonDao.update(
             lesson2.lesson,
-            lesson2.lessonTeachers,
-            lesson2.lessonClassrooms,
+            lesson2.teachers,
+            lesson2.classrooms,
             lesson2.byDates,
         )
         assertEquals(listOf(lesson2), lessonDao.getAllFlow(semesterId).first())
@@ -178,8 +178,8 @@ internal class LessonDaoTest {
         )
         lessonDao.update(
             lesson3.lesson,
-            lesson3.lessonTeachers,
-            lesson3.lessonClassrooms,
+            lesson3.teachers,
+            lesson3.classrooms,
             checkNotNull(lesson3.byWeekday),
         )
         assertEquals(listOf(lesson3), lessonDao.getAllFlow(semesterId).first())
@@ -198,8 +198,8 @@ internal class LessonDaoTest {
         )
         lessonDao.insert(
             lesson1.lesson,
-            lesson1.lessonTeachers,
-            lesson1.lessonClassrooms,
+            lesson1.teachers,
+            lesson1.classrooms,
             lesson1.byDates,
         )
         val lesson2 = lesson1.copy(
@@ -211,8 +211,8 @@ internal class LessonDaoTest {
         )
         lessonDao.insert(
             lesson2.lesson,
-            lesson2.lessonTeachers,
-            lesson2.lessonClassrooms,
+            lesson2.teachers,
+            lesson2.classrooms,
             lesson2.byDates,
         )
         assertEquals(listOf(lesson1, lesson2), lessonDao.getAllFlow(semesterId).first())
@@ -225,8 +225,8 @@ internal class LessonDaoTest {
         )
         lessonDao.insert(
             lesson3.lesson,
-            lesson3.lessonTeachers,
-            lesson3.lessonClassrooms,
+            lesson3.teachers,
+            lesson3.classrooms,
             checkNotNull(lesson3.byWeekday),
         )
         assertEquals(listOf(lesson3, lesson2), lessonDao.getAllFlow(semesterId).first())
@@ -245,8 +245,8 @@ internal class LessonDaoTest {
         )
         lessonDao.insert(
             lesson1.lesson,
-            lesson1.lessonTeachers,
-            lesson1.lessonClassrooms,
+            lesson1.teachers,
+            lesson1.classrooms,
             lesson1.byDates,
         )
         assertEquals(lesson1, lessonDao.get(10L))
@@ -260,8 +260,8 @@ internal class LessonDaoTest {
         )
         lessonDao.update(
             lesson2.lesson,
-            lesson2.lessonTeachers,
-            lesson2.lessonClassrooms,
+            lesson2.teachers,
+            lesson2.classrooms,
             lesson2.byDates,
         )
         assertEquals(lesson2, lessonDao.get(10L))
@@ -278,8 +278,8 @@ internal class LessonDaoTest {
         )
         lessonDao.update(
             lesson3.lesson,
-            lesson3.lessonTeachers,
-            lesson3.lessonClassrooms,
+            lesson3.teachers,
+            lesson3.classrooms,
             lesson3.byDates,
         )
         assertNull(lessonDao.get(10L))
@@ -298,8 +298,8 @@ internal class LessonDaoTest {
         )
         lessonDao.insert(
             lesson1.lesson,
-            lesson1.lessonTeachers,
-            lesson1.lessonClassrooms,
+            lesson1.teachers,
+            lesson1.classrooms,
             lesson1.byDates,
         )
         assertEquals(lesson1, lessonDao.getFlow(10L).first())
@@ -313,8 +313,8 @@ internal class LessonDaoTest {
         )
         lessonDao.update(
             lesson2.lesson,
-            lesson2.lessonTeachers,
-            lesson2.lessonClassrooms,
+            lesson2.teachers,
+            lesson2.classrooms,
             lesson2.byDates,
         )
         assertEquals(lesson2, lessonDao.getFlow(10L).first())
@@ -331,8 +331,8 @@ internal class LessonDaoTest {
         )
         lessonDao.insert(
             lesson3.lesson,
-            lesson3.lessonTeachers,
-            lesson3.lessonClassrooms,
+            lesson3.teachers,
+            lesson3.classrooms,
             lesson3.byDates,
         )
         assertNull(lessonDao.getFlow(10L).first())
@@ -351,8 +351,8 @@ internal class LessonDaoTest {
         )
         lessonDao.insert(
             lesson1.lesson,
-            lesson1.lessonTeachers,
-            lesson1.lessonClassrooms,
+            lesson1.teachers,
+            lesson1.classrooms,
             lesson1.byDates,
         )
         assertEquals(lesson1, lessonDao.getAllFlow(semesterId).first().single())
@@ -366,8 +366,8 @@ internal class LessonDaoTest {
         )
         lessonDao.update(
             lesson2.lesson,
-            lesson2.lessonTeachers,
-            lesson2.lessonClassrooms,
+            lesson2.teachers,
+            lesson2.classrooms,
             lesson2.byDates,
         )
         assertEquals(lesson2, lessonDao.getFlow(10L).first())

@@ -1,9 +1,5 @@
 package com.erdenian.studentassistant.repository.impl
 
-import com.erdenian.studentassistant.entity.ImmutableSortedSet
-import com.erdenian.studentassistant.entity.Lesson
-import com.erdenian.studentassistant.entity.emptyImmutableSortedSet
-import com.erdenian.studentassistant.entity.toImmutableSortedSet
 import com.erdenian.studentassistant.repository.api.LessonRepository
 import com.erdenian.studentassistant.repository.api.SelectedSemesterRepository
 import com.erdenian.studentassistant.repository.api.SettingsRepository
@@ -19,6 +15,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
+import kotlin.collections.map
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -36,8 +33,8 @@ internal class LessonRepositoryImpl @Inject constructor(
     override suspend fun insert(
         subjectName: String,
         type: String,
-        teachers: ImmutableSortedSet<String>,
-        classrooms: ImmutableSortedSet<String>,
+        teachers: List<String>,
+        classrooms: List<String>,
         startTime: LocalTime,
         endTime: LocalTime,
         semesterId: Long,
@@ -64,12 +61,12 @@ internal class LessonRepositoryImpl @Inject constructor(
     override suspend fun insert(
         subjectName: String,
         type: String,
-        teachers: ImmutableSortedSet<String>,
-        classrooms: ImmutableSortedSet<String>,
+        teachers: List<String>,
+        classrooms: List<String>,
         startTime: LocalTime,
         endTime: LocalTime,
         semesterId: Long,
-        dates: ImmutableSortedSet<LocalDate>,
+        dates: Set<LocalDate>,
     ) {
         val lessonEntity = LessonEntity(
             subjectName = subjectName,
@@ -92,8 +89,8 @@ internal class LessonRepositoryImpl @Inject constructor(
         id: Long,
         subjectName: String,
         type: String,
-        teachers: ImmutableSortedSet<String>,
-        classrooms: ImmutableSortedSet<String>,
+        teachers: List<String>,
+        classrooms: List<String>,
         startTime: LocalTime,
         endTime: LocalTime,
         semesterId: Long,
@@ -122,12 +119,12 @@ internal class LessonRepositoryImpl @Inject constructor(
         id: Long,
         subjectName: String,
         type: String,
-        teachers: ImmutableSortedSet<String>,
-        classrooms: ImmutableSortedSet<String>,
+        teachers: List<String>,
+        classrooms: List<String>,
         startTime: LocalTime,
         endTime: LocalTime,
         semesterId: Long,
-        dates: ImmutableSortedSet<LocalDate>,
+        dates: Set<LocalDate>,
     ) {
         val lessonEntity = LessonEntity(
             subjectName = subjectName,
@@ -153,22 +150,24 @@ internal class LessonRepositoryImpl @Inject constructor(
 
     // region Lessons
 
-    override suspend fun get(id: Long) = lessonDao.get(id)
+    override suspend fun get(id: Long) = lessonDao.get(id)?.toLesson()
 
-    override fun getFlow(id: Long) = lessonDao.getFlow(id)
+    override fun getFlow(id: Long) = lessonDao.getFlow(id).map { it?.toLesson() }
 
     override val allFlow = selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
-        semester?.id?.let { lessonDao.getAllFlow(it).map() } ?: flowOf(emptyImmutableSortedSet())
+        semester?.id?.let { lessonDao.getAllFlow(it).map() } ?: flowOf(emptyList())
     }
 
-    override fun getAllFlow(day: LocalDate): Flow<ImmutableSortedSet<Lesson>> =
-        selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
-            val allLessons = semester?.id?.let(lessonDao::getAllFlow) ?: flowOf(emptyList())
-            allLessons.map { lessons ->
-                val weekNumber = semester?.getWeekNumber(day) ?: return@map emptyImmutableSortedSet()
-                lessons.asSequence().filter { it.lessonRepeat.repeatsOnDay(day, weekNumber) }.toImmutableSortedSet()
-            }
+    override fun getAllFlow(day: LocalDate) = selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
+        val allLessons = semester?.id?.let(lessonDao::getAllFlow) ?: flowOf(emptyList())
+        allLessons.map { lessons ->
+            val weekNumber = semester?.getWeekNumber(day) ?: return@map emptyList()
+            lessons.asSequence()
+                .map { it.toLesson() }
+                .filter { it.lessonRepeat.repeatsOnDay(day, weekNumber) }
+                .toList()
         }
+    }
 
     override fun getAllFlow(semesterId: Long, dayOfWeek: DayOfWeek) =
         lessonDao.getAllFlow(semesterId, dayOfWeek).map()
@@ -185,7 +184,7 @@ internal class LessonRepositoryImpl @Inject constructor(
 
     override suspend fun getCount(semesterId: Long, subjectName: String) = lessonDao.getCount(semesterId, subjectName)
 
-    override fun getSubjects(semesterId: Long) = lessonDao.getSubjectsFlow(semesterId).map()
+    override fun getSubjects(semesterId: Long) = lessonDao.getSubjectsFlow(semesterId)
 
     override suspend fun renameSubject(semesterId: Long, oldName: String, newName: String) =
         lessonDao.renameSubject(semesterId, oldName, newName)
@@ -194,11 +193,11 @@ internal class LessonRepositoryImpl @Inject constructor(
 
     // region Other fields
 
-    override fun getTypes(semesterId: Long) = lessonDao.getTypesFlow(semesterId).map()
+    override fun getTypes(semesterId: Long) = lessonDao.getTypesFlow(semesterId)
 
-    override fun getTeachers(semesterId: Long) = lessonDao.getTeachersFlow(semesterId).map()
+    override fun getTeachers(semesterId: Long) = lessonDao.getTeachersFlow(semesterId)
 
-    override fun getClassrooms(semesterId: Long) = lessonDao.getClassroomsFlow(semesterId).map()
+    override fun getClassrooms(semesterId: Long) = lessonDao.getClassroomsFlow(semesterId)
 
     override suspend fun getNextStartTime(semesterId: Long, dayOfWeek: DayOfWeek) =
         lessonDao.getLastEndTime(semesterId, dayOfWeek)
@@ -207,8 +206,5 @@ internal class LessonRepositoryImpl @Inject constructor(
 
     // endregion
 
-    private fun Flow<List<FullLesson>>.map() = map { it.toImmutableSortedSet<Lesson>() }
-
-    @JvmName("mapString")
-    private fun Flow<List<String>>.map() = map { it.toImmutableSortedSet() }
+    private fun Flow<List<FullLesson>>.map() = map { it.map(FullLesson::toLesson) }
 }

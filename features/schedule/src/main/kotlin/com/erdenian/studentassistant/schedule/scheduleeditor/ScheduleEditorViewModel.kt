@@ -3,9 +3,8 @@ package com.erdenian.studentassistant.schedule.scheduleeditor
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.erdenian.studentassistant.entity.Lesson
-import com.erdenian.studentassistant.entity.toImmutableSortedSet
 import com.erdenian.studentassistant.repository.api.RepositoryApi
+import com.erdenian.studentassistant.repository.api.entity.Lesson
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -50,11 +49,7 @@ internal class ScheduleEditorViewModel @AssistedInject constructor(
         lessonRepository.getAllFlow(semesterId, dayOfWeek).onEach { deletedLessonIds.value = emptySet() },
         deletedLessonIds.asStateFlow(),
     ) { lessons, deletedIds ->
-        if (deletedIds.isEmpty()) {
-            lessons
-        } else {
-            lessons.asSequence().filter { it.id !in deletedIds }.toImmutableSortedSet()
-        }
+        if (deletedIds.isEmpty()) lessons else lessons.filter { it.id !in deletedIds }
     }
 
     fun deleteSemester() {

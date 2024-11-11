@@ -3,11 +3,8 @@ package com.erdenian.studentassistant.schedule.lessoneditor
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.erdenian.studentassistant.entity.Lesson
-import com.erdenian.studentassistant.entity.emptyImmutableSortedSet
-import com.erdenian.studentassistant.entity.immutableSortedSetOf
-import com.erdenian.studentassistant.entity.toImmutableSortedSet
 import com.erdenian.studentassistant.repository.api.RepositoryApi
+import com.erdenian.studentassistant.repository.api.entity.Lesson
 import com.erdenian.studentassistant.utils.toSingleLine
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -84,7 +81,7 @@ internal class LessonEditorViewModel @AssistedInject constructor(
     val dayOfWeek = MutableStateFlow(dayOfWeek ?: DayOfWeek.MONDAY)
     val weeks = MutableStateFlow(listOf(true))
     val isAdvancedWeeksSelectorEnabled = settingsRepository.getAdvancedWeeksSelectorFlow(viewModelScope)
-    val dates = MutableStateFlow(immutableSortedSetOf<LocalDate>())
+    val dates = MutableStateFlow(emptySet<LocalDate>())
 
     val startTime = MutableStateFlow(settingsRepository.defaultStartTime)
     val endTime = MutableStateFlow<LocalTime>(startTime.value + settingsRepository.defaultLessonDuration)
@@ -116,7 +113,7 @@ internal class LessonEditorViewModel @AssistedInject constructor(
                         Lesson.Repeat.ByWeekday::class
                     }
                     is Lesson.Repeat.ByDates -> {
-                        dates.value = lessonRepeat.dates.toImmutableSortedSet()
+                        dates.value = lessonRepeat.dates
                         Lesson.Repeat.ByDates::class
                     }
                 }
@@ -155,13 +152,13 @@ internal class LessonEditorViewModel @AssistedInject constructor(
     val isEditing = (this.lessonId != null)
 
     val existingSubjects = lessonRepository.getSubjects(semesterId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyImmutableSortedSet())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     val existingTypes = lessonRepository.getTypes(semesterId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyImmutableSortedSet())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     val existingTeachers = lessonRepository.getTeachers(semesterId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyImmutableSortedSet())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     val existingClassrooms = lessonRepository.getClassrooms(semesterId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyImmutableSortedSet())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     private var initialSubjectName: String? = null
     private val isSubjectNameChanged
@@ -190,14 +187,14 @@ internal class LessonEditorViewModel @AssistedInject constructor(
                 .asSequence()
                 .map(String::trim)
                 .filter(String::isNotBlank)
-                .toImmutableSortedSet()
+                .toList()
             val classrooms = classrooms.value
                 .toSingleLine()
                 .split(',')
                 .asSequence()
                 .map(String::trim)
                 .filter(String::isNotBlank)
-                .toImmutableSortedSet()
+                .toList()
             val startTime = startTime.value
             val endTime = endTime.value
 

@@ -11,6 +11,6 @@ android {
 dependencies {
     // region Private
     implementation(project(":core:style"))
-    implementation(project(":common:entity"))
+    implementation(project(":features:repository:api"))
     // endregion
 }

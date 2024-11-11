@@ -27,8 +27,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.erdenian.studentassistant.entity.Homework
-import com.erdenian.studentassistant.entity.Lesson
+import com.erdenian.studentassistant.repository.api.entity.Homework
+import com.erdenian.studentassistant.repository.api.entity.Lesson
 import com.erdenian.studentassistant.sampledata.Homeworks
 import com.erdenian.studentassistant.sampledata.Lessons
 import com.erdenian.studentassistant.schedule.composable.LazyHomeworksList
@@ -102,8 +102,8 @@ internal fun LessonInformationContent(
             LessonCard(
                 subjectName = lessonState?.subjectName ?: emptyText,
                 type = lessonState?.type ?: emptyText,
-                teachers = lessonState?.teachers?.list.orEmpty(),
-                classrooms = lessonState?.classrooms?.list ?: listOf(emptyText),
+                teachers = lessonState?.teachers.orEmpty(),
+                classrooms = lessonState?.classrooms ?: listOf(emptyText),
                 startTime = lessonState?.startTime?.format(timeFormatter) ?: emptyText,
                 endTime = lessonState?.endTime?.format(timeFormatter) ?: emptyText,
                 modifier = Modifier

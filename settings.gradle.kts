@@ -12,7 +12,6 @@ include(
     ":features:settings",
     ":features:settings:api",
 
-    ":common:entity",
     ":common:navigation",
     ":common:uikit",
     ":common:utils",

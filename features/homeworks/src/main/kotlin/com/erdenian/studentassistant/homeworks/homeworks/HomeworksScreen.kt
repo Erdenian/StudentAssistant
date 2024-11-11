@@ -11,10 +11,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.erdenian.studentassistant.entity.Homework
 import com.erdenian.studentassistant.homeworks.api.HomeworksRoute
 import com.erdenian.studentassistant.homeworks.di.HomeworksComponentHolder
 import com.erdenian.studentassistant.navigation.LocalNavController
+import com.erdenian.studentassistant.repository.api.entity.Homework
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
 
@@ -62,10 +62,10 @@ internal fun HomeworksScreen() {
     HomeworksContent(
         semesters = semesters.map { it.name },
         selectedSemester = selectedSemester,
-        overdueHomeworks = overdueHomeworks?.list,
-        actualHomeworks = actualHomeworks?.list,
-        pastHomeworks = pastHomeworks?.list,
-        onSelectedSemesterChange = { viewModel.selectSemester(semesters.list[it].id) },
+        overdueHomeworks = overdueHomeworks,
+        actualHomeworks = actualHomeworks,
+        pastHomeworks = pastHomeworks,
+        onSelectedSemesterChange = { viewModel.selectSemester(semesters[it].id) },
         onAddHomeworkClick = { navController.navigate(HomeworksRoute.HomeworkEditor(semesterId = it.id)) },
         onHomeworkClick = { homework ->
             navController.navigate(

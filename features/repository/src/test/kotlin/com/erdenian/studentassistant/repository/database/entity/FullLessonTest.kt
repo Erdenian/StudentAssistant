@@ -1,7 +1,6 @@
 package com.erdenian.studentassistant.repository.database.entity
 
-import com.erdenian.studentassistant.entity.Lesson
-import com.erdenian.studentassistant.entity.immutableSortedSetOf
+import com.erdenian.studentassistant.repository.api.entity.Lesson
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
@@ -69,15 +68,15 @@ internal class FullLessonTest {
             listOf(ClassroomEntity("classroom", 10L)),
             ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
             emptyList(),
-        )
+        ).toLesson()
         assertEquals("name", lesson1.subjectName)
         assertEquals("type", lesson1.type)
         assertEquals(LocalTime.of(10, 0), lesson1.startTime)
         assertEquals(LocalTime.of(12, 0), lesson1.endTime)
         assertEquals(1L, lesson1.semesterId)
         assertEquals(10L, lesson1.id)
-        assertEquals(immutableSortedSetOf("teacher"), lesson1.teachers)
-        assertEquals(immutableSortedSetOf("classroom"), lesson1.classrooms)
+        assertEquals(listOf("teacher"), lesson1.teachers)
+        assertEquals(listOf("classroom"), lesson1.classrooms)
         assertEquals(DayOfWeek.MONDAY, (lesson1.lessonRepeat as Lesson.Repeat.ByWeekday).dayOfWeek)
         assertEquals(listOf(true), (lesson1.lessonRepeat as Lesson.Repeat.ByWeekday).weeks)
 
@@ -87,7 +86,7 @@ internal class FullLessonTest {
             listOf(ClassroomEntity("classroom", 10L)),
             null,
             listOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L)),
-        )
+        ).toLesson()
         assertEquals(setOf(LocalDate.of(2020, 4, 25)), (lesson2.lessonRepeat as Lesson.Repeat.ByDates).dates)
     }
 }

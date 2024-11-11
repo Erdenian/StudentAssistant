@@ -70,7 +70,7 @@ internal fun LessonEditorScreen(route: ScheduleRoute.LessonEditor) {
     val type by viewModel.type.collectAsState()
     val predefinedTypes = stringArrayResource(RA.lesson_types).toList()
     val existingTypes by viewModel.existingTypes.collectAsState()
-    val displayedTypes = (predefinedTypes + existingTypes.list).distinct()
+    val displayedTypes = (predefinedTypes + existingTypes).distinct()
 
     val teachers by viewModel.teachers.collectAsState()
     val existingTeachers by viewModel.existingTeachers.collectAsState()
@@ -203,14 +203,14 @@ internal fun LessonEditorScreen(route: ScheduleRoute.LessonEditor) {
         isProgress = nonBlockingProgress,
         isEditing = isEditing,
         subjectName = subjectName,
-        existingSubjects = existingSubjects.list,
+        existingSubjects = existingSubjects,
         subjectNameErrorMessage = subjectNameErrorMessage,
         type = type,
         existingTypes = displayedTypes,
         teachers = teachers,
-        existingTeachers = existingTeachers.list,
+        existingTeachers = existingTeachers,
         classrooms = classrooms,
-        existingClassrooms = existingClassrooms.list,
+        existingClassrooms = existingClassrooms,
         startTime = startTime,
         endTime = endTime,
         dayOfWeek = dayOfWeek,

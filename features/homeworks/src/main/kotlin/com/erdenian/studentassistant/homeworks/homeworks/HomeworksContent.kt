@@ -22,9 +22,9 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.erdenian.studentassistant.entity.Homework
-import com.erdenian.studentassistant.entity.Semester
 import com.erdenian.studentassistant.homeworks.composable.LazyHomeworksList
+import com.erdenian.studentassistant.repository.api.entity.Homework
+import com.erdenian.studentassistant.repository.api.entity.Semester
 import com.erdenian.studentassistant.sampledata.Homeworks
 import com.erdenian.studentassistant.sampledata.Semesters
 import com.erdenian.studentassistant.strings.RS

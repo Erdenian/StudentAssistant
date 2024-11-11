@@ -3,7 +3,6 @@ package com.erdenian.studentassistant.schedule.schedule
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.erdenian.studentassistant.entity.immutableSortedSetOfNotNull
 import com.erdenian.studentassistant.repository.api.RepositoryApi
 import java.time.LocalDate
 import javax.inject.Inject
@@ -21,7 +20,7 @@ internal class ScheduleViewModel @Inject constructor(
 
     val selectedSemester = selectedSemesterRepository.selectedFlow
     val allSemesters = semesterRepository.allFlow
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), immutableSortedSetOfNotNull(selectedSemester.value))
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOfNotNull(selectedSemester.value))
 
     fun selectSemester(semesterId: Long) = selectedSemesterRepository.selectSemester(semesterId)
 

@@ -17,7 +17,6 @@ ksp {
 
 dependencies {
     // region Private
-    implementation(project(":common:entity"))
     implementation(project(":features:repository:api"))
     // endregion
 

@@ -3,7 +3,6 @@ package com.erdenian.studentassistant.homeworks.homeworkeditor
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.erdenian.studentassistant.entity.emptyImmutableSortedSet
 import com.erdenian.studentassistant.repository.api.RepositoryApi
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -72,7 +71,7 @@ internal class HomeworkEditorViewModel @AssistedInject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
-            initialValue = emptyImmutableSortedSet(),
+            initialValue = emptyList(),
         )
     val semesterDatesRange = semesterRepository.getFlow(semesterId)
         .filterNotNull()

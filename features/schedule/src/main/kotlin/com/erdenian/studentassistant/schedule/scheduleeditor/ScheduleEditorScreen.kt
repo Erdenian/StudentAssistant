@@ -17,14 +17,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.erdenian.studentassistant.entity.Lesson
 import com.erdenian.studentassistant.navigation.LocalNavController
+import com.erdenian.studentassistant.repository.api.entity.Lesson
 import com.erdenian.studentassistant.schedule.api.ScheduleRoute
 import com.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
 import java.time.DayOfWeek
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @Composable
@@ -46,7 +45,7 @@ internal fun ScheduleEditorScreen(route: ScheduleRoute.ScheduleEditor) {
             @SuppressLint("ProduceStateDoesNotAssignValue")
             produceState<List<Lesson>?>(null, page) {
                 val dayOfWeek = DayOfWeek.of(page + 1)
-                viewModel.getLessons(dayOfWeek).map { it.list }.collect { value = it }
+                viewModel.getLessons(dayOfWeek).collect { value = it }
             }
         }
     }

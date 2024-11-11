@@ -112,11 +112,11 @@ internal abstract class LessonDao {
     abstract fun getFlow(id: Long): Flow<FullLesson?>
 
     @Transaction
-    @Query("SELECT * FROM lessons WHERE semester_id = :semesterId ORDER BY start_time, end_time, _id")
+    @Query("SELECT * FROM lessons WHERE semester_id = :semesterId ORDER BY start_time, end_time, subject_name, type, _id, semester_id")
     abstract fun getAllFlow(semesterId: Long): Flow<List<FullLesson>>
 
     @Transaction
-    @Query("SELECT lessons.* FROM lessons INNER JOIN by_weekday ON by_weekday.lesson_id = lessons._id WHERE semester_id = :semesterId AND day_of_week = :dayOfWeek")
+    @Query("SELECT lessons.* FROM lessons INNER JOIN by_weekday ON by_weekday.lesson_id = lessons._id WHERE semester_id = :semesterId AND day_of_week = :dayOfWeek ORDER BY start_time, end_time, subject_name, type, _id, semester_id")
     abstract fun getAllFlow(semesterId: Long, dayOfWeek: DayOfWeek): Flow<List<FullLesson>>
 
     @Query("SELECT COUNT(_id) FROM lessons WHERE semester_id = :semesterId")

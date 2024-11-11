@@ -1,9 +1,10 @@
-package com.erdenian.studentassistant.entity
+package com.erdenian.studentassistant.repository.api.entity
 
 import android.os.Parcelable
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
+import kotlinx.parcelize.Parcelize
 
 /**
  * Класс пары (урока).
@@ -20,19 +21,18 @@ import java.time.LocalTime
  * @author Ilya Solovyov
  * @since 0.0.0
  */
-interface Lesson : Comparable<Lesson>, Parcelable {
-
-    val subjectName: String
-    val type: String
-    val teachers: ImmutableSortedSet<String>
-    val classrooms: ImmutableSortedSet<String>
-
-    val startTime: LocalTime
-    val endTime: LocalTime
-    val lessonRepeat: Repeat
-
-    val semesterId: Long
-    val id: Long
+@Parcelize
+data class Lesson(
+    val subjectName: String,
+    val type: String,
+    val teachers: List<String>,
+    val classrooms: List<String>,
+    val startTime: LocalTime,
+    val endTime: LocalTime,
+    val lessonRepeat: Repeat,
+    val semesterId: Long,
+    val id: Long,
+) : Comparable<Lesson>, Parcelable {
 
     /**
      * ClosedRange из начального и конечного времени пары.
@@ -62,6 +62,7 @@ interface Lesson : Comparable<Lesson>, Parcelable {
      * @author Ilya Solovyov
      * @since 0.0.0
      */
+    @Parcelize
     sealed class Repeat : Parcelable {
 
         /**
@@ -86,10 +87,10 @@ interface Lesson : Comparable<Lesson>, Parcelable {
          * @author Ilya Solovyov
          * @since 0.0.0
          */
-        abstract class ByWeekday : Repeat() {
-
-            abstract val dayOfWeek: DayOfWeek
-            abstract val weeks: List<Boolean>
+        data class ByWeekday(
+            val dayOfWeek: DayOfWeek,
+            val weeks: List<Boolean>,
+        ) : Repeat() {
 
             override fun repeatsOnDay(day: LocalDate, weekNumber: Int) =
                 (day.dayOfWeek == dayOfWeek) && (weeks[weekNumber % weeks.size])
@@ -113,9 +114,9 @@ interface Lesson : Comparable<Lesson>, Parcelable {
          * @author Ilya Solovyov
          * @since 0.0.0
          */
-        abstract class ByDates : Repeat() {
-
-            abstract val dates: Set<LocalDate>
+        data class ByDates(
+            val dates: Set<LocalDate>,
+        ) : Repeat() {
 
             override fun repeatsOnDay(day: LocalDate, weekNumber: Int) = day in dates
 

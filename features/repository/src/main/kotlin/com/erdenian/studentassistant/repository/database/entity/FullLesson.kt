@@ -1,12 +1,9 @@
 package com.erdenian.studentassistant.repository.database.entity
 
+import android.os.Parcelable
 import androidx.room.Embedded
-import androidx.room.Ignore
 import androidx.room.Relation
-import com.erdenian.studentassistant.entity.Lesson
-import com.erdenian.studentassistant.entity.toImmutableSortedSet
-import java.time.LocalDate
-import kotlinx.parcelize.IgnoredOnParcel
+import com.erdenian.studentassistant.repository.api.entity.Lesson
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -19,13 +16,13 @@ internal data class FullLesson(
         parentColumn = "_id",
         entityColumn = "lesson_id",
     )
-    val lessonTeachers: List<TeacherEntity>,
+    val teachers: List<TeacherEntity>,
 
     @Relation(
         parentColumn = "_id",
         entityColumn = "lesson_id",
     )
-    val lessonClassrooms: List<ClassroomEntity>,
+    val classrooms: List<ClassroomEntity>,
 
     @Relation(
         parentColumn = "_id",
@@ -38,32 +35,25 @@ internal data class FullLesson(
         entityColumn = "lesson_id",
     )
     val byDates: List<ByDateEntity>,
-) : Lesson {
-
-    override val subjectName get() = lesson.subjectName
-    override val type get() = lesson.type
-    override val startTime get() = lesson.startTime
-    override val endTime get() = lesson.endTime
-
-    override val semesterId get() = lesson.semesterId
-    override val id get() = lesson.id
-
-    @delegate:Ignore
-    @IgnoredOnParcel
-    override val teachers by lazy { lessonTeachers.asSequence().map { it.name }.toImmutableSortedSet() }
-
-    @delegate:Ignore
-    @IgnoredOnParcel
-    override val classrooms by lazy { lessonClassrooms.asSequence().map { it.name }.toImmutableSortedSet() }
-
-    @delegate:Ignore
-    @IgnoredOnParcel
-    override val lessonRepeat by lazy { byWeekday ?: ByDatesRepeat(byDates.asSequence().map { it.date }.toSet()) }
+) : Parcelable {
 
     init {
         require((byWeekday != null) xor byDates.isNotEmpty())
     }
 
-    @Parcelize
-    private data class ByDatesRepeat(override val dates: Set<LocalDate>) : Lesson.Repeat.ByDates()
+    fun toLesson() = Lesson(
+        subjectName = lesson.subjectName,
+        type = lesson.type,
+        teachers = teachers.asSequence().map { it.name }.sorted().toList(),
+        classrooms = classrooms.asSequence().map { it.name }.sorted().toList(),
+        startTime = lesson.startTime,
+        endTime = lesson.endTime,
+        lessonRepeat = byWeekday?.toLessonRepeat() ?: byDates.toLessonRepeat(),
+        semesterId = lesson.semesterId,
+        id = lesson.id,
+    )
+
+    private fun ByWeekdayEntity.toLessonRepeat() = Lesson.Repeat.ByWeekday(dayOfWeek, weeks)
+    private fun List<ByDateEntity>.toLessonRepeat() =
+        byDates.asSequence().map { it.date }.toSet().let(Lesson.Repeat::ByDates)
 }
