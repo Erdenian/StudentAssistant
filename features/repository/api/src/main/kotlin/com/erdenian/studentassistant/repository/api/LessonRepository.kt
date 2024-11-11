@@ -1,7 +1,6 @@
 package com.erdenian.studentassistant.repository.api
 
-import com.erdenian.studentassistant.entity.ImmutableSortedSet
-import com.erdenian.studentassistant.entity.Lesson
+import com.erdenian.studentassistant.repository.api.entity.Lesson
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
@@ -14,8 +13,8 @@ interface LessonRepository {
     suspend fun insert(
         subjectName: String,
         type: String,
-        teachers: ImmutableSortedSet<String>,
-        classrooms: ImmutableSortedSet<String>,
+        teachers: List<String>,
+        classrooms: List<String>,
         startTime: LocalTime,
         endTime: LocalTime,
         semesterId: Long,
@@ -26,20 +25,20 @@ interface LessonRepository {
     suspend fun insert(
         subjectName: String,
         type: String,
-        teachers: ImmutableSortedSet<String>,
-        classrooms: ImmutableSortedSet<String>,
+        teachers: List<String>,
+        classrooms: List<String>,
         startTime: LocalTime,
         endTime: LocalTime,
         semesterId: Long,
-        dates: ImmutableSortedSet<LocalDate>,
+        dates: Set<LocalDate>,
     )
 
     suspend fun update(
         id: Long,
         subjectName: String,
         type: String,
-        teachers: ImmutableSortedSet<String>,
-        classrooms: ImmutableSortedSet<String>,
+        teachers: List<String>,
+        classrooms: List<String>,
         startTime: LocalTime,
         endTime: LocalTime,
         semesterId: Long,
@@ -51,12 +50,12 @@ interface LessonRepository {
         id: Long,
         subjectName: String,
         type: String,
-        teachers: ImmutableSortedSet<String>,
-        classrooms: ImmutableSortedSet<String>,
+        teachers: List<String>,
+        classrooms: List<String>,
         startTime: LocalTime,
         endTime: LocalTime,
         semesterId: Long,
-        dates: ImmutableSortedSet<LocalDate>,
+        dates: Set<LocalDate>,
     )
 
     suspend fun delete(id: Long)
@@ -66,23 +65,23 @@ interface LessonRepository {
     // region Lessons
     suspend fun get(id: Long): Lesson?
     fun getFlow(id: Long): Flow<Lesson?>
-    val allFlow: Flow<ImmutableSortedSet<Lesson>>
-    fun getAllFlow(day: LocalDate): Flow<ImmutableSortedSet<Lesson>>
-    fun getAllFlow(semesterId: Long, dayOfWeek: DayOfWeek): Flow<ImmutableSortedSet<Lesson>>
+    val allFlow: Flow<List<Lesson>>
+    fun getAllFlow(day: LocalDate): Flow<List<Lesson>>
+    fun getAllFlow(semesterId: Long, dayOfWeek: DayOfWeek): Flow<List<Lesson>>
     suspend fun getCount(semesterId: Long): Int
     val hasLessonsFlow: Flow<Boolean>
     // endregion
 
     // region Subjects
     suspend fun getCount(semesterId: Long, subjectName: String): Int
-    fun getSubjects(semesterId: Long): Flow<ImmutableSortedSet<String>>
+    fun getSubjects(semesterId: Long): Flow<List<String>>
     suspend fun renameSubject(semesterId: Long, oldName: String, newName: String)
     // endregion
 
     // region Other fields
-    fun getTypes(semesterId: Long): Flow<ImmutableSortedSet<String>>
-    fun getTeachers(semesterId: Long): Flow<ImmutableSortedSet<String>>
-    fun getClassrooms(semesterId: Long): Flow<ImmutableSortedSet<String>>
+    fun getTypes(semesterId: Long): Flow<List<String>>
+    fun getTeachers(semesterId: Long): Flow<List<String>>
+    fun getClassrooms(semesterId: Long): Flow<List<String>>
     suspend fun getNextStartTime(semesterId: Long, dayOfWeek: DayOfWeek): LocalTime
     // endregion
 }

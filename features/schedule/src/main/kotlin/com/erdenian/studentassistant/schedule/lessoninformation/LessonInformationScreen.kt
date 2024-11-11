@@ -12,9 +12,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.erdenian.studentassistant.entity.Homework
 import com.erdenian.studentassistant.homeworks.api.HomeworksRoute
 import com.erdenian.studentassistant.navigation.LocalNavController
+import com.erdenian.studentassistant.repository.api.entity.Homework
 import com.erdenian.studentassistant.schedule.api.ScheduleRoute
 import com.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
 import com.erdenian.studentassistant.strings.RS
@@ -66,7 +66,7 @@ internal fun LessonInformationScreen(route: ScheduleRoute.LessonInformation) {
 
     LessonInformationContent(
         lesson = lesson,
-        homeworks = homeworks?.list,
+        homeworks = homeworks,
         onBackClick = navController::popBackStack,
         onEditClick = { lesson ->
             navController.navigate(ScheduleRoute.LessonEditor(semesterId = lesson.semesterId, lessonId = lesson.id))

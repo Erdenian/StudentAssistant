@@ -1,10 +1,10 @@
 package com.erdenian.studentassistant.repository.database.entity
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.erdenian.studentassistant.entity.Lesson
 import java.time.DayOfWeek
 import kotlinx.parcelize.Parcelize
 
@@ -24,16 +24,16 @@ import kotlinx.parcelize.Parcelize
 internal data class ByWeekdayEntity(
 
     @ColumnInfo(name = "day_of_week")
-    override val dayOfWeek: DayOfWeek,
+    val dayOfWeek: DayOfWeek,
 
     @ColumnInfo(name = "weeks")
-    override val weeks: List<Boolean>,
+    val weeks: List<Boolean>,
 
     @Suppress("DataClassShouldBeImmutable")
     @PrimaryKey
     @ColumnInfo(name = "lesson_id", index = true)
     var lessonId: Long = 0L,
-) : Lesson.Repeat.ByWeekday() {
+) : Parcelable {
 
     init {
         require(weeks.isNotEmpty()) { "Список недель пуст" }

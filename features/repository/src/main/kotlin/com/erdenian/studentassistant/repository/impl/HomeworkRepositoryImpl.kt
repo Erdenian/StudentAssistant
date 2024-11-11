@@ -1,10 +1,8 @@
 package com.erdenian.studentassistant.repository.impl
 
-import com.erdenian.studentassistant.entity.Homework
-import com.erdenian.studentassistant.entity.emptyImmutableSortedSet
-import com.erdenian.studentassistant.entity.toImmutableSortedSet
 import com.erdenian.studentassistant.repository.api.HomeworkRepository
 import com.erdenian.studentassistant.repository.api.SelectedSemesterRepository
+import com.erdenian.studentassistant.repository.api.entity.Homework
 import com.erdenian.studentassistant.repository.database.dao.HomeworkDao
 import com.erdenian.studentassistant.repository.database.entity.HomeworkEntity
 import dagger.Reusable
@@ -58,12 +56,12 @@ internal class HomeworkRepositoryImpl @Inject constructor(
 
     // region Homeworks
 
-    override suspend fun get(id: Long) = homeworkDao.get(id)
+    override suspend fun get(id: Long) = homeworkDao.get(id)?.toHomework()
 
-    override fun getFlow(id: Long): Flow<Homework?> = homeworkDao.getFlow(id).map { it }
+    override fun getFlow(id: Long): Flow<Homework?> = homeworkDao.getFlow(id).map { it?.toHomework() }
 
     override val allFlow = selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
-        semester?.id?.let { homeworkDao.getAllFlow(it).map() } ?: flowOf(emptyImmutableSortedSet())
+        semester?.id?.let { homeworkDao.getAllFlow(it).map() } ?: flowOf(emptyList())
     }
 
     override suspend fun getCount() =
@@ -74,7 +72,7 @@ internal class HomeworkRepositoryImpl @Inject constructor(
     // region By subject name
 
     override fun getAllFlow(subjectName: String) = selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
-        semester?.id?.let { homeworkDao.getAllFlow(it, subjectName).map() } ?: flowOf(emptyImmutableSortedSet())
+        semester?.id?.let { homeworkDao.getAllFlow(it, subjectName).map() } ?: flowOf(emptyList())
     }
 
     override suspend fun getCount(subjectName: String) =
@@ -89,25 +87,25 @@ internal class HomeworkRepositoryImpl @Inject constructor(
 
     override val actualFlow
         get() = selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
-            semester?.id?.let { homeworkDao.getActualFlow(it).map() } ?: flowOf(emptyImmutableSortedSet())
+            semester?.id?.let { homeworkDao.getActualFlow(it).map() } ?: flowOf(emptyList())
         }
 
     override val overdueFlow
         get() = selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
-            semester?.id?.let { homeworkDao.getOverdueFlow(it).map() } ?: flowOf(emptyImmutableSortedSet())
+            semester?.id?.let { homeworkDao.getOverdueFlow(it).map() } ?: flowOf(emptyList())
         }
 
     override val pastFlow
         get() = selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
-            semester?.id?.let { homeworkDao.getPastFlow(it).map() } ?: flowOf(emptyImmutableSortedSet())
+            semester?.id?.let { homeworkDao.getPastFlow(it).map() } ?: flowOf(emptyList())
         }
 
     override fun getActualFlow(subjectName: String) =
         selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
-            semester?.id?.let { homeworkDao.getActualFlow(it, subjectName).map() } ?: flowOf(emptyImmutableSortedSet())
+            semester?.id?.let { homeworkDao.getActualFlow(it, subjectName).map() } ?: flowOf(emptyList())
         }
 
     // endregion
 
-    private fun Flow<List<HomeworkEntity>>.map() = map { it.toImmutableSortedSet<Homework>() }
+    private fun Flow<List<HomeworkEntity>>.map() = map { it.map(HomeworkEntity::toHomework) }
 }

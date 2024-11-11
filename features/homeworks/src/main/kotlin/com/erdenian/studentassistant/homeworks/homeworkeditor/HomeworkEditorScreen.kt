@@ -153,7 +153,7 @@ internal fun HomeworkEditorScreen(route: HomeworksRoute.HomeworkEditor) {
     HomeworkEditorContent(
         isProgress = nonBlockingProgress,
         isEditing = viewModel.isEditing,
-        existingSubjects = existingSubjects.list,
+        existingSubjects = existingSubjects,
         subjectName = subjectName,
         deadline = deadline,
         description = description,

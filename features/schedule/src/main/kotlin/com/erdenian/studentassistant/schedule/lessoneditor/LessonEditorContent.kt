@@ -36,7 +36,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.erdenian.studentassistant.entity.Lesson
+import com.erdenian.studentassistant.repository.api.entity.Lesson
 import com.erdenian.studentassistant.sampledata.Lessons
 import com.erdenian.studentassistant.schedule.lessoneditor.composable.AutoCompleteTextField
 import com.erdenian.studentassistant.schedule.lessoneditor.composable.MultiAutoCompleteTextField

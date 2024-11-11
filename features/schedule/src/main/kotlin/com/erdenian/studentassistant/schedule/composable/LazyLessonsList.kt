@@ -23,7 +23,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.erdenian.studentassistant.entity.Lesson
+import com.erdenian.studentassistant.repository.api.entity.Lesson
 import com.erdenian.studentassistant.sampledata.Lessons
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.style.AppTheme
@@ -77,8 +77,8 @@ internal fun LazyLessonsList(
                             LessonCard(
                                 subjectName = lesson.subjectName,
                                 type = lesson.type,
-                                teachers = lesson.teachers.list,
-                                classrooms = lesson.classrooms.list,
+                                teachers = lesson.teachers,
+                                classrooms = lesson.classrooms,
                                 startTime = lesson.startTime.format(timeFormatter),
                                 endTime = lesson.endTime.format(timeFormatter),
                                 onClick = { onLessonClick(lesson) },

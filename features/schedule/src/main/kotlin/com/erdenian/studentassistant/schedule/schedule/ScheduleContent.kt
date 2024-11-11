@@ -29,8 +29,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.erdenian.studentassistant.entity.Lesson
-import com.erdenian.studentassistant.entity.Semester
+import com.erdenian.studentassistant.repository.api.entity.Lesson
+import com.erdenian.studentassistant.repository.api.entity.Semester
 import com.erdenian.studentassistant.sampledata.Lessons
 import com.erdenian.studentassistant.sampledata.Semesters
 import com.erdenian.studentassistant.schedule.composable.LazyLessonsList

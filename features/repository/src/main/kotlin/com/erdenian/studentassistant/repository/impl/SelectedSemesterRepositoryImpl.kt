@@ -1,8 +1,9 @@
 package com.erdenian.studentassistant.repository.impl
 
-import com.erdenian.studentassistant.entity.Semester
 import com.erdenian.studentassistant.repository.api.SelectedSemesterRepository
+import com.erdenian.studentassistant.repository.api.entity.Semester
 import com.erdenian.studentassistant.repository.database.dao.SemesterDao
+import com.erdenian.studentassistant.repository.database.entity.SemesterEntity
 import java.time.LocalDate
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.getAndUpdate
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
@@ -40,7 +42,7 @@ internal class SelectedSemesterRepositoryImpl @Inject constructor(
 
     private val selectedSharedFlow: SharedFlow<Semester?> = combineTransform(
         selectedSemesterIdFlow,
-        semesterDao.getAllFlow().onEach {
+        semesterDao.getAllFlow().map { it.map(SemesterEntity::toSemester) }.onEach {
             // We received actual list from database, clear inserted and deleted cache
             insertedSemesters.set(emptySet())
             deletedSemesterIds.set(emptySet())

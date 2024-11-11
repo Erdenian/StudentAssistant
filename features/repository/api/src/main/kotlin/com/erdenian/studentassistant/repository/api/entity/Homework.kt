@@ -1,7 +1,8 @@
-package com.erdenian.studentassistant.entity
+package com.erdenian.studentassistant.repository.api.entity
 
 import android.os.Parcelable
 import java.time.LocalDate
+import kotlinx.parcelize.Parcelize
 
 /**
  * Класс домашнего задания.
@@ -14,14 +15,15 @@ import java.time.LocalDate
  * @author Ilya Solovyov
  * @since 0.0.0
  */
-interface Homework : Comparable<Homework>, Parcelable {
-
-    val subjectName: String
-    val description: String
-    val deadline: LocalDate
-    val isDone: Boolean
-    val semesterId: Long
-    val id: Long
+@Parcelize
+data class Homework(
+    val subjectName: String,
+    val description: String,
+    val deadline: LocalDate,
+    val isDone: Boolean,
+    val semesterId: Long,
+    val id: Long,
+) : Comparable<Homework>, Parcelable {
 
     override fun compareTo(other: Homework) = compareValuesBy(
         this,

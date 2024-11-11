@@ -1,7 +1,6 @@
 package com.erdenian.studentassistant.repository.api
 
-import com.erdenian.studentassistant.entity.Homework
-import com.erdenian.studentassistant.entity.ImmutableSortedSet
+import com.erdenian.studentassistant.repository.api.entity.Homework
 import java.time.LocalDate
 import kotlinx.coroutines.flow.Flow
 
@@ -17,20 +16,20 @@ interface HomeworkRepository {
     // region Homeworks
     suspend fun get(id: Long): Homework?
     fun getFlow(id: Long): Flow<Homework?>
-    val allFlow: Flow<ImmutableSortedSet<Homework>>
+    val allFlow: Flow<List<Homework>>
     suspend fun getCount(): Int
     // endregion
 
     // region By subject name
-    fun getAllFlow(subjectName: String): Flow<ImmutableSortedSet<Homework>>
+    fun getAllFlow(subjectName: String): Flow<List<Homework>>
     suspend fun getCount(subjectName: String): Int
     suspend fun hasHomeworks(semesterId: Long, subjectName: String): Boolean
     // endregion
 
     // region By deadline
-    val actualFlow: Flow<ImmutableSortedSet<Homework>>
-    val overdueFlow: Flow<ImmutableSortedSet<Homework>>
-    val pastFlow: Flow<ImmutableSortedSet<Homework>>
-    fun getActualFlow(subjectName: String): Flow<ImmutableSortedSet<Homework>>
+    val actualFlow: Flow<List<Homework>>
+    val overdueFlow: Flow<List<Homework>>
+    val pastFlow: Flow<List<Homework>>
+    fun getActualFlow(subjectName: String): Flow<List<Homework>>
     // endregion
 }

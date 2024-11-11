@@ -1,8 +1,9 @@
-package com.erdenian.studentassistant.entity
+package com.erdenian.studentassistant.repository.api.entity
 
 import android.os.Parcelable
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
+import kotlinx.parcelize.Parcelize
 
 /**
  * Класс семестра (четверти).
@@ -15,12 +16,13 @@ import java.time.temporal.ChronoUnit
  * @author Ilya Solovyov
  * @since 0.0.0
  */
-interface Semester : Comparable<Semester>, Parcelable {
-
-    val name: String
-    val firstDay: LocalDate
-    val lastDay: LocalDate
-    val id: Long
+@Parcelize
+data class Semester(
+    val name: String,
+    val firstDay: LocalDate,
+    val lastDay: LocalDate,
+    val id: Long,
+) : Comparable<Semester>, Parcelable {
 
     /**
      * Длина семестра в днях.

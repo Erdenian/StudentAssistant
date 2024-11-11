@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -8,8 +9,9 @@ android {
 }
 
 dependencies {
-    // region Private
-    api(project(":common:entity"))
+    // region Tests
+    testImplementation(libs.bundles.test.unit)
+    androidTestImplementation(libs.bundles.test.android)
     // endregion
 
     // region Kotlin
