@@ -3,7 +3,7 @@ package com.erdenian.studentassistant.schedule.semestereditor
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.erdenian.studentassistant.repository.SemesterRepository
+import com.erdenian.studentassistant.repository.api.RepositoryApi
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -21,9 +21,11 @@ import kotlinx.coroutines.launch
 
 internal class SemesterEditorViewModel @AssistedInject constructor(
     application: Application,
-    private val semesterRepository: SemesterRepository,
+    repositoryApi: RepositoryApi,
     @Assisted private val semesterId: Long?,
 ) : AndroidViewModel(application) {
+
+    private val semesterRepository = repositoryApi.semesterRepository
 
     @AssistedFactory
     interface Factory {

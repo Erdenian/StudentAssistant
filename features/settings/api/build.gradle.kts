@@ -9,6 +9,11 @@ android {
 }
 
 dependencies {
+    // region Private
     implementation(project(":common:navigation"))
+    // endregion
+
+    // region Kotlin
     implementation(libs.kotlinx.serialization)
+    // endregion
 }

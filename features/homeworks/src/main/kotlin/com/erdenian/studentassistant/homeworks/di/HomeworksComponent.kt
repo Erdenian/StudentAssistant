@@ -5,7 +5,9 @@ import com.erdenian.studentassistant.homeworks.api.HomeworksApi
 import com.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorViewModel
 import com.erdenian.studentassistant.homeworks.homeworks.HomeworksViewModel
 import dagger.Component
+import javax.inject.Singleton
 
+@Singleton
 @Component(
     modules = [HomeworksApiModule::class],
     dependencies = [HomeworksDependencies::class],

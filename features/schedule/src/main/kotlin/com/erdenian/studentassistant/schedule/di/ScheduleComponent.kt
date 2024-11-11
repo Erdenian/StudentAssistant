@@ -8,7 +8,9 @@ import com.erdenian.studentassistant.schedule.schedule.ScheduleViewModel
 import com.erdenian.studentassistant.schedule.scheduleeditor.ScheduleEditorViewModel
 import com.erdenian.studentassistant.schedule.semestereditor.SemesterEditorViewModel
 import dagger.Component
+import javax.inject.Singleton
 
+@Singleton
 @Component(
     modules = [ScheduleApiModule::class],
     dependencies = [ScheduleDependencies::class],

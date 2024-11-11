@@ -4,7 +4,9 @@ import com.erdenian.studentassistant.settings.SettingsDependencies
 import com.erdenian.studentassistant.settings.api.SettingsApi
 import com.erdenian.studentassistant.settings.ui.SettingsViewModel
 import dagger.Component
+import javax.inject.Singleton
 
+@Singleton
 @Component(
     modules = [SettingsApiModule::class],
     dependencies = [SettingsDependencies::class],

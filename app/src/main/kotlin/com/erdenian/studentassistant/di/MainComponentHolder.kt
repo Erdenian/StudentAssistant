@@ -1,8 +1,7 @@
 package com.erdenian.studentassistant.di
 
 import android.app.Application
-import com.erdenian.studentassistant.database.di.DatabaseModule
-import com.erdenian.studentassistant.repository.di.RepositoryModule
+import com.erdenian.studentassistant.repository.RepositoryConfig
 
 internal object MainComponentHolder {
 
@@ -12,14 +11,12 @@ internal object MainComponentHolder {
     @Synchronized
     fun create(
         application: Application,
-        databaseModule: DatabaseModule,
-        repositoryModule: RepositoryModule,
+        repositoryConfig: RepositoryConfig,
     ): MainComponent {
         if (!MainComponentHolder::instance.isInitialized) {
             instance = DaggerMainComponent.factory().create(
                 application = application,
-                databaseModule = databaseModule,
-                repositoryModule = repositoryModule,
+                repositoryConfig = repositoryConfig,
             )
         }
         return instance

@@ -8,5 +8,7 @@ android {
 }
 
 dependencies {
+    // region AndroidX
     api(libs.androidx.navigation)
+    // endregion
 }

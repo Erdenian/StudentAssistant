@@ -16,7 +16,7 @@ dependencies {
     implementation(project(":common:sampledata"))
     implementation(project(":common:navigation"))
 
-    implementation(project(":data:repository"))
+    implementation(project(":features:repository:api"))
     implementation(project(":features:homeworks:api"))
     implementation(project(":features:schedule:api"))
     // endregion
