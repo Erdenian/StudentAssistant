@@ -44,8 +44,8 @@ internal data class FullLesson(
     fun toLesson() = Lesson(
         subjectName = lesson.subjectName,
         type = lesson.type,
-        teachers = teachers.map { it.name },
-        classrooms = classrooms.map { it.name },
+        teachers = teachers.asSequence().map { it.name }.sorted().toList(),
+        classrooms = classrooms.asSequence().map { it.name }.sorted().toList(),
         startTime = lesson.startTime,
         endTime = lesson.endTime,
         lessonRepeat = byWeekday?.toLessonRepeat() ?: byDates.toLessonRepeat(),

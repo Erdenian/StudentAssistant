@@ -24,7 +24,7 @@ internal interface SemesterDao {
 
     // endregion
 
-    @Query("SELECT * FROM semesters ORDER BY first_day, last_day, name, _id")
+    @Query("SELECT * FROM semesters ORDER BY last_day, first_day, name, _id")
     fun getAllFlow(): Flow<List<SemesterEntity>>
 
     @Query("SELECT * FROM semesters WHERE _id = :id")
@@ -33,6 +33,6 @@ internal interface SemesterDao {
     @Query("SELECT * FROM semesters WHERE _id = :id")
     fun getFlow(id: Long): Flow<SemesterEntity?>
 
-    @Query("SELECT name FROM semesters ORDER BY first_day, last_day, name, _id")
+    @Query("SELECT name FROM semesters ORDER BY last_day, first_day, name, _id")
     fun getNamesFlow(): Flow<List<String>>
 }

@@ -36,7 +36,7 @@ internal interface HomeworkDao {
     @Query("SELECT * FROM homeworks WHERE _id = :id")
     fun getFlow(id: Long): Flow<HomeworkEntity?>
 
-    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId ORDER BY deadline, _id")
+    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId ORDER BY is_done, deadline, subject_name, description, _id, semester_id")
     fun getAllFlow(semesterId: Long): Flow<List<HomeworkEntity>>
 
     @Query("SELECT COUNT(_id) FROM homeworks WHERE semester_id = :semesterId")
@@ -46,7 +46,7 @@ internal interface HomeworkDao {
 
     // region By subject name
 
-    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName ORDER BY deadline, _id")
+    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName ORDER BY  is_done, deadline, subject_name, description, _id, semester_id")
     fun getAllFlow(semesterId: Long, subjectName: String): Flow<List<HomeworkEntity>>
 
     @Query("SELECT COUNT(_id) FROM homeworks WHERE subject_name = :subjectName AND semester_id = :semesterId")
@@ -59,16 +59,16 @@ internal interface HomeworkDao {
 
     // region By deadline
 
-    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline >= :today ORDER BY deadline, _id")
+    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline >= :today ORDER BY  is_done, deadline, subject_name, description, _id, semester_id")
     fun getActualFlow(semesterId: Long, today: LocalDate = LocalDate.now()): Flow<List<HomeworkEntity>>
 
-    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline < :today AND is_done = 0 ORDER BY deadline, _id")
+    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline < :today AND is_done = 0 ORDER BY  is_done, deadline, subject_name, description, _id, semester_id")
     fun getOverdueFlow(semesterId: Long, today: LocalDate = LocalDate.now()): Flow<List<HomeworkEntity>>
 
-    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline < :today AND is_done = 1 ORDER BY deadline, _id")
+    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND deadline < :today AND is_done = 1 ORDER BY  is_done, deadline, subject_name, description, _id, semester_id")
     fun getPastFlow(semesterId: Long, today: LocalDate = LocalDate.now()): Flow<List<HomeworkEntity>>
 
-    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName AND deadline >= :today ORDER BY deadline, _id")
+    @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId AND subject_name = :subjectName AND deadline >= :today ORDER BY  is_done, deadline, subject_name, description, _id, semester_id")
     fun getActualFlow(
         semesterId: Long,
         subjectName: String,
