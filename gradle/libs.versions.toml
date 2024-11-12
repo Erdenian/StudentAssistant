@@ -25,7 +25,7 @@ kotlin_ksp = { id = "com.google.devtools.ksp", version = "2.0.21-1.0.27" }
 
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "plugins_detekt" }
 kover = { id = "org.jetbrains.kotlinx.kover", version = "0.8.3" }
-tripletPlay = { id = "com.github.triplet.play", version = "3.11.0" }
+tripletPlay = { id = "com.github.triplet.play", version = "3.12.0" }
 gradleVersionsFilter = { id = "se.ascp.gradle.gradle-versions-filter", version = "0.1.16" }
 
 [libraries]
@@ -43,7 +43,7 @@ test_androidx_runner = { group = "androidx.test", name = "runner", version = "1.
 
 # region KotlinX
 kotlinx_coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx_coroutines" }
-kotlinx_serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.7.1" }
+kotlinx_serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.7.3" }
 # endregion
 
 # region Android Tools
