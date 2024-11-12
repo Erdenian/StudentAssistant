@@ -3,6 +3,7 @@ package com.erdenian.studentassistant.repository.api.entity
 import android.os.Parcelable
 import java.time.LocalDate
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 /**
  * Класс домашнего задания.
@@ -15,10 +16,12 @@ import kotlinx.parcelize.Parcelize
  * @author Ilya Solovyov
  * @since 0.0.0
  */
+@Serializable
 @Parcelize
 data class Homework(
     val subjectName: String,
     val description: String,
+    @Serializable(with = LocalDateSerializer::class)
     val deadline: LocalDate,
     val isDone: Boolean,
     val semesterId: Long,

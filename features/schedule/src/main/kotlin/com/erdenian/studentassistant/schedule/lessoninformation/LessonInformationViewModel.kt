@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.erdenian.studentassistant.repository.api.RepositoryApi
+import com.erdenian.studentassistant.repository.api.entity.Lesson
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -22,7 +23,7 @@ import kotlinx.coroutines.launch
 internal class LessonInformationViewModel @AssistedInject constructor(
     application: Application,
     repositoryApi: RepositoryApi,
-    @Assisted lessonId: Long,
+    @Assisted lessonArg: Lesson,
 ) : AndroidViewModel(application) {
 
     private val lessonRepository = repositoryApi.lessonRepository
@@ -30,7 +31,7 @@ internal class LessonInformationViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun get(lessonId: Long): LessonInformationViewModel
+        fun get(lessonArg: Lesson): LessonInformationViewModel
     }
 
     enum class Operation {
@@ -40,11 +41,14 @@ internal class LessonInformationViewModel @AssistedInject constructor(
     private val operationPrivate = MutableStateFlow<Operation?>(null)
     val operation = operationPrivate.asStateFlow()
 
-    private val lessonPrivate = lessonRepository.getFlow(lessonId)
+    private val lessonPrivate = lessonRepository.getFlow(lessonArg.id)
         .shareIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed())
 
-    val lesson =
-        lessonPrivate.stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(), initialValue = null)
+    val lesson = lessonPrivate.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = lessonArg,
+    )
 
     val isDeleted = lessonPrivate.map { it == null }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
 

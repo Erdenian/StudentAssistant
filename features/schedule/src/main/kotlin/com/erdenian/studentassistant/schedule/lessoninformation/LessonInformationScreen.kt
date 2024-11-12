@@ -23,7 +23,7 @@ import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
 @Composable
 internal fun LessonInformationScreen(route: ScheduleRoute.LessonInformation) {
     val viewModel = viewModel {
-        ScheduleComponentHolder.instance.lessonInformationViewModelFactory.get(route.lessonId)
+        ScheduleComponentHolder.instance.lessonInformationViewModelFactory.get(route.lesson)
     }
     val navController = LocalNavController.current
 
@@ -65,20 +65,28 @@ internal fun LessonInformationScreen(route: ScheduleRoute.LessonInformation) {
     }
 
     LessonInformationContent(
-        lesson = lesson,
+        lesson = lesson ?: return,
         homeworks = homeworks,
         onBackClick = navController::popBackStack,
-        onEditClick = { lesson ->
-            navController.navigate(ScheduleRoute.LessonEditor(semesterId = lesson.semesterId, lessonId = lesson.id))
-        },
-        onHomeworkClick = { homework ->
+        onEditClick = { clickedLesson ->
             navController.navigate(
-                HomeworksRoute.HomeworkEditor(semesterId = homework.semesterId, homeworkId = homework.id),
+                ScheduleRoute.LessonEditor(
+                    semesterId = clickedLesson.semesterId,
+                    lessonId = clickedLesson.id,
+                ),
             )
         },
-        onAddHomeworkClick = { lesson ->
+        onHomeworkClick = { clickedHomework ->
             navController.navigate(
-                HomeworksRoute.HomeworkEditor(semesterId = lesson.semesterId, subjectName = lesson.subjectName),
+                HomeworksRoute.HomeworkEditor(semesterId = clickedHomework.semesterId, homeworkId = clickedHomework.id),
+            )
+        },
+        onAddHomeworkClick = { currentLesson ->
+            navController.navigate(
+                HomeworksRoute.HomeworkEditor(
+                    semesterId = currentLesson.semesterId,
+                    subjectName = currentLesson.subjectName,
+                ),
             )
         },
         onDeleteHomeworkClick = { homeworkForDeleteDialog = it },

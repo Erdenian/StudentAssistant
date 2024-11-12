@@ -23,6 +23,8 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import com.erdenian.studentassistant.navigation.LocalAnimatedContentScope
+import com.erdenian.studentassistant.navigation.LocalSharedTransitionScope
 import com.erdenian.studentassistant.repository.api.entity.Lesson
 import com.erdenian.studentassistant.sampledata.Lessons
 import com.erdenian.studentassistant.strings.RS
@@ -74,21 +76,27 @@ internal fun LazyLessonsList(
                             val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
                             val haptic = LocalHapticFeedback.current
 
-                            LessonCard(
-                                subjectName = lesson.subjectName,
-                                type = lesson.type,
-                                teachers = lesson.teachers,
-                                classrooms = lesson.classrooms,
-                                startTime = lesson.startTime.format(timeFormatter),
-                                endTime = lesson.endTime.format(timeFormatter),
-                                onClick = { onLessonClick(lesson) },
-                                onLongClick = onLongLessonClick?.let { onLongClick ->
-                                    {
-                                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                        onLongClick(lesson)
-                                    }
-                                },
-                            )
+                            with(LocalSharedTransitionScope.current) {
+                                LessonCard(
+                                    subjectName = lesson.subjectName,
+                                    type = lesson.type,
+                                    teachers = lesson.teachers,
+                                    classrooms = lesson.classrooms,
+                                    startTime = lesson.startTime.format(timeFormatter),
+                                    endTime = lesson.endTime.format(timeFormatter),
+                                    onClick = { onLessonClick(lesson) },
+                                    onLongClick = onLongLessonClick?.let { onLongClick ->
+                                        {
+                                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                            onLongClick(lesson)
+                                        }
+                                    },
+                                    modifier = Modifier.sharedElement(
+                                        rememberSharedContentState(lesson),
+                                        LocalAnimatedContentScope.current,
+                                    ),
+                                )
+                            }
                         }
                     }
             }

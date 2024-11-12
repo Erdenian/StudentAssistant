@@ -55,5 +55,5 @@ internal data class FullLesson(
 
     private fun ByWeekdayEntity.toLessonRepeat() = Lesson.Repeat.ByWeekday(dayOfWeek, weeks)
     private fun List<ByDateEntity>.toLessonRepeat() =
-        byDates.asSequence().map { it.date }.toSet().let(Lesson.Repeat::ByDates)
+        Lesson.Repeat.ByDates(byDates.asSequence().map { it.date }.toSet())
 }

@@ -5,6 +5,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 /**
  * Класс пары (урока).
@@ -21,13 +22,16 @@ import kotlinx.parcelize.Parcelize
  * @author Ilya Solovyov
  * @since 0.0.0
  */
+@Serializable
 @Parcelize
 data class Lesson(
     val subjectName: String,
     val type: String,
     val teachers: List<String>,
     val classrooms: List<String>,
+    @Serializable(with = LocalTimeSerializer::class)
     val startTime: LocalTime,
+    @Serializable(with = LocalTimeSerializer::class)
     val endTime: LocalTime,
     val lessonRepeat: Repeat,
     val semesterId: Long,
@@ -62,6 +66,7 @@ data class Lesson(
      * @author Ilya Solovyov
      * @since 0.0.0
      */
+    @Serializable
     @Parcelize
     sealed class Repeat : Parcelable {
 
@@ -87,6 +92,7 @@ data class Lesson(
          * @author Ilya Solovyov
          * @since 0.0.0
          */
+        @Serializable
         data class ByWeekday(
             val dayOfWeek: DayOfWeek,
             val weeks: List<Boolean>,
@@ -114,8 +120,9 @@ data class Lesson(
          * @author Ilya Solovyov
          * @since 0.0.0
          */
+        @Serializable
         data class ByDates(
-            val dates: Set<LocalDate>,
+            val dates: Set<@Serializable(with = LocalDateSerializer::class) LocalDate>,
         ) : Repeat() {
 
             override fun repeatsOnDay(day: LocalDate, weekNumber: Int) = day in dates

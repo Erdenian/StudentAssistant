@@ -1,5 +1,5 @@
 build:
-  maxIssues: 10
+  maxIssues: 9
   excludeCorrectable: false
   weights:
     UnsafeCallOnNullableType: 100500
@@ -803,7 +803,7 @@ formatting:
   android: true
   autoCorrect: false
   AnnotationOnSeparateLine:
-    active: true
+    active: false
     autoCorrect: true
     indentSize: 4
   AnnotationSpacing:

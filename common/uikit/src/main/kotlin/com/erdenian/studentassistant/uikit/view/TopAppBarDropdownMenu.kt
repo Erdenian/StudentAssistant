@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.DropdownMenu
@@ -67,10 +67,7 @@ private fun TopAppBarDropdownMenuContent(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            // https://issuetracker.google.com/issues/300953236
-            // Todo: remove workaround, it's fixed
-            //.fillMaxHeight()
-            .height(64.dp)
+            .fillMaxHeight()
             .clickable(onClick = onClick),
     ) {
         Text(

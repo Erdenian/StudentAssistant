@@ -139,6 +139,9 @@
     <!-- WeeksSelector -->
     <string name="ws_variants_title">Повторять</string>
 
+    <!-- DatePickerDialog -->
+    <string name="dpd_today">Сегодня</string>
+
     <!-- TimePickerDialog -->
     <string name="tpd_select_time">Выберите время</string>
     <string name="tpd_enter_time">Введите время</string>

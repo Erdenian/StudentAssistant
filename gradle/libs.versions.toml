@@ -25,7 +25,7 @@ kotlin_ksp = { id = "com.google.devtools.ksp", version = "2.0.21-1.0.27" }
 
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "plugins_detekt" }
 kover = { id = "org.jetbrains.kotlinx.kover", version = "0.8.3" }
-tripletPlay = { id = "com.github.triplet.play", version = "3.11.0" }
+tripletPlay = { id = "com.github.triplet.play", version = "3.12.0" }
 gradleVersionsFilter = { id = "se.ascp.gradle.gradle-versions-filter", version = "0.1.16" }
 
 [libraries]
@@ -43,7 +43,7 @@ test_androidx_runner = { group = "androidx.test", name = "runner", version = "1.
 
 # region KotlinX
 kotlinx_coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx_coroutines" }
-kotlinx_serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.7.1" }
+kotlinx_serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.7.3" }
 # endregion
 
 # region Android Tools
@@ -55,6 +55,7 @@ androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", versi
 androidx_compose_ui = { group = "androidx.compose.ui", name = "ui" }
 androidx_compose_ui_tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx_compose_foundation = { group = "androidx.compose.foundation", name = "foundation" }
+androidx_compose_animation = { group = "androidx.compose.animation", name = "animation" }
 androidx_compose_material = { group = "androidx.compose.material3", name = "material3" }
 androidx_compose_material_icons_core = { group = "androidx.compose.material", name = "material-icons-core" }
 androidx_compose_material_icons_extended = { group = "androidx.compose.material", name = "material-icons-extended" }
@@ -94,6 +95,7 @@ androidx_compose = [
     "androidx_compose_ui",
     "androidx_compose_ui_tooling",
     "androidx_compose_foundation",
+    "androidx_compose_animation",
     "androidx_compose_material",
     "androidx_compose_material_icons_core",
     "androidx_compose_material_icons_extended"

@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.erdenian.studentassistant.strings.RS
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
@@ -59,6 +60,16 @@ fun DatePickerDialog(
             }
         },
         dismissButton = {
+            TextButton(
+                onClick = {
+                    val millis = LocalDate.now().toEpochMillisecondUtc()
+                    state.selectedDateMillis = millis
+                    state.displayedMonthMillis = millis
+                },
+            ) {
+                Text(text = stringResource(RS.dpd_today))
+            }
+
             TextButton(
                 onClick = onDismiss,
             ) {
