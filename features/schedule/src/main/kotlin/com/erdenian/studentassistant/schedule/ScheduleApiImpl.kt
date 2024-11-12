@@ -14,6 +14,7 @@ import com.erdenian.studentassistant.schedule.lessoninformation.LessonInformatio
 import com.erdenian.studentassistant.schedule.schedule.ScheduleScreen
 import com.erdenian.studentassistant.schedule.scheduleeditor.ScheduleEditorScreen
 import com.erdenian.studentassistant.schedule.semestereditor.SemesterEditorScreen
+import com.erdenian.studentassistant.utils.getParcelableCompat
 import javax.inject.Inject
 import kotlin.reflect.typeOf
 import kotlinx.serialization.encodeToString
@@ -32,7 +33,7 @@ internal class ScheduleApiImpl @Inject constructor() : ScheduleApi {
             typeMap = mapOf(
                 typeOf<Lesson>() to object : NavType<Lesson>(isNullableAllowed = false) {
                     override fun put(bundle: Bundle, key: String, value: Lesson) = bundle.putParcelable(key, value)
-                    override fun get(bundle: Bundle, key: String) = bundle.getParcelable<Lesson>(key)
+                    override fun get(bundle: Bundle, key: String) = bundle.getParcelableCompat<Lesson>(key)
                     override fun serializeAsValue(value: Lesson) = Json.encodeToString(value)
                     override fun parseValue(value: String) = Json.decodeFromString<Lesson>(value)
                 },

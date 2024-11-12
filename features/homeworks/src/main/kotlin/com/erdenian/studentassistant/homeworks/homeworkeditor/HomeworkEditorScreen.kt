@@ -45,9 +45,9 @@ internal fun HomeworkEditorScreen(route: HomeworksRoute.HomeworkEditor) {
     LaunchedEffect(done) {
         if (done) {
             navController.popBackStack()
-            lessonNameToCreate?.let {
+            lessonNameToCreate?.let { subjectName ->
                 navController.navigate(
-                    ScheduleRoute.LessonEditor(semesterId = viewModel.semesterId, subjectName = it),
+                    ScheduleRoute.LessonEditor(semesterId = viewModel.semesterId, subjectName = subjectName),
                 )
             }
         }

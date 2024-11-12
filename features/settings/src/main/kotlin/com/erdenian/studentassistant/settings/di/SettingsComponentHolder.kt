@@ -2,7 +2,6 @@ package com.erdenian.studentassistant.settings.di
 
 import com.erdenian.studentassistant.settings.SettingsDependencies
 
-
 internal object SettingsComponentHolder {
 
     lateinit var instance: SettingsComponent

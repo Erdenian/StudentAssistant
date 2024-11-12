@@ -28,5 +28,5 @@ sealed interface ScheduleRoute : Route {
     }
 
     @Serializable
-    data class LessonInformation(@Serializable val lesson: Lesson) : ScheduleRoute
+    data class LessonInformation(val lesson: Lesson) : ScheduleRoute
 }
