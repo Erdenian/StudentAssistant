@@ -89,7 +89,7 @@ fun TimePickerDialog(
                 )
             }
 
-            Spacer(Modifier.weight(1f))
+            Spacer(Modifier.weight(1.0f))
 
             TextButton(
                 onClick = onDismiss,
