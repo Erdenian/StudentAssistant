@@ -111,8 +111,8 @@ internal fun LessonEditorScreen(route: ScheduleRoute.LessonEditor) {
         }
     }
 
-    var customOperaionMessageId by remember { mutableStateOf<Int?>(null) }
-    (blockingProgressMessageId ?: customOperaionMessageId)?.let { ProgressDialog(stringResource(it)) }
+    var customOperationMessageId by remember { mutableStateOf<Int?>(null) }
+    (blockingProgressMessageId ?: customOperationMessageId)?.let { ProgressDialog(stringResource(it)) }
 
     var showSaveDialog by rememberSaveable { mutableStateOf(false) }
     if (showSaveDialog) {
@@ -222,26 +222,26 @@ internal fun LessonEditorScreen(route: ScheduleRoute.LessonEditor) {
             if (errorMessage != null) {
                 context.toast(errorMessage)
             } else {
-                customOperaionMessageId = RS.le_rename_others_progress
+                customOperationMessageId = RS.le_rename_others_progress
                 coroutineScope.launch {
                     if (viewModel.isSubjectNameChangedAndNotLast()) {
                         showSaveDialog = true
                     } else {
                         viewModel.save()
                     }
-                    customOperaionMessageId = null
+                    customOperationMessageId = null
                 }
             }
         },
         onDeleteClick = {
-            customOperaionMessageId = RS.le_delete_homeworks_progress
+            customOperationMessageId = RS.le_delete_homeworks_progress
             coroutineScope.launch {
                 if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) {
                     showDeleteWithHomeworksDialog = true
                 } else {
                     showDeleteWithoutHomeworksDialog = true
                 }
-                customOperaionMessageId = null
+                customOperationMessageId = null
             }
         },
         onSubjectNameChange = { value ->
