@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Кнопка перехода к сегодняшней дате в диалоге выбора даты
 - Поддержка predictive back gesture
 - Shared element transition при переходе на экран информации о занятии
+- В редакторе занятия уже введенные преподаватели и аудитории больше не будут предлагаться в автодополнении
 
 ## [0.6.0] - 2024-03-31
 
