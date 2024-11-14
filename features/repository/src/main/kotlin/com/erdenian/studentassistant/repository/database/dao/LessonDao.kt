@@ -25,8 +25,8 @@ internal abstract class LessonDao {
     @Transaction
     open suspend fun insert(
         lesson: LessonEntity,
-        teachers: List<TeacherEntity>,
-        classrooms: List<ClassroomEntity>,
+        teachers: Set<TeacherEntity>,
+        classrooms: Set<ClassroomEntity>,
         byWeekday: ByWeekdayEntity,
     ): Long = withContext(Dispatchers.IO) {
         val id = insert(lesson)
@@ -41,9 +41,9 @@ internal abstract class LessonDao {
     @Transaction
     open suspend fun insert(
         lesson: LessonEntity,
-        teachers: List<TeacherEntity>,
-        classrooms: List<ClassroomEntity>,
-        byDates: List<ByDateEntity>,
+        teachers: Set<TeacherEntity>,
+        classrooms: Set<ClassroomEntity>,
+        byDates: Set<ByDateEntity>,
     ): Long {
         require(byDates.isNotEmpty()) { "Dates list must contain at least one item" }
         return withContext(Dispatchers.IO) {
@@ -62,23 +62,23 @@ internal abstract class LessonDao {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     protected abstract suspend fun insert(
-        teachers: List<TeacherEntity>,
-        classrooms: List<ClassroomEntity>,
+        teachers: Set<TeacherEntity>,
+        classrooms: Set<ClassroomEntity>,
         byWeekday: ByWeekdayEntity,
     )
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     protected abstract suspend fun insert(
-        teachers: List<TeacherEntity>,
-        classrooms: List<ClassroomEntity>,
-        byDates: List<ByDateEntity>,
+        teachers: Set<TeacherEntity>,
+        classrooms: Set<ClassroomEntity>,
+        byDates: Set<ByDateEntity>,
     )
 
     @Transaction
     open suspend fun update(
         lesson: LessonEntity,
-        teachers: List<TeacherEntity>,
-        classrooms: List<ClassroomEntity>,
+        teachers: Set<TeacherEntity>,
+        classrooms: Set<ClassroomEntity>,
         byWeekday: ByWeekdayEntity,
     ): Unit = withContext(Dispatchers.IO) {
         delete(lesson.id)
@@ -88,9 +88,9 @@ internal abstract class LessonDao {
     @Transaction
     open suspend fun update(
         lesson: LessonEntity,
-        teachers: List<TeacherEntity>,
-        classrooms: List<ClassroomEntity>,
-        byDates: List<ByDateEntity>,
+        teachers: Set<TeacherEntity>,
+        classrooms: Set<ClassroomEntity>,
+        byDates: Set<ByDateEntity>,
     ): Unit = withContext(Dispatchers.IO) {
         delete(lesson.id)
         insert(lesson = lesson, teachers = teachers, classrooms = classrooms, byDates = byDates)
