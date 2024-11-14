@@ -5,7 +5,9 @@ import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.Schedule
@@ -14,6 +16,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -57,6 +60,9 @@ internal fun StudentAssistantApp() {
 
     CompositionLocalProvider(LocalNavController provides navController) {
         Scaffold(
+            contentWindowInsets = ScaffoldDefaults.contentWindowInsets.only(
+                WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
+            ),
             content = { paddingValues ->
                 SharedTransitionLayout {
                     CompositionLocalProvider(LocalSharedTransitionScope provides this) {
