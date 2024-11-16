@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -46,20 +46,27 @@ internal fun LazyHomeworksList(
 ) {
     AnimatedContent(
         targetState = Triple(overdueHomeworks, actualHomeworks, pastHomeworks),
+        contentKey = { (overdue, actual, past) ->
+            when {
+                (overdue == null) || (actual == null) || (past == null) -> null
+                overdue.isEmpty() && actual.isEmpty() && past.isEmpty() -> false
+                else -> true
+            }
+        },
         transitionSpec = { fadeIn() togetherWith fadeOut() },
         contentAlignment = Alignment.Center,
         label = "LazyHomeworksList",
         modifier = modifier,
-    ) { (overdueHomeworksState, actualHomeworksState, pastHomeworksState) ->
+    ) { (overdue, actual, past) ->
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier.fillMaxSize(),
         ) {
             when {
-                (overdueHomeworksState == null) || (actualHomeworksState == null) || (pastHomeworksState == null) -> {
+                (overdue == null) || (actual == null) || (past == null) -> {
                     DelayedVisibility { CircularProgressIndicator() }
                 }
-                overdueHomeworksState.isEmpty() && actualHomeworksState.isEmpty() && pastHomeworksState.isEmpty() -> {
+                overdue.isEmpty() && actual.isEmpty() && past.isEmpty() -> {
                     Text(
                         text = stringResource(RS.lhl_no_homeworks),
                         textAlign = TextAlign.Center,
@@ -77,10 +84,10 @@ internal fun LazyHomeworksList(
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.cardsSpacing),
                         modifier = Modifier.fillMaxSize(),
                     ) {
-                        fun LazyListScope.createList(homeworks: List<Homework>) = itemsIndexed(
+                        fun LazyListScope.createList(homeworks: List<Homework>) = items(
                             items = homeworks,
-                            key = { _, item -> item.id },
-                        ) { _, homework ->
+                            key = { it.id },
+                        ) { homework ->
                             val haptic = LocalHapticFeedback.current
                             HomeworkCard(
                                 subjectName = homework.subjectName,
@@ -93,21 +100,19 @@ internal fun LazyHomeworksList(
                                     }
                                 },
                                 onClick = { onHomeworkClick(homework) },
+                                modifier = Modifier.animateItem(),
                             )
                         }
 
-                        createList(overdueHomeworksState)
-                        if (
-                            overdueHomeworksState.isNotEmpty() &&
-                            (actualHomeworksState.isNotEmpty() || pastHomeworksState.isNotEmpty())
-                        ) {
-                            item { HorizontalDivider() }
+                        createList(overdue)
+                        if (overdue.isNotEmpty() && (actual.isNotEmpty() || past.isNotEmpty())) {
+                            item { HorizontalDivider(modifier = Modifier.animateItem()) }
                         }
-                        createList(actualHomeworksState)
-                        if (actualHomeworksState.isNotEmpty() && pastHomeworksState.isNotEmpty()) {
-                            item { HorizontalDivider() }
+                        createList(actual)
+                        if (actual.isNotEmpty() && past.isNotEmpty()) {
+                            item { HorizontalDivider(modifier = Modifier.animateItem()) }
                         }
-                        createList(pastHomeworksState)
+                        createList(past)
                     }
                 }
             }

@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -44,6 +44,7 @@ internal fun LazyLessonsList(
 ) {
     AnimatedContent(
         targetState = lessons,
+        contentKey = { it?.isNotEmpty() },
         transitionSpec = { fadeIn() togetherWith fadeOut() },
         contentAlignment = Alignment.Center,
         label = "LazyLessonsList",
@@ -69,10 +70,10 @@ internal fun LazyLessonsList(
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.cardsSpacing),
                         modifier = Modifier.fillMaxSize(),
                     ) {
-                        itemsIndexed(
+                        items(
                             items = lessonsState,
-                            key = { _, item -> item.id },
-                        ) { _, lesson ->
+                            key = { it.id },
+                        ) { lesson ->
                             val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
                             val haptic = LocalHapticFeedback.current
 
@@ -91,10 +92,12 @@ internal fun LazyLessonsList(
                                             onLongClick(lesson)
                                         }
                                     },
-                                    modifier = Modifier.sharedElement(
-                                        rememberSharedContentState(lesson),
-                                        LocalAnimatedContentScope.current,
-                                    ),
+                                    modifier = Modifier
+                                        .animateItem()
+                                        .sharedElement(
+                                            rememberSharedContentState(lesson),
+                                            LocalAnimatedContentScope.current,
+                                        ),
                                 )
                             }
                         }
