@@ -3,11 +3,8 @@ package com.erdenian.studentassistant.schedule.scheduleeditor
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.erdenian.studentassistant.entity.Lesson
-import com.erdenian.studentassistant.entity.toImmutableSortedSet
-import com.erdenian.studentassistant.repository.HomeworkRepository
-import com.erdenian.studentassistant.repository.LessonRepository
-import com.erdenian.studentassistant.repository.SemesterRepository
+import com.erdenian.studentassistant.repository.api.RepositoryApi
+import com.erdenian.studentassistant.repository.api.entity.Lesson
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -20,13 +17,15 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class ScheduleEditorViewModel @AssistedInject constructor(
+internal class ScheduleEditorViewModel @AssistedInject constructor(
     application: Application,
-    private val semesterRepository: SemesterRepository,
-    private val lessonRepository: LessonRepository,
-    private val homeworkRepository: HomeworkRepository,
-    @Assisted val semesterId: Long
+    repositoryApi: RepositoryApi,
+    @Assisted val semesterId: Long,
 ) : AndroidViewModel(application) {
+
+    private val semesterRepository = repositoryApi.semesterRepository
+    private val lessonRepository = repositoryApi.lessonRepository
+    private val homeworkRepository = repositoryApi.homeworkRepository
 
     @AssistedFactory
     interface Factory {
@@ -35,7 +34,7 @@ class ScheduleEditorViewModel @AssistedInject constructor(
 
     enum class Operation {
         DELETING_LESSON,
-        DELETING_SEMESTER
+        DELETING_SEMESTER,
     }
 
     private val operationPrivate = MutableStateFlow<Operation?>(null)
@@ -48,10 +47,9 @@ class ScheduleEditorViewModel @AssistedInject constructor(
 
     fun getLessons(dayOfWeek: DayOfWeek) = combine(
         lessonRepository.getAllFlow(semesterId, dayOfWeek).onEach { deletedLessonIds.value = emptySet() },
-        deletedLessonIds.asStateFlow()
+        deletedLessonIds.asStateFlow(),
     ) { lessons, deletedIds ->
-        if (deletedIds.isEmpty()) lessons
-        else lessons.asSequence().filter { it.id !in deletedIds }.toImmutableSortedSet()
+        if (deletedIds.isEmpty()) lessons else lessons.filter { it.id !in deletedIds }
     }
 
     fun deleteSemester() {

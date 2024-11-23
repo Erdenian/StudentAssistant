@@ -1,32 +1,49 @@
 package com.erdenian.studentassistant.di
 
 import android.app.Application
-import com.erdenian.studentassistant.database.di.DatabaseModule
-import com.erdenian.studentassistant.homeworks.di.HomeworksComponent
-import com.erdenian.studentassistant.repository.SelectedSemesterRepository
-import com.erdenian.studentassistant.repository.di.RepositoryModule
-import com.erdenian.studentassistant.schedule.di.ScheduleComponent
-import com.erdenian.studentassistant.settings.di.SettingsComponent
+import com.erdenian.studentassistant.di.features.HomeworksModule
+import com.erdenian.studentassistant.di.features.RepositoryModule
+import com.erdenian.studentassistant.di.features.ScheduleModule
+import com.erdenian.studentassistant.di.features.SettingsModule
+import com.erdenian.studentassistant.homeworks.HomeworksDependencies
+import com.erdenian.studentassistant.homeworks.api.HomeworksApi
+import com.erdenian.studentassistant.repository.RepositoryConfig
+import com.erdenian.studentassistant.repository.RepositoryDependencies
+import com.erdenian.studentassistant.repository.api.RepositoryApi
+import com.erdenian.studentassistant.schedule.ScheduleDependencies
+import com.erdenian.studentassistant.schedule.api.ScheduleApi
+import com.erdenian.studentassistant.settings.SettingsDependencies
+import com.erdenian.studentassistant.settings.api.SettingsApi
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [RepositoryModule::class])
-interface MainComponent {
+@Component(
+    modules = [
+        ScheduleModule::class,
+        HomeworksModule::class,
+        SettingsModule::class,
+        RepositoryModule::class,
+    ],
+)
+internal interface MainComponent :
+    ScheduleDependencies,
+    HomeworksDependencies,
+    SettingsDependencies,
+    RepositoryDependencies {
 
     @Component.Factory
     interface Factory {
         fun create(
             @BindsInstance application: Application,
-            databaseModule: DatabaseModule,
-            repositoryModule: RepositoryModule
+            @BindsInstance repositoryConfig: RepositoryConfig,
         ): MainComponent
     }
 
-    val selectedSemesterRepository: SelectedSemesterRepository
+    override val repositoryApi: RepositoryApi
 
-    val scheduleComponent: ScheduleComponent
-    val homeworksComponent: HomeworksComponent
-    val settingsComponent: SettingsComponent
+    val scheduleApi: ScheduleApi
+    val homeworksApi: HomeworksApi
+    val settingsApi: SettingsApi
 }

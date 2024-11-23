@@ -52,10 +52,10 @@ internal fun PagerTabStrip(
     fontSize: TextUnit = 12.sp,
     textSpacing: Dp = 32.dp,
     underscoreHeight: Dp = 2.dp,
-    colors: PagerTabStripColors = PagerTabStripDefaults.pagerTabStripColors()
+    colors: PagerTabStripColors = PagerTabStripDefaults.pagerTabStripColors(),
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         val scrollCoroutineScope = rememberCoroutineScope()
         Layout(
@@ -67,8 +67,10 @@ internal fun PagerTabStrip(
                         scrollCoroutineScope.launch { state.scrollBy(-delta) }
                     },
                     onDragStopped = {
-                        launch { state.animateScrollToPage(state.currentPage + state.currentPageOffsetFraction.roundToInt()) }
-                    }
+                        launch {
+                            state.animateScrollToPage(state.currentPage + state.currentPageOffsetFraction.roundToInt())
+                        }
+                    },
                 ),
             content = {
                 val indices = 0 until state.pageCount
@@ -83,10 +85,10 @@ internal fun PagerTabStrip(
                     modifier = Modifier.clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null,
-                        enabled = (page in indices)
+                        enabled = (page in indices),
                     ) {
                         scrollCoroutineScope.launch { state.animateScrollToPage(page) }
-                    }
+                    },
                 )
 
                 val selectedTabTextColor = colors.selectedTabTextColor().value
@@ -100,19 +102,19 @@ internal fun PagerTabStrip(
 
                 createText(
                     page = page - 1,
-                    color = notSelectedTabTextColor
+                    color = notSelectedTabTextColor,
                 )
                 createText(
                     page = page,
-                    color = animatedCurrentTabTextColor
+                    color = animatedCurrentTabTextColor,
                 )
                 createText(
                     page = page + 1,
-                    color = notSelectedTabTextColor
+                    color = notSelectedTabTextColor,
                 )
 
                 Box(modifier = Modifier.background(tabIndicatorColor.copy(alpha = animatedUnderscoreAlpha)))
-            }
+            },
         ) { measurables, constraints ->
             val width = constraints.maxWidth
             val height = constraints.maxHeight
@@ -126,7 +128,7 @@ internal fun PagerTabStrip(
             val nextPlaceable = titlesPlaceables[2]
 
             val underscorePlaceable = measurables.last().measure(
-                Constraints.fixed(currentPlaceable.width + textSpacingPx, underscoreHeight.roundToPx())
+                Constraints.fixed(currentPlaceable.width + textSpacingPx, underscoreHeight.roundToPx()),
             )
 
             layout(width, height) {
@@ -160,7 +162,7 @@ internal fun PagerTabStrip(
             Modifier
                 .fillMaxWidth()
                 .height(1.dp)
-                .background(color = colors.tabIndicatorColor().value)
+                .background(color = colors.tabIndicatorColor().value),
         )
     }
 }
@@ -171,11 +173,11 @@ internal object PagerTabStripDefaults {
     fun pagerTabStripColors(
         selectedTabTextColor: Color = MaterialTheme.colorScheme.primary,
         notSelectedTabTextColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
-        tabIndicatorColor: Color = MaterialTheme.colorScheme.primary
+        tabIndicatorColor: Color = MaterialTheme.colorScheme.primary,
     ): PagerTabStripColors = DefaultPagerTabStripColors(
         selectedTabTextColor = selectedTabTextColor,
         notSelectedTabTextColor = notSelectedTabTextColor,
-        tabIndicatorColor = tabIndicatorColor
+        tabIndicatorColor = tabIndicatorColor,
     )
 }
 
@@ -196,7 +198,7 @@ internal interface PagerTabStripColors {
 private class DefaultPagerTabStripColors(
     private val selectedTabTextColor: Color,
     private val notSelectedTabTextColor: Color,
-    private val tabIndicatorColor: Color
+    private val tabIndicatorColor: Color,
 ) : PagerTabStripColors {
 
     @Composable
@@ -213,10 +215,10 @@ private fun Color.transitionTo(color: Color, progress: Float): Color {
     val invertedProgress = 1 - progress
     fun Float.square() = this * this
     return Color(
-        sqrt(this.red.square() * invertedProgress + color.red.square() * progress),
-        sqrt(this.green.square() * invertedProgress + color.green.square() * progress),
-        sqrt(this.blue.square() * invertedProgress + color.blue.square() * progress),
-        sqrt(this.alpha.square() * invertedProgress + color.alpha.square() * progress)
+        red = sqrt(this.red.square() * invertedProgress + color.red.square() * progress),
+        green = sqrt(this.green.square() * invertedProgress + color.green.square() * progress),
+        blue = sqrt(this.blue.square() * invertedProgress + color.blue.square() * progress),
+        alpha = sqrt(this.alpha.square() * invertedProgress + color.alpha.square() * progress),
     )
 }
 
@@ -229,16 +231,16 @@ private fun PagerTabStripPreview() = AppTheme {
 
         PagerTabStrip(
             state = state,
-            titleGetter = { "Page $it" }
+            titleGetter = { "Page $it" },
         )
 
         HorizontalPager(
             state = state,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) { page ->
             Text(
                 text = page.toString(),
-                modifier = Modifier.wrapContentSize()
+                modifier = Modifier.wrapContentSize(),
             )
         }
     }

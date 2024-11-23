@@ -10,16 +10,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
-import com.erdenian.studentassistant.entity.Homework
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.erdenian.studentassistant.homeworks.api.HomeworksRoute
+import com.erdenian.studentassistant.homeworks.di.HomeworksComponentHolder
+import com.erdenian.studentassistant.navigation.LocalNavController
+import com.erdenian.studentassistant.repository.api.entity.Homework
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
 
 @Composable
-fun HomeworksScreen(
-    viewModel: HomeworksViewModel,
-    navigateToCreateHomework: (semesterId: Long) -> Unit,
-    navigateToEditHomework: (semesterId: Long, homeworkId: Long) -> Unit
-) {
+internal fun HomeworksScreen() {
+    val viewModel = viewModel { HomeworksComponentHolder.instance.homeworksViewModel }
+    val navController = LocalNavController.current
+
     val semesters by viewModel.allSemesters.collectAsState()
     val selectedSemester by viewModel.selectedSemester.collectAsState()
 
@@ -41,7 +44,7 @@ fun HomeworksScreen(
             dismissButton = {
                 TextButton(
                     onClick = { homeworkForDeleteDialog = null },
-                    content = { Text(text = stringResource(RS.h_delete_no)) }
+                    content = { Text(text = stringResource(RS.h_delete_no)) },
                 )
             },
             confirmButton = {
@@ -50,21 +53,25 @@ fun HomeworksScreen(
                         viewModel.deleteHomework(homework.id)
                         homeworkForDeleteDialog = null
                     },
-                    content = { Text(text = stringResource(RS.h_delete_yes)) }
+                    content = { Text(text = stringResource(RS.h_delete_yes)) },
                 )
-            }
+            },
         )
     }
 
     HomeworksContent(
         semesters = semesters.map { it.name },
         selectedSemester = selectedSemester,
-        overdueHomeworks = overdueHomeworks?.list,
-        actualHomeworks = actualHomeworks?.list,
-        pastHomeworks = pastHomeworks?.list,
-        onSelectedSemesterChange = { viewModel.selectSemester(semesters.list[it].id) },
-        onAddHomeworkClick = { navigateToCreateHomework(it.id) },
-        onHomeworkClick = { navigateToEditHomework(it.semesterId, it.id) },
-        onDeleteHomeworkClick = { homeworkForDeleteDialog = it }
+        overdueHomeworks = overdueHomeworks,
+        actualHomeworks = actualHomeworks,
+        pastHomeworks = pastHomeworks,
+        onSelectedSemesterChange = { viewModel.selectSemester(semesters[it].id) },
+        onAddHomeworkClick = { navController.navigate(HomeworksRoute.HomeworkEditor(semesterId = it.id)) },
+        onHomeworkClick = { homework ->
+            navController.navigate(
+                HomeworksRoute.HomeworkEditor(semesterId = homework.semesterId, homeworkId = homework.id),
+            )
+        },
+        onDeleteHomeworkClick = { homeworkForDeleteDialog = it },
     )
 }

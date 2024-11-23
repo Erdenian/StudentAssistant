@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,7 +23,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.erdenian.studentassistant.entity.Homework
+import com.erdenian.studentassistant.repository.api.entity.Homework
 import com.erdenian.studentassistant.sampledata.Homeworks
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.style.AppTheme
@@ -38,39 +38,40 @@ internal fun LazyHomeworksList(
     homeworks: List<Homework>?,
     onHomeworkClick: (Homework) -> Unit,
     modifier: Modifier = Modifier,
-    onLongHomeworkClick: ((Homework) -> Unit)? = null
+    onLongHomeworkClick: ((Homework) -> Unit)? = null,
 ) {
     AnimatedContent(
         targetState = homeworks,
+        contentKey = { it?.isNotEmpty() },
         transitionSpec = { fadeIn() togetherWith fadeOut() },
         contentAlignment = Alignment.Center,
         label = "LazyHomeworksList",
-        modifier = modifier
+        modifier = modifier,
     ) { homeworksState ->
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
             when {
                 (homeworksState == null) -> DelayedVisibility { CircularProgressIndicator() }
                 homeworksState.isEmpty() -> Text(
                     text = stringResource(RS.lhl_no_homeworks),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal)
+                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal),
                 )
                 else ->
                     LazyColumn(
                         contentPadding = PaddingValues(
                             horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
-                            vertical = MaterialTheme.dimensions.screenPaddingVertical
+                            vertical = MaterialTheme.dimensions.screenPaddingVertical,
                         ),
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.cardsSpacing),
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
                     ) {
-                        itemsIndexed(
+                        items(
                             items = homeworksState,
-                            key = { _, item -> item.id }
-                        ) { _, homework ->
+                            key = { it.id },
+                        ) { homework ->
                             val deadlineFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
                             val haptic = LocalHapticFeedback.current
 
@@ -84,7 +85,8 @@ internal fun LazyHomeworksList(
                                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                         onLongClick(homework)
                                     }
-                                }
+                                },
+                                modifier = Modifier.animateItem(),
                             )
                         }
                     }
@@ -98,7 +100,7 @@ internal fun LazyHomeworksList(
 private fun LazyHomeworksListLoadingPreview() = AppTheme {
     LazyHomeworksList(
         homeworks = null,
-        onHomeworkClick = {}
+        onHomeworkClick = {},
     )
 }
 
@@ -107,7 +109,7 @@ private fun LazyHomeworksListLoadingPreview() = AppTheme {
 private fun LazyHomeworksListEmptyPreview() = AppTheme {
     LazyHomeworksList(
         homeworks = emptyList(),
-        onHomeworkClick = {}
+        onHomeworkClick = {},
     )
 }
 
@@ -116,6 +118,6 @@ private fun LazyHomeworksListEmptyPreview() = AppTheme {
 private fun LazyHomeworksListPreview() = AppTheme {
     LazyHomeworksList(
         homeworks = List(10) { Homeworks.regular },
-        onHomeworkClick = {}
+        onHomeworkClick = {},
     )
 }

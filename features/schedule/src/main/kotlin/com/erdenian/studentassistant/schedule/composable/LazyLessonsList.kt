@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,7 +23,9 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.erdenian.studentassistant.entity.Lesson
+import com.erdenian.studentassistant.navigation.LocalAnimatedContentScope
+import com.erdenian.studentassistant.navigation.LocalSharedTransitionScope
+import com.erdenian.studentassistant.repository.api.entity.Lesson
 import com.erdenian.studentassistant.sampledata.Lessons
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.style.AppTheme
@@ -38,57 +40,66 @@ internal fun LazyLessonsList(
     lessons: List<Lesson>?,
     onLessonClick: (Lesson) -> Unit,
     modifier: Modifier = Modifier,
-    onLongLessonClick: ((Lesson) -> Unit)? = null
+    onLongLessonClick: ((Lesson) -> Unit)? = null,
 ) {
     AnimatedContent(
         targetState = lessons,
+        contentKey = { it?.isNotEmpty() },
         transitionSpec = { fadeIn() togetherWith fadeOut() },
         contentAlignment = Alignment.Center,
         label = "LazyLessonsList",
-        modifier = modifier
+        modifier = modifier,
     ) { lessonsState ->
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
             when {
                 (lessonsState == null) -> DelayedVisibility { CircularProgressIndicator() }
                 lessonsState.isEmpty() -> Text(
                     text = stringResource(RS.lll_free_day),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal)
+                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal),
                 )
                 else ->
                     LazyColumn(
                         contentPadding = PaddingValues(
                             horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
-                            vertical = MaterialTheme.dimensions.screenPaddingVertical
+                            vertical = MaterialTheme.dimensions.screenPaddingVertical,
                         ),
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.cardsSpacing),
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
                     ) {
-                        itemsIndexed(
+                        items(
                             items = lessonsState,
-                            key = { _, item -> item.id }
-                        ) { _, lesson ->
+                            key = { it.id },
+                        ) { lesson ->
                             val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
                             val haptic = LocalHapticFeedback.current
 
-                            LessonCard(
-                                subjectName = lesson.subjectName,
-                                type = lesson.type,
-                                teachers = lesson.teachers.list,
-                                classrooms = lesson.classrooms.list,
-                                startTime = lesson.startTime.format(timeFormatter),
-                                endTime = lesson.endTime.format(timeFormatter),
-                                onClick = { onLessonClick(lesson) },
-                                onLongClick = onLongLessonClick?.let { onLongClick ->
-                                    {
-                                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                        onLongClick(lesson)
-                                    }
-                                }
-                            )
+                            with(LocalSharedTransitionScope.current) {
+                                LessonCard(
+                                    subjectName = lesson.subjectName,
+                                    type = lesson.type,
+                                    teachers = lesson.teachers,
+                                    classrooms = lesson.classrooms,
+                                    startTime = lesson.startTime.format(timeFormatter),
+                                    endTime = lesson.endTime.format(timeFormatter),
+                                    onClick = { onLessonClick(lesson) },
+                                    onLongClick = onLongLessonClick?.let { onLongClick ->
+                                        {
+                                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                            onLongClick(lesson)
+                                        }
+                                    },
+                                    modifier = Modifier
+                                        .animateItem()
+                                        .sharedElement(
+                                            rememberSharedContentState(lesson),
+                                            LocalAnimatedContentScope.current,
+                                        ),
+                                )
+                            }
                         }
                     }
             }
@@ -101,7 +112,7 @@ internal fun LazyLessonsList(
 private fun LazyLessonsListLoadingPreview() = AppTheme {
     LazyLessonsList(
         lessons = null,
-        onLessonClick = {}
+        onLessonClick = {},
     )
 }
 
@@ -110,7 +121,7 @@ private fun LazyLessonsListLoadingPreview() = AppTheme {
 private fun LazyLessonsListEmptyPreview() = AppTheme {
     LazyLessonsList(
         lessons = emptyList(),
-        onLessonClick = {}
+        onLessonClick = {},
     )
 }
 
@@ -119,6 +130,6 @@ private fun LazyLessonsListEmptyPreview() = AppTheme {
 private fun LazyLessonsListPreview() = AppTheme {
     LazyLessonsList(
         lessons = List(10) { Lessons.regular },
-        onLessonClick = {}
+        onLessonClick = {},
     )
 }

@@ -11,21 +11,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
-import com.erdenian.studentassistant.entity.Homework
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.erdenian.studentassistant.homeworks.api.HomeworksRoute
+import com.erdenian.studentassistant.navigation.LocalNavController
+import com.erdenian.studentassistant.repository.api.entity.Homework
+import com.erdenian.studentassistant.schedule.api.ScheduleRoute
+import com.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
 
 @Composable
-fun LessonInformationScreen(
-    viewModel: LessonInformationViewModel,
-    navigateBack: () -> Unit,
-    navigateToEditLesson: (semesterId: Long, lessonId: Long) -> Unit,
-    navigateToEditHomework: (semesterId: Long, homeworkId: Long) -> Unit,
-    navigateToCreateHomework: (semesterId: Long, subjectName: String) -> Unit
-) {
+internal fun LessonInformationScreen(route: ScheduleRoute.LessonInformation) {
+    val viewModel = viewModel {
+        ScheduleComponentHolder.instance.lessonInformationViewModelFactory.get(route.lesson)
+    }
+    val navController = LocalNavController.current
+
     val isDeleted by viewModel.isDeleted.collectAsState()
     LaunchedEffect(isDeleted) {
-        if (isDeleted) navigateBack()
+        if (isDeleted) navController.popBackStack()
     }
 
     val lesson by viewModel.lesson.collectAsState()
@@ -45,7 +49,7 @@ fun LessonInformationScreen(
             dismissButton = {
                 TextButton(
                     onClick = { homeworkForDeleteDialog = null },
-                    content = { Text(text = stringResource(RS.li_delete_homework_no)) }
+                    content = { Text(text = stringResource(RS.li_delete_homework_no)) },
                 )
             },
             confirmButton = {
@@ -54,19 +58,37 @@ fun LessonInformationScreen(
                         viewModel.deleteHomework(homework.id)
                         homeworkForDeleteDialog = null
                     },
-                    content = { Text(text = stringResource(RS.li_delete_homework_yes)) }
+                    content = { Text(text = stringResource(RS.li_delete_homework_yes)) },
                 )
-            }
+            },
         )
     }
 
     LessonInformationContent(
-        lesson = lesson,
-        homeworks = homeworks?.list,
-        onBackClick = navigateBack,
-        onEditClick = { navigateToEditLesson(it.semesterId, it.id) },
-        onHomeworkClick = { navigateToEditHomework(it.semesterId, it.id) },
-        onAddHomeworkClick = { navigateToCreateHomework(it.semesterId, it.subjectName) },
-        onDeleteHomeworkClick = { homeworkForDeleteDialog = it }
+        lesson = lesson ?: return,
+        homeworks = homeworks,
+        onBackClick = navController::popBackStack,
+        onEditClick = { clickedLesson ->
+            navController.navigate(
+                ScheduleRoute.LessonEditor(
+                    semesterId = clickedLesson.semesterId,
+                    lessonId = clickedLesson.id,
+                ),
+            )
+        },
+        onHomeworkClick = { clickedHomework ->
+            navController.navigate(
+                HomeworksRoute.HomeworkEditor(semesterId = clickedHomework.semesterId, homeworkId = clickedHomework.id),
+            )
+        },
+        onAddHomeworkClick = { currentLesson ->
+            navController.navigate(
+                HomeworksRoute.HomeworkEditor(
+                    semesterId = currentLesson.semesterId,
+                    subjectName = currentLesson.subjectName,
+                ),
+            )
+        },
+        onDeleteHomeworkClick = { homeworkForDeleteDialog = it },
     )
 }

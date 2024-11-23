@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.DropdownMenu
@@ -41,7 +41,7 @@ import com.erdenian.studentassistant.style.AutoMirrored
 fun TopAppBarDropdownMenu(
     items: List<String>,
     selectedItem: String,
-    onSelectedItemChange: (Int, String) -> Unit
+    onSelectedItemChange: (Int, String) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -51,7 +51,7 @@ fun TopAppBarDropdownMenu(
         expanded = expanded,
         onSelectedItemChange = onSelectedItemChange,
         onClick = { expanded = !expanded },
-        onDismissRequest = { expanded = false }
+        onDismissRequest = { expanded = false },
     )
 }
 
@@ -62,22 +62,19 @@ private fun TopAppBarDropdownMenuContent(
     expanded: Boolean,
     onSelectedItemChange: (Int, String) -> Unit,
     onClick: () -> Unit,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            // https://issuetracker.google.com/issues/300953236
-            // Todo: remove workaround, it's fixed
-            //.fillMaxHeight()
-            .height(64.dp)
-            .clickable(onClick = onClick)
+            .fillMaxHeight()
+            .clickable(onClick = onClick),
     ) {
         Text(
             text = selectedItem,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
-            modifier = Modifier.weight(1.0f, false)
+            modifier = Modifier.weight(1.0f, false),
         )
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -92,14 +89,14 @@ private fun TopAppBarDropdownMenuContent(
         expanded = expanded,
         onDismissRequest = onDismissRequest,
         offset = DpOffset(-xOffset, 0.dp),
-        properties = PopupProperties(focusable = true, clippingEnabled = false)
+        properties = PopupProperties(focusable = true, clippingEnabled = false),
     ) {
         DropdownMenuItems(
             items = items,
             onItemClick = { index, item ->
                 onDismissRequest()
                 onSelectedItemChange(index, item)
-            }
+            },
         )
     }
 }
@@ -108,7 +105,7 @@ private fun TopAppBarDropdownMenuContent(
 @Composable
 private fun ColumnScope.DropdownMenuItems(
     items: List<String>,
-    onItemClick: (index: Int, item: String) -> Unit
+    onItemClick: (index: Int, item: String) -> Unit,
 ) {
     items.forEachIndexed { index, item ->
         DropdownMenuItem(
@@ -117,10 +114,10 @@ private fun ColumnScope.DropdownMenuItems(
                     text = item,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge,
                 )
             },
-            onClick = { onItemClick(index, item) }
+            onClick = { onItemClick(index, item) },
         )
     }
 }
@@ -134,14 +131,14 @@ private fun TopAppBarDropdownMenuPreview() = AppTheme {
             TopAppBarDropdownMenu(
                 items = listOf("Item"),
                 selectedItem = "Item",
-                onSelectedItemChange = { _, _ -> }
+                onSelectedItemChange = { _, _ -> },
             )
         },
         navigationIcon = {
             IconButton(onClick = {}) {
                 Icon(imageVector = AppIcons.AutoMirrored.ArrowBack, contentDescription = null)
             }
-        }
+        },
     )
 }
 
@@ -153,14 +150,14 @@ private fun TopAppBarDropdownMenuLongPreview() = AppTheme {
             TopAppBarDropdownMenu(
                 items = listOf("Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Long Item"),
                 selectedItem = "Very Very Very Very Very Very Very Very Very Very Very Very Very Very Very Long Item",
-                onSelectedItemChange = { _, _ -> }
+                onSelectedItemChange = { _, _ -> },
             )
         },
         navigationIcon = {
             IconButton(onClick = {}) {
                 Icon(imageVector = AppIcons.AutoMirrored.ArrowBack, contentDescription = null)
             }
-        }
+        },
     )
 }
 
@@ -174,9 +171,9 @@ private fun TopAppBarDropdownMenuItemsPreview() = AppTheme {
                 items = listOf(
                     "First",
                     "Second",
-                    "Very very very very very very very very very very very very very long item"
+                    "Very very very very very very very very very very very very very long item",
                 ),
-                onItemClick = { _, _ -> }
+                onItemClick = { _, _ -> },
             )
         }
     }

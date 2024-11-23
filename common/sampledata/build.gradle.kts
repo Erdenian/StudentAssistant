@@ -1,17 +1,16 @@
 plugins {
-    id(libs.plugins.android.library.get().pluginId)
-    id(libs.plugins.kotlin.android.get().pluginId)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
     namespace = "com.erdenian.studentassistant.sampledata"
-
-    buildFeatures.compose = true
 }
 
 dependencies {
     // region Private
     implementation(project(":core:style"))
-    implementation(project(":data:entity"))
+    implementation(project(":features:repository:api"))
     // endregion
 }

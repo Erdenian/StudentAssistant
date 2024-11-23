@@ -31,24 +31,24 @@ fun HomeworkCard(
     deadline: String,
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
-    onLongClick: (() -> Unit)? = null
+    onLongClick: (() -> Unit)? = null,
 ) = ElevatedCard(
-    modifier = modifier
+    modifier = modifier,
 ) {
     Column(
         modifier = Modifier
             .combinedClickable(
                 enabled = (onClick != null) || (onLongClick != null),
                 onLongClick = onLongClick,
-                onClick = onClick ?: {}
+                onClick = onClick ?: {},
             )
-            .padding(MaterialTheme.dimensions.cardContentPadding)
+            .padding(MaterialTheme.dimensions.cardContentPadding),
     ) {
         Text(
             text = subjectName,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
         )
 
         HorizontalDivider(modifier = Modifier.padding(vertical = MaterialTheme.dimensions.dividerPaddingVertical))
@@ -58,14 +58,14 @@ fun HomeworkCard(
             overflow = TextOverflow.Ellipsis,
             maxLines = 3,
             style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
 
         Spacer(modifier = Modifier.height(6.dp))
 
         Text(
             text = stringResource(RS.hc_deadline, deadline),
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.bodySmall,
         )
     }
 }
@@ -77,7 +77,7 @@ private fun HomeworkCardPreview() = AppTheme {
     HomeworkCard(
         subjectName = "Интернет программирование",
         description = "Лабораторная работа",
-        deadline = "21.08.2021"
+        deadline = "21.08.2021",
     )
 }
 
@@ -87,7 +87,7 @@ private fun HomeworkCardLongPreview() = AppTheme {
     HomeworkCard(
         subjectName = "Интернет программирование программирование программирование программирование программирование",
         description = "Лабораторная работа" + " работа".repeat(100),
-        deadline = "21.08.2021"
+        deadline = "21.08.2021",
     )
 }
 
@@ -97,6 +97,6 @@ private fun HomeworkCardMultilinePreview() = AppTheme {
     HomeworkCard(
         subjectName = "Интернет программирование программирование программирование программирование программирование",
         description = "Лабораторная работа" + "\nЛабораторная работа".repeat(100),
-        deadline = "21.08.2021"
+        deadline = "21.08.2021",
     )
 }

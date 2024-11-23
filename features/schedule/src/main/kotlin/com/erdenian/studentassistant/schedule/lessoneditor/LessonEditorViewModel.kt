@@ -3,13 +3,8 @@ package com.erdenian.studentassistant.schedule.lessoneditor
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.erdenian.studentassistant.entity.Lesson
-import com.erdenian.studentassistant.entity.emptyImmutableSortedSet
-import com.erdenian.studentassistant.entity.immutableSortedSetOf
-import com.erdenian.studentassistant.entity.toImmutableSortedSet
-import com.erdenian.studentassistant.repository.HomeworkRepository
-import com.erdenian.studentassistant.repository.LessonRepository
-import com.erdenian.studentassistant.repository.SettingsRepository
+import com.erdenian.studentassistant.repository.api.RepositoryApi
+import com.erdenian.studentassistant.repository.api.entity.Lesson
 import com.erdenian.studentassistant.utils.toSingleLine
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -31,17 +26,19 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class LessonEditorViewModel @AssistedInject constructor(
+internal class LessonEditorViewModel @AssistedInject constructor(
     application: Application,
-    private val lessonRepository: LessonRepository,
-    private val homeworkRepository: HomeworkRepository,
-    settingsRepository: SettingsRepository,
+    repositoryApi: RepositoryApi,
     @Assisted private val semesterId: Long,
     @Assisted lessonId: Long?,
     @Assisted copy: Boolean,
     @Assisted dayOfWeek: DayOfWeek?,
-    @Assisted subjectName: String?
+    @Assisted subjectName: String?,
 ) : AndroidViewModel(application) {
+
+    private val lessonRepository = repositoryApi.lessonRepository
+    private val homeworkRepository = repositoryApi.homeworkRepository
+    private val settingsRepository = repositoryApi.settingsRepository
 
     @AssistedFactory
     abstract class Factory {
@@ -50,24 +47,25 @@ class LessonEditorViewModel @AssistedInject constructor(
             lessonId: Long? = null,
             copy: Boolean = false,
             dayOfWeek: DayOfWeek? = null,
-            subjectName: String? = null
+            subjectName: String? = null,
         ): LessonEditorViewModel
 
         fun get(semesterId: Long, dayOfWeek: DayOfWeek) = getInternal(semesterId, dayOfWeek = dayOfWeek)
         fun get(semesterId: Long, subjectName: String) = getInternal(semesterId, subjectName = subjectName)
-        fun get(semesterId: Long, lessonId: Long, copy: Boolean) = getInternal(semesterId, lessonId = lessonId, copy = copy)
+        fun get(semesterId: Long, lessonId: Long, copy: Boolean) =
+            getInternal(semesterId, lessonId = lessonId, copy = copy)
     }
 
     enum class Error {
         EMPTY_SUBJECT_NAME,
         WRONG_TIMES,
-        EMPTY_REPEAT
+        EMPTY_REPEAT,
     }
 
     enum class Operation {
         LOADING,
         SAVING,
-        DELETING
+        DELETING,
     }
 
     private val operationPrivate = MutableStateFlow<Operation?>(Operation.LOADING)
@@ -83,7 +81,7 @@ class LessonEditorViewModel @AssistedInject constructor(
     val dayOfWeek = MutableStateFlow(dayOfWeek ?: DayOfWeek.MONDAY)
     val weeks = MutableStateFlow(listOf(true))
     val isAdvancedWeeksSelectorEnabled = settingsRepository.getAdvancedWeeksSelectorFlow(viewModelScope)
-    val dates = MutableStateFlow(immutableSortedSetOf<LocalDate>())
+    val dates = MutableStateFlow(emptySet<LocalDate>())
 
     val startTime = MutableStateFlow(settingsRepository.defaultStartTime)
     val endTime = MutableStateFlow<LocalTime>(startTime.value + settingsRepository.defaultLessonDuration)
@@ -115,7 +113,7 @@ class LessonEditorViewModel @AssistedInject constructor(
                         Lesson.Repeat.ByWeekday::class
                     }
                     is Lesson.Repeat.ByDates -> {
-                        dates.value = lessonRepeat.dates.toImmutableSortedSet()
+                        dates.value = lessonRepeat.dates
                         Lesson.Repeat.ByDates::class
                     }
                 }
@@ -136,11 +134,11 @@ class LessonEditorViewModel @AssistedInject constructor(
     }
 
     val error = combine(
-        this.subjectName,
-        startTime,
-        endTime,
-        weeks,
-        dates
+        flow = this.subjectName,
+        flow2 = startTime,
+        flow3 = endTime,
+        flow4 = weeks,
+        flow5 = dates,
     ) { subjectName, startTime, endTime, weeks, dates ->
         when {
             subjectName.isBlank() -> Error.EMPTY_SUBJECT_NAME
@@ -154,20 +152,23 @@ class LessonEditorViewModel @AssistedInject constructor(
     val isEditing = (this.lessonId != null)
 
     val existingSubjects = lessonRepository.getSubjects(semesterId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyImmutableSortedSet())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     val existingTypes = lessonRepository.getTypes(semesterId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyImmutableSortedSet())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     val existingTeachers = lessonRepository.getTeachers(semesterId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyImmutableSortedSet())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     val existingClassrooms = lessonRepository.getClassrooms(semesterId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyImmutableSortedSet())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     private var initialSubjectName: String? = null
     private val isSubjectNameChanged
-        get() = initialSubjectName?.let { it != subjectName.value.trim() } ?: false
+        get() = initialSubjectName?.let { it != subjectName.value.trim() } == true
 
     suspend fun isSubjectNameChangedAndNotLast() = withContext(Dispatchers.IO) {
-        isSubjectNameChanged && lessonRepository.getCount(semesterId, initialSubjectName ?: return@withContext false) > 1
+        isSubjectNameChanged && lessonRepository.getCount(
+            semesterId,
+            initialSubjectName ?: return@withContext false,
+        ) > 1
     }
 
     private val donePrivate = MutableStateFlow(false)
@@ -186,14 +187,14 @@ class LessonEditorViewModel @AssistedInject constructor(
                 .asSequence()
                 .map(String::trim)
                 .filter(String::isNotBlank)
-                .toImmutableSortedSet()
+                .toSet()
             val classrooms = classrooms.value
                 .toSingleLine()
                 .split(',')
                 .asSequence()
                 .map(String::trim)
                 .filter(String::isNotBlank)
-                .toImmutableSortedSet()
+                .toSet()
             val startTime = startTime.value
             val endTime = endTime.value
 
@@ -212,26 +213,54 @@ class LessonEditorViewModel @AssistedInject constructor(
 
                     if (lessonId != null) {
                         lessonRepository.update(
-                            lessonId, subjectName, type, teachers, classrooms, startTime, endTime, semesterId,
-                            dayOfWeek.value, weeksValue
+                            id = lessonId,
+                            subjectName = subjectName,
+                            type = type,
+                            teachers = teachers,
+                            classrooms = classrooms,
+                            startTime = startTime,
+                            endTime = endTime,
+                            semesterId = semesterId,
+                            dayOfWeek = dayOfWeek.value,
+                            weeks = weeksValue,
                         )
                     } else {
                         lessonRepository.insert(
-                            subjectName, type, teachers, classrooms, startTime, endTime, semesterId,
-                            dayOfWeek.value, weeksValue
+                            subjectName = subjectName,
+                            type = type,
+                            teachers = teachers,
+                            classrooms = classrooms,
+                            startTime = startTime,
+                            endTime = endTime,
+                            semesterId = semesterId,
+                            dayOfWeek = dayOfWeek.value,
+                            weeks = weeksValue,
                         )
                     }
                 }
                 Lesson.Repeat.ByDates::class -> {
                     if (lessonId != null) {
                         lessonRepository.update(
-                            lessonId, subjectName, type, teachers, classrooms, startTime, endTime, semesterId,
-                            dates.value
+                            id = lessonId,
+                            subjectName = subjectName,
+                            type = type,
+                            teachers = teachers,
+                            classrooms = classrooms,
+                            startTime = startTime,
+                            endTime = endTime,
+                            semesterId = semesterId,
+                            dates = dates.value,
                         )
                     } else {
                         lessonRepository.insert(
-                            subjectName, type, teachers, classrooms, startTime, endTime, semesterId,
-                            dates.value
+                            subjectName = subjectName,
+                            type = type,
+                            teachers = teachers,
+                            classrooms = classrooms,
+                            startTime = startTime,
+                            endTime = endTime,
+                            semesterId = semesterId,
+                            dates = dates.value,
                         )
                     }
                 }

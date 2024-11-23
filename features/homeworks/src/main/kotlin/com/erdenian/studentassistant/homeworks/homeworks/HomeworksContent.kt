@@ -22,9 +22,9 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.erdenian.studentassistant.entity.Homework
-import com.erdenian.studentassistant.entity.Semester
 import com.erdenian.studentassistant.homeworks.composable.LazyHomeworksList
+import com.erdenian.studentassistant.repository.api.entity.Homework
+import com.erdenian.studentassistant.repository.api.entity.Semester
 import com.erdenian.studentassistant.sampledata.Homeworks
 import com.erdenian.studentassistant.sampledata.Semesters
 import com.erdenian.studentassistant.strings.RS
@@ -46,7 +46,7 @@ internal fun HomeworksContent(
     onSelectedSemesterChange: (Int) -> Unit,
     onAddHomeworkClick: (Semester) -> Unit,
     onHomeworkClick: (Homework) -> Unit,
-    onDeleteHomeworkClick: (Homework) -> Unit
+    onDeleteHomeworkClick: (Homework) -> Unit,
 ) {
     val topAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
@@ -59,38 +59,38 @@ internal fun HomeworksContent(
                         TopAppBarDropdownMenu(
                             items = semesters,
                             selectedItem = selectedSemester.name,
-                            onSelectedItemChange = { index, _ -> onSelectedSemesterChange(index) }
+                            onSelectedItemChange = { index, _ -> onSelectedSemesterChange(index) },
                         )
                     }
                 },
                 actions = {
                     TopAppBarActions(
                         actions = listOfNotNull(
-                            if (selectedSemester != null) {
+                            selectedSemester?.let { semester ->
                                 ActionItem.AlwaysShow(
                                     name = stringResource(RS.h_add),
                                     imageVector = AppIcons.Add,
-                                    onClick = { onAddHomeworkClick(selectedSemester) }
+                                    onClick = { onAddHomeworkClick(semester) },
                                 )
-                            } else null
-                        )
+                            },
+                        ),
                     )
                 },
-                scrollBehavior = topAppBarScrollBehavior
+                scrollBehavior = topAppBarScrollBehavior,
             )
-        }
+        },
     ) { paddingValues ->
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .padding(paddingValues)
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             if (selectedSemester == null) {
                 Text(
                     text = stringResource(RS.h_no_schedule),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal)
+                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal),
                 )
             } else {
                 var contextMenuHomework by remember { mutableStateOf<Homework?>(null) }
@@ -105,9 +105,9 @@ internal fun HomeworksContent(
                                 val homework = checkNotNull(contextMenuHomework)
                                 contextMenuHomework = null
                                 onDeleteHomeworkClick(homework)
-                            }
+                            },
                         )
-                    }
+                    },
                 ) {
                     LazyHomeworksList(
                         overdueHomeworks = overdueHomeworks,
@@ -115,7 +115,7 @@ internal fun HomeworksContent(
                         pastHomeworks = pastHomeworks,
                         onHomeworkClick = onHomeworkClick,
                         onLongHomeworkClick = { contextMenuHomework = it },
-                        modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
+                        modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
                     )
                 }
             }
@@ -136,7 +136,7 @@ private fun HomeworksContentNoSchedulePreview() = AppTheme {
         onSelectedSemesterChange = {},
         onAddHomeworkClick = {},
         onHomeworkClick = {},
-        onDeleteHomeworkClick = {}
+        onDeleteHomeworkClick = {},
     )
 }
 
@@ -153,7 +153,7 @@ private fun HomeworksContentLoadingPreview() = AppTheme {
         onSelectedSemesterChange = {},
         onAddHomeworkClick = {},
         onHomeworkClick = {},
-        onDeleteHomeworkClick = {}
+        onDeleteHomeworkClick = {},
     )
 }
 
@@ -170,7 +170,7 @@ private fun HomeworksContentNoHomeworksPreview() = AppTheme {
         onSelectedSemesterChange = {},
         onAddHomeworkClick = {},
         onHomeworkClick = {},
-        onDeleteHomeworkClick = {}
+        onDeleteHomeworkClick = {},
     )
 }
 
@@ -187,6 +187,6 @@ private fun HomeworksContentRegularPreview() = AppTheme {
         onSelectedSemesterChange = {},
         onAddHomeworkClick = {},
         onHomeworkClick = {},
-        onDeleteHomeworkClick = {}
+        onDeleteHomeworkClick = {},
     )
 }

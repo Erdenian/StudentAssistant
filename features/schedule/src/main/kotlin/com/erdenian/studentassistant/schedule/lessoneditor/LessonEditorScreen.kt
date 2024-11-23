@@ -15,6 +15,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.erdenian.studentassistant.navigation.LocalNavController
+import com.erdenian.studentassistant.schedule.api.ScheduleRoute
+import com.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
 import com.erdenian.studentassistant.schedule.lessoneditor.LessonEditorViewModel.Error
 import com.erdenian.studentassistant.strings.RA
 import com.erdenian.studentassistant.strings.RS
@@ -24,13 +28,27 @@ import com.erdenian.studentassistant.utils.toast
 import kotlinx.coroutines.launch
 
 @Composable
-fun LessonEditorScreen(
-    viewModel: LessonEditorViewModel,
-    navigateBack: () -> Unit
-) {
+internal fun LessonEditorScreen(route: ScheduleRoute.LessonEditor) {
+    val viewModel = viewModel {
+        val semesterId = route.semesterId
+        val dayOfWeek = route.dayOfWeek
+        val subjectName = route.subjectName
+        val lessonId = route.lessonId
+        val copy = route.copy
+
+        val factory = ScheduleComponentHolder.instance.lessonEditorViewModelFactory
+        when {
+            (dayOfWeek != null) -> factory.get(semesterId, dayOfWeek)
+            (subjectName != null) -> factory.get(semesterId, subjectName)
+            (lessonId != null) -> factory.get(semesterId, lessonId, copy == true)
+            else -> throw IllegalArgumentException("Wrong LessonEditor arguments")
+        }
+    }
+    val navController = LocalNavController.current
+
     val done by viewModel.done.collectAsState()
     LaunchedEffect(done) {
-        if (done) navigateBack()
+        if (done) navController.popBackStack()
     }
 
     var isSubjectNameChanged by rememberSaveable { mutableStateOf(false) }
@@ -52,7 +70,7 @@ fun LessonEditorScreen(
     val type by viewModel.type.collectAsState()
     val predefinedTypes = stringArrayResource(RA.lesson_types).toList()
     val existingTypes by viewModel.existingTypes.collectAsState()
-    val displayedTypes = (predefinedTypes + existingTypes.list).distinct()
+    val displayedTypes = (predefinedTypes + existingTypes).distinct()
 
     val teachers by viewModel.teachers.collectAsState()
     val existingTeachers by viewModel.existingTeachers.collectAsState()
@@ -93,8 +111,8 @@ fun LessonEditorScreen(
         }
     }
 
-    var customOperaionMessageId by remember { mutableStateOf<Int?>(null) }
-    (blockingProgressMessageId ?: customOperaionMessageId)?.let { ProgressDialog(stringResource(it)) }
+    var customOperationMessageId by remember { mutableStateOf<Int?>(null) }
+    (blockingProgressMessageId ?: customOperationMessageId)?.let { ProgressDialog(stringResource(it)) }
 
     var showSaveDialog by rememberSaveable { mutableStateOf(false) }
     if (showSaveDialog) {
@@ -105,7 +123,7 @@ fun LessonEditorScreen(
             dismissButton = {
                 TextButton(
                     onClick = { showSaveDialog = false },
-                    content = { Text(text = stringResource(RS.le_rename_others_cancel)) }
+                    content = { Text(text = stringResource(RS.le_rename_others_cancel)) },
                 )
             },
             confirmButton = {
@@ -114,16 +132,16 @@ fun LessonEditorScreen(
                         viewModel.save(false)
                         showSaveDialog = false
                     },
-                    content = { Text(text = stringResource(RS.le_rename_others_no)) }
+                    content = { Text(text = stringResource(RS.le_rename_others_no)) },
                 )
                 TextButton(
                     onClick = {
                         viewModel.save(true)
                         showSaveDialog = false
                     },
-                    content = { Text(text = stringResource(RS.le_rename_others_yes)) }
+                    content = { Text(text = stringResource(RS.le_rename_others_yes)) },
                 )
-            }
+            },
         )
     }
 
@@ -136,7 +154,7 @@ fun LessonEditorScreen(
             dismissButton = {
                 TextButton(
                     onClick = { showDeleteWithHomeworksDialog = false },
-                    content = { Text(text = stringResource(RS.le_delete_homeworks_cancel)) }
+                    content = { Text(text = stringResource(RS.le_delete_homeworks_cancel)) },
                 )
             },
             confirmButton = {
@@ -145,16 +163,16 @@ fun LessonEditorScreen(
                         viewModel.delete(false)
                         showDeleteWithHomeworksDialog = false
                     },
-                    content = { Text(text = stringResource(RS.le_delete_homeworks_no)) }
+                    content = { Text(text = stringResource(RS.le_delete_homeworks_no)) },
                 )
                 TextButton(
                     onClick = {
                         viewModel.delete(true)
                         showDeleteWithHomeworksDialog = false
                     },
-                    content = { Text(text = stringResource(RS.le_delete_homeworks_yes)) }
+                    content = { Text(text = stringResource(RS.le_delete_homeworks_yes)) },
                 )
-            }
+            },
         )
     }
 
@@ -166,7 +184,7 @@ fun LessonEditorScreen(
             dismissButton = {
                 TextButton(
                     onClick = { showDeleteWithoutHomeworksDialog = false },
-                    content = { Text(text = stringResource(RS.le_delete_no)) }
+                    content = { Text(text = stringResource(RS.le_delete_no)) },
                 )
             },
             confirmButton = {
@@ -175,9 +193,9 @@ fun LessonEditorScreen(
                         viewModel.delete()
                         showDeleteWithoutHomeworksDialog = false
                     },
-                    content = { Text(text = stringResource(RS.le_delete_yes)) }
+                    content = { Text(text = stringResource(RS.le_delete_yes)) },
                 )
-            }
+            },
         )
     }
 
@@ -185,39 +203,45 @@ fun LessonEditorScreen(
         isProgress = nonBlockingProgress,
         isEditing = isEditing,
         subjectName = subjectName,
-        existingSubjects = existingSubjects.list,
+        existingSubjects = existingSubjects,
         subjectNameErrorMessage = subjectNameErrorMessage,
         type = type,
         existingTypes = displayedTypes,
         teachers = teachers,
-        existingTeachers = existingTeachers.list,
+        existingTeachers = existingTeachers,
         classrooms = classrooms,
-        existingClassrooms = existingClassrooms.list,
+        existingClassrooms = existingClassrooms,
         startTime = startTime,
         endTime = endTime,
         dayOfWeek = dayOfWeek,
         weeks = weeks,
         isAdvancedWeeksSelectorEnabled = isAdvancedWeeksSelectorEnabled,
-        onBackClick = navigateBack,
+        onBackClick = navController::popBackStack,
         onSaveClick = {
             isSubjectNameChanged = true
             if (errorMessage != null) {
                 context.toast(errorMessage)
             } else {
-                customOperaionMessageId = RS.le_rename_others_progress
+                customOperationMessageId = RS.le_rename_others_progress
                 coroutineScope.launch {
-                    if (viewModel.isSubjectNameChangedAndNotLast()) showSaveDialog = true
-                    else viewModel.save()
-                    customOperaionMessageId = null
+                    if (viewModel.isSubjectNameChangedAndNotLast()) {
+                        showSaveDialog = true
+                    } else {
+                        viewModel.save()
+                    }
+                    customOperationMessageId = null
                 }
             }
         },
         onDeleteClick = {
-            customOperaionMessageId = RS.le_delete_homeworks_progress
+            customOperationMessageId = RS.le_delete_homeworks_progress
             coroutineScope.launch {
-                if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) showDeleteWithHomeworksDialog = true
-                else showDeleteWithoutHomeworksDialog = true
-                customOperaionMessageId = null
+                if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) {
+                    showDeleteWithHomeworksDialog = true
+                } else {
+                    showDeleteWithoutHomeworksDialog = true
+                }
+                customOperationMessageId = null
             }
         },
         onSubjectNameChange = { value ->
@@ -230,6 +254,6 @@ fun LessonEditorScreen(
         onStartTimeChange = { viewModel.startTime.value = it },
         onEndTimeChange = { viewModel.endTime.value = it },
         onDayOfWeekChange = { viewModel.dayOfWeek.value = it },
-        onWeeksChange = { viewModel.weeks.value = it }
+        onWeeksChange = { viewModel.weeks.value = it },
     )
 }

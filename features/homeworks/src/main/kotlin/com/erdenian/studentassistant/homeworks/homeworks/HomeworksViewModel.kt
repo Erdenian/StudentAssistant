@@ -3,13 +3,8 @@ package com.erdenian.studentassistant.homeworks.homeworks
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.erdenian.studentassistant.entity.Homework
-import com.erdenian.studentassistant.entity.ImmutableSortedSet
-import com.erdenian.studentassistant.entity.immutableSortedSetOfNotNull
-import com.erdenian.studentassistant.entity.toImmutableSortedSet
-import com.erdenian.studentassistant.repository.HomeworkRepository
-import com.erdenian.studentassistant.repository.SelectedSemesterRepository
-import com.erdenian.studentassistant.repository.SemesterRepository
+import com.erdenian.studentassistant.repository.api.RepositoryApi
+import com.erdenian.studentassistant.repository.api.entity.Homework
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,15 +15,17 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class HomeworksViewModel @Inject constructor(
+internal class HomeworksViewModel @Inject constructor(
     application: Application,
-    private val selectedSemesterRepository: SelectedSemesterRepository,
-    semesterRepository: SemesterRepository,
-    private val homeworkRepository: HomeworkRepository
+    repositoryApi: RepositoryApi,
 ) : AndroidViewModel(application) {
 
+    private val selectedSemesterRepository = repositoryApi.selectedSemesterRepository
+    private val semesterRepository = repositoryApi.semesterRepository
+    private val homeworkRepository = repositoryApi.homeworkRepository
+
     enum class Operation {
-        DELETING_HOMEWORK
+        DELETING_HOMEWORK,
     }
 
     private val operationPrivate = MutableStateFlow<Operation?>(null)
@@ -36,18 +33,17 @@ class HomeworksViewModel @Inject constructor(
 
     val selectedSemester = selectedSemesterRepository.selectedFlow
     val allSemesters = semesterRepository.allFlow
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), immutableSortedSetOfNotNull(selectedSemester.value))
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOfNotNull(selectedSemester.value))
 
     fun selectSemester(semesterId: Long) = selectedSemesterRepository.selectSemester(semesterId)
 
     private val deletedHomeworksIds = MutableStateFlow(emptySet<Long>())
-    private fun Flow<ImmutableSortedSet<Homework>>.stateWithDeleted() =
+    private fun Flow<List<Homework>>.stateWithDeleted() =
         combine(
             this.onEach { deletedHomeworksIds.value = emptySet() },
-            deletedHomeworksIds
+            deletedHomeworksIds,
         ) { homeworks, deletedIds ->
-            if (deletedIds.isEmpty()) homeworks
-            else homeworks.asSequence().filter { it.id !in deletedIds }.toImmutableSortedSet()
+            if (deletedIds.isEmpty()) homeworks else homeworks.filter { it.id !in deletedIds }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     val overdue = homeworkRepository.overdueFlow.stateWithDeleted()

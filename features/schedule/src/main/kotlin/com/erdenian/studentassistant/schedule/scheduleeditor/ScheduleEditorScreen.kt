@@ -1,5 +1,6 @@
 package com.erdenian.studentassistant.schedule.scheduleeditor
 
+import android.annotation.SuppressLint
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -15,31 +16,36 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
-import com.erdenian.studentassistant.entity.Lesson
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.erdenian.studentassistant.navigation.LocalNavController
+import com.erdenian.studentassistant.repository.api.entity.Lesson
+import com.erdenian.studentassistant.schedule.api.ScheduleRoute
+import com.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
 import java.time.DayOfWeek
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @Composable
-fun ScheduleEditorScreen(
-    viewModel: ScheduleEditorViewModel,
-    navigateBack: () -> Unit,
-    navigateToEditSemester: (semesterId: Long) -> Unit,
-    navigateToEditLesson: (semesterId: Long, lessonId: Long, copy: Boolean) -> Unit,
-    navigateToCreateLesson: (semesterId: Long, dayOfWeek: DayOfWeek) -> Unit
-) {
+internal fun ScheduleEditorScreen(route: ScheduleRoute.ScheduleEditor) {
+    val viewModel = viewModel {
+        ScheduleComponentHolder.instance.scheduleEditorViewModelFactory.get(route.semesterId)
+    }
+    val navController = LocalNavController.current
+
     val isDeleted by viewModel.isDeleted.collectAsState()
     LaunchedEffect(isDeleted) {
-        if (isDeleted) navigateBack()
+        if (isDeleted) navController.popBackStack()
     }
 
+    @Suppress("Wrapping")
     val rememberLessons = remember<@Composable (Int) -> State<List<Lesson>?>>(viewModel) {
         { page ->
+            // https://issuetracker.google.com/issues/368420773
+            @SuppressLint("ProduceStateDoesNotAssignValue")
             produceState<List<Lesson>?>(null, page) {
                 val dayOfWeek = DayOfWeek.of(page + 1)
-                viewModel.getLessons(dayOfWeek).map { it.list }.collect { value = it }
+                viewModel.getLessons(dayOfWeek).collect { value = it }
             }
         }
     }
@@ -64,7 +70,7 @@ fun ScheduleEditorScreen(
             dismissButton = {
                 TextButton(
                     onClick = { showDeleteSemesterDialog = false },
-                    content = { Text(text = stringResource(RS.sce_delete_no)) }
+                    content = { Text(text = stringResource(RS.sce_delete_no)) },
                 )
             },
             confirmButton = {
@@ -73,9 +79,9 @@ fun ScheduleEditorScreen(
                         viewModel.deleteSemester()
                         showDeleteSemesterDialog = false
                     },
-                    content = { Text(text = stringResource(RS.sce_delete_yes)) }
+                    content = { Text(text = stringResource(RS.sce_delete_yes)) },
                 )
-            }
+            },
         )
     }
 
@@ -88,7 +94,7 @@ fun ScheduleEditorScreen(
             dismissButton = {
                 TextButton(
                     onClick = { lessonForDeleteWithHomeworksDialog = null },
-                    content = { Text(text = stringResource(RS.le_delete_homeworks_cancel)) }
+                    content = { Text(text = stringResource(RS.le_delete_homeworks_cancel)) },
                 )
             },
             confirmButton = {
@@ -97,16 +103,16 @@ fun ScheduleEditorScreen(
                         viewModel.deleteLesson(lesson, false)
                         lessonForDeleteWithHomeworksDialog = null
                     },
-                    content = { Text(text = stringResource(RS.le_delete_homeworks_no)) }
+                    content = { Text(text = stringResource(RS.le_delete_homeworks_no)) },
                 )
                 TextButton(
                     onClick = {
                         viewModel.deleteLesson(lesson, true)
                         lessonForDeleteWithHomeworksDialog = null
                     },
-                    content = { Text(text = stringResource(RS.le_delete_homeworks_yes)) }
+                    content = { Text(text = stringResource(RS.le_delete_homeworks_yes)) },
                 )
-            }
+            },
         )
     }
 
@@ -118,7 +124,7 @@ fun ScheduleEditorScreen(
             dismissButton = {
                 TextButton(
                     onClick = { lessonForDeleteWithoutHomeworksDialog = null },
-                    content = { Text(text = stringResource(RS.le_delete_no)) }
+                    content = { Text(text = stringResource(RS.le_delete_no)) },
                 )
             },
             confirmButton = {
@@ -127,9 +133,9 @@ fun ScheduleEditorScreen(
                         viewModel.deleteLesson(lesson)
                         lessonForDeleteWithoutHomeworksDialog = null
                     },
-                    content = { Text(text = stringResource(RS.le_delete_yes)) }
+                    content = { Text(text = stringResource(RS.le_delete_yes)) },
                 )
-            }
+            },
         )
     }
 
@@ -137,19 +143,36 @@ fun ScheduleEditorScreen(
 
     ScheduleEditorContent(
         rememberLessons = rememberLessons,
-        onBackClick = navigateBack,
-        onEditSemesterClick = { navigateToEditSemester(viewModel.semesterId) },
+        onBackClick = navController::popBackStack,
+        onEditSemesterClick = {
+            navController.navigate(ScheduleRoute.SemesterEditor(semesterId = viewModel.semesterId))
+        },
         onDeleteSemesterClick = { showDeleteSemesterDialog = true },
-        onLessonClick = { navigateToEditLesson(viewModel.semesterId, it.id, false) },
-        onCopyLessonClick = { navigateToEditLesson(viewModel.semesterId, it.id, true) },
+        onLessonClick = { lesson ->
+            navController.navigate(
+                ScheduleRoute.LessonEditor(semesterId = viewModel.semesterId, lessonId = lesson.id, copy = false),
+            )
+        },
+        onCopyLessonClick = { lesson ->
+            navController.navigate(
+                ScheduleRoute.LessonEditor(semesterId = viewModel.semesterId, lessonId = lesson.id, copy = true),
+            )
+        },
         onDeleteLessonClick = { lesson ->
             showHomeworksCounterOperation = true
             coroutineScope.launch {
-                if (viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson)) lessonForDeleteWithHomeworksDialog = lesson
-                else lessonForDeleteWithoutHomeworksDialog = lesson
+                if (viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson)) {
+                    lessonForDeleteWithHomeworksDialog = lesson
+                } else {
+                    lessonForDeleteWithoutHomeworksDialog = lesson
+                }
                 showHomeworksCounterOperation = false
             }
         },
-        onAddLessonClick = { navigateToCreateLesson(viewModel.semesterId, it) }
+        onAddLessonClick = { dayOfWeek ->
+            navController.navigate(
+                ScheduleRoute.LessonEditor(semesterId = viewModel.semesterId, dayOfWeekValue = dayOfWeek.value),
+            )
+        },
     )
 }

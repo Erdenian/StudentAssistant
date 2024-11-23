@@ -1,20 +1,22 @@
 plugins {
-    id(libs.plugins.android.library.get().pluginId)
-    id(libs.plugins.kotlin.android.get().pluginId)
-    id(libs.plugins.kotlin.ksp.get().pluginId)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
     namespace = "com.erdenian.studentassistant.settings"
-
-    buildFeatures.compose = true
 }
 
 dependencies {
     // region Private
-    implementation(project(":data:repository"))
     implementation(project(":common:uikit"))
     implementation(project(":common:utils"))
+    implementation(project(":common:navigation"))
+
+    implementation(project(":features:repository:api"))
+    implementation(project(":features:settings:api"))
     // endregion
 
     // region AndroidX

@@ -9,6 +9,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.erdenian.studentassistant.navigation.LocalNavController
+import com.erdenian.studentassistant.schedule.api.ScheduleRoute
+import com.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
 import com.erdenian.studentassistant.schedule.semestereditor.SemesterEditorViewModel.Error
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
@@ -16,13 +20,15 @@ import com.erdenian.studentassistant.utils.toSingleLine
 import com.erdenian.studentassistant.utils.toast
 
 @Composable
-fun SemesterEditorScreen(
-    viewModel: SemesterEditorViewModel,
-    navigateBack: () -> Unit
-) {
+internal fun SemesterEditorScreen(route: ScheduleRoute.SemesterEditor) {
+    val viewModel = viewModel {
+        ScheduleComponentHolder.instance.semesterEditorViewModelFactory.get(route.semesterId)
+    }
+    val navController = LocalNavController.current
+
     val done by viewModel.done.collectAsState()
     LaunchedEffect(done) {
-        if (done) navigateBack()
+        if (done) navController.popBackStack()
     }
 
     var isNameChanged by rememberSaveable { mutableStateOf(false) }
@@ -73,7 +79,7 @@ fun SemesterEditorScreen(
         firstDay = firstDay,
         lastDay = lastDay,
         errorMessage = nameErrorMessage,
-        onBackClick = navigateBack,
+        onBackClick = navController::popBackStack,
         onSaveClick = {
             isNameChanged = true
             errorMessage?.let { context.toast(it) } ?: viewModel.save()
@@ -83,6 +89,6 @@ fun SemesterEditorScreen(
             viewModel.name.value = value.toSingleLine()
         },
         onFirstDayChange = { viewModel.firstDay.value = it },
-        onLastDayChange = { viewModel.lastDay.value = it }
+        onLastDayChange = { viewModel.lastDay.value = it },
     )
 }

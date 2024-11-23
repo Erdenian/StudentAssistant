@@ -1,5 +1,5 @@
 build:
-  maxIssues: 170
+  maxIssues: 9
   excludeCorrectable: false
   weights:
     UnsafeCallOnNullableType: 100500
@@ -46,7 +46,7 @@ output-reports:
   active: true
   exclude:
     - 'TxtOutputReport'
-    - 'XmlOutputReport'
+    # - 'XmlOutputReport'
     # - 'HtmlOutputReport'
     - 'MdOutputReport'
     - 'SarifOutputReport'
@@ -68,7 +68,7 @@ comments:
     endOfSentenceFormat: '([.?!][ \t\n\r\f<])|([.?!:]$)'
   KDocReferencesNonPublicProperty:
     active: true
-    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
   OutdatedDocumentation:
     active: false
     matchTypeParameters: true
@@ -76,7 +76,7 @@ comments:
     allowParamOnConstructorProperties: true
   UndocumentedPublicClass:
     active: false
-    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     searchInNestedClass: true
     searchInInnerClass: true
     searchInInnerObject: true
@@ -84,11 +84,11 @@ comments:
     searchInProtectedClass: true
   UndocumentedPublicFunction:
     active: false
-    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     searchProtectedFunction: true
   UndocumentedPublicProperty:
     active: false
-    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     searchProtectedProperty: true
 
 complexity:
@@ -96,6 +96,7 @@ complexity:
   CognitiveComplexMethod:
     active: true
     threshold: 15
+    ignoreAnnotated: ['Composable']
   ComplexCondition:
     active: true
     threshold: 4
@@ -121,6 +122,7 @@ complexity:
       - 'run'
       - 'use'
       - 'with'
+    ignoreAnnotated: ['Composable']
   LabeledExpression:
     active: false
     ignoredLabels: []
@@ -132,7 +134,7 @@ complexity:
     threshold: 60
     ignoreAnnotated: ['Composable']
   LongParameterList:
-    active: true
+    active: false
     functionThreshold: 6
     constructorThreshold: 7
     ignoreDefaultParameters: false
@@ -159,17 +161,18 @@ complexity:
       - 'kotlin.let'
       - 'kotlin.also'
   ReplaceSafeCallChainWithRun:
-    active: true
+    active: false
   StringLiteralDuplication:
     active: true
-    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
+    ignoreAnnotated: ['*Preview']
     threshold: 3
     ignoreAnnotation: true
     excludeStringsWithLessThan5Characters: true
     ignoreStringsRegex: '$^'
   TooManyFunctions:
     active: true
-    excludes: ['**/*Dao.kt', '**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/*Dao.kt', '**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     thresholdInFiles: 11
     thresholdInClasses: 11
     thresholdInInterfaces: 11
@@ -178,13 +181,14 @@ complexity:
     ignoreDeprecated: false
     ignorePrivate: false
     ignoreOverridden: false
+    ignoreAnnotatedFunctions: []
 
 coroutines:
   active: true
   GlobalCoroutineUsage:
     active: true
   InjectDispatcher:
-    active: true
+    active: false
     dispatcherNames:
       - 'IO'
       - 'Default'
@@ -246,7 +250,7 @@ exceptions:
       - 'toString'
   InstanceOfCheckForException:
     active: true
-    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
   NotImplementedDeclaration:
     active: true
   ObjectExtendsThrowable:
@@ -272,7 +276,7 @@ exceptions:
     active: true
   ThrowingExceptionsWithoutMessageOrCause:
     active: true
-    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     exceptions:
       - 'ArrayIndexOutOfBoundsException'
       - 'Exception'
@@ -287,7 +291,7 @@ exceptions:
     active: true
   TooGenericExceptionCaught:
     active: true
-    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     exceptionNames:
       - 'ArrayIndexOutOfBoundsException'
       - 'Error'
@@ -309,7 +313,7 @@ exceptions:
 naming:
   active: true
   BooleanPropertyNaming:
-    active: true
+    active: false
     allowedPattern: '^(is|has|are)'
   ClassNaming:
     active: true
@@ -327,19 +331,19 @@ naming:
     forbiddenName: []
   FunctionMaxLength:
     active: true
-    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     maximumFunctionNameLength: 30
-    ignoreAnnotated: ['Composable']
+    ignoreAnnotated: ['Composable', 'Provides', 'Binds']
   FunctionMinLength:
     active: true
-    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     minimumFunctionNameLength: 3
   FunctionNaming:
     active: true
     excludes: []
     functionPattern: '[a-z][a-zA-Z0-9]*'
     excludeClassPattern: '$^'
-    ignoreAnnotated: ['Composable']
+    ignoreAnnotated: ['Composable', 'Test']
   FunctionParameterNaming:
     active: true
     parameterPattern: '[a-z][A-Za-z0-9]*'
@@ -350,7 +354,7 @@ naming:
     requireRootInDeclaration: true
   LambdaParameterNaming:
     active: true
-    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     parameterPattern: '[a-z][A-Za-z0-9]*|_'
   MatchingDeclarationName:
     active: true
@@ -361,7 +365,7 @@ naming:
   NoNameShadowing:
     active: true
   NonBooleanPropertyPrefixedWithIs:
-    active: true
+    active: false
   ObjectPropertyNaming:
     active: true
     constantPattern: '[A-Za-z][_A-Za-z0-9]*'
@@ -396,10 +400,10 @@ performance:
     threshold: 2
   ForEachOnRange:
     active: true
-    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
   SpreadOperator:
     active: true
-    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
   UnnecessaryPartOfBinaryExpression:
     active: true
   UnnecessaryTemporaryInstantiation:
@@ -462,7 +466,7 @@ potential-bugs:
   ImplicitDefaultLocale:
     active: true
   ImplicitUnitReturnType:
-    active: true
+    active: false
     allowExplicitReturnType: true
   InvalidRange:
     active: true
@@ -472,7 +476,7 @@ potential-bugs:
     active: true
   LateinitUsage:
     active: true
-    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**', '**/*ComponentHolder.kt']
     ignoreOnClassesPattern: ''
   MapGetWithNotNullAssertionOperator:
     active: true
@@ -499,7 +503,7 @@ potential-bugs:
     active: true
   UnsafeCallOnNullableType:
     active: true
-    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
   UnsafeCast:
     active: true
   UnusedUnaryOperator:
@@ -616,7 +620,7 @@ style:
     maxJumpCount: 1
   MagicNumber:
     active: true
-    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**', '**/*.kts']
     ignoreNumbers:
       - '-1'
       - '0'
@@ -641,7 +645,7 @@ style:
   MaxLineLength:
     active: true
     excludes: '**/*Dao.kt'
-    maxLineLength: 130
+    maxLineLength: 120
     excludePackageStatements: true
     excludeImportStatements: true
     excludeCommentStatements: false
@@ -682,6 +686,7 @@ style:
     active: true
   RedundantVisibilityModifierRule:
     active: true
+    excludes: ['**/features/**/*ApiImpl.kt', '**/features/**/*Dependencies.kt']
   ReturnCount:
     active: true
     max: 2
@@ -748,7 +753,7 @@ style:
   UnusedPrivateMember:
     active: true
     allowedNames: ''
-    ignoreAnnotated: ['Preview']
+    ignoreAnnotated: ['*Preview']
   UnusedPrivateProperty:
     active: true
     allowedNames: '_|ignored|expected|serialVersionUID'
@@ -798,7 +803,7 @@ formatting:
   android: true
   autoCorrect: false
   AnnotationOnSeparateLine:
-    active: true
+    active: false
     autoCorrect: true
     indentSize: 4
   AnnotationSpacing:
@@ -808,16 +813,42 @@ formatting:
     active: false
     autoCorrect: true
     indentSize: 4
-    maxLineLength: 130
+    maxLineLength: 120
+    ignoreRuleParameterThreshold: 8
+  BackingPropertyNaming:
+    active: true
+  BinaryExpressionWrapping:
+    active: true
+    autoCorrect: true
+    maxLineLength: 120
+    indentSize: 4
+  BlankLineBeforeDeclaration:
+    active: true
+    autoCorrect: true
+  BlankLineBetweenWhenConditions:
+    active: true
+    autoCorrect: true
+    lineBreakAfterWhenEntries: true
   BlockCommentInitialStarAlignment:
     active: true
     autoCorrect: true
+  ChainMethodContinuation:
+    active: true
+    autoCorrect: true
+    indentSize: 4
+    maxLineLength: 120
+    forceMultilineWhenChainOperatorCountGreaterOrEqualThan: 4
   ChainWrapping:
     active: true
     autoCorrect: true
     indentSize: 4
   ClassName:
     active: true
+  ClassSignature:
+    active: true
+    autoCorrect: true
+    indentSize: 4
+    maxLineLength: 120
   CommentSpacing:
     active: true
     autoCorrect: true
@@ -825,16 +856,18 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
+  ConditionWrapping:
+    active: true
+    autoCorrect: true
+    indentSize: 4
   ContextReceiverMapping:
     active: true
     autoCorrect: true
-    maxLineLength: 130
+    maxLineLength: 120
     indentSize: 4
-  DiscouragedCommentLocation:
-    active: true
-    autoCorrect: true
   EnumEntryNameCase:
     active: true
+    # aliases: ['EnumEntryName']
     autoCorrect: true
   EnumWrapping:
     active: true
@@ -849,20 +882,33 @@ formatting:
   FunKeywordSpacing:
     active: true
     autoCorrect: true
+  FunctionExpressionBody:
+    active: true
+    autoCorrect: true
+    indentSize: 4
+    maxLineLength: 120
+  FunctionLiteral:
+    active: true
+    autoCorrect: true
+    indentSize: 4
+    maxLineLength: 120
   FunctionName:
     active: false
   FunctionReturnTypeSpacing:
     active: true
     autoCorrect: true
-    maxLineLength: 130
+    maxLineLength: 120
   FunctionSignature:
     active: false
     autoCorrect: true
     forceMultilineWhenParameterCountGreaterOrEqualThan: 2147483647
     functionBodyExpressionWrapping: 'default'
-    maxLineLength: 130
+    maxLineLength: 120
     indentSize: 4
   FunctionStartOfBodySpacing:
+    active: true
+    autoCorrect: true
+  FunctionTypeModifierSpacing:
     active: true
     autoCorrect: true
   FunctionTypeReferenceSpacing:
@@ -879,19 +925,24 @@ formatting:
   ImportOrdering:
     active: true
     autoCorrect: true
-    layout: '*'
+    layout: '*,^'
   Indentation:
     active: true
     autoCorrect: true
     indentSize: 4
+  Kdoc:
+    active: true
   KdocWrapping:
     active: true
     autoCorrect: true
     indentSize: 4
   MaximumLineLength:
-    active: true
-    maxLineLength: 130
+    active: false
+    # aliases: ['MaxLineLength']
+    maxLineLength: 120
     ignoreBackTickedIdentifier: false
+  MixedConditionOperators:
+    active: true
   ModifierListSpacing:
     active: true
     autoCorrect: true
@@ -903,6 +954,10 @@ formatting:
     autoCorrect: true
     indentSize: 4
   MultilineExpressionWrapping:
+    active: false
+    autoCorrect: true
+    indentSize: 4
+  MultilineLoop:
     active: false
     autoCorrect: true
     indentSize: 4
@@ -923,6 +978,8 @@ formatting:
   NoEmptyClassBody:
     active: true
     autoCorrect: true
+  NoEmptyFile:
+    active: true
   NoEmptyFirstLineInClassBody:
     active: false
     autoCorrect: true
@@ -963,27 +1020,27 @@ formatting:
     autoCorrect: true
   PackageName:
     active: true
-    autoCorrect: true
   ParameterListSpacing:
     active: true
     autoCorrect: true
+    maxLineLength: 120
   ParameterListWrapping:
     active: true
     autoCorrect: true
-    maxLineLength: 130
+    maxLineLength: 120
     indentSize: 4
   ParameterWrapping:
     active: true
     autoCorrect: true
     indentSize: 4
-    maxLineLength: 130
+    maxLineLength: 120
   PropertyName:
     active: false
   PropertyWrapping:
     active: true
     autoCorrect: true
     indentSize: 4
-    maxLineLength: 130
+    maxLineLength: 120
   SpacingAroundAngleBrackets:
     active: true
     autoCorrect: true
@@ -996,6 +1053,7 @@ formatting:
   SpacingAroundCurly:
     active: true
     autoCorrect: true
+    indentSize: 4
   SpacingAroundDot:
     active: true
     autoCorrect: true
@@ -1014,6 +1072,9 @@ formatting:
   SpacingAroundRangeOperator:
     active: true
     autoCorrect: true
+  SpacingAroundSquareBrackets:
+    active: true
+    autoCorrect: true
   SpacingAroundUnaryOperator:
     active: true
     autoCorrect: true
@@ -1026,6 +1087,10 @@ formatting:
   SpacingBetweenFunctionNameAndOpeningParenthesis:
     active: true
     autoCorrect: true
+  StatementWrapping:
+    active: true
+    autoCorrect: true
+    indentSize: 4
   StringTemplate:
     active: true
     autoCorrect: true
@@ -1036,19 +1101,23 @@ formatting:
   TrailingCommaOnCallSite:
     active: true
     autoCorrect: true
-    useTrailingCommaOnCallSite: false
+    useTrailingCommaOnCallSite: true
   TrailingCommaOnDeclarationSite:
     active: true
     autoCorrect: true
-    useTrailingCommaOnDeclarationSite: false
+    useTrailingCommaOnDeclarationSite: true
   TryCatchFinallySpacing:
     active: true
     autoCorrect: true
     indentSize: 4
+  TypeArgumentComment:
+    active: true
   TypeArgumentListSpacing:
     active: true
     autoCorrect: true
     indentSize: 4
+  TypeParameterComment:
+    active: true
   TypeParameterListSpacing:
     active: true
     autoCorrect: true
@@ -1056,8 +1125,12 @@ formatting:
   UnnecessaryParenthesesBeforeTrailingLambda:
     active: true
     autoCorrect: true
+  ValueArgumentComment:
+    active: true
+  ValueParameterComment:
+    active: true
   Wrapping:
     active: true
     autoCorrect: true
     indentSize: 4
-    maxLineLength: 130
+    maxLineLength: 120

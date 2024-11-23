@@ -3,10 +3,7 @@ package com.erdenian.studentassistant.homeworks.homeworkeditor
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.erdenian.studentassistant.entity.emptyImmutableSortedSet
-import com.erdenian.studentassistant.repository.HomeworkRepository
-import com.erdenian.studentassistant.repository.LessonRepository
-import com.erdenian.studentassistant.repository.SemesterRepository
+import com.erdenian.studentassistant.repository.api.RepositoryApi
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -24,22 +21,24 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class HomeworkEditorViewModel @AssistedInject constructor(
+internal class HomeworkEditorViewModel @AssistedInject constructor(
     application: Application,
-    semesterRepository: SemesterRepository,
-    lessonRepository: LessonRepository,
-    private val homeworkRepository: HomeworkRepository,
+    repositoryApi: RepositoryApi,
     @Assisted val semesterId: Long,
     @Assisted private val homeworkId: Long?,
-    @Assisted subjectName: String?
+    @Assisted subjectName: String?,
 ) : AndroidViewModel(application) {
+
+    private val semesterRepository = repositoryApi.semesterRepository
+    private val lessonRepository = repositoryApi.lessonRepository
+    private val homeworkRepository = repositoryApi.homeworkRepository
 
     @AssistedFactory
     abstract class Factory {
         internal abstract fun getInternal(
             semesterId: Long,
             homeworkId: Long? = null,
-            subjectName: String? = null
+            subjectName: String? = null,
         ): HomeworkEditorViewModel
 
         fun get(semesterId: Long, subjectName: String? = null) = getInternal(semesterId, subjectName = subjectName)
@@ -48,13 +47,13 @@ class HomeworkEditorViewModel @AssistedInject constructor(
 
     enum class Error {
         EMPTY_SUBJECT,
-        EMPTY_DESCRIPTION
+        EMPTY_DESCRIPTION,
     }
 
     enum class Operation {
         LOADING,
         SAVING,
-        DELETING
+        DELETING,
     }
 
     private val isHomeworkLoaded = MutableStateFlow(homeworkId == null)
@@ -72,7 +71,7 @@ class HomeworkEditorViewModel @AssistedInject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
-            initialValue = emptyImmutableSortedSet()
+            initialValue = emptyList(),
         )
     val semesterDatesRange = semesterRepository.getFlow(semesterId)
         .filterNotNull()
@@ -89,7 +88,7 @@ class HomeworkEditorViewModel @AssistedInject constructor(
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
-        initialValue = null
+        initialValue = null,
     )
 
     val isEditing get() = (homeworkId != null)
@@ -128,9 +127,20 @@ class HomeworkEditorViewModel @AssistedInject constructor(
         operationPrivate.value = Operation.SAVING
         viewModelScope.launch {
             if (homeworkId != null) {
-                homeworkRepository.update(homeworkId, subjectName.value, description.value, deadline.value, semesterId)
+                homeworkRepository.update(
+                    id = homeworkId,
+                    subjectName = subjectName.value,
+                    description = description.value,
+                    deadline = deadline.value,
+                    semesterId = semesterId,
+                )
             } else {
-                homeworkRepository.insert(subjectName.value, description.value, deadline.value, semesterId)
+                homeworkRepository.insert(
+                    subjectName = subjectName.value,
+                    description = description.value,
+                    deadline = deadline.value,
+                    semesterId = semesterId,
+                )
             }
 
             operationPrivate.value = null

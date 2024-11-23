@@ -21,7 +21,7 @@ internal val LightColorScheme = lightColorScheme(
     tertiary = Color(0xFF6E5676),
     onTertiary = Color(0xFFFFFFFF),
     tertiaryContainer = Color(0xFFF7D8FF),
-    onTertiaryContainer = Color(0xFF271430)
+    onTertiaryContainer = Color(0xFF271430),
 )
 
 internal val DarkColorScheme = darkColorScheme(
@@ -39,5 +39,5 @@ internal val DarkColorScheme = darkColorScheme(
     tertiary = Color(0xFFDABDE2),
     onTertiary = Color(0xFF3D2846),
     tertiaryContainer = Color(0xFF553F5D),
-    onTertiaryContainer = Color(0xFFF7D8FF)
+    onTertiaryContainer = Color(0xFFF7D8FF),
 )

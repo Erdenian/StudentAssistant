@@ -58,12 +58,12 @@
     <string name="le_teachers">Преподаватели</string>
     <string name="le_classrooms">Аудитории</string>
     <string name="le_start_time">Время начала</string>
-    <string name="le_end_time">Время конца</string>
+    <string name="le_end_time">Время окончания</string>
     <string name="le_repeat_type">Когда повторять</string>
     <string name="le_save">Сохранить</string>
     <string name="le_save_progress">Сохранение…</string>
     <string name="le_error_empty_subject_name">Введите название занятия</string>
-    <string name="le_error_wrong_time">Время начала и конца введено некорректно</string>
+    <string name="le_error_wrong_time">Время начала и окончания введено некорректно</string>
     <string name="le_error_empty_repeat">Не выбраны дни для повторения</string>
     <string name="le_rename_others_progress">Получение информации о других занятиях…</string>
     <string name="le_rename_others_title">Изменить занятия?</string>
@@ -138,6 +138,9 @@
 
     <!-- WeeksSelector -->
     <string name="ws_variants_title">Повторять</string>
+
+    <!-- DatePickerDialog -->
+    <string name="dpd_today">Сегодня</string>
 
     <!-- TimePickerDialog -->
     <string name="tpd_select_time">Выберите время</string>

@@ -9,12 +9,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import com.erdenian.studentassistant.uikit.R
@@ -26,7 +28,7 @@ internal fun DurationPreference(
     value: Duration,
     onValueChange: (Duration) -> Unit,
     modifier: Modifier = Modifier,
-    icon: Painter? = null
+    icon: Painter? = null,
 ) {
     var isShowDialog by rememberSaveable { mutableStateOf(false) }
 
@@ -35,7 +37,7 @@ internal fun DurationPreference(
         description = String.format("%02d:%02d", value.toHours(), value.toMinutesPart()),
         icon = icon,
         onClick = { isShowDialog = true },
-        modifier = modifier
+        modifier = modifier,
     )
 
     if (isShowDialog) {
@@ -45,38 +47,41 @@ internal fun DurationPreference(
             onDismissRequest = { isShowDialog = false },
             title = { Text(text = title) },
             text = {
-                AndroidView(
-                    factory = { context ->
-                        @SuppressLint("InflateParams")
-                        val timePicker = LayoutInflater.from(context).inflate(R.layout.spinner_time_picker, null) as TimePicker
-                        timePicker.apply {
-                            setIs24HourView(true)
-                            duration = value
-                            setOnTimeChangedListener { _, hourOfDay, minute ->
-                                selectedDuration = Duration.ofHours(hourOfDay.toLong()).plusMinutes(minute.toLong())
+                key(LocalConfiguration.current) {
+                    AndroidView(
+                        factory = { context ->
+                            @SuppressLint("InflateParams")
+                            val timePicker =
+                                LayoutInflater.from(context).inflate(R.layout.spinner_time_picker, null) as TimePicker
+                            timePicker.apply {
+                                setIs24HourView(true)
+                                duration = selectedDuration
+                                setOnTimeChangedListener { _, hourOfDay, minute ->
+                                    selectedDuration = Duration.ofHours(hourOfDay.toLong()).plusMinutes(minute.toLong())
+                                }
                             }
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                )
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
             },
             confirmButton = {
                 TextButton(
                     onClick = {
                         onValueChange(selectedDuration)
                         isShowDialog = false
-                    }
+                    },
                 ) {
                     Text(text = stringResource(android.R.string.ok))
                 }
             },
             dismissButton = {
                 TextButton(
-                    onClick = { isShowDialog = false }
+                    onClick = { isShowDialog = false },
                 ) {
                     Text(text = stringResource(android.R.string.cancel))
                 }
-            }
+            },
         )
     }
 }

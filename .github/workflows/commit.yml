@@ -18,12 +18,13 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 21
+      - uses: android-actions/setup-android@v3
       - uses: gradle/actions/setup-gradle@v3
       # --------------------------------------
       # Run
       # --------------------------------------
       - uses: actions/checkout@v4
-      - run: ./gradlew :detekt
+      - run: ./gradlew detektMain
       # --------------------------------------
       # Analyze
       # --------------------------------------
@@ -31,5 +32,5 @@ jobs:
         if: always()
         with:
           name: Detekt
-          path: "build/reports/detekt/detekt.html"
+          path: "**/build/reports/detekt/"
           if-no-files-found: error

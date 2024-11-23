@@ -1,13 +1,14 @@
 plugins {
-    id(libs.plugins.android.library.get().pluginId)
-    id(libs.plugins.kotlin.android.get().pluginId)
-    id(libs.plugins.kotlin.ksp.get().pluginId)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
     namespace = "com.erdenian.studentassistant.schedule"
-
-    buildFeatures.compose = true
 }
 
 dependencies {
@@ -15,8 +16,15 @@ dependencies {
     implementation(project(":common:uikit"))
     implementation(project(":common:utils"))
     implementation(project(":common:sampledata"))
+    implementation(project(":common:navigation"))
 
-    implementation(project(":data:repository"))
+    implementation(project(":features:repository:api"))
+    implementation(project(":features:schedule:api"))
+    implementation(project(":features:homeworks:api"))
+    // endregion
+
+    // region Kotlin
+    implementation(libs.kotlinx.serialization)
     // endregion
 
     // region AndroidX

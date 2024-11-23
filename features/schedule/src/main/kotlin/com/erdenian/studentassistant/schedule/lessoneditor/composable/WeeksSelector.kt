@@ -54,7 +54,7 @@ internal fun WeeksSelector(
     onWeeksChange: (weeks: List<Boolean>) -> Unit,
     modifier: Modifier = Modifier,
     isAdvancedMode: Boolean = true,
-    enabled: Boolean = true
+    enabled: Boolean = true,
 ) {
     val repeatVariants = stringArrayResource(RA.repeat_variants).toList()
     val weeksVariants = remember {
@@ -65,8 +65,10 @@ internal fun WeeksSelector(
             listOf(true, false, false, false),
             listOf(false, true, false, false),
             listOf(false, false, true, false),
-            listOf(false, false, false, true)
-        )
+            listOf(false, false, false, true),
+        ).also { weeksVariants ->
+            check(repeatVariants.size == weeksVariants.size + 1) { "repeatVariants and weekVariants are not synced" }
+        }
     }
     val simpleRepeatVariants = remember { repeatVariants.take(3) }
 
@@ -101,7 +103,7 @@ internal fun WeeksSelector(
             isMinusEnabled = (weeks.size > 1) && isCustomEnabled,
             isCustomEnabled = isCustomEnabled,
             enabled = enabled,
-            modifier = modifier
+            modifier = modifier,
         )
     } else {
         WeeksSelectorSimpleContent(
@@ -116,7 +118,7 @@ internal fun WeeksSelector(
                 repeatVariantsExpanded = false
             },
             enabled = enabled,
-            modifier = modifier
+            modifier = modifier,
         )
     }
 }
@@ -130,10 +132,10 @@ private fun WeeksSelectorSimpleContent(
     onRepeatVariantsDismissRequest: () -> Unit,
     onRepeatVariantClick: (index: Int) -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
 ) = Column(modifier = modifier) {
     Row(
-        verticalAlignment = Alignment.Bottom
+        verticalAlignment = Alignment.Bottom,
     ) {
         Text(text = stringResource(RS.ws_variants_title))
 
@@ -141,28 +143,28 @@ private fun WeeksSelectorSimpleContent(
             verticalAlignment = Alignment.Bottom,
             modifier = Modifier
                 .padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal)
-                .clickable(onClick = onSelectedRepeatVariantClick, enabled = enabled)
+                .clickable(onClick = onSelectedRepeatVariantClick, enabled = enabled),
         ) {
             Text(
                 text = repeatVariants[selectedRepeatVariantIndex],
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                modifier = Modifier.weight(1.0f, false)
+                modifier = Modifier.weight(1.0f, false),
             )
 
             Icon(
                 imageVector = AppIcons.ArrowDropDown,
-                contentDescription = null
+                contentDescription = null,
             )
 
             DropdownMenu(
                 expanded = repeatVariantsExpanded,
-                onDismissRequest = onRepeatVariantsDismissRequest
+                onDismissRequest = onRepeatVariantsDismissRequest,
             ) {
                 repeatVariants.forEachIndexed { index, variant ->
                     DropdownMenuItem(
                         text = { Text(text = variant) },
-                        onClick = { onRepeatVariantClick(index) }
+                        onClick = { onRepeatVariantClick(index) },
                     )
                 }
             }
@@ -185,10 +187,10 @@ private fun WeeksSelectorAdvancedContent(
     isMinusEnabled: Boolean,
     isCustomEnabled: Boolean,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
 ) = Column(modifier = modifier) {
     Row(
-        verticalAlignment = Alignment.Bottom
+        verticalAlignment = Alignment.Bottom,
     ) {
         Text(text = stringResource(RS.ws_variants_title))
 
@@ -196,28 +198,28 @@ private fun WeeksSelectorAdvancedContent(
             verticalAlignment = Alignment.Bottom,
             modifier = Modifier
                 .padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal)
-                .clickable(onClick = onSelectedRepeatVariantClick, enabled = enabled)
+                .clickable(onClick = onSelectedRepeatVariantClick, enabled = enabled),
         ) {
             Text(
                 text = repeatVariants[selectedRepeatVariantIndex],
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                modifier = Modifier.weight(1.0f, false)
+                modifier = Modifier.weight(1.0f, false),
             )
 
             Icon(
                 imageVector = AppIcons.ArrowDropDown,
-                contentDescription = null
+                contentDescription = null,
             )
 
             DropdownMenu(
                 expanded = repeatVariantsExpanded,
-                onDismissRequest = onRepeatVariantsDismissRequest
+                onDismissRequest = onRepeatVariantsDismissRequest,
             ) {
                 repeatVariants.forEachIndexed { index, variant ->
                     DropdownMenuItem(
                         text = { Text(text = variant) },
-                        onClick = { onRepeatVariantClick(index) }
+                        onClick = { onRepeatVariantClick(index) },
                     )
                 }
             }
@@ -226,15 +228,15 @@ private fun WeeksSelectorAdvancedContent(
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(top = 4.dp)
+        modifier = Modifier.padding(top = 4.dp),
     ) {
         IconButton(
             onClick = onMinusClick,
-            enabled = (isMinusEnabled && enabled)
+            enabled = (isMinusEnabled && enabled),
         ) {
             Icon(
                 imageVector = AppIcons.Remove,
-                contentDescription = null
+                contentDescription = null,
             )
         }
 
@@ -244,14 +246,14 @@ private fun WeeksSelectorAdvancedContent(
             contentPadding = PaddingValues(horizontal = 6.dp),
             horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.weight(1.0f)
+            modifier = Modifier.weight(1.0f),
         ) {
             itemsIndexed(weeks) { index, checked ->
                 CheckBoxWithText(
                     checked = checked,
                     text = (index + 1).toString(),
                     onCheckedChange = { onWeekCheckedChange(index, it) },
-                    enabled = (isCustomEnabled && enabled)
+                    enabled = (isCustomEnabled && enabled),
                 )
             }
         }
@@ -260,11 +262,11 @@ private fun WeeksSelectorAdvancedContent(
 
         IconButton(
             onClick = onPlusClick,
-            enabled = (isCustomEnabled && enabled)
+            enabled = (isCustomEnabled && enabled),
         ) {
             Icon(
                 imageVector = AppIcons.Add,
-                contentDescription = null
+                contentDescription = null,
             )
         }
     }
@@ -275,7 +277,7 @@ private fun WeeksSelectorAdvancedContent(
     name = "WeeksSelector simple preview (dark)",
     group = "WeeksSelector",
     showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
 )
 @Composable
 private fun WeeksSelectorSimplePreview() = AppTheme {
@@ -286,7 +288,7 @@ private fun WeeksSelectorSimplePreview() = AppTheme {
         onSelectedRepeatVariantClick = {},
         onRepeatVariantsDismissRequest = {},
         onRepeatVariantClick = {},
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     )
 }
 
@@ -295,7 +297,7 @@ private fun WeeksSelectorSimplePreview() = AppTheme {
     name = "WeeksSelector preview (dark)",
     group = "WeeksSelector",
     showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
 )
 @Composable
 private fun WeeksSelectorPreview() = AppTheme {
@@ -312,7 +314,7 @@ private fun WeeksSelectorPreview() = AppTheme {
         onPlusClick = {},
         isMinusEnabled = true,
         isCustomEnabled = true,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     )
 }
 
@@ -332,7 +334,7 @@ private fun WeeksSelectorLongRepeatVariantPreview() = AppTheme {
         onPlusClick = {},
         isMinusEnabled = true,
         isCustomEnabled = true,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     )
 }
 
@@ -342,10 +344,10 @@ private fun CheckBoxWithText(
     text: String,
     onCheckedChange: ((Boolean) -> Unit)?,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
 ) = Column(
     horizontalAlignment = Alignment.CenterHorizontally,
-    modifier = modifier.run { if (enabled) clickable { onCheckedChange?.invoke(!checked) } else this }
+    modifier = modifier.run { if (enabled) clickable { onCheckedChange?.invoke(!checked) } else this },
 ) {
     Checkbox(checked = checked, onCheckedChange = null, enabled = enabled)
     Text(text = text, maxLines = 1)
@@ -372,18 +374,20 @@ private fun CheckBoxWithTextLongPreview() = AppTheme {
 @Preview(name = "Disabled", group = "CheckBoxWithText", showBackground = true)
 @Composable
 private fun CheckBoxWithTextDisabledPreview() = AppTheme {
-    CheckBoxWithText(true, "Disabled", null, enabled = false)
+    CheckBoxWithText(checked = true, text = "Disabled", onCheckedChange = null, enabled = false)
 }
 
-@Preview(name = "Dark theme", group = "CheckBoxWithText", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(
+    name = "Dark theme", group = "CheckBoxWithText", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
 @Composable
 private fun CheckBoxWithTextDarkPreview() = AppTheme {
     CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onBackground) {
         CheckBoxWithText(
-            true,
-            "Dark",
-            null,
-            modifier = Modifier.background(MaterialTheme.colorScheme.background)
+            checked = true,
+            text = "Dark",
+            onCheckedChange = null,
+            modifier = Modifier.background(MaterialTheme.colorScheme.background),
         )
     }
 }

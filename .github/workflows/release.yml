@@ -28,17 +28,13 @@ jobs:
           distribution: 'temurin'
           java-version: 21
       - uses: android-actions/setup-android@v3
-      - uses: nttld/setup-ndk@v1
-        with:
-          ndk-version: r26c
-          link-to-sdk: true
       - uses: gradle/actions/setup-gradle@v3
       # --------------------------------------
       # Run
       # --------------------------------------
       - uses: actions/checkout@v4
       - run: ./gradlew :app:lintRelease testReleaseUnitTest :app:koverHtmlReportRelease :app:koverXmlReportRelease :app:assembleRelease :app:bundleRelease
-      - run: ./gradlew testDeviceDebugAndroidTest '-Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect' '-Dorg.gradle.jvmargs=-Xmx6g -Dfile.encoding=UTF-8'
+      - run: ./gradlew testDeviceDebugAndroidTest '-Dorg.gradle.jvmargs=-Xmx6g -Dfile.encoding=UTF-8' '-Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect'
       # --------------------------------------
       # Analyze
       # --------------------------------------
@@ -74,7 +70,7 @@ jobs:
         if: always()
         with:
           name: Android Test Report
-          path: "**/build/outputs/androidTest-results/managedDevice/debug/testDevice/TEST-*.xml"
+          path: "**/build/outputs/androidTest-results/**/TEST-*.xml"
           reporter: java-junit
       # --------------------------------------
       - uses: actions/upload-artifact@v4
@@ -84,7 +80,7 @@ jobs:
           path: "**/build/reports/kover/html*/"
           if-no-files-found: error
       - uses: mi-kas/kover-report@v1
-        if: always()
+        if: github.event_name == 'pull_request'
         with:
           path: ${{ github.workspace }}/app/build/reports/kover/reportRelease.xml
           token: ${{ secrets.GITHUB_TOKEN }}

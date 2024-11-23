@@ -1,16 +1,19 @@
 plugins {
-    id(libs.plugins.android.library.get().pluginId)
-    id(libs.plugins.kotlin.android.get().pluginId)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
     namespace = "com.erdenian.studentassistant.style"
-
-    buildFeatures.compose = true
 }
 
 dependencies {
     // region Compose
     api(libs.bundles.androidx.compose)
+    // endregion
+
+    // region AndroidX
+    implementation(libs.androidx.appcompat)
     // endregion
 }

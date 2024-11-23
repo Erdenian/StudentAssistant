@@ -13,24 +13,43 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.erdenian.studentassistant.homeworks.api.HomeworksRoute
+import com.erdenian.studentassistant.homeworks.di.HomeworksComponentHolder
 import com.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorViewModel.Error
+import com.erdenian.studentassistant.navigation.LocalNavController
+import com.erdenian.studentassistant.schedule.api.ScheduleRoute
 import com.erdenian.studentassistant.strings.RS
 import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
 import com.erdenian.studentassistant.utils.toSingleLine
 import com.erdenian.studentassistant.utils.toast
 
 @Composable
-fun HomeworkEditorScreen(
-    viewModel: HomeworkEditorViewModel,
-    navigateBack: () -> Unit,
-    navigateToCreateLesson: (semesterId: Long, subjectName: String) -> Unit
-) {
+internal fun HomeworkEditorScreen(route: HomeworksRoute.HomeworkEditor) {
+    val viewModel = viewModel {
+        val semesterId = route.semesterId
+        val subjectName = route.subjectName
+        val homeworkId = route.homeworkId
+
+        val factory = HomeworksComponentHolder.instance.homeworkEditorViewModelFactory
+        when {
+            (homeworkId != null) -> factory.get(semesterId, homeworkId)
+            (subjectName != null) -> factory.get(semesterId, subjectName)
+            else -> factory.get(semesterId)
+        }
+    }
+    val navController = LocalNavController.current
+
     var lessonNameToCreate by remember { mutableStateOf<String?>(null) }
     val done by viewModel.done.collectAsState()
     LaunchedEffect(done) {
         if (done) {
-            navigateBack()
-            lessonNameToCreate?.let { navigateToCreateLesson(viewModel.semesterId, it) }
+            navController.popBackStack()
+            lessonNameToCreate?.let { subjectName ->
+                navController.navigate(
+                    ScheduleRoute.LessonEditor(semesterId = viewModel.semesterId, subjectName = subjectName),
+                )
+            }
         }
     }
 
@@ -84,7 +103,7 @@ fun HomeworkEditorScreen(
             dismissButton = {
                 TextButton(
                     onClick = { showSaveDialog = false },
-                    content = { Text(text = stringResource(RS.he_unknown_lesson_no)) }
+                    content = { Text(text = stringResource(RS.he_unknown_lesson_no)) },
                 )
             },
             confirmButton = {
@@ -94,16 +113,16 @@ fun HomeworkEditorScreen(
                         viewModel.save()
                         showSaveDialog = false
                     },
-                    content = { Text(text = stringResource(RS.he_unknown_lesson_yes_and_create)) }
+                    content = { Text(text = stringResource(RS.he_unknown_lesson_yes_and_create)) },
                 )
                 TextButton(
                     onClick = {
                         viewModel.save()
                         showSaveDialog = false
                     },
-                    content = { Text(text = stringResource(RS.he_unknown_lesson_yes)) }
+                    content = { Text(text = stringResource(RS.he_unknown_lesson_yes)) },
                 )
-            }
+            },
         )
     }
 
@@ -115,7 +134,7 @@ fun HomeworkEditorScreen(
             dismissButton = {
                 TextButton(
                     onClick = { showDeleteDialog = false },
-                    content = { Text(text = stringResource(RS.he_delete_no)) }
+                    content = { Text(text = stringResource(RS.he_delete_no)) },
                 )
             },
             confirmButton = {
@@ -124,9 +143,9 @@ fun HomeworkEditorScreen(
                         viewModel.delete()
                         showDeleteDialog = false
                     },
-                    content = { Text(text = stringResource(RS.he_delete_yes)) }
+                    content = { Text(text = stringResource(RS.he_delete_yes)) },
                 )
-            }
+            },
         )
     }
 
@@ -134,12 +153,12 @@ fun HomeworkEditorScreen(
     HomeworkEditorContent(
         isProgress = nonBlockingProgress,
         isEditing = viewModel.isEditing,
-        existingSubjects = existingSubjects.list,
+        existingSubjects = existingSubjects,
         subjectName = subjectName,
         deadline = deadline,
         description = description,
         semesterDates = semesterDatesRange,
-        onBackClick = navigateBack,
+        onBackClick = navController::popBackStack,
         onSaveClick = {
             when {
                 (errorMessage != null) -> context.toast(errorMessage)
@@ -150,6 +169,6 @@ fun HomeworkEditorScreen(
         onDeleteClick = { showDeleteDialog = true },
         onSubjectNameChange = { viewModel.subjectName.value = it.toSingleLine() },
         onDeadlineChange = { viewModel.deadline.value = it },
-        onDescriptionChange = { viewModel.description.value = it }
+        onDescriptionChange = { viewModel.description.value = it },
     )
 }

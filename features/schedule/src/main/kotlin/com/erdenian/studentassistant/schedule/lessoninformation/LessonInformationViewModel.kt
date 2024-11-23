@@ -3,10 +3,8 @@ package com.erdenian.studentassistant.schedule.lessoninformation
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.erdenian.studentassistant.entity.emptyImmutableSortedSet
-import com.erdenian.studentassistant.entity.toImmutableSortedSet
-import com.erdenian.studentassistant.repository.HomeworkRepository
-import com.erdenian.studentassistant.repository.LessonRepository
+import com.erdenian.studentassistant.repository.api.RepositoryApi
+import com.erdenian.studentassistant.repository.api.entity.Lesson
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -22,29 +20,35 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class LessonInformationViewModel @AssistedInject constructor(
+internal class LessonInformationViewModel @AssistedInject constructor(
     application: Application,
-    lessonRepository: LessonRepository,
-    private val homeworkRepository: HomeworkRepository,
-    @Assisted lessonId: Long
+    repositoryApi: RepositoryApi,
+    @Assisted lessonArg: Lesson,
 ) : AndroidViewModel(application) {
+
+    private val lessonRepository = repositoryApi.lessonRepository
+    private val homeworkRepository = repositoryApi.homeworkRepository
 
     @AssistedFactory
     interface Factory {
-        fun get(lessonId: Long): LessonInformationViewModel
+        fun get(lessonArg: Lesson): LessonInformationViewModel
     }
 
     enum class Operation {
-        DELETING_HOMEWORK
+        DELETING_HOMEWORK,
     }
 
     private val operationPrivate = MutableStateFlow<Operation?>(null)
     val operation = operationPrivate.asStateFlow()
 
-    private val lessonPrivate = lessonRepository.getFlow(lessonId)
+    private val lessonPrivate = lessonRepository.getFlow(lessonArg.id)
         .shareIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed())
 
-    val lesson = lessonPrivate.stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(), initialValue = null)
+    val lesson = lessonPrivate.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = lessonArg,
+    )
 
     val isDeleted = lessonPrivate.map { it == null }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
 
@@ -52,13 +56,11 @@ class LessonInformationViewModel @AssistedInject constructor(
 
     val homeworks = combine(
         lessonPrivate.flatMapLatest { lesson ->
-            if (lesson != null) homeworkRepository.getActualFlow(lesson.subjectName)
-            else flowOf(emptyImmutableSortedSet())
+            lesson?.let { homeworkRepository.getActualFlow(it.subjectName) } ?: flowOf(emptyList())
         }.onEach { deletedHomeworkIds.value = emptySet() },
-        deletedHomeworkIds
+        deletedHomeworkIds,
     ) { homeworks, deletedIds ->
-        if (deletedIds.isEmpty()) homeworks
-        else homeworks.asSequence().filter { it.id !in deletedIds }.toImmutableSortedSet()
+        if (deletedIds.isEmpty()) homeworks else homeworks.filter { it.id !in deletedIds }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     fun deleteHomework(id: Long) {

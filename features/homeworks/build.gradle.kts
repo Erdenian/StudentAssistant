@@ -1,12 +1,11 @@
 plugins {
-    id(libs.plugins.android.library.get().pluginId)
-    id(libs.plugins.kotlin.android.get().pluginId)
-    id(libs.plugins.kotlin.ksp.get().pluginId)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
-    buildFeatures.compose = true
-
     namespace = "com.erdenian.studentassistant.homeworks"
 }
 
@@ -15,8 +14,11 @@ dependencies {
     implementation(project(":common:uikit"))
     implementation(project(":common:utils"))
     implementation(project(":common:sampledata"))
+    implementation(project(":common:navigation"))
 
-    implementation(project(":data:repository"))
+    implementation(project(":features:repository:api"))
+    implementation(project(":features:homeworks:api"))
+    implementation(project(":features:schedule:api"))
     // endregion
 
     // region AndroidX
