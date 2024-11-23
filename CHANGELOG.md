@@ -6,8 +6,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2024-11-12
+
 ### Fixed
 - Отображение текстовки "Домашние задания" в строке навигации
+- Выделение выбранной вкладки в строке навигации
+- Проблемы при многократном нажатии кнопки "Назад" в тулбаре
+- Положение контекстного меню при первом открытии внизу экрана
+- Состояние выбора повторений при открытии экрана редактирования занятия
+- Цвет статусбара при скролле контента
+
+### Added
+- Кнопка перехода к сегодняшней дате в диалоге выбора даты
+- Поддержка predictive back gesture
+- Shared element transition при переходе на экран информации о занятии
+- В редакторе занятия уже введенные преподаватели и аудитории больше не будут предлагаться в автодополнении
+- Анимации добавления и удаления занятий и заданий
 
 ## [0.6.0] - 2024-03-31
 
@@ -93,7 +107,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2016-12-19
 
 <!-- @formatter:off -->
-[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/0.6.0...develop
+[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/0.7.0...develop
+[0.7.0]: https://github.com/Erdenian/StudentAssistant/compare/0.6.0...0.7.0
 [0.6.0]: https://github.com/Erdenian/StudentAssistant/compare/0.5.3...0.6.0
 [0.5.3]: https://github.com/Erdenian/StudentAssistant/compare/0.5.2...0.5.3
 [0.5.2]: https://github.com/Erdenian/StudentAssistant/compare/0.5.1...0.5.2

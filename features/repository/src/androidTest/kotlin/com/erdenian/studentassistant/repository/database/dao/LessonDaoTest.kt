@@ -51,12 +51,12 @@ internal class LessonDaoTest {
             listOf(TeacherEntity("teacher")),
             listOf(ClassroomEntity("classroom")),
             ByWeekdayEntity(DayOfWeek.FRIDAY, listOf(true)),
-            emptyList(),
+            emptySet(),
         )
         val id1 = lessonDao.insert(
             lesson1.lesson,
-            lesson1.teachers,
-            lesson1.classrooms,
+            lesson1.teachers.toSet(),
+            lesson1.classrooms.toSet(),
             checkNotNull(lesson1.byWeekday),
         )
         assertNotEquals(0, id1)
@@ -65,7 +65,7 @@ internal class LessonDaoTest {
             lesson1.teachers.map { it.copy(lessonId = id1, id = 1L) },
             lesson1.classrooms.map { it.copy(lessonId = id1, id = 1L) },
             checkNotNull(lesson1.byWeekday).copy(lessonId = id1),
-            emptyList(),
+            emptySet(),
         )
         assertEquals(listOf(expected1), lessonDao.getAllFlow(semesterId).first())
 
@@ -74,12 +74,12 @@ internal class LessonDaoTest {
             listOf(TeacherEntity("teacher", 10L, 20L)),
             listOf(ClassroomEntity("classroom", 10L, 20L)),
             null,
-            listOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L), ByDateEntity(LocalDate.of(2021, 4, 25), 10L)),
+            setOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L), ByDateEntity(LocalDate.of(2021, 4, 25), 10L)),
         )
         val id2 = lessonDao.insert(
             lesson2.lesson,
-            lesson2.teachers,
-            lesson2.classrooms,
+            lesson2.teachers.toSet(),
+            lesson2.classrooms.toSet(),
             lesson2.byDates,
         )
         assertEquals(10L, id2)
@@ -89,9 +89,9 @@ internal class LessonDaoTest {
             runBlocking {
                 lessonDao.insert(
                     LessonEntity("name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), semesterId, 10L),
-                    listOf(TeacherEntity("teacher")),
-                    listOf(ClassroomEntity("classroom")),
-                    listOf(ByDateEntity(LocalDate.of(2020, 4, 25))),
+                    setOf(TeacherEntity("teacher")),
+                    setOf(ClassroomEntity("classroom")),
+                    setOf(ByDateEntity(LocalDate.of(2020, 4, 25))),
                 )
             }
         }
@@ -100,9 +100,9 @@ internal class LessonDaoTest {
             runBlocking {
                 lessonDao.insert(
                     LessonEntity("name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), semesterId),
-                    listOf(TeacherEntity("teacher", id = 20L)),
-                    listOf(ClassroomEntity("classroom")),
-                    listOf(ByDateEntity(LocalDate.of(2020, 4, 25))),
+                    setOf(TeacherEntity("teacher", id = 20L)),
+                    setOf(ClassroomEntity("classroom")),
+                    setOf(ByDateEntity(LocalDate.of(2020, 4, 25))),
                 )
             }
         }
@@ -111,9 +111,9 @@ internal class LessonDaoTest {
             runBlocking {
                 lessonDao.insert(
                     LessonEntity("name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), semesterId),
-                    listOf(TeacherEntity("teacher")),
-                    listOf(ClassroomEntity("classroom", id = 20L)),
-                    listOf(ByDateEntity(LocalDate.of(2020, 4, 25))),
+                    setOf(TeacherEntity("teacher")),
+                    setOf(ClassroomEntity("classroom", id = 20L)),
+                    setOf(ByDateEntity(LocalDate.of(2020, 4, 25))),
                 )
             }
         }
@@ -122,9 +122,9 @@ internal class LessonDaoTest {
             runBlocking {
                 lessonDao.insert(
                     LessonEntity("name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), semesterId),
-                    listOf(TeacherEntity("teacher")),
-                    listOf(ClassroomEntity("classroom")),
-                    emptyList(),
+                    setOf(TeacherEntity("teacher")),
+                    setOf(ClassroomEntity("classroom")),
+                    emptySet(),
                 )
             }
         }
@@ -133,9 +133,9 @@ internal class LessonDaoTest {
             runBlocking {
                 lessonDao.insert(
                     LessonEntity("name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), semesterId + 1),
-                    listOf(TeacherEntity("teacher")),
-                    listOf(ClassroomEntity("classroom")),
-                    listOf(ByDateEntity(LocalDate.of(2020, 4, 25))),
+                    setOf(TeacherEntity("teacher")),
+                    setOf(ClassroomEntity("classroom")),
+                    setOf(ByDateEntity(LocalDate.of(2020, 4, 25))),
                 )
             }
         }
@@ -150,36 +150,36 @@ internal class LessonDaoTest {
             listOf(TeacherEntity("teacher", 10L, 20L)),
             listOf(ClassroomEntity("classroom", 10L, 20L)),
             null,
-            listOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L), ByDateEntity(LocalDate.of(2021, 4, 25), 10L)),
+            setOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L), ByDateEntity(LocalDate.of(2021, 4, 25), 10L)),
         )
         lessonDao.insert(
             lesson1.lesson,
-            lesson1.teachers,
-            lesson1.classrooms,
+            lesson1.teachers.toSet(),
+            lesson1.classrooms.toSet(),
             lesson1.byDates,
         )
         assertEquals(listOf(lesson1), lessonDao.getAllFlow(semesterId).first())
 
         val lesson2 = lesson1.copy(
             lesson = lesson1.lesson.copy(subjectName = "new_name"),
-            byDates = listOf(ByDateEntity(LocalDate.of(2023, 4, 25), 10L)),
+            byDates = setOf(ByDateEntity(LocalDate.of(2023, 4, 25), 10L)),
         )
         lessonDao.update(
             lesson2.lesson,
-            lesson2.teachers,
-            lesson2.classrooms,
+            lesson2.teachers.toSet(),
+            lesson2.classrooms.toSet(),
             lesson2.byDates,
         )
         assertEquals(listOf(lesson2), lessonDao.getAllFlow(semesterId).first())
 
         val lesson3 = lesson2.copy(
             byWeekday = ByWeekdayEntity(DayOfWeek.FRIDAY, listOf(true, false, true), 10L),
-            byDates = emptyList(),
+            byDates = emptySet(),
         )
         lessonDao.update(
             lesson3.lesson,
-            lesson3.teachers,
-            lesson3.classrooms,
+            lesson3.teachers.toSet(),
+            lesson3.classrooms.toSet(),
             checkNotNull(lesson3.byWeekday),
         )
         assertEquals(listOf(lesson3), lessonDao.getAllFlow(semesterId).first())
@@ -194,12 +194,12 @@ internal class LessonDaoTest {
             listOf(TeacherEntity("teacher1", 10L, 20L)),
             listOf(ClassroomEntity("classroom1", 10L, 20L)),
             null,
-            listOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L), ByDateEntity(LocalDate.of(2021, 4, 25), 10L)),
+            setOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L), ByDateEntity(LocalDate.of(2021, 4, 25), 10L)),
         )
         lessonDao.insert(
             lesson1.lesson,
-            lesson1.teachers,
-            lesson1.classrooms,
+            lesson1.teachers.toSet(),
+            lesson1.classrooms.toSet(),
             lesson1.byDates,
         )
         val lesson2 = lesson1.copy(
@@ -207,12 +207,12 @@ internal class LessonDaoTest {
             listOf(TeacherEntity("teacher2", 20L, 40L)),
             listOf(ClassroomEntity("classroom2", 20L, 40L)),
             null,
-            listOf(ByDateEntity(LocalDate.of(2022, 4, 25), 20L), ByDateEntity(LocalDate.of(2023, 4, 25), 20L)),
+            setOf(ByDateEntity(LocalDate.of(2022, 4, 25), 20L), ByDateEntity(LocalDate.of(2023, 4, 25), 20L)),
         )
         lessonDao.insert(
             lesson2.lesson,
-            lesson2.teachers,
-            lesson2.classrooms,
+            lesson2.teachers.toSet(),
+            lesson2.classrooms.toSet(),
             lesson2.byDates,
         )
         assertEquals(listOf(lesson1, lesson2), lessonDao.getAllFlow(semesterId).first())
@@ -221,12 +221,12 @@ internal class LessonDaoTest {
         assertEquals(listOf(lesson2), lessonDao.getAllFlow(semesterId).first())
         val lesson3 = lesson1.copy(
             byWeekday = ByWeekdayEntity(DayOfWeek.FRIDAY, listOf(true, false, true), 10L),
-            byDates = emptyList(),
+            byDates = emptySet(),
         )
         lessonDao.insert(
             lesson3.lesson,
-            lesson3.teachers,
-            lesson3.classrooms,
+            lesson3.teachers.toSet(),
+            lesson3.classrooms.toSet(),
             checkNotNull(lesson3.byWeekday),
         )
         assertEquals(listOf(lesson3, lesson2), lessonDao.getAllFlow(semesterId).first())
@@ -241,12 +241,12 @@ internal class LessonDaoTest {
             listOf(TeacherEntity("teacher1", 10L, 20L)),
             listOf(ClassroomEntity("classroom1", 10L, 20L)),
             null,
-            listOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L), ByDateEntity(LocalDate.of(2021, 4, 25), 10L)),
+            setOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L), ByDateEntity(LocalDate.of(2021, 4, 25), 10L)),
         )
         lessonDao.insert(
             lesson1.lesson,
-            lesson1.teachers,
-            lesson1.classrooms,
+            lesson1.teachers.toSet(),
+            lesson1.classrooms.toSet(),
             lesson1.byDates,
         )
         assertEquals(lesson1, lessonDao.get(10L))
@@ -256,12 +256,12 @@ internal class LessonDaoTest {
             listOf(TeacherEntity("teacher2", 10L, 20L)),
             listOf(ClassroomEntity("classroom2", 10L, 20L)),
             null,
-            listOf(ByDateEntity(LocalDate.of(2021, 4, 25), 10L), ByDateEntity(LocalDate.of(2022, 4, 25), 10L)),
+            setOf(ByDateEntity(LocalDate.of(2021, 4, 25), 10L), ByDateEntity(LocalDate.of(2022, 4, 25), 10L)),
         )
         lessonDao.update(
             lesson2.lesson,
-            lesson2.teachers,
-            lesson2.classrooms,
+            lesson2.teachers.toSet(),
+            lesson2.classrooms.toSet(),
             lesson2.byDates,
         )
         assertEquals(lesson2, lessonDao.get(10L))
@@ -274,12 +274,12 @@ internal class LessonDaoTest {
             listOf(TeacherEntity("teacher3", 10L, 20L)),
             listOf(ClassroomEntity("classroom3", 10L, 20L)),
             null,
-            listOf(ByDateEntity(LocalDate.of(2021, 4, 25), 10L), ByDateEntity(LocalDate.of(2022, 4, 25), 10L)),
+            setOf(ByDateEntity(LocalDate.of(2021, 4, 25), 10L), ByDateEntity(LocalDate.of(2022, 4, 25), 10L)),
         )
         lessonDao.update(
             lesson3.lesson,
-            lesson3.teachers,
-            lesson3.classrooms,
+            lesson3.teachers.toSet(),
+            lesson3.classrooms.toSet(),
             lesson3.byDates,
         )
         assertNull(lessonDao.get(10L))
@@ -294,12 +294,12 @@ internal class LessonDaoTest {
             listOf(TeacherEntity("teacher1", 10L, 20L)),
             listOf(ClassroomEntity("classroom1", 10L, 20L)),
             null,
-            listOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L), ByDateEntity(LocalDate.of(2021, 4, 25), 10L)),
+            setOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L), ByDateEntity(LocalDate.of(2021, 4, 25), 10L)),
         )
         lessonDao.insert(
             lesson1.lesson,
-            lesson1.teachers,
-            lesson1.classrooms,
+            lesson1.teachers.toSet(),
+            lesson1.classrooms.toSet(),
             lesson1.byDates,
         )
         assertEquals(lesson1, lessonDao.getFlow(10L).first())
@@ -309,12 +309,12 @@ internal class LessonDaoTest {
             listOf(TeacherEntity("teacher2", 10L, 20L)),
             listOf(ClassroomEntity("classroom2", 10L, 20L)),
             null,
-            listOf(ByDateEntity(LocalDate.of(2021, 4, 25), 10L), ByDateEntity(LocalDate.of(2022, 4, 25), 10L)),
+            setOf(ByDateEntity(LocalDate.of(2021, 4, 25), 10L), ByDateEntity(LocalDate.of(2022, 4, 25), 10L)),
         )
         lessonDao.update(
             lesson2.lesson,
-            lesson2.teachers,
-            lesson2.classrooms,
+            lesson2.teachers.toSet(),
+            lesson2.classrooms.toSet(),
             lesson2.byDates,
         )
         assertEquals(lesson2, lessonDao.getFlow(10L).first())
@@ -327,12 +327,12 @@ internal class LessonDaoTest {
             listOf(TeacherEntity("teacher3", 10L, 20L)),
             listOf(ClassroomEntity("classroom3", 10L, 20L)),
             null,
-            listOf(ByDateEntity(LocalDate.of(2021, 4, 25), 10L), ByDateEntity(LocalDate.of(2022, 4, 25), 10L)),
+            setOf(ByDateEntity(LocalDate.of(2021, 4, 25), 10L), ByDateEntity(LocalDate.of(2022, 4, 25), 10L)),
         )
         lessonDao.insert(
             lesson3.lesson,
-            lesson3.teachers,
-            lesson3.classrooms,
+            lesson3.teachers.toSet(),
+            lesson3.classrooms.toSet(),
             lesson3.byDates,
         )
         assertNull(lessonDao.getFlow(10L).first())
@@ -347,12 +347,12 @@ internal class LessonDaoTest {
             listOf(TeacherEntity("teacher1", 10L, 20L)),
             listOf(ClassroomEntity("classroom1", 10L, 20L)),
             null,
-            listOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L), ByDateEntity(LocalDate.of(2021, 4, 25), 10L)),
+            setOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L), ByDateEntity(LocalDate.of(2021, 4, 25), 10L)),
         )
         lessonDao.insert(
             lesson1.lesson,
-            lesson1.teachers,
-            lesson1.classrooms,
+            lesson1.teachers.toSet(),
+            lesson1.classrooms.toSet(),
             lesson1.byDates,
         )
         assertEquals(lesson1, lessonDao.getAllFlow(semesterId).first().single())
@@ -362,12 +362,12 @@ internal class LessonDaoTest {
             listOf(TeacherEntity("teacher2", 10L, 20L)),
             listOf(ClassroomEntity("classroom2", 10L, 20L)),
             null,
-            listOf(ByDateEntity(LocalDate.of(2021, 4, 25), 10L), ByDateEntity(LocalDate.of(2022, 4, 25), 10L)),
+            setOf(ByDateEntity(LocalDate.of(2021, 4, 25), 10L), ByDateEntity(LocalDate.of(2022, 4, 25), 10L)),
         )
         lessonDao.update(
             lesson2.lesson,
-            lesson2.teachers,
-            lesson2.classrooms,
+            lesson2.teachers.toSet(),
+            lesson2.classrooms.toSet(),
             lesson2.byDates,
         )
         assertEquals(lesson2, lessonDao.getFlow(10L).first())
@@ -383,8 +383,8 @@ internal class LessonDaoTest {
 
         lessonDao.insert(
             LessonEntity("name", "", LocalTime.of(9, 0), LocalTime.of(11, 30), semesterId),
-            emptyList(),
-            emptyList(),
+            emptySet(),
+            emptySet(),
             ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
         )
         assertEquals(LocalTime.of(11, 30), lessonDao.getLastEndTime(semesterId, DayOfWeek.MONDAY))
@@ -392,46 +392,46 @@ internal class LessonDaoTest {
 
         lessonDao.insert(
             LessonEntity("name", "", LocalTime.of(11, 50), LocalTime.of(14, 20), semesterId),
-            emptyList(),
-            emptyList(),
+            emptySet(),
+            emptySet(),
             ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
         )
         assertEquals(LocalTime.of(14, 20), lessonDao.getLastEndTime(semesterId, DayOfWeek.MONDAY))
 
         lessonDao.insert(
             LessonEntity("name", "", LocalTime.of(14, 40), LocalTime.of(17, 10), semesterId),
-            emptyList(),
-            emptyList(),
+            emptySet(),
+            emptySet(),
             ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
         )
         assertEquals(LocalTime.of(17, 10), lessonDao.getLastEndTime(semesterId, DayOfWeek.MONDAY))
 
         lessonDao.insert(
             LessonEntity("name", "", LocalTime.of(17, 20), LocalTime.of(17, 50), semesterId),
-            emptyList(),
-            emptyList(),
+            emptySet(),
+            emptySet(),
             ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
         )
         assertEquals(LocalTime.of(17, 50), lessonDao.getLastEndTime(semesterId, DayOfWeek.MONDAY))
 
         lessonDao.insert(
             LessonEntity("name", "", LocalTime.of(18, 0), LocalTime.of(18, 30), semesterId),
-            emptyList(),
-            emptyList(),
+            emptySet(),
+            emptySet(),
             ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
         )
         lessonDao.insert(
             LessonEntity("name", "", LocalTime.of(18, 40), LocalTime.of(19, 10), semesterId),
-            emptyList(),
-            emptyList(),
+            emptySet(),
+            emptySet(),
             ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
         )
         assertEquals(LocalTime.of(19, 10), lessonDao.getLastEndTime(semesterId, DayOfWeek.MONDAY))
 
         lessonDao.insert(
             LessonEntity("name", "", LocalTime.of(17, 20), LocalTime.of(22, 0), semesterId),
-            emptyList(),
-            emptyList(),
+            emptySet(),
+            emptySet(),
             ByWeekdayEntity(DayOfWeek.TUESDAY, listOf(true)),
         )
         assertEquals(LocalTime.of(19, 10), lessonDao.getLastEndTime(semesterId, DayOfWeek.MONDAY))
@@ -440,8 +440,8 @@ internal class LessonDaoTest {
         semesterDao.insert(SemesterEntity("name1", LocalDate.of(2020, 1, 1), LocalDate.of(2020, 6, 1), semesterId + 1))
         lessonDao.insert(
             LessonEntity("name", "", LocalTime.of(18, 20), LocalTime.of(23, 0), semesterId + 1),
-            emptyList(),
-            emptyList(),
+            emptySet(),
+            emptySet(),
             ByWeekdayEntity(DayOfWeek.TUESDAY, listOf(true)),
         )
         assertEquals(LocalTime.of(19, 10), lessonDao.getLastEndTime(semesterId, DayOfWeek.MONDAY))

@@ -33,27 +33,24 @@ internal class LessonRepositoryImpl @Inject constructor(
     override suspend fun insert(
         subjectName: String,
         type: String,
-        teachers: List<String>,
-        classrooms: List<String>,
+        teachers: Set<String>,
+        classrooms: Set<String>,
         startTime: LocalTime,
         endTime: LocalTime,
         semesterId: Long,
         dayOfWeek: DayOfWeek,
         weeks: List<Boolean>,
     ) {
-        val lessonEntity = LessonEntity(
-            subjectName = subjectName,
-            type = type,
-            startTime = startTime,
-            endTime = endTime,
-            semesterId = semesterId,
-        )
-        val teachersEntity = teachers.map { TeacherEntity(it) }
-        val classroomsEntity = classrooms.map { ClassroomEntity(it) }
         lessonDao.insert(
-            lesson = lessonEntity,
-            teachers = teachersEntity,
-            classrooms = classroomsEntity,
+            lesson = LessonEntity(
+                subjectName = subjectName,
+                type = type,
+                startTime = startTime,
+                endTime = endTime,
+                semesterId = semesterId,
+            ),
+            teachers = teachers.asSequence().map { TeacherEntity(it) }.toSet(),
+            classrooms = classrooms.asSequence().map { ClassroomEntity(it) }.toSet(),
             byWeekday = ByWeekdayEntity(dayOfWeek, weeks),
         )
     }
@@ -61,27 +58,24 @@ internal class LessonRepositoryImpl @Inject constructor(
     override suspend fun insert(
         subjectName: String,
         type: String,
-        teachers: List<String>,
-        classrooms: List<String>,
+        teachers: Set<String>,
+        classrooms: Set<String>,
         startTime: LocalTime,
         endTime: LocalTime,
         semesterId: Long,
         dates: Set<LocalDate>,
     ) {
-        val lessonEntity = LessonEntity(
-            subjectName = subjectName,
-            type = type,
-            startTime = startTime,
-            endTime = endTime,
-            semesterId = semesterId,
-        )
-        val teachersEntity = teachers.map { TeacherEntity(it) }
-        val classroomsEntity = classrooms.map { ClassroomEntity(it) }
         lessonDao.insert(
-            lesson = lessonEntity,
-            teachers = teachersEntity,
-            classrooms = classroomsEntity,
-            byDates = dates.map { ByDateEntity(it) },
+            lesson = LessonEntity(
+                subjectName = subjectName,
+                type = type,
+                startTime = startTime,
+                endTime = endTime,
+                semesterId = semesterId,
+            ),
+            teachers = teachers.asSequence().map { TeacherEntity(it) }.toSet(),
+            classrooms = classrooms.asSequence().map { ClassroomEntity(it) }.toSet(),
+            byDates = dates.asSequence().map { ByDateEntity(it) }.toSet(),
         )
     }
 
@@ -89,28 +83,25 @@ internal class LessonRepositoryImpl @Inject constructor(
         id: Long,
         subjectName: String,
         type: String,
-        teachers: List<String>,
-        classrooms: List<String>,
+        teachers: Set<String>,
+        classrooms: Set<String>,
         startTime: LocalTime,
         endTime: LocalTime,
         semesterId: Long,
         dayOfWeek: DayOfWeek,
         weeks: List<Boolean>,
     ) {
-        val lessonEntity = LessonEntity(
-            subjectName = subjectName,
-            type = type,
-            startTime = startTime,
-            endTime = endTime,
-            semesterId = semesterId,
-            id = id,
-        )
-        val teachersEntity = teachers.map { TeacherEntity(it, id) }
-        val classroomsEntity = classrooms.map { ClassroomEntity(it, id) }
         lessonDao.update(
-            lesson = lessonEntity,
-            teachers = teachersEntity,
-            classrooms = classroomsEntity,
+            lesson = LessonEntity(
+                subjectName = subjectName,
+                type = type,
+                startTime = startTime,
+                endTime = endTime,
+                semesterId = semesterId,
+                id = id,
+            ),
+            teachers = teachers.asSequence().map { TeacherEntity(it) }.toSet(),
+            classrooms = classrooms.asSequence().map { ClassroomEntity(it) }.toSet(),
             byWeekday = ByWeekdayEntity(dayOfWeek, weeks, id),
         )
     }
@@ -119,28 +110,25 @@ internal class LessonRepositoryImpl @Inject constructor(
         id: Long,
         subjectName: String,
         type: String,
-        teachers: List<String>,
-        classrooms: List<String>,
+        teachers: Set<String>,
+        classrooms: Set<String>,
         startTime: LocalTime,
         endTime: LocalTime,
         semesterId: Long,
         dates: Set<LocalDate>,
     ) {
-        val lessonEntity = LessonEntity(
-            subjectName = subjectName,
-            type = type,
-            startTime = startTime,
-            endTime = endTime,
-            semesterId = semesterId,
-            id = id,
-        )
-        val teachersEntity = teachers.map { TeacherEntity(it, id) }
-        val classroomsEntity = classrooms.map { ClassroomEntity(it, id) }
         lessonDao.update(
-            lesson = lessonEntity,
-            teachers = teachersEntity,
-            classrooms = classroomsEntity,
-            byDates = dates.map { ByDateEntity(it) },
+            lesson = LessonEntity(
+                subjectName = subjectName,
+                type = type,
+                startTime = startTime,
+                endTime = endTime,
+                semesterId = semesterId,
+                id = id,
+            ),
+            teachers = teachers.asSequence().map { TeacherEntity(it) }.toSet(),
+            classrooms = classrooms.asSequence().map { ClassroomEntity(it) }.toSet(),
+            byDates = dates.asSequence().map { ByDateEntity(it) }.toSet(),
         )
     }
 

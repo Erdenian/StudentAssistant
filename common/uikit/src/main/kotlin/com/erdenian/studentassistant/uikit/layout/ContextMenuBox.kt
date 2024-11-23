@@ -41,7 +41,7 @@ fun ContextMenuBox(
 
     val density = LocalDensity.current
     var menuSize by remember { mutableStateOf(IntSize.Zero) }
-    val menuOffset = remember(expanded) {
+    val menuOffset = remember(expanded, menuSize) {
         with(density) {
             val xOffset = clickPosition.x
             val yOffset = clickPosition.y - contentSize.height

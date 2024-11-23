@@ -34,7 +34,7 @@ internal data class FullLesson(
         parentColumn = "_id",
         entityColumn = "lesson_id",
     )
-    val byDates: List<ByDateEntity>,
+    val byDates: Set<ByDateEntity>,
 ) : Parcelable {
 
     init {
@@ -54,6 +54,6 @@ internal data class FullLesson(
     )
 
     private fun ByWeekdayEntity.toLessonRepeat() = Lesson.Repeat.ByWeekday(dayOfWeek, weeks)
-    private fun List<ByDateEntity>.toLessonRepeat() =
+    private fun Set<ByDateEntity>.toLessonRepeat() =
         Lesson.Repeat.ByDates(byDates.asSequence().map { it.date }.toSet())
 }

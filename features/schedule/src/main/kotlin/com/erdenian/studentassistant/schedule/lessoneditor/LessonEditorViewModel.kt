@@ -187,14 +187,14 @@ internal class LessonEditorViewModel @AssistedInject constructor(
                 .asSequence()
                 .map(String::trim)
                 .filter(String::isNotBlank)
-                .toList()
+                .toSet()
             val classrooms = classrooms.value
                 .toSingleLine()
                 .split(',')
                 .asSequence()
                 .map(String::trim)
                 .filter(String::isNotBlank)
-                .toList()
+                .toSet()
             val startTime = startTime.value
             val endTime = endTime.value
 

@@ -17,7 +17,7 @@ internal class FullLessonTest {
             listOf(TeacherEntity("teacher", 10L)),
             listOf(ClassroomEntity("classroom", 10L)),
             ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
-            emptyList(),
+            emptySet(),
         )
     }
 
@@ -28,7 +28,7 @@ internal class FullLessonTest {
             listOf(TeacherEntity("teacher", 10L)),
             listOf(ClassroomEntity("classroom", 10L)),
             null,
-            listOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L)),
+            setOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L)),
         )
     }
 
@@ -40,7 +40,7 @@ internal class FullLessonTest {
                 listOf(TeacherEntity("teacher", 10L)),
                 listOf(ClassroomEntity("classroom", 10L)),
                 null,
-                emptyList(),
+                emptySet(),
             )
         }
     }
@@ -53,7 +53,7 @@ internal class FullLessonTest {
                 listOf(TeacherEntity("teacher", 10L)),
                 listOf(ClassroomEntity("classroom", 10L)),
                 ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
-                listOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L)),
+                setOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L)),
             )
         }
     }
@@ -67,7 +67,7 @@ internal class FullLessonTest {
             listOf(TeacherEntity("teacher", 10L)),
             listOf(ClassroomEntity("classroom", 10L)),
             ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
-            emptyList(),
+            emptySet(),
         ).toLesson()
         assertEquals("name", lesson1.subjectName)
         assertEquals("type", lesson1.type)
@@ -85,7 +85,7 @@ internal class FullLessonTest {
             listOf(TeacherEntity("teacher", 10L)),
             listOf(ClassroomEntity("classroom", 10L)),
             null,
-            listOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L)),
+            setOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L)),
         ).toLesson()
         assertEquals(setOf(LocalDate.of(2020, 4, 25)), (lesson2.lessonRepeat as Lesson.Repeat.ByDates).dates)
     }

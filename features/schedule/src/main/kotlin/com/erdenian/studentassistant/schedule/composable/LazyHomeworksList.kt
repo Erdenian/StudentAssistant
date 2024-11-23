@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -42,6 +42,7 @@ internal fun LazyHomeworksList(
 ) {
     AnimatedContent(
         targetState = homeworks,
+        contentKey = { it?.isNotEmpty() },
         transitionSpec = { fadeIn() togetherWith fadeOut() },
         contentAlignment = Alignment.Center,
         label = "LazyHomeworksList",
@@ -67,10 +68,10 @@ internal fun LazyHomeworksList(
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.cardsSpacing),
                         modifier = Modifier.fillMaxSize(),
                     ) {
-                        itemsIndexed(
+                        items(
                             items = homeworksState,
-                            key = { _, item -> item.id },
-                        ) { _, homework ->
+                            key = { it.id },
+                        ) { homework ->
                             val deadlineFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
                             val haptic = LocalHapticFeedback.current
 
@@ -85,6 +86,7 @@ internal fun LazyHomeworksList(
                                         onLongClick(homework)
                                     }
                                 },
+                                modifier = Modifier.animateItem(),
                             )
                         }
                     }

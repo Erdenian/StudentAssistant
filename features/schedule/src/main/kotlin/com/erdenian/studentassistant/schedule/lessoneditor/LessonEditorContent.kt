@@ -24,6 +24,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -292,18 +293,20 @@ internal fun LessonEditorContent(
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-            WeeksSelector(
-                weeks = weeks,
-                onWeeksChange = onWeeksChange,
-                isAdvancedMode = isAdvancedWeeksSelectorEnabled,
-                enabled = !isProgress,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .placeholder(
-                        visible = isProgress,
-                        highlight = PlaceholderHighlight.fade(),
-                    ),
-            )
+            key(isProgress) { // To reset WeekSelector's state when loading completes
+                WeeksSelector(
+                    weeks = weeks,
+                    onWeeksChange = onWeeksChange,
+                    isAdvancedMode = isAdvancedWeeksSelectorEnabled,
+                    enabled = !isProgress,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .placeholder(
+                            visible = isProgress,
+                            highlight = PlaceholderHighlight.fade(),
+                        ),
+                )
+            }
 
             timePickerData?.let { (initialTime, onConfirm) ->
                 TimePickerDialog(

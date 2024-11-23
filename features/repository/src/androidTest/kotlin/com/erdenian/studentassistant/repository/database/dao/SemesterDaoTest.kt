@@ -74,9 +74,9 @@ internal class SemesterDaoTest {
         assertEquals(0, database.lessonDao.getAllFlow(semester1.id).first().size)
         database.lessonDao.insert(
             LessonEntity("name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), semester1.id),
-            listOf(TeacherEntity("teacher")),
-            listOf(ClassroomEntity("classroom")),
-            listOf(ByDateEntity(LocalDate.of(2020, 4, 25))),
+            setOf(TeacherEntity("teacher")),
+            setOf(ClassroomEntity("classroom")),
+            setOf(ByDateEntity(LocalDate.of(2020, 4, 25))),
         )
         assertEquals(1, database.lessonDao.getAllFlow(semester1.id).first().size)
 
@@ -87,9 +87,9 @@ internal class SemesterDaoTest {
         assertEquals(0, database.lessonDao.getAllFlow(semester2.id).first().size)
         database.lessonDao.insert(
             LessonEntity("name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), semester2.id),
-            listOf(TeacherEntity("teacher")),
-            listOf(ClassroomEntity("classroom")),
-            listOf(ByDateEntity(LocalDate.of(2020, 4, 25))),
+            setOf(TeacherEntity("teacher")),
+            setOf(ClassroomEntity("classroom")),
+            setOf(ByDateEntity(LocalDate.of(2020, 4, 25))),
         )
         assertEquals(1, database.lessonDao.getAllFlow(semester2.id).first().size)
 

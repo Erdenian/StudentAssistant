@@ -28,7 +28,9 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import com.erdenian.studentassistant.utils.toSingleLine
 
+private const val DELIMITER = ','
 private const val LENGTH_TO_EXPAND = 2
 
 @Composable
@@ -62,7 +64,10 @@ internal fun AutoCompleteTextField(
         if (text.length < LENGTH_TO_EXPAND) {
             emptyList()
         } else {
-            items.filter { it.contains(text, ignoreCase = true) && (it.length > text.length) }
+            items.asSequence()
+                .filter { it.contains(text, ignoreCase = true) && (it.length > text.length) }
+                .sorted()
+                .toList()
         }
     }
 
@@ -129,8 +134,8 @@ internal fun MultiAutoCompleteTextField(
 
     var autoCompleteRange by remember { mutableStateOf(IntRange(0, -1)) }
     fun recalculateAutoCompleteRange(newValue: TextFieldValue) {
-        val currentItemStartIndex = newValue.text.lastIndexOf(',', startIndex = newValue.selection.min - 1) + 1
-        val currentItemEndIndex = (newValue.text.indexOf(',', startIndex = newValue.selection.min) - 1)
+        val currentItemStartIndex = newValue.text.lastIndexOf(DELIMITER, startIndex = newValue.selection.min - 1) + 1
+        val currentItemEndIndex = (newValue.text.indexOf(DELIMITER, startIndex = newValue.selection.min) - 1)
             .takeIf { it >= 0 }
             ?: newValue.text.lastIndex
         autoCompleteRange = currentItemStartIndex..currentItemEndIndex
@@ -141,7 +146,18 @@ internal fun MultiAutoCompleteTextField(
         if (text.length < LENGTH_TO_EXPAND) {
             emptyList()
         } else {
-            items.filter { it.contains(text, ignoreCase = true) && (it.length > text.length) }
+            val enteredItems = textFieldValue.text
+                .toSingleLine()
+                .split(DELIMITER)
+                .asSequence()
+                .map(String::trim)
+                .filter(String::isNotBlank)
+                .toSet()
+            items.asSequence()
+                .filter { it !in enteredItems }
+                .filter { it.contains(text, ignoreCase = true) && (it.length > text.length) }
+                .sorted()
+                .toList()
         }
     }
 

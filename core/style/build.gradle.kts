@@ -12,4 +12,8 @@ dependencies {
     // region Compose
     api(libs.bundles.androidx.compose)
     // endregion
+
+    // region AndroidX
+    implementation(libs.androidx.appcompat)
+    // endregion
 }

@@ -66,7 +66,9 @@ internal fun WeeksSelector(
             listOf(false, true, false, false),
             listOf(false, false, true, false),
             listOf(false, false, false, true),
-        )
+        ).also { weeksVariants ->
+            check(repeatVariants.size == weeksVariants.size + 1) { "repeatVariants and weekVariants are not synced" }
+        }
     }
     val simpleRepeatVariants = remember { repeatVariants.take(3) }
 
