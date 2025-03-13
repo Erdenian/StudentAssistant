@@ -17,7 +17,6 @@ import com.erdenian.studentassistant.schedule.semestereditor.SemesterEditorScree
 import com.erdenian.studentassistant.utils.getParcelableCompat
 import javax.inject.Inject
 import kotlin.reflect.typeOf
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 public fun createScheduleApi(dependencies: ScheduleDependencies): ScheduleApi =
