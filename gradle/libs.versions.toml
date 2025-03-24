@@ -1,14 +1,14 @@
 [versions]
 
 plugins_android = "8.9.0"
-plugins_kotlin = "2.1.10"
+plugins_kotlin = "2.1.20"
 plugins_detekt = "1.23.8"
 
 kotlinx_coroutines = "1.10.1"
 
 androidx_room = "2.6.1"
 
-core_dagger = "2.55"
+core_dagger = "2.56"
 
 [plugins]
 
@@ -21,7 +21,7 @@ kotlin_jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "plugins_kotlin" }
 kotlin_compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "plugins_kotlin" }
 kotlin_parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "plugins_kotlin" }
 kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "plugins_kotlin" }
-kotlin_ksp = { id = "com.google.devtools.ksp", version = "2.1.10-1.0.31" }
+kotlin_ksp = { id = "com.google.devtools.ksp", version = "2.1.20-1.0.31" }
 
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "plugins_detekt" }
 kover = { id = "org.jetbrains.kotlinx.kover", version = "0.9.1" }
