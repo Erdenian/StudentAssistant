@@ -1,14 +1,14 @@
 [versions]
 
-plugins_android = "8.9.0"
-plugins_kotlin = "2.1.20"
+plugins_android = "8.11.0"
+plugins_kotlin = "2.2.0"
 plugins_detekt = "1.23.8"
 
-kotlinx_coroutines = "1.10.1"
+kotlinx_coroutines = "1.10.2"
 
-androidx_room = "2.6.1"
+androidx_room = "2.7.2"
 
-core_dagger = "2.56"
+core_dagger = "2.56.2"
 
 [plugins]
 
@@ -21,7 +21,7 @@ kotlin_jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "plugins_kotlin" }
 kotlin_compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "plugins_kotlin" }
 kotlin_parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "plugins_kotlin" }
 kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "plugins_kotlin" }
-kotlin_ksp = { id = "com.google.devtools.ksp", version = "2.1.20-1.0.31" }
+kotlin_ksp = { id = "com.google.devtools.ksp", version = "2.2.0-2.0.2" }
 
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "plugins_detekt" }
 kover = { id = "org.jetbrains.kotlinx.kover", version = "0.9.1" }
@@ -35,7 +35,7 @@ detekt_formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-form
 # region Testing
 test_coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx_coroutines" }
 test_junit = { group = "junit", name = "junit", version = "4.13.2" }
-test_mockk = { group = "io.mockk", name = "mockk", version = "1.13.17" }
+test_mockk = { group = "io.mockk", name = "mockk", version = "1.14.4" }
 test_androidx_junitKtx = { group = "androidx.test.ext", name = "junit-ktx", version = "1.2.1" }
 test_androidx_core = { group = "androidx.test", name = "core-ktx", version = "1.6.1" }
 test_androidx_runner = { group = "androidx.test", name = "runner", version = "1.6.2" }
@@ -43,7 +43,7 @@ test_androidx_runner = { group = "androidx.test", name = "runner", version = "1.
 
 # region KotlinX
 kotlinx_coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx_coroutines" }
-kotlinx_serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.8.0" }
+kotlinx_serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.9.0" }
 # endregion
 
 # region Android Tools
@@ -51,7 +51,7 @@ androidTools_desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk
 # endregion
 
 # region Compose
-androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version = "2025.03.00" }
+androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version = "2025.06.01" }
 androidx_compose_ui = { group = "androidx.compose.ui", name = "ui" }
 androidx_compose_ui_tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx_compose_foundation = { group = "androidx.compose.foundation", name = "foundation" }
@@ -62,12 +62,12 @@ androidx_compose_material_icons_extended = { group = "androidx.compose.material"
 # endregion
 
 # region AndroidX
-androidx_lifecycle_viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version = "2.8.7" }
+androidx_lifecycle_viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version = "2.9.1" }
 androidx_room_compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx_room" }
 androidx_room = { group = "androidx.room", name = "room-ktx", version.ref = "androidx_room" }
-androidx_appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.0" }
+androidx_appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.1" }
 androidx_activity = { group = "androidx.activity", name = "activity-compose", version = "1.10.1" }
-androidx_navigation = { group = "androidx.navigation", name = "navigation-compose", version = "2.8.9" }
+androidx_navigation = { group = "androidx.navigation", name = "navigation-compose", version = "2.9.0" }
 androidx_core_splashscreen = { group = "androidx.core", name = "core-splashscreen", version = "1.0.1" }
 # endregion
 
