@@ -1,10 +1,10 @@
-package com.erdenian.studentassistant.settings.di
+package ru.erdenian.studentassistant.settings.di
 
-import com.erdenian.studentassistant.settings.SettingsDependencies
-import com.erdenian.studentassistant.settings.api.SettingsApi
-import com.erdenian.studentassistant.settings.ui.SettingsViewModel
 import dagger.Component
 import javax.inject.Singleton
+import ru.erdenian.studentassistant.settings.SettingsDependencies
+import ru.erdenian.studentassistant.settings.api.SettingsApi
+import ru.erdenian.studentassistant.settings.ui.SettingsViewModel
 
 @Singleton
 @Component(

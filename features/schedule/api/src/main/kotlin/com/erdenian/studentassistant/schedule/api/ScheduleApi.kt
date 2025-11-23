@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.schedule.api
+package ru.erdenian.studentassistant.schedule.api
 
 import androidx.navigation.NavGraphBuilder
 

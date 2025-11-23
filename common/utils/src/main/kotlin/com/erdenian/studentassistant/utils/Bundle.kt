@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.utils
+package ru.erdenian.studentassistant.utils
 
 import android.os.Build
 import android.os.Bundle

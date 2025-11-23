@@ -1,18 +1,18 @@
-package com.erdenian.studentassistant.repository.database
+package ru.erdenian.studentassistant.repository.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.erdenian.studentassistant.repository.database.dao.HomeworkDao
-import com.erdenian.studentassistant.repository.database.dao.LessonDao
-import com.erdenian.studentassistant.repository.database.dao.SemesterDao
-import com.erdenian.studentassistant.repository.database.entity.ByDateEntity
-import com.erdenian.studentassistant.repository.database.entity.ByWeekdayEntity
-import com.erdenian.studentassistant.repository.database.entity.ClassroomEntity
-import com.erdenian.studentassistant.repository.database.entity.HomeworkEntity
-import com.erdenian.studentassistant.repository.database.entity.LessonEntity
-import com.erdenian.studentassistant.repository.database.entity.SemesterEntity
-import com.erdenian.studentassistant.repository.database.entity.TeacherEntity
+import ru.erdenian.studentassistant.repository.database.dao.HomeworkDao
+import ru.erdenian.studentassistant.repository.database.dao.LessonDao
+import ru.erdenian.studentassistant.repository.database.dao.SemesterDao
+import ru.erdenian.studentassistant.repository.database.entity.ByDateEntity
+import ru.erdenian.studentassistant.repository.database.entity.ByWeekdayEntity
+import ru.erdenian.studentassistant.repository.database.entity.ClassroomEntity
+import ru.erdenian.studentassistant.repository.database.entity.HomeworkEntity
+import ru.erdenian.studentassistant.repository.database.entity.LessonEntity
+import ru.erdenian.studentassistant.repository.database.entity.SemesterEntity
+import ru.erdenian.studentassistant.repository.database.entity.TeacherEntity
 
 @Database(
     entities = [

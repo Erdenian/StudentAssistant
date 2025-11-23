@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.erdenian.studentassistant.utils"
+    namespace = "ru.erdenian.studentassistant.utils"
 }
 
 dependencies {

@@ -1,10 +1,10 @@
-package com.erdenian.studentassistant.di.features
+package ru.erdenian.studentassistant.di.features
 
-import com.erdenian.studentassistant.di.MainComponent
-import com.erdenian.studentassistant.homeworks.HomeworksDependencies
-import com.erdenian.studentassistant.homeworks.createHomeworksApi
 import dagger.Module
 import dagger.Provides
+import ru.erdenian.studentassistant.di.MainComponent
+import ru.erdenian.studentassistant.homeworks.HomeworksDependencies
+import ru.erdenian.studentassistant.homeworks.createHomeworksApi
 
 @Module
 internal class HomeworksModule {

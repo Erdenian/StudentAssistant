@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.repository.impl
+package ru.erdenian.studentassistant.repository.impl
 
 import android.content.Context
 import android.content.SharedPreferences

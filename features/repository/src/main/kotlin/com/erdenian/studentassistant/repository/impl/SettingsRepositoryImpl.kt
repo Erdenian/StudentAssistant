@@ -1,12 +1,12 @@
-package com.erdenian.studentassistant.repository.impl
+package ru.erdenian.studentassistant.repository.impl
 
 import android.content.SharedPreferences
-import com.erdenian.studentassistant.repository.api.SettingsRepository
 import dagger.Reusable
 import java.time.Duration
 import java.time.LocalTime
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
+import ru.erdenian.studentassistant.repository.api.SettingsRepository
 
 @Reusable
 internal class SettingsRepositoryImpl @Inject constructor(

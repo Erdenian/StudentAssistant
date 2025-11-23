@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.schedule.scheduleeditor
+package ru.erdenian.studentassistant.schedule.scheduleeditor
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
@@ -25,20 +25,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.erdenian.studentassistant.repository.api.entity.Lesson
-import com.erdenian.studentassistant.sampledata.Lessons
-import com.erdenian.studentassistant.schedule.composable.LazyLessonsList
-import com.erdenian.studentassistant.schedule.composable.PagerTabStrip
-import com.erdenian.studentassistant.strings.RS
-import com.erdenian.studentassistant.style.AppIcons
-import com.erdenian.studentassistant.style.AppTheme
-import com.erdenian.studentassistant.style.AutoMirrored
-import com.erdenian.studentassistant.uikit.layout.ContextMenuBox
-import com.erdenian.studentassistant.uikit.view.ActionItem
-import com.erdenian.studentassistant.uikit.view.TopAppBarActions
 import java.time.DayOfWeek
 import java.time.format.TextStyle
 import java.util.Locale
+import ru.erdenian.studentassistant.repository.api.entity.Lesson
+import ru.erdenian.studentassistant.sampledata.Lessons
+import ru.erdenian.studentassistant.schedule.composable.LazyLessonsList
+import ru.erdenian.studentassistant.schedule.composable.PagerTabStrip
+import ru.erdenian.studentassistant.strings.RS
+import ru.erdenian.studentassistant.style.AppIcons
+import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.style.AutoMirrored
+import ru.erdenian.studentassistant.uikit.layout.ContextMenuBox
+import ru.erdenian.studentassistant.uikit.view.ActionItem
+import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
 @Composable
 internal fun ScheduleEditorContent(

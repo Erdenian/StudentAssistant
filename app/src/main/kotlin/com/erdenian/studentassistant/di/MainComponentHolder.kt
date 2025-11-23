@@ -1,7 +1,7 @@
-package com.erdenian.studentassistant.di
+package ru.erdenian.studentassistant.di
 
 import android.app.Application
-import com.erdenian.studentassistant.repository.RepositoryConfig
+import ru.erdenian.studentassistant.repository.RepositoryConfig
 
 internal object MainComponentHolder {
 

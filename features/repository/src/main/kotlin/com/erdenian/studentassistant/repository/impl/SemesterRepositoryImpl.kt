@@ -1,12 +1,12 @@
-package com.erdenian.studentassistant.repository.impl
+package ru.erdenian.studentassistant.repository.impl
 
-import com.erdenian.studentassistant.repository.api.SemesterRepository
-import com.erdenian.studentassistant.repository.database.dao.SemesterDao
-import com.erdenian.studentassistant.repository.database.entity.SemesterEntity
 import dagger.Reusable
 import java.time.LocalDate
 import javax.inject.Inject
 import kotlinx.coroutines.flow.map
+import ru.erdenian.studentassistant.repository.api.SemesterRepository
+import ru.erdenian.studentassistant.repository.database.dao.SemesterDao
+import ru.erdenian.studentassistant.repository.database.entity.SemesterEntity
 
 @Reusable
 internal class SemesterRepositoryImpl @Inject constructor(

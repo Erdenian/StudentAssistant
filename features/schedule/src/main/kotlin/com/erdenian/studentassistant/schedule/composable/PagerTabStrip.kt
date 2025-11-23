@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.schedule.composable
+package ru.erdenian.studentassistant.schedule.composable
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -36,13 +36,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.erdenian.studentassistant.style.AppTheme
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
 import kotlinx.coroutines.launch
+import ru.erdenian.studentassistant.style.AppTheme
 
 @Composable
 internal fun PagerTabStrip(

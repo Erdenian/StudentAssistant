@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.repository.api.entity
+package ru.erdenian.studentassistant.repository.api.entity
 
 import android.os.Parcelable
 import java.time.LocalDate

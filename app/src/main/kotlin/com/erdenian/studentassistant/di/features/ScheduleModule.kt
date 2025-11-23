@@ -1,10 +1,10 @@
-package com.erdenian.studentassistant.di.features
+package ru.erdenian.studentassistant.di.features
 
-import com.erdenian.studentassistant.di.MainComponent
-import com.erdenian.studentassistant.schedule.ScheduleDependencies
-import com.erdenian.studentassistant.schedule.createScheduleApi
 import dagger.Module
 import dagger.Provides
+import ru.erdenian.studentassistant.di.MainComponent
+import ru.erdenian.studentassistant.schedule.ScheduleDependencies
+import ru.erdenian.studentassistant.schedule.createScheduleApi
 
 @Module
 internal class ScheduleModule {

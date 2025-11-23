@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.repository.api.entity
+package ru.erdenian.studentassistant.repository.api.entity
 
 import java.time.LocalDate
 import kotlinx.serialization.KSerializer

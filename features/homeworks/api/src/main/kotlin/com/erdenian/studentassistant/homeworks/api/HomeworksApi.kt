@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.homeworks.api
+package ru.erdenian.studentassistant.homeworks.api
 
 import androidx.navigation.NavGraphBuilder
 

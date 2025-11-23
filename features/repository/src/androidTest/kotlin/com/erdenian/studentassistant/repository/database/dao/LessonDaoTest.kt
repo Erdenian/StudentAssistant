@@ -1,15 +1,7 @@
-package com.erdenian.studentassistant.repository.database.dao
+package ru.erdenian.studentassistant.repository.database.dao
 
 import android.database.sqlite.SQLiteConstraintException
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.erdenian.studentassistant.repository.database.buildDatabase
-import com.erdenian.studentassistant.repository.database.entity.ByDateEntity
-import com.erdenian.studentassistant.repository.database.entity.ByWeekdayEntity
-import com.erdenian.studentassistant.repository.database.entity.ClassroomEntity
-import com.erdenian.studentassistant.repository.database.entity.FullLesson
-import com.erdenian.studentassistant.repository.database.entity.LessonEntity
-import com.erdenian.studentassistant.repository.database.entity.SemesterEntity
-import com.erdenian.studentassistant.repository.database.entity.TeacherEntity
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
@@ -24,6 +16,14 @@ import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import ru.erdenian.studentassistant.repository.database.buildDatabase
+import ru.erdenian.studentassistant.repository.database.entity.ByDateEntity
+import ru.erdenian.studentassistant.repository.database.entity.ByWeekdayEntity
+import ru.erdenian.studentassistant.repository.database.entity.ClassroomEntity
+import ru.erdenian.studentassistant.repository.database.entity.FullLesson
+import ru.erdenian.studentassistant.repository.database.entity.LessonEntity
+import ru.erdenian.studentassistant.repository.database.entity.SemesterEntity
+import ru.erdenian.studentassistant.repository.database.entity.TeacherEntity
 
 @RunWith(AndroidJUnit4::class)
 internal class LessonDaoTest {

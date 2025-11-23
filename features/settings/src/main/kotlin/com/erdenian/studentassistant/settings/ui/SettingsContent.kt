@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.settings.ui
+package ru.erdenian.studentassistant.settings.ui
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
@@ -14,13 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.erdenian.studentassistant.settings.preference.BooleanPreference
-import com.erdenian.studentassistant.settings.preference.DurationPreference
-import com.erdenian.studentassistant.settings.preference.TimePreference
-import com.erdenian.studentassistant.strings.RS
-import com.erdenian.studentassistant.style.AppTheme
 import java.time.Duration
 import java.time.LocalTime
+import ru.erdenian.studentassistant.settings.preference.BooleanPreference
+import ru.erdenian.studentassistant.settings.preference.DurationPreference
+import ru.erdenian.studentassistant.settings.preference.TimePreference
+import ru.erdenian.studentassistant.strings.RS
+import ru.erdenian.studentassistant.style.AppTheme
 
 @Composable
 internal fun SettingsContent(

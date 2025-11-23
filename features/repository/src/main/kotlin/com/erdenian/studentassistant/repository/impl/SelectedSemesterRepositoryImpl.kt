@@ -1,9 +1,5 @@
-package com.erdenian.studentassistant.repository.impl
+package ru.erdenian.studentassistant.repository.impl
 
-import com.erdenian.studentassistant.repository.api.SelectedSemesterRepository
-import com.erdenian.studentassistant.repository.api.entity.Semester
-import com.erdenian.studentassistant.repository.database.dao.SemesterDao
-import com.erdenian.studentassistant.repository.database.entity.SemesterEntity
 import java.time.LocalDate
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
@@ -19,6 +15,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
+import ru.erdenian.studentassistant.repository.api.SelectedSemesterRepository
+import ru.erdenian.studentassistant.repository.api.entity.Semester
+import ru.erdenian.studentassistant.repository.database.dao.SemesterDao
+import ru.erdenian.studentassistant.repository.database.entity.SemesterEntity
 
 @Singleton
 internal class SelectedSemesterRepositoryImpl @Inject constructor(

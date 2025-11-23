@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.uikit.layout
+package ru.erdenian.studentassistant.uikit.layout
 
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown

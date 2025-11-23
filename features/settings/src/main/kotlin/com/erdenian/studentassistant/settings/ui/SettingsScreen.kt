@@ -1,10 +1,10 @@
-package com.erdenian.studentassistant.settings.ui
+package ru.erdenian.studentassistant.settings.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.erdenian.studentassistant.settings.di.SettingsComponentHolder
+import ru.erdenian.studentassistant.settings.di.SettingsComponentHolder
 
 @Composable
 internal fun SettingsScreen() {

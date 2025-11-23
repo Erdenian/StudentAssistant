@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.uikit.placeholder
+package ru.erdenian.studentassistant.uikit.placeholder
 
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.MutableTransitionState

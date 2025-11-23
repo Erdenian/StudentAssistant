@@ -1,3 +1,3 @@
-package com.erdenian.studentassistant.navigation
+package ru.erdenian.studentassistant.navigation
 
 interface Route

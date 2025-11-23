@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.schedule.schedule
+package ru.erdenian.studentassistant.schedule.schedule
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
@@ -29,27 +29,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.erdenian.studentassistant.repository.api.entity.Lesson
-import com.erdenian.studentassistant.repository.api.entity.Semester
-import com.erdenian.studentassistant.sampledata.Lessons
-import com.erdenian.studentassistant.sampledata.Semesters
-import com.erdenian.studentassistant.schedule.composable.LazyLessonsList
-import com.erdenian.studentassistant.schedule.composable.PagerTabStrip
-import com.erdenian.studentassistant.schedule.schedule.SemesterWithState.Companion.animateScrollToDate
-import com.erdenian.studentassistant.schedule.schedule.SemesterWithState.Companion.currentDate
-import com.erdenian.studentassistant.schedule.schedule.SemesterWithState.Companion.getDate
-import com.erdenian.studentassistant.strings.RS
-import com.erdenian.studentassistant.style.AppIcons
-import com.erdenian.studentassistant.style.AppTheme
-import com.erdenian.studentassistant.style.dimensions
-import com.erdenian.studentassistant.uikit.dialog.DatePickerDialog
-import com.erdenian.studentassistant.uikit.view.ActionItem
-import com.erdenian.studentassistant.uikit.view.TopAppBarActions
-import com.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import kotlinx.coroutines.launch
+import ru.erdenian.studentassistant.repository.api.entity.Lesson
+import ru.erdenian.studentassistant.repository.api.entity.Semester
+import ru.erdenian.studentassistant.sampledata.Lessons
+import ru.erdenian.studentassistant.sampledata.Semesters
+import ru.erdenian.studentassistant.schedule.composable.LazyLessonsList
+import ru.erdenian.studentassistant.schedule.composable.PagerTabStrip
+import ru.erdenian.studentassistant.schedule.schedule.SemesterWithState.Companion.animateScrollToDate
+import ru.erdenian.studentassistant.schedule.schedule.SemesterWithState.Companion.currentDate
+import ru.erdenian.studentassistant.schedule.schedule.SemesterWithState.Companion.getDate
+import ru.erdenian.studentassistant.strings.RS
+import ru.erdenian.studentassistant.style.AppIcons
+import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.style.dimensions
+import ru.erdenian.studentassistant.uikit.dialog.DatePickerDialog
+import ru.erdenian.studentassistant.uikit.view.ActionItem
+import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
+import ru.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
 
 @Composable
 internal fun ScheduleContent(

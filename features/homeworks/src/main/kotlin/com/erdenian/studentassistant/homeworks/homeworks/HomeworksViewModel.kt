@@ -1,10 +1,8 @@
-package com.erdenian.studentassistant.homeworks.homeworks
+package ru.erdenian.studentassistant.homeworks.homeworks
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.erdenian.studentassistant.repository.api.RepositoryApi
-import com.erdenian.studentassistant.repository.api.entity.Homework
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +12,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import ru.erdenian.studentassistant.repository.api.RepositoryApi
+import ru.erdenian.studentassistant.repository.api.entity.Homework
 
 internal class HomeworksViewModel @Inject constructor(
     application: Application,

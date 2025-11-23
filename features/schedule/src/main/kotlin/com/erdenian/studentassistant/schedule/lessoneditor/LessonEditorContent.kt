@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.schedule.lessoneditor
+package ru.erdenian.studentassistant.schedule.lessoneditor
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
@@ -37,27 +37,27 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.erdenian.studentassistant.repository.api.entity.Lesson
-import com.erdenian.studentassistant.sampledata.Lessons
-import com.erdenian.studentassistant.schedule.lessoneditor.composable.AutoCompleteTextField
-import com.erdenian.studentassistant.schedule.lessoneditor.composable.MultiAutoCompleteTextField
-import com.erdenian.studentassistant.schedule.lessoneditor.composable.WeekdayPicker
-import com.erdenian.studentassistant.schedule.lessoneditor.composable.WeeksSelector
-import com.erdenian.studentassistant.strings.RS
-import com.erdenian.studentassistant.style.AppIcons
-import com.erdenian.studentassistant.style.AppTheme
-import com.erdenian.studentassistant.style.AutoMirrored
-import com.erdenian.studentassistant.style.dimensions
-import com.erdenian.studentassistant.uikit.dialog.TimePickerDialog
-import com.erdenian.studentassistant.uikit.placeholder.PlaceholderHighlight
-import com.erdenian.studentassistant.uikit.placeholder.fade
-import com.erdenian.studentassistant.uikit.placeholder.placeholder
-import com.erdenian.studentassistant.uikit.view.ActionItem
-import com.erdenian.studentassistant.uikit.view.TopAppBarActions
 import java.time.DayOfWeek
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import ru.erdenian.studentassistant.repository.api.entity.Lesson
+import ru.erdenian.studentassistant.sampledata.Lessons
+import ru.erdenian.studentassistant.schedule.lessoneditor.composable.AutoCompleteTextField
+import ru.erdenian.studentassistant.schedule.lessoneditor.composable.MultiAutoCompleteTextField
+import ru.erdenian.studentassistant.schedule.lessoneditor.composable.WeekdayPicker
+import ru.erdenian.studentassistant.schedule.lessoneditor.composable.WeeksSelector
+import ru.erdenian.studentassistant.strings.RS
+import ru.erdenian.studentassistant.style.AppIcons
+import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.style.AutoMirrored
+import ru.erdenian.studentassistant.style.dimensions
+import ru.erdenian.studentassistant.uikit.dialog.TimePickerDialog
+import ru.erdenian.studentassistant.uikit.placeholder.PlaceholderHighlight
+import ru.erdenian.studentassistant.uikit.placeholder.fade
+import ru.erdenian.studentassistant.uikit.placeholder.placeholder
+import ru.erdenian.studentassistant.uikit.view.ActionItem
+import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
 @Composable
 internal fun LessonEditorContent(

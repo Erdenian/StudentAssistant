@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.schedule.schedule
+package ru.erdenian.studentassistant.schedule.schedule
 
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
@@ -9,11 +9,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.erdenian.studentassistant.navigation.LocalNavController
-import com.erdenian.studentassistant.repository.api.entity.Lesson
-import com.erdenian.studentassistant.schedule.api.ScheduleRoute
-import com.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
 import java.time.LocalDate
+import ru.erdenian.studentassistant.navigation.LocalNavController
+import ru.erdenian.studentassistant.repository.api.entity.Lesson
+import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
+import ru.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
 
 @Composable
 internal fun ScheduleScreen() {

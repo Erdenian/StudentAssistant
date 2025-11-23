@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.schedule.lessoninformation
+package ru.erdenian.studentassistant.schedule.lessoninformation
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
@@ -12,13 +12,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.erdenian.studentassistant.homeworks.api.HomeworksRoute
-import com.erdenian.studentassistant.navigation.LocalNavController
-import com.erdenian.studentassistant.repository.api.entity.Homework
-import com.erdenian.studentassistant.schedule.api.ScheduleRoute
-import com.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
-import com.erdenian.studentassistant.strings.RS
-import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
+import ru.erdenian.studentassistant.homeworks.api.HomeworksRoute
+import ru.erdenian.studentassistant.navigation.LocalNavController
+import ru.erdenian.studentassistant.repository.api.entity.Homework
+import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
+import ru.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
+import ru.erdenian.studentassistant.strings.RS
+import ru.erdenian.studentassistant.uikit.dialog.ProgressDialog
 
 @Composable
 internal fun LessonInformationScreen(route: ScheduleRoute.LessonInformation) {

@@ -1,12 +1,12 @@
-package com.erdenian.studentassistant.settings.ui
+package ru.erdenian.studentassistant.settings.ui
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.erdenian.studentassistant.repository.api.RepositoryApi
 import java.time.Duration
 import java.time.LocalTime
 import javax.inject.Inject
+import ru.erdenian.studentassistant.repository.api.RepositoryApi
 
 internal class SettingsViewModel @Inject constructor(
     application: Application,

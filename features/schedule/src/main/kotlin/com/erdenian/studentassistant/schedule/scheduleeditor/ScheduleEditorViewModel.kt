@@ -1,10 +1,8 @@
-package com.erdenian.studentassistant.schedule.scheduleeditor
+package ru.erdenian.studentassistant.schedule.scheduleeditor
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.erdenian.studentassistant.repository.api.RepositoryApi
-import com.erdenian.studentassistant.repository.api.entity.Lesson
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -16,6 +14,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import ru.erdenian.studentassistant.repository.api.RepositoryApi
+import ru.erdenian.studentassistant.repository.api.entity.Lesson
 
 internal class ScheduleEditorViewModel @AssistedInject constructor(
     application: Application,

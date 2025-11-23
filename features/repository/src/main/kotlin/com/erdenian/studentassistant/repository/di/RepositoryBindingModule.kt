@@ -1,17 +1,17 @@
-package com.erdenian.studentassistant.repository.di
+package ru.erdenian.studentassistant.repository.di
 
-import com.erdenian.studentassistant.repository.api.HomeworkRepository
-import com.erdenian.studentassistant.repository.api.LessonRepository
-import com.erdenian.studentassistant.repository.api.SelectedSemesterRepository
-import com.erdenian.studentassistant.repository.api.SemesterRepository
-import com.erdenian.studentassistant.repository.api.SettingsRepository
-import com.erdenian.studentassistant.repository.impl.HomeworkRepositoryImpl
-import com.erdenian.studentassistant.repository.impl.LessonRepositoryImpl
-import com.erdenian.studentassistant.repository.impl.SelectedSemesterRepositoryImpl
-import com.erdenian.studentassistant.repository.impl.SemesterRepositoryImpl
-import com.erdenian.studentassistant.repository.impl.SettingsRepositoryImpl
 import dagger.Binds
 import dagger.Module
+import ru.erdenian.studentassistant.repository.api.HomeworkRepository
+import ru.erdenian.studentassistant.repository.api.LessonRepository
+import ru.erdenian.studentassistant.repository.api.SelectedSemesterRepository
+import ru.erdenian.studentassistant.repository.api.SemesterRepository
+import ru.erdenian.studentassistant.repository.api.SettingsRepository
+import ru.erdenian.studentassistant.repository.impl.HomeworkRepositoryImpl
+import ru.erdenian.studentassistant.repository.impl.LessonRepositoryImpl
+import ru.erdenian.studentassistant.repository.impl.SelectedSemesterRepositoryImpl
+import ru.erdenian.studentassistant.repository.impl.SemesterRepositoryImpl
+import ru.erdenian.studentassistant.repository.impl.SettingsRepositoryImpl
 
 @Module
 internal interface RepositoryBindingModule {

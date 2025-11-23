@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.uikit.dialog
+package ru.erdenian.studentassistant.uikit.dialog
 
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
@@ -11,11 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.erdenian.studentassistant.strings.RS
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneOffset
+import ru.erdenian.studentassistant.strings.RS
 
 @Composable
 fun DatePickerDialog(

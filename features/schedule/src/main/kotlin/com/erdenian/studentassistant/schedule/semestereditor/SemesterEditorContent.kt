@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.schedule.semestereditor
+package ru.erdenian.studentassistant.schedule.semestereditor
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
@@ -35,21 +35,21 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.erdenian.studentassistant.sampledata.Semesters
-import com.erdenian.studentassistant.strings.RS
-import com.erdenian.studentassistant.style.AppIcons
-import com.erdenian.studentassistant.style.AppTheme
-import com.erdenian.studentassistant.style.AutoMirrored
-import com.erdenian.studentassistant.style.dimensions
-import com.erdenian.studentassistant.uikit.dialog.DatePickerDialog
-import com.erdenian.studentassistant.uikit.placeholder.PlaceholderHighlight
-import com.erdenian.studentassistant.uikit.placeholder.fade
-import com.erdenian.studentassistant.uikit.placeholder.placeholder
-import com.erdenian.studentassistant.uikit.view.ActionItem
-import com.erdenian.studentassistant.uikit.view.TopAppBarActions
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import ru.erdenian.studentassistant.sampledata.Semesters
+import ru.erdenian.studentassistant.strings.RS
+import ru.erdenian.studentassistant.style.AppIcons
+import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.style.AutoMirrored
+import ru.erdenian.studentassistant.style.dimensions
+import ru.erdenian.studentassistant.uikit.dialog.DatePickerDialog
+import ru.erdenian.studentassistant.uikit.placeholder.PlaceholderHighlight
+import ru.erdenian.studentassistant.uikit.placeholder.fade
+import ru.erdenian.studentassistant.uikit.placeholder.placeholder
+import ru.erdenian.studentassistant.uikit.view.ActionItem
+import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
 @Composable
 internal fun SemesterEditorContent(

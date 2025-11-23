@@ -1,7 +1,7 @@
-package com.erdenian.studentassistant.settings.api
+package ru.erdenian.studentassistant.settings.api
 
-import com.erdenian.studentassistant.navigation.Route
 import kotlinx.serialization.Serializable
+import ru.erdenian.studentassistant.navigation.Route
 
 sealed interface SettingsRoute : Route {
     @Serializable

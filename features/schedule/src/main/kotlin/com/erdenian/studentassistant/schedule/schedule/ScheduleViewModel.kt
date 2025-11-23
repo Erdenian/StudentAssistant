@@ -1,13 +1,13 @@
-package com.erdenian.studentassistant.schedule.schedule
+package ru.erdenian.studentassistant.schedule.schedule
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.erdenian.studentassistant.repository.api.RepositoryApi
 import java.time.LocalDate
 import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import ru.erdenian.studentassistant.repository.api.RepositoryApi
 
 internal class ScheduleViewModel @Inject constructor(
     application: Application,

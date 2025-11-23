@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.repository.api
+package ru.erdenian.studentassistant.repository.api
 
 import java.time.Duration
 import java.time.LocalTime

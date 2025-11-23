@@ -1,10 +1,10 @@
-package com.erdenian.studentassistant.repository.database.entity
+package ru.erdenian.studentassistant.repository.database.entity
 
 import android.os.Parcelable
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.erdenian.studentassistant.repository.api.entity.Lesson
 import kotlinx.parcelize.Parcelize
+import ru.erdenian.studentassistant.repository.api.entity.Lesson
 
 @Parcelize
 internal data class FullLesson(

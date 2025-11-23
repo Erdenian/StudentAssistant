@@ -1,10 +1,10 @@
-package com.erdenian.studentassistant
+package ru.erdenian.studentassistant
 
 import android.app.Application
-import com.erdenian.studentassistant.di.MainComponentHolder
-import com.erdenian.studentassistant.repository.RepositoryConfig
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
+import ru.erdenian.studentassistant.di.MainComponentHolder
+import ru.erdenian.studentassistant.repository.RepositoryConfig
 
 internal class MainApplication : Application() {
 

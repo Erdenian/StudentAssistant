@@ -1,13 +1,13 @@
-package com.erdenian.studentassistant.repository.di
+package ru.erdenian.studentassistant.repository.di
 
 import android.app.Application
 import android.content.Context
-import com.erdenian.studentassistant.repository.RepositoryConfig
-import com.erdenian.studentassistant.repository.database.dao.SemesterDao
-import com.erdenian.studentassistant.repository.impl.SelectedSemesterRepositoryImpl
-import com.erdenian.studentassistant.repository.impl.SettingsRepositoryImpl
 import dagger.Module
 import dagger.Provides
+import ru.erdenian.studentassistant.repository.RepositoryConfig
+import ru.erdenian.studentassistant.repository.database.dao.SemesterDao
+import ru.erdenian.studentassistant.repository.impl.SelectedSemesterRepositoryImpl
+import ru.erdenian.studentassistant.repository.impl.SettingsRepositoryImpl
 
 @Module
 internal class RepositoryConfigModule {

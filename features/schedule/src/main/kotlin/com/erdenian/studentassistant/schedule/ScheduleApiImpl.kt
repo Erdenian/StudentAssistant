@@ -1,23 +1,23 @@
-package com.erdenian.studentassistant.schedule
+package ru.erdenian.studentassistant.schedule
 
 import android.os.Bundle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.toRoute
-import com.erdenian.studentassistant.navigation.composableAnimated
-import com.erdenian.studentassistant.repository.api.entity.Lesson
-import com.erdenian.studentassistant.schedule.api.ScheduleApi
-import com.erdenian.studentassistant.schedule.api.ScheduleRoute
-import com.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
-import com.erdenian.studentassistant.schedule.lessoneditor.LessonEditorScreen
-import com.erdenian.studentassistant.schedule.lessoninformation.LessonInformationScreen
-import com.erdenian.studentassistant.schedule.schedule.ScheduleScreen
-import com.erdenian.studentassistant.schedule.scheduleeditor.ScheduleEditorScreen
-import com.erdenian.studentassistant.schedule.semestereditor.SemesterEditorScreen
-import com.erdenian.studentassistant.utils.getParcelableCompat
 import javax.inject.Inject
 import kotlin.reflect.typeOf
 import kotlinx.serialization.json.Json
+import ru.erdenian.studentassistant.navigation.composableAnimated
+import ru.erdenian.studentassistant.repository.api.entity.Lesson
+import ru.erdenian.studentassistant.schedule.api.ScheduleApi
+import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
+import ru.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
+import ru.erdenian.studentassistant.schedule.lessoneditor.LessonEditorScreen
+import ru.erdenian.studentassistant.schedule.lessoninformation.LessonInformationScreen
+import ru.erdenian.studentassistant.schedule.schedule.ScheduleScreen
+import ru.erdenian.studentassistant.schedule.scheduleeditor.ScheduleEditorScreen
+import ru.erdenian.studentassistant.schedule.semestereditor.SemesterEditorScreen
+import ru.erdenian.studentassistant.utils.getParcelableCompat
 
 public fun createScheduleApi(dependencies: ScheduleDependencies): ScheduleApi =
     ScheduleComponentHolder.create(dependencies).api

@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.schedule.scheduleeditor
+package ru.erdenian.studentassistant.schedule.scheduleeditor
 
 import android.annotation.SuppressLint
 import androidx.compose.material3.AlertDialog
@@ -17,14 +17,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.erdenian.studentassistant.navigation.LocalNavController
-import com.erdenian.studentassistant.repository.api.entity.Lesson
-import com.erdenian.studentassistant.schedule.api.ScheduleRoute
-import com.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
-import com.erdenian.studentassistant.strings.RS
-import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
 import java.time.DayOfWeek
 import kotlinx.coroutines.launch
+import ru.erdenian.studentassistant.navigation.LocalNavController
+import ru.erdenian.studentassistant.repository.api.entity.Lesson
+import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
+import ru.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
+import ru.erdenian.studentassistant.strings.RS
+import ru.erdenian.studentassistant.uikit.dialog.ProgressDialog
 
 @Composable
 internal fun ScheduleEditorScreen(route: ScheduleRoute.ScheduleEditor) {

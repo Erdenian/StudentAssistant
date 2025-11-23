@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.uikit.dialog
+package ru.erdenian.studentassistant.uikit.dialog
 
 import android.app.Activity
 import android.content.ContextWrapper
@@ -21,8 +21,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.erdenian.studentassistant.style.AppTheme
-import com.erdenian.studentassistant.uikit.layout.DelayedVisibility
+import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.uikit.layout.DelayedVisibility
 
 @Composable
 fun ProgressDialog(text: String) {

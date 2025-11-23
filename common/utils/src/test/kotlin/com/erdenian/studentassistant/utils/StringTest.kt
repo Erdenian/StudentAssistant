@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.utils
+package ru.erdenian.studentassistant.utils
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

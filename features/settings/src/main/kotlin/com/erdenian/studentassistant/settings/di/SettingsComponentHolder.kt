@@ -1,6 +1,6 @@
-package com.erdenian.studentassistant.settings.di
+package ru.erdenian.studentassistant.settings.di
 
-import com.erdenian.studentassistant.settings.SettingsDependencies
+import ru.erdenian.studentassistant.settings.SettingsDependencies
 
 internal object SettingsComponentHolder {
 

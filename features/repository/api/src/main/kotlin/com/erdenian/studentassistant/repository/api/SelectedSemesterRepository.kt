@@ -1,7 +1,7 @@
-package com.erdenian.studentassistant.repository.api
+package ru.erdenian.studentassistant.repository.api
 
-import com.erdenian.studentassistant.repository.api.entity.Semester
 import kotlinx.coroutines.flow.StateFlow
+import ru.erdenian.studentassistant.repository.api.entity.Semester
 
 interface SelectedSemesterRepository {
     val selectedFlow: StateFlow<Semester?>

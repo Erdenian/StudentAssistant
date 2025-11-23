@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.settings.preference
+package ru.erdenian.studentassistant.settings.preference
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -19,8 +19,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
-import com.erdenian.studentassistant.uikit.R
 import java.time.Duration
+import ru.erdenian.studentassistant.uikit.R
 
 @Composable
 internal fun DurationPreference(

@@ -1,9 +1,9 @@
-package com.erdenian.studentassistant.homeworks.di
+package ru.erdenian.studentassistant.homeworks.di
 
-import com.erdenian.studentassistant.homeworks.HomeworksApiImpl
-import com.erdenian.studentassistant.homeworks.api.HomeworksApi
 import dagger.Binds
 import dagger.Module
+import ru.erdenian.studentassistant.homeworks.HomeworksApiImpl
+import ru.erdenian.studentassistant.homeworks.api.HomeworksApi
 
 @Module
 internal interface HomeworksApiModule {

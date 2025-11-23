@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.settings.preference
+package ru.erdenian.studentassistant.settings.preference
 
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable

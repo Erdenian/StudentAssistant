@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.repository
+package ru.erdenian.studentassistant.repository
 
 import android.app.Application
 import kotlinx.coroutines.CoroutineScope

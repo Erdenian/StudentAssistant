@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.uikit.view
+package ru.erdenian.studentassistant.uikit.view
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
@@ -33,9 +33,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
-import com.erdenian.studentassistant.style.AppIcons
-import com.erdenian.studentassistant.style.AppTheme
-import com.erdenian.studentassistant.style.AutoMirrored
+import ru.erdenian.studentassistant.style.AppIcons
+import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.style.AutoMirrored
 
 @Composable
 fun TopAppBarDropdownMenu(

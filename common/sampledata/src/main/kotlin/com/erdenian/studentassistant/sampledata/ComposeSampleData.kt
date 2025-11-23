@@ -1,14 +1,14 @@
 @file:Suppress("StringLiteralDuplication")
 
-package com.erdenian.studentassistant.sampledata
+package ru.erdenian.studentassistant.sampledata
 
 import androidx.compose.runtime.Composable
-import com.erdenian.studentassistant.repository.api.entity.Homework
-import com.erdenian.studentassistant.repository.api.entity.Lesson
-import com.erdenian.studentassistant.repository.api.entity.Semester
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
+import ru.erdenian.studentassistant.repository.api.entity.Homework
+import ru.erdenian.studentassistant.repository.api.entity.Lesson
+import ru.erdenian.studentassistant.repository.api.entity.Semester
 
 object Semesters {
 

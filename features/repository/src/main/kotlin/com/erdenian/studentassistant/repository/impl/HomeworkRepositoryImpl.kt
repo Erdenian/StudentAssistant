@@ -1,10 +1,5 @@
-package com.erdenian.studentassistant.repository.impl
+package ru.erdenian.studentassistant.repository.impl
 
-import com.erdenian.studentassistant.repository.api.HomeworkRepository
-import com.erdenian.studentassistant.repository.api.SelectedSemesterRepository
-import com.erdenian.studentassistant.repository.api.entity.Homework
-import com.erdenian.studentassistant.repository.database.dao.HomeworkDao
-import com.erdenian.studentassistant.repository.database.entity.HomeworkEntity
 import dagger.Reusable
 import java.time.LocalDate
 import javax.inject.Inject
@@ -12,6 +7,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import ru.erdenian.studentassistant.repository.api.HomeworkRepository
+import ru.erdenian.studentassistant.repository.api.SelectedSemesterRepository
+import ru.erdenian.studentassistant.repository.api.entity.Homework
+import ru.erdenian.studentassistant.repository.database.dao.HomeworkDao
+import ru.erdenian.studentassistant.repository.database.entity.HomeworkEntity
 
 @Reusable
 internal class HomeworkRepositoryImpl @Inject constructor(

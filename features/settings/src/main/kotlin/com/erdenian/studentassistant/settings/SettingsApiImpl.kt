@@ -1,12 +1,12 @@
-package com.erdenian.studentassistant.settings
+package ru.erdenian.studentassistant.settings
 
 import androidx.navigation.NavGraphBuilder
-import com.erdenian.studentassistant.navigation.composableAnimated
-import com.erdenian.studentassistant.settings.api.SettingsApi
-import com.erdenian.studentassistant.settings.api.SettingsRoute
-import com.erdenian.studentassistant.settings.di.SettingsComponentHolder
-import com.erdenian.studentassistant.settings.ui.SettingsScreen
 import javax.inject.Inject
+import ru.erdenian.studentassistant.navigation.composableAnimated
+import ru.erdenian.studentassistant.settings.api.SettingsApi
+import ru.erdenian.studentassistant.settings.api.SettingsRoute
+import ru.erdenian.studentassistant.settings.di.SettingsComponentHolder
+import ru.erdenian.studentassistant.settings.ui.SettingsScreen
 
 public fun createSettingsApi(dependencies: SettingsDependencies): SettingsApi =
     SettingsComponentHolder.create(dependencies).api

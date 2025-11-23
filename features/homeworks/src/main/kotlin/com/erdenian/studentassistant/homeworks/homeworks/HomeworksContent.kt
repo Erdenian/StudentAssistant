@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.homeworks.homeworks
+package ru.erdenian.studentassistant.homeworks.homeworks
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
@@ -22,19 +22,19 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.erdenian.studentassistant.homeworks.composable.LazyHomeworksList
-import com.erdenian.studentassistant.repository.api.entity.Homework
-import com.erdenian.studentassistant.repository.api.entity.Semester
-import com.erdenian.studentassistant.sampledata.Homeworks
-import com.erdenian.studentassistant.sampledata.Semesters
-import com.erdenian.studentassistant.strings.RS
-import com.erdenian.studentassistant.style.AppIcons
-import com.erdenian.studentassistant.style.AppTheme
-import com.erdenian.studentassistant.style.dimensions
-import com.erdenian.studentassistant.uikit.layout.ContextMenuBox
-import com.erdenian.studentassistant.uikit.view.ActionItem
-import com.erdenian.studentassistant.uikit.view.TopAppBarActions
-import com.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
+import ru.erdenian.studentassistant.homeworks.composable.LazyHomeworksList
+import ru.erdenian.studentassistant.repository.api.entity.Homework
+import ru.erdenian.studentassistant.repository.api.entity.Semester
+import ru.erdenian.studentassistant.sampledata.Homeworks
+import ru.erdenian.studentassistant.sampledata.Semesters
+import ru.erdenian.studentassistant.strings.RS
+import ru.erdenian.studentassistant.style.AppIcons
+import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.style.dimensions
+import ru.erdenian.studentassistant.uikit.layout.ContextMenuBox
+import ru.erdenian.studentassistant.uikit.view.ActionItem
+import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
+import ru.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
 
 @Composable
 internal fun HomeworksContent(

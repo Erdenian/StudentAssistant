@@ -1,8 +1,8 @@
-package com.erdenian.studentassistant.repository.api
+package ru.erdenian.studentassistant.repository.api
 
-import com.erdenian.studentassistant.repository.api.entity.Homework
 import java.time.LocalDate
 import kotlinx.coroutines.flow.Flow
+import ru.erdenian.studentassistant.repository.api.entity.Homework
 
 interface HomeworkRepository {
 

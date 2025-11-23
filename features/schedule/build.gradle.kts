@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.erdenian.studentassistant.schedule"
+    namespace = "ru.erdenian.studentassistant.schedule"
 }
 
 dependencies {

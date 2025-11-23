@@ -1,10 +1,10 @@
-package com.erdenian.studentassistant.repository.api
+package ru.erdenian.studentassistant.repository.api
 
-import com.erdenian.studentassistant.repository.api.entity.Lesson
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import kotlinx.coroutines.flow.Flow
+import ru.erdenian.studentassistant.repository.api.entity.Lesson
 
 interface LessonRepository {
 

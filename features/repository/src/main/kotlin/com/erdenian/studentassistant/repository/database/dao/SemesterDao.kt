@@ -1,12 +1,12 @@
-package com.erdenian.studentassistant.repository.database.dao
+package ru.erdenian.studentassistant.repository.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.erdenian.studentassistant.repository.database.entity.SemesterEntity
 import kotlinx.coroutines.flow.Flow
+import ru.erdenian.studentassistant.repository.database.entity.SemesterEntity
 
 @Dao
 internal interface SemesterDao {

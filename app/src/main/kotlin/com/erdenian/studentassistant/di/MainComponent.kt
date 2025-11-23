@@ -1,22 +1,22 @@
-package com.erdenian.studentassistant.di
+package ru.erdenian.studentassistant.di
 
 import android.app.Application
-import com.erdenian.studentassistant.di.features.HomeworksModule
-import com.erdenian.studentassistant.di.features.RepositoryModule
-import com.erdenian.studentassistant.di.features.ScheduleModule
-import com.erdenian.studentassistant.di.features.SettingsModule
-import com.erdenian.studentassistant.homeworks.HomeworksDependencies
-import com.erdenian.studentassistant.homeworks.api.HomeworksApi
-import com.erdenian.studentassistant.repository.RepositoryConfig
-import com.erdenian.studentassistant.repository.RepositoryDependencies
-import com.erdenian.studentassistant.repository.api.RepositoryApi
-import com.erdenian.studentassistant.schedule.ScheduleDependencies
-import com.erdenian.studentassistant.schedule.api.ScheduleApi
-import com.erdenian.studentassistant.settings.SettingsDependencies
-import com.erdenian.studentassistant.settings.api.SettingsApi
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
+import ru.erdenian.studentassistant.di.features.HomeworksModule
+import ru.erdenian.studentassistant.di.features.RepositoryModule
+import ru.erdenian.studentassistant.di.features.ScheduleModule
+import ru.erdenian.studentassistant.di.features.SettingsModule
+import ru.erdenian.studentassistant.homeworks.HomeworksDependencies
+import ru.erdenian.studentassistant.homeworks.api.HomeworksApi
+import ru.erdenian.studentassistant.repository.RepositoryConfig
+import ru.erdenian.studentassistant.repository.RepositoryDependencies
+import ru.erdenian.studentassistant.repository.api.RepositoryApi
+import ru.erdenian.studentassistant.schedule.ScheduleDependencies
+import ru.erdenian.studentassistant.schedule.api.ScheduleApi
+import ru.erdenian.studentassistant.settings.SettingsDependencies
+import ru.erdenian.studentassistant.settings.api.SettingsApi
 
 @Singleton
 @Component(

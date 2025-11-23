@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.schedule.lessoneditor.composable
+package ru.erdenian.studentassistant.schedule.lessoneditor.composable
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.text.KeyboardActions
@@ -28,7 +28,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
-import com.erdenian.studentassistant.utils.toSingleLine
+import ru.erdenian.studentassistant.utils.toSingleLine
 
 private const val DELIMITER = ','
 private const val LENGTH_TO_EXPAND = 2

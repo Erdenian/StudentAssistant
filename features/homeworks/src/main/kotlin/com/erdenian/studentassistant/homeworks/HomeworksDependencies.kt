@@ -1,7 +1,7 @@
-package com.erdenian.studentassistant.homeworks
+package ru.erdenian.studentassistant.homeworks
 
 import android.app.Application
-import com.erdenian.studentassistant.repository.api.RepositoryApi
+import ru.erdenian.studentassistant.repository.api.RepositoryApi
 
 public interface HomeworksDependencies {
     public val application: Application

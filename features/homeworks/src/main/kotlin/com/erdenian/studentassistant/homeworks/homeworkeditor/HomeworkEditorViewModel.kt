@@ -1,9 +1,8 @@
-package com.erdenian.studentassistant.homeworks.homeworkeditor
+package ru.erdenian.studentassistant.homeworks.homeworkeditor
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.erdenian.studentassistant.repository.api.RepositoryApi
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -20,6 +19,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import ru.erdenian.studentassistant.repository.api.RepositoryApi
 
 internal class HomeworkEditorViewModel @AssistedInject constructor(
     application: Application,

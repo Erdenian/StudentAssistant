@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.homeworks.homeworkeditor
+package ru.erdenian.studentassistant.homeworks.homeworkeditor
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
@@ -14,15 +14,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.erdenian.studentassistant.homeworks.api.HomeworksRoute
-import com.erdenian.studentassistant.homeworks.di.HomeworksComponentHolder
-import com.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorViewModel.Error
-import com.erdenian.studentassistant.navigation.LocalNavController
-import com.erdenian.studentassistant.schedule.api.ScheduleRoute
-import com.erdenian.studentassistant.strings.RS
-import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
-import com.erdenian.studentassistant.utils.toSingleLine
-import com.erdenian.studentassistant.utils.toast
+import ru.erdenian.studentassistant.homeworks.api.HomeworksRoute
+import ru.erdenian.studentassistant.homeworks.di.HomeworksComponentHolder
+import ru.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorViewModel.Error
+import ru.erdenian.studentassistant.navigation.LocalNavController
+import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
+import ru.erdenian.studentassistant.strings.RS
+import ru.erdenian.studentassistant.uikit.dialog.ProgressDialog
+import ru.erdenian.studentassistant.utils.toSingleLine
+import ru.erdenian.studentassistant.utils.toast
 
 @Composable
 internal fun HomeworkEditorScreen(route: HomeworksRoute.HomeworkEditor) {

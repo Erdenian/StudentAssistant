@@ -1,9 +1,9 @@
-package com.erdenian.studentassistant.repository.di
+package ru.erdenian.studentassistant.repository.di
 
-import com.erdenian.studentassistant.repository.RepositoryDependencies
-import com.erdenian.studentassistant.repository.api.RepositoryApi
 import dagger.Component
 import javax.inject.Singleton
+import ru.erdenian.studentassistant.repository.RepositoryDependencies
+import ru.erdenian.studentassistant.repository.api.RepositoryApi
 
 @Singleton
 @Component(

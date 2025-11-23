@@ -1,25 +1,24 @@
-package com.erdenian.studentassistant.repository.impl
+package ru.erdenian.studentassistant.repository.impl
 
-import com.erdenian.studentassistant.repository.api.LessonRepository
-import com.erdenian.studentassistant.repository.api.SelectedSemesterRepository
-import com.erdenian.studentassistant.repository.api.SettingsRepository
-import com.erdenian.studentassistant.repository.database.dao.LessonDao
-import com.erdenian.studentassistant.repository.database.entity.ByDateEntity
-import com.erdenian.studentassistant.repository.database.entity.ByWeekdayEntity
-import com.erdenian.studentassistant.repository.database.entity.ClassroomEntity
-import com.erdenian.studentassistant.repository.database.entity.FullLesson
-import com.erdenian.studentassistant.repository.database.entity.LessonEntity
-import com.erdenian.studentassistant.repository.database.entity.TeacherEntity
 import dagger.Reusable
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
-import kotlin.collections.map
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import ru.erdenian.studentassistant.repository.api.LessonRepository
+import ru.erdenian.studentassistant.repository.api.SelectedSemesterRepository
+import ru.erdenian.studentassistant.repository.api.SettingsRepository
+import ru.erdenian.studentassistant.repository.database.dao.LessonDao
+import ru.erdenian.studentassistant.repository.database.entity.ByDateEntity
+import ru.erdenian.studentassistant.repository.database.entity.ByWeekdayEntity
+import ru.erdenian.studentassistant.repository.database.entity.ClassroomEntity
+import ru.erdenian.studentassistant.repository.database.entity.FullLesson
+import ru.erdenian.studentassistant.repository.database.entity.LessonEntity
+import ru.erdenian.studentassistant.repository.database.entity.TeacherEntity
 
 @Reusable
 internal class LessonRepositoryImpl @Inject constructor(

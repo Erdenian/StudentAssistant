@@ -1,12 +1,12 @@
-package com.erdenian.studentassistant.repository.di
+package ru.erdenian.studentassistant.repository.di
 
 import android.app.Application
 import androidx.room.Room
-import com.erdenian.studentassistant.repository.RepositoryConfig
-import com.erdenian.studentassistant.repository.database.ScheduleDatabase
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
+import ru.erdenian.studentassistant.repository.RepositoryConfig
+import ru.erdenian.studentassistant.repository.database.ScheduleDatabase
 
 @Module
 internal class DatabaseModule {

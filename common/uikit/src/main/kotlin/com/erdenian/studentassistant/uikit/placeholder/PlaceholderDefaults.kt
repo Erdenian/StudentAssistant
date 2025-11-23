@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.uikit.placeholder
+package ru.erdenian.studentassistant.uikit.placeholder
 
 import androidx.compose.animation.core.InfiniteRepeatableSpec
 import androidx.compose.animation.core.RepeatMode

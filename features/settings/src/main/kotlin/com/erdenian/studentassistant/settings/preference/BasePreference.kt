@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.settings.preference
+package ru.erdenian.studentassistant.settings.preference
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -25,8 +25,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.erdenian.studentassistant.style.AppIcons
-import com.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.style.AppIcons
+import ru.erdenian.studentassistant.style.AppTheme
 
 @Composable
 internal fun BasePreference(

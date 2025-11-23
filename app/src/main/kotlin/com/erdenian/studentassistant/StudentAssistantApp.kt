@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant
+package ru.erdenian.studentassistant
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.SharedTransitionLayout
@@ -35,17 +35,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.erdenian.studentassistant.di.MainComponentHolder
-import com.erdenian.studentassistant.homeworks.api.HomeworksRoute
-import com.erdenian.studentassistant.navigation.LocalNavController
-import com.erdenian.studentassistant.navigation.LocalSharedTransitionScope
-import com.erdenian.studentassistant.navigation.Route
-import com.erdenian.studentassistant.schedule.api.ScheduleRoute
-import com.erdenian.studentassistant.settings.api.SettingsRoute
-import com.erdenian.studentassistant.strings.RS
-import com.erdenian.studentassistant.style.AppIcons
-import com.erdenian.studentassistant.style.AutoMirrored
 import kotlinx.serialization.Serializable
+import ru.erdenian.studentassistant.di.MainComponentHolder
+import ru.erdenian.studentassistant.homeworks.api.HomeworksRoute
+import ru.erdenian.studentassistant.navigation.LocalNavController
+import ru.erdenian.studentassistant.navigation.LocalSharedTransitionScope
+import ru.erdenian.studentassistant.navigation.Route
+import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
+import ru.erdenian.studentassistant.settings.api.SettingsRoute
+import ru.erdenian.studentassistant.strings.RS
+import ru.erdenian.studentassistant.style.AppIcons
+import ru.erdenian.studentassistant.style.AutoMirrored
 
 @Composable
 internal fun StudentAssistantApp() {

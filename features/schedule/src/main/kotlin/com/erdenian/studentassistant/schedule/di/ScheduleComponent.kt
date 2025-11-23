@@ -1,14 +1,14 @@
-package com.erdenian.studentassistant.schedule.di
+package ru.erdenian.studentassistant.schedule.di
 
-import com.erdenian.studentassistant.schedule.ScheduleDependencies
-import com.erdenian.studentassistant.schedule.api.ScheduleApi
-import com.erdenian.studentassistant.schedule.lessoneditor.LessonEditorViewModel
-import com.erdenian.studentassistant.schedule.lessoninformation.LessonInformationViewModel
-import com.erdenian.studentassistant.schedule.schedule.ScheduleViewModel
-import com.erdenian.studentassistant.schedule.scheduleeditor.ScheduleEditorViewModel
-import com.erdenian.studentassistant.schedule.semestereditor.SemesterEditorViewModel
 import dagger.Component
 import javax.inject.Singleton
+import ru.erdenian.studentassistant.schedule.ScheduleDependencies
+import ru.erdenian.studentassistant.schedule.api.ScheduleApi
+import ru.erdenian.studentassistant.schedule.lessoneditor.LessonEditorViewModel
+import ru.erdenian.studentassistant.schedule.lessoninformation.LessonInformationViewModel
+import ru.erdenian.studentassistant.schedule.schedule.ScheduleViewModel
+import ru.erdenian.studentassistant.schedule.scheduleeditor.ScheduleEditorViewModel
+import ru.erdenian.studentassistant.schedule.semestereditor.SemesterEditorViewModel
 
 @Singleton
 @Component(

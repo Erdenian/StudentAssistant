@@ -1,7 +1,7 @@
-package com.erdenian.studentassistant.homeworks.api
+package ru.erdenian.studentassistant.homeworks.api
 
-import com.erdenian.studentassistant.navigation.Route
 import kotlinx.serialization.Serializable
+import ru.erdenian.studentassistant.navigation.Route
 
 sealed interface HomeworksRoute : Route {
 

@@ -1,6 +1,6 @@
-package com.erdenian.studentassistant.repository.di
+package ru.erdenian.studentassistant.repository.di
 
-import com.erdenian.studentassistant.repository.RepositoryDependencies
+import ru.erdenian.studentassistant.repository.RepositoryDependencies
 
 internal object RepositoryComponentHolder {
 

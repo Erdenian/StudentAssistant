@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.repository.database.entity
+package ru.erdenian.studentassistant.repository.database.entity
 
 import org.junit.Assert.assertThrows
 import org.junit.Test

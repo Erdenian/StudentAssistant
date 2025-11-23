@@ -1,21 +1,21 @@
-package com.erdenian.studentassistant.repository.database.dao
+package ru.erdenian.studentassistant.repository.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.erdenian.studentassistant.repository.database.entity.ByDateEntity
-import com.erdenian.studentassistant.repository.database.entity.ByWeekdayEntity
-import com.erdenian.studentassistant.repository.database.entity.ClassroomEntity
-import com.erdenian.studentassistant.repository.database.entity.FullLesson
-import com.erdenian.studentassistant.repository.database.entity.LessonEntity
-import com.erdenian.studentassistant.repository.database.entity.TeacherEntity
 import java.time.DayOfWeek
 import java.time.LocalTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import ru.erdenian.studentassistant.repository.database.entity.ByDateEntity
+import ru.erdenian.studentassistant.repository.database.entity.ByWeekdayEntity
+import ru.erdenian.studentassistant.repository.database.entity.ClassroomEntity
+import ru.erdenian.studentassistant.repository.database.entity.FullLesson
+import ru.erdenian.studentassistant.repository.database.entity.LessonEntity
+import ru.erdenian.studentassistant.repository.database.entity.TeacherEntity
 
 @Dao
 internal abstract class LessonDao {

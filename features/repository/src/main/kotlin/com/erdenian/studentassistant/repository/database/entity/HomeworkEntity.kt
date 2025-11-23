@@ -1,13 +1,13 @@
-package com.erdenian.studentassistant.repository.database.entity
+package ru.erdenian.studentassistant.repository.database.entity
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.erdenian.studentassistant.repository.api.entity.Homework
 import java.time.LocalDate
 import kotlinx.parcelize.Parcelize
+import ru.erdenian.studentassistant.repository.api.entity.Homework
 
 @Entity(
     tableName = "homeworks",

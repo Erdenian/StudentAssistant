@@ -1,9 +1,9 @@
-package com.erdenian.studentassistant.repository.di
+package ru.erdenian.studentassistant.repository.di
 
-import com.erdenian.studentassistant.repository.RepositoryApiImpl
-import com.erdenian.studentassistant.repository.api.RepositoryApi
 import dagger.Binds
 import dagger.Module
+import ru.erdenian.studentassistant.repository.RepositoryApiImpl
+import ru.erdenian.studentassistant.repository.api.RepositoryApi
 
 @Module
 internal interface RepositoryApiModule {

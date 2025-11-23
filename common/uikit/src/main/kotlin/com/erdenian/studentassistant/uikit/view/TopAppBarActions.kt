@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.uikit.view
+package ru.erdenian.studentassistant.uikit.view
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
@@ -30,12 +30,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import com.erdenian.studentassistant.style.AppIcons
-import com.erdenian.studentassistant.style.AppTheme
-import com.erdenian.studentassistant.style.AutoMirrored
-import com.erdenian.studentassistant.uikit.placeholder.PlaceholderHighlight
-import com.erdenian.studentassistant.uikit.placeholder.fade
-import com.erdenian.studentassistant.uikit.placeholder.placeholder
+import ru.erdenian.studentassistant.style.AppIcons
+import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.style.AutoMirrored
+import ru.erdenian.studentassistant.uikit.placeholder.PlaceholderHighlight
+import ru.erdenian.studentassistant.uikit.placeholder.fade
+import ru.erdenian.studentassistant.uikit.placeholder.placeholder
 
 @Suppress("UnusedReceiverParameter")
 @Composable

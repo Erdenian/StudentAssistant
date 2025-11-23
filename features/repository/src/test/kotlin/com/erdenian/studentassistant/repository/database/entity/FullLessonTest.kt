@@ -1,12 +1,12 @@
-package com.erdenian.studentassistant.repository.database.entity
+package ru.erdenian.studentassistant.repository.database.entity
 
-import com.erdenian.studentassistant.repository.api.entity.Lesson
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Test
+import ru.erdenian.studentassistant.repository.api.entity.Lesson
 
 internal class FullLessonTest {
 

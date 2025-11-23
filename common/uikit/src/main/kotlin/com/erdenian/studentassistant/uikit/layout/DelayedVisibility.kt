@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.uikit.layout
+package ru.erdenian.studentassistant.uikit.layout
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.AnimationConstants

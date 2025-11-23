@@ -1,14 +1,7 @@
-package com.erdenian.studentassistant.repository.database.dao
+package ru.erdenian.studentassistant.repository.database.dao
 
 import android.database.sqlite.SQLiteConstraintException
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.erdenian.studentassistant.repository.database.buildDatabase
-import com.erdenian.studentassistant.repository.database.entity.ByDateEntity
-import com.erdenian.studentassistant.repository.database.entity.ClassroomEntity
-import com.erdenian.studentassistant.repository.database.entity.HomeworkEntity
-import com.erdenian.studentassistant.repository.database.entity.LessonEntity
-import com.erdenian.studentassistant.repository.database.entity.SemesterEntity
-import com.erdenian.studentassistant.repository.database.entity.TeacherEntity
 import java.time.LocalDate
 import java.time.LocalTime
 import junit.framework.TestCase.assertNull
@@ -21,6 +14,13 @@ import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertThrows
 import org.junit.Test
 import org.junit.runner.RunWith
+import ru.erdenian.studentassistant.repository.database.buildDatabase
+import ru.erdenian.studentassistant.repository.database.entity.ByDateEntity
+import ru.erdenian.studentassistant.repository.database.entity.ClassroomEntity
+import ru.erdenian.studentassistant.repository.database.entity.HomeworkEntity
+import ru.erdenian.studentassistant.repository.database.entity.LessonEntity
+import ru.erdenian.studentassistant.repository.database.entity.SemesterEntity
+import ru.erdenian.studentassistant.repository.database.entity.TeacherEntity
 
 @RunWith(AndroidJUnit4::class)
 internal class SemesterDaoTest {

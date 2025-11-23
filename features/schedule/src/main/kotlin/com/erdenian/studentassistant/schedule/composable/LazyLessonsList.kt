@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.schedule.composable
+package ru.erdenian.studentassistant.schedule.composable
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
@@ -23,17 +23,17 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.erdenian.studentassistant.navigation.LocalAnimatedContentScope
-import com.erdenian.studentassistant.navigation.LocalSharedTransitionScope
-import com.erdenian.studentassistant.repository.api.entity.Lesson
-import com.erdenian.studentassistant.sampledata.Lessons
-import com.erdenian.studentassistant.strings.RS
-import com.erdenian.studentassistant.style.AppTheme
-import com.erdenian.studentassistant.style.dimensions
-import com.erdenian.studentassistant.uikit.layout.DelayedVisibility
-import com.erdenian.studentassistant.uikit.view.LessonCard
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import ru.erdenian.studentassistant.navigation.LocalAnimatedContentScope
+import ru.erdenian.studentassistant.navigation.LocalSharedTransitionScope
+import ru.erdenian.studentassistant.repository.api.entity.Lesson
+import ru.erdenian.studentassistant.sampledata.Lessons
+import ru.erdenian.studentassistant.strings.RS
+import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.style.dimensions
+import ru.erdenian.studentassistant.uikit.layout.DelayedVisibility
+import ru.erdenian.studentassistant.uikit.view.LessonCard
 
 @Composable
 internal fun LazyLessonsList(

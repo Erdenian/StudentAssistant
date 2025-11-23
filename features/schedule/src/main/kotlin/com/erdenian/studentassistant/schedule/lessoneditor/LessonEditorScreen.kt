@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.schedule.lessoneditor
+package ru.erdenian.studentassistant.schedule.lessoneditor
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
@@ -16,16 +16,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.erdenian.studentassistant.navigation.LocalNavController
-import com.erdenian.studentassistant.schedule.api.ScheduleRoute
-import com.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
-import com.erdenian.studentassistant.schedule.lessoneditor.LessonEditorViewModel.Error
-import com.erdenian.studentassistant.strings.RA
-import com.erdenian.studentassistant.strings.RS
-import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
-import com.erdenian.studentassistant.utils.toSingleLine
-import com.erdenian.studentassistant.utils.toast
 import kotlinx.coroutines.launch
+import ru.erdenian.studentassistant.navigation.LocalNavController
+import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
+import ru.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
+import ru.erdenian.studentassistant.schedule.lessoneditor.LessonEditorViewModel.Error
+import ru.erdenian.studentassistant.strings.RA
+import ru.erdenian.studentassistant.strings.RS
+import ru.erdenian.studentassistant.uikit.dialog.ProgressDialog
+import ru.erdenian.studentassistant.utils.toSingleLine
+import ru.erdenian.studentassistant.utils.toast
 
 @Composable
 internal fun LessonEditorScreen(route: ScheduleRoute.LessonEditor) {

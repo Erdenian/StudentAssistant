@@ -1,9 +1,9 @@
-package com.erdenian.studentassistant.settings.di
+package ru.erdenian.studentassistant.settings.di
 
-import com.erdenian.studentassistant.settings.SettingsApiImpl
-import com.erdenian.studentassistant.settings.api.SettingsApi
 import dagger.Binds
 import dagger.Module
+import ru.erdenian.studentassistant.settings.SettingsApiImpl
+import ru.erdenian.studentassistant.settings.api.SettingsApi
 
 @Module
 internal interface SettingsApiModule {

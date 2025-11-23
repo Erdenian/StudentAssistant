@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.repository.database
+package ru.erdenian.studentassistant.repository.database
 
 import java.time.DayOfWeek
 import java.time.LocalDate

@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.utils
+package ru.erdenian.studentassistant.utils
 
 /**
  * Преобразует многострочный текст в единственную строку.

@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.repository.database.entity
+package ru.erdenian.studentassistant.repository.database.entity
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo

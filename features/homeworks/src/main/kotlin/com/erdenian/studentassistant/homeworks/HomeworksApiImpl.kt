@@ -1,14 +1,14 @@
-package com.erdenian.studentassistant.homeworks
+package ru.erdenian.studentassistant.homeworks
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.toRoute
-import com.erdenian.studentassistant.homeworks.api.HomeworksApi
-import com.erdenian.studentassistant.homeworks.api.HomeworksRoute
-import com.erdenian.studentassistant.homeworks.di.HomeworksComponentHolder
-import com.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorScreen
-import com.erdenian.studentassistant.homeworks.homeworks.HomeworksScreen
-import com.erdenian.studentassistant.navigation.composableAnimated
 import javax.inject.Inject
+import ru.erdenian.studentassistant.homeworks.api.HomeworksApi
+import ru.erdenian.studentassistant.homeworks.api.HomeworksRoute
+import ru.erdenian.studentassistant.homeworks.di.HomeworksComponentHolder
+import ru.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorScreen
+import ru.erdenian.studentassistant.homeworks.homeworks.HomeworksScreen
+import ru.erdenian.studentassistant.navigation.composableAnimated
 
 public fun createHomeworksApi(dependencies: HomeworksDependencies): HomeworksApi =
     HomeworksComponentHolder.create(dependencies).api

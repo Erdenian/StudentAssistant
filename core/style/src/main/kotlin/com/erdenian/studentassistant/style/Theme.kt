@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.style
+package ru.erdenian.studentassistant.style
 
 import android.app.Activity
 import android.content.ContextWrapper

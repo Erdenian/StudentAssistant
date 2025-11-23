@@ -1,13 +1,13 @@
-package com.erdenian.studentassistant.repository
+package ru.erdenian.studentassistant.repository
 
-import com.erdenian.studentassistant.repository.api.RepositoryApi
-import com.erdenian.studentassistant.repository.di.RepositoryComponentHolder
-import com.erdenian.studentassistant.repository.impl.HomeworkRepositoryImpl
-import com.erdenian.studentassistant.repository.impl.LessonRepositoryImpl
-import com.erdenian.studentassistant.repository.impl.SelectedSemesterRepositoryImpl
-import com.erdenian.studentassistant.repository.impl.SemesterRepositoryImpl
-import com.erdenian.studentassistant.repository.impl.SettingsRepositoryImpl
 import javax.inject.Inject
+import ru.erdenian.studentassistant.repository.api.RepositoryApi
+import ru.erdenian.studentassistant.repository.di.RepositoryComponentHolder
+import ru.erdenian.studentassistant.repository.impl.HomeworkRepositoryImpl
+import ru.erdenian.studentassistant.repository.impl.LessonRepositoryImpl
+import ru.erdenian.studentassistant.repository.impl.SelectedSemesterRepositoryImpl
+import ru.erdenian.studentassistant.repository.impl.SemesterRepositoryImpl
+import ru.erdenian.studentassistant.repository.impl.SettingsRepositoryImpl
 
 public fun createRepositoryApi(dependencies: RepositoryDependencies): RepositoryApi =
     RepositoryComponentHolder.create(dependencies).api

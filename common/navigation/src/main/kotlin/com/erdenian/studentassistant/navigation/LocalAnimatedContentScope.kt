@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.navigation
+package ru.erdenian.studentassistant.navigation
 
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.foundation.layout.Box

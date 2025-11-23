@@ -1,6 +1,6 @@
-package com.erdenian.studentassistant.schedule.di
+package ru.erdenian.studentassistant.schedule.di
 
-import com.erdenian.studentassistant.schedule.ScheduleDependencies
+import ru.erdenian.studentassistant.schedule.ScheduleDependencies
 
 internal object ScheduleComponentHolder {
 

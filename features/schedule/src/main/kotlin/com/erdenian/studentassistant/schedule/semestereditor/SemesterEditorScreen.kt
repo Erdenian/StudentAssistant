@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.schedule.semestereditor
+package ru.erdenian.studentassistant.schedule.semestereditor
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -10,14 +10,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.erdenian.studentassistant.navigation.LocalNavController
-import com.erdenian.studentassistant.schedule.api.ScheduleRoute
-import com.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
-import com.erdenian.studentassistant.schedule.semestereditor.SemesterEditorViewModel.Error
-import com.erdenian.studentassistant.strings.RS
-import com.erdenian.studentassistant.uikit.dialog.ProgressDialog
-import com.erdenian.studentassistant.utils.toSingleLine
-import com.erdenian.studentassistant.utils.toast
+import ru.erdenian.studentassistant.navigation.LocalNavController
+import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
+import ru.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
+import ru.erdenian.studentassistant.schedule.semestereditor.SemesterEditorViewModel.Error
+import ru.erdenian.studentassistant.strings.RS
+import ru.erdenian.studentassistant.uikit.dialog.ProgressDialog
+import ru.erdenian.studentassistant.utils.toSingleLine
+import ru.erdenian.studentassistant.utils.toast
 
 @Composable
 internal fun SemesterEditorScreen(route: ScheduleRoute.SemesterEditor) {

@@ -1,7 +1,7 @@
-package com.erdenian.studentassistant.settings
+package ru.erdenian.studentassistant.settings
 
 import android.app.Application
-import com.erdenian.studentassistant.repository.api.RepositoryApi
+import ru.erdenian.studentassistant.repository.api.RepositoryApi
 
 public interface SettingsDependencies {
     public val application: Application

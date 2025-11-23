@@ -1,9 +1,9 @@
-package com.erdenian.studentassistant.schedule.di
+package ru.erdenian.studentassistant.schedule.di
 
-import com.erdenian.studentassistant.schedule.ScheduleApiImpl
-import com.erdenian.studentassistant.schedule.api.ScheduleApi
 import dagger.Binds
 import dagger.Module
+import ru.erdenian.studentassistant.schedule.ScheduleApiImpl
+import ru.erdenian.studentassistant.schedule.api.ScheduleApi
 
 @Module
 internal interface ScheduleApiModule {

@@ -1,9 +1,9 @@
-package com.erdenian.studentassistant.repostory.api.entity
+package ru.erdenian.studentassistant.repostory.api.entity
 
-import com.erdenian.studentassistant.repository.api.entity.Semester
 import java.time.LocalDate
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import ru.erdenian.studentassistant.repository.api.entity.Semester
 
 class SemesterTest {
 

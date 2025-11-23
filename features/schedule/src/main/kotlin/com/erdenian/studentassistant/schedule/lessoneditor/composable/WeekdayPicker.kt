@@ -1,4 +1,4 @@
-package com.erdenian.studentassistant.schedule.lessoneditor.composable
+package ru.erdenian.studentassistant.schedule.lessoneditor.composable
 
 import android.graphics.Paint
 import android.graphics.Rect
