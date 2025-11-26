@@ -350,7 +350,7 @@ naming:
     excludeClassPattern: '$^'
   InvalidPackageDeclaration:
     active: true
-    rootPackage: 'com.erdenian.studentassistant'
+    rootPackage: 'ru.erdenian.studentassistant'
     requireRootInDeclaration: true
   LambdaParameterNaming:
     active: true

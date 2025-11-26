@@ -10,12 +10,12 @@ plugins {
 }
 
 android {
-    namespace = "com.erdenian.studentassistant"
+    namespace = "ru.erdenian.studentassistant"
 
     defaultConfig {
-        applicationId = "com.erdenian.studentassistant"
-        versionCode = 26
-        versionName = "0.7.2"
+        applicationId = "ru.erdenian.studentassistant"
+        versionCode = 27
+        versionName = "0.7.3"
 
         resourceConfigurations.retainAll(setOf("ru"))
         base.archivesName = "${rootProject.name}-$versionName"

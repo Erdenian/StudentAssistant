@@ -4,5 +4,5 @@ plugins {
 }
 
 android {
-    namespace = "com.erdenian.studentassistant.strings"
+    namespace = "ru.erdenian.studentassistant.strings"
 }
