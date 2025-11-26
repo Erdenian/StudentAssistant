@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.erdenian.studentassistant.repository.api"
+    namespace = "ru.erdenian.studentassistant.repository.api"
 }
 
 dependencies {

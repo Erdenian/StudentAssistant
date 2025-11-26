@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.erdenian.studentassistant.repository"
+    namespace = "ru.erdenian.studentassistant.repository"
 }
 
 ksp {
