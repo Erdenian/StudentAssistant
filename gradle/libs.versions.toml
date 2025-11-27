@@ -26,7 +26,6 @@ kotlin_ksp = { id = "com.google.devtools.ksp", version = "2.3.3" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "plugins_detekt" }
 kover = { id = "org.jetbrains.kotlinx.kover", version = "0.9.3" }
 tripletPlay = { id = "com.github.triplet.play", version = "3.12.2" }
-gradleVersionsFilter = { id = "se.ascp.gradle.gradle-versions-filter", version = "0.1.16" }
 
 [libraries]
 
