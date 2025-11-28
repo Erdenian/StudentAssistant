@@ -10,7 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import ru.erdenian.studentassistant.navigation.LocalNavController
+import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
 import ru.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
 import ru.erdenian.studentassistant.schedule.semestereditor.SemesterEditorViewModel.Error
@@ -24,11 +24,11 @@ internal fun SemesterEditorScreen(route: ScheduleRoute.SemesterEditor) {
     val viewModel = viewModel {
         ScheduleComponentHolder.instance.semesterEditorViewModelFactory.get(route.semesterId)
     }
-    val navController = LocalNavController.current
+    val navController = LocalNavigator.current
 
     val done by viewModel.done.collectAsState()
     LaunchedEffect(done) {
-        if (done) navController.popBackStack()
+        if (done) navController.goBack()
     }
 
     var isNameChanged by rememberSaveable { mutableStateOf(false) }
@@ -79,7 +79,7 @@ internal fun SemesterEditorScreen(route: ScheduleRoute.SemesterEditor) {
         firstDay = firstDay,
         lastDay = lastDay,
         errorMessage = nameErrorMessage,
-        onBackClick = navController::popBackStack,
+        onBackClick = navController::goBack,
         onSaveClick = {
             isNameChanged = true
             errorMessage?.let { context.toast(it) } ?: viewModel.save()

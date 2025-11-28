@@ -1,7 +1,8 @@
 package ru.erdenian.studentassistant.settings.api
 
-import androidx.navigation.NavGraphBuilder
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
 
 interface SettingsApi {
-    fun addToGraph(builder: NavGraphBuilder)
+    fun addToGraph(scope: EntryProviderScope<NavKey>)
 }

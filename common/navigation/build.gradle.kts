@@ -10,7 +10,7 @@ android {
 
 dependencies {
     // region AndroidX
-    api(libs.androidx.navigation)
+    implementation(libs.androidx.navigation3.runtime)
     api(libs.androidx.compose.animation)
     // endregion
 }

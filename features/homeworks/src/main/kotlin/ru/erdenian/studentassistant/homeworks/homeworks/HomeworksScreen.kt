@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.erdenian.studentassistant.homeworks.api.HomeworksRoute
 import ru.erdenian.studentassistant.homeworks.di.HomeworksComponentHolder
-import ru.erdenian.studentassistant.navigation.LocalNavController
+import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.repository.api.entity.Homework
 import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.uikit.dialog.ProgressDialog
@@ -21,7 +21,7 @@ import ru.erdenian.studentassistant.uikit.dialog.ProgressDialog
 @Composable
 internal fun HomeworksScreen() {
     val viewModel = viewModel { HomeworksComponentHolder.instance.homeworksViewModel }
-    val navController = LocalNavController.current
+    val navController = LocalNavigator.current
 
     val semesters by viewModel.allSemesters.collectAsState()
     val selectedSemester by viewModel.selectedSemester.collectAsState()
