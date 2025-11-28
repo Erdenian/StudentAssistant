@@ -10,8 +10,6 @@ plugins {
 
     alias(libs.plugins.detekt)
     alias(libs.plugins.kover)
-
-    alias(libs.plugins.gradleVersionsFilter)
 }
 
 val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {

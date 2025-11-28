@@ -1,3 +1,5 @@
+import java.time.LocalDate
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -166,7 +168,7 @@ rootProject.tasks.register("updateChangelog") {
 
         lines.add(
             lines.indexOf("## [Unreleased]") + 1,
-            "$lineSeparator## [$newVersion] - ${`java.time`.LocalDate.now()}",
+            "$lineSeparator## [$newVersion] - ${LocalDate.now()}",
         )
 
         lines.set(
