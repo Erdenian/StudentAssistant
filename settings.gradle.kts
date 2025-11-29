@@ -27,7 +27,7 @@ dependencyResolutionManagement {
 refreshVersions {
     rejectVersionIf { candidate.stabilityLevel.isLessStableThan(current.stabilityLevel) }
 
-    versionsPropertiesFile = file("build/versions.properties").apply { parentFile.mkdirs(); createNewFile() }
+    versionsPropertiesFile = file("build/versions.properties").apply { parentFile.mkdirs() }
     gradle.rootProject {
         val versionsFile = file("gradle/libs.versions.toml")
         tasks.configureEach {
