@@ -24,6 +24,8 @@ jobs:
           distribution: 'temurin'
           java-version: 21
       - uses: android-actions/setup-android@v3
+        with:
+          packages: 'ndk;29.0.14206865'
       - uses: gradle/actions/setup-gradle@v3
       # --------------------------------------
       # Run
