@@ -10,11 +10,18 @@ val LocalNavigator = staticCompositionLocalOf<Navigator> { error("No Navigator")
  */
 class Navigator(val state: NavigationState) {
     fun navigate(route: NavKey) {
-        if (route in state.backStacks.keys) {
-            // This is a top level route, just switch to it.
-            state.topLevelRoute = route
-        } else {
-            state.backStacks[state.topLevelRoute]?.add(route)
+        when (route) {
+            state.topLevelRoute -> {
+                val backStack = state.backStacks[state.topLevelRoute] ?: return
+                backStack.retainAll(setOf(backStack.first()))
+            }
+            in state.backStacks.keys -> {
+                // This is a top level route, just switch to it.
+                state.topLevelRoute = route
+            }
+            else -> {
+                state.backStacks[state.topLevelRoute]?.add(route)
+            }
         }
     }
 
