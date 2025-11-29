@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.schedule.scheduleeditor
 
-import android.annotation.SuppressLint
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -41,9 +40,7 @@ internal fun ScheduleEditorScreen(route: ScheduleRoute.ScheduleEditor) {
     @Suppress("Wrapping")
     val rememberLessons = remember<@Composable (Int) -> State<List<Lesson>?>>(viewModel) {
         { page ->
-            // https://issuetracker.google.com/issues/368420773
-            @SuppressLint("ProduceStateDoesNotAssignValue")
-            produceState<List<Lesson>?>(null, page) {
+            produceState(null, page) {
                 val dayOfWeek = DayOfWeek.of(page + 1)
                 viewModel.getLessons(dayOfWeek).collect { value = it }
             }

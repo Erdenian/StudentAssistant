@@ -23,10 +23,11 @@ android {
         base.archivesName = "${rootProject.name}-$versionName"
     }
 
-    // Workaround for: Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so.
+    // Workaround for: "Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so."
     // https://issuetracker.google.com/issues/237187538
     // https://issuetracker.google.com/issues/271316809
-    ndkVersion = "26.2.11394342"
+    // The same NDK version must be installed in the android-actions/setup-android step in GitHub Actions workflows.
+    ndkVersion = "29.0.14206865"
 
     lint {
         checkDependencies = true
