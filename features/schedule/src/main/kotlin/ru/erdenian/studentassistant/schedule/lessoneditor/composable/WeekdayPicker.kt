@@ -22,9 +22,11 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.ConfigurationCompat
 import java.time.DayOfWeek
 import java.time.format.TextStyle
 import java.util.Locale
@@ -39,8 +41,9 @@ internal fun WeekdayPicker(
     colors: WeekdaysPickerColors = WeekdaysPickerDefaults.weekdaysPickerColors(),
 ) {
     val daysOfWeek = run {
-        val locale = Locale.getDefault()
-        remember(locale) {
+        val configuration = LocalConfiguration.current
+        remember(configuration) {
+            val locale = ConfigurationCompat.getLocales(configuration).get(0) ?: Locale.getDefault()
             // TextStyle.NARROW_STANDALONE возвращает число
             // https://stackoverflow.com/questions/63415047
             DayOfWeek.entries.associateWith { it.getDisplayName(TextStyle.NARROW, locale).uppercase(locale) }
