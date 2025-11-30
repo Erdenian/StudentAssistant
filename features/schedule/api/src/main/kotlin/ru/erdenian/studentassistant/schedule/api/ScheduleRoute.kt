@@ -1,11 +1,11 @@
 package ru.erdenian.studentassistant.schedule.api
 
+import androidx.navigation3.runtime.NavKey
 import java.time.DayOfWeek
 import kotlinx.serialization.Serializable
-import ru.erdenian.studentassistant.navigation.Route
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 
-sealed interface ScheduleRoute : Route {
+sealed interface ScheduleRoute : NavKey {
 
     @Serializable
     data object Schedule : ScheduleRoute

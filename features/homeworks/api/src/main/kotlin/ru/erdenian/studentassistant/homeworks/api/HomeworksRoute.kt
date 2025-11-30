@@ -1,9 +1,9 @@
 package ru.erdenian.studentassistant.homeworks.api
 
+import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
-import ru.erdenian.studentassistant.navigation.Route
 
-sealed interface HomeworksRoute : Route {
+sealed interface HomeworksRoute : NavKey {
 
     @Serializable
     data object Homeworks : HomeworksRoute

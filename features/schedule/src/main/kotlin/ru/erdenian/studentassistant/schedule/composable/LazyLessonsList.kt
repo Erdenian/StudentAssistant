@@ -23,9 +23,9 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import ru.erdenian.studentassistant.navigation.LocalAnimatedContentScope
 import ru.erdenian.studentassistant.navigation.LocalSharedTransitionScope
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.sampledata.Lessons
@@ -96,7 +96,7 @@ internal fun LazyLessonsList(
                                         .animateItem()
                                         .sharedElement(
                                             rememberSharedContentState(lesson),
-                                            LocalAnimatedContentScope.current,
+                                            LocalNavAnimatedContentScope.current,
                                         ),
                                 )
                             }

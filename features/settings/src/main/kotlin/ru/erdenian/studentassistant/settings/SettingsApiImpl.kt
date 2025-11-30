@@ -1,8 +1,8 @@
 package ru.erdenian.studentassistant.settings
 
-import androidx.navigation.NavGraphBuilder
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
 import javax.inject.Inject
-import ru.erdenian.studentassistant.navigation.composableAnimated
 import ru.erdenian.studentassistant.settings.api.SettingsApi
 import ru.erdenian.studentassistant.settings.api.SettingsRoute
 import ru.erdenian.studentassistant.settings.di.SettingsComponentHolder
@@ -12,7 +12,7 @@ public fun createSettingsApi(dependencies: SettingsDependencies): SettingsApi =
     SettingsComponentHolder.create(dependencies).api
 
 internal class SettingsApiImpl @Inject constructor() : SettingsApi {
-    override fun addToGraph(builder: NavGraphBuilder) {
-        builder.composableAnimated<SettingsRoute.Settings> { SettingsScreen() }
+    override fun addToGraph(scope: EntryProviderScope<NavKey>) {
+        scope.entry<SettingsRoute.Settings> { SettingsScreen() }
     }
 }

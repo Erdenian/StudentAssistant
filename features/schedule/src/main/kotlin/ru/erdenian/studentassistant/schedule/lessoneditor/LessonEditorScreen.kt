@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
-import ru.erdenian.studentassistant.navigation.LocalNavController
+import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
 import ru.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
 import ru.erdenian.studentassistant.schedule.lessoneditor.LessonEditorViewModel.Error
@@ -44,11 +44,11 @@ internal fun LessonEditorScreen(route: ScheduleRoute.LessonEditor) {
             else -> throw IllegalArgumentException("Wrong LessonEditor arguments")
         }
     }
-    val navController = LocalNavController.current
+    val navController = LocalNavigator.current
 
     val done by viewModel.done.collectAsState()
     LaunchedEffect(done) {
-        if (done) navController.popBackStack()
+        if (done) navController.goBack()
     }
 
     var isSubjectNameChanged by rememberSaveable { mutableStateOf(false) }
@@ -216,7 +216,7 @@ internal fun LessonEditorScreen(route: ScheduleRoute.LessonEditor) {
         dayOfWeek = dayOfWeek,
         weeks = weeks,
         isAdvancedWeeksSelectorEnabled = isAdvancedWeeksSelectorEnabled,
-        onBackClick = navController::popBackStack,
+        onBackClick = navController::goBack,
         onSaveClick = {
             isSubjectNameChanged = true
             if (errorMessage != null) {

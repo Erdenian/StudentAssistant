@@ -27,9 +27,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import ru.erdenian.studentassistant.navigation.LocalAnimatedContentScope
 import ru.erdenian.studentassistant.navigation.LocalSharedTransitionScope
 import ru.erdenian.studentassistant.repository.api.entity.Homework
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
@@ -108,7 +108,7 @@ internal fun LessonInformationContent(
                         )
                         .sharedElement(
                             rememberSharedContentState(lesson),
-                            LocalAnimatedContentScope.current,
+                            LocalNavAnimatedContentScope.current,
                         ),
                 )
             }

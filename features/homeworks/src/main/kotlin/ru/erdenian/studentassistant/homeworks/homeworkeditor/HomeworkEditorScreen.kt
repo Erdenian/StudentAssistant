@@ -17,7 +17,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.erdenian.studentassistant.homeworks.api.HomeworksRoute
 import ru.erdenian.studentassistant.homeworks.di.HomeworksComponentHolder
 import ru.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorViewModel.Error
-import ru.erdenian.studentassistant.navigation.LocalNavController
+import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
 import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.uikit.dialog.ProgressDialog
@@ -38,13 +38,13 @@ internal fun HomeworkEditorScreen(route: HomeworksRoute.HomeworkEditor) {
             else -> factory.get(semesterId)
         }
     }
-    val navController = LocalNavController.current
+    val navController = LocalNavigator.current
 
     var lessonNameToCreate by remember { mutableStateOf<String?>(null) }
     val done by viewModel.done.collectAsState()
     LaunchedEffect(done) {
         if (done) {
-            navController.popBackStack()
+            navController.goBack()
             lessonNameToCreate?.let { subjectName ->
                 navController.navigate(
                     ScheduleRoute.LessonEditor(semesterId = viewModel.semesterId, subjectName = subjectName),
@@ -158,7 +158,7 @@ internal fun HomeworkEditorScreen(route: HomeworksRoute.HomeworkEditor) {
         deadline = deadline,
         description = description,
         semesterDates = semesterDatesRange,
-        onBackClick = navController::popBackStack,
+        onBackClick = navController::goBack,
         onSaveClick = {
             when {
                 (errorMessage != null) -> context.toast(errorMessage)

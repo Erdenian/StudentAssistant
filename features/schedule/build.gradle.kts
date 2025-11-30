@@ -29,6 +29,7 @@ dependencies {
 
     // region AndroidX
     implementation(libs.androidx.lifecycle.viewmodel)
+    implementation(libs.androidx.navigation3.ui)
     // endregion
 
     // region Core

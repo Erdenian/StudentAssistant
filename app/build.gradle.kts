@@ -129,7 +129,8 @@ dependencies {
     // region AndroidX
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
-    implementation(libs.androidx.navigation)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.core.splashscreen)
     // endregion
 

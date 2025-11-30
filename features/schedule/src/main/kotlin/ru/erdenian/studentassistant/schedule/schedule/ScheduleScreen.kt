@@ -9,7 +9,7 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.time.LocalDate
-import ru.erdenian.studentassistant.navigation.LocalNavController
+import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
 import ru.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
@@ -17,7 +17,7 @@ import ru.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
 @Composable
 internal fun ScheduleScreen() {
     val viewModel = viewModel { ScheduleComponentHolder.instance.scheduleViewModel }
-    val navController = LocalNavController.current
+    val navController = LocalNavigator.current
 
     val semesters by viewModel.allSemesters.collectAsState()
     val semestersNames by remember { derivedStateOf { semesters.map { it.name } } }

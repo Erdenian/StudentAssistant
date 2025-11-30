@@ -13,7 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.erdenian.studentassistant.homeworks.api.HomeworksRoute
-import ru.erdenian.studentassistant.navigation.LocalNavController
+import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.repository.api.entity.Homework
 import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
 import ru.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
@@ -25,11 +25,11 @@ internal fun LessonInformationScreen(route: ScheduleRoute.LessonInformation) {
     val viewModel = viewModel {
         ScheduleComponentHolder.instance.lessonInformationViewModelFactory.get(route.lesson)
     }
-    val navController = LocalNavController.current
+    val navController = LocalNavigator.current
 
     val isDeleted by viewModel.isDeleted.collectAsState()
     LaunchedEffect(isDeleted) {
-        if (isDeleted) navController.popBackStack()
+        if (isDeleted) navController.goBack()
     }
 
     val lesson by viewModel.lesson.collectAsState()
@@ -67,7 +67,7 @@ internal fun LessonInformationScreen(route: ScheduleRoute.LessonInformation) {
     LessonInformationContent(
         lesson = lesson ?: return,
         homeworks = homeworks,
-        onBackClick = navController::popBackStack,
+        onBackClick = navController::goBack,
         onEditClick = { clickedLesson ->
             navController.navigate(
                 ScheduleRoute.LessonEditor(

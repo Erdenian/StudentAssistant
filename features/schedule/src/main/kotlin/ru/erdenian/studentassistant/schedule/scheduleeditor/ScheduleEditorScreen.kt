@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.time.DayOfWeek
 import kotlinx.coroutines.launch
-import ru.erdenian.studentassistant.navigation.LocalNavController
+import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
 import ru.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
@@ -30,11 +30,11 @@ internal fun ScheduleEditorScreen(route: ScheduleRoute.ScheduleEditor) {
     val viewModel = viewModel {
         ScheduleComponentHolder.instance.scheduleEditorViewModelFactory.get(route.semesterId)
     }
-    val navController = LocalNavController.current
+    val navController = LocalNavigator.current
 
     val isDeleted by viewModel.isDeleted.collectAsState()
     LaunchedEffect(isDeleted) {
-        if (isDeleted) navController.popBackStack()
+        if (isDeleted) navController.goBack()
     }
 
     @Suppress("Wrapping")
@@ -140,7 +140,7 @@ internal fun ScheduleEditorScreen(route: ScheduleRoute.ScheduleEditor) {
 
     ScheduleEditorContent(
         rememberLessons = rememberLessons,
-        onBackClick = navController::popBackStack,
+        onBackClick = navController::goBack,
         onEditSemesterClick = {
             navController.navigate(ScheduleRoute.SemesterEditor(semesterId = viewModel.semesterId))
         },
