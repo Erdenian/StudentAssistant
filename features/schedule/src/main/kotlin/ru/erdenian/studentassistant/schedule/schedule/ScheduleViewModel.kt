@@ -8,6 +8,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
+import ru.erdenian.studentassistant.utils.Default
 
 internal class ScheduleViewModel @Inject constructor(
     application: Application,
@@ -20,7 +21,7 @@ internal class ScheduleViewModel @Inject constructor(
 
     val selectedSemester = selectedSemesterRepository.selectedFlow
     val allSemesters = semesterRepository.allFlow
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOfNotNull(selectedSemester.value))
+        .stateIn(viewModelScope, SharingStarted.Default, listOfNotNull(selectedSemester.value))
 
     fun selectSemester(semesterId: Long) = selectedSemesterRepository.selectSemester(semesterId)
 

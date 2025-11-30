@@ -12,4 +12,8 @@ dependencies {
     // region Tests
     testImplementation(libs.bundles.test.unit)
     // endregion
+
+    // region Kotlin
+    implementation(libs.kotlinx.coroutines)
+    // endregion
 }

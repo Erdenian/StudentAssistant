@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.repository.api.entity.Homework
+import ru.erdenian.studentassistant.utils.Default
 
 internal class HomeworksViewModel @Inject constructor(
     application: Application,
@@ -33,7 +34,7 @@ internal class HomeworksViewModel @Inject constructor(
 
     val selectedSemester = selectedSemesterRepository.selectedFlow
     val allSemesters = semesterRepository.allFlow
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOfNotNull(selectedSemester.value))
+        .stateIn(viewModelScope, SharingStarted.Default, listOfNotNull(selectedSemester.value))
 
     fun selectSemester(semesterId: Long) = selectedSemesterRepository.selectSemester(semesterId)
 
@@ -44,7 +45,7 @@ internal class HomeworksViewModel @Inject constructor(
             deletedHomeworksIds,
         ) { homeworks, deletedIds ->
             if (deletedIds.isEmpty()) homeworks else homeworks.filter { it.id !in deletedIds }
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+        }.stateIn(viewModelScope, SharingStarted.Default, null)
 
     val overdue = homeworkRepository.overdueFlow.stateWithDeleted()
     val actual = homeworkRepository.actualFlow.stateWithDeleted()

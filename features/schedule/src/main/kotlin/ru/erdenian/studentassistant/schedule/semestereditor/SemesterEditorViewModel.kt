@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
+import ru.erdenian.studentassistant.utils.Default
 
 internal class SemesterEditorViewModel @AssistedInject constructor(
     application: Application,
@@ -104,7 +105,7 @@ internal class SemesterEditorViewModel @AssistedInject constructor(
             (firstDay >= lastDay) -> Error.WRONG_DATES
             else -> null
         }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+    }.stateIn(viewModelScope, SharingStarted.Default, null)
 
     val isEditing = (semesterId != null)
 

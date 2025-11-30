@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
+import ru.erdenian.studentassistant.utils.Default
 
 internal class LessonInformationViewModel @AssistedInject constructor(
     application: Application,
@@ -42,15 +43,11 @@ internal class LessonInformationViewModel @AssistedInject constructor(
     val operation = operationPrivate.asStateFlow()
 
     private val lessonPrivate = lessonRepository.getFlow(lessonArg.id)
-        .shareIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed())
+        .shareIn(scope = viewModelScope, started = SharingStarted.Default)
 
-    val lesson = lessonPrivate.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = lessonArg,
-    )
+    val lesson = lessonPrivate.stateIn(viewModelScope, SharingStarted.Default, lessonArg)
 
-    val isDeleted = lessonPrivate.map { it == null }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
+    val isDeleted = lessonPrivate.map { it == null }.stateIn(viewModelScope, SharingStarted.Default, false)
 
     private val deletedHomeworkIds = MutableStateFlow(emptySet<Long>())
 
@@ -61,7 +58,7 @@ internal class LessonInformationViewModel @AssistedInject constructor(
         deletedHomeworkIds,
     ) { homeworks, deletedIds ->
         if (deletedIds.isEmpty()) homeworks else homeworks.filter { it.id !in deletedIds }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+    }.stateIn(viewModelScope, SharingStarted.Default, null)
 
     fun deleteHomework(id: Long) {
         operationPrivate.value = Operation.DELETING_HOMEWORK
