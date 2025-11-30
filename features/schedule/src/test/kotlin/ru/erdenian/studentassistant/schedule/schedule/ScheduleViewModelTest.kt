@@ -57,7 +57,8 @@ internal class ScheduleViewModelTest {
 
     @Test
     fun `getLessons test`() {
-        val date = LocalDate.now()
+        // Используем фиксированную дату
+        val date = LocalDate.of(2023, 2, 14)
         val lessons = listOf(mockk<Lesson>())
         val lessonsFlow = MutableStateFlow(lessons)
         every { lessonRepository.getAllFlow(date) } returns lessonsFlow

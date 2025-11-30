@@ -19,6 +19,7 @@ internal class SelectedSemesterRepositoryImplTest {
 
     @Test
     fun `test default selection logic`() = runTest(testDispatcher) {
+        // Фиксируем "сегодня" для этого теста, чтобы избежать race conditions внутри теста
         val now = LocalDate.now()
         val past = SemesterEntity("Past", now.minusMonths(5), now.minusMonths(2), id = 1)
         val current = SemesterEntity("Current", now.minusMonths(1), now.plusMonths(1), id = 2)

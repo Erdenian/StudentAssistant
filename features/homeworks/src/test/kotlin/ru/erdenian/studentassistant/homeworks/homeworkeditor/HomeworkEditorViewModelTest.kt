@@ -44,8 +44,10 @@ internal class HomeworkEditorViewModelTest {
     }
 
     private val semesterId = 1L
+    // Используем фиксированную дату
+    private val today = LocalDate.of(2023, 2, 14)
     private val semesterFlow = MutableStateFlow(
-        Semester("Semester", LocalDate.now().minusMonths(1), LocalDate.now().plusMonths(1), semesterId),
+        Semester("Semester", today.minusMonths(1), today.plusMonths(1), semesterId),
     )
     private val subjectsFlow = MutableStateFlow(listOf("Subject1", "Subject2"))
 
@@ -71,7 +73,7 @@ internal class HomeworkEditorViewModelTest {
 
     @Test
     fun `init existing homework test`() = runTest {
-        val homework = Homework("Subject", "Description", LocalDate.now(), false, semesterId, 10L)
+        val homework = Homework("Subject", "Description", today, false, semesterId, 10L)
         coEvery { homeworkRepository.get(homework.id) } returns homework
 
         val viewModel = HomeworkEditorViewModel(application, repositoryApi, semesterId, homework.id, null)
@@ -96,7 +98,7 @@ internal class HomeworkEditorViewModelTest {
 
         viewModel.subjectName.value = "Subject"
         viewModel.description.value = "Description"
-        viewModel.deadline.value = LocalDate.now()
+        viewModel.deadline.value = today
 
         viewModel.save()
         advanceUntilIdle()
@@ -114,7 +116,7 @@ internal class HomeworkEditorViewModelTest {
 
     @Test
     fun `save existing homework test`() = runTest {
-        val homework = Homework("Subject", "Description", LocalDate.now(), false, semesterId, 10L)
+        val homework = Homework("Subject", "Description", today, false, semesterId, 10L)
         coEvery { homeworkRepository.get(homework.id) } returns homework
 
         val viewModel = HomeworkEditorViewModel(application, repositoryApi, semesterId, homework.id, null)
@@ -142,7 +144,7 @@ internal class HomeworkEditorViewModelTest {
     @Test
     fun `delete homework test`() = runTest {
         val homeworkId = 10L
-        val homework = Homework("Subject", "Description", LocalDate.now(), false, semesterId, homeworkId)
+        val homework = Homework("Subject", "Description", today, false, semesterId, homeworkId)
         coEvery { homeworkRepository.get(homeworkId) } returns homework
 
         val viewModel = HomeworkEditorViewModel(application, repositoryApi, semesterId, homeworkId, null)

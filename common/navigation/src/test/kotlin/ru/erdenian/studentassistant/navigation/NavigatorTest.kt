@@ -30,7 +30,7 @@ internal class NavigatorTest {
             RouteOtherTop to otherStack
         )
 
-        // Mocking list behavior for .first()
+        // Мокаем поведение списка для .first()
         every { startStack.isEmpty() } returns false
         every { startStack[0] } returns RouteStart
 
@@ -93,9 +93,9 @@ internal class NavigatorTest {
         val startStack = mockk<NavBackStack<NavKey>>(relaxed = true)
         val backStacks: Map<NavKey, NavBackStack<NavKey>> = mapOf(RouteStart to startStack)
 
-        // Mocking list behavior for .last() and .removeLastOrNull()
-        // last() uses get(size - 1)
-        // removeLastOrNull() uses removeAt(size - 1)
+        // Мокаем поведение списка для .last() и .removeLastOrNull()
+        // last() использует get(size - 1)
+        // removeLastOrNull() использует removeAt(size - 1)
         every { startStack.isEmpty() } returns false
         every { startStack.size } returns 2
         every { startStack[1] } returns RouteDeep
@@ -123,7 +123,7 @@ internal class NavigatorTest {
             RouteOtherTop to otherStack
         )
 
-        // Mocking list behavior for .last()
+        // Мокаем поведение списка для .last()
         every { otherStack.isEmpty() } returns false
         every { otherStack.size } returns 1
         every { otherStack[0] } returns RouteOtherTop

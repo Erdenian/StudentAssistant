@@ -152,7 +152,7 @@ internal class HomeworkRepositoryImplTest {
         // Прошедшие (Past): дедлайн < сегодня И сделано
         // Актуальные (Actual): дедлайн >= сегодня (независимо от статуса выполнения)
         
-        // Для стабильности тестов используем реальную сегодняшнюю дату, так как репозиторий использует LocalDate.now() по умолчанию
+        // Фиксируем дату "сегодня" для этого теста, так как репозиторий использует LocalDate.now()
         val realToday = LocalDate.now()
         val overdueHw = HomeworkEntity("Overdue", "D", realToday.minusDays(1), 1L, isDone = false)
         val pastHw = HomeworkEntity("Past", "D", realToday.minusDays(1), 1L, isDone = true)
