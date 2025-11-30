@@ -13,6 +13,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertFalse
 import org.junit.Test
 import ru.erdenian.studentassistant.repository.api.SettingsRepository
 import ru.erdenian.studentassistant.repository.database.entity.ByWeekdayEntity
@@ -51,7 +52,7 @@ internal class LessonRepositoryImplTest {
     private val repository = LessonRepositoryImpl(fakeLessonDao, selectedSemesterRepository, settingsRepository)
 
     @Test
-    fun `insert and get`() = runTest(testDispatcher) {
+    fun `insert and get test`() = runTest(testDispatcher) {
         repository.insert(
             "Subj",
             "Type",
@@ -64,7 +65,8 @@ internal class LessonRepositoryImplTest {
             listOf(true),
         )
 
-        // Since we cannot easily predict ID in repository insert (it returns Unit), we assume fake generates IDs or we query all
+        // Так как мы не можем легко предсказать ID при вставке через репозиторий (он возвращает Unit),
+        // предполагаем, что фейк генерирует ID корректно
         val lesson = fakeLessonDao.lessons.value.last()
         assertEquals("Subj", lesson.lesson.subjectName)
         assertEquals("T1", lesson.teachers.first().name)
@@ -72,10 +74,15 @@ internal class LessonRepositoryImplTest {
         val loaded = repository.get(lesson.lesson.id)
         assertNotNull(loaded)
         assertEquals("Subj", loaded?.subjectName)
+
+        // Проверка getFlow
+        val loadedFlow = repository.getFlow(lesson.lesson.id).first()
+        assertNotNull(loadedFlow)
+        assertEquals("Subj", loadedFlow?.subjectName)
     }
 
     @Test
-    fun `insert by dates`() = runTest(testDispatcher) {
+    fun `insert by dates test`() = runTest(testDispatcher) {
         repository.insert(
             "Subj",
             "Type",
@@ -92,7 +99,7 @@ internal class LessonRepositoryImplTest {
     }
 
     @Test
-    fun `update by weekday`() = runTest(testDispatcher) {
+    fun `update by weekday test`() = runTest(testDispatcher) {
         fakeLessonDao.insert(
             LessonEntity("L1", "T", LocalTime.MIN, LocalTime.MAX, 1L, 10L),
             emptySet(), emptySet(), ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
@@ -119,7 +126,7 @@ internal class LessonRepositoryImplTest {
     }
 
     @Test
-    fun `update by dates`() = runTest(testDispatcher) {
+    fun `update by dates test`() = runTest(testDispatcher) {
         fakeLessonDao.insert(
             LessonEntity("L1", "T", LocalTime.MIN, LocalTime.MAX, 1L, 10L),
             emptySet(), emptySet(), ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
@@ -136,7 +143,7 @@ internal class LessonRepositoryImplTest {
     }
 
     @Test
-    fun `delete`() = runTest(testDispatcher) {
+    fun `delete test`() = runTest(testDispatcher) {
         fakeLessonDao.insert(
             LessonEntity("L1", "T", LocalTime.MIN, LocalTime.MAX, 1L, 10L),
             emptySet(), emptySet(), ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
@@ -148,7 +155,7 @@ internal class LessonRepositoryImplTest {
 
     @Test
     fun `getAllFlow(date) correctly calculates week number`() = runTest(testDispatcher) {
-        val start = LocalDate.of(2023, 9, 4) // Monday
+        val start = LocalDate.of(2023, 9, 4) // Понедельник
         val semester = SemesterEntity("S1", start, start.plusMonths(4), id = 1)
         fakeSemesterDao.insert(semester)
         selectedSemesterRepository.onSemesterInserted(semester.toSemester())
@@ -160,18 +167,25 @@ internal class LessonRepositoryImplTest {
             ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 100L),
         )
 
-        // Check week 0 (Start date)
+        // Проверка недели 0 (Дата начала)
         val res0 = repository.getAllFlow(start).first()
         assertEquals(1, res0.size)
         assertEquals("L1", res0.first().subjectName)
 
-        // Check week 1 (Next Monday)
+        // Проверка недели 1 (Следующий понедельник)
         val res1 = repository.getAllFlow(start.plusWeeks(1)).first()
         assertEquals(1, res1.size)
     }
 
     @Test
-    fun `renameSubject`() = runTest(testDispatcher) {
+    fun `getAllFlow(date) returns empty if no semester selected`() = runTest(testDispatcher) {
+        // Семестр не выбран
+        val res = repository.getAllFlow(LocalDate.now()).first()
+        assertEquals(0, res.size)
+    }
+
+    @Test
+    fun `renameSubject test`() = runTest(testDispatcher) {
         fakeLessonDao.insert(
             LessonEntity("Old", "T", LocalTime.MIN, LocalTime.MAX, 1L, 10L),
             emptySet(), emptySet(), ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
@@ -182,7 +196,7 @@ internal class LessonRepositoryImplTest {
     }
 
     @Test
-    fun `getNextStartTime`() = runTest(testDispatcher) {
+    fun `getNextStartTime test`() = runTest(testDispatcher) {
         assertEquals(settingsRepository.defaultStartTime, repository.getNextStartTime(1L, DayOfWeek.MONDAY))
 
         fakeLessonDao.insert(
@@ -195,7 +209,7 @@ internal class LessonRepositoryImplTest {
     }
 
     @Test
-    fun `getCount`() = runTest(testDispatcher) {
+    fun `getCount test`() = runTest(testDispatcher) {
         assertEquals(0, repository.getCount(1L))
         fakeLessonDao.insert(
             LessonEntity("L1", "T", LocalTime.MIN, LocalTime.MAX, 1L, 10L),
@@ -207,7 +221,7 @@ internal class LessonRepositoryImplTest {
     }
 
     @Test
-    fun `getCount subject`() = runTest(testDispatcher) {
+    fun `getCount subject test`() = runTest(testDispatcher) {
         assertEquals(0, repository.getCount(1L, "S"))
         fakeLessonDao.insert(
             LessonEntity("S", "T", LocalTime.MIN, LocalTime.MAX, 1L, 10L),
@@ -219,7 +233,7 @@ internal class LessonRepositoryImplTest {
     }
 
     @Test
-    fun `helper flows`() = runTest(testDispatcher) {
+    fun `helper flows test`() = runTest(testDispatcher) {
         fakeLessonDao.insert(
             LessonEntity("S", "Type1", LocalTime.MIN, LocalTime.MAX, 1L, 10L),
             setOf(TeacherEntity("Teach1")),
@@ -231,5 +245,10 @@ internal class LessonRepositoryImplTest {
         assertEquals(listOf("Type1"), repository.getTypes(1L).first())
         assertEquals(listOf("Teach1"), repository.getTeachers(1L).first())
         assertEquals(listOf("Class1"), repository.getClassrooms(1L).first())
+
+        // hasLessonsFlow
+        val hasLessons = repository.hasLessonsFlow.first()
+        // Семестр не выбран -> возвращает false
+        assertFalse(hasLessons)
     }
 }
