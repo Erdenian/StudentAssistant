@@ -25,6 +25,19 @@ internal class LessonTest {
     }
 
     @Test
+    fun timeRangeTest() {
+        val start = LocalTime.of(9, 0)
+        val end = LocalTime.of(10, 30)
+        val lesson = Lesson(
+            "subject", "type", listOf("t"), listOf("c"),
+            start, end,
+            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)), 1L, 10L,
+        )
+        
+        assertEquals(start..end, lesson.timeRange)
+    }
+
+    @Test
     fun compareToTest() {
         val base = Lesson(
             "subject", "type", listOf("t"), listOf("c"),
