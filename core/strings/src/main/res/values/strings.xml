@@ -138,6 +138,7 @@
 
     <!-- WeeksSelector -->
     <string name="ws_variants_title">Повторять</string>
+    <string name="ws_cycle_length">Длина цикла: %1$d</string>
 
     <!-- DatePickerDialog -->
     <string name="dpd_today">Сегодня</string>
