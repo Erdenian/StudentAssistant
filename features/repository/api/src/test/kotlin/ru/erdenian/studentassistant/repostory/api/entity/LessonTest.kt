@@ -4,232 +4,81 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 
-class LessonTest {
+internal class LessonTest {
 
     @Test
     fun byWeekdayTest() {
         val repeat = Lesson.Repeat.ByWeekday(DayOfWeek.THURSDAY, listOf(true, false, true))
-
-        assertEquals(true, repeat.repeatsOnDay(LocalDate.of(2023, 2, 16), 0))
-        assertEquals(false, repeat.repeatsOnDay(LocalDate.of(2023, 2, 16), 1))
-        assertEquals(true, repeat.repeatsOnDay(LocalDate.of(2023, 2, 16), 2))
-        assertEquals(false, repeat.repeatsOnDay(LocalDate.of(2023, 2, 17), 0))
-
-        assertEquals(false, repeat.repeatsOnDayOfWeek(DayOfWeek.WEDNESDAY))
-        assertEquals(true, repeat.repeatsOnDayOfWeek(DayOfWeek.THURSDAY))
-        assertEquals(false, repeat.repeatsOnDayOfWeek(DayOfWeek.FRIDAY))
+        assertEquals(DayOfWeek.THURSDAY, repeat.dayOfWeek)
+        assertEquals(listOf(true, false, true), repeat.weeks)
     }
 
     @Test
     fun byDatesTest() {
-        val repeat = Lesson.Repeat.ByDates(setOf(LocalDate.of(2023, 2, 16)))
-
-        assertEquals(true, repeat.repeatsOnDay(LocalDate.of(2023, 2, 16), 0))
-        assertEquals(true, repeat.repeatsOnDay(LocalDate.of(2023, 2, 16), 1))
-        assertEquals(true, repeat.repeatsOnDay(LocalDate.of(2023, 2, 16), 0))
-        assertEquals(false, repeat.repeatsOnDay(LocalDate.of(2023, 2, 17), 0))
-        assertEquals(false, repeat.repeatsOnDay(LocalDate.of(2023, 2, 15), 0))
-
-        assertEquals(true, repeat.repeatsOnDate(LocalDate.of(2023, 2, 16)))
-        assertEquals(false, repeat.repeatsOnDate(LocalDate.of(2023, 2, 17)))
-        assertEquals(false, repeat.repeatsOnDate(LocalDate.of(2023, 2, 15)))
+        val dates = setOf(LocalDate.of(2023, 2, 16))
+        val repeat = Lesson.Repeat.ByDates(dates)
+        assertEquals(dates, repeat.dates)
     }
 
     @Test
-    fun compareToEqualsTest() {
-        val lesson1 = Lesson(
-            "subjectName1",
-            "type1",
-            listOf("teacher1"),
-            listOf("classroom1"),
-            LocalTime.of(9, 0),
-            LocalTime.of(10, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
-            1L,
-            10L,
+    fun compareToTest() {
+        val base = Lesson(
+            "subject", "type", listOf("t"), listOf("c"),
+            LocalTime.of(9, 0), LocalTime.of(10, 30),
+            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)), 1L, 10L,
         )
-        val lesson2 = Lesson(
-            "subjectName1",
-            "type1",
-            listOf("teacher1"),
-            listOf("classroom1"),
-            LocalTime.of(9, 0),
-            LocalTime.of(10, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
-            1L,
-            10L,
-        )
-        assertEquals(0, lesson1.compareTo(lesson2))
-    }
 
-    @Test
-    fun compareToStartTimeTest() {
-        val lesson1 = Lesson(
-            "subjectName1",
-            "type1",
-            listOf("teacher1"),
-            listOf("classroom1"),
-            LocalTime.of(9, 0),
-            LocalTime.of(10, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
-            1L,
-            10L,
-        )
-        val lesson2 = Lesson(
-            "subjectName1",
-            "type1",
-            listOf("teacher1"),
-            listOf("classroom1"),
-            LocalTime.of(10, 0),
-            LocalTime.of(10, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
-            1L,
-            10L,
-        )
-        assertEquals(-1, lesson1.compareTo(lesson2))
-        assertEquals(1, lesson2.compareTo(lesson1))
-    }
+        assertEquals(0, base.compareTo(base.copy()))
 
-    @Test
-    fun compareToEndTimeTest() {
-        val lesson1 = Lesson(
-            "subjectName1",
-            "type1",
-            listOf("teacher1"),
-            listOf("classroom1"),
-            LocalTime.of(9, 0),
-            LocalTime.of(10, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
-            1L,
-            10L,
-        )
-        val lesson2 = Lesson(
-            "subjectName1",
-            "type1",
-            listOf("teacher1"),
-            listOf("classroom1"),
-            LocalTime.of(9, 0),
-            LocalTime.of(11, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
-            1L,
-            10L,
-        )
-        assertEquals(-1, lesson1.compareTo(lesson2))
-        assertEquals(1, lesson2.compareTo(lesson1))
-    }
+        // startTime
+        assertTrue(base.compareTo(base.copy(startTime = LocalTime.of(9, 1))) < 0)
+        assertTrue(base.copy(startTime = LocalTime.of(9, 1)).compareTo(base) > 0)
 
-    @Test
-    fun compareToSubjectNameTest() {
-        val lesson1 = Lesson(
-            "subjectName1",
-            "type1",
-            listOf("teacher1"),
-            listOf("classroom1"),
-            LocalTime.of(9, 0),
-            LocalTime.of(10, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
-            1L,
-            10L,
-        )
-        val lesson2 = Lesson(
-            "subjectName2",
-            "type1",
-            listOf("teacher1"),
-            listOf("classroom1"),
-            LocalTime.of(9, 0),
-            LocalTime.of(10, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
-            1L,
-            10L,
-        )
-        assertEquals(-1, lesson1.compareTo(lesson2))
-        assertEquals(1, lesson2.compareTo(lesson1))
-    }
+        // endTime
+        assertTrue(base.compareTo(base.copy(endTime = LocalTime.of(10, 31))) < 0)
+        assertTrue(base.copy(endTime = LocalTime.of(10, 31)).compareTo(base) > 0)
 
-    @Test
-    fun compareToTypeTest() {
-        val lesson1 = Lesson(
-            "subjectName1",
-            "type1",
-            listOf("teacher1"),
-            listOf("classroom1"),
-            LocalTime.of(9, 0),
-            LocalTime.of(10, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
-            1L,
-            10L,
-        )
-        val lesson2 = Lesson(
-            "subjectName1",
-            "type2",
-            listOf("teacher1"),
-            listOf("classroom1"),
-            LocalTime.of(9, 0),
-            LocalTime.of(10, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
-            1L,
-            10L,
-        )
-        assertEquals(-1, lesson1.compareTo(lesson2))
-        assertEquals(1, lesson2.compareTo(lesson1))
-    }
+        // subjectName
+        assertTrue(base.compareTo(base.copy(subjectName = "subject_")) < 0)
+        assertTrue(base.copy(subjectName = "subject_").compareTo(base) > 0)
 
-    @Test
-    fun compareToIdTest() {
-        val lesson1 = Lesson(
-            "subjectName1",
-            "type1",
-            listOf("teacher1"),
-            listOf("classroom1"),
-            LocalTime.of(9, 0),
-            LocalTime.of(10, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
-            1L,
-            1L,
-        )
-        val lesson2 = Lesson(
-            "subjectName1",
-            "type1",
-            listOf("teacher1"),
-            listOf("classroom1"),
-            LocalTime.of(9, 0),
-            LocalTime.of(10, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
-            1L,
-            11L,
-        )
-        assertEquals(-1, lesson1.compareTo(lesson2))
-        assertEquals(1, lesson2.compareTo(lesson1))
-    }
+        // type
+        assertTrue(base.compareTo(base.copy(type = "type_")) < 0)
+        assertTrue(base.copy(type = "type_").compareTo(base) > 0)
 
-    @Test
-    fun compareToSemesterIdTest() {
-        val lesson1 = Lesson(
-            "subjectName1",
-            "type1",
-            listOf("teacher1"),
-            listOf("classroom1"),
-            LocalTime.of(9, 0),
-            LocalTime.of(10, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
-            1L,
-            10L,
+        // teachers
+        assertTrue(base.compareTo(base.copy(teachers = listOf("t_"))) < 0)
+        assertTrue(base.copy(teachers = listOf("t_")).compareTo(base) > 0)
+
+        // classrooms
+        assertTrue(base.compareTo(base.copy(classrooms = listOf("c_"))) < 0)
+        assertTrue(base.copy(classrooms = listOf("c_")).compareTo(base) > 0)
+
+        // lessonRepeat
+        assertTrue(
+            base.compareTo(
+                base.copy(
+                    lessonRepeat = Lesson.Repeat.ByWeekday(
+                        DayOfWeek.TUESDAY,
+                        listOf(true),
+                    ),
+                ),
+            ) < 0,
         )
-        val lesson2 = Lesson(
-            "subjectName1",
-            "type1",
-            listOf("teacher1"),
-            listOf("classroom1"),
-            LocalTime.of(9, 0),
-            LocalTime.of(10, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
-            2L,
-            10L,
+        assertTrue(
+            base.copy(lessonRepeat = Lesson.Repeat.ByWeekday(DayOfWeek.TUESDAY, listOf(true))).compareTo(base) > 0,
         )
-        assertEquals(-1, lesson1.compareTo(lesson2))
-        assertEquals(1, lesson2.compareTo(lesson1))
+
+        // id
+        assertTrue(base.compareTo(base.copy(id = 11L)) < 0)
+        assertTrue(base.copy(id = 11L).compareTo(base) > 0)
+
+        // semesterId
+        assertTrue(base.compareTo(base.copy(semesterId = 2L)) < 0)
+        assertTrue(base.copy(semesterId = 2L).compareTo(base) > 0)
     }
 }

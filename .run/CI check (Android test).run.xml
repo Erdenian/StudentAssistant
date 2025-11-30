@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration name="CI check" default="false" factoryName="Gradle" folderName="CI check"
+    <configuration name="CI check (Android test)" default="false" factoryName="Gradle" folderName="CI check"
         type="GradleRunConfiguration">
         <ExternalSystemSettings>
             <option name="executionName" />
@@ -12,13 +12,6 @@
             </option>
             <option name="taskNames">
                 <list>
-                    <option value="detektMain" />
-                    <option value=":app:lintDebug" />
-                    <option value="testDebugUnitTest" />
-                    <option value=":app:koverHtmlReportDebug" />
-                    <option value=":app:koverXmlReportDebug" />
-                    <option value=":app:assembleDebug" />
-                    <option value=":app:bundleDebug" />
                     <option value="testDeviceDebugAndroidTest" />
                 </list>
             </option>
