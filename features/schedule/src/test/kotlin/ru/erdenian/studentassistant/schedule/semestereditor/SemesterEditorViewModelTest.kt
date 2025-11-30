@@ -5,6 +5,8 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import java.time.LocalDate
 import java.time.Month
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -14,9 +16,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
@@ -38,8 +42,22 @@ internal class SemesterEditorViewModelTest {
 
     private val namesFlow = MutableStateFlow(listOf("Semester 1", "Semester 2"))
 
+    // Фиксированная дата для детерминированности тестов (10 апреля 2023)
+    private val fixedDate = LocalDate.of(2023, 4, 10)
+
     init {
         every { semesterRepository.namesFlow } returns namesFlow
+    }
+
+    @Before
+    fun setUp() {
+        mockkStatic(LocalDate::class)
+        every { LocalDate.now() } returns fixedDate
+    }
+
+    @After
+    fun tearDown() {
+        unmockkStatic(LocalDate::class)
     }
 
     @Test
@@ -52,11 +70,11 @@ internal class SemesterEditorViewModelTest {
 
         assertEquals("", viewModel.name.value)
 
-        val today = LocalDate.now().withDayOfMonth(1)
-        val ranges = listOf(Month.FEBRUARY..Month.MAY, Month.SEPTEMBER..Month.DECEMBER)
-        val range = ranges.find { today.month <= it.endInclusive } ?: ranges.first()
-        val expectedFirstDay = today.withMonth(range.start.value)
-        val expectedLastDay = today.withMonth(range.endInclusive.value).withDayOfMonth(range.endInclusive.maxLength())
+        // Логика ViewModel: если сегодня 10 апреля, ближайший диапазон FEBRUARY..MAY
+        // Start: 1 февраля того же года (2023)
+        // End: Конец мая того же года (2023)
+        val expectedFirstDay = LocalDate.of(2023, Month.FEBRUARY, 1)
+        val expectedLastDay = LocalDate.of(2023, Month.MAY, 31)
 
         assertEquals(expectedFirstDay, viewModel.firstDay.value)
         assertEquals(expectedLastDay, viewModel.lastDay.value)

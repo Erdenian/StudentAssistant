@@ -65,7 +65,7 @@ internal class LessonInformationViewModelTest {
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.lesson.collect() }
         advanceUntilIdle()
 
-        // Wait for non-null value
+        // Ожидаем, пока придет не null значение
         viewModel.homeworks.filterNotNull().first()
 
         assertEquals(lesson, viewModel.lesson.value)
@@ -80,7 +80,7 @@ internal class LessonInformationViewModelTest {
         homeworksFlow.value = listOf(homework)
         coEvery { homeworkRepository.delete(homework.id) } returns Unit
 
-        // Wait for homeworks to update
+        // Ожидаем обновления списка домашних заданий
         viewModel.homeworks.filterNotNull().first()
         advanceUntilIdle()
 
