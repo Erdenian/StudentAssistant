@@ -7,6 +7,7 @@ import io.mockk.verify
 import java.time.Duration
 import java.time.LocalTime
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -40,7 +41,7 @@ internal class SettingsViewModelTest {
     private val viewModel by lazy { SettingsViewModel(application, repositoryApi) }
 
     @Test
-    fun `defaultStartTime flow and setter test`() {
+    fun `defaultStartTime flow and setter test`() = runTest {
         val expected = LocalTime.of(10, 0)
 
         assertEquals(defaultStartTimeFlow.value, viewModel.defaultStartTimeFlow.value)
@@ -50,7 +51,7 @@ internal class SettingsViewModelTest {
     }
 
     @Test
-    fun `defaultLessonDuration flow and setter test`() {
+    fun `defaultLessonDuration flow and setter test`() = runTest {
         val expected = Duration.ofMinutes(45)
 
         assertEquals(defaultLessonDurationFlow.value, viewModel.defaultLessonDurationFlow.value)
@@ -60,7 +61,7 @@ internal class SettingsViewModelTest {
     }
 
     @Test
-    fun `defaultBreakDuration flow and setter test`() {
+    fun `defaultBreakDuration flow and setter test`() = runTest {
         val expected = Duration.ofMinutes(20)
 
         assertEquals(defaultBreakDurationFlow.value, viewModel.defaultBreakDurationFlow.value)
@@ -70,7 +71,7 @@ internal class SettingsViewModelTest {
     }
 
     @Test
-    fun `isAdvancedWeeksSelectorEnabled flow and setter test`() {
+    fun `isAdvancedWeeksSelectorEnabled flow and setter test`() = runTest {
         val expected = true
 
         assertEquals(isAdvancedWeeksSelectorEnabledFlow.value, viewModel.isAdvancedWeeksSelectorEnabledFlow.value)
