@@ -5,6 +5,8 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import java.time.LocalDate
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,10 +15,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import ru.erdenian.studentassistant.homeworks.MainDispatcherRule
@@ -44,7 +48,6 @@ internal class HomeworkEditorViewModelTest {
     }
 
     private val semesterId = 1L
-    // Используем фиксированную дату
     private val today = LocalDate.of(2023, 2, 14)
     private val semesterFlow = MutableStateFlow(
         Semester("Semester", today.minusMonths(1), today.plusMonths(1), semesterId),
@@ -54,6 +57,17 @@ internal class HomeworkEditorViewModelTest {
     init {
         every { semesterRepository.getFlow(semesterId) } returns semesterFlow
         every { lessonRepository.getSubjects(semesterId) } returns subjectsFlow
+    }
+
+    @Before
+    fun setUp() {
+        mockkStatic(LocalDate::class)
+        every { LocalDate.now() } returns today
+    }
+
+    @After
+    fun tearDown() {
+        unmockkStatic(LocalDate::class)
     }
 
     @Test
@@ -67,6 +81,8 @@ internal class HomeworkEditorViewModelTest {
 
         assertEquals("", viewModel.subjectName.value)
         assertEquals("", viewModel.description.value)
+        // Проверяем дефолтный дедлайн (сегодня + 1 неделя)
+        assertEquals(today.plusWeeks(1), viewModel.deadline.value)
         assertEquals(subjectsFlow.value, viewModel.existingSubjects.value)
         assertNull(viewModel.operation.value)
     }
