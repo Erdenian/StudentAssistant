@@ -155,6 +155,64 @@ internal class LessonEditorViewModelTest {
     }
 
     @Test
+    fun `save reduces constant weeks cycle test`() = runTest {
+        val viewModel = LessonEditorViewModel(
+            application, repositoryApi, semesterId, null, false, DayOfWeek.MONDAY, null
+        )
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
+        advanceUntilIdle()
+
+        viewModel.subjectName.value = "Subject"
+        // [true, true, true, true] -> должно быть сокращено до [true]
+        viewModel.weeks.value = listOf(true, true, true, true)
+        viewModel.save()
+        advanceUntilIdle()
+
+        coVerify {
+            lessonRepository.insert(
+                subjectName = any(),
+                type = any(),
+                teachers = any(),
+                classrooms = any(),
+                startTime = any(),
+                endTime = any(),
+                semesterId = any(),
+                dayOfWeek = any(),
+                weeks = listOf(true)
+            )
+        }
+    }
+
+    @Test
+    fun `save reduces mixed weeks cycle test`() = runTest {
+        val viewModel = LessonEditorViewModel(
+            application, repositoryApi, semesterId, null, false, DayOfWeek.MONDAY, null
+        )
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
+        advanceUntilIdle()
+
+        viewModel.subjectName.value = "Subject"
+        // [true, false, false, true, false, false] -> должно быть сокращено до [true, false, false]
+        viewModel.weeks.value = listOf(true, false, false, true, false, false)
+        viewModel.save()
+        advanceUntilIdle()
+
+        coVerify {
+            lessonRepository.insert(
+                subjectName = any(),
+                type = any(),
+                teachers = any(),
+                classrooms = any(),
+                startTime = any(),
+                endTime = any(),
+                semesterId = any(),
+                dayOfWeek = any(),
+                weeks = listOf(true, false, false)
+            )
+        }
+    }
+
+    @Test
     fun `save does not reduce irreducible weeks cycle test`() = runTest {
         val viewModel = LessonEditorViewModel(
             application, repositoryApi, semesterId, null, false, DayOfWeek.MONDAY, null
