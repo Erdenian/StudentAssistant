@@ -1,12 +1,17 @@
 package ru.erdenian.studentassistant.homeworks.homeworks
 
 import android.app.Application
+import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import java.time.LocalDate
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -19,6 +24,7 @@ import ru.erdenian.studentassistant.repository.api.SemesterRepository
 import ru.erdenian.studentassistant.repository.api.entity.Homework
 import ru.erdenian.studentassistant.repository.api.entity.Semester
 
+@OptIn(ExperimentalCoroutinesApi::class)
 internal class HomeworksViewModelTest {
 
     @get:Rule
@@ -61,16 +67,20 @@ internal class HomeworksViewModelTest {
     fun `deleteHomework test`() = runTest {
         val homework = Homework("Subject", "Description", LocalDate.now(), false, 1L, 10L)
         overdueFlow.value = listOf(homework)
+        coEvery { homeworkRepository.delete(homework.id) } returns Unit
 
-        assertEquals(listOf(homework), viewModel.overdue.first())
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.overdue.collect() }
+        advanceUntilIdle()
+
+        assertEquals(listOf(homework), viewModel.overdue.value)
 
         viewModel.deleteHomework(homework.id)
+        advanceUntilIdle()
 
         // Проверяем, что удаление вызвалось в репозитории
         coVerify { homeworkRepository.delete(homework.id) }
 
         // Проверяем, что ID добавился в список удаленных и фильтруется локально
-        // (так как overdueFlow.value мы не меняли, список должен стать пустым только благодаря фильтрации во ViewModel)
-        assertEquals(emptyList<Homework>(), viewModel.overdue.first())
+        assertEquals(emptyList<Homework>(), viewModel.overdue.value)
     }
 }

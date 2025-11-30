@@ -6,11 +6,12 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import java.time.LocalDate
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -25,6 +26,7 @@ import ru.erdenian.studentassistant.repository.api.SemesterRepository
 import ru.erdenian.studentassistant.repository.api.entity.Homework
 import ru.erdenian.studentassistant.repository.api.entity.Semester
 
+@OptIn(ExperimentalCoroutinesApi::class)
 internal class HomeworkEditorViewModelTest {
 
     @get:Rule
@@ -54,9 +56,11 @@ internal class HomeworkEditorViewModelTest {
     @Test
     fun `init new homework test`() = runTest {
         val viewModel = HomeworkEditorViewModel(application, repositoryApi, semesterId, null, null)
-        backgroundScope.launch { viewModel.existingSubjects.collect() }
-        backgroundScope.launch { viewModel.semesterDatesRange.collect() }
-        runCurrent()
+        // Сбор потоков необходим, чтобы во ViewModel сработали onEach, устанавливающие флаги загрузки
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.existingSubjects.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.semesterDatesRange.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
+        advanceUntilIdle()
 
         assertEquals("", viewModel.subjectName.value)
         assertEquals("", viewModel.description.value)
@@ -70,9 +74,10 @@ internal class HomeworkEditorViewModelTest {
         coEvery { homeworkRepository.get(homework.id) } returns homework
 
         val viewModel = HomeworkEditorViewModel(application, repositoryApi, semesterId, homework.id, null)
-        backgroundScope.launch { viewModel.existingSubjects.collect() }
-        backgroundScope.launch { viewModel.semesterDatesRange.collect() }
-        runCurrent()
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.existingSubjects.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.semesterDatesRange.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
+        advanceUntilIdle()
 
         assertEquals(homework.subjectName, viewModel.subjectName.value)
         assertEquals(homework.description, viewModel.description.value)
@@ -83,15 +88,17 @@ internal class HomeworkEditorViewModelTest {
     @Test
     fun `save new homework test`() = runTest {
         val viewModel = HomeworkEditorViewModel(application, repositoryApi, semesterId, null, null)
-        backgroundScope.launch { viewModel.existingSubjects.collect() }
-        backgroundScope.launch { viewModel.semesterDatesRange.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.existingSubjects.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.semesterDatesRange.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
+        advanceUntilIdle()
 
         viewModel.subjectName.value = "Subject"
         viewModel.description.value = "Description"
         viewModel.deadline.value = LocalDate.now()
 
         viewModel.save()
-        runCurrent()
+        advanceUntilIdle()
 
         coVerify {
             homeworkRepository.insert(
@@ -110,12 +117,14 @@ internal class HomeworkEditorViewModelTest {
         coEvery { homeworkRepository.get(homework.id) } returns homework
 
         val viewModel = HomeworkEditorViewModel(application, repositoryApi, semesterId, homework.id, null)
-        backgroundScope.launch { viewModel.existingSubjects.collect() }
-        backgroundScope.launch { viewModel.semesterDatesRange.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.existingSubjects.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.semesterDatesRange.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
+        advanceUntilIdle()
 
         viewModel.subjectName.value = "New Subject"
         viewModel.save()
-        runCurrent()
+        advanceUntilIdle()
 
         coVerify {
             homeworkRepository.update(
@@ -136,11 +145,13 @@ internal class HomeworkEditorViewModelTest {
         coEvery { homeworkRepository.get(homeworkId) } returns homework
 
         val viewModel = HomeworkEditorViewModel(application, repositoryApi, semesterId, homeworkId, null)
-        backgroundScope.launch { viewModel.existingSubjects.collect() }
-        backgroundScope.launch { viewModel.semesterDatesRange.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.existingSubjects.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.semesterDatesRange.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
+        advanceUntilIdle()
 
         viewModel.delete()
-        runCurrent()
+        advanceUntilIdle()
 
         coVerify { homeworkRepository.delete(homeworkId) }
         assertTrue(viewModel.done.value)
@@ -149,16 +160,20 @@ internal class HomeworkEditorViewModelTest {
     @Test
     fun `error test`() = runTest {
         val viewModel = HomeworkEditorViewModel(application, repositoryApi, semesterId, null, null)
-        backgroundScope.launch { viewModel.existingSubjects.collect() }
-        backgroundScope.launch { viewModel.semesterDatesRange.collect() }
-        runCurrent()
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.existingSubjects.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.semesterDatesRange.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.error.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
+        advanceUntilIdle()
 
-        assertEquals(HomeworkEditorViewModel.Error.EMPTY_SUBJECT, viewModel.error.first())
+        assertEquals(HomeworkEditorViewModel.Error.EMPTY_SUBJECT, viewModel.error.value)
 
         viewModel.subjectName.value = "Subject"
-        assertEquals(HomeworkEditorViewModel.Error.EMPTY_DESCRIPTION, viewModel.error.first())
+        advanceUntilIdle()
+        assertEquals(HomeworkEditorViewModel.Error.EMPTY_DESCRIPTION, viewModel.error.value)
 
         viewModel.description.value = "Description"
-        assertNull(viewModel.error.first())
+        advanceUntilIdle()
+        assertNull(viewModel.error.value)
     }
 }
