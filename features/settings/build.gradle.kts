@@ -7,6 +7,8 @@ plugins {
 
 android {
     namespace = "ru.erdenian.studentassistant.settings"
+
+    testOptions.unitTests.all { it.jvmArgs("--add-opens=java.base/java.time=ALL-UNNAMED") }
 }
 
 dependencies {
@@ -17,6 +19,10 @@ dependencies {
 
     implementation(project(":features:repository:api"))
     implementation(project(":features:settings:api"))
+    // endregion
+
+    // region Tests
+    testImplementation(libs.bundles.test.unit)
     // endregion
 
     // region AndroidX

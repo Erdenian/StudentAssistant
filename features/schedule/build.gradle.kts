@@ -9,6 +9,8 @@ plugins {
 
 android {
     namespace = "ru.erdenian.studentassistant.schedule"
+
+    testOptions.unitTests.all { it.jvmArgs("--add-opens=java.base/java.time=ALL-UNNAMED") }
 }
 
 dependencies {
@@ -21,6 +23,10 @@ dependencies {
     implementation(project(":features:repository:api"))
     implementation(project(":features:schedule:api"))
     implementation(project(":features:homeworks:api"))
+    // endregion
+
+    // region Tests
+    testImplementation(libs.bundles.test.unit)
     // endregion
 
     // region Kotlin

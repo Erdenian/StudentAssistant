@@ -1,13 +1,18 @@
 package ru.erdenian.studentassistant.repository.impl
 
+import io.mockk.every
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import java.time.LocalDate
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
+import org.junit.Before
 import org.junit.Test
 import ru.erdenian.studentassistant.repository.database.entity.SemesterEntity
 
@@ -16,10 +21,23 @@ internal class SelectedSemesterRepositoryImplTest {
 
     private val testDispatcher = UnconfinedTestDispatcher()
     private val fakeSemesterDao = FakeSemesterDao()
+    
+    private val fixedNow = LocalDate.of(2025, 11, 30)
+
+    @Before
+    fun setUp() {
+        mockkStatic(LocalDate::class)
+        every { LocalDate.now() } returns fixedNow
+    }
+
+    @After
+    fun tearDown() {
+        unmockkStatic(LocalDate::class)
+    }
 
     @Test
     fun `test default selection logic`() = runTest(testDispatcher) {
-        val now = LocalDate.now()
+        val now = fixedNow
         val past = SemesterEntity("Past", now.minusMonths(5), now.minusMonths(2), id = 1)
         val current = SemesterEntity("Current", now.minusMonths(1), now.plusMonths(1), id = 2)
         val future = SemesterEntity("Future", now.plusMonths(2), now.plusMonths(5), id = 3)

@@ -3,11 +3,12 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.kotlin.parcelize)
-    alias(libs.plugins.kover)
 }
 
 android {
     namespace = "ru.erdenian.studentassistant.repository"
+
+    testOptions.unitTests.all { it.jvmArgs("--add-opens=java.base/java.time=ALL-UNNAMED") }
 }
 
 ksp {
