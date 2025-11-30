@@ -52,7 +52,6 @@ internal class LessonRepositoryImplTest {
 
     @Test
     fun `insert and get`() = runTest(testDispatcher) {
-        val id = 100L
         repository.insert(
             "Subj",
             "Type",
@@ -85,7 +84,7 @@ internal class LessonRepositoryImplTest {
             LocalTime.MIN,
             LocalTime.MAX,
             1L,
-            setOf(LocalDate.now()),
+            setOf(LocalDate.of(2025, 2, 14)),
         )
         val lesson = fakeLessonDao.lessons.value.last()
         assertEquals(1, lesson.byDates.size)

@@ -22,7 +22,8 @@ internal class SemesterRepositoryImplTest {
 
     @Test
     fun `insert selects new semester`() = runTest(testDispatcher) {
-        repository.insert("S1", LocalDate.now(), LocalDate.now().plusMonths(1))
+        val today = LocalDate.of(2025, 2, 14)
+        repository.insert("S1", today, today.plusMonths(1))
 
         val selected = selectedSemesterRepository.selectedFlow.first()
         assertNotNull(selected)
@@ -31,7 +32,8 @@ internal class SemesterRepositoryImplTest {
 
     @Test
     fun `delete clears selection if selected`() = runTest(testDispatcher) {
-        repository.insert("S1", LocalDate.now(), LocalDate.now().plusMonths(1))
+        val today = LocalDate.of(2025, 2, 14)
+        repository.insert("S1", today, today.plusMonths(1))
         val s1 = repository.allFlow.first()[0]
 
         repository.delete(s1.id)
@@ -40,7 +42,8 @@ internal class SemesterRepositoryImplTest {
 
     @Test
     fun `update works`() = runTest(testDispatcher) {
-        repository.insert("S1", LocalDate.now(), LocalDate.now().plusMonths(1))
+        val today = LocalDate.of(2025, 2, 14)
+        repository.insert("S1", today, today.plusMonths(1))
         val s1 = repository.allFlow.first()[0]
 
         repository.update(s1.id, "S1_Updated", s1.firstDay, s1.lastDay)
@@ -51,8 +54,9 @@ internal class SemesterRepositoryImplTest {
 
     @Test
     fun `names flow`() = runTest(testDispatcher) {
-        repository.insert("S1", LocalDate.now(), LocalDate.now().plusMonths(1))
-        repository.insert("S2", LocalDate.now(), LocalDate.now().plusMonths(1))
+        val today = LocalDate.of(2025, 2, 14)
+        repository.insert("S1", today, today.plusMonths(1))
+        repository.insert("S2", today, today.plusMonths(1))
 
         val names = repository.namesFlow.first()
         assertEquals(setOf("S1", "S2"), names.toSet())

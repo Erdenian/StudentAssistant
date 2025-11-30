@@ -26,7 +26,7 @@ internal class HomeworkRepositoryImplTest {
     @Test
     fun `insert and get`() = runTest(testDispatcher) {
         val semesterId = 1L
-        repository.insert("Math", "HW1", LocalDate.now(), semesterId)
+        repository.insert("Math", "HW1", LocalDate.of(2025, 2, 14), semesterId)
 
         val all = fakeHomeworkDao.homeworks.value
         assertEquals(1, all.size)
@@ -35,7 +35,7 @@ internal class HomeworkRepositoryImplTest {
 
     @Test
     fun `delete by id`() = runTest(testDispatcher) {
-        val id = fakeHomeworkDao.insert(HomeworkEntity("Math", "HW1", LocalDate.now(), 1L))
+        val id = fakeHomeworkDao.insert(HomeworkEntity("Math", "HW1", LocalDate.of(2025, 2, 14), 1L))
         assertNotNull(repository.get(id))
 
         repository.delete(id)
@@ -44,9 +44,10 @@ internal class HomeworkRepositoryImplTest {
 
     @Test
     fun `delete by subject`() = runTest(testDispatcher) {
-        fakeHomeworkDao.insert(HomeworkEntity("Math", "HW1", LocalDate.now(), 1L))
-        fakeHomeworkDao.insert(HomeworkEntity("Math", "HW2", LocalDate.now(), 1L))
-        fakeHomeworkDao.insert(HomeworkEntity("Physics", "HW1", LocalDate.now(), 1L))
+        val date = LocalDate.of(2025, 2, 14)
+        fakeHomeworkDao.insert(HomeworkEntity("Math", "HW1", date, 1L))
+        fakeHomeworkDao.insert(HomeworkEntity("Math", "HW2", date, 1L))
+        fakeHomeworkDao.insert(HomeworkEntity("Physics", "HW1", date, 1L))
 
         repository.delete("Math")
 
@@ -56,13 +57,14 @@ internal class HomeworkRepositoryImplTest {
 
     @Test
     fun `flow filtering by selected semester`() = runTest(testDispatcher) {
-        val s1 = SemesterEntity("S1", LocalDate.now(), LocalDate.now().plusMonths(1), id = 1)
-        val s2 = SemesterEntity("S2", LocalDate.now(), LocalDate.now().plusMonths(1), id = 2)
+        val today = LocalDate.of(2025, 2, 14)
+        val s1 = SemesterEntity("S1", today, today.plusMonths(1), id = 1)
+        val s2 = SemesterEntity("S2", today, today.plusMonths(1), id = 2)
         fakeSemesterDao.insert(s1)
         fakeSemesterDao.insert(s2)
 
-        fakeHomeworkDao.insert(HomeworkEntity("H1", "D", LocalDate.now(), 1L))
-        fakeHomeworkDao.insert(HomeworkEntity("H2", "D", LocalDate.now(), 2L))
+        fakeHomeworkDao.insert(HomeworkEntity("H1", "D", today, 1L))
+        fakeHomeworkDao.insert(HomeworkEntity("H2", "D", today, 2L))
 
         // Select S1
         selectedSemesterRepository.selectSemester(1L)

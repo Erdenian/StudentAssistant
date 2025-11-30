@@ -24,10 +24,11 @@ internal class HomeworkDaoTest {
     private val homeworkDao = database.homeworkDao
     private val semesterDao = database.semesterDao
     private val semesterId = 1L
+    private val today = LocalDate.of(2025, 2, 14)
 
     @Before
     fun setUp() = runTest {
-        semesterDao.insert(SemesterEntity("S1", LocalDate.now(), LocalDate.now().plusMonths(1), semesterId))
+        semesterDao.insert(SemesterEntity("S1", today, today.plusMonths(1), semesterId))
     }
 
     @After
@@ -35,7 +36,7 @@ internal class HomeworkDaoTest {
 
     @Test
     fun insertAndGet() = runTest {
-        val hw = HomeworkEntity("Subj", "Desc", LocalDate.now(), semesterId)
+        val hw = HomeworkEntity("Subj", "Desc", today, semesterId)
         val id = homeworkDao.insert(hw)
 
         val loaded = homeworkDao.get(id)
@@ -46,7 +47,7 @@ internal class HomeworkDaoTest {
 
     @Test
     fun update() = runTest {
-        val hw = HomeworkEntity("Subj", "Desc", LocalDate.now(), semesterId)
+        val hw = HomeworkEntity("Subj", "Desc", today, semesterId)
         val id = homeworkDao.insert(hw)
 
         val updated = hw.copy(id = id, subjectName = "New Name")
@@ -58,7 +59,7 @@ internal class HomeworkDaoTest {
 
     @Test
     fun delete() = runTest {
-        val hw = HomeworkEntity("Subj", "Desc", LocalDate.now(), semesterId)
+        val hw = HomeworkEntity("Subj", "Desc", today, semesterId)
         val id = homeworkDao.insert(hw)
         homeworkDao.delete(id)
         assertNull(homeworkDao.get(id))
@@ -66,9 +67,9 @@ internal class HomeworkDaoTest {
 
     @Test
     fun deleteBySubject() = runTest {
-        homeworkDao.insert(HomeworkEntity("Subj", "D1", LocalDate.now(), semesterId))
-        homeworkDao.insert(HomeworkEntity("Subj", "D2", LocalDate.now(), semesterId))
-        homeworkDao.insert(HomeworkEntity("Other", "D3", LocalDate.now(), semesterId))
+        homeworkDao.insert(HomeworkEntity("Subj", "D1", today, semesterId))
+        homeworkDao.insert(HomeworkEntity("Subj", "D2", today, semesterId))
+        homeworkDao.insert(HomeworkEntity("Other", "D3", today, semesterId))
 
         homeworkDao.delete("Subj")
         assertEquals(1, homeworkDao.getAllFlow(semesterId).first().size)
@@ -77,7 +78,6 @@ internal class HomeworkDaoTest {
 
     @Test
     fun getActualFlow() = runTest {
-        val today = LocalDate.now()
         val hwPast = HomeworkEntity("Past", "D", today.minusDays(1), semesterId, isDone = false)
         val hwFuture = HomeworkEntity("Future", "D", today.plusDays(1), semesterId, isDone = false)
         val hwDone = HomeworkEntity("Done", "D", today.plusDays(1), semesterId, isDone = true)
@@ -95,7 +95,6 @@ internal class HomeworkDaoTest {
 
     @Test
     fun getOverdueFlow() = runTest {
-        val today = LocalDate.now()
         val hwOverdue = HomeworkEntity("Over", "D", today.minusDays(1), semesterId, isDone = false)
         val hwDonePast = HomeworkEntity("Done", "D", today.minusDays(1), semesterId, isDone = true)
 
@@ -109,7 +108,6 @@ internal class HomeworkDaoTest {
 
     @Test
     fun getPastFlow() = runTest {
-        val today = LocalDate.now()
         val hwOverdue = HomeworkEntity("Over", "D", today.minusDays(1), semesterId, isDone = false)
         val hwDonePast = HomeworkEntity("Done", "D", today.minusDays(1), semesterId, isDone = true)
 
@@ -124,7 +122,7 @@ internal class HomeworkDaoTest {
     @Test
     fun hasHomeworks() = runTest {
         assertFalse(homeworkDao.hasHomeworks(semesterId, "Math"))
-        homeworkDao.insert(HomeworkEntity("Math", "Desc", LocalDate.now(), semesterId))
+        homeworkDao.insert(HomeworkEntity("Math", "Desc", today, semesterId))
         assertTrue(homeworkDao.hasHomeworks(semesterId, "Math"))
     }
 }
