@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kover)
 }
 
 android {
@@ -19,6 +20,10 @@ dependencies {
     implementation(project(":features:repository:api"))
     implementation(project(":features:homeworks:api"))
     implementation(project(":features:schedule:api"))
+    // endregion
+
+    // region Tests
+    testImplementation(libs.bundles.test.unit)
     // endregion
 
     // region AndroidX
