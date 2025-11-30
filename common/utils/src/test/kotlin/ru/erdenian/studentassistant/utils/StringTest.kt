@@ -11,5 +11,7 @@ internal class StringTest {
         assertEquals("one two", "one\r\ntwo".toSingleLine())
         assertEquals("one two", "one\rtwo".toSingleLine())
         assertEquals("one  two", "one  two".toSingleLine())
+        assertEquals("one two three", "one\ntwo\nthree".toSingleLine())
+        assertEquals("", "".toSingleLine())
     }
 }
