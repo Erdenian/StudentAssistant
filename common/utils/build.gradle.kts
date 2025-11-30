@@ -6,6 +6,8 @@ plugins {
 
 android {
     namespace = "ru.erdenian.studentassistant.utils"
+
+    testOptions.unitTests.all { it.jvmArgs("--add-opens=java.base/java.time=ALL-UNNAMED") }
 }
 
 dependencies {
