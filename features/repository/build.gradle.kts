@@ -18,6 +18,7 @@ ksp {
 dependencies {
     // region Private
     implementation(project(":features:repository:api"))
+    implementation(project(":common:utils"))
     // endregion
 
     // region Tests

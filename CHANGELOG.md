@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Обновление названий дней недели при смене языка устройства в редакторе расписания
+
 ### Changed
 - Значительно уменьшено время получения списка занятий в определенный день из БД
 

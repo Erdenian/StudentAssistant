@@ -35,7 +35,7 @@ internal class SelectedSemesterRepositoryImpl @Inject constructor(
     private val deletedSemesterIds = AtomicReference(emptySet<Long>())
     internal fun onSemesterDeleted(semesterId: Long) {
         deletedSemesterIds.getAndUpdate { it + semesterId }
-        selectedSemesterIdFlow.value = null // To select default semester
+        selectedSemesterIdFlow.value = null // Чтобы выбрать семестр по умолчанию
     }
 
     private val selectedSemesterIdFlow = MutableStateFlow<Long?>(null)
@@ -43,7 +43,7 @@ internal class SelectedSemesterRepositoryImpl @Inject constructor(
     private val selectedSharedFlow: SharedFlow<Semester?> = combineTransform(
         selectedSemesterIdFlow,
         semesterDao.getAllFlow().map { it.map(SemesterEntity::toSemester) }.onEach {
-            // We received actual list from database, clear inserted and deleted cache
+            // Мы получили актуальный список из базы данных, очищаем кэш вставленных и удаленных
             insertedSemesters.set(emptySet())
             deletedSemesterIds.set(emptySet())
         },
@@ -68,7 +68,7 @@ internal class SelectedSemesterRepositoryImpl @Inject constructor(
             if (semester != null) {
                 emit(semester)
             } else {
-                // The selected semester has been deleted, select the default semester from the rest
+                // Выбранный семестр был удален, выбираем семестр по умолчанию из оставшихся
                 selectDefault()
             }
         }

@@ -11,12 +11,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 
 /**
- * Contains default values used by [placeholder] and [PlaceholderHighlight].
+ * Содержит значения по умолчанию, используемые [placeholder] и [PlaceholderHighlight].
  */
 object PlaceholderDefaults {
 
     /**
-     * The default [InfiniteRepeatableSpec] to use for [fade].
+     * [InfiniteRepeatableSpec] по умолчанию для использования с [fade].
      */
     val fadeAnimationSpec: InfiniteRepeatableSpec<Float> by lazy {
         infiniteRepeatable(
@@ -26,7 +26,7 @@ object PlaceholderDefaults {
     }
 
     /**
-     * The default [InfiniteRepeatableSpec] to use for [shimmer].
+     * [InfiniteRepeatableSpec] по умолчанию для использования с [shimmer].
      */
     val shimmerAnimationSpec: InfiniteRepeatableSpec<Float> by lazy {
         infiniteRepeatable(
@@ -36,13 +36,13 @@ object PlaceholderDefaults {
     }
 
     /**
-     * Returns the value used as the the `color` parameter value on [placeholder].
+     * Возвращает значение, используемое в качестве параметра `color` в [placeholder].
      *
-     * @param backgroundColor The current background color of the layout. Defaults to
+     * @param backgroundColor Текущий цвет фона макета. По умолчанию
      * `MaterialTheme.colorScheme.surface`.
-     * @param contentColor The content color to be used on top of [backgroundColor].
-     * @param contentAlpha The alpha component to set on [contentColor] when compositing the color
-     * on top of [backgroundColor]. Defaults to `0.1f`.
+     * @param contentColor Цвет контента, который будет использоваться поверх [backgroundColor].
+     * @param contentAlpha Альфа-компонент, устанавливаемый на [contentColor] при наложении цвета
+     * поверх [backgroundColor]. По умолчанию `0.1f`.
      */
     @Composable
     fun color(
@@ -52,12 +52,12 @@ object PlaceholderDefaults {
     ): Color = contentColor.copy(contentAlpha).compositeOver(backgroundColor)
 
     /**
-     * Returns the value used as the the `highlightColor` parameter value of
+     * Возвращает значение, используемое в качестве параметра `highlightColor` в
      * [PlaceholderHighlight.Companion.fade].
      *
-     * @param backgroundColor The current background color of the layout. Defaults to
+     * @param backgroundColor Текущий цвет фона макета. По умолчанию
      * `MaterialTheme.colorScheme.surface`.
-     * @param alpha The alpha component to set on [backgroundColor]. Defaults to `0.3f`.
+     * @param alpha Альфа-компонент, устанавливаемый на [backgroundColor]. По умолчанию `0.3f`.
      */
     @Composable
     fun fadeHighlightColor(
@@ -66,12 +66,12 @@ object PlaceholderDefaults {
     ): Color = backgroundColor.copy(alpha = alpha)
 
     /**
-     * Returns the value used as the the `highlightColor` parameter value of
+     * Возвращает значение, используемое в качестве параметра `highlightColor` в
      * [PlaceholderHighlight.Companion.shimmer].
      *
-     * @param backgroundColor The current background color of the layout. Defaults to
+     * @param backgroundColor Текущий цвет фона макета. По умолчанию
      * `MaterialTheme.colorScheme.inverseSurface`.
-     * @param alpha The alpha component to set on [backgroundColor]. Defaults to `0.75f`.
+     * @param alpha Альфа-компонент, устанавливаемый на [backgroundColor]. По умолчанию `0.75f`.
      */
     @Composable
     fun shimmerHighlightColor(

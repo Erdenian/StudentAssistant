@@ -25,7 +25,7 @@ import androidx.navigation3.runtime.serialization.NavKeySerializer
 import androidx.savedstate.compose.serialization.serializers.MutableStateSerializer
 
 /**
- * Create a navigation state that persists config changes and process death.
+ * Создает состояние навигации, которое сохраняется при изменении конфигурации и завершении процесса.
  */
 @Composable
 fun rememberNavigationState(
@@ -52,11 +52,11 @@ fun rememberNavigationState(
 }
 
 /**
- * State holder for navigation state.
+ * Держатель состояния для состояния навигации.
  *
- * @param startRoute - the start route. The user will exit the app through this route.
- * @param topLevelRoute - the current top level route
- * @param backStacks - the back stacks for each top level route
+ * @param startRoute - стартовый маршрут. Пользователь выйдет из приложения через этот маршрут.
+ * @param topLevelRoute - текущий маршрут верхнего уровня
+ * @param backStacks - бэкстеки для каждого маршрута верхнего уровня
  */
 class NavigationState(
     val startRoute: NavKey,
@@ -73,7 +73,7 @@ class NavigationState(
 }
 
 /**
- * Convert NavigationState into NavEntries.
+ * Преобразует NavigationState в NavEntries.
  */
 @Composable
 fun NavigationState.toEntries(

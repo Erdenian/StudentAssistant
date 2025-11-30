@@ -23,8 +23,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.os.ConfigurationCompat
 import java.time.DayOfWeek
 import java.time.format.TextStyle
 import java.util.Locale
@@ -51,11 +53,16 @@ internal fun ScheduleEditorContent(
     onDeleteLessonClick: (Lesson) -> Unit,
     onAddLessonClick: (DayOfWeek) -> Unit,
 ) {
-    val daysOfWeekTitles = remember {
-        // TextStyle.FULL_STANDALONE returns number
-        // https://stackoverflow.com/questions/63415047
-        DayOfWeek.entries.map { it.getDisplayName(TextStyle.FULL, Locale.getDefault()) }
+    val daysOfWeekTitles = run {
+        val configuration = LocalConfiguration.current
+        remember(configuration) {
+            val locale = ConfigurationCompat.getLocales(configuration).get(0) ?: Locale.getDefault()
+            // TextStyle.FULL_STANDALONE возвращает число
+            // https://stackoverflow.com/questions/63415047
+            DayOfWeek.entries.map { it.getDisplayName(TextStyle.FULL, locale) }
+        }
     }
+
     val pagerState = rememberPagerState(
         initialPage = 0,
         initialPageOffsetFraction = 0f,

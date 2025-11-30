@@ -14,20 +14,20 @@ import androidx.compose.ui.util.lerp
 import kotlin.math.max
 
 /**
- * A class which provides a brush to paint placeholder based on progress.
+ * Класс, предоставляющий кисть для рисования плейсхолдера на основе прогресса.
  */
 @Stable
 interface PlaceholderHighlight {
     /**
-     * The optional [AnimationSpec] to use when running the animation for this highlight.
+     * Необязательный [AnimationSpec], используемый при запуске анимации для этой подсветки.
      */
     val animationSpec: InfiniteRepeatableSpec<Float>?
 
     /**
-     * Return a [Brush] to draw for the given [progress] and [size].
+     * Возвращает [Brush] для рисования для данного [progress] и [size].
      *
-     * @param progress the current animated progress in the range of 0f..1f.
-     * @param size The size of the current layout to draw in.
+     * @param progress текущий анимированный прогресс в диапазоне 0f..1f.
+     * @param size Размер текущего макета для рисования.
      */
     fun brush(
         @FloatRange(from = 0.0, to = 1.0) progress: Float,
@@ -35,9 +35,9 @@ interface PlaceholderHighlight {
     ): Brush
 
     /**
-     * Return the desired alpha value used for drawing the [Brush] returned from [brush].
+     * Возвращает желаемое значение альфа, используемое для рисования [Brush], возвращаемого из [brush].
      *
-     * @param progress the current animated progress in the range of 0f..1f.
+     * @param progress текущий анимированный прогресс в диапазоне 0f..1f.
      */
     @FloatRange(from = 0.0, to = 1.0)
     fun alpha(progress: Float): Float
@@ -46,10 +46,10 @@ interface PlaceholderHighlight {
 }
 
 /**
- * Creates a [Fade] brush with the given initial and target colors.
+ * Создает кисть [Fade] с заданными начальным и конечным цветами.
  *
- * @param highlightColor the color of the highlight which is faded in/out.
- * @param animationSpec the [AnimationSpec] to configure the animation.
+ * @param highlightColor цвет подсветки, которая появляется/исчезает.
+ * @param animationSpec [AnimationSpec] для настройки анимации.
  */
 fun PlaceholderHighlight.Companion.fade(
     highlightColor: Color,
@@ -60,16 +60,16 @@ fun PlaceholderHighlight.Companion.fade(
 )
 
 /**
- * Creates a [PlaceholderHighlight] which 'shimmers', using the given [highlightColor].
+ * Создает [PlaceholderHighlight], который "мерцает", используя заданный [highlightColor].
  *
- * The highlight starts at the top-start, and then grows to the bottom-end during the animation.
- * During that time it is also faded in, from 0f..progressForMaxAlpha, and then faded out from
+ * Подсветка начинается сверху-слева, а затем растет к низу-справа во время анимации.
+ * В это время она также плавно появляется от 0f..progressForMaxAlpha, а затем плавно исчезает от
  * progressForMaxAlpha..1f.
  *
- * @param highlightColor the color of the highlight 'shimmer'.
- * @param animationSpec the [AnimationSpec] to configure the animation.
- * @param progressForMaxAlpha The progress where the shimmer should be at it's peak opacity.
- * Defaults to 0.6f.
+ * @param highlightColor цвет "мерцания" подсветки.
+ * @param animationSpec [AnimationSpec] для настройки анимации.
+ * @param progressForMaxAlpha Прогресс, при котором мерцание должно быть на пике непрозрачности.
+ * По умолчанию 0.6f.
  */
 fun PlaceholderHighlight.Companion.shimmer(
     highlightColor: Color,
@@ -82,10 +82,10 @@ fun PlaceholderHighlight.Companion.shimmer(
 )
 
 /**
- * Creates a [PlaceholderHighlight] which fades in an appropriate color, using the
- * given [animationSpec].
+ * Создает [PlaceholderHighlight], который плавно появляется подходящим цветом, используя
+ * заданный [animationSpec].
  *
- * @param animationSpec the [AnimationSpec] to configure the animation.
+ * @param animationSpec [AnimationSpec] для настройки анимации.
  */
 @Composable
 fun PlaceholderHighlight.Companion.fade(
@@ -96,15 +96,15 @@ fun PlaceholderHighlight.Companion.fade(
 )
 
 /**
- * Creates a [PlaceholderHighlight] which 'shimmers', using a default color.
+ * Создает [PlaceholderHighlight], который "мерцает", используя цвет по умолчанию.
  *
- * The highlight starts at the top-start, and then grows to the bottom-end during the animation.
- * During that time it is also faded in, from 0f..progressForMaxAlpha, and then faded out from
+ * Подсветка начинается сверху-слева, а затем растет к низу-справа во время анимации.
+ * В это время она также плавно появляется от 0f..progressForMaxAlpha, а затем плавно исчезает от
  * progressForMaxAlpha..1f.
  *
- * @param animationSpec the [AnimationSpec] to configure the animation.
- * @param progressForMaxAlpha The progress where the shimmer should be at it's peak opacity.
- * Defaults to 0.6f.
+ * @param animationSpec [AnimationSpec] для настройки анимации.
+ * @param progressForMaxAlpha Прогресс, при котором мерцание должно быть на пике непрозрачности.
+ * По умолчанию 0.6f.
  */
 @Composable
 fun PlaceholderHighlight.Companion.shimmer(
@@ -145,13 +145,13 @@ private data class Shimmer(
     )
 
     override fun alpha(progress: Float): Float =
-        if (progress <= progressForMaxAlpha) { // From 0f...ProgressForOpaqueAlpha we animate from 0..1
+        if (progress <= progressForMaxAlpha) { // От 0f...ProgressForOpaqueAlpha анимируем от 0..1
             lerp(
                 start = 0f,
                 stop = 1f,
                 fraction = progress / progressForMaxAlpha,
             )
-        } else { // From ProgressForOpaqueAlpha..1f we animate from 1..0
+        } else { // От ProgressForOpaqueAlpha..1f анимируем от 1..0
             lerp(
                 start = 1f,
                 stop = 0f,
