@@ -50,29 +50,6 @@ internal class LessonTest {
         assertTrue(base.compareTo(base.copy(type = "type_")) < 0)
         assertTrue(base.copy(type = "type_").compareTo(base) > 0)
 
-        // teachers
-        assertTrue(base.compareTo(base.copy(teachers = listOf("t_"))) < 0)
-        assertTrue(base.copy(teachers = listOf("t_")).compareTo(base) > 0)
-
-        // classrooms
-        assertTrue(base.compareTo(base.copy(classrooms = listOf("c_"))) < 0)
-        assertTrue(base.copy(classrooms = listOf("c_")).compareTo(base) > 0)
-
-        // lessonRepeat
-        assertTrue(
-            base.compareTo(
-                base.copy(
-                    lessonRepeat = Lesson.Repeat.ByWeekday(
-                        DayOfWeek.TUESDAY,
-                        listOf(true),
-                    ),
-                ),
-            ) < 0,
-        )
-        assertTrue(
-            base.copy(lessonRepeat = Lesson.Repeat.ByWeekday(DayOfWeek.TUESDAY, listOf(true))).compareTo(base) > 0,
-        )
-
         // id
         assertTrue(base.compareTo(base.copy(id = 11L)) < 0)
         assertTrue(base.copy(id = 11L).compareTo(base) > 0)

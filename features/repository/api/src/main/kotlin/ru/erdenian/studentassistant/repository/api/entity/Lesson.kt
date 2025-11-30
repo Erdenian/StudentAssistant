@@ -53,9 +53,6 @@ data class Lesson(
         Lesson::endTime,
         Lesson::subjectName,
         Lesson::type,
-        { it.teachers.joinToString() },
-        { it.classrooms.joinToString() },
-        { it.lessonRepeat.toString() },
         Lesson::id,
         Lesson::semesterId,
     )
