@@ -14,6 +14,7 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -175,5 +176,20 @@ internal class HomeworkEditorViewModelTest {
         viewModel.description.value = "Description"
         advanceUntilIdle()
         assertNull(viewModel.error.value)
+    }
+
+    @Test
+    fun `lessonExists test`() = runTest {
+        val viewModel = HomeworkEditorViewModel(application, repositoryApi, semesterId, null, null)
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.existingSubjects.collect() }
+        advanceUntilIdle()
+
+        // subjectsFlow имеет значения "Subject1", "Subject2"
+        
+        viewModel.subjectName.value = "Subject1"
+        assertTrue(viewModel.lessonExists)
+
+        viewModel.subjectName.value = "Subject3"
+        assertFalse(viewModel.lessonExists)
     }
 }
