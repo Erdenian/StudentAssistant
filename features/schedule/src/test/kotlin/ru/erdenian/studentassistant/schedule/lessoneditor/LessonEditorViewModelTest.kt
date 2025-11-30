@@ -16,6 +16,7 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -122,6 +123,93 @@ internal class LessonEditorViewModelTest {
             )
         }
         assertTrue(viewModel.done.value)
+    }
+
+    @Test
+    fun `save reduces weeks cycle test`() = runTest {
+        val viewModel = LessonEditorViewModel(
+            application, repositoryApi, semesterId, null, false, DayOfWeek.MONDAY, null
+        )
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
+        advanceUntilIdle()
+
+        viewModel.subjectName.value = "Subject"
+        // [true, false, true, false] -> должно быть сокращено до [true, false]
+        viewModel.weeks.value = listOf(true, false, true, false)
+        viewModel.save()
+        advanceUntilIdle()
+
+        coVerify {
+            lessonRepository.insert(
+                subjectName = any(),
+                type = any(),
+                teachers = any(),
+                classrooms = any(),
+                startTime = any(),
+                endTime = any(),
+                semesterId = any(),
+                dayOfWeek = any(),
+                weeks = listOf(true, false)
+            )
+        }
+    }
+
+    @Test
+    fun `save does not reduce irreducible weeks cycle test`() = runTest {
+        val viewModel = LessonEditorViewModel(
+            application, repositoryApi, semesterId, null, false, DayOfWeek.MONDAY, null
+        )
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
+        advanceUntilIdle()
+
+        viewModel.subjectName.value = "Subject"
+        // [true, false, true] -> не может быть сокращено
+        viewModel.weeks.value = listOf(true, false, true)
+        viewModel.save()
+        advanceUntilIdle()
+
+        coVerify {
+            lessonRepository.insert(
+                subjectName = any(),
+                type = any(),
+                teachers = any(),
+                classrooms = any(),
+                startTime = any(),
+                endTime = any(),
+                semesterId = any(),
+                dayOfWeek = any(),
+                weeks = listOf(true, false, true)
+            )
+        }
+    }
+
+    @Test
+    fun `isSubjectNameChangedAndNotLast test`() = runTest {
+        val lesson = Lesson(
+            "Subject", "Type", listOf("T1"), listOf("C1"),
+            LocalTime.of(10, 0), LocalTime.of(11, 30),
+            Lesson.Repeat.ByWeekday(DayOfWeek.FRIDAY, listOf(true)),
+            semesterId, 10L
+        )
+        coEvery { lessonRepository.get(10L) } returns lesson
+        coEvery { lessonRepository.getCount(semesterId, "Subject") } returns 2
+
+        val viewModel = LessonEditorViewModel(
+            application, repositoryApi, semesterId, 10L, false, null, null
+        )
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
+        advanceUntilIdle()
+
+        // Имя не изменено
+        assertFalse(viewModel.isSubjectNameChangedAndNotLast())
+
+        // Имя изменено, количество > 1
+        viewModel.subjectName.value = "New Subject"
+        assertTrue(viewModel.isSubjectNameChangedAndNotLast())
+
+        // Имя изменено, количество = 1
+        coEvery { lessonRepository.getCount(semesterId, "Subject") } returns 1
+        assertFalse(viewModel.isSubjectNameChangedAndNotLast())
     }
 
     @Test
