@@ -142,7 +142,8 @@ dependencies {
 dependencies {
     rootProject.subprojects {
         afterEvaluate {
-            if (plugins.hasPlugin(libs.plugins.kover.get().pluginId)) kover(project(path))
+            apply(plugin = libs.plugins.kover.get().pluginId)
+            kover(project(path))
         }
     }
 }
