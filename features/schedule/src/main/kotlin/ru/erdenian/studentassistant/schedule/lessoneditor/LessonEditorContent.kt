@@ -2,6 +2,9 @@ package ru.erdenian.studentassistant.schedule.lessoneditor
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,13 +16,13 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -28,8 +31,8 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -126,6 +129,7 @@ internal fun LessonEditorContent(
         modifier = Modifier.imePadding(),
     ) { paddingValues ->
         Column(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
                 .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
                 .verticalScroll(rememberScrollState())
@@ -138,35 +142,39 @@ internal fun LessonEditorContent(
             val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
             var timePickerData: Pair<LocalTime, (LocalTime) -> Unit>? by remember { mutableStateOf(null) }
 
-            AutoCompleteTextField(
-                value = subjectName,
-                items = existingSubjects,
-                onValueChange = onSubjectNameChange,
-                enabled = !isProgress,
-                label = { Text(text = stringResource(RS.le_subject_name)) },
-                isError = (subjectNameErrorMessage != null),
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Sentences,
-                    imeAction = ImeAction.Next,
-                ),
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .placeholder(
-                        visible = isProgress,
-                        highlight = PlaceholderHighlight.fade(),
+            // Subject Name
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                AutoCompleteTextField(
+                    value = subjectName,
+                    items = existingSubjects,
+                    onValueChange = onSubjectNameChange,
+                    enabled = !isProgress,
+                    label = { Text(text = stringResource(RS.le_subject_name)) },
+                    isError = (subjectNameErrorMessage != null),
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Sentences,
+                        imeAction = ImeAction.Next,
                     ),
-            )
-
-            AnimatedVisibility(subjectNameErrorMessage != null) {
-                Text(
-                    text = subjectNameErrorMessage.orEmpty(),
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(start = 16.dp),
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .placeholder(
+                            visible = isProgress,
+                            highlight = PlaceholderHighlight.fade(),
+                        ),
                 )
+
+                AnimatedVisibility(subjectNameErrorMessage != null) {
+                    Text(
+                        text = subjectNameErrorMessage.orEmpty(),
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(start = 16.dp),
+                    )
+                }
             }
 
+            // Type
             AutoCompleteTextField(
                 value = type,
                 items = existingTypes,
@@ -180,13 +188,13 @@ internal fun LessonEditorContent(
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp)
                     .placeholder(
                         visible = isProgress,
                         highlight = PlaceholderHighlight.fade(),
                     ),
             )
 
+            // Teachers
             MultiAutoCompleteTextField(
                 value = teachers,
                 items = existingTeachers,
@@ -200,13 +208,13 @@ internal fun LessonEditorContent(
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp)
                     .placeholder(
                         visible = isProgress,
                         highlight = PlaceholderHighlight.fade(),
                     ),
             )
 
+            // Classrooms
             val focusManager = LocalFocusManager.current
             MultiAutoCompleteTextField(
                 value = classrooms,
@@ -224,75 +232,68 @@ internal fun LessonEditorContent(
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp)
                     .placeholder(
                         visible = isProgress,
                         highlight = PlaceholderHighlight.fade(),
                     ),
             )
 
+            // Time
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(
-                    text = stringResource(RS.le_start_time),
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.weight(1.0f),
-                )
-                TextButton(
+                TimeItem(
+                    time = startTime,
+                    label = stringResource(RS.le_start_time),
                     onClick = { timePickerData = startTime to onStartTimeChange },
                     enabled = !isProgress,
-                    modifier = Modifier.placeholder(
-                        visible = isProgress,
-                        highlight = PlaceholderHighlight.fade(),
-                    ),
-                ) {
-                    Text(text = startTime.format(timeFormatter))
-                }
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp),
-            ) {
-                Text(
-                    text = stringResource(RS.le_end_time),
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.weight(1.0f),
+                    timeFormatter = timeFormatter,
+                    modifier = Modifier
+                        .weight(1f)
+                        .placeholder(
+                            visible = isProgress,
+                            highlight = PlaceholderHighlight.fade(),
+                        ),
                 )
-                TextButton(
+
+                TimeItem(
+                    time = endTime,
+                    label = stringResource(RS.le_end_time),
                     onClick = { timePickerData = endTime to onEndTimeChange },
                     enabled = !isProgress,
-                    modifier = Modifier.placeholder(
-                        visible = isProgress,
-                        highlight = PlaceholderHighlight.fade(),
-                    ),
-                ) {
-                    Text(text = endTime.format(timeFormatter))
-                }
+                    timeFormatter = timeFormatter,
+                    modifier = Modifier
+                        .weight(1f)
+                        .placeholder(
+                            visible = isProgress,
+                            highlight = PlaceholderHighlight.fade(),
+                        ),
+                )
             }
 
-            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+            // Day of Week
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = stringResource(RS.le_day_of_week),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(start = 4.dp),
+                )
+                WeekdayPicker(
+                    value = dayOfWeek,
+                    onValueChange = onDayOfWeekChange,
+                    enabled = !isProgress,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .placeholder(
+                            visible = isProgress,
+                            highlight = PlaceholderHighlight.fade(),
+                        ),
+                )
+            }
 
-            WeekdayPicker(
-                value = dayOfWeek,
-                onValueChange = onDayOfWeekChange,
-                enabled = !isProgress,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .placeholder(
-                        visible = isProgress,
-                        highlight = PlaceholderHighlight.fade(),
-                    ),
-            )
-
-            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-
+            // Weeks
             key(isProgress) { // Чтобы сбросить состояние WeekSelector при завершении загрузки
                 WeeksSelector(
                     weeks = weeks,
@@ -319,6 +320,35 @@ internal fun LessonEditorContent(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun TimeItem(
+    time: LocalTime,
+    label: String,
+    onClick: () -> Unit,
+    enabled: Boolean,
+    timeFormatter: DateTimeFormatter,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier) {
+        OutlinedTextField(
+            value = time.format(timeFormatter),
+            onValueChange = {},
+            readOnly = true,
+            enabled = enabled,
+            label = { Text(text = label) },
+            trailingIcon = { Icon(imageVector = AppIcons.Schedule, contentDescription = null) },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .clip(MaterialTheme.shapes.small)
+                .clickable(enabled = enabled, onClick = onClick),
+        )
     }
 }
 
