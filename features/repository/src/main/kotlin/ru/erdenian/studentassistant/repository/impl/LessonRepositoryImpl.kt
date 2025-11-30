@@ -146,14 +146,20 @@ internal class LessonRepositoryImpl @Inject constructor(
     }
 
     override fun getAllFlow(day: LocalDate) = selectedSemesterRepository.selectedFlow.flatMapLatest { semester ->
-        val allLessons = semester?.id?.let(lessonDao::getAllFlow) ?: flowOf(emptyList())
-        allLessons.map { lessons ->
-            val weekNumber = semester?.getWeekNumber(day) ?: return@map emptyList()
-            lessons.asSequence()
-                .map { it.toLesson() }
-                .filter { it.lessonRepeat.repeatsOnDay(day, weekNumber) }
-                .toList()
-        }
+        if (semester == null) return@flatMapLatest flowOf(emptyList())
+        val weekNumber = semester.getWeekNumber(day)
+
+        // Если день за пределами семестра (раньше), то weekNumber < 0.
+        // Для таких случаев SQL с substr(weeks, 0, 1) вернет пустоту, что корректно (пар по неделям нет).
+        // Но пары по датам (ByDates) могут существовать теоретически.
+        // Однако логичнее просто вернуть запрос.
+
+        lessonDao.getAllFlow(
+            semesterId = semester.id,
+            dayOfWeek = day.dayOfWeek,
+            weekNumber = weekNumber,
+            date = day,
+        ).map()
     }
 
     override fun getAllFlow(semesterId: Long, dayOfWeek: DayOfWeek) =

@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.LocalTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -114,6 +115,29 @@ internal abstract class LessonDao {
     @Transaction
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId ORDER BY start_time, end_time, subject_name, type, _id, semester_id")
     abstract fun getAllFlow(semesterId: Long): Flow<List<FullLesson>>
+
+    @Transaction
+    @Query(
+        """
+        SELECT l.* FROM lessons AS l
+        INNER JOIN by_weekday AS w ON l._id = w.lesson_id
+        WHERE l.semester_id = :semesterId
+          AND w.day_of_week = :dayOfWeek
+          AND substr(w.weeks, (:weekNumber % length(w.weeks)) + 1, 1) = '1'
+        UNION
+        SELECT l.* FROM lessons AS l
+        INNER JOIN by_date AS d ON l._id = d.lesson_id
+        WHERE l.semester_id = :semesterId
+          AND d.date = :date
+        ORDER BY start_time, end_time, subject_name, type, _id, semester_id
+    """,
+    )
+    abstract fun getAllFlow(
+        semesterId: Long,
+        dayOfWeek: DayOfWeek,
+        weekNumber: Int,
+        date: LocalDate,
+    ): Flow<List<FullLesson>>
 
     @Transaction
     @Query("SELECT lessons.* FROM lessons INNER JOIN by_weekday ON by_weekday.lesson_id = lessons._id WHERE semester_id = :semesterId AND day_of_week = :dayOfWeek ORDER BY start_time, end_time, subject_name, type, _id, semester_id")

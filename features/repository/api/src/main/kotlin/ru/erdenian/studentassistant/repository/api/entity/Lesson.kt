@@ -53,9 +53,6 @@ data class Lesson(
         Lesson::endTime,
         Lesson::subjectName,
         Lesson::type,
-        { it.teachers.hashCode() },
-        { it.classrooms.hashCode() },
-        { it.lessonRepeat.hashCode() },
         Lesson::id,
         Lesson::semesterId,
     )
@@ -69,17 +66,6 @@ data class Lesson(
     @Serializable
     @Parcelize
     sealed class Repeat : Parcelable {
-
-        /**
-         * Показывает, повторяется ли пара в заданный день.
-         *
-         * @param day день
-         * @param weekNumber номер недели, содержащей этот день (начинается с 0)
-         * @return true, если пара повторяется в заданный день, в противном случае false
-         * @author Ilya Solovyov
-         * @since 0.0.0
-         */
-        abstract fun repeatsOnDay(day: LocalDate, weekNumber: Int): Boolean
 
         /**
          * Повторение по дням недели.
@@ -96,21 +82,7 @@ data class Lesson(
         data class ByWeekday(
             val dayOfWeek: DayOfWeek,
             val weeks: List<Boolean>,
-        ) : Repeat() {
-
-            override fun repeatsOnDay(day: LocalDate, weekNumber: Int) =
-                (day.dayOfWeek == dayOfWeek) && (weeks[weekNumber % weeks.size])
-
-            /**
-             * Показывает, повторяется ли пара в заданный день недели без учета номера недели.
-             *
-             * @param dayOfWeek день недели
-             * @return true, если пара повторяется в этот день недели, хотя бы на одной неделе, false в противном случае
-             * @author Ilya Solovyov
-             * @since 0.0.0
-             */
-            fun repeatsOnDayOfWeek(dayOfWeek: DayOfWeek): Boolean = (dayOfWeek == this.dayOfWeek)
-        }
+        ) : Repeat()
 
         /**
          * Повторение по датам.
@@ -123,19 +95,6 @@ data class Lesson(
         @Serializable
         data class ByDates(
             val dates: Set<@Serializable(with = LocalDateSerializer::class) LocalDate>,
-        ) : Repeat() {
-
-            override fun repeatsOnDay(day: LocalDate, weekNumber: Int) = day in dates
-
-            /**
-             * То же, что и [repeatsOnDay], но без ненужного второго параметра.
-             *
-             * @param date день
-             * @return true, если пара повторяется в заданный день, в противном случае false
-             * @author Ilya Solovyov
-             * @since 0.0.0
-             */
-            fun repeatsOnDate(date: LocalDate) = repeatsOnDay(date, -1)
-        }
+        ) : Repeat()
     }
 }

@@ -13,6 +13,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertThrows
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -446,5 +447,43 @@ internal class LessonDaoTest {
         )
         assertEquals(LocalTime.of(19, 10), lessonDao.getLastEndTime(semesterId, DayOfWeek.MONDAY))
         assertEquals(LocalTime.of(22, 0), lessonDao.getLastEndTime(semesterId, DayOfWeek.TUESDAY))
+    }
+
+    @Test
+    fun getAllFlow_Filtering_ByWeekday() = runTest {
+        // Урок 1: Только по четным (индексы 1, 3...)
+        val lesson1 = LessonEntity("Even", "Type", LocalTime.of(10, 0), LocalTime.of(11, 30), semesterId)
+        lessonDao.insert(
+            lesson1, emptySet(), emptySet(),
+            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(false, true)),
+        )
+
+        // Week 0 -> Остаток 0 -> Индекс 1 -> '0' (false)
+        val resWeek0 = lessonDao.getAllFlow(semesterId, DayOfWeek.MONDAY, 0, LocalDate.MIN).first()
+        assertTrue(resWeek0.isEmpty())
+
+        // Week 1 -> Остаток 1 -> Индекс 2 -> '1' (true)
+        val resWeek1 = lessonDao.getAllFlow(semesterId, DayOfWeek.MONDAY, 1, LocalDate.MIN).first()
+        assertEquals(1, resWeek1.size)
+        assertEquals("Even", resWeek1[0].lesson.subjectName)
+    }
+
+    @Test
+    fun getAllFlow_Filtering_ByDate() = runTest {
+        val targetDate = LocalDate.of(2020, 5, 20)
+        val lesson = LessonEntity("Date", "Type", LocalTime.of(10, 0), LocalTime.of(11, 30), semesterId)
+        lessonDao.insert(
+            lesson, emptySet(), emptySet(),
+            setOf(ByDateEntity(targetDate)),
+        )
+
+        // Запрос по этой дате
+        val res = lessonDao.getAllFlow(semesterId, targetDate.dayOfWeek, 10, targetDate).first()
+        assertEquals(1, res.size)
+        assertEquals("Date", res[0].lesson.subjectName)
+
+        // Запрос по другой дате
+        val resOther = lessonDao.getAllFlow(semesterId, targetDate.dayOfWeek, 10, targetDate.plusDays(1)).first()
+        assertTrue(resOther.isEmpty())
     }
 }
