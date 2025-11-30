@@ -293,7 +293,7 @@ internal fun LessonEditorContent(
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-            key(isProgress) { // To reset WeekSelector's state when loading completes
+            key(isProgress) { // Чтобы сбросить состояние WeekSelector при завершении загрузки
                 WeeksSelector(
                     weeks = weeks,
                     onWeeksChange = onWeeksChange,

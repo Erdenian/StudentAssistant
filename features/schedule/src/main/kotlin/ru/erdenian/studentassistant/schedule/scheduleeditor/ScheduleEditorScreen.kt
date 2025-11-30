@@ -168,7 +168,7 @@ internal fun ScheduleEditorScreen(route: ScheduleRoute.ScheduleEditor) {
         },
         onAddLessonClick = { dayOfWeek ->
             navController.navigate(
-                ScheduleRoute.LessonEditor(semesterId = viewModel.semesterId, dayOfWeekValue = dayOfWeek.value),
+                ScheduleRoute.LessonEditor(semesterId = viewModel.semesterId, dayOfWeek = dayOfWeek),
             )
         },
     )

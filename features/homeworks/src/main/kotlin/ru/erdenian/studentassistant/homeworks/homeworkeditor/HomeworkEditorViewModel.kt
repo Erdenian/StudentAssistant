@@ -99,7 +99,7 @@ internal class HomeworkEditorViewModel @AssistedInject constructor(
                     description.value = homework.description
                     deadline.value = homework.deadline
                 } else {
-                    // Homework was deleted
+                    // Домашнее задание было удалено
                     donePrivate.value = true
                 }
                 isHomeworkLoaded.value = true

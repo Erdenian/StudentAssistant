@@ -41,7 +41,7 @@ internal fun WeekdayPicker(
     val daysOfWeek = run {
         val locale = Locale.getDefault()
         remember(locale) {
-            // TextStyle.NARROW_STANDALONE returns number
+            // TextStyle.NARROW_STANDALONE возвращает число
             // https://stackoverflow.com/questions/63415047
             DayOfWeek.entries.associateWith { it.getDisplayName(TextStyle.NARROW, locale).uppercase(locale) }
         }

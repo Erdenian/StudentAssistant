@@ -116,6 +116,21 @@ internal abstract class LessonDao {
     @Query("SELECT * FROM lessons WHERE semester_id = :semesterId ORDER BY start_time, end_time, subject_name, type, _id, semester_id")
     abstract fun getAllFlow(semesterId: Long): Flow<List<FullLesson>>
 
+    /*
+     * Запрос для получения занятий на определенный день.
+     * Он объединяет (UNION) регулярные занятия (by_weekday) и занятия по датам (by_date).
+     *
+     * Логика проверки недель:
+     * Поле 'weeks' в таблице 'by_weekday' хранит строку из '0' и '1', где каждый символ соответствует неделе.
+     * Мы используем функцию SUBSTR, чтобы получить символ, соответствующий текущей неделе (weekNumber).
+     * weekNumber - это номер недели с начала семестра (начиная с 0).
+     *
+     * Формула: (:weekNumber % length(w.weeks)) + 1
+     * 1. Берем остаток от деления номера недели на длину цикла повторений.
+     * 2. Прибавляем 1, так как в SQL индексация строк начинается с 1.
+     *
+     * Если полученный символ равен '1', значит занятие проводится на этой неделе.
+     */
     @Transaction
     @Query(
         """

@@ -52,7 +52,7 @@ internal fun ScheduleEditorContent(
     onAddLessonClick: (DayOfWeek) -> Unit,
 ) {
     val daysOfWeekTitles = remember {
-        // TextStyle.FULL_STANDALONE returns number
+        // TextStyle.FULL_STANDALONE возвращает число
         // https://stackoverflow.com/questions/63415047
         DayOfWeek.entries.map { it.getDisplayName(TextStyle.FULL, Locale.getDefault()) }
     }
