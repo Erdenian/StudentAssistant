@@ -152,6 +152,7 @@ subprojectsAfterEvaluate {
             device = "Pixel 4"
             apiLevel = 34
             systemImageSource = "aosp"
+            testedAbi = "x86_64"
         }
 
         dependencies {

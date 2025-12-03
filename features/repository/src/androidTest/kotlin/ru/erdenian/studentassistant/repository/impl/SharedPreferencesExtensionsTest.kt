@@ -33,7 +33,7 @@ internal class SharedPreferencesExtensionsTest {
 
     @Test
     fun booleanTest() = runTest {
-        val key = "KEY"
+        val key = "booleanTest"
         val defaultValue = false
         val newValue = true
 
@@ -54,7 +54,7 @@ internal class SharedPreferencesExtensionsTest {
 
     @Test
     fun localTimeTest() = runTest {
-        val key = "KEY"
+        val key = "localTimeTest"
         val defaultValue = LocalTime.of(10, 0)
         val newValue = LocalTime.of(17, 8, 17)
 
@@ -78,7 +78,7 @@ internal class SharedPreferencesExtensionsTest {
 
     @Test
     fun durationTest() = runTest {
-        val key = "KEY"
+        val key = "durationTest"
         val defaultValue = Duration.ZERO
         val newValue = Duration.ofMinutes(420)
 
