@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.schedule.lessoneditor.composable
 
-import android.content.res.Configuration
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
@@ -26,12 +25,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.core.os.ConfigurationCompat
 import java.time.DayOfWeek
 import java.time.format.TextStyle
 import java.util.Locale
+import ru.erdenian.studentassistant.style.AppPreviews
 import ru.erdenian.studentassistant.style.AppTheme
 
 /**
@@ -259,25 +260,21 @@ private class DefaultWeekdayPickerColors(
     }
 }
 
-@Preview(name = "WeekdayPicker Light")
-@Preview(name = "WeekdayPicker Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun WeekdayPickerPreview() = AppTheme {
-    WeekdayPicker(
-        value = DayOfWeek.WEDNESDAY,
-        onValueChange = {},
-        modifier = Modifier.fillMaxWidth(),
-    )
+private class WeekdayPickerPreviewParameterProvider : PreviewParameterProvider<Boolean> {
+    override val values = sequenceOf(true, false)
 }
 
-@Preview(name = "WeekdayPicker Disabled")
-@Preview(name = "WeekdayPicker Disabled Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@AppPreviews
 @Composable
-private fun WeekdayPickerDisabledPreview() = AppTheme {
-    WeekdayPicker(
-        value = DayOfWeek.WEDNESDAY,
-        onValueChange = {},
-        enabled = false,
-        modifier = Modifier.fillMaxWidth(),
-    )
+private fun WeekdayPickerPreview(
+    @PreviewParameter(WeekdayPickerPreviewParameterProvider::class) enabled: Boolean,
+) = AppTheme {
+    Surface {
+        WeekdayPicker(
+            value = DayOfWeek.WEDNESDAY,
+            onValueChange = {},
+            enabled = enabled,
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
 }

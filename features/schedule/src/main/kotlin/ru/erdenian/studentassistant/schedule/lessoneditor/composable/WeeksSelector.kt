@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.schedule.lessoneditor.composable
 
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
@@ -27,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -45,11 +45,13 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import ru.erdenian.studentassistant.strings.RA
 import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppIcons
+import ru.erdenian.studentassistant.style.AppPreviews
 import ru.erdenian.studentassistant.style.AppTheme
 
 /**
@@ -244,48 +246,33 @@ internal fun WeeksSelector(
     }
 }
 
-@Preview(name = "Simple Mode")
-@Preview(name = "Simple Mode (Dark)", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun WeeksSelectorSimplePreview() = AppTheme {
-    WeeksSelector(
-        weeks = listOf(true, false),
-        onWeeksChange = {},
-        isAdvancedMode = false,
-        modifier = Modifier.padding(16.dp),
+private data class WeeksSelectorPreviewState(
+    val weeks: List<Boolean>,
+    val isAdvancedMode: Boolean,
+)
+
+@Suppress("StringLiteralDuplication", "MagicNumber")
+private class WeeksSelectorPreviewParameterProvider : PreviewParameterProvider<WeeksSelectorPreviewState> {
+    override val values = sequenceOf(
+        WeeksSelectorPreviewState(weeks = listOf(true, false), isAdvancedMode = false),
+        WeeksSelectorPreviewState(weeks = listOf(true, false), isAdvancedMode = true),
+        WeeksSelectorPreviewState(weeks = listOf(true), isAdvancedMode = true),
+        WeeksSelectorPreviewState(weeks = List(20) { it % 2 == 0 }, isAdvancedMode = true),
+        WeeksSelectorPreviewState(weeks = List(20) { it % 2 == 0 }, isAdvancedMode = false),
     )
 }
 
-@Preview(name = "Advanced Mode")
-@Preview(name = "Advanced Mode (Dark)", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@AppPreviews
 @Composable
-private fun WeeksSelectorAdvancedPreview() = AppTheme {
-    WeeksSelector(
-        weeks = listOf(true, false, true),
-        onWeeksChange = {},
-        isAdvancedMode = true,
-        modifier = Modifier.padding(16.dp),
-    )
-}
-
-@Preview(name = "Simple Mode with Custom Data")
-@Composable
-private fun WeeksSelectorSimpleWithCustomDataPreview() = AppTheme {
-    WeeksSelector(
-        weeks = listOf(true, false, true),
-        onWeeksChange = {},
-        isAdvancedMode = false,
-        modifier = Modifier.padding(16.dp),
-    )
-}
-
-@Preview(name = "Long Cycle")
-@Composable
-private fun WeeksSelectorLongCyclePreview() = AppTheme {
-    WeeksSelector(
-        weeks = List(15) { it % 2 == 0 },
-        onWeeksChange = {},
-        isAdvancedMode = true,
-        modifier = Modifier.padding(16.dp),
-    )
+private fun WeeksSelectorPreview(
+    @PreviewParameter(WeeksSelectorPreviewParameterProvider::class) state: WeeksSelectorPreviewState,
+) = AppTheme {
+    Surface {
+        WeeksSelector(
+            weeks = state.weeks,
+            onWeeksChange = {},
+            isAdvancedMode = state.isAdvancedMode,
+            modifier = Modifier.padding(16.dp),
+        )
+    }
 }

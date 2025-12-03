@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.uikit.view
 
-import android.content.res.Configuration
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,9 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import ru.erdenian.studentassistant.strings.RS
+import ru.erdenian.studentassistant.style.AppPreviews
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
 
@@ -70,33 +71,41 @@ fun HomeworkCard(
     }
 }
 
-@Preview(name = "HomeworkCard preview")
-@Preview(name = "HomeworkCard preview (dark)", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun HomeworkCardPreview() = AppTheme {
-    HomeworkCard(
-        subjectName = "Интернет программирование",
-        description = "Лабораторная работа",
-        deadline = "21.08.2021",
+private data class HomeworkCardPreviewData(
+    val subjectName: String,
+    val description: String,
+    val deadline: String,
+)
+
+@Suppress("StringLiteralDuplication", "MagicNumber")
+private class HomeworkCardPreviewParameterProvider : PreviewParameterProvider<HomeworkCardPreviewData> {
+    override val values = sequenceOf(
+        HomeworkCardPreviewData(
+            subjectName = "Интернет программирование",
+            description = "Лабораторная работа",
+            deadline = "21.08.2021",
+        ),
+        HomeworkCardPreviewData(
+            subjectName = "Интернет программирование программирование программирование программирование",
+            description = "Лабораторная работа" + " работа".repeat(100),
+            deadline = "21.08.2021",
+        ),
+        HomeworkCardPreviewData(
+            subjectName = "Интернет программирование программирование программирование программирование",
+            description = "Лабораторная работа" + "\nЛабораторная работа".repeat(100),
+            deadline = "21.08.2021",
+        ),
     )
 }
 
-@Preview
+@AppPreviews
 @Composable
-private fun HomeworkCardLongPreview() = AppTheme {
+private fun HomeworkCardPreview(
+    @PreviewParameter(HomeworkCardPreviewParameterProvider::class) data: HomeworkCardPreviewData,
+) = AppTheme {
     HomeworkCard(
-        subjectName = "Интернет программирование программирование программирование программирование программирование",
-        description = "Лабораторная работа" + " работа".repeat(100),
-        deadline = "21.08.2021",
-    )
-}
-
-@Preview
-@Composable
-private fun HomeworkCardMultilinePreview() = AppTheme {
-    HomeworkCard(
-        subjectName = "Интернет программирование программирование программирование программирование программирование",
-        description = "Лабораторная работа" + "\nЛабораторная работа".repeat(100),
-        deadline = "21.08.2021",
+        subjectName = data.subjectName,
+        description = data.description,
+        deadline = data.deadline,
     )
 }

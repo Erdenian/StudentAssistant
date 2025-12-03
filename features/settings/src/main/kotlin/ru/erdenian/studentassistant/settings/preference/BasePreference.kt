@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.settings.preference
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -14,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,9 +23,11 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import ru.erdenian.studentassistant.style.AppIcons
+import ru.erdenian.studentassistant.style.AppPreviews
 import ru.erdenian.studentassistant.style.AppTheme
 
 @Composable
@@ -88,65 +90,47 @@ internal fun BasePreference(
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun BasePreferencePreview() = AppTheme {
-    BasePreference(
-        title = "Title",
-        icon = rememberVectorPainter(AppIcons.Timer),
-        description = "Description",
-        onClick = {},
-        modifier = Modifier.background(MaterialTheme.colorScheme.background),
+private class BasePreferencePreviewParameterProvider : PreviewParameterProvider<Pair<String, String>> {
+    override val values = sequenceOf(
+        "Title" to "Description",
+        "Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title" to
+            "Description Description Description Description Description Description Description Description",
     )
 }
 
-@Preview
+@AppPreviews
 @Composable
-private fun BasePreferenceLongPreview() = AppTheme {
-    BasePreference(
-        title = "Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title",
-        icon = rememberVectorPainter(AppIcons.Timer),
-        description = "Description Description Description Description Description Description Description Description",
-        onClick = {},
-        modifier = Modifier.background(MaterialTheme.colorScheme.background),
-    )
+private fun BasePreferencePreview(
+    @PreviewParameter(BasePreferencePreviewParameterProvider::class) texts: Pair<String, String>,
+) = AppTheme {
+    Surface {
+        BasePreference(
+            title = texts.first,
+            icon = rememberVectorPainter(AppIcons.Timer),
+            description = texts.second,
+            onClick = {},
+        )
+    }
 }
 
-@Preview
+@AppPreviews
 @Composable
-private fun BasePreferenceWithContentEndPreview() = AppTheme {
-    BasePreference(
-        title = "Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title",
-        icon = rememberVectorPainter(AppIcons.Timer),
-        description = "Description Description Description Description Description Description Description Description",
-        contentEnd = {
-            Box(
-                Modifier
-                    .size(24.dp)
-                    .background(Color.Green),
-            )
-        },
-        onClick = {},
-        modifier = Modifier.background(MaterialTheme.colorScheme.background),
-    )
-}
-
-@Preview
-@Composable
-private fun BasePreferenceWithContentEndLongPreview() = AppTheme {
-    BasePreference(
-        title = "Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title",
-        icon = rememberVectorPainter(AppIcons.Timer),
-        description = "Description Description Description Description Description Description Description Description",
-        contentEnd = {
-            Box(
-                Modifier
-                    .size(24.dp)
-                    .background(Color.Green),
-            )
-        },
-        onClick = {},
-        modifier = Modifier.background(MaterialTheme.colorScheme.background),
-    )
+private fun BasePreferenceWithContentEndPreview(
+    @PreviewParameter(BasePreferencePreviewParameterProvider::class) texts: Pair<String, String>,
+) = AppTheme {
+    Surface {
+        BasePreference(
+            title = texts.first,
+            icon = rememberVectorPainter(AppIcons.Timer),
+            description = texts.second,
+            contentEnd = {
+                Box(
+                    Modifier
+                        .size(24.dp)
+                        .background(Color.Green),
+                )
+            },
+            onClick = {},
+        )
+    }
 }
