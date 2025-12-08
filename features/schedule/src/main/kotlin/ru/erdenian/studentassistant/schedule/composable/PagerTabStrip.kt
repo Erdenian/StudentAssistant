@@ -9,6 +9,7 @@ import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -77,7 +78,7 @@ internal fun PagerTabStrip(
         val scrollCoroutineScope = rememberCoroutineScope()
         Layout(
             modifier = modifier
-                .height(32.dp)
+                .defaultMinSize(minHeight = 32.dp)
                 .draggable(
                     orientation = Orientation.Horizontal,
                     state = rememberDraggableState { delta ->
@@ -134,7 +135,6 @@ internal fun PagerTabStrip(
             },
         ) { measurables, constraints ->
             val width = constraints.maxWidth
-            val height = constraints.maxHeight
             val textSpacingPx = textSpacing.roundToPx()
 
             val titlesConstraints = constraints.copy(maxWidth = width / 2 - textSpacingPx, minHeight = 0)
@@ -147,6 +147,11 @@ internal fun PagerTabStrip(
             val underscorePlaceable = measurables.last().measure(
                 Constraints.fixed(currentPlaceable.width + textSpacingPx, underscoreHeight.roundToPx()),
             )
+
+            // Вычисляем высоту контейнера:
+            // Либо минимальная (32dp), либо высота текста + высота подчеркивания (если текст крупный)
+            val maxTextHeight = titlesPlaceables.maxOf { it.height }
+            val height = max(constraints.minHeight, maxTextHeight + underscorePlaceable.height)
 
             layout(width, height) {
                 val halfCurrWidth = currentPlaceable.width / 2
@@ -161,7 +166,9 @@ internal fun PagerTabStrip(
                 val currLeft = currCenter - currentPlaceable.width / 2
                 val currRight = currLeft + currentPlaceable.width
 
-                val y = (height - currentPlaceable.height) / 2
+                // Центрируем текст вертикально в доступном пространстве НАД подчеркиванием
+                val textAvailableHeight = height - underscorePlaceable.height
+                val y = (textAvailableHeight - currentPlaceable.height) / 2
 
                 currentPlaceable.placeRelative(currLeft, y)
 
