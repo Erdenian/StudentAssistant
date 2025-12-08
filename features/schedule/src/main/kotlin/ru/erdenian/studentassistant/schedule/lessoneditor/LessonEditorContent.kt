@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.schedule.lessoneditor
 
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -38,7 +37,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import java.time.DayOfWeek
 import java.time.LocalTime
@@ -54,6 +54,7 @@ import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.AutoMirrored
+import ru.erdenian.studentassistant.style.ScreenPreviews
 import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.dialog.TimePickerDialog
 import ru.erdenian.studentassistant.uikit.placeholder.PlaceholderHighlight
@@ -352,95 +353,93 @@ private fun TimeItem(
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun LessonEditorContentPreview() = AppTheme {
-    LessonEditorContent(
-        isProgress = false,
-        isEditing = true,
-        subjectName = Lessons.regular.subjectName,
-        existingSubjects = emptyList(),
-        subjectNameErrorMessage = null,
-        type = Lessons.regular.type,
-        existingTypes = emptyList(),
-        teachers = Lessons.regular.teachers.joinToString(),
-        existingTeachers = emptyList(),
-        classrooms = Lessons.regular.classrooms.joinToString(),
-        existingClassrooms = emptyList(),
-        startTime = Lessons.regular.startTime,
-        endTime = Lessons.regular.endTime,
-        dayOfWeek = (Lessons.regular.lessonRepeat as Lesson.Repeat.ByWeekday).dayOfWeek,
-        weeks = (Lessons.regular.lessonRepeat as Lesson.Repeat.ByWeekday).weeks,
-        isAdvancedWeeksSelectorEnabled = true,
-        onBackClick = {},
-        onSaveClick = {},
-        onDeleteClick = {},
-        onSubjectNameChange = {},
-        onTypeChange = {},
-        onTeachersChange = {},
-        onClassroomsChange = {},
-        onStartTimeChange = {},
-        onEndTimeChange = {},
-        onDayOfWeekChange = {},
-        onWeeksChange = {},
+private data class LessonEditorContentPreviewData(
+    val isProgress: Boolean,
+    val isEditing: Boolean,
+    val subjectName: String,
+    val subjectNameErrorMessage: String? = null,
+    val type: String,
+    val teachers: String,
+    val classrooms: String,
+    val weeks: List<Boolean>,
+    val isAdvanced: Boolean = true,
+)
+
+private class LessonEditorContentPreviewParameterProvider : PreviewParameterProvider<LessonEditorContentPreviewData> {
+    override val values = sequenceOf(
+        LessonEditorContentPreviewData(
+            isProgress = true,
+            isEditing = false,
+            subjectName = "",
+            type = "",
+            teachers = "",
+            classrooms = "",
+            weeks = listOf(true),
+        ),
+        LessonEditorContentPreviewData(
+            isProgress = false,
+            isEditing = true,
+            subjectName = "",
+            type = "",
+            teachers = "",
+            classrooms = "",
+            weeks = listOf(true),
+            isAdvanced = false,
+        ),
+        LessonEditorContentPreviewData(
+            isProgress = false,
+            isEditing = true,
+            subjectName = "",
+            subjectNameErrorMessage = "Введите название занятия",
+            type = "",
+            teachers = "",
+            classrooms = "",
+            weeks = listOf(true),
+            isAdvanced = false,
+        ),
+        LessonEditorContentPreviewData(
+            isProgress = false,
+            isEditing = true,
+            subjectName = Lessons.regular.subjectName,
+            type = Lessons.regular.type,
+            teachers = Lessons.regular.teachers.joinToString(),
+            classrooms = Lessons.regular.classrooms.joinToString(),
+            weeks = (Lessons.regular.lessonRepeat as Lesson.Repeat.ByWeekday).weeks,
+        ),
+        LessonEditorContentPreviewData(
+            isProgress = false,
+            isEditing = true,
+            subjectName = Lessons.long.subjectName,
+            type = Lessons.long.type,
+            teachers = Lessons.long.teachers.joinToString(),
+            classrooms = Lessons.long.classrooms.joinToString(),
+            weeks = (Lessons.long.lessonRepeat as Lesson.Repeat.ByWeekday).weeks,
+        ),
     )
 }
 
-@Preview
+@ScreenPreviews
 @Composable
-private fun LessonEditorContentLongPreview() = AppTheme {
+private fun LessonEditorContentPreview(
+    @PreviewParameter(LessonEditorContentPreviewParameterProvider::class) data: LessonEditorContentPreviewData,
+) = AppTheme {
     LessonEditorContent(
-        isProgress = false,
-        isEditing = true,
-        subjectName = Lessons.long.subjectName,
+        isProgress = data.isProgress,
+        isEditing = data.isEditing,
+        subjectName = data.subjectName,
         existingSubjects = emptyList(),
-        subjectNameErrorMessage = null,
-        type = Lessons.long.type,
+        subjectNameErrorMessage = data.subjectNameErrorMessage,
+        type = data.type,
         existingTypes = emptyList(),
-        teachers = Lessons.long.teachers.joinToString(),
+        teachers = data.teachers,
         existingTeachers = emptyList(),
-        classrooms = Lessons.long.classrooms.joinToString(),
-        existingClassrooms = emptyList(),
-        startTime = Lessons.long.startTime,
-        endTime = Lessons.long.endTime,
-        dayOfWeek = (Lessons.long.lessonRepeat as Lesson.Repeat.ByWeekday).dayOfWeek,
-        weeks = (Lessons.long.lessonRepeat as Lesson.Repeat.ByWeekday).weeks,
-        isAdvancedWeeksSelectorEnabled = true,
-        onBackClick = {},
-        onSaveClick = {},
-        onDeleteClick = {},
-        onSubjectNameChange = {},
-        onTypeChange = {},
-        onTeachersChange = {},
-        onClassroomsChange = {},
-        onStartTimeChange = {},
-        onEndTimeChange = {},
-        onDayOfWeekChange = {},
-        onWeeksChange = {},
-    )
-}
-
-@Preview
-@Composable
-private fun LessonEditorContentLoadingPreview() = AppTheme {
-    LessonEditorContent(
-        isProgress = true,
-        isEditing = true,
-        subjectName = Lessons.regular.subjectName,
-        existingSubjects = emptyList(),
-        subjectNameErrorMessage = null,
-        type = Lessons.regular.type,
-        existingTypes = emptyList(),
-        teachers = Lessons.regular.teachers.joinToString(),
-        existingTeachers = emptyList(),
-        classrooms = Lessons.regular.classrooms.joinToString(),
+        classrooms = data.classrooms,
         existingClassrooms = emptyList(),
         startTime = Lessons.regular.startTime,
         endTime = Lessons.regular.endTime,
-        dayOfWeek = (Lessons.regular.lessonRepeat as Lesson.Repeat.ByWeekday).dayOfWeek,
-        weeks = (Lessons.regular.lessonRepeat as Lesson.Repeat.ByWeekday).weeks,
-        isAdvancedWeeksSelectorEnabled = true,
+        dayOfWeek = DayOfWeek.MONDAY,
+        weeks = data.weeks,
+        isAdvancedWeeksSelectorEnabled = data.isAdvanced,
         onBackClick = {},
         onSaveClick = {},
         onDeleteClick = {},
