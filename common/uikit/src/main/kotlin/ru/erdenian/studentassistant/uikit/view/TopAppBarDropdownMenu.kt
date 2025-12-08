@@ -32,9 +32,9 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import ru.erdenian.studentassistant.style.AppIcons
-import ru.erdenian.studentassistant.style.AppPreviews
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.AutoMirrored
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
 @Composable
 fun TopAppBarDropdownMenu(

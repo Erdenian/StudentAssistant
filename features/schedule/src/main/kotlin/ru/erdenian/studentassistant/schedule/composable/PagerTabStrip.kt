@@ -44,8 +44,8 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
 import kotlinx.coroutines.launch
-import ru.erdenian.studentassistant.style.AppPreviews
 import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
 @Composable
 internal fun PagerTabStrip(

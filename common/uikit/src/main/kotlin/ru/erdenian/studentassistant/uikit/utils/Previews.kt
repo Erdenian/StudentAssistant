@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.style
+package ru.erdenian.studentassistant.uikit.utils
 
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewFontScale

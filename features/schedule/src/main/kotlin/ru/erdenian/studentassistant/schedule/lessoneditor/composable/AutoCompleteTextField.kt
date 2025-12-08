@@ -36,8 +36,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import ru.erdenian.studentassistant.style.AppPreviews
 import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 import ru.erdenian.studentassistant.utils.toSingleLine
 
 private const val DELIMITER = ','

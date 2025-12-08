@@ -21,9 +21,9 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import java.time.Duration
-import ru.erdenian.studentassistant.style.AppPreviews
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.uikit.R
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
 @Composable
 internal fun DurationPreference(

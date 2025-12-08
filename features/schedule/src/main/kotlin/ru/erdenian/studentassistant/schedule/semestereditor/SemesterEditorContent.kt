@@ -43,12 +43,12 @@ import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.AutoMirrored
-import ru.erdenian.studentassistant.style.ScreenPreviews
 import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.dialog.DatePickerDialog
 import ru.erdenian.studentassistant.uikit.placeholder.PlaceholderHighlight
 import ru.erdenian.studentassistant.uikit.placeholder.fade
 import ru.erdenian.studentassistant.uikit.placeholder.placeholder
+import ru.erdenian.studentassistant.uikit.utils.ScreenPreviews
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 

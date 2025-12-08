@@ -32,10 +32,10 @@ import java.time.format.FormatStyle
 import ru.erdenian.studentassistant.repository.api.entity.Homework
 import ru.erdenian.studentassistant.sampledata.Homeworks
 import ru.erdenian.studentassistant.strings.RS
-import ru.erdenian.studentassistant.style.AppPreviews
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.layout.DelayedVisibility
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 import ru.erdenian.studentassistant.uikit.view.HomeworkCard
 
 @Composable

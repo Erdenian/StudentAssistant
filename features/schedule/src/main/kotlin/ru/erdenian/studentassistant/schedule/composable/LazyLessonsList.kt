@@ -34,10 +34,10 @@ import ru.erdenian.studentassistant.navigation.LocalSharedTransitionScope
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.sampledata.Lessons
 import ru.erdenian.studentassistant.strings.RS
-import ru.erdenian.studentassistant.style.AppPreviews
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.layout.DelayedVisibility
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 import ru.erdenian.studentassistant.uikit.view.LessonCard
 
 @Composable

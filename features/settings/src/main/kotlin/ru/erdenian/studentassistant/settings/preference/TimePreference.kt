@@ -11,9 +11,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import ru.erdenian.studentassistant.style.AppPreviews
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.uikit.dialog.TimePickerDialog
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
 @Composable
 internal fun TimePreference(

@@ -19,7 +19,7 @@ import ru.erdenian.studentassistant.settings.preference.DurationPreference
 import ru.erdenian.studentassistant.settings.preference.TimePreference
 import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppTheme
-import ru.erdenian.studentassistant.style.ScreenPreviews
+import ru.erdenian.studentassistant.uikit.utils.ScreenPreviews
 
 @Composable
 internal fun SettingsContent(

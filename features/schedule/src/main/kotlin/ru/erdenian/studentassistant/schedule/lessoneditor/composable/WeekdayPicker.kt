@@ -32,8 +32,8 @@ import androidx.core.os.ConfigurationCompat
 import java.time.DayOfWeek
 import java.time.format.TextStyle
 import java.util.Locale
-import ru.erdenian.studentassistant.style.AppPreviews
 import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
 /**
  * Компонент для выбора дня недели.

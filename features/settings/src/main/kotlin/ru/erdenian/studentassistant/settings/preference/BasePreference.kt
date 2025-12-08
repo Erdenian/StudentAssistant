@@ -27,8 +27,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import ru.erdenian.studentassistant.style.AppIcons
-import ru.erdenian.studentassistant.style.AppPreviews
 import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
 @Composable
 internal fun BasePreference(

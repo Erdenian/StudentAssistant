@@ -45,9 +45,9 @@ import ru.erdenian.studentassistant.schedule.schedule.SemesterWithState.Companio
 import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
-import ru.erdenian.studentassistant.style.ScreenPreviews
 import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.dialog.DatePickerDialog
+import ru.erdenian.studentassistant.uikit.utils.ScreenPreviews
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
@@ -230,9 +230,9 @@ private class ScheduleContentPreviewParameterProvider : PreviewParameterProvider
             lessons = emptyList(),
         ),
         ScheduleContentPreviewData(
-            semestersNames = listOf(Semesters.regular.name, Semesters.long.name),
-            selectedSemester = Semesters.regular,
-            lessons = List(10) { Lessons.regular },
+            semestersNames = listOf(Semesters.long.name),
+            selectedSemester = Semesters.long,
+            lessons = List(10) { Lessons.long },
         ),
     )
 }

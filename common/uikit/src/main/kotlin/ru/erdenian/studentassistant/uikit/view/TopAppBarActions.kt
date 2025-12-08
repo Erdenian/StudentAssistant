@@ -29,12 +29,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import ru.erdenian.studentassistant.style.AppIcons
-import ru.erdenian.studentassistant.style.AppPreviews
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.AutoMirrored
 import ru.erdenian.studentassistant.uikit.placeholder.PlaceholderHighlight
 import ru.erdenian.studentassistant.uikit.placeholder.fade
 import ru.erdenian.studentassistant.uikit.placeholder.placeholder
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
 @Suppress("UnusedReceiverParameter")
 @Composable
