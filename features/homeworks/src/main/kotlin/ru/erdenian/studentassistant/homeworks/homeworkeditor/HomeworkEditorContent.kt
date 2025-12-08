@@ -6,9 +6,9 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -30,7 +30,6 @@ import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
@@ -42,7 +41,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -59,8 +57,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import ru.erdenian.studentassistant.sampledata.Homeworks
 import ru.erdenian.studentassistant.sampledata.Lessons
 import ru.erdenian.studentassistant.sampledata.Semesters
@@ -75,6 +71,7 @@ import ru.erdenian.studentassistant.uikit.placeholder.fade
 import ru.erdenian.studentassistant.uikit.placeholder.placeholder
 import ru.erdenian.studentassistant.uikit.utils.ScreenPreviews
 import ru.erdenian.studentassistant.uikit.view.ActionItem
+import ru.erdenian.studentassistant.uikit.view.DateField
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
 @Composable
@@ -127,6 +124,7 @@ internal fun HomeworkEditorContent(
     modifier = Modifier.imePadding(),
 ) { paddingValues ->
     Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier
             .padding(paddingValues)
             .padding(
@@ -197,41 +195,30 @@ internal fun HomeworkEditorContent(
             }
         }
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(vertical = 8.dp),
-        ) {
-            var showDatePicker by remember { mutableStateOf(false) }
-
-            Text(
-                text = stringResource(RS.he_deadline_label),
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.weight(1.0f),
-            )
-
-            TextButton(
-                onClick = { showDatePicker = true },
-                enabled = !isProgress,
-                modifier = Modifier.placeholder(
+        var showDatePicker by remember { mutableStateOf(false) }
+        DateField(
+            value = deadline,
+            label = stringResource(RS.he_deadline_label),
+            onClick = { showDatePicker = true },
+            enabled = !isProgress,
+            modifier = Modifier
+                .fillMaxWidth()
+                .placeholder(
                     visible = isProgress,
                     highlight = PlaceholderHighlight.fade(),
                 ),
-            ) {
-                val deadlineFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
-                Text(text = deadline.format(deadlineFormatter))
-            }
+        )
 
-            if (showDatePicker) {
-                DatePickerDialog(
-                    onConfirm = { newValue ->
-                        showDatePicker = false
-                        onDeadlineChange(newValue)
-                    },
-                    onDismiss = { showDatePicker = false },
-                    initialSelectedDate = deadline,
-                    datesRange = semesterDates,
-                )
-            }
+        if (showDatePicker) {
+            DatePickerDialog(
+                onConfirm = { newValue ->
+                    showDatePicker = false
+                    onDeadlineChange(newValue)
+                },
+                onDismiss = { showDatePicker = false },
+                initialSelectedDate = deadline,
+                datesRange = semesterDates,
+            )
         }
 
         AnimatedVisibility(
