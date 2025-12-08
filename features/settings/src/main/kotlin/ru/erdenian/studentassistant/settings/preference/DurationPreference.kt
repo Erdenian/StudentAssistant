@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.widget.TimePicker
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -20,7 +21,9 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import java.time.Duration
+import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.uikit.R
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
 @Composable
 internal fun DurationPreference(
@@ -111,3 +114,15 @@ private var TimePicker.duration: Duration
             currentMinute = value.toMinutesPart()
         }
     }
+
+@AppPreviews
+@Composable
+private fun DurationPreferencePreview() = AppTheme {
+    Surface {
+        DurationPreference(
+            title = "Duration Preference",
+            value = Duration.ofMinutes(90),
+            onValueChange = {},
+        )
+    }
+}

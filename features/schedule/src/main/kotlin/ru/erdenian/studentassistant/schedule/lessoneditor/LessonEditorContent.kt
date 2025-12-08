@@ -1,7 +1,9 @@
 package ru.erdenian.studentassistant.schedule.lessoneditor
 
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,13 +15,13 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -28,14 +30,15 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import java.time.DayOfWeek
 import java.time.LocalTime
@@ -56,6 +59,7 @@ import ru.erdenian.studentassistant.uikit.dialog.TimePickerDialog
 import ru.erdenian.studentassistant.uikit.placeholder.PlaceholderHighlight
 import ru.erdenian.studentassistant.uikit.placeholder.fade
 import ru.erdenian.studentassistant.uikit.placeholder.placeholder
+import ru.erdenian.studentassistant.uikit.utils.ScreenPreviews
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
@@ -126,6 +130,7 @@ internal fun LessonEditorContent(
         modifier = Modifier.imePadding(),
     ) { paddingValues ->
         Column(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
                 .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
                 .verticalScroll(rememberScrollState())
@@ -138,35 +143,39 @@ internal fun LessonEditorContent(
             val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
             var timePickerData: Pair<LocalTime, (LocalTime) -> Unit>? by remember { mutableStateOf(null) }
 
-            AutoCompleteTextField(
-                value = subjectName,
-                items = existingSubjects,
-                onValueChange = onSubjectNameChange,
-                enabled = !isProgress,
-                label = { Text(text = stringResource(RS.le_subject_name)) },
-                isError = (subjectNameErrorMessage != null),
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Sentences,
-                    imeAction = ImeAction.Next,
-                ),
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .placeholder(
-                        visible = isProgress,
-                        highlight = PlaceholderHighlight.fade(),
+            // Subject Name
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                AutoCompleteTextField(
+                    value = subjectName,
+                    items = existingSubjects,
+                    onValueChange = onSubjectNameChange,
+                    enabled = !isProgress,
+                    label = { Text(text = stringResource(RS.le_subject_name)) },
+                    isError = (subjectNameErrorMessage != null),
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Sentences,
+                        imeAction = ImeAction.Next,
                     ),
-            )
-
-            AnimatedVisibility(subjectNameErrorMessage != null) {
-                Text(
-                    text = subjectNameErrorMessage.orEmpty(),
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(start = 16.dp),
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .placeholder(
+                            visible = isProgress,
+                            highlight = PlaceholderHighlight.fade(),
+                        ),
                 )
+
+                AnimatedVisibility(subjectNameErrorMessage != null) {
+                    Text(
+                        text = subjectNameErrorMessage.orEmpty(),
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(start = 16.dp),
+                    )
+                }
             }
 
+            // Type
             AutoCompleteTextField(
                 value = type,
                 items = existingTypes,
@@ -180,13 +189,13 @@ internal fun LessonEditorContent(
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp)
                     .placeholder(
                         visible = isProgress,
                         highlight = PlaceholderHighlight.fade(),
                     ),
             )
 
+            // Teachers
             MultiAutoCompleteTextField(
                 value = teachers,
                 items = existingTeachers,
@@ -200,13 +209,13 @@ internal fun LessonEditorContent(
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp)
                     .placeholder(
                         visible = isProgress,
                         highlight = PlaceholderHighlight.fade(),
                     ),
             )
 
+            // Classrooms
             val focusManager = LocalFocusManager.current
             MultiAutoCompleteTextField(
                 value = classrooms,
@@ -224,75 +233,68 @@ internal fun LessonEditorContent(
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp)
                     .placeholder(
                         visible = isProgress,
                         highlight = PlaceholderHighlight.fade(),
                     ),
             )
 
+            // Time
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(
-                    text = stringResource(RS.le_start_time),
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.weight(1.0f),
-                )
-                TextButton(
+                TimeItem(
+                    time = startTime,
+                    label = stringResource(RS.le_start_time),
                     onClick = { timePickerData = startTime to onStartTimeChange },
                     enabled = !isProgress,
-                    modifier = Modifier.placeholder(
-                        visible = isProgress,
-                        highlight = PlaceholderHighlight.fade(),
-                    ),
-                ) {
-                    Text(text = startTime.format(timeFormatter))
-                }
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp),
-            ) {
-                Text(
-                    text = stringResource(RS.le_end_time),
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.weight(1.0f),
+                    timeFormatter = timeFormatter,
+                    modifier = Modifier
+                        .weight(1f)
+                        .placeholder(
+                            visible = isProgress,
+                            highlight = PlaceholderHighlight.fade(),
+                        ),
                 )
-                TextButton(
+
+                TimeItem(
+                    time = endTime,
+                    label = stringResource(RS.le_end_time),
                     onClick = { timePickerData = endTime to onEndTimeChange },
                     enabled = !isProgress,
-                    modifier = Modifier.placeholder(
-                        visible = isProgress,
-                        highlight = PlaceholderHighlight.fade(),
-                    ),
-                ) {
-                    Text(text = endTime.format(timeFormatter))
-                }
+                    timeFormatter = timeFormatter,
+                    modifier = Modifier
+                        .weight(1f)
+                        .placeholder(
+                            visible = isProgress,
+                            highlight = PlaceholderHighlight.fade(),
+                        ),
+                )
             }
 
-            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+            // Day of Week
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = stringResource(RS.le_day_of_week),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(start = 4.dp),
+                )
+                WeekdayPicker(
+                    value = dayOfWeek,
+                    onValueChange = onDayOfWeekChange,
+                    enabled = !isProgress,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .placeholder(
+                            visible = isProgress,
+                            highlight = PlaceholderHighlight.fade(),
+                        ),
+                )
+            }
 
-            WeekdayPicker(
-                value = dayOfWeek,
-                onValueChange = onDayOfWeekChange,
-                enabled = !isProgress,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .placeholder(
-                        visible = isProgress,
-                        highlight = PlaceholderHighlight.fade(),
-                    ),
-            )
-
-            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-
+            // Weeks
             key(isProgress) { // Чтобы сбросить состояние WeekSelector при завершении загрузки
                 WeeksSelector(
                     weeks = weeks,
@@ -322,95 +324,122 @@ internal fun LessonEditorContent(
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun LessonEditorContentPreview() = AppTheme {
-    LessonEditorContent(
-        isProgress = false,
-        isEditing = true,
-        subjectName = Lessons.regular.subjectName,
-        existingSubjects = emptyList(),
-        subjectNameErrorMessage = null,
-        type = Lessons.regular.type,
-        existingTypes = emptyList(),
-        teachers = Lessons.regular.teachers.joinToString(),
-        existingTeachers = emptyList(),
-        classrooms = Lessons.regular.classrooms.joinToString(),
-        existingClassrooms = emptyList(),
-        startTime = Lessons.regular.startTime,
-        endTime = Lessons.regular.endTime,
-        dayOfWeek = (Lessons.regular.lessonRepeat as Lesson.Repeat.ByWeekday).dayOfWeek,
-        weeks = (Lessons.regular.lessonRepeat as Lesson.Repeat.ByWeekday).weeks,
-        isAdvancedWeeksSelectorEnabled = true,
-        onBackClick = {},
-        onSaveClick = {},
-        onDeleteClick = {},
-        onSubjectNameChange = {},
-        onTypeChange = {},
-        onTeachersChange = {},
-        onClassroomsChange = {},
-        onStartTimeChange = {},
-        onEndTimeChange = {},
-        onDayOfWeekChange = {},
-        onWeeksChange = {},
+private fun TimeItem(
+    time: LocalTime,
+    label: String,
+    onClick: () -> Unit,
+    enabled: Boolean,
+    timeFormatter: DateTimeFormatter,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier) {
+        OutlinedTextField(
+            value = time.format(timeFormatter),
+            onValueChange = {},
+            readOnly = true,
+            enabled = enabled,
+            label = { Text(text = label) },
+            trailingIcon = { Icon(imageVector = AppIcons.Schedule, contentDescription = null) },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .clip(MaterialTheme.shapes.small)
+                .clickable(enabled = enabled, onClick = onClick),
+        )
+    }
+}
+
+private data class LessonEditorContentPreviewData(
+    val isProgress: Boolean,
+    val isEditing: Boolean,
+    val subjectName: String,
+    val subjectNameErrorMessage: String? = null,
+    val type: String,
+    val teachers: String,
+    val classrooms: String,
+    val weeks: List<Boolean>,
+    val isAdvanced: Boolean = true,
+)
+
+private class LessonEditorContentPreviewParameterProvider : PreviewParameterProvider<LessonEditorContentPreviewData> {
+    override val values = sequenceOf(
+        LessonEditorContentPreviewData(
+            isProgress = true,
+            isEditing = false,
+            subjectName = "",
+            type = "",
+            teachers = "",
+            classrooms = "",
+            weeks = listOf(true),
+        ),
+        LessonEditorContentPreviewData(
+            isProgress = false,
+            isEditing = true,
+            subjectName = "",
+            type = "",
+            teachers = "",
+            classrooms = "",
+            weeks = listOf(true),
+            isAdvanced = false,
+        ),
+        LessonEditorContentPreviewData(
+            isProgress = false,
+            isEditing = true,
+            subjectName = "",
+            subjectNameErrorMessage = "Введите название занятия",
+            type = "",
+            teachers = "",
+            classrooms = "",
+            weeks = listOf(true),
+            isAdvanced = false,
+        ),
+        LessonEditorContentPreviewData(
+            isProgress = false,
+            isEditing = true,
+            subjectName = Lessons.regular.subjectName,
+            type = Lessons.regular.type,
+            teachers = Lessons.regular.teachers.joinToString(),
+            classrooms = Lessons.regular.classrooms.joinToString(),
+            weeks = (Lessons.regular.lessonRepeat as Lesson.Repeat.ByWeekday).weeks,
+        ),
+        LessonEditorContentPreviewData(
+            isProgress = false,
+            isEditing = true,
+            subjectName = Lessons.long.subjectName,
+            type = Lessons.long.type,
+            teachers = Lessons.long.teachers.joinToString(),
+            classrooms = Lessons.long.classrooms.joinToString(),
+            weeks = (Lessons.long.lessonRepeat as Lesson.Repeat.ByWeekday).weeks,
+        ),
     )
 }
 
-@Preview
+@ScreenPreviews
 @Composable
-private fun LessonEditorContentLongPreview() = AppTheme {
+private fun LessonEditorContentPreview(
+    @PreviewParameter(LessonEditorContentPreviewParameterProvider::class) data: LessonEditorContentPreviewData,
+) = AppTheme {
     LessonEditorContent(
-        isProgress = false,
-        isEditing = true,
-        subjectName = Lessons.long.subjectName,
+        isProgress = data.isProgress,
+        isEditing = data.isEditing,
+        subjectName = data.subjectName,
         existingSubjects = emptyList(),
-        subjectNameErrorMessage = null,
-        type = Lessons.long.type,
+        subjectNameErrorMessage = data.subjectNameErrorMessage,
+        type = data.type,
         existingTypes = emptyList(),
-        teachers = Lessons.long.teachers.joinToString(),
+        teachers = data.teachers,
         existingTeachers = emptyList(),
-        classrooms = Lessons.long.classrooms.joinToString(),
-        existingClassrooms = emptyList(),
-        startTime = Lessons.long.startTime,
-        endTime = Lessons.long.endTime,
-        dayOfWeek = (Lessons.long.lessonRepeat as Lesson.Repeat.ByWeekday).dayOfWeek,
-        weeks = (Lessons.long.lessonRepeat as Lesson.Repeat.ByWeekday).weeks,
-        isAdvancedWeeksSelectorEnabled = true,
-        onBackClick = {},
-        onSaveClick = {},
-        onDeleteClick = {},
-        onSubjectNameChange = {},
-        onTypeChange = {},
-        onTeachersChange = {},
-        onClassroomsChange = {},
-        onStartTimeChange = {},
-        onEndTimeChange = {},
-        onDayOfWeekChange = {},
-        onWeeksChange = {},
-    )
-}
-
-@Preview
-@Composable
-private fun LessonEditorContentLoadingPreview() = AppTheme {
-    LessonEditorContent(
-        isProgress = true,
-        isEditing = true,
-        subjectName = Lessons.regular.subjectName,
-        existingSubjects = emptyList(),
-        subjectNameErrorMessage = null,
-        type = Lessons.regular.type,
-        existingTypes = emptyList(),
-        teachers = Lessons.regular.teachers.joinToString(),
-        existingTeachers = emptyList(),
-        classrooms = Lessons.regular.classrooms.joinToString(),
+        classrooms = data.classrooms,
         existingClassrooms = emptyList(),
         startTime = Lessons.regular.startTime,
         endTime = Lessons.regular.endTime,
-        dayOfWeek = (Lessons.regular.lessonRepeat as Lesson.Repeat.ByWeekday).dayOfWeek,
-        weeks = (Lessons.regular.lessonRepeat as Lesson.Repeat.ByWeekday).weeks,
-        isAdvancedWeeksSelectorEnabled = true,
+        dayOfWeek = DayOfWeek.MONDAY,
+        weeks = data.weeks,
+        isAdvancedWeeksSelectorEnabled = data.isAdvanced,
         onBackClick = {},
         onSaveClick = {},
         onDeleteClick = {},

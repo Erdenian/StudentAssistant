@@ -1,6 +1,10 @@
 package ru.erdenian.studentassistant.schedule.lessoneditor.composable
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenuItem
@@ -11,6 +15,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
@@ -28,6 +33,11 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.dp
+import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 import ru.erdenian.studentassistant.utils.toSingleLine
 
 private const val DELIMITER = ','
@@ -282,6 +292,50 @@ private fun BaseAutoCompleteTextField(
                     },
                 )
             }
+        }
+    }
+}
+
+private data class AutoCompleteTextFieldPreviewState(
+    val value: String,
+    val enabled: Boolean,
+)
+
+private class AutoCompleteTextFieldPreviewParameterProvider :
+    PreviewParameterProvider<AutoCompleteTextFieldPreviewState> {
+    override val values = sequenceOf(
+        AutoCompleteTextFieldPreviewState(value = "Text", enabled = true),
+        AutoCompleteTextFieldPreviewState(value = "Text", enabled = false),
+        AutoCompleteTextFieldPreviewState(value = "", enabled = true),
+        AutoCompleteTextFieldPreviewState(
+            value = "Very very very very very very very very very very very very very long text",
+            enabled = true,
+        ),
+    )
+}
+
+@AppPreviews
+@Composable
+private fun AutoCompleteTextFieldPreview(
+    @PreviewParameter(AutoCompleteTextFieldPreviewParameterProvider::class) state: AutoCompleteTextFieldPreviewState,
+) = AppTheme {
+    Surface {
+        Column(modifier = Modifier.padding(16.dp)) {
+            AutoCompleteTextField(
+                value = state.value,
+                items = emptyList(),
+                onValueChange = {},
+                enabled = state.enabled,
+                label = { Text(text = "AutoCompleteTextField") },
+            )
+            Spacer(modifier = Modifier.size(16.dp))
+            MultiAutoCompleteTextField(
+                value = state.value,
+                items = emptyList(),
+                onValueChange = {},
+                enabled = state.enabled,
+                label = { Text(text = "MultiAutoCompleteTextField") },
+            )
         }
     }
 }

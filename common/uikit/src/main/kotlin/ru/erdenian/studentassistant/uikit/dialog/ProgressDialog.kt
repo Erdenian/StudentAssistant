@@ -2,7 +2,6 @@ package ru.erdenian.studentassistant.uikit.dialog
 
 import android.app.Activity
 import android.content.ContextWrapper
-import android.content.res.Configuration
 import android.view.WindowManager
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,12 +16,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.uikit.layout.DelayedVisibility
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
 @Composable
 fun ProgressDialog(text: String) {
@@ -63,8 +62,7 @@ private fun ProgressDialogContent(
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@AppPreviews
 @Composable
 private fun ProgressDialogPreview() = AppTheme {
     ProgressDialogContent("Please wait")

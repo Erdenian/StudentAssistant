@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -22,15 +23,17 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import ru.erdenian.studentassistant.repository.api.entity.Homework
-import ru.erdenian.studentassistant.sampledata.Homeworks
 import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.layout.DelayedVisibility
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 import ru.erdenian.studentassistant.uikit.view.HomeworkCard
 
 @Composable
@@ -95,29 +98,33 @@ internal fun LazyHomeworksList(
     }
 }
 
-@Preview(showSystemUi = true)
-@Composable
-private fun LazyHomeworksListLoadingPreview() = AppTheme {
-    LazyHomeworksList(
-        homeworks = null,
-        onHomeworkClick = {},
+@Suppress("StringLiteralDuplication", "MagicNumber")
+private class LazyHomeworksListPreviewParameterProvider : PreviewParameterProvider<List<Homework>?> {
+    override val values = sequenceOf(
+        null,
+        emptyList(),
+        List(10) { index ->
+            Homework(
+                subjectName = "Интернет программирование",
+                description = "Лабораторная работа",
+                deadline = LocalDate.of(2021, 10, 2),
+                isDone = false,
+                semesterId = 0L,
+                id = index.toLong(),
+            )
+        },
     )
 }
 
-@Preview(showSystemUi = true)
+@AppPreviews
 @Composable
-private fun LazyHomeworksListEmptyPreview() = AppTheme {
-    LazyHomeworksList(
-        homeworks = emptyList(),
-        onHomeworkClick = {},
-    )
-}
-
-@Preview(showSystemUi = true)
-@Composable
-private fun LazyHomeworksListPreview() = AppTheme {
-    LazyHomeworksList(
-        homeworks = List(10) { Homeworks.regular },
-        onHomeworkClick = {},
-    )
+private fun LazyHomeworksListPreview(
+    @PreviewParameter(LazyHomeworksListPreviewParameterProvider::class) homeworks: List<Homework>?,
+) = AppTheme {
+    Surface {
+        LazyHomeworksList(
+            homeworks = homeworks,
+            onHomeworkClick = {},
+        )
+    }
 }

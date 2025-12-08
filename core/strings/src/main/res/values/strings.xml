@@ -59,6 +59,7 @@
     <string name="le_classrooms">Аудитории</string>
     <string name="le_start_time">Время начала</string>
     <string name="le_end_time">Время окончания</string>
+    <string name="le_day_of_week">День недели</string>
     <string name="le_repeat_type">Когда повторять</string>
     <string name="le_save">Сохранить</string>
     <string name="le_save_progress">Сохранение…</string>
@@ -138,6 +139,7 @@
 
     <!-- WeeksSelector -->
     <string name="ws_variants_title">Повторять</string>
+    <string name="ws_cycle_length">Длина цикла: %1$d</string>
 
     <!-- DatePickerDialog -->
     <string name="dpd_today">Сегодня</string>

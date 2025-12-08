@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.schedule.schedule
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,7 +27,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -47,6 +47,7 @@ import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.dialog.DatePickerDialog
+import ru.erdenian.studentassistant.uikit.utils.ScreenPreviews
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
@@ -204,60 +205,48 @@ private data class SemesterWithState(val semester: Semester, val pagerState: Pag
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun ScheduleScreenNoSchedulePreview() = AppTheme {
-    ScheduleContent(
-        semestersNames = emptyList(),
-        selectedSemester = null,
-        rememberLessons = { remember { mutableStateOf(emptyList()) } },
-        onSelectedSemesterChange = {},
-        onAddSemesterClick = {},
-        onEditScheduleClick = {},
-        onLessonClick = {},
+private data class ScheduleContentPreviewData(
+    val semestersNames: List<String>,
+    val selectedSemester: Semester?,
+    val lessons: List<Lesson>?,
+)
+
+@Suppress("MagicNumber")
+private class ScheduleContentPreviewParameterProvider : PreviewParameterProvider<ScheduleContentPreviewData> {
+    override val values = sequenceOf(
+        ScheduleContentPreviewData(
+            semestersNames = emptyList(),
+            selectedSemester = null,
+            lessons = emptyList(),
+        ),
+        ScheduleContentPreviewData(
+            semestersNames = listOf(Semesters.regular.name),
+            selectedSemester = Semesters.regular,
+            lessons = null,
+        ),
+        ScheduleContentPreviewData(
+            semestersNames = listOf(Semesters.regular.name),
+            selectedSemester = Semesters.regular,
+            lessons = emptyList(),
+        ),
+        ScheduleContentPreviewData(
+            semestersNames = listOf(Semesters.long.name),
+            selectedSemester = Semesters.long,
+            lessons = List(10) { Lessons.long },
+        ),
     )
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@ScreenPreviews
 @Composable
-private fun ScheduleScreenLoadingPreview() = AppTheme {
+private fun ScheduleContentPreview(
+    @PreviewParameter(ScheduleContentPreviewParameterProvider::class) data: ScheduleContentPreviewData,
+) = AppTheme {
+    val lessonsState = remember { mutableStateOf(data.lessons) }
     ScheduleContent(
-        semestersNames = listOf(Semesters.regular.name),
-        selectedSemester = Semesters.regular,
-        rememberLessons = { remember { mutableStateOf(null) } },
-        onSelectedSemesterChange = {},
-        onAddSemesterClick = {},
-        onEditScheduleClick = {},
-        onLessonClick = {},
-    )
-}
-
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun ScheduleScreenNoLessonsPreview() = AppTheme {
-    ScheduleContent(
-        semestersNames = listOf(Semesters.regular.name),
-        selectedSemester = Semesters.regular,
-        rememberLessons = { remember { mutableStateOf(emptyList()) } },
-        onSelectedSemesterChange = {},
-        onAddSemesterClick = {},
-        onEditScheduleClick = {},
-        onLessonClick = {},
-    )
-}
-
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun ScheduleScreenPreview() = AppTheme {
-    val lessons = List(10) { Lessons.regular }
-    ScheduleContent(
-        semestersNames = listOf(Semesters.regular.name, Semesters.long.name),
-        selectedSemester = Semesters.regular,
-        rememberLessons = { remember { mutableStateOf(lessons) } },
+        semestersNames = data.semestersNames,
+        selectedSemester = data.selectedSemester,
+        rememberLessons = { lessonsState },
         onSelectedSemesterChange = {},
         onAddSemesterClick = {},
         onEditScheduleClick = {},

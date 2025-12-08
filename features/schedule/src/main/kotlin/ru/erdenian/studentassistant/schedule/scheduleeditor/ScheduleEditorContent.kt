@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.schedule.scheduleeditor
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,7 +24,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.core.os.ConfigurationCompat
 import java.time.DayOfWeek
 import java.time.format.TextStyle
@@ -39,6 +39,7 @@ import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.AutoMirrored
 import ru.erdenian.studentassistant.uikit.layout.ContextMenuBox
+import ru.erdenian.studentassistant.uikit.utils.ScreenPreviews
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
@@ -151,45 +152,29 @@ internal fun ScheduleEditorContent(
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun ScheduleEditorContentLoadingPreview() = AppTheme {
-    ScheduleEditorContent(
-        rememberLessons = { remember { mutableStateOf(null) } },
-        onBackClick = {},
-        onEditSemesterClick = {},
-        onDeleteSemesterClick = {},
-        onLessonClick = {},
-        onCopyLessonClick = {},
-        onDeleteLessonClick = {},
-        onAddLessonClick = {},
+private data class ScheduleEditorContentPreviewData(
+    val lessons: List<Lesson>?,
+    val isLoading: Boolean = false,
+)
+
+@Suppress("MagicNumber")
+private class ScheduleEditorContentPreviewParameterProvider :
+    PreviewParameterProvider<ScheduleEditorContentPreviewData> {
+    override val values = sequenceOf(
+        ScheduleEditorContentPreviewData(lessons = null, isLoading = true),
+        ScheduleEditorContentPreviewData(lessons = emptyList()),
+        ScheduleEditorContentPreviewData(lessons = List(10) { Lessons.regular }),
     )
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@ScreenPreviews
 @Composable
-private fun ScheduleEditorContentNoLessonsPreview() = AppTheme {
+private fun ScheduleEditorContentPreview(
+    @PreviewParameter(ScheduleEditorContentPreviewParameterProvider::class) data: ScheduleEditorContentPreviewData,
+) = AppTheme {
+    val state = remember { mutableStateOf(data.lessons) }
     ScheduleEditorContent(
-        rememberLessons = { remember { mutableStateOf(emptyList()) } },
-        onBackClick = {},
-        onEditSemesterClick = {},
-        onDeleteSemesterClick = {},
-        onLessonClick = {},
-        onCopyLessonClick = {},
-        onDeleteLessonClick = {},
-        onAddLessonClick = {},
-    )
-}
-
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun ScheduleEditorContentPreview() = AppTheme {
-    val lessons = List(10) { Lessons.regular }
-    ScheduleEditorContent(
-        rememberLessons = { remember { mutableStateOf(lessons) } },
+        rememberLessons = { state },
         onBackClick = {},
         onEditSemesterClick = {},
         onDeleteSemesterClick = {},

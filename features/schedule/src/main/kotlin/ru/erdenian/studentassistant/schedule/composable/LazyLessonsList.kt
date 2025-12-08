@@ -1,6 +1,7 @@
 package ru.erdenian.studentassistant.schedule.composable
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
@@ -13,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -20,9 +22,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -33,6 +37,7 @@ import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.layout.DelayedVisibility
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 import ru.erdenian.studentassistant.uikit.view.LessonCard
 
 @Composable
@@ -76,30 +81,37 @@ internal fun LazyLessonsList(
                         ) { lesson ->
                             val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
                             val haptic = LocalHapticFeedback.current
+                            val isInspection = LocalInspectionMode.current
 
-                            with(LocalSharedTransitionScope.current) {
-                                LessonCard(
-                                    subjectName = lesson.subjectName,
-                                    type = lesson.type,
-                                    teachers = lesson.teachers,
-                                    classrooms = lesson.classrooms,
-                                    startTime = lesson.startTime.format(timeFormatter),
-                                    endTime = lesson.endTime.format(timeFormatter),
-                                    onClick = { onLessonClick(lesson) },
-                                    onLongClick = onLongLessonClick?.let { onLongClick ->
-                                        {
-                                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                            onLongClick(lesson)
+                            LessonCard(
+                                subjectName = lesson.subjectName,
+                                type = lesson.type,
+                                teachers = lesson.teachers,
+                                classrooms = lesson.classrooms,
+                                startTime = lesson.startTime.format(timeFormatter),
+                                endTime = lesson.endTime.format(timeFormatter),
+                                onClick = { onLessonClick(lesson) },
+                                onLongClick = onLongLessonClick?.let { onLongClick ->
+                                    {
+                                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                        onLongClick(lesson)
+                                    }
+                                },
+                                modifier = Modifier
+                                    .animateItem()
+                                    .let { modifier ->
+                                        if (!isInspection) {
+                                            with(LocalSharedTransitionScope.current) {
+                                                modifier.sharedElement(
+                                                    rememberSharedContentState(lesson),
+                                                    LocalNavAnimatedContentScope.current,
+                                                )
+                                            }
+                                        } else {
+                                            modifier
                                         }
                                     },
-                                    modifier = Modifier
-                                        .animateItem()
-                                        .sharedElement(
-                                            rememberSharedContentState(lesson),
-                                            LocalNavAnimatedContentScope.current,
-                                        ),
-                                )
-                            }
+                            )
                         }
                     }
             }
@@ -107,29 +119,25 @@ internal fun LazyLessonsList(
     }
 }
 
-@Preview(showSystemUi = true)
-@Composable
-private fun LazyLessonsListLoadingPreview() = AppTheme {
-    LazyLessonsList(
-        lessons = null,
-        onLessonClick = {},
+@Suppress("StringLiteralDuplication", "MagicNumber")
+private class LazyLessonsListPreviewParameterProvider : PreviewParameterProvider<List<Lesson>?> {
+    override val values = sequenceOf(
+        null,
+        emptyList(),
+        List(10) { Lessons.regular },
     )
 }
 
-@Preview(showSystemUi = true)
+@OptIn(ExperimentalSharedTransitionApi::class)
+@AppPreviews
 @Composable
-private fun LazyLessonsListEmptyPreview() = AppTheme {
-    LazyLessonsList(
-        lessons = emptyList(),
-        onLessonClick = {},
-    )
-}
-
-@Preview(showSystemUi = true)
-@Composable
-private fun LazyLessonsListPreview() = AppTheme {
-    LazyLessonsList(
-        lessons = List(10) { Lessons.regular },
-        onLessonClick = {},
-    )
+private fun LazyLessonsListPreview(
+    @PreviewParameter(LazyLessonsListPreviewParameterProvider::class) lessons: List<Lesson>?,
+) = AppTheme {
+    Surface {
+        LazyLessonsList(
+            lessons = lessons,
+            onLessonClick = {},
+        )
+    }
 }

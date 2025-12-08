@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.uikit.view
 
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,13 +28,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.AutoMirrored
 import ru.erdenian.studentassistant.uikit.placeholder.PlaceholderHighlight
 import ru.erdenian.studentassistant.uikit.placeholder.fade
 import ru.erdenian.studentassistant.uikit.placeholder.placeholder
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
 @Suppress("UnusedReceiverParameter")
 @Composable
@@ -151,8 +150,7 @@ private fun ColumnScope.DropdownMenuItems(
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@AppPreviews
 @Composable
 private fun TopAppBarActionsPreview() = AppTheme {
     TopAppBar(
@@ -186,8 +184,7 @@ private fun TopAppBarActionsPreview() = AppTheme {
     )
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@AppPreviews
 @Composable
 private fun TopAppBarActionsDropdownPreview() = AppTheme {
     Surface(shape = MaterialTheme.shapes.medium) {

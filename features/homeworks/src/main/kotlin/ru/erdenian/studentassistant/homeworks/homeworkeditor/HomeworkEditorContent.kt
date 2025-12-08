@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.homeworks.homeworkeditor
 
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -56,13 +55,15 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import ru.erdenian.studentassistant.sampledata.Homeworks
 import ru.erdenian.studentassistant.sampledata.Lessons
+import ru.erdenian.studentassistant.sampledata.Semesters
 import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
@@ -72,6 +73,7 @@ import ru.erdenian.studentassistant.uikit.dialog.DatePickerDialog
 import ru.erdenian.studentassistant.uikit.placeholder.PlaceholderHighlight
 import ru.erdenian.studentassistant.uikit.placeholder.fade
 import ru.erdenian.studentassistant.uikit.placeholder.placeholder
+import ru.erdenian.studentassistant.uikit.utils.ScreenPreviews
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
@@ -306,79 +308,59 @@ private fun SimpleTextField(
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+private data class HomeworkEditorContentPreviewData(
+    val isProgress: Boolean,
+    val isEditing: Boolean,
+    val subjectName: String,
+    val description: String,
+    val existingSubjects: List<String> = emptyList(),
+)
+
+private class HomeworkEditorContentPreviewParameterProvider :
+    PreviewParameterProvider<HomeworkEditorContentPreviewData> {
+    override val values = sequenceOf(
+        HomeworkEditorContentPreviewData(
+            isProgress = true,
+            isEditing = false,
+            subjectName = "",
+            description = "",
+        ),
+        HomeworkEditorContentPreviewData(
+            isProgress = false,
+            isEditing = true,
+            subjectName = "",
+            description = "",
+            existingSubjects = listOf(""),
+        ),
+        HomeworkEditorContentPreviewData(
+            isProgress = false,
+            isEditing = true,
+            subjectName = Homeworks.regular.subjectName,
+            description = Homeworks.regular.description,
+        ),
+        HomeworkEditorContentPreviewData(
+            isProgress = false,
+            isEditing = true,
+            subjectName = Homeworks.long.subjectName,
+            description = Homeworks.long.description,
+            existingSubjects = listOf(Lessons.long.subjectName),
+        ),
+    )
+}
+
+@ScreenPreviews
 @Composable
-private fun HomeworkEditorContentRegularPreview() = AppTheme {
+private fun HomeworkEditorContentPreview(
+    @PreviewParameter(HomeworkEditorContentPreviewParameterProvider::class) data: HomeworkEditorContentPreviewData,
+) = AppTheme {
     HomeworkEditorContent(
-        isProgress = false,
-        isEditing = true,
-        existingSubjects = emptyList(),
-        subjectName = Homeworks.regular.subjectName,
+        isProgress = data.isProgress,
+        isEditing = data.isEditing,
+        existingSubjects = data.existingSubjects,
+        subjectName = data.subjectName,
         deadline = Homeworks.regular.deadline,
-        description = Homeworks.regular.description,
-        semesterDates = LocalDate.of(2021, 9, 1)..LocalDate.of(2022, 6, 30),
-        onBackClick = {},
-        onSaveClick = {},
-        onDeleteClick = {},
-        onSubjectNameChange = {},
-        onDeadlineChange = {},
-        onDescriptionChange = {},
-    )
-}
-
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun HomeworkEditorContentEmptyPreview() = AppTheme {
-    HomeworkEditorContent(
-        isProgress = false,
-        isEditing = true,
-        existingSubjects = emptyList(),
-        subjectName = "",
-        deadline = LocalDate.of(2021, 10, 3),
-        description = "",
-        semesterDates = LocalDate.of(2021, 9, 1)..LocalDate.of(2022, 6, 30),
-        onBackClick = {},
-        onSaveClick = {},
-        onDeleteClick = {},
-        onSubjectNameChange = {},
-        onDeadlineChange = {},
-        onDescriptionChange = {},
-    )
-}
-
-@Preview
-@Composable
-private fun HomeworkEditorContentLongPreview() = AppTheme {
-    HomeworkEditorContent(
-        isProgress = false,
-        isEditing = true,
-        existingSubjects = listOf(Lessons.long.subjectName),
-        subjectName = Homeworks.long.subjectName,
-        deadline = Homeworks.long.deadline,
-        description = Homeworks.long.description,
-        semesterDates = LocalDate.of(2021, 9, 1)..LocalDate.of(2022, 6, 30),
-        onBackClick = {},
-        onSaveClick = {},
-        onDeleteClick = {},
-        onSubjectNameChange = {},
-        onDeadlineChange = {},
-        onDescriptionChange = {},
-    )
-}
-
-@Preview
-@Composable
-private fun HomeworkEditorContentLoadingPreview() = AppTheme {
-    HomeworkEditorContent(
-        isProgress = true,
-        isEditing = true,
-        existingSubjects = emptyList(),
-        subjectName = Homeworks.long.subjectName,
-        deadline = Homeworks.long.deadline,
-        description = Homeworks.long.description,
-        semesterDates = LocalDate.of(2021, 9, 1)..LocalDate.of(2022, 6, 30),
+        description = data.description,
+        semesterDates = Semesters.regular.dateRange,
         onBackClick = {},
         onSaveClick = {},
         onDeleteClick = {},

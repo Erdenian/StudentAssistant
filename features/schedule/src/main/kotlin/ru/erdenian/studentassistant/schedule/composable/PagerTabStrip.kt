@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.schedule.composable
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
@@ -18,6 +17,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -26,11 +26,13 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
@@ -43,6 +45,7 @@ import kotlin.math.roundToInt
 import kotlin.math.sqrt
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
 @Composable
 internal fun PagerTabStrip(
@@ -222,26 +225,39 @@ private fun Color.transitionTo(color: Color, progress: Float): Color {
     )
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Suppress("StringLiteralDuplication", "MagicNumber")
+private class PageCountPreviewParameterProvider : PreviewParameterProvider<Int> {
+    override val values = sequenceOf(10, 0)
+}
+
+@AppPreviews
 @Composable
-private fun PagerTabStripPreview() = AppTheme {
-    Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
-        val state = rememberPagerState { 10 }
+private fun PagerTabStripPreview(
+    @PreviewParameter(PageCountPreviewParameterProvider::class) pageCount: Int,
+) = AppTheme {
+    Surface {
+        Column {
+            val state = rememberPagerState { pageCount }
 
-        PagerTabStrip(
-            state = state,
-            titleGetter = { "Page $it" },
-        )
-
-        HorizontalPager(
-            state = state,
-            modifier = Modifier.fillMaxSize(),
-        ) { page ->
-            Text(
-                text = page.toString(),
-                modifier = Modifier.wrapContentSize(),
+            PagerTabStrip(
+                state = state,
+                titleGetter = { "Page $it" },
             )
+
+            HorizontalPager(
+                state = state,
+                modifier = Modifier.fillMaxSize(),
+            ) { page ->
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+                    Text(
+                        text = "Page $page",
+                        modifier = Modifier.wrapContentSize(),
+                    )
+                }
+            }
         }
     }
 }
