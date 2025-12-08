@@ -47,7 +47,7 @@ import ru.erdenian.studentassistant.uikit.utils.AppPreviews
  * @param value текущий выбранный день недели [DayOfWeek].
  * @param onValueChange колбэк, вызываемый при выборе пользователем нового дня недели.
  * @param modifier [Modifier], применяемый к корневому контейнеру (Row).
- * @param enabled управляет доступностью компонента. Если , компонент не реагирует на нажатия
+ * @param enabled управляет доступностью компонента. Если значение false, то компонент не реагирует на нажатия
  * и отображается в полупрозрачном состоянии.
  * @param colors [WeekdayPickerColors], определяющий цвета компонента в различных состояниях.
  * См. [WeekdayPickerDefaults.weekdaysPickerColors].
