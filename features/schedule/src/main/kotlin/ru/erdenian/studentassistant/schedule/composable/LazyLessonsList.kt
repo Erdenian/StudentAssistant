@@ -28,12 +28,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
-import java.time.DayOfWeek
-import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import ru.erdenian.studentassistant.navigation.LocalSharedTransitionScope
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
+import ru.erdenian.studentassistant.sampledata.Lessons
 import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppPreviews
 import ru.erdenian.studentassistant.style.AppTheme
@@ -125,19 +124,7 @@ private class LazyLessonsListPreviewParameterProvider : PreviewParameterProvider
     override val values = sequenceOf(
         null,
         emptyList(),
-        List(10) { index ->
-            Lesson(
-                subjectName = "Интернет программирование",
-                type = "Лабораторная работа",
-                teachers = listOf("Кожухов Игорь Борисович"),
-                classrooms = listOf("4212а", "4212б"),
-                startTime = LocalTime.of(9, 0),
-                endTime = LocalTime.of(10, 30),
-                lessonRepeat = Lesson.Repeat.ByWeekday(dayOfWeek = DayOfWeek.MONDAY, weeks = listOf(true)),
-                semesterId = 0L,
-                id = index.toLong(),
-            )
-        },
+        List(10) { Lessons.regular },
     )
 }
 
