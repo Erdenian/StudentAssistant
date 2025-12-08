@@ -18,6 +18,17 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntSize
 
+/**
+ * Контейнер, который показывает контекстное меню (DropdownMenu) при определенном условии (обычно по long-press).
+ *
+ * Этот компонент отслеживает позицию касания и отображает меню в этой точке.
+ *
+ * @param expanded управляет видимостью меню.
+ * @param onDismissRequest колбэк для закрытия меню.
+ * @param contextMenu содержимое меню (список DropdownMenuItem).
+ * @param modifier модификатор контейнера.
+ * @param content основной контент, поверх которого будет открываться меню.
+ */
 @Composable
 fun ContextMenuBox(
     expanded: Boolean,

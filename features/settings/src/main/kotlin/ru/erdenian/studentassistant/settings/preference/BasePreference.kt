@@ -30,6 +30,18 @@ import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
+/**
+ * Базовый компонент для элемента настроек.
+ *
+ * Отображает заголовок, описание и опциональную иконку. Может содержать дополнительный контент справа.
+ *
+ * @param title заголовок настройки.
+ * @param description описание или текущее значение настройки.
+ * @param onClick действие при клике.
+ * @param modifier модификатор.
+ * @param icon иконка настройки.
+ * @param contentEnd дополнительный контент в правой части (например, свитч).
+ */
 @Composable
 internal fun BasePreference(
     title: String,

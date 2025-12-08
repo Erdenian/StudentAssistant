@@ -23,6 +23,14 @@ import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.uikit.layout.DelayedVisibility
 import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
+/**
+ * Модальный диалог прогресса.
+ *
+ * Блокирует взаимодействие с экраном и показывает индикатор загрузки с текстом.
+ * Диалог нельзя закрыть кнопкой "Назад" или кликом вне области.
+ *
+ * @param text текст сообщения, отображаемого под индикатором.
+ */
 @Composable
 fun ProgressDialog(text: String) {
     val context = LocalContext.current

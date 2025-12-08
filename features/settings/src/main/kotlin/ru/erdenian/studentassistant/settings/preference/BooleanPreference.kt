@@ -10,6 +10,16 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
+/**
+ * Настройка с переключателем (Switch).
+ *
+ * @param title заголовок настройки.
+ * @param description описание настройки.
+ * @param value текущее значение.
+ * @param onValueChange колбэк при изменении значения.
+ * @param modifier модификатор.
+ * @param icon иконка настройки.
+ */
 @Composable
 internal fun BooleanPreference(
     title: String,

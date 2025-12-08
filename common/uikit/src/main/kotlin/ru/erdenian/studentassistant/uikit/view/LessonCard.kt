@@ -31,7 +31,19 @@ import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
 /**
- * Карточка пары.
+ * Карточка, отображающая краткую информацию о занятии.
+ *
+ * Используется в списках занятий. Отображает время, аудитории, тип занятия, название предмета и преподавателей.
+ *
+ * @param subjectName название предмета.
+ * @param type тип занятия (например, "Лекция", "Лабораторная работа").
+ * @param teachers список имен преподавателей.
+ * @param classrooms список номеров аудиторий.
+ * @param startTime время начала занятия (уже отформатированное).
+ * @param endTime время окончания занятия (уже отформатированное).
+ * @param modifier модификатор для настройки внешнего вида карточки.
+ * @param onClick действие при клике на карточку.
+ * @param onLongClick действие при длительном нажатии на карточку.
  */
 @Composable
 fun LessonCard(

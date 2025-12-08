@@ -25,6 +25,17 @@ import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.uikit.R
 import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
+/**
+ * Настройка для выбора продолжительности.
+ *
+ * Использует [TimePicker] в режиме 24 часов для выбора часов и минут, которые интерпретируются как длительность.
+ *
+ * @param title заголовок настройки.
+ * @param value текущая длительность.
+ * @param onValueChange колбэк при изменении длительности.
+ * @param modifier модификатор.
+ * @param icon иконка настройки.
+ */
 @Composable
 internal fun DurationPreference(
     title: String,

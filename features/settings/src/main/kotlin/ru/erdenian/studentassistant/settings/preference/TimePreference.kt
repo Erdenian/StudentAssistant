@@ -15,6 +15,17 @@ import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.uikit.dialog.TimePickerDialog
 import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
+/**
+ * Настройка для выбора времени.
+ *
+ * При нажатии открывает диалог выбора времени. Текущее значение отображается в описании.
+ *
+ * @param title заголовок настройки.
+ * @param value текущее значение времени.
+ * @param onValueChange колбэк при выборе нового времени.
+ * @param modifier модификатор.
+ * @param icon иконка настройки.
+ */
 @Composable
 internal fun TimePreference(
     title: String,

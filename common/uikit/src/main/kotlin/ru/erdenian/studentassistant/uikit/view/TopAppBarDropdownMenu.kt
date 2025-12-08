@@ -37,6 +37,16 @@ import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.AutoMirrored
 import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
+/**
+ * Выпадающее меню для использования в заголовке [TopAppBar].
+ *
+ * Отображает текущий выбранный элемент и стрелку. При нажатии раскрывает список всех элементов.
+ * Используется, например, для переключения между семестрами.
+ *
+ * @param items список строк для выбора.
+ * @param selectedItem текущий выбранный элемент (отображается в заголовке).
+ * @param onSelectedItemChange колбэк при выборе элемента (индекс, значение).
+ */
 @Composable
 fun TopAppBarDropdownMenu(
     items: List<String>,

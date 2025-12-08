@@ -43,6 +43,15 @@ import ru.erdenian.studentassistant.utils.toSingleLine
 private const val DELIMITER = ','
 private const val LENGTH_TO_EXPAND = 2
 
+/**
+ * Текстовое поле с автодополнением.
+ *
+ * Предлагает варианты из [items], фильтруя их по введенному тексту.
+ *
+ * @param value текущий текст.
+ * @param items список всех возможных вариантов для автодополнения.
+ * @param onValueChange колбэк при изменении текста.
+ */
 @Composable
 internal fun AutoCompleteTextField(
     value: String,
@@ -116,6 +125,16 @@ internal fun AutoCompleteTextField(
     )
 }
 
+/**
+ * Текстовое поле с автодополнением для нескольких значений, разделенных запятой.
+ *
+ * Позволяет вводить несколько значений (например, имена преподавателей).
+ * Автодополнение работает для текущего вводимого значения (между запятыми).
+ *
+ * @param value текущий текст.
+ * @param items список всех возможных вариантов для автодополнения.
+ * @param onValueChange колбэк при изменении текста.
+ */
 @Composable
 internal fun MultiAutoCompleteTextField(
     value: String,
