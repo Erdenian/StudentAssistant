@@ -79,6 +79,20 @@ internal class ScheduleEditorViewModel @AssistedInject constructor(
                 deleteHomeworks.await()
             }
 
+            /*
+             * Добавляем ID удаленного урока в список исключенных.
+             *
+             * Это необходимо для предотвращения "мерцания" элемента в списке (LessonCard).
+             * Room обновляет Flow асинхронно. Может возникнуть ситуация, когда:
+             * 1. Транзакция удаления в БД завершилась (await() прошел).
+             * 2. Прогресс-бар скрылся (operationPrivate.value = null).
+             * 3. А Flow от Room еще не успел эмитировать новый список без этого урока.
+             *
+             * В этот момент пользователь снова увидел бы удаленный урок.
+             * Добавляя ID в deletedLessonIds, мы принудительно фильтруем его в getLessons().
+             * Когда Room наконец пришлет обновленный список, сработает onEach в getLessons,
+             * который очистит deletedLessonIds.
+             */
             deletedLessonIds.value += lesson.id
             operationPrivate.value = null
         }
