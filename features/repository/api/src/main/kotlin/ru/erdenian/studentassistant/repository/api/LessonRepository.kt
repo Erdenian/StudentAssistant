@@ -70,6 +70,7 @@ interface LessonRepository {
     fun getAllFlow(semesterId: Long, dayOfWeek: DayOfWeek): Flow<List<Lesson>>
     suspend fun getCount(semesterId: Long): Int
     val hasLessonsFlow: Flow<Boolean>
+    suspend fun hasNonRecurringLessons(semesterId: Long): Boolean
     // endregion
 
     // region Subjects

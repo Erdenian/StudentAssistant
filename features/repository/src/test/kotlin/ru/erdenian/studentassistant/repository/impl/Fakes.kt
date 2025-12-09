@@ -177,6 +177,12 @@ internal class FakeLessonDao : LessonDao() {
     override fun hasLessonsFlow(semesterId: Long): Flow<Boolean> =
         lessons.map { list -> list.any { it.lesson.semesterId == semesterId } }
 
+    override suspend fun hasNonRecurringLessons(semesterId: Long): Boolean =
+        lessons.value.any { full ->
+            val weeks = full.byWeekday?.weeks
+            (full.lesson.semesterId == semesterId) && (weeks != null) && weeks.contains(false)
+        }
+
     override suspend fun getCount(semesterId: Long, subjectName: String): Int =
         lessons.value.count { it.lesson.semesterId == semesterId && it.lesson.subjectName == subjectName }
 

@@ -11,9 +11,10 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
-import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import ru.erdenian.studentassistant.repository.api.SettingsRepository
 import ru.erdenian.studentassistant.repository.database.entity.ByWeekdayEntity
@@ -250,5 +251,24 @@ internal class LessonRepositoryImplTest {
         val hasLessons = repository.hasLessonsFlow.first()
         // Семестр не выбран -> возвращает false
         assertFalse(hasLessons)
+    }
+
+    @Test
+    fun `hasNonRecurringLessons test`() = runTest(testDispatcher) {
+        assertFalse(repository.hasNonRecurringLessons(1L))
+
+        // Каждую неделю -> False
+        fakeLessonDao.insert(
+            LessonEntity("L1", "", LocalTime.MIN, LocalTime.MAX, 1L, 10L),
+            emptySet(), emptySet(), ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
+        )
+        assertFalse(repository.hasNonRecurringLessons(1L))
+
+        // Через неделю -> True
+        fakeLessonDao.insert(
+            LessonEntity("L2", "", LocalTime.MIN, LocalTime.MAX, 1L, 20L),
+            emptySet(), emptySet(), ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true, false), 20L),
+        )
+        assertTrue(repository.hasNonRecurringLessons(1L))
     }
 }
