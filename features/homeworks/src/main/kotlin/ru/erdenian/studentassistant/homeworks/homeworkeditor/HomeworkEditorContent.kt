@@ -1,41 +1,27 @@
 package ru.erdenian.studentassistant.homeworks.homeworkeditor
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.interaction.InteractionSource
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldColors
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,12 +30,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
@@ -130,7 +112,8 @@ internal fun HomeworkEditorContent(
             .padding(
                 horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
                 vertical = MaterialTheme.dimensions.screenPaddingVertical,
-            ),
+            )
+            .fillMaxSize(),
     ) {
         val descriptionFocusRequester = remember { FocusRequester() }
         val currentExistingSubjects by rememberUpdatedState(existingSubjects)
@@ -166,7 +149,7 @@ internal fun HomeworkEditorContent(
                 singleLine = true,
                 colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
                 modifier = Modifier
-                    .menuAnchor(MenuAnchorType.PrimaryEditable)
+                    .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
                     .fillMaxWidth()
                     .placeholder(
                         visible = isProgress,
@@ -221,76 +204,19 @@ internal fun HomeworkEditorContent(
             )
         }
 
-        AnimatedVisibility(
-            visible = !isProgress,
-            enter = fadeIn(),
-            exit = fadeOut(),
-        ) {
-            SimpleTextField(
-                value = description,
-                onValueChange = onDescriptionChange,
-                label = { Text(text = stringResource(RS.he_description)) },
-                enabled = !isProgress,
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .focusRequester(descriptionFocusRequester),
-            )
-        }
-    }
-}
-
-@Composable
-private fun SimpleTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    label: @Composable (() -> Unit)? = null,
-    enabled: Boolean = true,
-    keyboardOptions: KeyboardOptions = KeyboardOptions(),
-    colors: TextFieldColors = TextFieldDefaults.colors(),
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-) = Box {
-    @Composable
-    fun TextFieldColors.textColor(
-        enabled: Boolean,
-        interactionSource: InteractionSource,
-    ): State<Color> {
-        val focused by interactionSource.collectIsFocusedAsState()
-
-        val targetValue = when {
-            !enabled -> disabledTextColor
-            focused -> focusedTextColor
-            else -> unfocusedTextColor
-        }
-        return rememberUpdatedState(targetValue)
-    }
-
-    val textStyle = LocalTextStyle.current
-    val textColor = textStyle.color.takeOrElse { colors.textColor(enabled, interactionSource).value }
-
-    BasicTextField(
-        value = value,
-        onValueChange = onValueChange,
-        enabled = enabled,
-        textStyle = textStyle.merge(TextStyle(color = textColor)),
-        keyboardOptions = keyboardOptions,
-        cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
-        interactionSource = interactionSource,
-        modifier = modifier,
-    )
-
-    if (value.isEmpty() && (label != null)) {
-        @Composable
-        fun TextFieldColors.labelColor(enabled: Boolean): State<Color> {
-            val targetValue = if (enabled) unfocusedLabelColor else disabledLabelColor
-            return rememberUpdatedState(targetValue)
-        }
-
-        val contentColor = colors.labelColor(enabled).value
-        CompositionLocalProvider(
-            LocalContentColor provides contentColor,
-            content = label,
+        OutlinedTextField(
+            value = description,
+            onValueChange = onDescriptionChange,
+            label = { Text(text = stringResource(RS.he_description)) },
+            enabled = !isProgress,
+            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
+            modifier = Modifier
+                .fillMaxSize()
+                .placeholder(
+                    visible = isProgress,
+                    highlight = PlaceholderHighlight.fade(),
+                )
+                .focusRequester(descriptionFocusRequester),
         )
     }
 }
