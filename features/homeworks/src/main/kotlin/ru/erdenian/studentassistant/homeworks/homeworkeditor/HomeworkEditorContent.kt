@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.homeworks.homeworkeditor
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.DropdownMenuItem
@@ -22,11 +24,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -56,6 +60,7 @@ import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.DateField
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun HomeworkEditorContent(
     isProgress: Boolean,
@@ -204,9 +209,27 @@ internal fun HomeworkEditorContent(
             )
         }
 
+        // Используем TextFieldState для нового API
+        val descriptionState = rememberTextFieldState(initialText = description)
+
+        // Синхронизация: если описание изменилось извне (ViewModel), обновляем State
+        LaunchedEffect(description) {
+            if (descriptionState.text.toString() != description) {
+                descriptionState.edit { replace(0, length, description) }
+            }
+        }
+
+        // Синхронизация: слушаем изменения State и передаем их наверх
+        LaunchedEffect(descriptionState) {
+            snapshotFlow { descriptionState.text }
+                .collect { onDescriptionChange(it.toString()) }
+        }
+
+        // Используем перегрузку с TextFieldState, так как она автоматически обрабатывает
+        // прокрутку к курсору (bringIntoView) при открытии клавиатуры и изменении размера поля,
+        // в отличие от старых перегрузок со String/TextFieldValue.
         OutlinedTextField(
-            value = description,
-            onValueChange = onDescriptionChange,
+            state = descriptionState,
             label = { Text(text = stringResource(RS.he_description)) },
             enabled = !isProgress,
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
