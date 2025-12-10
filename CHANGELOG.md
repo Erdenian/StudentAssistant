@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Обновлен дизайн и анимации компонентов выбора дней недели и недель повторения
 - Улучшен дизайн экрана редактирования занятия: обновлены поля выбора времени, оптимизированы отступы
 
+## [0.7.4] - 2025-12-11
+
+### Fixed
+- Высота верхней панели приложения при наличии нескольких расписаний
+
 ## [0.7.3] - 2025-11-27
 
 ### Fixed
@@ -144,7 +149,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2016-12-19
 
 <!-- @formatter:off -->
-[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/0.7.3...develop
+[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/0.7.4...develop
+[0.7.4]: https://github.com/Erdenian/StudentAssistant/compare/0.7.3...0.7.4
 [0.7.3]: https://github.com/Erdenian/StudentAssistant/compare/0.7.2...0.7.3
 [0.7.2]: https://github.com/Erdenian/StudentAssistant/compare/0.7.1...0.7.2
 [0.7.1]: https://github.com/Erdenian/StudentAssistant/compare/0.7.0...0.7.1
