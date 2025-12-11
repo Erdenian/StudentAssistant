@@ -276,3 +276,31 @@
     * Используйте символ многоточия **`…`** (U+2026) вместо трех точек `...` для индикации прогресса или обрезанного
       текста.
     * Для плейсхолдеров используйте нумерованные аргументы: `%1$s`, `%2$d`.
+
+## 13. Проверка изменений
+
+Перед созданием pull request все изменения должны быть проверены с помощью следующих команд:
+
+* `detektMain` — анализ кода на соответствие стилю и правилам проекта
+* `:app:lintDebug` — статический анализ кода и проверка на потенциальные проблемы
+* `testDebugUnitTest` — запуск unit-тестов
+* `:app:koverHtmlReportDebug` и `:app:koverXmlReportDebug`— генерация отчетов о покрытии кода тестами
+* `:app:assembleDebug` — сборка debug-версии приложения
+* `:app:bundleDebug` — создание Android App Bundle
+* `testDeviceDebugAndroidTest` — запуск instrumentation тестов
+
+Полная команда для запуска всех проверок
+```shell
+./gradlew \
+    detektMain \
+    :app:lintDebug \
+    testDebugUnitTest \
+    :app:koverHtmlReportDebug \
+    :app:koverXmlReportDebug \
+    :app:assembleDebug \
+    :app:bundleDebug \
+    testDeviceDebugAndroidTest \
+    -Dorg.gradle.jvmargs=-Xmx6g -Dfile.encoding=UTF-8 -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect
+```
+
+Эти проверки также выполняются в CI при создании pull request.
