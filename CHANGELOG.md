@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- Мелькание клавиатуры при закрытии экранов редактирования после сохранения
 - Исправлено автоматическое переключение на созданный семестр
 - Исправлено перекрытие текста описания домашнего задания клавиатурой
 - Обновление названий дней недели при смене языка устройства в редакторе расписания
@@ -161,7 +162,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.7.4]: https://github.com/Erdenian/StudentAssistant/compare/0.7.3...0.7.4
 [0.7.3]: https://github.com/Erdenian/StudentAssistant/compare/0.7.2...0.7.3
 [0.7.2]: https://github.com/Erdenian/StudentAssistant/compare/0.7.1...0.7.2
-[0.7.1]: https://github.com/Erdenian/StudentAssistant/compare/0.7.0...0.7.1
+[0.7.1]: https://github.com/Erdenian/StudentAssistant/compare/0.6.0...0.7.1
 [0.7.0]: https://github.com/Erdenian/StudentAssistant/compare/0.6.0...0.7.0
 [0.6.0]: https://github.com/Erdenian/StudentAssistant/compare/0.5.3...0.6.0
 [0.5.3]: https://github.com/Erdenian/StudentAssistant/compare/0.5.2...0.5.3

@@ -136,7 +136,6 @@ internal class HomeworkEditorViewModel @AssistedInject constructor(
                 )
             }
 
-            operationPrivate.value = null
             donePrivate.value = true
         }
     }
@@ -145,7 +144,6 @@ internal class HomeworkEditorViewModel @AssistedInject constructor(
         operationPrivate.value = Operation.DELETING
         viewModelScope.launch {
             homeworkRepository.delete(checkNotNull(homeworkId))
-            operationPrivate.value = null
             donePrivate.value = true
         }
     }

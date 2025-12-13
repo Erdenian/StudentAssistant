@@ -139,7 +139,6 @@ internal class SemesterEditorViewModel @AssistedInject constructor(
                 semesterRepository.insert(name = name.value, firstDay = firstDay.value, lastDay = lastDay.value)
             }
             donePrivate.value = true
-            operationPrivate.value = null
         }
     }
 
