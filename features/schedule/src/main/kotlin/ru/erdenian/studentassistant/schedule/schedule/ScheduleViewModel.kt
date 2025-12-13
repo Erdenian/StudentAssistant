@@ -31,7 +31,10 @@ internal class ScheduleViewModel @Inject constructor(
     val allSemesters = semesterRepository.allFlow
         .stateIn(viewModelScope, SharingStarted.Default, listOfNotNull(selectedSemester.value))
 
-    fun selectSemester(semesterId: Long) = selectedSemesterRepository.selectSemester(semesterId)
+    fun selectSemester(semesterId: Long) {
+        lessonsFlows.clear()
+        selectedSemesterRepository.selectSemester(semesterId)
+    }
 
     // Храним потоки для последних запрошенных дней.
     // Этого достаточно для свайпов влево/вправо и поворота экрана,
