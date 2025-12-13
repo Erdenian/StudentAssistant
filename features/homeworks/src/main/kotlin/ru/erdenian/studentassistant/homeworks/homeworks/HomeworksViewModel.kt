@@ -4,9 +4,13 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
@@ -34,9 +38,9 @@ internal class HomeworksViewModel @Inject constructor(
 
     fun selectSemester(semesterId: Long) = selectedSemesterRepository.selectSemester(semesterId)
 
-    val overdue = homeworkRepository.overdueFlow.stateIn(viewModelScope, SharingStarted.Default, null)
-    val actual = homeworkRepository.actualFlow.stateIn(viewModelScope, SharingStarted.Default, null)
-    val past = homeworkRepository.pastFlow.stateIn(viewModelScope, SharingStarted.Default, null)
+    val overdue = homeworkRepository.overdueFlow.asStateFlowWithLoader()
+    val actual = homeworkRepository.actualFlow.asStateFlowWithLoader()
+    val past = homeworkRepository.pastFlow.asStateFlowWithLoader()
 
     fun deleteHomework(id: Long) {
         operationPrivate.value = Operation.DELETING_HOMEWORK
@@ -45,4 +49,11 @@ internal class HomeworksViewModel @Inject constructor(
             operationPrivate.value = null
         }
     }
+
+    private fun <T> Flow<T>.asStateFlowWithLoader() = selectedSemester.flatMapLatest {
+        flow {
+            emit(null)
+            emitAll(this@asStateFlowWithLoader)
+        }
+    }.stateIn(viewModelScope, SharingStarted.Default, null)
 }
