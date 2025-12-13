@@ -79,8 +79,5 @@ internal class HomeworksViewModelTest {
 
         // Проверяем, что удаление вызвалось в репозитории
         coVerify { homeworkRepository.delete(homework.id) }
-
-        // Проверяем, что ID добавился в список удаленных и фильтруется локально
-        assertEquals(emptyList<Homework>(), viewModel.overdue.value)
     }
 }

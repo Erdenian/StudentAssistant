@@ -159,7 +159,7 @@ internal class LessonRepositoryImplTest {
         val start = LocalDate.of(2023, 9, 4) // Понедельник
         val semester = SemesterEntity("S1", start, start.plusMonths(4), id = 1)
         fakeSemesterDao.insert(semester)
-        selectedSemesterRepository.onSemesterInserted(semester.toSemester())
+        selectedSemesterRepository.selectSemester(semester.id)
 
         fakeLessonDao.insert(
             LessonEntity("L1", "Type", LocalTime.of(9, 0), LocalTime.of(10, 30), 1L, 100L),

@@ -13,8 +13,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
@@ -52,8 +50,6 @@ internal class ScheduleEditorViewModel @AssistedInject constructor(
     private val isDeletedPrivate = MutableStateFlow(false)
     val isDeleted = isDeletedPrivate.asStateFlow()
 
-    private val deletedLessonIds = MutableStateFlow(emptySet<Long>())
-
     private val lessonsFlows = object : LinkedHashMap<DayOfWeek, Flow<List<Lesson>>>(
         LESSONS_FLOWS_CACHE_SIZE, LESSONS_FLOWS_LOAD_FACTOR, true,
     ) {
@@ -63,12 +59,8 @@ internal class ScheduleEditorViewModel @AssistedInject constructor(
 
     fun getLessons(dayOfWeek: DayOfWeek): Flow<List<Lesson>> = synchronized(lessonsFlows) {
         lessonsFlows.getOrPut(dayOfWeek) {
-            combine(
-                lessonRepository.getAllFlow(semesterId, dayOfWeek).onEach { deletedLessonIds.value = emptySet() },
-                deletedLessonIds.asStateFlow(),
-            ) { lessons, deletedIds ->
-                if (deletedIds.isEmpty()) lessons else lessons.filter { it.id !in deletedIds }
-            }.shareIn(viewModelScope, SharingStarted.Default, replay = 1)
+            lessonRepository.getAllFlow(semesterId, dayOfWeek)
+                .shareIn(viewModelScope, SharingStarted.Default, replay = 1)
         }
     }
 
@@ -98,22 +90,6 @@ internal class ScheduleEditorViewModel @AssistedInject constructor(
                 deleteLesson.await()
                 deleteHomeworks.await()
             }
-
-            /*
-             * Добавляем ID удаленного урока в список исключенных.
-             *
-             * Это необходимо для предотвращения "мерцания" элемента в списке (LessonCard).
-             * Room обновляет Flow асинхронно. Может возникнуть ситуация, когда:
-             * 1. Транзакция удаления в БД завершилась (await() прошел).
-             * 2. Прогресс-бар скрылся (operationPrivate.value = null).
-             * 3. А Flow от Room еще не успел эмитировать новый список без этого урока.
-             *
-             * В этот момент пользователь снова увидел бы удаленный урок.
-             * Добавляя ID в deletedLessonIds, мы принудительно фильтруем его в getLessons().
-             * Когда Room наконец пришлет обновленный список, сработает onEach в getLessons,
-             * который очистит deletedLessonIds.
-             */
-            deletedLessonIds.value += lesson.id
             operationPrivate.value = null
         }
     }
