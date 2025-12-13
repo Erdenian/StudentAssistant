@@ -60,6 +60,23 @@ import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.DateField
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
+/**
+ * UI контент экрана редактора домашнего задания.
+ *
+ * @param isProgress флаг загрузки.
+ * @param isEditing режим редактирования.
+ * @param existingSubjects список существующих предметов.
+ * @param subjectName название предмета.
+ * @param deadline срок сдачи.
+ * @param description описание.
+ * @param semesterDates диапазон дат семестра (для ограничения выбора даты).
+ * @param onBackClick колбэк нажатия назад.
+ * @param onSaveClick колбэк сохранения.
+ * @param onDeleteClick колбэк удаления.
+ * @param onSubjectNameChange колбэк изменения названия.
+ * @param onDeadlineChange колбэк изменения дедлайна.
+ * @param onDescriptionChange колбэк изменения описания.
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun HomeworkEditorContent(

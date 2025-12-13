@@ -22,6 +22,13 @@ import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.utils.Default
 
+/**
+ * ViewModel для экрана редактора домашнего задания.
+ *
+ * @param semesterId идентификатор семестра.
+ * @param homeworkId идентификатор задания (для редактирования).
+ * @param subjectName предустановленное название предмета (для создания).
+ */
 internal class HomeworkEditorViewModel @AssistedInject constructor(
     application: Application,
     repositoryApi: RepositoryApi,

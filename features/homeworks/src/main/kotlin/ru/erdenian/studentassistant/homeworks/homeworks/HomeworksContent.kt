@@ -37,6 +37,19 @@ import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
 
+/**
+ * UI контент экрана домашних заданий.
+ *
+ * @param semesters список названий семестров.
+ * @param selectedSemester текущий выбранный семестр.
+ * @param overdueHomeworks список просроченных заданий.
+ * @param actualHomeworks список актуальных заданий.
+ * @param pastHomeworks список выполненных/прошедших заданий.
+ * @param onSelectedSemesterChange колбэк выбора семестра.
+ * @param onAddHomeworkClick колбэк добавления задания.
+ * @param onHomeworkClick колбэк клика на задание.
+ * @param onDeleteHomeworkClick колбэк удаления задания.
+ */
 @Composable
 internal fun HomeworksContent(
     semesters: List<String>,

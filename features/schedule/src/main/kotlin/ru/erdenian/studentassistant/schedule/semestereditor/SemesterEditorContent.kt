@@ -51,6 +51,21 @@ import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.DateField
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
+/**
+ * UI контент экрана редактора семестра.
+ *
+ * @param isLoading отображать ли состояние загрузки.
+ * @param isEditing режим редактирования (true) или создания (false).
+ * @param name название семестра.
+ * @param firstDay дата начала.
+ * @param lastDay дата окончания.
+ * @param errorMessage сообщение об ошибке валидации названия.
+ * @param onBackClick колбэк нажатия назад.
+ * @param onSaveClick колбэк сохранения.
+ * @param onNameChange колбэк изменения названия.
+ * @param onFirstDayChange колбэк изменения даты начала.
+ * @param onLastDayChange колбэк изменения даты окончания.
+ */
 @Composable
 internal fun SemesterEditorContent(
     isLoading: Boolean,

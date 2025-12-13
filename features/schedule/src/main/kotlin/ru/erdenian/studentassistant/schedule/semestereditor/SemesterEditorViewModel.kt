@@ -20,6 +20,11 @@ import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.utils.Default
 
+/**
+ * ViewModel для экрана создания/редактирования семестра.
+ *
+ * @param semesterId ID семестра для редактирования. Если null, создается новый семестр.
+ */
 internal class SemesterEditorViewModel @AssistedInject constructor(
     application: Application,
     repositoryApi: RepositoryApi,
@@ -95,6 +100,9 @@ internal class SemesterEditorViewModel @AssistedInject constructor(
         }
     }
 
+    /**
+     * Поток ошибки валидации.
+     */
     val error = combine(
         flow = name,
         flow2 = firstDay,
@@ -116,8 +124,18 @@ internal class SemesterEditorViewModel @AssistedInject constructor(
     val done = donePrivate.asStateFlow()
 
     private val showWeekShiftDialogPrivate = MutableStateFlow(false)
+
+    /** Поток управления видимостью диалога предупреждения о сдвиге недель. */
     val showWeekShiftDialog = showWeekShiftDialogPrivate.asStateFlow()
 
+    /**
+     * Сохраняет изменения или создает новый семестр.
+     *
+     * Если дата начала семестра изменилась и в семестре есть нерегулярные занятия,
+     * может потребоваться подтверждение пользователя (через [showWeekShiftDialog]).
+     *
+     * @param confirmWeekShift подтверждает ли пользователь сохранение, несмотря на сдвиг недель.
+     */
     fun save(confirmWeekShift: Boolean = false) {
         check(error.value == null)
         operationPrivate.value = Operation.SAVING

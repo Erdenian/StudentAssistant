@@ -43,6 +43,20 @@ import ru.erdenian.studentassistant.uikit.utils.ScreenPreviews
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
+/**
+ * UI контент экрана редактора расписания.
+ *
+ * Отображает расписание по дням недели в виде пейджера.
+ *
+ * @param rememberLessons функция для получения списка уроков по индексу страницы (дня недели).
+ * @param onBackClick колбэк нажатия кнопки назад.
+ * @param onEditSemesterClick колбэк нажатия кнопки редактирования данных семестра.
+ * @param onDeleteSemesterClick колбэк нажатия кнопки удаления семестра.
+ * @param onLessonClick колбэк нажатия на занятие.
+ * @param onCopyLessonClick колбэк копирования занятия.
+ * @param onDeleteLessonClick колбэк удаления занятия.
+ * @param onAddLessonClick колбэк добавления нового занятия в указанный день недели.
+ */
 @Composable
 internal fun ScheduleEditorContent(
     rememberLessons: @Composable (page: Int) -> State<List<Lesson>?>,

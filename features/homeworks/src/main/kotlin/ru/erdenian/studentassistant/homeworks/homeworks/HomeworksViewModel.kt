@@ -16,6 +16,9 @@ import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.utils.Default
 
+/**
+ * ViewModel для главного экрана домашних заданий.
+ */
 internal class HomeworksViewModel @Inject constructor(
     application: Application,
     repositoryApi: RepositoryApi,
@@ -38,8 +41,19 @@ internal class HomeworksViewModel @Inject constructor(
 
     fun selectSemester(semesterId: Long) = selectedSemesterRepository.selectSemester(semesterId)
 
+    /**
+     * Поток просроченных домашних заданий.
+     */
     val overdue = homeworkRepository.overdueFlow.asStateFlowWithLoader()
+
+    /**
+     * Поток актуальных домашних заданий.
+     */
     val actual = homeworkRepository.actualFlow.asStateFlowWithLoader()
+
+    /**
+     * Поток выполненных или прошедших домашних заданий.
+     */
     val past = homeworkRepository.pastFlow.asStateFlowWithLoader()
 
     fun deleteHomework(id: Long) {

@@ -52,6 +52,17 @@ import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
 
+/**
+ * UI контент экрана расписания.
+ *
+ * @param semestersNames список названий доступных семестров для выбора.
+ * @param selectedSemester текущий выбранный семестр.
+ * @param rememberLessons функция для получения состояния списка уроков по дате.
+ * @param onSelectedSemesterChange колбэк выбора другого семестра.
+ * @param onAddSemesterClick колбэк нажатия кнопки добавления семестра.
+ * @param onEditScheduleClick колбэк нажатия кнопки редактирования расписания.
+ * @param onLessonClick колбэк нажатия на карточку занятия.
+ */
 @Composable
 internal fun ScheduleContent(
     semestersNames: List<String>,
