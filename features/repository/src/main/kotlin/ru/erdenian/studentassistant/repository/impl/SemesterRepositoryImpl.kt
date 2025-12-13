@@ -1,15 +1,17 @@
 package ru.erdenian.studentassistant.repository.impl
 
-import dagger.Reusable
 import java.time.LocalDate
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.shareIn
 import ru.erdenian.studentassistant.repository.api.SemesterRepository
 import ru.erdenian.studentassistant.repository.database.dao.SemesterDao
 import ru.erdenian.studentassistant.repository.database.entity.SemesterEntity
 
-@Reusable
 internal class SemesterRepositoryImpl @Inject constructor(
+    coroutineScope: CoroutineScope,
     private val semesterDao: SemesterDao,
     private val selectedSemesterRepository: SelectedSemesterRepositoryImpl,
 ) : SemesterRepository {
@@ -28,7 +30,9 @@ internal class SemesterRepositoryImpl @Inject constructor(
         selectedSemesterRepository.onSemesterDeleted(id)
     }
 
-    override val allFlow get() = semesterDao.getAllFlow().map { it.map(SemesterEntity::toSemester) }
+    override val allFlow = semesterDao.getAllFlow().map { it.map(SemesterEntity::toSemester) }
+        .shareIn(coroutineScope, SharingStarted.Eagerly, replay = 1)
+
     override suspend fun get(id: Long) = semesterDao.get(id)?.toSemester()
     override fun getFlow(id: Long) = semesterDao.getFlow(id).map { it?.toSemester() }
     override val namesFlow get() = semesterDao.getNamesFlow()
