@@ -40,6 +40,17 @@ import ru.erdenian.studentassistant.uikit.layout.DelayedVisibility
 import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 import ru.erdenian.studentassistant.uikit.view.LessonCard
 
+/**
+ * Список занятий.
+ *
+ * Отображает список [LessonCard] для переданных занятий.
+ * Обрабатывает состояния загрузки (null) и пустого списка.
+ *
+ * @param lessons список занятий. Если null, отображается индикатор загрузки.
+ * @param onLessonClick колбэк при клике на занятие.
+ * @param modifier модификатор.
+ * @param onLongLessonClick колбэк при длительном нажатии на занятие.
+ */
 @Composable
 internal fun LazyLessonsList(
     lessons: List<Lesson>?,

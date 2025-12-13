@@ -1,9 +1,7 @@
 package ru.erdenian.studentassistant.schedule.lessoneditor
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,11 +13,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -31,7 +27,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -42,8 +37,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import java.time.DayOfWeek
 import java.time.LocalTime
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.sampledata.Lessons
 import ru.erdenian.studentassistant.schedule.lessoneditor.composable.AutoCompleteTextField
@@ -61,6 +54,7 @@ import ru.erdenian.studentassistant.uikit.placeholder.fade
 import ru.erdenian.studentassistant.uikit.placeholder.placeholder
 import ru.erdenian.studentassistant.uikit.utils.ScreenPreviews
 import ru.erdenian.studentassistant.uikit.view.ActionItem
+import ru.erdenian.studentassistant.uikit.view.TimeField
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
 @Composable
@@ -140,7 +134,6 @@ internal fun LessonEditorContent(
                     vertical = MaterialTheme.dimensions.screenPaddingVertical,
                 ),
         ) {
-            val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
             var timePickerData: Pair<LocalTime, (LocalTime) -> Unit>? by remember { mutableStateOf(null) }
 
             // Subject Name
@@ -244,12 +237,11 @@ internal fun LessonEditorContent(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                TimeItem(
-                    time = startTime,
+                TimeField(
+                    value = startTime,
                     label = stringResource(RS.le_start_time),
                     onClick = { timePickerData = startTime to onStartTimeChange },
                     enabled = !isProgress,
-                    timeFormatter = timeFormatter,
                     modifier = Modifier
                         .weight(1f)
                         .placeholder(
@@ -258,12 +250,11 @@ internal fun LessonEditorContent(
                         ),
                 )
 
-                TimeItem(
-                    time = endTime,
+                TimeField(
+                    value = endTime,
                     label = stringResource(RS.le_end_time),
                     onClick = { timePickerData = endTime to onEndTimeChange },
                     enabled = !isProgress,
-                    timeFormatter = timeFormatter,
                     modifier = Modifier
                         .weight(1f)
                         .placeholder(
@@ -321,35 +312,6 @@ internal fun LessonEditorContent(
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun TimeItem(
-    time: LocalTime,
-    label: String,
-    onClick: () -> Unit,
-    enabled: Boolean,
-    timeFormatter: DateTimeFormatter,
-    modifier: Modifier = Modifier,
-) {
-    Box(modifier = modifier) {
-        OutlinedTextField(
-            value = time.format(timeFormatter),
-            onValueChange = {},
-            readOnly = true,
-            enabled = enabled,
-            label = { Text(text = label) },
-            trailingIcon = { Icon(imageVector = AppIcons.Schedule, contentDescription = null) },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .clip(MaterialTheme.shapes.small)
-                .clickable(enabled = enabled, onClick = onClick),
-        )
     }
 }
 

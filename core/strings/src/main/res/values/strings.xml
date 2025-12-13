@@ -37,6 +37,10 @@
     <string name="se_error_empty_name">Имя не может быть пустым</string>
     <string name="se_error_name_not_available">Такое имя уже занято</string>
     <string name="se_error_wrong_dates">Даты первого и последнего дня введены некорректно</string>
+    <string name="se_warning_week_shift_title">Внимание</string>
+    <string name="se_warning_week_shift_message">Вы изменили неделю начала семестра. Это может нарушить порядок чередования недель у существующих занятий. Продолжить?</string>
+    <string name="se_warning_week_shift_yes">Да</string>
+    <string name="se_warning_week_shift_no">Отмена</string>
 
     <!-- Schedule Editor -->
     <string name="sce_title">Редактор расписания</string>

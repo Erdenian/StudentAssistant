@@ -3,6 +3,7 @@ package ru.erdenian.studentassistant.schedule
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import javax.inject.Inject
+import javax.inject.Singleton
 import ru.erdenian.studentassistant.schedule.api.ScheduleApi
 import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
 import ru.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
@@ -15,6 +16,7 @@ import ru.erdenian.studentassistant.schedule.semestereditor.SemesterEditorScreen
 public fun createScheduleApi(dependencies: ScheduleDependencies): ScheduleApi =
     ScheduleComponentHolder.create(dependencies).api
 
+@Singleton
 internal class ScheduleApiImpl @Inject constructor() : ScheduleApi {
     override fun addToGraph(scope: EntryProviderScope<NavKey>) {
         scope.entry<ScheduleRoute.Schedule> { ScheduleScreen() }

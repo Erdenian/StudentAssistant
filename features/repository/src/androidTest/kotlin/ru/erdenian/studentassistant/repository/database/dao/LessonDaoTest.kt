@@ -10,6 +10,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertThrows
@@ -485,5 +486,49 @@ internal class LessonDaoTest {
         // Запрос по другой дате
         val resOther = lessonDao.getAllFlow(semesterId, targetDate.dayOfWeek, 10, targetDate.plusDays(1)).first()
         assertTrue(resOther.isEmpty())
+    }
+
+    @Test
+    fun hasNonRecurringLessonsTest() = runTest {
+        assertFalse(lessonDao.hasNonRecurringLessons(semesterId))
+
+        // Занятие повторяется каждую неделю (111) -> Должно вернуть False
+        val lessonEveryWeek = LessonEntity("EveryWeek", "", LocalTime.MIN, LocalTime.MAX, semesterId)
+        val lessonEveryWeekId = lessonDao.insert(
+            lessonEveryWeek, emptySet(), emptySet(),
+            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
+        )
+        assertFalse(lessonDao.hasNonRecurringLessons(semesterId))
+
+        // Занятие повторяется по нечетным неделям (101) -> Должно вернуть True
+        val lessonOdd = LessonEntity("Odd", "", LocalTime.MIN, LocalTime.MAX, semesterId)
+        val lessonOddId = lessonDao.insert(
+            lessonOdd, emptySet(), emptySet(),
+            ByWeekdayEntity(DayOfWeek.TUESDAY, listOf(true, false)),
+        )
+        assertTrue(lessonDao.hasNonRecurringLessons(semesterId))
+
+        // Очистка
+        lessonDao.delete(lessonOddId)
+        assertFalse(lessonDao.hasNonRecurringLessons(semesterId))
+
+        // Занятие повторяется по четным неделям (010) -> Должно вернуть True
+        val lessonEven = LessonEntity("Even", "", LocalTime.MIN, LocalTime.MAX, semesterId)
+        val lessonEvenId = lessonDao.insert(
+            lessonEven, emptySet(), emptySet(),
+            ByWeekdayEntity(DayOfWeek.WEDNESDAY, listOf(false, true)),
+        )
+        assertTrue(lessonDao.hasNonRecurringLessons(semesterId))
+
+        // Занятие по датам -> Должно вернуть False (проверяется только by_weekday)
+        lessonDao.delete(lessonEvenId)
+        lessonDao.delete(lessonEveryWeekId)
+
+        val lessonByDate = LessonEntity("ByDate", "", LocalTime.MIN, LocalTime.MAX, semesterId)
+        lessonDao.insert(
+            lessonByDate, emptySet(), emptySet(),
+            setOf(ByDateEntity(LocalDate.now())),
+        )
+        assertFalse(lessonDao.hasNonRecurringLessons(semesterId))
     }
 }

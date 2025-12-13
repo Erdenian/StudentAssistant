@@ -38,6 +38,18 @@ import ru.erdenian.studentassistant.uikit.layout.DelayedVisibility
 import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 import ru.erdenian.studentassistant.uikit.view.HomeworkCard
 
+/**
+ * Список домашних заданий.
+ *
+ * Отображает списки просроченных, актуальных и выполненных заданий с разделителями.
+ *
+ * @param overdueHomeworks список просроченных заданий.
+ * @param actualHomeworks список актуальных заданий.
+ * @param pastHomeworks список прошедших (выполненных) заданий.
+ * @param onHomeworkClick колбэк при клике на задание.
+ * @param modifier модификатор.
+ * @param onLongHomeworkClick колбэк при длительном нажатии на задание.
+ */
 @Composable
 internal fun LazyHomeworksList(
     overdueHomeworks: List<Homework>?,

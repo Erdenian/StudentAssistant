@@ -18,11 +18,13 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import ru.erdenian.studentassistant.repository.api.LessonRepository
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.repository.api.SemesterRepository
 import ru.erdenian.studentassistant.repository.api.entity.Semester
@@ -36,8 +38,10 @@ internal class SemesterEditorViewModelTest {
 
     private val application = mockk<Application>()
     private val semesterRepository = mockk<SemesterRepository>()
+    private val lessonRepository = mockk<LessonRepository>()
     private val repositoryApi = mockk<RepositoryApi> {
         every { semesterRepository } returns this@SemesterEditorViewModelTest.semesterRepository
+        every { lessonRepository } returns this@SemesterEditorViewModelTest.lessonRepository
     }
 
     private val namesFlow = MutableStateFlow(listOf("Semester 1", "Semester 2"))
@@ -125,6 +129,7 @@ internal class SemesterEditorViewModelTest {
         val semester = Semester("Semester 3", LocalDate.of(2023, 2, 1), LocalDate.of(2023, 5, 31), 10L)
         coEvery { semesterRepository.get(semester.id) } returns semester
         coEvery { semesterRepository.update(any(), any(), any(), any()) } returns Unit
+        coEvery { lessonRepository.hasNonRecurringLessons(semester.id) } returns false
 
         val viewModel = SemesterEditorViewModel(application, repositoryApi, semester.id)
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.error.collect() }
@@ -143,6 +148,58 @@ internal class SemesterEditorViewModelTest {
                 lastDay = semester.lastDay,
             )
         }
+        assertTrue(viewModel.done.value)
+    }
+
+    @Test
+    fun `save triggers week shift dialog`() = runTest {
+        val start = LocalDate.of(2023, 9, 4) // Понедельник
+        val semester = Semester("S1", start, start.plusMonths(4), 10L)
+        coEvery { semesterRepository.get(semester.id) } returns semester
+        coEvery { lessonRepository.hasNonRecurringLessons(semester.id) } returns true
+
+        val viewModel = SemesterEditorViewModel(application, repositoryApi, semester.id)
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.error.collect() }
+        advanceUntilIdle()
+
+        // Сдвигаем на 1 неделю вперед (11 сентября - понедельник). Четность не меняется в смысле "понедельник-понедельник",
+        // но наша логика проверяет именно изменение даты понедельника первой недели.
+        // 4 сентября -> понедельник
+        // 11 сентября -> понедельник.
+        // Monday(4.09) = 4.09. Monday(11.09) = 11.09. Они не равны -> Диалог должен быть.
+        viewModel.firstDay.value = start.plusWeeks(1)
+        viewModel.save()
+        advanceUntilIdle()
+
+        assertTrue(viewModel.showWeekShiftDialog.value)
+        assertFalse(viewModel.done.value)
+
+        // Подтверждаем
+        coEvery { semesterRepository.update(any(), any(), any(), any()) } returns Unit
+        viewModel.save(confirmWeekShift = true)
+        advanceUntilIdle()
+
+        assertTrue(viewModel.done.value)
+    }
+
+    @Test
+    fun `save does not trigger week shift dialog if start week monday is same`() = runTest {
+        val start = LocalDate.of(2023, 9, 4) // Понедельник
+        val semester = Semester("S1", start, start.plusMonths(4), 10L)
+        coEvery { semesterRepository.get(semester.id) } returns semester
+        coEvery { semesterRepository.update(any(), any(), any(), any()) } returns Unit
+        coEvery { lessonRepository.hasNonRecurringLessons(semester.id) } returns true
+
+        val viewModel = SemesterEditorViewModel(application, repositoryApi, semester.id)
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.error.collect() }
+        advanceUntilIdle()
+
+        // Сдвигаем на вторник той же недели
+        viewModel.firstDay.value = start.plusDays(1)
+        viewModel.save()
+        advanceUntilIdle()
+
+        assertFalse(viewModel.showWeekShiftDialog.value)
         assertTrue(viewModel.done.value)
     }
 

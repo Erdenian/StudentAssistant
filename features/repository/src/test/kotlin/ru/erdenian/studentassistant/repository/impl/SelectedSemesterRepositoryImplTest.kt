@@ -21,7 +21,7 @@ internal class SelectedSemesterRepositoryImplTest {
 
     private val testDispatcher = UnconfinedTestDispatcher()
     private val fakeSemesterDao = FakeSemesterDao()
-    
+
     private val fixedNow = LocalDate.of(2025, 11, 30)
 
     @Before

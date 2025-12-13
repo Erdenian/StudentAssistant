@@ -271,7 +271,6 @@ internal class LessonEditorViewModel @AssistedInject constructor(
                 if (forceRenameOther) lessonRepository.renameSubject(semesterId, initial, subjectName)
             }
 
-            operationPrivate.value = null
             donePrivate.value = true
         }
     }
@@ -297,7 +296,6 @@ internal class LessonEditorViewModel @AssistedInject constructor(
                 deleteHomeworks.await()
             }
 
-            operationPrivate.value = null
             donePrivate.value = true
         }
     }

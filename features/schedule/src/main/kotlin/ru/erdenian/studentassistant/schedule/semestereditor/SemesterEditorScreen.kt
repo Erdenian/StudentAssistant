@@ -1,5 +1,8 @@
 package ru.erdenian.studentassistant.schedule.semestereditor
 
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -69,6 +72,28 @@ internal fun SemesterEditorScreen(route: ScheduleRoute.SemesterEditor) {
     }
 
     if (isSaving) ProgressDialog(stringResource(RS.se_saving))
+
+    val showWeekShiftDialog by viewModel.showWeekShiftDialog.collectAsState()
+    if (showWeekShiftDialog) {
+        AlertDialog(
+            onDismissRequest = viewModel::dismissWeekShiftDialog,
+            title = { Text(text = stringResource(RS.se_warning_week_shift_title)) },
+            text = { Text(text = stringResource(RS.se_warning_week_shift_message)) },
+            dismissButton = {
+                TextButton(
+                    onClick = viewModel::dismissWeekShiftDialog,
+                ) { Text(text = stringResource(RS.se_warning_week_shift_no)) }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.dismissWeekShiftDialog()
+                        viewModel.save(confirmWeekShift = true)
+                    },
+                ) { Text(text = stringResource(RS.se_warning_week_shift_yes)) }
+            },
+        )
+    }
 
     val context = LocalContext.current
 

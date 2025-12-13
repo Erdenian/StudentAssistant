@@ -6,6 +6,9 @@ import io.mockk.mockk
 import io.mockk.verify
 import java.time.LocalDate
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -56,13 +59,13 @@ internal class ScheduleViewModelTest {
     }
 
     @Test
-    fun `getLessons test`() {
+    fun `getLessons test`() = runTest {
         // Используем фиксированную дату
         val date = LocalDate.of(2023, 2, 14)
         val lessons = listOf(mockk<Lesson>())
-        val lessonsFlow = MutableStateFlow(lessons)
+        val lessonsFlow = flowOf(lessons)
         every { lessonRepository.getAllFlow(date) } returns lessonsFlow
 
-        assertEquals(lessonsFlow, viewModel.getLessons(date))
+        assertEquals(lessons, viewModel.getLessons(date).first())
     }
 }

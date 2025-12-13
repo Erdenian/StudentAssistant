@@ -25,6 +25,17 @@ import java.time.LocalTime
 import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppIcons
 
+/**
+ * Диалог выбора времени.
+ *
+ * Обертка над Material3 [androidx.compose.material3.TimePickerDialog].
+ * Позволяет переключаться между режимом часов (Picker) и ручного ввода (Input).
+ *
+ * @param onConfirm колбэк, вызываемый при подтверждении выбора.
+ * @param onDismiss колбэк, вызываемый при отмене или закрытии диалога.
+ * @param modifier модификатор.
+ * @param initialTime изначально выбранное время.
+ */
 @Composable
 fun TimePickerDialog(
     onConfirm: (LocalTime) -> Unit,

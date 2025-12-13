@@ -3,7 +3,6 @@ package ru.erdenian.studentassistant.repository.impl
 import java.time.LocalDate
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -20,7 +19,6 @@ import ru.erdenian.studentassistant.repository.api.entity.Semester
 import ru.erdenian.studentassistant.repository.database.dao.SemesterDao
 import ru.erdenian.studentassistant.repository.database.entity.SemesterEntity
 
-@Singleton
 internal class SelectedSemesterRepositoryImpl @Inject constructor(
     coroutineScope: CoroutineScope,
     semesterDao: SemesterDao,

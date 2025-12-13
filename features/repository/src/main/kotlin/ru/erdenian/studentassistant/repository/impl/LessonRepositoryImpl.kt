@@ -171,6 +171,8 @@ internal class LessonRepositoryImpl @Inject constructor(
         semester?.id?.let { lessonDao.hasLessonsFlow(it) } ?: flowOf(false)
     }
 
+    override suspend fun hasNonRecurringLessons(semesterId: Long) = lessonDao.hasNonRecurringLessons(semesterId)
+
     // endregion
 
     // region Subjects

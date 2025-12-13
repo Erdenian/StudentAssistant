@@ -11,9 +11,10 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
-import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import ru.erdenian.studentassistant.repository.api.SettingsRepository
 import ru.erdenian.studentassistant.repository.database.entity.ByWeekdayEntity
@@ -158,7 +159,7 @@ internal class LessonRepositoryImplTest {
         val start = LocalDate.of(2023, 9, 4) // Понедельник
         val semester = SemesterEntity("S1", start, start.plusMonths(4), id = 1)
         fakeSemesterDao.insert(semester)
-        selectedSemesterRepository.onSemesterInserted(semester.toSemester())
+        selectedSemesterRepository.selectSemester(semester.id)
 
         fakeLessonDao.insert(
             LessonEntity("L1", "Type", LocalTime.of(9, 0), LocalTime.of(10, 30), 1L, 100L),
@@ -250,5 +251,24 @@ internal class LessonRepositoryImplTest {
         val hasLessons = repository.hasLessonsFlow.first()
         // Семестр не выбран -> возвращает false
         assertFalse(hasLessons)
+    }
+
+    @Test
+    fun `hasNonRecurringLessons test`() = runTest(testDispatcher) {
+        assertFalse(repository.hasNonRecurringLessons(1L))
+
+        // Каждую неделю -> False
+        fakeLessonDao.insert(
+            LessonEntity("L1", "", LocalTime.MIN, LocalTime.MAX, 1L, 10L),
+            emptySet(), emptySet(), ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
+        )
+        assertFalse(repository.hasNonRecurringLessons(1L))
+
+        // Через неделю -> True
+        fakeLessonDao.insert(
+            LessonEntity("L2", "", LocalTime.MIN, LocalTime.MAX, 1L, 20L),
+            emptySet(), emptySet(), ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true, false), 20L),
+        )
+        assertTrue(repository.hasNonRecurringLessons(1L))
     }
 }

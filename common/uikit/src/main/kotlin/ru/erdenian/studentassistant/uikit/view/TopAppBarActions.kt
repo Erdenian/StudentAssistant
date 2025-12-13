@@ -36,6 +36,14 @@ import ru.erdenian.studentassistant.uikit.placeholder.fade
 import ru.erdenian.studentassistant.uikit.placeholder.placeholder
 import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
+/**
+ * Отображает список действий в [TopAppBar].
+ *
+ * Автоматически разделяет действия на те, которые должны быть показаны всегда (в виде иконок),
+ * и те, которые должны быть скрыты в выпадающем меню (overflow menu).
+ *
+ * @param actions список действий [ActionItem].
+ */
 @Suppress("UnusedReceiverParameter")
 @Composable
 fun RowScope.TopAppBarActions(
@@ -50,11 +58,23 @@ fun RowScope.TopAppBarActions(
     )
 }
 
+/**
+ * Представляет элемент действия в меню.
+ *
+ * @property name название действия (используется для contentDescription и текста в меню).
+ * @property loading флаг загрузки. Если true, вместо иконки отображается прогресс-бар, а кнопка неактивна.
+ * @property onClick действие при клике.
+ */
 sealed class ActionItem(
     val name: String,
     val loading: Boolean = false,
     val onClick: () -> Unit,
 ) {
+    /**
+     * Действие, которое всегда отображается в виде иконки в TopAppBar.
+     *
+     * @property imageVector иконка действия.
+     */
     class AlwaysShow(
         name: String,
         val imageVector: ImageVector,
@@ -62,6 +82,9 @@ sealed class ActionItem(
         onClick: () -> Unit,
     ) : ActionItem(name, loading, onClick)
 
+    /**
+     * Действие, которое скрывается в выпадающем меню (три точки).
+     */
     class NeverShow(
         name: String,
         loading: Boolean = false,

@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
-import ru.erdenian.studentassistant.repository.api.entity.Homework
 import ru.erdenian.studentassistant.utils.Default
 
 internal class HomeworksViewModel @Inject constructor(
@@ -38,25 +38,22 @@ internal class HomeworksViewModel @Inject constructor(
 
     fun selectSemester(semesterId: Long) = selectedSemesterRepository.selectSemester(semesterId)
 
-    private val deletedHomeworksIds = MutableStateFlow(emptySet<Long>())
-    private fun Flow<List<Homework>>.stateWithDeleted() =
-        combine(
-            this.onEach { deletedHomeworksIds.value = emptySet() },
-            deletedHomeworksIds,
-        ) { homeworks, deletedIds ->
-            if (deletedIds.isEmpty()) homeworks else homeworks.filter { it.id !in deletedIds }
-        }.stateIn(viewModelScope, SharingStarted.Default, null)
-
-    val overdue = homeworkRepository.overdueFlow.stateWithDeleted()
-    val actual = homeworkRepository.actualFlow.stateWithDeleted()
-    val past = homeworkRepository.pastFlow.stateWithDeleted()
+    val overdue = homeworkRepository.overdueFlow.asStateFlowWithLoader()
+    val actual = homeworkRepository.actualFlow.asStateFlowWithLoader()
+    val past = homeworkRepository.pastFlow.asStateFlowWithLoader()
 
     fun deleteHomework(id: Long) {
         operationPrivate.value = Operation.DELETING_HOMEWORK
         viewModelScope.launch {
             homeworkRepository.delete(id)
-            deletedHomeworksIds.value += id
             operationPrivate.value = null
         }
     }
+
+    private fun <T> Flow<T>.asStateFlowWithLoader() = selectedSemester.flatMapLatest {
+        flow {
+            emit(null)
+            emitAll(this@asStateFlowWithLoader)
+        }
+    }.stateIn(viewModelScope, SharingStarted.Default, null)
 }

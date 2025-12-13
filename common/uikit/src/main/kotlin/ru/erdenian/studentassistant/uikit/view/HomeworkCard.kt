@@ -23,7 +23,14 @@ import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
 /**
- * Карточка домашнего задания.
+ * Карточка, отображающая информацию о домашнем задании.
+ *
+ * @param subjectName название предмета.
+ * @param description описание задания.
+ * @param deadline срок сдачи (уже отформатированный).
+ * @param modifier модификатор для настройки внешнего вида.
+ * @param onClick действие при клике.
+ * @param onLongClick действие при длительном нажатии.
  */
 @Composable
 fun HomeworkCard(

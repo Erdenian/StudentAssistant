@@ -164,6 +164,22 @@ internal abstract class LessonDao {
     @Query("SELECT EXISTS(SELECT _id FROM lessons WHERE semester_id = :semesterId)")
     abstract fun hasLessonsFlow(semesterId: Long): Flow<Boolean>
 
+    /*
+     * Проверяет, есть ли в семестре занятия, которые повторяются не каждую неделю.
+     *
+     * Логика:
+     * Если строка weeks (хранящаяся как последовательность '0' и '1') содержит '0',
+     * значит есть недели, когда занятие не проводится (пропуски).
+     * В этом случае изменение даты начала семестра (сдвиг понедельника первой недели) может привести
+     * к тому, что расписание "съедет" относительно календаря (например, четные недели станут нечетными
+     * в понимании пользователя).
+     *
+     * Если же все занятия проводятся каждую неделю (все '1'), то сдвиг начала семестра
+     * не повлияет на фактическое расписание.
+     */
+    @Query("SELECT EXISTS(SELECT lesson_id FROM by_weekday WHERE lesson_id IN (SELECT _id FROM lessons WHERE semester_id = :semesterId) AND weeks LIKE '%0%')")
+    abstract suspend fun hasNonRecurringLessons(semesterId: Long): Boolean
+
     // endregion
 
     // region Subjects

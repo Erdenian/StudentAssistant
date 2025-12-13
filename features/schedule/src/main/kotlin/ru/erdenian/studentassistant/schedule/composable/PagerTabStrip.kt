@@ -9,6 +9,7 @@ import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -47,6 +48,20 @@ import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
+/**
+ * Полоса вкладок для пейджера (Pager), отображающая названия страниц.
+ *
+ * Отображает название текущей страницы по центру, а также названия предыдущей и следующей страницы по бокам.
+ * Поддерживает свайп для переключения страниц и клик по названию.
+ *
+ * @param state состояние пейджера [PagerState].
+ * @param titleGetter функция для получения названия страницы по её индексу.
+ * @param modifier модификатор.
+ * @param fontSize размер шрифта.
+ * @param textSpacing расстояние между текстом вкладок.
+ * @param underscoreHeight высота индикатора (подчеркивания) текущей вкладки.
+ * @param colors цвета компонента.
+ */
 @Composable
 internal fun PagerTabStrip(
     state: PagerState,
@@ -63,7 +78,7 @@ internal fun PagerTabStrip(
         val scrollCoroutineScope = rememberCoroutineScope()
         Layout(
             modifier = modifier
-                .height(32.dp)
+                .defaultMinSize(minHeight = 32.dp)
                 .draggable(
                     orientation = Orientation.Horizontal,
                     state = rememberDraggableState { delta ->
@@ -120,7 +135,6 @@ internal fun PagerTabStrip(
             },
         ) { measurables, constraints ->
             val width = constraints.maxWidth
-            val height = constraints.maxHeight
             val textSpacingPx = textSpacing.roundToPx()
 
             val titlesConstraints = constraints.copy(maxWidth = width / 2 - textSpacingPx, minHeight = 0)
@@ -133,6 +147,11 @@ internal fun PagerTabStrip(
             val underscorePlaceable = measurables.last().measure(
                 Constraints.fixed(currentPlaceable.width + textSpacingPx, underscoreHeight.roundToPx()),
             )
+
+            // Вычисляем высоту контейнера:
+            // Либо минимальная (32dp), либо высота текста + высота подчеркивания (если текст крупный)
+            val maxTextHeight = titlesPlaceables.maxOf { it.height }
+            val height = max(constraints.minHeight, maxTextHeight + underscorePlaceable.height)
 
             layout(width, height) {
                 val halfCurrWidth = currentPlaceable.width / 2
@@ -147,7 +166,9 @@ internal fun PagerTabStrip(
                 val currLeft = currCenter - currentPlaceable.width / 2
                 val currRight = currLeft + currentPlaceable.width
 
-                val y = (height - currentPlaceable.height) / 2
+                // Центрируем текст вертикально в доступном пространстве НАД подчеркиванием
+                val textAvailableHeight = height - underscorePlaceable.height
+                val y = (textAvailableHeight - currentPlaceable.height) / 2
 
                 currentPlaceable.placeRelative(currLeft, y)
 
@@ -170,8 +191,18 @@ internal fun PagerTabStrip(
     }
 }
 
+/**
+ * Объект, содержащий значения по умолчанию для [PagerTabStrip].
+ */
 internal object PagerTabStripDefaults {
 
+    /**
+     * Создает экземпляр [PagerTabStripColors] с заданными цветами.
+     *
+     * @param selectedTabTextColor цвет текста активной вкладки.
+     * @param notSelectedTabTextColor цвет текста неактивных вкладок.
+     * @param tabIndicatorColor цвет индикатора (подчеркивания) активной вкладки.
+     */
     @Composable
     fun pagerTabStripColors(
         selectedTabTextColor: Color = MaterialTheme.colorScheme.primary,
@@ -184,15 +215,23 @@ internal object PagerTabStripDefaults {
     )
 }
 
+/**
+ * Представляет набор цветов, используемых в [PagerTabStrip].
+ *
+ * См. [PagerTabStripDefaults.pagerTabStripColors] для реализации по умолчанию.
+ */
 @Stable
 internal interface PagerTabStripColors {
 
+    /** Цвет текста активной (выбранной) вкладки. */
     @Composable
     fun selectedTabTextColor(): State<Color>
 
+    /** Цвет текста неактивных вкладок (слева и справа от выбранной). */
     @Composable
     fun notSelectedTabTextColor(): State<Color>
 
+    /** Цвет индикатора (подчеркивания) под активной вкладкой. */
     @Composable
     fun tabIndicatorColor(): State<Color>
 }

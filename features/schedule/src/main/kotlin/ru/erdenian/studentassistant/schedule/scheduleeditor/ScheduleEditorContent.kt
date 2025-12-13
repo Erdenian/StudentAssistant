@@ -114,6 +114,7 @@ internal fun ScheduleEditorContent(
 
             HorizontalPager(
                 state = pagerState,
+                beyondViewportPageCount = 2,
                 modifier = Modifier.fillMaxSize(),
             ) { page ->
                 val lessons by rememberLessons(page)

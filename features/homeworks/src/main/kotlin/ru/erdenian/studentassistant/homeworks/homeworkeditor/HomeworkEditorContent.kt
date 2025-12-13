@@ -1,57 +1,41 @@
 package ru.erdenian.studentassistant.homeworks.homeworkeditor
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.interaction.InteractionSource
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsFocusedAsState
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextFieldColors
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.State
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
@@ -59,8 +43,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import ru.erdenian.studentassistant.sampledata.Homeworks
 import ru.erdenian.studentassistant.sampledata.Lessons
 import ru.erdenian.studentassistant.sampledata.Semesters
@@ -75,8 +57,10 @@ import ru.erdenian.studentassistant.uikit.placeholder.fade
 import ru.erdenian.studentassistant.uikit.placeholder.placeholder
 import ru.erdenian.studentassistant.uikit.utils.ScreenPreviews
 import ru.erdenian.studentassistant.uikit.view.ActionItem
+import ru.erdenian.studentassistant.uikit.view.DateField
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun HomeworkEditorContent(
     isProgress: Boolean,
@@ -127,12 +111,14 @@ internal fun HomeworkEditorContent(
     modifier = Modifier.imePadding(),
 ) { paddingValues ->
     Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier
             .padding(paddingValues)
             .padding(
                 horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
                 vertical = MaterialTheme.dimensions.screenPaddingVertical,
-            ),
+            )
+            .fillMaxSize(),
     ) {
         val descriptionFocusRequester = remember { FocusRequester() }
         val currentExistingSubjects by rememberUpdatedState(existingSubjects)
@@ -168,7 +154,7 @@ internal fun HomeworkEditorContent(
                 singleLine = true,
                 colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
                 modifier = Modifier
-                    .menuAnchor(MenuAnchorType.PrimaryEditable)
+                    .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
                     .fillMaxWidth()
                     .placeholder(
                         visible = isProgress,
@@ -197,113 +183,63 @@ internal fun HomeworkEditorContent(
             }
         }
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(vertical = 8.dp),
-        ) {
-            var showDatePicker by remember { mutableStateOf(false) }
-
-            Text(
-                text = stringResource(RS.he_deadline_label),
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.weight(1.0f),
-            )
-
-            TextButton(
-                onClick = { showDatePicker = true },
-                enabled = !isProgress,
-                modifier = Modifier.placeholder(
+        var showDatePicker by remember { mutableStateOf(false) }
+        DateField(
+            value = deadline,
+            label = stringResource(RS.he_deadline_label),
+            onClick = { showDatePicker = true },
+            enabled = !isProgress,
+            modifier = Modifier
+                .fillMaxWidth()
+                .placeholder(
                     visible = isProgress,
                     highlight = PlaceholderHighlight.fade(),
                 ),
-            ) {
-                val deadlineFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
-                Text(text = deadline.format(deadlineFormatter))
-            }
+        )
 
-            if (showDatePicker) {
-                DatePickerDialog(
-                    onConfirm = { newValue ->
-                        showDatePicker = false
-                        onDeadlineChange(newValue)
-                    },
-                    onDismiss = { showDatePicker = false },
-                    initialSelectedDate = deadline,
-                    datesRange = semesterDates,
-                )
-            }
-        }
-
-        AnimatedVisibility(
-            visible = !isProgress,
-            enter = fadeIn(),
-            exit = fadeOut(),
-        ) {
-            SimpleTextField(
-                value = description,
-                onValueChange = onDescriptionChange,
-                label = { Text(text = stringResource(RS.he_description)) },
-                enabled = !isProgress,
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .focusRequester(descriptionFocusRequester),
+        if (showDatePicker) {
+            DatePickerDialog(
+                onConfirm = { newValue ->
+                    showDatePicker = false
+                    onDeadlineChange(newValue)
+                },
+                onDismiss = { showDatePicker = false },
+                initialSelectedDate = deadline,
+                datesRange = semesterDates,
             )
         }
-    }
-}
 
-@Composable
-private fun SimpleTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    label: @Composable (() -> Unit)? = null,
-    enabled: Boolean = true,
-    keyboardOptions: KeyboardOptions = KeyboardOptions(),
-    colors: TextFieldColors = TextFieldDefaults.colors(),
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-) = Box {
-    @Composable
-    fun TextFieldColors.textColor(
-        enabled: Boolean,
-        interactionSource: InteractionSource,
-    ): State<Color> {
-        val focused by interactionSource.collectIsFocusedAsState()
+        // Используем TextFieldState для нового API
+        val descriptionState = rememberTextFieldState(initialText = description)
 
-        val targetValue = when {
-            !enabled -> disabledTextColor
-            focused -> focusedTextColor
-            else -> unfocusedTextColor
-        }
-        return rememberUpdatedState(targetValue)
-    }
-
-    val textStyle = LocalTextStyle.current
-    val textColor = textStyle.color.takeOrElse { colors.textColor(enabled, interactionSource).value }
-
-    BasicTextField(
-        value = value,
-        onValueChange = onValueChange,
-        enabled = enabled,
-        textStyle = textStyle.merge(TextStyle(color = textColor)),
-        keyboardOptions = keyboardOptions,
-        cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
-        interactionSource = interactionSource,
-        modifier = modifier,
-    )
-
-    if (value.isEmpty() && (label != null)) {
-        @Composable
-        fun TextFieldColors.labelColor(enabled: Boolean): State<Color> {
-            val targetValue = if (enabled) unfocusedLabelColor else disabledLabelColor
-            return rememberUpdatedState(targetValue)
+        // Синхронизация: если описание изменилось извне (ViewModel), обновляем State
+        LaunchedEffect(description) {
+            if (descriptionState.text.toString() != description) {
+                descriptionState.edit { replace(0, length, description) }
+            }
         }
 
-        val contentColor = colors.labelColor(enabled).value
-        CompositionLocalProvider(
-            LocalContentColor provides contentColor,
-            content = label,
+        // Синхронизация: слушаем изменения State и передаем их наверх
+        LaunchedEffect(descriptionState) {
+            snapshotFlow { descriptionState.text }
+                .collect { onDescriptionChange(it.toString()) }
+        }
+
+        // Используем перегрузку с TextFieldState, так как она автоматически обрабатывает
+        // прокрутку к курсору (bringIntoView) при открытии клавиатуры и изменении размера поля,
+        // в отличие от старых перегрузок со String/TextFieldValue.
+        OutlinedTextField(
+            state = descriptionState,
+            label = { Text(text = stringResource(RS.he_description)) },
+            enabled = !isProgress,
+            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
+            modifier = Modifier
+                .fillMaxSize()
+                .placeholder(
+                    visible = isProgress,
+                    highlight = PlaceholderHighlight.fade(),
+                )
+                .focusRequester(descriptionFocusRequester),
         )
     }
 }

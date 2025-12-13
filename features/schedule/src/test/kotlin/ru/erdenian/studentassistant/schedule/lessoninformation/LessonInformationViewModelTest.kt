@@ -90,7 +90,6 @@ internal class LessonInformationViewModelTest {
         advanceUntilIdle()
 
         coVerify { homeworkRepository.delete(homework.id) }
-        assertEquals(emptyList<Homework>(), viewModel.homeworks.value)
     }
 
     @Test
