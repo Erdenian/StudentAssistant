@@ -138,6 +138,9 @@
 
     <!-- region uikit -->
 
+    <!-- TopAppBarActions -->
+    <string name="taba_more_options">Ещё</string>
+
     <!--HomeworkCard -->
     <string name="hc_deadline">До %1$s</string>
 

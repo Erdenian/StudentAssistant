@@ -26,8 +26,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.AutoMirrored
@@ -127,7 +129,10 @@ private fun TopAppBarActionsContent(
         if (neverShowActions.isNotEmpty()) {
             Box {
                 IconButton(onClick = onExpandClick) {
-                    Icon(imageVector = AppIcons.MoreVert, contentDescription = null)
+                    Icon(
+                        imageVector = AppIcons.MoreVert,
+                        contentDescription = stringResource(RS.taba_more_options),
+                    )
                 }
 
                 DropdownMenu(
