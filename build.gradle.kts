@@ -166,9 +166,11 @@ subprojectsAfterEvaluate {
             testedAbi = "x86_64"
         }
 
-        dependencies {
+        project.dependencies {
             if (project.plugins.hasPlugin(libs.plugins.kotlin.compose.get().pluginId)) {
-                "implementation"(platform(libs.androidx.compose.bom))
+                val bom = platform(libs.androidx.compose.bom)
+                "implementation"(bom)
+                "androidTestImplementation"(bom)
             }
 
             configurations.findByName("coreLibraryDesugaring")?.invoke(libs.androidTools.desugarJdkLibs)

@@ -21,6 +21,9 @@ android {
 
         resourceConfigurations.retainAll(setOf("ru"))
         base.archivesName = "${rootProject.name}-$versionName"
+
+        // Указываем наш кастомный TestRunner
+        testInstrumentationRunner = "ru.erdenian.studentassistant.StudentAssistantTestRunner"
     }
 
     // Workaround for: "Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so."
@@ -137,6 +140,13 @@ dependencies {
     // region Core
     ksp(libs.core.dagger.compiler)
     implementation(libs.core.dagger)
+    // endregion
+
+    // region Tests
+    androidTestImplementation(libs.bundles.test.android)
+    androidTestImplementation(libs.bundles.test.compose)
+    debugImplementation(libs.test.compose.manifest)
+    // endregion
 }
 
 dependencies {
