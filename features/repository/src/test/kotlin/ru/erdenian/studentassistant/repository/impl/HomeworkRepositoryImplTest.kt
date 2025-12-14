@@ -90,13 +90,13 @@ internal class HomeworkRepositoryImplTest {
         fakeHomeworkDao.insert(HomeworkEntity("H1", "D", today, 1L))
         fakeHomeworkDao.insert(HomeworkEntity("H2", "D", today, 2L))
 
-        // Выбор семестра 1
+        // Выбор расписания 1
         selectedSemesterRepository.selectSemester(1L)
         val list1 = repository.allFlow.first()
         assertEquals(1, list1.size)
         assertEquals("H1", list1[0].subjectName)
 
-        // Выбор семестра 2
+        // Выбор расписания 2
         selectedSemesterRepository.selectSemester(2L)
         val list2 = repository.allFlow.first()
         assertEquals(1, list2.size)

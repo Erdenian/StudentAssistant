@@ -48,6 +48,17 @@ import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.LessonCard
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
+/**
+ * UI контент экрана информации о занятии.
+ *
+ * @param lesson занятие.
+ * @param homeworks список домашних заданий по предмету.
+ * @param onBackClick колбэк нажатия назад.
+ * @param onEditClick колбэк нажатия редактирования.
+ * @param onHomeworkClick колбэк нажатия на домашнее задание.
+ * @param onAddHomeworkClick колбэк добавления домашнего задания.
+ * @param onDeleteHomeworkClick колбэк удаления домашнего задания.
+ */
 @Composable
 internal fun LessonInformationContent(
     lesson: Lesson,

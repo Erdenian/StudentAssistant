@@ -19,6 +19,13 @@ import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.utils.Default
 
+/**
+ * ViewModel для экрана информации о занятии.
+ *
+ * Отображает подробную информацию о занятии и связанные с ним домашние задания.
+ *
+ * @param lessonArg занятие, информация о котором отображается.
+ */
 internal class LessonInformationViewModel @AssistedInject constructor(
     application: Application,
     repositoryApi: RepositoryApi,
@@ -43,14 +50,30 @@ internal class LessonInformationViewModel @AssistedInject constructor(
     private val lessonPrivate = lessonRepository.getFlow(lessonArg.id)
         .shareIn(scope = viewModelScope, started = SharingStarted.Default)
 
+    /**
+     * Поток актуальных данных о занятии.
+     *
+     * Обновляется при изменениях в БД.
+     */
     val lesson = lessonPrivate.stateIn(viewModelScope, SharingStarted.Default, lessonArg)
 
+    /**
+     * Поток флага удаления занятия.
+     *
+     * Становится true, если занятие было удалено из БД (например, с другого экрана или при синхронизации).
+     */
     val isDeleted = lessonPrivate.map { it == null }.stateIn(viewModelScope, SharingStarted.Default, false)
 
+    /**
+     * Поток списка домашних заданий для данного предмета.
+     */
     val homeworks = lessonPrivate.flatMapLatest { lesson ->
         lesson?.let { homeworkRepository.getActualFlow(it.subjectName) } ?: flowOf(emptyList())
     }.stateIn(viewModelScope, SharingStarted.Default, null)
 
+    /**
+     * Удаляет домашнее задание по ID.
+     */
     fun deleteHomework(id: Long) {
         operationPrivate.value = Operation.DELETING_HOMEWORK
         viewModelScope.launch {

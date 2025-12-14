@@ -33,7 +33,7 @@ internal class SelectedSemesterRepositoryImpl @Inject constructor(
     private val deletedSemesterIds = AtomicReference(emptySet<Long>())
     internal fun onSemesterDeleted(semesterId: Long) {
         deletedSemesterIds.getAndUpdate { it + semesterId }
-        selectedSemesterIdFlow.value = null // Чтобы выбрать семестр по умолчанию
+        selectedSemesterIdFlow.value = null // Чтобы выбрать расписание по умолчанию
     }
 
     private val selectedSemesterIdFlow = MutableStateFlow<Long?>(null)
@@ -66,7 +66,7 @@ internal class SelectedSemesterRepositoryImpl @Inject constructor(
             if (semester != null) {
                 emit(semester)
             } else {
-                // Выбранный семестр был удален, выбираем семестр по умолчанию из оставшихся
+                // Выбранное расписание было удалено, выбираем расписание по умолчанию из оставшихся
                 selectDefault()
             }
         }

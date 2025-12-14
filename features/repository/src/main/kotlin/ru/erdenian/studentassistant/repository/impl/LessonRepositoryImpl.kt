@@ -149,9 +149,9 @@ internal class LessonRepositoryImpl @Inject constructor(
         if (semester == null) return@flatMapLatest flowOf(emptyList())
         val weekNumber = semester.getWeekNumber(day)
 
-        // Если день за пределами семестра (раньше), то weekNumber < 0.
-        // Для таких случаев SQL с substr(weeks, 0, 1) вернет пустоту, что корректно (пар по неделям нет).
-        // Но пары по датам (ByDates) могут существовать теоретически.
+        // Если день за пределами расписания (раньше), то weekNumber < 0.
+        // Для таких случаев SQL с substr(weeks, 0, 1) вернет пустоту, что корректно
+        // (занятий по неделям нет). Но занятия по датам (ByDates) могут существовать теоретически.
         // Однако логичнее просто вернуть запрос.
 
         lessonDao.getAllFlow(

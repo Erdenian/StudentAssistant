@@ -19,6 +19,14 @@ import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.utils.Default
 
+/**
+ * ViewModel для экрана редактора расписания.
+ *
+ * Позволяет просматривать и редактировать расписание.
+ * Поддерживает удаление расписания и удаление отдельных занятий (с опциональным удалением домашних заданий).
+ *
+ * @param semesterId идентификатор редактируемого расписания.
+ */
 internal class ScheduleEditorViewModel @AssistedInject constructor(
     application: Application,
     repositoryApi: RepositoryApi,
@@ -45,9 +53,13 @@ internal class ScheduleEditorViewModel @AssistedInject constructor(
     }
 
     private val operationPrivate = MutableStateFlow<Operation?>(null)
+
+    /** Поток текущей выполняемой операции (для отображения индикатора прогресса). */
     val operation = operationPrivate.asStateFlow()
 
     private val isDeletedPrivate = MutableStateFlow(false)
+
+    /** Поток флага удаления расписания (для навигации назад после удаления). */
     val isDeleted = isDeletedPrivate.asStateFlow()
 
     private val lessonsFlows = object : LinkedHashMap<DayOfWeek, Flow<List<Lesson>>>(
@@ -57,6 +69,9 @@ internal class ScheduleEditorViewModel @AssistedInject constructor(
             size > LESSONS_FLOWS_CACHE_SIZE
     }
 
+    /**
+     * Возвращает поток занятий для указанного дня недели в текущем расписании.
+     */
     fun getLessons(dayOfWeek: DayOfWeek): Flow<List<Lesson>> = synchronized(lessonsFlows) {
         lessonsFlows.getOrPut(dayOfWeek) {
             lessonRepository.getAllFlow(semesterId, dayOfWeek)
@@ -64,6 +79,9 @@ internal class ScheduleEditorViewModel @AssistedInject constructor(
         }
     }
 
+    /**
+     * Удаляет текущее расписание.
+     */
     fun deleteSemester() {
         operationPrivate.value = Operation.DELETING_SEMESTER
         viewModelScope.launch {
@@ -73,6 +91,11 @@ internal class ScheduleEditorViewModel @AssistedInject constructor(
         }
     }
 
+    /**
+     * Проверяет, является ли удаляемое занятие последним по данному предмету и есть ли для него домашние задания.
+     *
+     * Используется для отображения диалога с предложением удалить также и домашние задания.
+     */
     suspend fun isLastLessonOfSubjectsAndHasHomeworks(lesson: Lesson): Boolean = coroutineScope {
         val subjectName = lesson.subjectName
         val isLastLesson = async { lessonRepository.getCount(semesterId, subjectName) == 1 }
@@ -80,6 +103,12 @@ internal class ScheduleEditorViewModel @AssistedInject constructor(
         isLastLesson.await() && hasHomeworks.await()
     }
 
+    /**
+     * Удаляет занятие.
+     *
+     * @param lesson удаляемое занятие.
+     * @param withHomeworks если true, удаляет также все домашние задания по этому предмету.
+     */
     fun deleteLesson(lesson: Lesson, withHomeworks: Boolean = false) {
         operationPrivate.value = Operation.DELETING_LESSON
         viewModelScope.launch {

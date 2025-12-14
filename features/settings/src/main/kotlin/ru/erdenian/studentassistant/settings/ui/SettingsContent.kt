@@ -21,6 +21,18 @@ import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.uikit.utils.ScreenPreviews
 
+/**
+ * Отображает список настроек приложения.
+ *
+ * @param defaultStartTime текущее время начала занятий.
+ * @param onDefaultStartTimeChange колбэк изменения времени начала занятий.
+ * @param defaultLessonDuration текущая длительность занятия.
+ * @param onDefaultLessonDurationChange колбэк изменения длительности занятия.
+ * @param defaultBreakDuration текущая длительность перемены.
+ * @param onDefaultBreakDurationChange колбэк изменения длительности перемены.
+ * @param isAdvancedWeeksSelectorEnabled включен ли расширенный выбор недель.
+ * @param isAdvancedWeeksSelectorEnabledChange колбэк изменения настройки расширенного выбора недель.
+ */
 @Composable
 internal fun SettingsContent(
     defaultStartTime: LocalTime,

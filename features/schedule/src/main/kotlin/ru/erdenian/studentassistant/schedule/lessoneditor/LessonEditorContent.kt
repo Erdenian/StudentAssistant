@@ -57,6 +57,39 @@ import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.TimeField
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
+/**
+ * UI контент экрана редактора занятия.
+ *
+ * Отображает форму для ввода данных о занятии (предмет, время, повторения и т.д.).
+ *
+ * @param isProgress флаг загрузки.
+ * @param isEditing режим редактирования.
+ * @param subjectName название предмета.
+ * @param existingSubjects список существующих предметов (для автодополнения).
+ * @param subjectNameErrorMessage сообщение об ошибке названия.
+ * @param type тип занятия.
+ * @param existingTypes список существующих типов (для автодополнения).
+ * @param teachers преподаватели.
+ * @param existingTeachers список существующих преподавателей.
+ * @param classrooms аудитории.
+ * @param existingClassrooms список существующих аудиторий.
+ * @param startTime время начала.
+ * @param endTime время окончания.
+ * @param dayOfWeek день недели.
+ * @param weeks список недель повторения.
+ * @param isAdvancedWeeksSelectorEnabled включен ли расширенный режим выбора недель.
+ * @param onBackClick колбэк нажатия назад.
+ * @param onSaveClick колбэк сохранения.
+ * @param onDeleteClick колбэк удаления.
+ * @param onSubjectNameChange колбэк изменения названия.
+ * @param onTypeChange колбэк изменения типа.
+ * @param onTeachersChange колбэк изменения преподавателей.
+ * @param onClassroomsChange колбэк изменения аудиторий.
+ * @param onStartTimeChange колбэк изменения времени начала.
+ * @param onEndTimeChange колбэк изменения времени окончания.
+ * @param onDayOfWeekChange колбэк изменения дня недели.
+ * @param onWeeksChange колбэк изменения недель повторения.
+ */
 @Composable
 internal fun LessonEditorContent(
     isProgress: Boolean,
