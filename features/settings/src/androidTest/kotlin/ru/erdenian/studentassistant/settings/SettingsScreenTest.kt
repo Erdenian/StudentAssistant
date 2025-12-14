@@ -12,8 +12,11 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
 import io.mockk.mockk
+import java.time.Duration
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -40,6 +43,16 @@ internal class SettingsScreenTest {
 
     @Before
     fun setUp() {
+        // СБРОС СИНГЛТОНА: Очищаем поле 'instance' в SettingsComponentHolder через рефлексию
+        // для принудительного пересоздания графа зависимостей перед каждым тестом.
+        try {
+            val instanceField = SettingsComponentHolder::class.java.getDeclaredField("instance")
+            instanceField.isAccessible = true
+            instanceField.set(SettingsComponentHolder, null)
+        } catch (_: Exception) {
+            // Игнорируем, если поле еще не инициализировано
+        }
+
         val dependencies = object : SettingsDependencies {
             override val application: Application = ApplicationProvider.getApplicationContext()
             override val repositoryApi: RepositoryApi = object : RepositoryApi {
@@ -53,39 +66,105 @@ internal class SettingsScreenTest {
         }
 
         SettingsComponentHolder.create(dependencies)
+
+        // Сбрасываем данные репозитория в начальное состояние
+        fakeSettingsRepository.defaultStartTime = LocalTime.of(9, 0)
+        fakeSettingsRepository.defaultLessonDuration = Duration.ofMinutes(90)
+        fakeSettingsRepository.defaultBreakDuration = Duration.ofMinutes(10)
+        fakeSettingsRepository.isAdvancedWeeksSelectorEnabled = false
     }
 
-    @Test
-    fun verifySettingsDisplayAndInteraction() {
+    private fun launchScreen() {
         val navigator = mockk<Navigator>(relaxed = true)
-
         composeTestRule.setContent {
             CompositionLocalProvider(LocalNavigator provides navigator) {
                 SettingsScreen()
             }
         }
+    }
 
-        // 1. Проверяем отображение времени
+    @Test
+    fun verifyDefaultStartTimeChange() {
+        launchScreen()
+
+        val title = context.getString(RS.st_default_start_time)
         val timeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
-        val expectedTimeText = fakeSettingsRepository.defaultStartTime.format(timeFormatter)
 
-        composeTestRule.onNodeWithText(expectedTimeText).assertIsDisplayed()
+        val initialTimeStr = fakeSettingsRepository.defaultStartTime.format(timeFormatter)
+        composeTestRule.onNodeWithText(title).assertIsDisplayed()
+        composeTestRule.onNodeWithText(initialTimeStr).assertIsDisplayed()
 
-        // Проверяем длительность занятия (01:30 - 90 минут)
+        composeTestRule.onNodeWithText(title).performClick()
+
+        val okButtonText = context.getString(android.R.string.ok)
+        composeTestRule.onNodeWithText(okButtonText).assertIsDisplayed()
+        composeTestRule.onNodeWithText(okButtonText).performClick()
+        composeTestRule.onNodeWithText(okButtonText).assertDoesNotExist()
+    }
+
+    @Test
+    fun verifyLessonDurationChange() {
+        launchScreen()
+
+        val title = context.getString(RS.st_default_lesson_duration)
+
+        composeTestRule.onNodeWithText(title).assertIsDisplayed()
         composeTestRule.onNodeWithText("01:30").assertIsDisplayed()
 
-        // 2. Проверяем Switch "Расширенный выбор недель"
-        val advancedWeeksTitle = context.getString(RS.st_is_advanced_weeks_selector_enabled)
-        composeTestRule.onNodeWithText(advancedWeeksTitle).assertIsDisplayed()
+        composeTestRule.onNodeWithText(title).performClick()
+
+        val okButtonText = context.getString(android.R.string.ok)
+        composeTestRule.onNodeWithText(okButtonText).assertIsDisplayed()
+
+        composeTestRule.onNodeWithText(okButtonText).performClick()
+        composeTestRule.onNodeWithText(okButtonText).assertDoesNotExist()
+    }
+
+    @Test
+    fun verifyBreakDurationChange() {
+        launchScreen()
+
+        val title = context.getString(RS.st_default_break_duration)
+
+        composeTestRule.onNodeWithText(title).assertIsDisplayed()
+        composeTestRule.onNodeWithText("00:10").assertIsDisplayed()
+
+        composeTestRule.onNodeWithText(title).performClick()
+
+        val cancelButtonText = context.getString(android.R.string.cancel)
+        composeTestRule.onNodeWithText(cancelButtonText).performClick()
+
+        assertEquals(Duration.ofMinutes(10), fakeSettingsRepository.defaultBreakDuration)
+    }
+
+    @Test
+    fun verifyAdvancedWeeksSelectorToggle() {
+        launchScreen()
+
+        val title = context.getString(RS.st_is_advanced_weeks_selector_enabled)
+        composeTestRule.onNodeWithText(title).assertIsDisplayed()
 
         val switchNode = composeTestRule.onNode(isToggleable())
 
+        // Включение
         switchNode.assertIsOff()
-        assertFalse(fakeSettingsRepository.isAdvancedWeeksSelectorEnabled)
-
         switchNode.performClick()
 
+        composeTestRule.waitForIdle()
         switchNode.assertIsOn()
-        assertTrue(fakeSettingsRepository.isAdvancedWeeksSelectorEnabled)
+        assertTrue(
+            "Состояние репозитория должно быть true после включения",
+            fakeSettingsRepository.isAdvancedWeeksSelectorEnabled,
+        )
+
+        // Выключение
+        switchNode.performClick()
+
+        composeTestRule.waitForIdle()
+        switchNode.assertIsOff()
+        assertFalse(
+            "Состояние репозитория должно быть false после выключения",
+            fakeSettingsRepository.isAdvancedWeeksSelectorEnabled,
+        )
     }
 }
