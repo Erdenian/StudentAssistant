@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 import java.time.LocalDate
 
 plugins {
@@ -19,7 +21,7 @@ android {
         versionCode = 28
         versionName = "0.7.4"
 
-        resourceConfigurations.retainAll(setOf("ru"))
+        androidResources.localeFilters += "ru"
         base.archivesName = "${rootProject.name}-$versionName"
 
         // Указываем наш кастомный TestRunner

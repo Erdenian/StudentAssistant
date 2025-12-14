@@ -7,8 +7,6 @@ plugins {
 
 android {
     namespace = "ru.erdenian.studentassistant.repository"
-
-    testOptions.unitTests.all { it.jvmArgs("--add-opens=java.base/java.time=ALL-UNNAMED") }
 }
 
 ksp {

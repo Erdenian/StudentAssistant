@@ -50,7 +50,7 @@ internal class HomeworksScreenTest {
             val instanceField = HomeworksComponentHolder::class.java.getDeclaredField("instance")
             instanceField.isAccessible = true
             instanceField.set(HomeworksComponentHolder, null)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             // Ignored
         }
 

@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
@@ -76,6 +78,7 @@ subprojects {
             freeCompilerArgs.addAll(
                 "-Xjvm-default=all",
                 "-opt-in=kotlin.RequiresOptIn",
+                "-Xannotation-default-target=param-property",
 
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
@@ -159,11 +162,19 @@ subprojectsAfterEvaluate {
             }
         }
 
-        testOptions.managedDevices.devices.create<com.android.build.api.dsl.ManagedVirtualDevice>("testDevice") {
-            device = "Pixel 4"
-            apiLevel = 34
-            systemImageSource = "aosp"
-            testedAbi = "x86_64"
+        testOptions.unitTests.all { it.jvmArgs("--add-opens=java.base/java.time=ALL-UNNAMED") }
+        tasks.withType(Test::class) { jvmArgs = listOf("-XX:+EnableDynamicAgentLoading") }
+
+        val androidTestDir = project.file("src/androidTest")
+        val androidTestExists = androidTestDir.exists() && androidTestDir.walk().any { it.isFile }
+
+        if (androidTestExists) {
+            testOptions.managedDevices.allDevices.create<com.android.build.api.dsl.ManagedVirtualDevice>("testDevice") {
+                device = "Pixel 4"
+                apiLevel = 34
+                systemImageSource = "aosp"
+                testedAbi = "x86_64"
+            }
         }
 
         project.dependencies {
@@ -175,15 +186,6 @@ subprojectsAfterEvaluate {
 
             configurations.findByName("coreLibraryDesugaring")?.invoke(libs.androidTools.desugarJdkLibs)
         }
-    }
-}
-
-subprojectsAfterEvaluate {
-    configureAndroidIfExists {
-        val androidTestDir = project.file("src/androidTest")
-        val androidTestExists = androidTestDir.exists() && androidTestDir.walk().any { it.isFile }
-
-        if (!androidTestExists) testOptions.managedDevices.devices.clear()
     }
 }
 

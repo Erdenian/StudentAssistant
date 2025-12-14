@@ -57,7 +57,8 @@ internal class LessonInformationScreenTest {
             val instanceField = ScheduleComponentHolder::class.java.getDeclaredField("instance")
             instanceField.isAccessible = true
             instanceField.set(ScheduleComponentHolder, null)
-        } catch (e: Exception) { /* Ignored */
+        } catch (_: Exception) {
+            // Ignored
         }
 
         val dependencies = object : ScheduleDependencies {
