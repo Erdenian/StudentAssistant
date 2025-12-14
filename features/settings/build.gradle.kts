@@ -23,6 +23,9 @@ dependencies {
 
     // region Tests
     testImplementation(libs.bundles.test.unit)
+    androidTestImplementation(libs.bundles.test.android)
+    androidTestImplementation(libs.bundles.test.compose)
+    debugImplementation(libs.test.compose.manifest)
     // endregion
 
     // region AndroidX
