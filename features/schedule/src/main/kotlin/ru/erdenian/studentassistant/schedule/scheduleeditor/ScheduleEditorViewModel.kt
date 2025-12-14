@@ -22,10 +22,10 @@ import ru.erdenian.studentassistant.utils.Default
 /**
  * ViewModel для экрана редактора расписания.
  *
- * Позволяет просматривать и редактировать расписание для конкретного семестра.
- * Поддерживает удаление семестра и удаление отдельных занятий (с опциональным удалением домашних заданий).
+ * Позволяет просматривать и редактировать расписание.
+ * Поддерживает удаление расписания и удаление отдельных занятий (с опциональным удалением домашних заданий).
  *
- * @param semesterId идентификатор редактируемого семестра.
+ * @param semesterId идентификатор редактируемого расписания.
  */
 internal class ScheduleEditorViewModel @AssistedInject constructor(
     application: Application,
@@ -59,7 +59,7 @@ internal class ScheduleEditorViewModel @AssistedInject constructor(
 
     private val isDeletedPrivate = MutableStateFlow(false)
 
-    /** Поток флага удаления семестра (для навигации назад после удаления). */
+    /** Поток флага удаления расписания (для навигации назад после удаления). */
     val isDeleted = isDeletedPrivate.asStateFlow()
 
     private val lessonsFlows = object : LinkedHashMap<DayOfWeek, Flow<List<Lesson>>>(
@@ -70,7 +70,7 @@ internal class ScheduleEditorViewModel @AssistedInject constructor(
     }
 
     /**
-     * Возвращает поток занятий для указанного дня недели в текущем семестре.
+     * Возвращает поток занятий для указанного дня недели в текущем расписании.
      */
     fun getLessons(dayOfWeek: DayOfWeek): Flow<List<Lesson>> = synchronized(lessonsFlows) {
         lessonsFlows.getOrPut(dayOfWeek) {
@@ -80,7 +80,7 @@ internal class ScheduleEditorViewModel @AssistedInject constructor(
     }
 
     /**
-     * Удаляет текущий семестр.
+     * Удаляет текущее расписание.
      */
     fun deleteSemester() {
         operationPrivate.value = Operation.DELETING_SEMESTER

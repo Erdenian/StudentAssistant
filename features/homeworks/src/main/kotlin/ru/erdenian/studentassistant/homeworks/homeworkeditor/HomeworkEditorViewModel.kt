@@ -25,7 +25,7 @@ import ru.erdenian.studentassistant.utils.Default
 /**
  * ViewModel для экрана редактора домашнего задания.
  *
- * @param semesterId идентификатор семестра.
+ * @param semesterId идентификатор расписания.
  * @param homeworkId идентификатор задания (для редактирования).
  * @param subjectName предустановленное название предмета (для создания).
  */

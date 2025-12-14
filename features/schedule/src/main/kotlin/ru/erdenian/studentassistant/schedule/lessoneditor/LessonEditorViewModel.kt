@@ -32,7 +32,7 @@ import ru.erdenian.studentassistant.utils.toSingleLine
  *
  * Поддерживает создание, редактирование и копирование занятий.
  *
- * @param semesterId идентификатор семестра.
+ * @param semesterId идентификатор расписания.
  * @param lessonId идентификатор занятия (если редактирование или копирование).
  * @param copy true, если создается копия существующего занятия.
  * @param dayOfWeek день недели для нового занятия.

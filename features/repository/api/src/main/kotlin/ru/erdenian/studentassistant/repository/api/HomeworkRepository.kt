@@ -17,7 +17,7 @@ interface HomeworkRepository {
      * @param subjectName название предмета.
      * @param description описание задания.
      * @param deadline срок сдачи.
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      */
     suspend fun insert(subjectName: String, description: String, deadline: LocalDate, semesterId: Long)
 
@@ -28,7 +28,7 @@ interface HomeworkRepository {
      * @param subjectName название предмета.
      * @param description описание задания.
      * @param deadline срок сдачи.
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      */
     suspend fun update(id: Long, subjectName: String, description: String, deadline: LocalDate, semesterId: Long)
 
@@ -67,12 +67,12 @@ interface HomeworkRepository {
     fun getFlow(id: Long): Flow<Homework?>
 
     /**
-     * Возвращает поток всех домашних заданий для текущего выбранного семестра.
+     * Возвращает поток всех домашних заданий для текущего выбранного расписания.
      */
     val allFlow: Flow<List<Homework>>
 
     /**
-     * Возвращает общее количество домашних заданий в текущем выбранном семестре.
+     * Возвращает общее количество домашних заданий в текущем выбранном расписании.
      *
      * @return количество заданий.
      */
@@ -83,7 +83,7 @@ interface HomeworkRepository {
     // region By subject name
 
     /**
-     * Возвращает поток всех домашних заданий по конкретному предмету в текущем семестре.
+     * Возвращает поток всех домашних заданий по конкретному предмету в текущем расписании.
      *
      * @param subjectName название предмета.
      * @return поток списка заданий.
@@ -91,7 +91,7 @@ interface HomeworkRepository {
     fun getAllFlow(subjectName: String): Flow<List<Homework>>
 
     /**
-     * Возвращает количество домашних заданий по конкретному предмету в текущем семестре.
+     * Возвращает количество домашних заданий по конкретному предмету в текущем расписании.
      *
      * @param subjectName название предмета.
      * @return количество заданий.
@@ -99,9 +99,9 @@ interface HomeworkRepository {
     suspend fun getCount(subjectName: String): Int
 
     /**
-     * Проверяет, существуют ли домашние задания по указанному предмету в семестре.
+     * Проверяет, существуют ли домашние задания по указанному предмету в расписании.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @param subjectName название предмета.
      * @return true, если задания есть.
      */

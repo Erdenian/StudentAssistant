@@ -22,7 +22,7 @@ interface LessonRepository {
      * @param classrooms список аудиторий.
      * @param startTime время начала.
      * @param endTime время окончания.
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @param dayOfWeek день недели.
      * @param weeks список флагов повторения по неделям (true - повторяется, false - нет).
      */
@@ -47,7 +47,7 @@ interface LessonRepository {
      * @param classrooms список аудиторий.
      * @param startTime время начала.
      * @param endTime время окончания.
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @param dates набор дат проведения занятия.
      */
     suspend fun insert(
@@ -71,7 +71,7 @@ interface LessonRepository {
      * @param classrooms список аудиторий.
      * @param startTime время начала.
      * @param endTime время окончания.
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @param dayOfWeek день недели.
      * @param weeks список флагов повторения по неделям.
      */
@@ -98,7 +98,7 @@ interface LessonRepository {
      * @param classrooms список аудиторий.
      * @param startTime время начала.
      * @param endTime время окончания.
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @param dates набор дат проведения занятия.
      */
     suspend fun update(
@@ -141,12 +141,12 @@ interface LessonRepository {
     fun getFlow(id: Long): Flow<Lesson?>
 
     /**
-     * Возвращает поток всех занятий текущего выбранного семестра.
+     * Возвращает поток всех занятий текущего выбранного расписания.
      */
     val allFlow: Flow<List<Lesson>>
 
     /**
-     * Возвращает поток занятий на конкретную дату для текущего выбранного семестра.
+     * Возвращает поток занятий на конкретную дату для текущего выбранного расписания.
      *
      * Учитывает как регулярные занятия (проверяет четность недели), так и занятия по датам.
      *
@@ -156,34 +156,34 @@ interface LessonRepository {
     fun getAllFlow(day: LocalDate): Flow<List<Lesson>>
 
     /**
-     * Возвращает поток всех занятий в семестре, проходящих в указанный день недели.
+     * Возвращает поток всех занятий в расписании, проходящих в указанный день недели.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @param dayOfWeek день недели.
      * @return поток со списком занятий.
      */
     fun getAllFlow(semesterId: Long, dayOfWeek: DayOfWeek): Flow<List<Lesson>>
 
     /**
-     * Возвращает общее количество занятий в семестре.
+     * Возвращает общее количество занятий в расписании.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @return количество занятий.
      */
     suspend fun getCount(semesterId: Long): Int
 
     /**
-     * Поток, показывающий, есть ли занятия в текущем выбранном семестре.
+     * Поток, показывающий, есть ли занятия в текущем выбранном расписании.
      */
     val hasLessonsFlow: Flow<Boolean>
 
     /**
-     * Проверяет, есть ли в семестре занятия, повторяющиеся не каждую неделю.
+     * Проверяет, есть ли в расписании занятия, повторяющиеся не каждую неделю.
      *
-     * Используется для предупреждения пользователя при изменении дат семестра,
+     * Используется для предупреждения пользователя при изменении дат расписания,
      * так как это может сбить цикл четности недель.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @return true, если есть занятия с пропусками недель ("дырками" в цикле).
      */
     suspend fun hasNonRecurringLessons(semesterId: Long): Boolean
@@ -193,26 +193,26 @@ interface LessonRepository {
     // region Subjects
 
     /**
-     * Возвращает количество занятий по конкретному предмету в семестре.
+     * Возвращает количество занятий по конкретному предмету в расписании.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @param subjectName название предмета.
      * @return количество занятий.
      */
     suspend fun getCount(semesterId: Long, subjectName: String): Int
 
     /**
-     * Возвращает поток списка всех уникальных названий предметов в семестре.
+     * Возвращает поток списка всех уникальных названий предметов в расписании.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @return поток списка названий.
      */
     fun getSubjects(semesterId: Long): Flow<List<String>>
 
     /**
-     * Переименовывает предмет во всех занятиях и домашних заданиях семестра.
+     * Переименовывает предмет во всех занятиях и домашних заданиях расписания.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @param oldName старое название предмета.
      * @param newName новое название предмета.
      */
@@ -223,25 +223,25 @@ interface LessonRepository {
     // region Other fields
 
     /**
-     * Возвращает поток списка всех уникальных типов занятий в семестре.
+     * Возвращает поток списка всех уникальных типов занятий в расписании.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @return поток списка типов.
      */
     fun getTypes(semesterId: Long): Flow<List<String>>
 
     /**
-     * Возвращает поток списка всех преподавателей в семестре.
+     * Возвращает поток списка всех преподавателей в расписании.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @return поток списка имен преподавателей.
      */
     fun getTeachers(semesterId: Long): Flow<List<String>>
 
     /**
-     * Возвращает поток списка всех аудиторий в семестре.
+     * Возвращает поток списка всех аудиторий в расписании.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @return поток списка названий аудиторий.
      */
     fun getClassrooms(semesterId: Long): Flow<List<String>>
@@ -252,7 +252,7 @@ interface LessonRepository {
      * Берет время окончания последнего занятия в этот день и добавляет длительность перемены.
      * Если занятий нет, возвращает время начала по умолчанию из настроек.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @param dayOfWeek день недели.
      * @return предлагаемое время начала.
      */

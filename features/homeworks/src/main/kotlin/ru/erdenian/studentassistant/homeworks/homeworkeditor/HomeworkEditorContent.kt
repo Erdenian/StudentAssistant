@@ -69,7 +69,7 @@ import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
  * @param subjectName название предмета.
  * @param deadline срок сдачи.
  * @param description описание.
- * @param semesterDates диапазон дат семестра (для ограничения выбора даты).
+ * @param semesterDates диапазон дат расписания (для ограничения выбора даты).
  * @param onBackClick колбэк нажатия назад.
  * @param onSaveClick колбэк сохранения.
  * @param onDeleteClick колбэк удаления.

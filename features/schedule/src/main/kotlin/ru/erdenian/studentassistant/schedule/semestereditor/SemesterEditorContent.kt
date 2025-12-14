@@ -52,11 +52,11 @@ import ru.erdenian.studentassistant.uikit.view.DateField
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
 /**
- * UI контент экрана редактора семестра.
+ * UI контент экрана редактора расписания.
  *
  * @param isLoading отображать ли состояние загрузки.
  * @param isEditing режим редактирования (true) или создания (false).
- * @param name название семестра.
+ * @param name название расписания.
  * @param firstDay дата начала.
  * @param lastDay дата окончания.
  * @param errorMessage сообщение об ошибке валидации названия.

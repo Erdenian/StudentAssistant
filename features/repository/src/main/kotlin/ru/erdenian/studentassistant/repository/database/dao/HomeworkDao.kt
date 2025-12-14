@@ -73,18 +73,18 @@ internal interface HomeworkDao {
     fun getFlow(id: Long): Flow<HomeworkEntity?>
 
     /**
-     * Возвращает поток всех домашних заданий семестра.
+     * Возвращает поток всех домашних заданий расписания.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @return поток списка заданий.
      */
     @Query("SELECT * FROM homeworks WHERE semester_id = :semesterId ORDER BY is_done, deadline, subject_name, description, _id, semester_id")
     fun getAllFlow(semesterId: Long): Flow<List<HomeworkEntity>>
 
     /**
-     * Возвращает количество домашних заданий в семестре.
+     * Возвращает количество домашних заданий в расписании.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @return количество заданий.
      */
     @Query("SELECT COUNT(_id) FROM homeworks WHERE semester_id = :semesterId")
@@ -97,7 +97,7 @@ internal interface HomeworkDao {
     /**
      * Возвращает поток домашних заданий по конкретному предмету.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @param subjectName название предмета.
      * @return поток списка заданий.
      */
@@ -107,7 +107,7 @@ internal interface HomeworkDao {
     /**
      * Возвращает количество домашних заданий по предмету.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @param subjectName название предмета.
      * @return количество заданий.
      */
@@ -117,7 +117,7 @@ internal interface HomeworkDao {
     /**
      * Проверяет наличие заданий по предмету.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @param subjectName название предмета.
      * @return true, если задания есть.
      */
@@ -131,7 +131,7 @@ internal interface HomeworkDao {
     /**
      * Возвращает поток актуальных заданий (дедлайн >= сегодня).
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @param today текущая дата.
      * @return поток списка заданий.
      */
@@ -141,7 +141,7 @@ internal interface HomeworkDao {
     /**
      * Возвращает поток просроченных невыполненных заданий.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @param today текущая дата.
      * @return поток списка заданий.
      */
@@ -151,7 +151,7 @@ internal interface HomeworkDao {
     /**
      * Возвращает поток выполненных заданий или заданий с прошедшим дедлайном, которые были помечены как выполненные.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @param today текущая дата.
      * @return поток списка заданий.
      */
@@ -161,7 +161,7 @@ internal interface HomeworkDao {
     /**
      * Возвращает поток актуальных заданий по конкретному предмету.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @param subjectName название предмета.
      * @param today текущая дата.
      * @return поток списка заданий.

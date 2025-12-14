@@ -452,7 +452,7 @@ internal class LessonDaoTest {
 
     @Test
     fun getAllFlow_Filtering_ByWeekday() = runTest {
-        // Урок 1: Только по четным (индексы 1, 3...)
+        // Занятие 1: Только по четным (индексы 1, 3...)
         val lesson1 = LessonEntity("Even", "Type", LocalTime.of(10, 0), LocalTime.of(11, 30), semesterId)
         lessonDao.insert(
             lesson1, emptySet(), emptySet(),

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import ru.erdenian.studentassistant.repository.database.entity.SemesterEntity
 
 /**
- * DAO для работы с таблицей семестров.
+ * DAO для работы с таблицей расписаний.
  */
 @Dao
 internal interface SemesterDao {
@@ -17,26 +17,26 @@ internal interface SemesterDao {
     // region Primary actions
 
     /**
-     * Вставляет новый семестр в базу данных.
+     * Вставляет новое расписание в базу данных.
      *
-     * @param semester сущность семестра.
+     * @param semester сущность расписания.
      * @return идентификатор вставленной записи.
      */
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(semester: SemesterEntity): Long
 
     /**
-     * Обновляет существующий семестр.
+     * Обновляет существующее расписание.
      *
-     * @param semester сущность семестра с обновленными данными.
+     * @param semester сущность расписания с обновленными данными.
      */
     @Update
     suspend fun update(semester: SemesterEntity)
 
     /**
-     * Удаляет семестр по идентификатору.
+     * Удаляет расписание по идентификатору.
      *
-     * @param id идентификатор семестра.
+     * @param id идентификатор расписания.
      */
     @Query("DELETE FROM semesters WHERE _id = :id")
     suspend fun delete(id: Long)
@@ -44,33 +44,33 @@ internal interface SemesterDao {
     // endregion
 
     /**
-     * Возвращает поток всех семестров, отсортированных по датам и названию.
+     * Возвращает поток всех расписаний, отсортированных по датам и названию.
      *
-     * @return поток списка семестров.
+     * @return поток списка расписаний.
      */
     @Query("SELECT * FROM semesters ORDER BY last_day, first_day, name, _id")
     fun getAllFlow(): Flow<List<SemesterEntity>>
 
     /**
-     * Возвращает семестр по идентификатору.
+     * Возвращает расписание по идентификатору.
      *
-     * @param id идентификатор семестра.
-     * @return семестр или null, если не найден.
+     * @param id идентификатор расписания.
+     * @return расписание или null, если не найден.
      */
     @Query("SELECT * FROM semesters WHERE _id = :id")
     suspend fun get(id: Long): SemesterEntity?
 
     /**
-     * Возвращает поток семестра по идентификатору.
+     * Возвращает поток расписания по идентификатору.
      *
-     * @param id идентификатор семестра.
-     * @return поток с семестром или null.
+     * @param id идентификатор расписания.
+     * @return поток с расписанием или null.
      */
     @Query("SELECT * FROM semesters WHERE _id = :id")
     fun getFlow(id: Long): Flow<SemesterEntity?>
 
     /**
-     * Возвращает список всех названий семестров.
+     * Возвращает список всех названий расписаний.
      *
      * @return поток списка названий.
      */

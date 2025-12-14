@@ -17,8 +17,8 @@ import ru.erdenian.studentassistant.utils.Default
  * ViewModel для главного экрана расписания.
  *
  * Отвечает за:
- * - Отображение списка семестров и текущего выбранного семестра.
- * - Переключение семестров.
+ * - Отображение списка расписаний и текущего выбранного расписания.
+ * - Переключение расписаний.
  * - Предоставление списка занятий для конкретных дат.
  */
 internal class ScheduleViewModel @Inject constructor(
@@ -36,22 +36,22 @@ internal class ScheduleViewModel @Inject constructor(
     private val lessonRepository = repositoryApi.lessonRepository
 
     /**
-     * Поток текущего выбранного семестра.
+     * Поток текущего выбранного расписания.
      */
     val selectedSemester = selectedSemesterRepository.selectedFlow
 
     /**
-     * Поток списка всех семестров.
+     * Поток списка всех расписаний.
      */
     val allSemesters = semesterRepository.allFlow
         .stateIn(viewModelScope, SharingStarted.Default, listOfNotNull(selectedSemester.value))
 
     /**
-     * Выбирает семестр по идентификатору.
+     * Выбирает расписание по идентификатору.
      *
-     * Также очищает кэш потоков занятий, так как они зависят от выбранного семестра.
+     * Также очищает кэш потоков занятий, так как они зависят от выбранного расписания.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      */
     fun selectSemester(semesterId: Long) {
         lessonsFlows.clear()

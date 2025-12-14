@@ -7,12 +7,12 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 /**
- * Класс семестра (четверти).
+ * Класс расписания (семестра, четверти).
  *
- * @property name название семестра
- * @property firstDay первый день семестра
- * @property lastDay последний день семестра
- * @property id уникальный id семестра
+ * @property name название расписания
+ * @property firstDay первый день расписания
+ * @property lastDay последний день расписания
+ * @property id уникальный id расписания
  * @throws IllegalArgumentException если [name] пусто или [firstDay] > [lastDay]
  * @author Ilya Solovyov
  * @since 0.0.0
@@ -29,7 +29,7 @@ data class Semester(
 ) : Comparable<Semester>, Parcelable {
 
     /**
-     * Длина семестра в днях.
+     * Длина расписания в днях.
      *
      * @author Ilya Solovyov
      * @since 0.0.0
@@ -37,7 +37,7 @@ data class Semester(
     val length: Int get() = ChronoUnit.DAYS.between(firstDay, lastDay).toInt() + 1
 
     /**
-     * ClosedRange из начальной и конечной даты семестра.
+     * ClosedRange из начальной и конечной даты расписания.
      *
      * @author Ilya Solovyov
      * @since 0.5.4
@@ -53,7 +53,7 @@ data class Semester(
     private val firstWeekMonday: LocalDate get() = firstDay.minusDays(firstDay.dayOfWeek.value.toLong() - 1L)
 
     /**
-     * Позволяет получить номер недели с начала семестра, содержащей определенную дату.
+     * Позволяет получить номер недели с начала расписания, содержащей определенную дату.
      *
      * Начинается с 0.
      *

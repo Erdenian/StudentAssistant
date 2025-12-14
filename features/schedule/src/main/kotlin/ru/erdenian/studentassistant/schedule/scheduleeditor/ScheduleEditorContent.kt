@@ -48,10 +48,10 @@ import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
  *
  * Отображает расписание по дням недели в виде пейджера.
  *
- * @param rememberLessons функция для получения списка уроков по индексу страницы (дня недели).
+ * @param rememberLessons функция для получения списка занятий по индексу страницы (дня недели).
  * @param onBackClick колбэк нажатия кнопки назад.
- * @param onEditSemesterClick колбэк нажатия кнопки редактирования данных семестра.
- * @param onDeleteSemesterClick колбэк нажатия кнопки удаления семестра.
+ * @param onEditSemesterClick колбэк нажатия кнопки редактирования данных расписания.
+ * @param onDeleteSemesterClick колбэк нажатия кнопки удаления расписания.
  * @param onLessonClick колбэк нажатия на занятие.
  * @param onCopyLessonClick колбэк копирования занятия.
  * @param onDeleteLessonClick колбэк удаления занятия.

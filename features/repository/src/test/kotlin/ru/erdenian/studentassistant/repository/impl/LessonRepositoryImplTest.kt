@@ -180,7 +180,7 @@ internal class LessonRepositoryImplTest {
 
     @Test
     fun `getAllFlow(date) returns empty if no semester selected`() = runTest(testDispatcher) {
-        // Семестр не выбран
+        // Расписание не выбрано
         val res = repository.getAllFlow(LocalDate.now()).first()
         assertEquals(0, res.size)
     }
@@ -249,7 +249,7 @@ internal class LessonRepositoryImplTest {
 
         // hasLessonsFlow
         val hasLessons = repository.hasLessonsFlow.first()
-        // Семестр не выбран -> возвращает false
+        // Расписание не выбрано -> возвращает false
         assertFalse(hasLessons)
     }
 

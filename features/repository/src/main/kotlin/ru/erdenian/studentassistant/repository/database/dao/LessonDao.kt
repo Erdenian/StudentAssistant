@@ -179,9 +179,9 @@ internal abstract class LessonDao {
     abstract fun getFlow(id: Long): Flow<FullLesson?>
 
     /**
-     * Возвращает поток всех занятий в семестре.
+     * Возвращает поток всех занятий в расписании.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @return поток списка всех занятий.
      */
     @Transaction
@@ -198,9 +198,9 @@ internal abstract class LessonDao {
      * Функция `SUBSTR` используется для проверки, стоит ли '1' на позиции, соответствующей текущей неделе.
      * Индекс недели вычисляется как `(:weekNumber % length(w.weeks)) + 1` (+1 т.к. SQL индексация с 1).
      *
-     * @param semesterId ID семестра.
+     * @param semesterId ID расписания.
      * @param dayOfWeek день недели запрошенной даты.
-     * @param weekNumber номер недели от начала семестра (для проверки чередования недель).
+     * @param weekNumber номер недели от начала расписания (для проверки чередования недель).
      * @param date сама дата (для проверки занятий по датам).
      * @return поток списка занятий на этот день.
      */
@@ -228,9 +228,9 @@ internal abstract class LessonDao {
     ): Flow<List<FullLesson>>
 
     /**
-     * Возвращает поток всех занятий в семестре для определенного дня недели.
+     * Возвращает поток всех занятий в расписании для определенного дня недели.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @param dayOfWeek день недели.
      * @return поток списка занятий.
      */
@@ -239,37 +239,37 @@ internal abstract class LessonDao {
     abstract fun getAllFlow(semesterId: Long, dayOfWeek: DayOfWeek): Flow<List<FullLesson>>
 
     /**
-     * Возвращает количество занятий в семестре.
+     * Возвращает количество занятий в расписании.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @return количество занятий.
      */
     @Query("SELECT COUNT(_id) FROM lessons WHERE semester_id = :semesterId")
     abstract suspend fun getCount(semesterId: Long): Int
 
     /**
-     * Возвращает поток, сообщающий о наличии занятий в семестре.
+     * Возвращает поток, сообщающий о наличии занятий в расписании.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @return поток boolean (true, если есть хотя бы одно занятие).
      */
     @Query("SELECT EXISTS(SELECT _id FROM lessons WHERE semester_id = :semesterId)")
     abstract fun hasLessonsFlow(semesterId: Long): Flow<Boolean>
 
     /**
-     * Проверяет, есть ли в семестре занятия, которые повторяются не каждую неделю.
+     * Проверяет, есть ли в расписании занятия, которые повторяются не каждую неделю.
      *
      * Логика:
      * Если строка weeks (хранящаяся как последовательность '0' и '1') содержит '0',
      * значит есть недели, когда занятие не проводится (пропуски).
-     * В этом случае изменение даты начала семестра (сдвиг понедельника первой недели) может привести
-     * к тому, что расписание "съедет" относительно календаря (например, четные недели станут нечетными
+     * В этом случае изменение даты начала расписания (сдвиг понедельника первой недели) может привести
+     * к тому, что даты занятий "съедут" относительно календаря (например, четные недели станут нечетными
      * в понимании пользователя).
      *
-     * Если же все занятия проводятся каждую неделю (все '1'), то сдвиг начала семестра
-     * не повлияет на фактическое расписание.
+     * Если же все занятия проводятся каждую неделю (все '1'), то сдвиг начала расписания
+     * не повлияет на даты повторений.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @return true, если есть такие занятия.
      */
     @Query("SELECT EXISTS(SELECT lesson_id FROM by_weekday WHERE lesson_id IN (SELECT _id FROM lessons WHERE semester_id = :semesterId) AND weeks LIKE '%0%')")
@@ -280,9 +280,9 @@ internal abstract class LessonDao {
     // region Subjects
 
     /**
-     * Возвращает количество занятий по предмету в семестре.
+     * Возвращает количество занятий по предмету в расписании.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @param subjectName название предмета.
      * @return количество занятий.
      */
@@ -290,9 +290,9 @@ internal abstract class LessonDao {
     abstract suspend fun getCount(semesterId: Long, subjectName: String): Int
 
     /**
-     * Возвращает поток уникальных названий предметов в семестре.
+     * Возвращает поток уникальных названий предметов в расписании.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @return поток списка названий.
      */
     @Query("SELECT DISTINCT subject_name FROM lessons WHERE semester_id = :semesterId ORDER BY subject_name")
@@ -301,7 +301,7 @@ internal abstract class LessonDao {
     /**
      * Переименовывает предмет во всех занятиях и домашних заданиях.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @param oldName старое название.
      * @param newName новое название.
      */
@@ -324,7 +324,7 @@ internal abstract class LessonDao {
     /**
      * Возвращает поток уникальных типов занятий.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @return поток списка типов.
      */
     @Query("SELECT DISTINCT type FROM lessons WHERE type IS NOT NULL AND semester_id = :semesterId ORDER BY type")
@@ -333,7 +333,7 @@ internal abstract class LessonDao {
     /**
      * Возвращает поток имен всех преподавателей.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @return поток списка имен.
      */
     @Query("SELECT DISTINCT t.name FROM teachers AS t INNER JOIN lessons AS l ON l._id = t.lesson_id WHERE l.semester_id = :semesterId ORDER BY t.name")
@@ -342,7 +342,7 @@ internal abstract class LessonDao {
     /**
      * Возвращает поток названий всех аудиторий.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @return поток списка аудиторий.
      */
     @Query("SELECT DISTINCT c.name FROM classrooms AS c INNER JOIN lessons AS l ON l._id = c.lesson_id WHERE l.semester_id = :semesterId ORDER BY c.name")
@@ -352,7 +352,7 @@ internal abstract class LessonDao {
      * Возвращает время окончания последнего занятия в указанный день недели.
      * Используется для подстановки времени начала следующего занятия.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      * @param dayOfWeek день недели.
      * @return время окончания или null.
      */

@@ -21,9 +21,9 @@ import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.utils.Default
 
 /**
- * ViewModel для экрана создания/редактирования семестра.
+ * ViewModel для экрана создания/редактирования расписания.
  *
- * @param semesterId ID семестра для редактирования. Если null, создается новый семестр.
+ * @param semesterId ID расписания для редактирования. Если null, создается новое расписание.
  */
 internal class SemesterEditorViewModel @AssistedInject constructor(
     application: Application,
@@ -129,9 +129,9 @@ internal class SemesterEditorViewModel @AssistedInject constructor(
     val showWeekShiftDialog = showWeekShiftDialogPrivate.asStateFlow()
 
     /**
-     * Сохраняет изменения или создает новый семестр.
+     * Сохраняет изменения или создает новое расписание.
      *
-     * Если дата начала семестра изменилась и в семестре есть нерегулярные занятия,
+     * Если дата начала расписания изменилась и в нем есть нерегулярные занятия,
      * может потребоваться подтверждение пользователя (через [showWeekShiftDialog]).
      *
      * @param confirmWeekShift подтверждает ли пользователь сохранение, несмотря на сдвиг недель.
