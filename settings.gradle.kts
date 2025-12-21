@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 rootProject.name = "StudentAssistant"
 
 pluginManagement {
@@ -48,7 +50,7 @@ refreshVersions {
                 var currentName = ""
                 var currentBlock = ""
 
-                versionsFile.readText().replace("⬆", " ⬆").lineSequence().forEach { line ->
+                versionsFile.readText().lineSequence().forEach { line ->
                     when {
                         line.matches("""^\[\w+\]""".toRegex()) -> {
                             currentName = line.removeSurrounding("[", "]")
