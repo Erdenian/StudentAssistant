@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
@@ -49,17 +51,20 @@ tasks.register<Delete>("clean") {
 
 fun subprojectsAfterEvaluate(action: Action<in Project>) = subprojects { afterEvaluate(action) }
 
-fun Project.configureAndroidIfExists(action: com.android.build.gradle.BaseExtension.() -> Unit) {
-    if (extensions.findByType<com.android.build.gradle.BaseExtension>() != null) extensions.configure(action)
+typealias AndroidExtensions = com.android.build.api.dsl.CommonExtension<*, *, *, *, *, *>
+
+fun Project.configureAndroidIfExists(action: AndroidExtensions.() -> Unit) {
+    val androidExtension = extensions.findByName("android") as? AndroidExtensions
+    androidExtension?.apply(action)
 }
 
-fun com.android.build.gradle.BaseExtension.ifApplication(
-    action: com.android.build.gradle.internal.dsl.BaseAppModuleExtension.() -> Unit,
-) = if (this is com.android.build.gradle.internal.dsl.BaseAppModuleExtension) action() else Unit
+fun AndroidExtensions.ifApplication(
+    action: com.android.build.api.dsl.ApplicationExtension.() -> Unit,
+) = if (this is com.android.build.api.dsl.ApplicationExtension) action() else Unit
 
-fun com.android.build.gradle.BaseExtension.ifLibrary(
-    action: com.android.build.gradle.LibraryExtension.() -> Unit,
-) = if (this is com.android.build.gradle.LibraryExtension) action() else Unit
+fun AndroidExtensions.ifLibrary(
+    action: com.android.build.api.dsl.LibraryExtension.() -> Unit,
+) = if (this is com.android.build.api.dsl.LibraryExtension) action() else Unit
 
 // endregion
 
@@ -72,6 +77,7 @@ subprojects {
             freeCompilerArgs.addAll(
                 "-Xjvm-default=all",
                 "-opt-in=kotlin.RequiresOptIn",
+                "-Xannotation-default-target=param-property",
 
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
@@ -114,8 +120,6 @@ subprojectsAfterEvaluate {
             defaultConfig {
                 minSdk = config.versions.minSdk.get().toInt()
                 targetSdk = config.versions.targetSdk.get().toInt()
-
-                testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
             }
         }
         ifLibrary {
@@ -148,38 +152,37 @@ subprojectsAfterEvaluate {
             targetCompatibility = JavaVersion.VERSION_11
         }
 
-        testOptions.managedDevices.devices.create<com.android.build.api.dsl.ManagedVirtualDevice>("testDevice") {
-            device = "Pixel 4"
-            apiLevel = 34
-            systemImageSource = "aosp"
-            testedAbi = "x86_64"
+        packaging {
+            resources {
+                excludes += "META-INF/LICENSE.md"
+                excludes += "META-INF/LICENSE-notice.md"
+            }
         }
 
-        dependencies {
+        testOptions.unitTests.all { it.jvmArgs("--add-opens=java.base/java.time=ALL-UNNAMED") }
+        tasks.withType(Test::class) { jvmArgs = listOf("-XX:+EnableDynamicAgentLoading") }
+
+        val androidTestDir = project.file("src/androidTest")
+        val androidTestExists = androidTestDir.exists() && androidTestDir.walk().any { it.isFile }
+
+        if (androidTestExists) {
+            testOptions.managedDevices.allDevices.create<com.android.build.api.dsl.ManagedVirtualDevice>("testDevice") {
+                device = "Pixel 4"
+                apiLevel = 34
+                systemImageSource = "aosp"
+                testedAbi = "x86_64"
+            }
+        }
+
+        project.dependencies {
             if (project.plugins.hasPlugin(libs.plugins.kotlin.compose.get().pluginId)) {
-                "implementation"(platform(libs.androidx.compose.bom))
+                val bom = platform(libs.androidx.compose.bom)
+                "implementation"(bom)
+                "androidTestImplementation"(bom)
             }
 
             configurations.findByName("coreLibraryDesugaring")?.invoke(libs.androidTools.desugarJdkLibs)
         }
-    }
-}
-
-subprojectsAfterEvaluate {
-    configureAndroidIfExists {
-        fun com.android.build.gradle.api.AndroidSourceSet?.hasFiles() = this
-            ?.java
-            ?.srcDirs
-            ?.single()
-            ?.absoluteFile
-            ?.parentFile
-            ?.walk()
-            ?.any { it.isFile } == true
-
-        val unitTestExists = sourceSets.findByName("test").hasFiles()
-        val androidTestExists = sourceSets.findByName("androidTest").hasFiles()
-
-        if (!androidTestExists) testOptions.managedDevices.devices.clear()
     }
 }
 

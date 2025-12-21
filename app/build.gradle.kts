@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 import java.time.LocalDate
 
 plugins {
@@ -19,14 +21,16 @@ android {
         versionCode = 28
         versionName = "0.7.4"
 
-        resourceConfigurations.retainAll(setOf("ru"))
+        androidResources.localeFilters += "ru"
         base.archivesName = "${rootProject.name}-$versionName"
+
+        testInstrumentationRunner = "ru.erdenian.studentassistant.TestRunner"
     }
 
-    // Workaround for: "Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so."
+    // Workaround для "Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so."
     // https://issuetracker.google.com/issues/237187538
     // https://issuetracker.google.com/issues/271316809
-    // The same NDK version must be installed in the android-actions/setup-android step in GitHub Actions workflows.
+    // Та же версия NDK должна быть установлена в шаге android-actions/setup-android в рабочих процессах GitHub Actions.
     ndkVersion = "29.0.14206865"
 
     lint {
@@ -137,6 +141,13 @@ dependencies {
     // region Core
     ksp(libs.core.dagger.compiler)
     implementation(libs.core.dagger)
+    // endregion
+
+    // region Tests
+    androidTestImplementation(libs.bundles.test.android)
+    androidTestImplementation(libs.bundles.test.compose)
+    debugImplementation(libs.test.compose.manifest)
+    // endregion
 }
 
 dependencies {

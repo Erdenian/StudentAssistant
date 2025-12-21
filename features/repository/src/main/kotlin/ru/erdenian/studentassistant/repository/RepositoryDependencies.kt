@@ -9,7 +9,8 @@ public interface RepositoryDependencies {
 }
 
 public interface RepositoryConfig {
-    public val databaseName: String
+    // Nullable для поддержки in-memory базы данных в тестах
+    public val databaseName: String?
     public val applicationCoroutineScope: CoroutineScope
     public val settingsPreferencesName: String
 }
