@@ -172,14 +172,20 @@ internal fun WeeksSelector(
                             onClick = { onWeeksChange(weeks.dropLast(1)) },
                             enabled = enabled && weeks.size > 1,
                         ) {
-                            Icon(imageVector = AppIcons.Remove, contentDescription = null)
+                            Icon(
+                                imageVector = AppIcons.Remove,
+                                contentDescription = stringResource(RS.ws_remove_week),
+                            )
                         }
 
                         IconButton(
                             onClick = { onWeeksChange(weeks + false) },
                             enabled = enabled,
                         ) {
-                            Icon(imageVector = AppIcons.Add, contentDescription = null)
+                            Icon(
+                                imageVector = AppIcons.Add,
+                                contentDescription = stringResource(RS.ws_add_week),
+                            )
                         }
                     }
                 }

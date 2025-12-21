@@ -90,7 +90,10 @@ internal fun ScheduleEditorContent(
                 title = { Text(text = stringResource(RS.sce_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(imageVector = AppIcons.AutoMirrored.ArrowBack, contentDescription = null)
+                        Icon(
+                            imageVector = AppIcons.AutoMirrored.ArrowBack,
+                            contentDescription = stringResource(RS.u_back),
+                        )
                     }
                 },
                 actions = {

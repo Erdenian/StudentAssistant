@@ -74,7 +74,10 @@ internal fun LessonInformationContent(
             title = { Text(stringResource(RS.li_title)) },
             navigationIcon = {
                 IconButton(onClick = onBackClick) {
-                    Icon(imageVector = AppIcons.AutoMirrored.ArrowBack, contentDescription = null)
+                    Icon(
+                        imageVector = AppIcons.AutoMirrored.ArrowBack,
+                        contentDescription = stringResource(RS.u_back),
+                    )
                 }
             },
             actions = {
@@ -92,7 +95,7 @@ internal fun LessonInformationContent(
     },
     floatingActionButton = {
         FloatingActionButton(onClick = { onAddHomeworkClick(lesson) }) {
-            Icon(imageVector = AppIcons.Add, contentDescription = null)
+            Icon(imageVector = AppIcons.Add, contentDescription = stringResource(RS.li_add_homework))
         }
     },
 ) { paddingValues ->

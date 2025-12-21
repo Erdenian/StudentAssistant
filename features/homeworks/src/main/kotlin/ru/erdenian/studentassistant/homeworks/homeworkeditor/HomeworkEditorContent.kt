@@ -99,7 +99,10 @@ internal fun HomeworkEditorContent(
             title = { Text(text = stringResource(RS.he_title)) },
             navigationIcon = {
                 IconButton(onClick = onBackClick) {
-                    Icon(imageVector = AppIcons.AutoMirrored.ArrowBack, contentDescription = null)
+                    Icon(
+                        imageVector = AppIcons.AutoMirrored.ArrowBack,
+                        contentDescription = stringResource(RS.u_back),
+                    )
                 }
             },
             actions = {

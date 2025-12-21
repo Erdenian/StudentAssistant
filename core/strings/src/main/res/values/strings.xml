@@ -20,6 +20,7 @@
     <!-- Lesson Information -->
     <string name="li_title">Данные занятия</string>
     <string name="li_edit">Редактировать</string>
+    <string name="li_add_homework">Добавить задание</string>
     <string name="li_delete_homework">Удалить</string>
     <string name="li_delete_homework_message">Удалить задание?</string>
     <string name="li_delete_homework_yes">Да</string>
@@ -139,6 +140,9 @@
 
     <!-- region uikit -->
 
+    <!-- Common icons -->
+    <string name="u_back">Назад</string>
+
     <!-- TopAppBarActions -->
     <string name="taba_more_options">Ещё</string>
 
@@ -148,6 +152,8 @@
     <!-- WeeksSelector -->
     <string name="ws_variants_title">Повторять</string>
     <string name="ws_cycle_length">Длина цикла: %1$d</string>
+    <string name="ws_add_week">Добавить неделю в цикл</string>
+    <string name="ws_remove_week">Удалить последнюю неделю из цикла</string>
 
     <!-- DatePickerDialog -->
     <string name="dpd_today">Сегодня</string>
@@ -155,6 +161,7 @@
     <!-- TimePickerDialog -->
     <string name="tpd_select_time">Выберите время</string>
     <string name="tpd_enter_time">Введите время</string>
+    <string name="tpd_mode_switch">Переключить режим ввода времени</string>
 
     <!-- endregion -->
 
