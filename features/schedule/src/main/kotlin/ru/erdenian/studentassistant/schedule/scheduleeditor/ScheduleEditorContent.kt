@@ -111,7 +111,7 @@ internal fun ScheduleEditorContent(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { onAddLessonClick(DayOfWeek.of(pagerState.currentPage + 1)) }) {
-                Icon(imageVector = AppIcons.Add, contentDescription = null)
+                Icon(imageVector = AppIcons.Add, contentDescription = stringResource(RS.sce_add_lesson))
             }
         },
     ) { paddingValues ->

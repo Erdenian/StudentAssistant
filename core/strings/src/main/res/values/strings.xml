@@ -45,6 +45,7 @@
     <!-- Schedule Editor -->
     <string name="sce_title">Редактор расписания</string>
     <string name="sce_edit">Изменить данные расписания</string>
+    <string name="sce_add_lesson">Добавить занятие</string>
     <string name="sce_delete">Удалить расписание</string>
     <string name="sce_delete_message">Удалить расписание?</string>
     <string name="sce_delete_yes">Да</string>
