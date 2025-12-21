@@ -24,14 +24,13 @@ android {
         androidResources.localeFilters += "ru"
         base.archivesName = "${rootProject.name}-$versionName"
 
-        // Указываем наш кастомный TestRunner
-        testInstrumentationRunner = "ru.erdenian.studentassistant.StudentAssistantTestRunner"
+        testInstrumentationRunner = "ru.erdenian.studentassistant.TestRunner"
     }
 
-    // Workaround for: "Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so."
+    // Workaround для "Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so."
     // https://issuetracker.google.com/issues/237187538
     // https://issuetracker.google.com/issues/271316809
-    // The same NDK version must be installed in the android-actions/setup-android step in GitHub Actions workflows.
+    // Та же версия NDK должна быть установлена в шаге android-actions/setup-android в рабочих процессах GitHub Actions.
     ndkVersion = "29.0.14206865"
 
     lint {

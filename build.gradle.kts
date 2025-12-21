@@ -51,7 +51,6 @@ tasks.register<Delete>("clean") {
 
 fun subprojectsAfterEvaluate(action: Action<in Project>) = subprojects { afterEvaluate(action) }
 
-// Используем новый CommonExtension
 typealias AndroidExtensions = com.android.build.api.dsl.CommonExtension<*, *, *, *, *, *>
 
 fun Project.configureAndroidIfExists(action: AndroidExtensions.() -> Unit) {
@@ -121,8 +120,6 @@ subprojectsAfterEvaluate {
             defaultConfig {
                 minSdk = config.versions.minSdk.get().toInt()
                 targetSdk = config.versions.targetSdk.get().toInt()
-
-                testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
             }
         }
         ifLibrary {
