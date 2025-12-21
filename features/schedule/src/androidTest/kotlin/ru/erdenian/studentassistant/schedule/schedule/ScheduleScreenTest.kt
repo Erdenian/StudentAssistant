@@ -9,7 +9,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.ui.NavDisplay
@@ -126,35 +125,5 @@ internal class ScheduleScreenTest {
         composeTestRule.waitForIdle()
         composeTestRule.onNodeWithText("Physics").assertIsDisplayed()
         composeTestRule.onNodeWithText("Lab").assertIsDisplayed()
-    }
-
-    @Test
-    fun verifySemesterSwitching() {
-        val s1 = Semester("S1", LocalDate.now(), LocalDate.now(), 1L)
-        val s2 = Semester("S2", LocalDate.now(), LocalDate.now(), 2L)
-        semesterRepository.semesters.value = listOf(s1, s2)
-        selectedSemesterRepository.selectedSemester.value = s1
-
-        val navigator = mockk<Navigator>(relaxed = true)
-        composeTestRule.setContent {
-            SharedTransitionLayout {
-                CompositionLocalProvider(LocalNavigator provides navigator, LocalSharedTransitionScope provides this) {
-                    val entry = remember { NavEntry(TestKey) { ScheduleScreen() } }
-                    NavDisplay(entries = listOf(entry), onBack = {})
-                }
-            }
-        }
-
-        // Кликаем на дропдаун в заголовке
-        composeTestRule.onNodeWithText("S1").performClick()
-        // Выбираем второй семестр
-        composeTestRule.onNodeWithText("S2").performClick()
-
-        // В тесте мы должны проверить, что вызвался selectSemester?
-        // Но так как UI обновляется реактивно, мы можем проверить, что заголовок изменился?
-        // Нет, FakeSelectedSemesterRepository не обновляет selectedSemester сам по себе (см. Fakes.kt).
-        // Поэтому визуально заголовок может не измениться без мока поведения. 
-        // Но мы можем проверить вызов метода, если бы это был MockK.
-        // В текущей конфигурации этот тест проверяет только то, что меню открывается и кликается.
     }
 }

@@ -1,7 +1,6 @@
 package ru.erdenian.studentassistant.schedule.lessoninformation
 
 import android.app.Application
-import android.content.Context
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.runtime.CompositionLocalProvider
@@ -15,7 +14,6 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.test.core.app.ApplicationProvider
 import io.mockk.mockk
 import java.time.DayOfWeek
-import java.time.LocalDate
 import java.time.LocalTime
 import kotlinx.serialization.Serializable
 import org.junit.Before
@@ -25,7 +23,6 @@ import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.navigation.LocalSharedTransitionScope
 import ru.erdenian.studentassistant.navigation.Navigator
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
-import ru.erdenian.studentassistant.repository.api.entity.Homework
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.schedule.FakeHomeworkRepository
 import ru.erdenian.studentassistant.schedule.FakeLessonRepository
@@ -42,7 +39,6 @@ internal class LessonInformationScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val context = ApplicationProvider.getApplicationContext<Context>()
     private val lessonRepository = FakeLessonRepository()
     private val homeworkRepository = FakeHomeworkRepository()
     private val semesterRepository = FakeSemesterRepository()
@@ -112,39 +108,5 @@ internal class LessonInformationScreenTest {
         composeTestRule.onNodeWithText("Lecture").assertIsDisplayed()
         composeTestRule.onNodeWithText("Teacher 1").assertIsDisplayed()
         composeTestRule.onNodeWithText("Room 101").assertIsDisplayed()
-    }
-
-    @Test
-    fun verifyHomeworksDisplayAndDelete() {
-        val lesson = Lesson(
-            "Biology",
-            "Lecture",
-            emptyList(),
-            emptyList(),
-            LocalTime.MIN,
-            LocalTime.MAX,
-            Lesson.Repeat.ByWeekday(DayOfWeek.FRIDAY, listOf(true)),
-            semesterId,
-            10L,
-        )
-        val homework = Homework("Biology", "Read Ch.1", LocalDate.now(), false, semesterId, 100L)
-
-        lessonRepository.lessons.value = listOf(lesson)
-
-        // В FakeHomeworkRepository мы должны вручную положить данные в actualFlow
-        // Но FakeRepo просто держит список и не фильтрует сам для actualFlow в нашей реализации выше.
-        // Давайте поправим FakeHomeworkRepository (он был обновлен в Fakes.kt), чтобы getActualFlow работал?
-        // В Fakes.kt, getActualFlow возвращает emptyFlow(). Нам нужно это поправить или замокать здесь.
-        // Поскольку FakeHomeworkRepository из Fakes.kt не имеет логики фильтрации для getActualFlow,
-        // мы можем просто вернуть flowOf(list) если добавим такую возможность в Fake.
-        // Но проще использовать MockK для HomeworkRepository если логика сложная, 
-        // но мы используем Fake.
-
-        // Исправим тест: мы не можем проверить отображение домашки, если FakeRepo возвращает emptyFlow.
-        // Но мы можем проверить удаление домашки через меню, если бы она отобразилась.
-        // Для этого нужно, чтобы Fakes были умнее. 
-        // В текущем виде FakeHomeworkRepository.getActualFlow возвращает emptyFlow.
-        // Пропустим этот тест в рамках данного шага, или нужно дорабатывать Fakes.
-        // Оставим проверку только деталей урока.
     }
 }

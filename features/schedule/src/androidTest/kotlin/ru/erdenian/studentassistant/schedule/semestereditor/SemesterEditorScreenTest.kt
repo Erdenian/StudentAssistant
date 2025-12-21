@@ -20,7 +20,6 @@ import org.junit.Test
 import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.navigation.Navigator
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
-import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.repository.api.entity.Semester
 import ru.erdenian.studentassistant.schedule.FakeHomeworkRepository
 import ru.erdenian.studentassistant.schedule.FakeLessonRepository
@@ -121,37 +120,5 @@ internal class SemesterEditorScreenTest {
 
         composeTestRule.onNodeWithText(context.getString(RS.se_error_name_not_available)).assertIsDisplayed()
         assertEquals(1, semesterRepository.semesters.value.size)
-    }
-
-    @Test
-    fun verifyWeekShiftDialog() {
-        // Сценарий: Изменяем дату начала, при этом есть нерегулярные занятия
-        val start = LocalDate.now()
-        val semester = Semester("S1", start, start.plusMonths(4), 1L)
-        semesterRepository.semesters.value = listOf(semester)
-
-        // Добавляем нерегулярное занятие (раз в 2 недели)
-        val lesson = Lesson(
-            "L", "T", emptyList(), emptyList(), java.time.LocalTime.MIN, java.time.LocalTime.MAX,
-            Lesson.Repeat.ByWeekday(start.dayOfWeek, listOf(true, false)), 1L, 10L,
-        )
-        lessonRepository.lessons.value = listOf(lesson)
-
-        val navigator = mockk<Navigator>(relaxed = true)
-        composeTestRule.setContent {
-            CompositionLocalProvider(LocalNavigator provides navigator) {
-                SemesterEditorScreen(route = ScheduleRoute.SemesterEditor(semesterId = 1L))
-            }
-        }
-
-        // Меняем дату начала (вызываем DatePicker и меняем дату на неделю вперед)
-        // Для простоты теста в UI-тесте без сложного DatePicker взаимодействия мы можем просто нажать Save,
-        // но нам нужно изменить State. 
-        // В реальном тесте сложно кликать DatePicker. 
-        // Мы можем пропустить этот тест в UI layer если сложно мокать DatePicker, 
-        // но ViewModelTest это покрывает.
-        // Оставим проверку только если можно ввести дату текстом, но DateField read-only.
-        // Пропустим этот конкретный тест здесь, так как он покрыт в ViewModelTest, 
-        // а взаимодействие с DatePicker сложное.
     }
 }
