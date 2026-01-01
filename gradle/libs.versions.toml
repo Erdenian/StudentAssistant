@@ -34,6 +34,7 @@ tripletPlay = { id = "com.github.triplet.play", version = "3.13.0" }
 [libraries]
 
 detekt_formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "plugins_detekt" }
+detekt_rulesCompose = { group = "ru.kode", name = "detekt-rules-compose", version = "1.4.0" }
 
 # region Testing
 
