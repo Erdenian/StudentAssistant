@@ -6,7 +6,6 @@ import java.time.LocalTime
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-@Suppress("MagicNumber")
 internal class ConvertersTest {
 
     private val converters = Converters

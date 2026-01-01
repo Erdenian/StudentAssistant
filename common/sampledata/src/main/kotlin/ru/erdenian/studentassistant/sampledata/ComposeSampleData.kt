@@ -1,4 +1,4 @@
-@file:Suppress("StringLiteralDuplication", "MagicNumber")
+@file:Suppress("StringLiteralDuplication")
 
 package ru.erdenian.studentassistant.sampledata
 

@@ -168,7 +168,6 @@ private data class LessonInformationContentPreviewData(
     val homeworks: List<Homework>?,
 )
 
-@Suppress("MagicNumber")
 private class LessonInformationContentPreviewParameterProvider :
     PreviewParameterProvider<LessonInformationContentPreviewData> {
     override val values = sequenceOf(

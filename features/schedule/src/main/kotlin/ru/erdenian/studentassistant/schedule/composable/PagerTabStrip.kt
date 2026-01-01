@@ -264,7 +264,7 @@ private fun Color.transitionTo(color: Color, progress: Float): Color {
     )
 }
 
-@Suppress("StringLiteralDuplication", "MagicNumber")
+@Suppress("StringLiteralDuplication")
 private class PageCountPreviewParameterProvider : PreviewParameterProvider<Int> {
     override val values = sequenceOf(10, 0)
 }

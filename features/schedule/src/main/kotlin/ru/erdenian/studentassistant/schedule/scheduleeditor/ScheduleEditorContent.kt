@@ -175,7 +175,6 @@ private data class ScheduleEditorContentPreviewData(
     val isLoading: Boolean = false,
 )
 
-@Suppress("MagicNumber")
 private class ScheduleEditorContentPreviewParameterProvider :
     PreviewParameterProvider<ScheduleEditorContentPreviewData> {
     override val values = sequenceOf(
