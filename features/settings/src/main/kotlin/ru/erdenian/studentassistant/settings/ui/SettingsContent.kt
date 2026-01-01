@@ -31,7 +31,7 @@ import ru.erdenian.studentassistant.uikit.utils.ScreenPreviews
  * @param defaultBreakDuration текущая длительность перемены.
  * @param onDefaultBreakDurationChange колбэк изменения длительности перемены.
  * @param isAdvancedWeeksSelectorEnabled включен ли расширенный выбор недель.
- * @param isAdvancedWeeksSelectorEnabledChange колбэк изменения настройки расширенного выбора недель.
+ * @param onAdvancedWeeksSelectorEnabledChange колбэк изменения настройки расширенного выбора недель.
  */
 @Composable
 internal fun SettingsContent(
@@ -42,7 +42,7 @@ internal fun SettingsContent(
     defaultBreakDuration: Duration,
     onDefaultBreakDurationChange: (Duration) -> Unit,
     isAdvancedWeeksSelectorEnabled: Boolean,
-    isAdvancedWeeksSelectorEnabledChange: (Boolean) -> Unit,
+    onAdvancedWeeksSelectorEnabledChange: (Boolean) -> Unit,
 ) {
     val topAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
@@ -78,7 +78,7 @@ internal fun SettingsContent(
                 title = stringResource(RS.st_is_advanced_weeks_selector_enabled),
                 description = stringResource(RS.st_is_advanced_weeks_selector_enabled_description),
                 value = isAdvancedWeeksSelectorEnabled,
-                onValueChange = isAdvancedWeeksSelectorEnabledChange,
+                onValueChange = onAdvancedWeeksSelectorEnabledChange,
             )
         }
     }
@@ -95,6 +95,6 @@ private fun SettingsContentPreview() = AppTheme {
         defaultBreakDuration = Duration.ofMinutes(10),
         onDefaultBreakDurationChange = {},
         isAdvancedWeeksSelectorEnabled = true,
-        isAdvancedWeeksSelectorEnabledChange = {},
+        onAdvancedWeeksSelectorEnabledChange = {},
     )
 }

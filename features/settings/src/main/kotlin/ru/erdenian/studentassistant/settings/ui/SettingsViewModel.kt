@@ -11,7 +11,8 @@ import ru.erdenian.studentassistant.repository.api.RepositoryApi
 /**
  * ViewModel для экрана настроек.
  *
- * Управляет чтением и записью настроек приложения через [ru.erdenian.studentassistant.repository.api.SettingsRepository].
+ * Управляет чтением и записью настроек приложения через
+ * [ru.erdenian.studentassistant.repository.api.SettingsRepository].
  */
 internal class SettingsViewModel @Inject constructor(
     application: Application,

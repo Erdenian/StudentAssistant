@@ -67,6 +67,9 @@ internal class SemesterEditorViewModel @AssistedInject constructor(
     private var initialName: String? = null
     private var initialFirstDay: LocalDate? = null
 
+    private val donePrivate = MutableStateFlow(false)
+    val done = donePrivate.asStateFlow()
+
     init {
         val today = LocalDate.now().withDayOfMonth(1)
         val range = semestersRanges.find { today.month <= it.endInclusive } ?: semestersRanges.first()
@@ -119,9 +122,6 @@ internal class SemesterEditorViewModel @AssistedInject constructor(
     }.stateIn(viewModelScope, SharingStarted.Default, null)
 
     val isEditing = (semesterId != null)
-
-    private val donePrivate = MutableStateFlow(false)
-    val done = donePrivate.asStateFlow()
 
     private val showWeekShiftDialogPrivate = MutableStateFlow(false)
 

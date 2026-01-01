@@ -72,123 +72,119 @@ internal fun PagerTabStrip(
     underscoreHeight: Dp = 2.dp,
     colors: PagerTabStripColors = PagerTabStripDefaults.pagerTabStripColors(),
 ) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        val scrollCoroutineScope = rememberCoroutineScope()
-        Layout(
-            modifier = modifier
-                .defaultMinSize(minHeight = 32.dp)
-                .draggable(
-                    orientation = Orientation.Horizontal,
-                    state = rememberDraggableState { delta ->
-                        scrollCoroutineScope.launch { state.scrollBy(-delta) }
-                    },
-                    onDragStopped = {
-                        launch {
-                            state.animateScrollToPage(state.currentPage + state.currentPageOffsetFraction.roundToInt())
-                        }
-                    },
-                ),
-            content = {
-                val indices = 0 until state.pageCount
+    val scrollCoroutineScope = rememberCoroutineScope()
+    Layout(
+        modifier = modifier
+            .defaultMinSize(minHeight = 32.dp)
+            .draggable(
+                orientation = Orientation.Horizontal,
+                state = rememberDraggableState { delta ->
+                    scrollCoroutineScope.launch { state.scrollBy(-delta) }
+                },
+                onDragStopped = {
+                    launch {
+                        state.animateScrollToPage(state.currentPage + state.currentPageOffsetFraction.roundToInt())
+                    }
+                },
+            ),
+        content = {
+            val indices = 0 until state.pageCount
 
-                @Composable
-                fun createText(page: Int, color: Color) = Text(
-                    text = if (page in indices) titleGetter(page) else "",
-                    color = color,
-                    fontSize = fontSize,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        enabled = (page in indices),
-                    ) {
-                        scrollCoroutineScope.launch { state.animateScrollToPage(page) }
-                    },
-                )
-
-                val selectedTabTextColor = colors.selectedTabTextColor().value
-                val notSelectedTabTextColor = colors.notSelectedTabTextColor().value
-                val tabIndicatorColor = colors.tabIndicatorColor().value
-
-                val page = state.currentPage + state.currentPageOffsetFraction.roundToInt()
-                val offset = 1 - abs(abs(state.currentPageOffsetFraction) % 1 - 0.5f) * 2.0f
-                val animatedCurrentTabTextColor = selectedTabTextColor.transitionTo(notSelectedTabTextColor, offset)
-                val animatedUnderscoreAlpha = tabIndicatorColor.alpha * (1 - offset)
-
-                createText(
-                    page = page - 1,
-                    color = notSelectedTabTextColor,
-                )
-                createText(
-                    page = page,
-                    color = animatedCurrentTabTextColor,
-                )
-                createText(
-                    page = page + 1,
-                    color = notSelectedTabTextColor,
-                )
-
-                Box(modifier = Modifier.background(tabIndicatorColor.copy(alpha = animatedUnderscoreAlpha)))
-            },
-        ) { measurables, constraints ->
-            val width = constraints.maxWidth
-            val textSpacingPx = textSpacing.roundToPx()
-
-            val titlesConstraints = constraints.copy(maxWidth = width / 2 - textSpacingPx, minHeight = 0)
-            val titlesPlaceables = measurables.dropLast(1).map { it.measure(titlesConstraints) }
-
-            val previousPlaceable = titlesPlaceables[0]
-            val currentPlaceable = titlesPlaceables[1]
-            val nextPlaceable = titlesPlaceables[2]
-
-            val underscorePlaceable = measurables.last().measure(
-                Constraints.fixed(currentPlaceable.width + textSpacingPx, underscoreHeight.roundToPx()),
+            @Composable
+            fun createText(page: Int, color: Color) = Text(
+                text = if (page in indices) titleGetter(page) else "",
+                color = color,
+                fontSize = fontSize,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    enabled = (page in indices),
+                ) {
+                    scrollCoroutineScope.launch { state.animateScrollToPage(page) }
+                },
             )
 
-            // Вычисляем высоту контейнера:
-            // Либо минимальная (32dp), либо высота текста + высота подчеркивания (если текст крупный)
-            val maxTextHeight = titlesPlaceables.maxOf { it.height }
-            val height = max(constraints.minHeight, maxTextHeight + underscorePlaceable.height)
+            val selectedTabTextColor = colors.selectedTabTextColor().value
+            val notSelectedTabTextColor = colors.notSelectedTabTextColor().value
+            val tabIndicatorColor = colors.tabIndicatorColor().value
 
-            layout(width, height) {
-                val halfCurrWidth = currentPlaceable.width / 2
-                val contentWidth = width - currentPlaceable.width
+            val page = state.currentPage + state.currentPageOffsetFraction.roundToInt()
+            val offset = 1 - abs(abs(state.currentPageOffsetFraction) % 1 - 0.5f) * 2.0f
+            val animatedCurrentTabTextColor = selectedTabTextColor.transitionTo(notSelectedTabTextColor, offset)
+            val animatedUnderscoreAlpha = tabIndicatorColor.alpha * (1 - offset)
 
-                val currOffset = run {
-                    val offset = (state.currentPageOffsetFraction + 0.5f) % 1
-                    if (offset >= 0.0f) offset else offset + 1.0f
-                }
+            createText(
+                page = page - 1,
+                color = notSelectedTabTextColor,
+            )
+            createText(
+                page = page,
+                color = animatedCurrentTabTextColor,
+            )
+            createText(
+                page = page + 1,
+                color = notSelectedTabTextColor,
+            )
 
-                val currCenter = width - halfCurrWidth - (contentWidth * currOffset).toInt()
-                val currLeft = currCenter - currentPlaceable.width / 2
-                val currRight = currLeft + currentPlaceable.width
+            Box(modifier = Modifier.background(tabIndicatorColor.copy(alpha = animatedUnderscoreAlpha)))
+        },
+    ) { measurables, constraints ->
+        val width = constraints.maxWidth
+        val textSpacingPx = textSpacing.roundToPx()
 
-                // Центрируем текст вертикально в доступном пространстве НАД подчеркиванием
-                val textAvailableHeight = height - underscorePlaceable.height
-                val y = (textAvailableHeight - currentPlaceable.height) / 2
+        val titlesConstraints = constraints.copy(maxWidth = width / 2 - textSpacingPx, minHeight = 0)
+        val titlesPlaceables = measurables.dropLast(1).map { it.measure(titlesConstraints) }
 
-                currentPlaceable.placeRelative(currLeft, y)
+        val previousPlaceable = titlesPlaceables[0]
+        val currentPlaceable = titlesPlaceables[1]
+        val nextPlaceable = titlesPlaceables[2]
 
-                val prevLeft = min(0, currLeft - textSpacingPx - previousPlaceable.width)
-                previousPlaceable.placeRelative(prevLeft, y)
-
-                val nextLeft = max(width - nextPlaceable.width, currRight + textSpacingPx)
-                nextPlaceable.placeRelative(nextLeft, y)
-
-                underscorePlaceable.placeRelative(currLeft - textSpacingPx / 2, height - underscorePlaceable.height)
-            }
-        }
-
-        Box(
-            Modifier
-                .fillMaxWidth()
-                .height(1.dp)
-                .background(color = colors.tabIndicatorColor().value),
+        val underscorePlaceable = measurables.last().measure(
+            Constraints.fixed(currentPlaceable.width + textSpacingPx, underscoreHeight.roundToPx()),
         )
+
+        // Вычисляем высоту контейнера:
+        // Либо минимальная (32dp), либо высота текста + высота подчеркивания (если текст крупный)
+        val maxTextHeight = titlesPlaceables.maxOf { it.height }
+        val height = max(constraints.minHeight, maxTextHeight + underscorePlaceable.height)
+
+        layout(width, height) {
+            val halfCurrWidth = currentPlaceable.width / 2
+            val contentWidth = width - currentPlaceable.width
+
+            val currOffset = run {
+                val offset = (state.currentPageOffsetFraction + 0.5f) % 1
+                if (offset >= 0.0f) offset else offset + 1.0f
+            }
+
+            val currCenter = width - halfCurrWidth - (contentWidth * currOffset).toInt()
+            val currLeft = currCenter - currentPlaceable.width / 2
+            val currRight = currLeft + currentPlaceable.width
+
+            // Центрируем текст вертикально в доступном пространстве НАД подчеркиванием
+            val textAvailableHeight = height - underscorePlaceable.height
+            val y = (textAvailableHeight - currentPlaceable.height) / 2
+
+            currentPlaceable.placeRelative(currLeft, y)
+
+            val prevLeft = min(0, currLeft - textSpacingPx - previousPlaceable.width)
+            previousPlaceable.placeRelative(prevLeft, y)
+
+            val nextLeft = max(width - nextPlaceable.width, currRight + textSpacingPx)
+            nextPlaceable.placeRelative(nextLeft, y)
+
+            underscorePlaceable.placeRelative(currLeft - textSpacingPx / 2, height - underscorePlaceable.height)
+        }
     }
+
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .height(1.dp)
+            .background(color = colors.tabIndicatorColor().value),
+    )
 }
 
 /**

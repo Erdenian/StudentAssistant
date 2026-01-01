@@ -64,9 +64,9 @@ internal fun LessonInformationContent(
     lesson: Lesson,
     homeworks: List<Homework>?,
     onBackClick: () -> Unit,
-    onEditClick: (Lesson) -> Unit,
+    onEditClick: () -> Unit,
     onHomeworkClick: (Homework) -> Unit,
-    onAddHomeworkClick: (Lesson) -> Unit,
+    onAddHomeworkClick: () -> Unit,
     onDeleteHomeworkClick: (Homework) -> Unit,
 ) = Scaffold(
     topBar = {
@@ -86,7 +86,7 @@ internal fun LessonInformationContent(
                         ActionItem.AlwaysShow(
                             name = stringResource(RS.li_edit),
                             imageVector = AppIcons.Edit,
-                            onClick = { onEditClick(lesson) },
+                            onClick = onEditClick,
                         ),
                     ),
                 )
@@ -94,7 +94,7 @@ internal fun LessonInformationContent(
         )
     },
     floatingActionButton = {
-        FloatingActionButton(onClick = { onAddHomeworkClick(lesson) }) {
+        FloatingActionButton(onClick = onAddHomeworkClick) {
             Icon(imageVector = AppIcons.Add, contentDescription = stringResource(RS.li_add_homework))
         }
     },

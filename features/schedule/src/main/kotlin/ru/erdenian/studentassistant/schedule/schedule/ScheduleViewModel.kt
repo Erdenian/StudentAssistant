@@ -46,6 +46,16 @@ internal class ScheduleViewModel @Inject constructor(
     val allSemesters = semesterRepository.allFlow
         .stateIn(viewModelScope, SharingStarted.Default, listOfNotNull(selectedSemester.value))
 
+    // Храним потоки для последних запрошенных дней.
+    // Этого достаточно для свайпов влево/вправо и поворота экрана,
+    // но предотвращает бесконечный рост памяти.
+    private val lessonsFlows = object : LinkedHashMap<LocalDate, Flow<List<Lesson>>>(
+        LESSONS_FLOWS_CACHE_SIZE, LESSONS_FLOWS_LOAD_FACTOR, true,
+    ) {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<LocalDate, Flow<List<Lesson>>>) =
+            size > LESSONS_FLOWS_CACHE_SIZE
+    }
+
     /**
      * Выбирает расписание по идентификатору.
      *
@@ -56,16 +66,6 @@ internal class ScheduleViewModel @Inject constructor(
     fun selectSemester(semesterId: Long) {
         lessonsFlows.clear()
         selectedSemesterRepository.selectSemester(semesterId)
-    }
-
-    // Храним потоки для последних запрошенных дней.
-    // Этого достаточно для свайпов влево/вправо и поворота экрана,
-    // но предотвращает бесконечный рост памяти.
-    private val lessonsFlows = object : LinkedHashMap<LocalDate, Flow<List<Lesson>>>(
-        LESSONS_FLOWS_CACHE_SIZE, LESSONS_FLOWS_LOAD_FACTOR, true,
-    ) {
-        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<LocalDate, Flow<List<Lesson>>>) =
-            size > LESSONS_FLOWS_CACHE_SIZE
     }
 
     /**

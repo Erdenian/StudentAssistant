@@ -7,4 +7,3 @@ sealed interface SettingsRoute : NavKey {
     @Serializable
     data object Settings : SettingsRoute
 }
-

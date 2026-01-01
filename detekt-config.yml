@@ -1,5 +1,5 @@
 build:
-  maxIssues: 11
+  maxIssues: 7
   excludeCorrectable: false
   weights:
     UnsafeCallOnNullableType: 100500
@@ -1143,7 +1143,7 @@ compose:
   ComposableEventParameterNaming:
     active: true
   ComposableParametersOrdering:
-    active: true
+    active: false # https://github.com/appKODE/detekt-rules-compose/issues/40
   ModifierHeightWithText:
     active: true
   MissingModifierDefaultValue:
@@ -1152,9 +1152,10 @@ compose:
     active: true
   TopLevelComposableFunctions:
     active: true
-    allowInObjects: false
+    allowInObjects: true
+    ignoreAnnotated: ["Stable", "Immutable"]
   ComposableFunctionName:
-    active: true
+    active: false # https://github.com/appKODE/detekt-rules-compose/issues/35
   ConditionCouldBeLifted:
     active: true
     ignoreCallsWithArgumentNames: ['modifier', 'contentAlignment']
