@@ -8,6 +8,7 @@ kotlinx_coroutines = "1.10.2"
 
 androidx_room = "2.8.4"
 androidx_navigation3 = "1.0.0"
+androidx_core = "1.17.0"
 
 core_dagger = "2.57.2"
 
@@ -76,6 +77,7 @@ androidx_compose_material_icons_extended = { group = "androidx.compose.material"
 # endregion
 
 # region AndroidX
+androidx_core_ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx_core" }
 androidx_lifecycle_viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-navigation3", version = "2.10.0" }
 androidx_room_compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx_room" }
 androidx_room = { group = "androidx.room", name = "room-ktx", version.ref = "androidx_room" }

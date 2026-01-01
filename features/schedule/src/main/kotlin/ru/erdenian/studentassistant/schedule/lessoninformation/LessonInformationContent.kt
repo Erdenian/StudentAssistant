@@ -24,13 +24,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.core.os.ConfigurationCompat
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.Locale
 import ru.erdenian.studentassistant.navigation.LocalSharedTransitionScope
 import ru.erdenian.studentassistant.repository.api.entity.Homework
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
@@ -102,7 +105,13 @@ internal fun LessonInformationContent(
     Column(
         modifier = Modifier.padding(paddingValues),
     ) {
-        val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
+        val locale = ConfigurationCompat
+            .getLocales(LocalConfiguration.current)
+            .get(0)
+            ?: Locale.getDefault()
+        val timeFormatter = remember(locale) {
+            DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale)
+        }
 
         AnimatedContent(
             targetState = lesson,

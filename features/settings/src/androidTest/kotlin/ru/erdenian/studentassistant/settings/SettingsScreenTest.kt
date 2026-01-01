@@ -10,12 +10,14 @@ import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.core.os.ConfigurationCompat
 import androidx.test.core.app.ApplicationProvider
 import io.mockk.mockk
 import java.time.Duration
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.Locale
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -80,7 +82,8 @@ internal class SettingsScreenTest {
         launchScreen()
 
         val title = context.getString(RS.st_default_start_time)
-        val timeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
+        val locale = ConfigurationCompat.getLocales(context.resources.configuration).get(0) ?: Locale.getDefault()
+        val timeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale)
 
         val initialTimeStr = fakeSettingsRepository.defaultStartTime.format(timeFormatter)
         composeTestRule.onNodeWithText(title).assertIsDisplayed()

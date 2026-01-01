@@ -14,11 +14,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.core.os.ConfigurationCompat
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.Locale
 import ru.erdenian.studentassistant.style.AppIcons
 
 /**
@@ -32,7 +35,8 @@ import ru.erdenian.studentassistant.style.AppIcons
  * @param onClick обработчик нажатия на поле (обычно открывает диалог выбора даты).
  * @param modifier [Modifier] для настройки внешнего вида и расположения.
  * @param enabled включено ли поле. Если false, поле будет затемнено и неактивно.
- * @param dateFormatter форматтер для преобразования [value] в строку. По умолчанию использует [FormatStyle.SHORT].
+ * @param dateFormatter форматтер для преобразования [value] в строку. По умолчанию использует [FormatStyle.SHORT]
+ * с учетом локали приложения.
  */
 @Composable
 fun DateField(
@@ -41,7 +45,10 @@ fun DateField(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    dateFormatter: DateTimeFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) },
+    dateFormatter: DateTimeFormatter = run {
+        val locale = ConfigurationCompat.getLocales(LocalConfiguration.current).get(0) ?: Locale.getDefault()
+        remember(locale) { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(locale) }
+    },
 ) {
     ActionTextField(
         value = value.format(dateFormatter),
@@ -64,7 +71,8 @@ fun DateField(
  * @param onClick обработчик нажатия на поле (обычно открывает диалог выбора времени).
  * @param modifier [Modifier] для настройки внешнего вида и расположения.
  * @param enabled включено ли поле. Если false, поле будет затемнено и неактивно.
- * @param timeFormatter форматтер для преобразования [value] в строку. По умолчанию использует [FormatStyle.SHORT].
+ * @param timeFormatter форматтер для преобразования [value] в строку. По умолчанию использует [FormatStyle.SHORT]
+ * с учетом локали приложения.
  */
 @Composable
 fun TimeField(
@@ -73,7 +81,10 @@ fun TimeField(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    timeFormatter: DateTimeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) },
+    timeFormatter: DateTimeFormatter = run {
+        val locale = ConfigurationCompat.getLocales(LocalConfiguration.current).get(0) ?: Locale.getDefault()
+        remember(locale) { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale) }
+    },
 ) {
     ActionTextField(
         value = value.format(timeFormatter),
