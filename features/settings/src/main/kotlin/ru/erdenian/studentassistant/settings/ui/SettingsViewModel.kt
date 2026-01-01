@@ -7,6 +7,7 @@ import java.time.Duration
 import java.time.LocalTime
 import javax.inject.Inject
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
+import ru.erdenian.studentassistant.settings.di.SettingsComponentHolder
 
 /**
  * ViewModel для экрана настроек.
@@ -67,5 +68,11 @@ internal class SettingsViewModel @Inject constructor(
      */
     fun setAdvancedWeeksSelectorEnabled(enabled: Boolean) {
         settingsRepository.isAdvancedWeeksSelectorEnabled = enabled
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        // Очищаем граф зависимостей фичи настроек, так как пользователь покинул экран
+        SettingsComponentHolder.clear()
     }
 }
