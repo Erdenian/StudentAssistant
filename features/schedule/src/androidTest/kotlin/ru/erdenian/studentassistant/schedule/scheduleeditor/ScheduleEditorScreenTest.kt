@@ -57,13 +57,7 @@ internal class ScheduleEditorScreenTest {
 
     @Before
     fun setUp() {
-        try {
-            val instanceField = ScheduleComponentHolder::class.java.getDeclaredField("instance")
-            instanceField.isAccessible = true
-            instanceField.set(ScheduleComponentHolder, null)
-        } catch (_: Exception) {
-            // Ignored
-        }
+        ScheduleComponentHolder.clear()
 
         val dependencies = object : ScheduleDependencies {
             override val application: Application = ApplicationProvider.getApplicationContext()

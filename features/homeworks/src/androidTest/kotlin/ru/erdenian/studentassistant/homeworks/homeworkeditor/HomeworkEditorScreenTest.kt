@@ -47,13 +47,7 @@ internal class HomeworkEditorScreenTest {
 
     @Before
     fun setUp() {
-        try {
-            val instanceField = HomeworksComponentHolder::class.java.getDeclaredField("instance")
-            instanceField.isAccessible = true
-            instanceField.set(HomeworksComponentHolder, null)
-        } catch (_: Exception) {
-            // Ignored
-        }
+        HomeworksComponentHolder.clear()
 
         val dependencies = object : HomeworksDependencies {
             override val application: Application = ApplicationProvider.getApplicationContext()
