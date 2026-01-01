@@ -23,6 +23,7 @@ subprojects {
 
     dependencies {
         detektPlugins(rootProject.libs.detekt.formatting)
+        detektPlugins(rootProject.libs.detekt.rulesCompose)
     }
 
     detekt {
@@ -166,10 +167,10 @@ subprojectsAfterEvaluate {
         val androidTestExists = androidTestDir.exists() && androidTestDir.walk().any { it.isFile }
 
         if (androidTestExists) {
-            testOptions.managedDevices.allDevices.create<com.android.build.api.dsl.ManagedVirtualDevice>("testDevice") {
+            testOptions.managedDevices.localDevices.create("testDevice") {
                 device = "Pixel 4"
                 apiLevel = 34
-                systemImageSource = "aosp"
+                systemImageSource = "aosp-atd"
                 testedAbi = "x86_64"
             }
         }

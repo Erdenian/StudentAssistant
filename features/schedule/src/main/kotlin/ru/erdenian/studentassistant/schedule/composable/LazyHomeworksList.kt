@@ -98,7 +98,7 @@ internal fun LazyHomeworksList(
     }
 }
 
-@Suppress("StringLiteralDuplication", "MagicNumber")
+@Suppress("StringLiteralDuplication")
 private class LazyHomeworksListPreviewParameterProvider : PreviewParameterProvider<List<Homework>?> {
     override val values = sequenceOf(
         null,

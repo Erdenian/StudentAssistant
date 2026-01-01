@@ -43,15 +43,7 @@ internal class SettingsScreenTest {
 
     @Before
     fun setUp() {
-        // СБРОС СИНГЛТОНА: Очищаем поле 'instance' в SettingsComponentHolder через рефлексию
-        // для принудительного пересоздания графа зависимостей перед каждым тестом.
-        try {
-            val instanceField = SettingsComponentHolder::class.java.getDeclaredField("instance")
-            instanceField.isAccessible = true
-            instanceField.set(SettingsComponentHolder, null)
-        } catch (_: Exception) {
-            // Игнорируем, если поле еще не инициализировано
-        }
+        SettingsComponentHolder.clear()
 
         val dependencies = object : SettingsDependencies {
             override val application: Application = ApplicationProvider.getApplicationContext()

@@ -1,17 +1,8 @@
 package ru.erdenian.studentassistant.schedule.di
 
 import ru.erdenian.studentassistant.schedule.ScheduleDependencies
+import ru.erdenian.studentassistant.utils.BaseComponentHolder
 
-internal object ScheduleComponentHolder {
-
-    lateinit var instance: ScheduleComponent
-        private set
-
-    @Synchronized
-    fun create(dependencies: ScheduleDependencies): ScheduleComponent {
-        if (!ScheduleComponentHolder::instance.isInitialized) {
-            instance = DaggerScheduleComponent.factory().create(dependencies)
-        }
-        return instance
-    }
-}
+internal object ScheduleComponentHolder : BaseComponentHolder<ScheduleComponent, ScheduleDependencies>(
+    factory = { DaggerScheduleComponent.factory().create(it) },
+)

@@ -64,15 +64,16 @@ internal fun LessonInformationScreen(route: ScheduleRoute.LessonInformation) {
         )
     }
 
+    val nonNullLesson = lesson ?: return
     LessonInformationContent(
-        lesson = lesson ?: return,
+        lesson = nonNullLesson,
         homeworks = homeworks,
         onBackClick = navController::goBack,
-        onEditClick = { clickedLesson ->
+        onEditClick = {
             navController.navigate(
                 ScheduleRoute.LessonEditor(
-                    semesterId = clickedLesson.semesterId,
-                    lessonId = clickedLesson.id,
+                    semesterId = nonNullLesson.semesterId,
+                    lessonId = nonNullLesson.id,
                 ),
             )
         },
@@ -81,11 +82,11 @@ internal fun LessonInformationScreen(route: ScheduleRoute.LessonInformation) {
                 HomeworksRoute.HomeworkEditor(semesterId = clickedHomework.semesterId, homeworkId = clickedHomework.id),
             )
         },
-        onAddHomeworkClick = { currentLesson ->
+        onAddHomeworkClick = {
             navController.navigate(
                 HomeworksRoute.HomeworkEditor(
-                    semesterId = currentLesson.semesterId,
-                    subjectName = currentLesson.subjectName,
+                    semesterId = nonNullLesson.semesterId,
+                    subjectName = nonNullLesson.subjectName,
                 ),
             )
         },

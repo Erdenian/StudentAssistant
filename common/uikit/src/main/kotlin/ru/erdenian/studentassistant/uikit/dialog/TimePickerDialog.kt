@@ -76,7 +76,7 @@ fun TimePickerDialog(
                         DisplayMode.Input -> AppIcons.Schedule
                         else -> AppIcons.Schedule
                     },
-                    contentDescription = "",
+                    contentDescription = stringResource(RS.tpd_mode_switch),
                 )
             }
         },

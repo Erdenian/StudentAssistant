@@ -74,6 +74,7 @@ private fun TopAppBarDropdownMenuContent(
     onClick: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
+    @Suppress("ModifierHeightWithText")
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier

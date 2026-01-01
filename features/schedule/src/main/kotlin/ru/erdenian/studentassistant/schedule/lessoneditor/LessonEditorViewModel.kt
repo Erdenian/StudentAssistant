@@ -100,6 +100,13 @@ internal class LessonEditorViewModel @AssistedInject constructor(
 
     val lessonRepeat = MutableStateFlow<KClass<out Lesson.Repeat>>(Lesson.Repeat.ByWeekday::class)
 
+    private var initialSubjectName: String? = null
+    private val isSubjectNameChanged
+        get() = initialSubjectName?.let { it != subjectName.value.trim() } == true
+
+    private val donePrivate = MutableStateFlow(false)
+    val done = donePrivate.asStateFlow()
+
     init {
         viewModelScope.launch {
             val vm = this@LessonEditorViewModel
@@ -175,10 +182,6 @@ internal class LessonEditorViewModel @AssistedInject constructor(
     val existingClassrooms = lessonRepository.getClassrooms(semesterId)
         .stateIn(viewModelScope, SharingStarted.Default, emptyList())
 
-    private var initialSubjectName: String? = null
-    private val isSubjectNameChanged
-        get() = initialSubjectName?.let { it != subjectName.value.trim() } == true
-
     /**
      * Проверяет, было ли изменено название предмета и является ли редактируемое занятие
      * не единственным по старому названию.
@@ -191,9 +194,6 @@ internal class LessonEditorViewModel @AssistedInject constructor(
             initialSubjectName ?: return@withContext false,
         ) > 1
     }
-
-    private val donePrivate = MutableStateFlow(false)
-    val done = donePrivate.asStateFlow()
 
     /**
      * Сохраняет занятие.

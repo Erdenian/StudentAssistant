@@ -130,7 +130,7 @@ internal fun LazyLessonsList(
     }
 }
 
-@Suppress("StringLiteralDuplication", "MagicNumber")
+@Suppress("StringLiteralDuplication")
 private class LazyLessonsListPreviewParameterProvider : PreviewParameterProvider<List<Lesson>?> {
     override val values = sequenceOf(
         null,

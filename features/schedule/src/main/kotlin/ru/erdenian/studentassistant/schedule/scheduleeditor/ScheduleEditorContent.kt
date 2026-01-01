@@ -90,7 +90,10 @@ internal fun ScheduleEditorContent(
                 title = { Text(text = stringResource(RS.sce_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(imageVector = AppIcons.AutoMirrored.ArrowBack, contentDescription = null)
+                        Icon(
+                            imageVector = AppIcons.AutoMirrored.ArrowBack,
+                            contentDescription = stringResource(RS.u_back),
+                        )
                     }
                 },
                 actions = {
@@ -172,7 +175,6 @@ private data class ScheduleEditorContentPreviewData(
     val isLoading: Boolean = false,
 )
 
-@Suppress("MagicNumber")
 private class ScheduleEditorContentPreviewParameterProvider :
     PreviewParameterProvider<ScheduleEditorContentPreviewData> {
     override val values = sequenceOf(

@@ -223,7 +223,6 @@ private data class ScheduleContentPreviewData(
     val lessons: List<Lesson>?,
 )
 
-@Suppress("MagicNumber")
 private class ScheduleContentPreviewParameterProvider : PreviewParameterProvider<ScheduleContentPreviewData> {
     override val values = sequenceOf(
         ScheduleContentPreviewData(

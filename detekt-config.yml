@@ -1,5 +1,5 @@
 build:
-  maxIssues: 10
+  maxIssues: 7
   excludeCorrectable: false
   weights:
     UnsafeCallOnNullableType: 100500
@@ -627,7 +627,7 @@ style:
       - '1'
       - '2'
     ignoreHashCodeFunction: true
-    ignorePropertyDeclaration: false
+    ignorePropertyDeclaration: true
     ignoreLocalVariableDeclaration: false
     ignoreConstantDeclaration: true
     ignoreCompanionObjectPropertyDeclaration: true
@@ -1134,3 +1134,28 @@ formatting:
     autoCorrect: true
     indentSize: 4
     maxLineLength: 120
+
+compose:
+  ReusedModifierInstance:
+    active: true
+  UnnecessaryEventHandlerParameter:
+    active: true
+  ComposableEventParameterNaming:
+    active: true
+  ComposableParametersOrdering:
+    active: false # https://github.com/appKODE/detekt-rules-compose/issues/40
+  ModifierHeightWithText:
+    active: true
+  MissingModifierDefaultValue:
+    active: true
+  PublicComposablePreview:
+    active: true
+  TopLevelComposableFunctions:
+    active: true
+    allowInObjects: true
+    ignoreAnnotated: ["Stable", "Immutable"]
+  ComposableFunctionName:
+    active: false # https://github.com/appKODE/detekt-rules-compose/issues/35
+  ConditionCouldBeLifted:
+    active: true
+    ignoreCallsWithArgumentNames: ['modifier', 'contentAlignment']

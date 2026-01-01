@@ -85,7 +85,10 @@ internal fun SemesterEditorContent(
             title = { Text(text = stringResource(if (isEditing) RS.se_title_edit else RS.se_title_new)) },
             navigationIcon = {
                 IconButton(onClick = onBackClick) {
-                    Icon(imageVector = AppIcons.AutoMirrored.ArrowBack, contentDescription = null)
+                    Icon(
+                        imageVector = AppIcons.AutoMirrored.ArrowBack,
+                        contentDescription = stringResource(RS.u_back),
+                    )
                 }
             },
             actions = {
