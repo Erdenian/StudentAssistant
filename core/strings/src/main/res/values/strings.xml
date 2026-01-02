@@ -84,9 +84,9 @@
     <string name="le_delete_yes">Delete</string>
     <string name="le_delete_no">Cancel</string>
     <string name="le_delete_progress">Deleting…</string>
-    <string name="le_delete_homeworks_progress">Checking homeworks…</string>
-    <string name="le_delete_homeworks_title">Linked homeworks</string>
-    <string name="le_delete_homeworks_message">There are homeworks for this subject. Delete them?</string>
+    <string name="le_delete_homeworks_progress">Checking homework…</string>
+    <string name="le_delete_homeworks_title">Linked homework</string>
+    <string name="le_delete_homeworks_message">There is homework for this subject. Delete it?</string>
     <string name="le_delete_homeworks_yes">Delete</string>
     <string name="le_delete_homeworks_no">Keep</string>
     <string name="le_delete_homeworks_cancel">Cancel</string>
@@ -96,9 +96,9 @@
     <!-- region homeworks -->
 
     <!-- Homeworks -->
-    <string name="h_title">Homeworks</string>
+    <string name="h_title">Homework</string>
     <string name="h_add">New homework</string>
-    <string name="h_no_schedule">It\'s empty here. Add a schedule to save homeworks.</string>
+    <string name="h_no_schedule">It\'s empty here. Add a schedule to save homework.</string>
     <string name="h_delete_homework">Delete</string>
     <string name="h_delete_message">Delete this homework?</string>
     <string name="h_delete_yes">Delete</string>
