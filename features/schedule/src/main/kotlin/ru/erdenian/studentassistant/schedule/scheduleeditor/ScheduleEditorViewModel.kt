@@ -86,7 +86,6 @@ internal class ScheduleEditorViewModel @AssistedInject constructor(
         operationPrivate.value = Operation.DELETING_SEMESTER
         viewModelScope.launch {
             semesterRepository.delete(semesterId)
-            operationPrivate.value = null
             isDeletedPrivate.value = true
         }
     }
