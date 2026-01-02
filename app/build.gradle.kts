@@ -1,6 +1,8 @@
 @file:Suppress("UnstableApiUsage")
 
 import java.time.LocalDate
+import javax.xml.parsers.DocumentBuilderFactory
+import org.w3c.dom.Element
 
 plugins {
     alias(libs.plugins.android.application)
@@ -13,6 +15,24 @@ plugins {
     alias(libs.plugins.tripletPlay)
 }
 
+// Автоматическое чтение поддерживаемых языков из locale_config.xml
+val supportedLocales: Set<String>
+    get() = try {
+        val localeFile = file("src/main/res/xml/locale_config.xml")
+        if (localeFile.exists()) {
+            val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(localeFile)
+            val localeNodes = doc.getElementsByTagName("locale")
+            (0 until localeNodes.length).map { i ->
+                (localeNodes.item(i) as Element).getAttribute("android:name")
+            }.toSet()
+        } else {
+            emptySet()
+        }
+    } catch (e: Exception) {
+        logger.warn("Could not parse locale_config.xml: ${e.message}")
+        emptySet()
+    }
+
 android {
     namespace = "ru.erdenian.studentassistant"
 
@@ -21,7 +41,9 @@ android {
         versionCode = 28
         versionName = "0.7.4"
 
-        androidResources.localeFilters += setOf("en", "ru", "fr", "it", "de", "es")
+        // Применяем фильтр ресурсов на основе прочитанного списка
+        androidResources.localeFilters += supportedLocales
+
         base.archivesName = "${rootProject.name}-$versionName"
 
         testInstrumentationRunner = "ru.erdenian.studentassistant.TestRunner"
