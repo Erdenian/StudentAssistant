@@ -4,15 +4,21 @@
     <string name="app_name">Student Assistant</string>
 
     <!-- region schedule -->
+
+    <!-- LazyLessonsList -->
     <string name="lll_free_day">Канмалли кун</string>
+
+    <!-- LazyHomeworksList -->
     <string name="lhl_no_homeworks">Килти ӗҫ ҫук</string>
 
+    <!-- Schedule -->
     <string name="s_title">Урок йӗрки</string>
     <string name="s_calendar">Календарь</string>
     <string name="s_add">Йӗрке хуш</string>
     <string name="s_edit">Йӗркене тӳрлет</string>
     <string name="s_no_schedule">Кунта пушӑ. Университет е шкул расписанине хушӑр.</string>
 
+    <!-- Lesson Information -->
     <string name="li_title">Урок ҫинчен</string>
     <string name="li_edit">Тӳрлет</string>
     <string name="li_add_homework">Килти ӗҫ хуш</string>
@@ -22,6 +28,7 @@
     <string name="li_delete_homework_no">Пӑрахӑҫла</string>
     <string name="li_delete_homework_progress">Килти ӗҫе кӑларса пӑрахни…</string>
 
+    <!-- Semester Editor -->
     <string name="se_title_new">Ҫӗнӗ расписани</string>
     <string name="se_title_edit">Расписанине тӳрлетни</string>
     <string name="se_name">Ят</string>
@@ -37,6 +44,7 @@
     <string name="se_warning_week_shift_yes">Малалла</string>
     <string name="se_warning_week_shift_no">Пӑрахӑҫла</string>
 
+    <!-- Schedule Editor -->
     <string name="sce_title">Урок редакторӗ</string>
     <string name="sce_edit">Параметрсем</string>
     <string name="sce_add_lesson">Урок хуш</string>
@@ -49,6 +57,7 @@
     <string name="sce_delete_lesson">Кӑларса пӑрах</string>
     <string name="sce_delete_lesson_progress">Урока кӑларса пӑрахни…</string>
 
+    <!-- Lesson Editor -->
     <string name="le_title_new">Ҫӗнӗ урок</string>
     <string name="le_title_edit">Урока тӳрлетни</string>
     <string name="le_subject_name">Предмет</string>
@@ -81,9 +90,12 @@
     <string name="le_delete_homeworks_yes">Кӑларса пӑрах</string>
     <string name="le_delete_homeworks_no">Хӑвар</string>
     <string name="le_delete_homeworks_cancel">Пӑрахӑҫла</string>
+
     <!-- endregion -->
 
     <!-- region homeworks -->
+
+    <!-- Homeworks -->
     <string name="h_title">Килти ӗҫсем</string>
     <string name="h_add">Ҫӗнӗ ӗҫ</string>
     <string name="h_no_schedule">Кунта пушӑ. Килти ӗҫсене ҫырса пыма расписани хушӑр.</string>
@@ -93,6 +105,7 @@
     <string name="h_delete_no">Пӑрахӑҫла</string>
     <string name="h_delete_progress">Килти ӗҫе кӑларса пӑрахни…</string>
 
+    <!-- Homework Editor -->
     <string name="he_title">Килти ӗҫ редакторӗ</string>
     <string name="he_subject">Предмет</string>
     <string name="he_description">Ӗҫӗн ӑнлантарӑвӗ</string>
@@ -111,9 +124,12 @@
     <string name="he_delete_yes">Кӑларса пӑрах</string>
     <string name="he_delete_no">Пӑрахӑҫла</string>
     <string name="he_delete_progress">Кӑларса пӑрахни…</string>
+
     <!-- endregion -->
 
     <!-- region settings -->
+
+    <!-- Settings -->
     <string name="st_title">Настройкӑсем</string>
     <string name="st_default_start_time">Урок пуҫламӑшӗ</string>
     <string name="st_default_lesson_duration">Урок тӑсӑлӑвӗ</string>
@@ -122,24 +138,38 @@
     <string name="st_is_advanced_weeks_selector_enabled_description">Урока тӑтӑшлӑхне суйламалли анлӑрах майсем</string>
     <string name="st_ok">Юрать</string>
     <string name="st_cancel">Пӑрахӑҫла</string>
+
     <!-- endregion -->
 
     <!-- region uikit -->
+
+    <!-- Common icons -->
     <string name="u_back">Каялла</string>
+
+    <!-- TopAppBarActions -->
     <string name="taba_more_options">Тата</string>
+
+    <!--HomeworkCard -->
     <string name="hc_deadline">%1$s ччен</string>
+
+    <!-- WeeksSelector -->
     <string name="ws_variants_title">Тӑтӑшлӑх</string>
     <string name="ws_cycle_length">Цикл тӑсӑлӑвӗ: %1$d</string>
     <string name="ws_add_week">Эрне хуш</string>
     <string name="ws_remove_week">Эрнене кӑлар</string>
+
+    <!-- DatePickerDialog -->
     <string name="dpd_today">Паян</string>
     <string name="dpd_ok">Юрать</string>
     <string name="dpd_cancel">Пӑрахӑҫла</string>
+
+    <!-- TimePickerDialog -->
     <string name="tpd_select_time">Вӑхӑт суйла</string>
     <string name="tpd_enter_time">Вӑхӑт ҫыр</string>
     <string name="tpd_mode_switch">Вӑхӑт кӗртмелли меслет</string>
     <string name="tpd_ok">Юрать</string>
     <string name="tpd_cancel">Пӑрахӑҫла</string>
+
     <!-- endregion -->
 
 </resources>

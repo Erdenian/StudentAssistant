@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Student Assistant</string>
 
     <!-- region schedule -->
+
+    <!-- LazyLessonsList -->
     <string name="lll_free_day">Бос күн</string>
+
+    <!-- LazyHomeworksList -->
     <string name="lhl_no_homeworks">Үй тапсырмасы жоқ</string>
 
+    <!-- Schedule -->
     <string name="s_title">Сабақ кестесі</string>
     <string name="s_calendar">Күнтізбе</string>
     <string name="s_add">Кесте қосу</string>
     <string name="s_edit">Кестені өңдеу</string>
     <string name="s_no_schedule">Мұнда әзірге бос. Университет немесе мектеп кестесін қосыңыз.</string>
 
+    <!-- Lesson Information -->
     <string name="li_title">Сабақ туралы ақпарат</string>
     <string name="li_edit">Өзгерту</string>
     <string name="li_add_homework">Тапсырма қосу</string>
@@ -21,6 +28,7 @@
     <string name="li_delete_homework_no">Болдырмау</string>
     <string name="li_delete_homework_progress">Тапсырма жойылуда…</string>
 
+    <!-- Semester Editor -->
     <string name="se_title_new">Жаңа кесте</string>
     <string name="se_title_edit">Кестені өңдеу</string>
     <string name="se_name">Атауы</string>
@@ -36,6 +44,7 @@
     <string name="se_warning_week_shift_yes">Иә, жалғастыру</string>
     <string name="se_warning_week_shift_no">Болдырмау</string>
 
+    <!-- Schedule Editor -->
     <string name="sce_title">Сабақ редакторы</string>
     <string name="sce_edit">Кесте параметрлері</string>
     <string name="sce_add_lesson">Сабақ қосу</string>
@@ -48,6 +57,7 @@
     <string name="sce_delete_lesson">Жою</string>
     <string name="sce_delete_lesson_progress">Сабақ жойылуда…</string>
 
+    <!-- Lesson Editor -->
     <string name="le_title_new">Жаңа сабақ</string>
     <string name="le_title_edit">Сабақты өңдеу</string>
     <string name="le_subject_name">Пән</string>
@@ -80,9 +90,12 @@
     <string name="le_delete_homeworks_yes">Жою</string>
     <string name="le_delete_homeworks_no">Қалдыру</string>
     <string name="le_delete_homeworks_cancel">Болдырмау</string>
+
     <!-- endregion -->
 
     <!-- region homeworks -->
+
+    <!-- Homeworks -->
     <string name="h_title">Тапсырмалар</string>
     <string name="h_add">Жаңа тапсырма</string>
     <string name="h_no_schedule">Мұнда әзірге бос. Үй тапсырмаларын жазу үшін кесте қосыңыз.</string>
@@ -92,6 +105,7 @@
     <string name="h_delete_no">Болдырмау</string>
     <string name="h_delete_progress">Тапсырма жойылуда…</string>
 
+    <!-- Homework Editor -->
     <string name="he_title">Тапсырма редакторы</string>
     <string name="he_subject">Пән</string>
     <string name="he_description">Сипаттамасы</string>
@@ -110,9 +124,12 @@
     <string name="he_delete_yes">Жою</string>
     <string name="he_delete_no">Болдырмау</string>
     <string name="he_delete_progress">Жойылуда…</string>
+
     <!-- endregion -->
 
     <!-- region settings -->
+
+    <!-- Settings -->
     <string name="st_title">Параметрлер</string>
     <string name="st_default_start_time">Сабақтың басталуы</string>
     <string name="st_default_lesson_duration">Сабақтың ұзақтығы</string>
@@ -121,23 +138,38 @@
     <string name="st_is_advanced_weeks_selector_enabled_description">Сабақты қайталау үшін апталарды икемді таңдау</string>
     <string name="st_ok">ОК</string>
     <string name="st_cancel">Болдырмау</string>
+
     <!-- endregion -->
 
     <!-- region uikit -->
+
+    <!-- Common icons -->
     <string name="u_back">Артқа</string>
+
+    <!-- TopAppBarActions -->
     <string name="taba_more_options">Тағы</string>
+
+    <!--HomeworkCard -->
     <string name="hc_deadline">%1$s дейін</string>
+
+    <!-- WeeksSelector -->
     <string name="ws_variants_title">Қайталау</string>
     <string name="ws_cycle_length">Цикл ұзындығы: %1$d</string>
     <string name="ws_add_week">Апта қосу</string>
     <string name="ws_remove_week">Аптаны алып тастау</string>
+
+    <!-- DatePickerDialog -->
     <string name="dpd_today">Бүгін</string>
     <string name="dpd_ok">ОК</string>
     <string name="dpd_cancel">Болдырмау</string>
+
+    <!-- TimePickerDialog -->
     <string name="tpd_select_time">Уақытты таңдаңыз</string>
     <string name="tpd_enter_time">Уақытты енгізіңіз</string>
     <string name="tpd_mode_switch">Енгізу режимі</string>
     <string name="tpd_ok">ОК</string>
     <string name="tpd_cancel">Болдырмау</string>
+
     <!-- endregion -->
+
 </resources>

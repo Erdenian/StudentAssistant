@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Student Assistant</string>
 
     <!-- region schedule -->
+
+    <!-- LazyLessonsList -->
     <string name="lll_free_day">Freier Tag</string>
+
+    <!-- LazyHomeworksList -->
     <string name="lhl_no_homeworks">Keine Hausaufgaben</string>
 
+    <!-- Schedule -->
     <string name="s_title">Stundenplan</string>
     <string name="s_calendar">Kalender</string>
     <string name="s_add">Stundenplan hinzufügen</string>
     <string name="s_edit">Stundenplan bearbeiten</string>
     <string name="s_no_schedule">Hier ist es leer. Fügen Sie einen Uni- oder Schulstundenplan hinzu.</string>
 
+    <!-- Lesson Information -->
     <string name="li_title">Infos zur Stunde</string>
     <string name="li_edit">Bearbeiten</string>
     <string name="li_add_homework">Hausaufgabe hinzufügen</string>
@@ -21,6 +28,7 @@
     <string name="li_delete_homework_no">Abbrechen</string>
     <string name="li_delete_homework_progress">Hausaufgabe wird gelöscht…</string>
 
+    <!-- Semester Editor -->
     <string name="se_title_new">Neuer Stundenplan</string>
     <string name="se_title_edit">Stundenplan bearbeiten</string>
     <string name="se_name">Name</string>
@@ -36,6 +44,7 @@
     <string name="se_warning_week_shift_yes">Ja, fortfahren</string>
     <string name="se_warning_week_shift_no">Abbrechen</string>
 
+    <!-- Schedule Editor -->
     <string name="sce_title">Stundeneditor</string>
     <string name="sce_edit">Parameter</string>
     <string name="sce_add_lesson">Stunde hinzufügen</string>
@@ -48,6 +57,7 @@
     <string name="sce_delete_lesson">Löschen</string>
     <string name="sce_delete_lesson_progress">Stunde wird gelöscht…</string>
 
+    <!-- Lesson Editor -->
     <string name="le_title_new">Neue Stunde</string>
     <string name="le_title_edit">Stunde bearbeiten</string>
     <string name="le_subject_name">Fach</string>
@@ -80,9 +90,12 @@
     <string name="le_delete_homeworks_yes">Löschen</string>
     <string name="le_delete_homeworks_no">Behalten</string>
     <string name="le_delete_homeworks_cancel">Abbrechen</string>
+
     <!-- endregion -->
 
     <!-- region homeworks -->
+
+    <!-- Homeworks -->
     <string name="h_title">Hausaufgaben</string>
     <string name="h_add">Neue Hausaufgabe</string>
     <string name="h_no_schedule">Hier ist es leer. Fügen Sie einen Stundenplan hinzu, um Hausaufgaben zu speichern.</string>
@@ -92,6 +105,7 @@
     <string name="h_delete_no">Abbrechen</string>
     <string name="h_delete_progress">Hausaufgabe wird gelöscht…</string>
 
+    <!-- Homework Editor -->
     <string name="he_title">Hausaufgabeneditor</string>
     <string name="he_subject">Fach</string>
     <string name="he_description">Beschreibung</string>
@@ -110,9 +124,12 @@
     <string name="he_delete_yes">Löschen</string>
     <string name="he_delete_no">Abbrechen</string>
     <string name="he_delete_progress">Wird gelöscht…</string>
+
     <!-- endregion -->
 
     <!-- region settings -->
+
+    <!-- Settings -->
     <string name="st_title">Einstellungen</string>
     <string name="st_default_start_time">Unterrichtsbeginn</string>
     <string name="st_default_lesson_duration">Dauer der Stunde</string>
@@ -121,23 +138,38 @@
     <string name="st_is_advanced_weeks_selector_enabled_description">Flexiblere Wochenauswahl für Stundenwiederholungen</string>
     <string name="st_ok">OK</string>
     <string name="st_cancel">Abbrechen</string>
+
     <!-- endregion -->
 
     <!-- region uikit -->
+
+    <!-- Common icons -->
     <string name="u_back">Zurück</string>
+
+    <!-- TopAppBarActions -->
     <string name="taba_more_options">Mehr Optionen</string>
+
+    <!--HomeworkCard -->
     <string name="hc_deadline">Bis %1$s</string>
+
+    <!-- WeeksSelector -->
     <string name="ws_variants_title">Wiederholung</string>
     <string name="ws_cycle_length">Zykluslänge: %1$d</string>
     <string name="ws_add_week">Woche hinzufügen</string>
     <string name="ws_remove_week">Woche entfernen</string>
+
+    <!-- DatePickerDialog -->
     <string name="dpd_today">Heute</string>
     <string name="dpd_ok">OK</string>
     <string name="dpd_cancel">Abbrechen</string>
+
+    <!-- TimePickerDialog -->
     <string name="tpd_select_time">Zeit auswählen</string>
     <string name="tpd_enter_time">Zeit eingeben</string>
     <string name="tpd_mode_switch">Eingabemodus</string>
     <string name="tpd_ok">OK</string>
     <string name="tpd_cancel">Abbrechen</string>
+
     <!-- endregion -->
+
 </resources>

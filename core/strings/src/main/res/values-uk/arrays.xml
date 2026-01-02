@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="lesson_repeat_types">
+
+<string-array name="lesson_repeat_types">
         <item>По днях тижня</item>
         <item>По датах</item>
     </string-array>
@@ -25,4 +26,5 @@
         <item>Кожен 4-й тиждень з 4</item>
         <item>Свій варіант</item>
     </string-array>
+
 </resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="lesson_repeat_types">
+
+<string-array name="lesson_repeat_types">
         <item>Por días de la semana</item>
         <item>Por fechas</item>
     </string-array>
@@ -25,4 +26,5 @@
         <item>Cada 4ª semana de 4</item>
         <item>Personalizado</item>
     </string-array>
+
 </resources>

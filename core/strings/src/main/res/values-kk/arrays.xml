@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="lesson_repeat_types">
+
+<string-array name="lesson_repeat_types">
         <item>Апта күндері бойынша</item>
         <item>Күндер бойынша</item>
     </string-array>
@@ -25,4 +26,5 @@
         <item>4 аптаның әр 4-шісі</item>
         <item>Өз нұсқаңыз</item>
     </string-array>
+
 </resources>

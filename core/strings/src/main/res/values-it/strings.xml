@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Student Assistant</string>
 
     <!-- region schedule -->
+
+    <!-- LazyLessonsList -->
     <string name="lll_free_day">Giorno libero</string>
+
+    <!-- LazyHomeworksList -->
     <string name="lhl_no_homeworks">Nessun compito</string>
 
+    <!-- Schedule -->
     <string name="s_title">Orario</string>
     <string name="s_calendar">Calendario</string>
     <string name="s_add">Aggiungi orario</string>
     <string name="s_edit">Modifica orario</string>
     <string name="s_no_schedule">È vuoto qui. Aggiungi un orario universitario o scolastico.</string>
 
+    <!-- Lesson Information -->
     <string name="li_title">Info lezione</string>
     <string name="li_edit">Modifica</string>
     <string name="li_add_homework">Aggiungi compito</string>
@@ -21,6 +28,7 @@
     <string name="li_delete_homework_no">Annulla</string>
     <string name="li_delete_homework_progress">Eliminazione compito…</string>
 
+    <!-- Semester Editor -->
     <string name="se_title_new">Nuovo orario</string>
     <string name="se_title_edit">Modifica orario</string>
     <string name="se_name">Nome</string>
@@ -36,6 +44,7 @@
     <string name="se_warning_week_shift_yes">Sì, continua</string>
     <string name="se_warning_week_shift_no">Annulla</string>
 
+    <!-- Schedule Editor -->
     <string name="sce_title">Editor lezioni</string>
     <string name="sce_edit">Parametri</string>
     <string name="sce_add_lesson">Aggiungi lezione</string>
@@ -48,6 +57,7 @@
     <string name="sce_delete_lesson">Elimina</string>
     <string name="sce_delete_lesson_progress">Eliminazione lezione…</string>
 
+    <!-- Lesson Editor -->
     <string name="le_title_new">Nuova lezione</string>
     <string name="le_title_edit">Modifica lezione</string>
     <string name="le_subject_name">Materia</string>
@@ -80,9 +90,12 @@
     <string name="le_delete_homeworks_yes">Elimina</string>
     <string name="le_delete_homeworks_no">Mantieni</string>
     <string name="le_delete_homeworks_cancel">Annulla</string>
+
     <!-- endregion -->
 
     <!-- region homeworks -->
+
+    <!-- Homeworks -->
     <string name="h_title">Compiti</string>
     <string name="h_add">Nuovo compito</string>
     <string name="h_no_schedule">È vuoto qui. Aggiungi un orario per salvare i compiti.</string>
@@ -92,6 +105,7 @@
     <string name="h_delete_no">Annulla</string>
     <string name="h_delete_progress">Eliminazione compito…</string>
 
+    <!-- Homework Editor -->
     <string name="he_title">Editor compito</string>
     <string name="he_subject">Materia</string>
     <string name="he_description">Descrizione</string>
@@ -110,9 +124,12 @@
     <string name="he_delete_yes">Elimina</string>
     <string name="he_delete_no">Annulla</string>
     <string name="he_delete_progress">Eliminazione…</string>
+
     <!-- endregion -->
 
     <!-- region settings -->
+
+    <!-- Settings -->
     <string name="st_title">Impostazioni</string>
     <string name="st_default_start_time">Ora inizio lezioni</string>
     <string name="st_default_lesson_duration">Durata lezione</string>
@@ -121,23 +138,38 @@
     <string name="st_is_advanced_weeks_selector_enabled_description">Selezione più flessibile delle settimane per la ripetizione delle lezioni</string>
     <string name="st_ok">OK</string>
     <string name="st_cancel">Annulla</string>
+
     <!-- endregion -->
 
     <!-- region uikit -->
+
+    <!-- Common icons -->
     <string name="u_back">Indietro</string>
+
+    <!-- TopAppBarActions -->
     <string name="taba_more_options">Altre opzioni</string>
+
+    <!--HomeworkCard -->
     <string name="hc_deadline">Fino al %1$s</string>
+
+    <!-- WeeksSelector -->
     <string name="ws_variants_title">Ripetizione</string>
     <string name="ws_cycle_length">Lunghezza ciclo: %1$d</string>
     <string name="ws_add_week">Aggiungi settimana</string>
     <string name="ws_remove_week">Rimuovi settimana</string>
+
+    <!-- DatePickerDialog -->
     <string name="dpd_today">Oggi</string>
     <string name="dpd_ok">OK</string>
     <string name="dpd_cancel">Annulla</string>
+
+    <!-- TimePickerDialog -->
     <string name="tpd_select_time">Seleziona ora</string>
     <string name="tpd_enter_time">Inserisci ora</string>
     <string name="tpd_mode_switch">Modalità di input</string>
     <string name="tpd_ok">OK</string>
     <string name="tpd_cancel">Annulla</string>
+
     <!-- endregion -->
+
 </resources>

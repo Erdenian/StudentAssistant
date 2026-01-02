@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Student Assistant</string>
 
     <!-- region schedule -->
+
+    <!-- LazyLessonsList -->
     <string name="lll_free_day">Вільний день</string>
+
+    <!-- LazyHomeworksList -->
     <string name="lhl_no_homeworks">Немає завдань</string>
 
+    <!-- Schedule -->
     <string name="s_title">Розклад</string>
     <string name="s_calendar">Календар</string>
     <string name="s_add">Додати розклад</string>
     <string name="s_edit">Редагувати розклад</string>
     <string name="s_no_schedule">Тут поки порожньо. Додайте розклад університету або школи.</string>
 
+    <!-- Lesson Information -->
     <string name="li_title">Інформація про заняття</string>
     <string name="li_edit">Змінити</string>
     <string name="li_add_homework">Додати завдання</string>
@@ -21,6 +28,7 @@
     <string name="li_delete_homework_no">Скасувати</string>
     <string name="li_delete_homework_progress">Видалення завдання…</string>
 
+    <!-- Semester Editor -->
     <string name="se_title_new">Новий розклад</string>
     <string name="se_title_edit">Редагування розкладу</string>
     <string name="se_name">Назва</string>
@@ -36,6 +44,7 @@
     <string name="se_warning_week_shift_yes">Так, продовжити</string>
     <string name="se_warning_week_shift_no">Скасувати</string>
 
+    <!-- Schedule Editor -->
     <string name="sce_title">Редактор занять</string>
     <string name="sce_edit">Параметри розкладу</string>
     <string name="sce_add_lesson">Додати заняття</string>
@@ -48,6 +57,7 @@
     <string name="sce_delete_lesson">Видалити</string>
     <string name="sce_delete_lesson_progress">Видалення заняття…</string>
 
+    <!-- Lesson Editor -->
     <string name="le_title_new">Нове заняття</string>
     <string name="le_title_edit">Редагування заняття</string>
     <string name="le_subject_name">Предмет</string>
@@ -80,9 +90,12 @@
     <string name="le_delete_homeworks_yes">Видалити</string>
     <string name="le_delete_homeworks_no">Залишити</string>
     <string name="le_delete_homeworks_cancel">Скасувати</string>
+
     <!-- endregion -->
 
     <!-- region homeworks -->
+
+    <!-- Homeworks -->
     <string name="h_title">Завдання</string>
     <string name="h_add">Нове завдання</string>
     <string name="h_no_schedule">Тут поки порожньо. Додайте розклад, щоб записувати домашні завдання.</string>
@@ -92,6 +105,7 @@
     <string name="h_delete_no">Скасувати</string>
     <string name="h_delete_progress">Видалення завдання…</string>
 
+    <!-- Homework Editor -->
     <string name="he_title">Редактор завдання</string>
     <string name="he_subject">Предмет</string>
     <string name="he_description">Опис</string>
@@ -110,9 +124,12 @@
     <string name="he_delete_yes">Видалити</string>
     <string name="he_delete_no">Скасувати</string>
     <string name="he_delete_progress">Видалення…</string>
+
     <!-- endregion -->
 
     <!-- region settings -->
+
+    <!-- Settings -->
     <string name="st_title">Налаштування</string>
     <string name="st_default_start_time">Початок занять</string>
     <string name="st_default_lesson_duration">Тривалість заняття</string>
@@ -121,23 +138,38 @@
     <string name="st_is_advanced_weeks_selector_enabled_description">Більш гнучкий вибір тижнів для повторення заняття</string>
     <string name="st_ok">ОК</string>
     <string name="st_cancel">Скасувати</string>
+
     <!-- endregion -->
 
     <!-- region uikit -->
+
+    <!-- Common icons -->
     <string name="u_back">Назад</string>
+
+    <!-- TopAppBarActions -->
     <string name="taba_more_options">Ще</string>
+
+    <!--HomeworkCard -->
     <string name="hc_deadline">До %1$s</string>
+
+    <!-- WeeksSelector -->
     <string name="ws_variants_title">Повторення</string>
     <string name="ws_cycle_length">Довжина циклу: %1$d</string>
     <string name="ws_add_week">Додати тиждень</string>
     <string name="ws_remove_week">Прибрати тиждень</string>
+
+    <!-- DatePickerDialog -->
     <string name="dpd_today">Сьогодні</string>
     <string name="dpd_ok">ОК</string>
     <string name="dpd_cancel">Скасувати</string>
+
+    <!-- TimePickerDialog -->
     <string name="tpd_select_time">Виберіть час</string>
     <string name="tpd_enter_time">Введіть час</string>
     <string name="tpd_mode_switch">Режим введення</string>
     <string name="tpd_ok">ОК</string>
     <string name="tpd_cancel">Скасувати</string>
+
     <!-- endregion -->
+
 </resources>
