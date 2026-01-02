@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Student Assistant</string>
+
+    <!-- region schedule -->
+
+    <!-- LazyLessonsList -->
+    <string name="lll_free_day">Free day</string>
+
+    <!-- LazyHomeworksList -->
+    <string name="lhl_no_homeworks">No homework</string>
+
+    <!-- Schedule -->
+    <string name="s_title">Schedule</string>
+    <string name="s_calendar">Calendar</string>
+    <string name="s_add">Add schedule</string>
+    <string name="s_edit">Edit schedule</string>
+    <string name="s_no_schedule">It\'s empty here. Add a university or school schedule.</string>
+
+    <!-- Lesson Information -->
+    <string name="li_title">Lesson information</string>
+    <string name="li_edit">Edit</string>
+    <string name="li_add_homework">Add homework</string>
+    <string name="li_delete_homework">Delete</string>
+    <string name="li_delete_homework_message">Delete this homework?</string>
+    <string name="li_delete_homework_yes">Delete</string>
+    <string name="li_delete_homework_no">Cancel</string>
+    <string name="li_delete_homework_progress">Deleting homework…</string>
+
+    <!-- Semester Editor -->
+    <string name="se_title_new">New schedule</string>
+    <string name="se_title_edit">Edit schedule</string>
+    <string name="se_name">Name</string>
+    <string name="se_first_day">First day</string>
+    <string name="se_last_day">Last day</string>
+    <string name="se_save">Save</string>
+    <string name="se_saving">Saving…</string>
+    <string name="se_error_empty_name">Enter name</string>
+    <string name="se_error_name_not_available">This name is already in use</string>
+    <string name="se_error_wrong_dates">Invalid date range</string>
+    <string name="se_warning_week_shift_title">Week shift</string>
+    <string name="se_warning_week_shift_message">You changed the semester start date. This may disrupt the week alternation (even/odd) for existing lessons. Continue?</string>
+    <string name="se_warning_week_shift_yes">Yes, continue</string>
+    <string name="se_warning_week_shift_no">Cancel</string>
+
+    <!-- Schedule Editor -->
+    <string name="sce_title">Schedule editor</string>
+    <string name="sce_edit">Schedule parameters</string>
+    <string name="sce_add_lesson">Add lesson</string>
+    <string name="sce_delete">Delete schedule</string>
+    <string name="sce_delete_message">Delete schedule and all lessons?</string>
+    <string name="sce_delete_yes">Delete</string>
+    <string name="sce_delete_no">Cancel</string>
+    <string name="sce_delete_progress">Deleting schedule…</string>
+    <string name="sce_copy_lesson">Copy</string>
+    <string name="sce_delete_lesson">Delete</string>
+    <string name="sce_delete_lesson_progress">Deleting lesson…</string>
+
+    <!-- Lesson Editor -->
+    <string name="le_title_new">New lesson</string>
+    <string name="le_title_edit">Edit lesson</string>
+    <string name="le_subject_name">Subject</string>
+    <string name="le_type">Lesson type</string>
+    <string name="le_teachers">Teachers</string>
+    <string name="le_classrooms">Classrooms</string>
+    <string name="le_start_time">Start</string>
+    <string name="le_end_time">End</string>
+    <string name="le_day_of_week">Day of week</string>
+    <string name="le_repeat_type">Repeat</string>
+    <string name="le_save">Save</string>
+    <string name="le_save_progress">Saving…</string>
+    <string name="le_error_empty_subject_name">Enter subject name</string>
+    <string name="le_error_wrong_time">Start time must be before end time</string>
+    <string name="le_error_empty_repeat">No repeat days selected</string>
+    <string name="le_rename_others_progress">Checking other lessons…</string>
+    <string name="le_rename_others_title">Group rename</string>
+    <string name="le_rename_others_message">You renamed the subject. Update it for other lessons too?</string>
+    <string name="le_rename_others_yes">Yes</string>
+    <string name="le_rename_others_no">No</string>
+    <string name="le_rename_others_cancel">Cancel</string>
+    <string name="le_delete">Delete lesson</string>
+    <string name="le_delete_message">Delete this lesson?</string>
+    <string name="le_delete_yes">Delete</string>
+    <string name="le_delete_no">Cancel</string>
+    <string name="le_delete_progress">Deleting…</string>
+    <string name="le_delete_homeworks_progress">Checking homeworks…</string>
+    <string name="le_delete_homeworks_title">Linked homeworks</string>
+    <string name="le_delete_homeworks_message">There are homeworks for this subject. Delete them?</string>
+    <string name="le_delete_homeworks_yes">Delete</string>
+    <string name="le_delete_homeworks_no">Keep</string>
+    <string name="le_delete_homeworks_cancel">Cancel</string>
+
+    <!-- endregion -->
+
+    <!-- region homeworks -->
+
+    <!-- Homeworks -->
+    <string name="h_title">Homeworks</string>
+    <string name="h_add">New homework</string>
+    <string name="h_no_schedule">It\'s empty here. Add a schedule to save homeworks.</string>
+    <string name="h_delete_homework">Delete</string>
+    <string name="h_delete_message">Delete this homework?</string>
+    <string name="h_delete_yes">Delete</string>
+    <string name="h_delete_no">Cancel</string>
+    <string name="h_delete_progress">Deleting homework…</string>
+
+    <!-- Homework Editor -->
+    <string name="he_title">Homework editor</string>
+    <string name="he_subject">Subject</string>
+    <string name="he_description">Homework description</string>
+    <string name="he_deadline_label">Deadline</string>
+    <string name="he_save">Save</string>
+    <string name="he_save_progress">Saving…</string>
+    <string name="he_error_empty_subject_name">Enter subject</string>
+    <string name="he_error_empty_description">Enter description</string>
+    <string name="he_unknown_lesson">New subject</string>
+    <string name="he_unknown_lesson_message">The subject is not in the schedule. Save homework and add subject to the list?</string>
+    <string name="he_unknown_lesson_yes">Save</string>
+    <string name="he_unknown_lesson_no">Cancel</string>
+    <string name="he_unknown_lesson_yes_and_create">Save and create lesson</string>
+    <string name="he_delete">Delete</string>
+    <string name="he_delete_message">Delete homework?</string>
+    <string name="he_delete_yes">Delete</string>
+    <string name="he_delete_no">Cancel</string>
+    <string name="he_delete_progress">Deleting…</string>
+
+    <!-- endregion -->
+
+    <!-- region settings -->
+
+    <!-- Settings -->
+    <string name="st_title">Settings</string>
+    <string name="st_default_start_time">Classes start time</string>
+    <string name="st_default_lesson_duration">Lesson duration</string>
+    <string name="st_default_break_duration">Break duration</string>
+    <string name="st_is_advanced_weeks_selector_enabled">Advanced week selector</string>
+    <string name="st_is_advanced_weeks_selector_enabled_description">More flexible week selection for lesson repetition</string>
+    <string name="st_ok">OK</string>
+    <string name="st_cancel">Cancel</string>
+
+    <!-- endregion -->
+
+    <!-- region uikit -->
+
+    <!-- Common icons -->
+    <string name="u_back">Back</string>
+
+    <!-- TopAppBarActions -->
+    <string name="taba_more_options">More options</string>
+
+    <!--HomeworkCard -->
+    <string name="hc_deadline">Until %1$s</string>
+
+    <!-- WeeksSelector -->
+    <string name="ws_variants_title">Repeat</string>
+    <string name="ws_cycle_length">Cycle length: %1$d</string>
+    <string name="ws_add_week">Add week</string>
+    <string name="ws_remove_week">Remove week</string>
+
+    <!-- DatePickerDialog -->
+    <string name="dpd_today">Today</string>
+    <string name="dpd_ok">OK</string>
+    <string name="dpd_cancel">Cancel</string>
+
+    <!-- TimePickerDialog -->
+    <string name="tpd_select_time">Select time</string>
+    <string name="tpd_enter_time">Enter time</string>
+    <string name="tpd_mode_switch">Input mode</string>
+    <string name="tpd_ok">OK</string>
+    <string name="tpd_cancel">Cancel</string>
+
+    <!-- endregion -->
+
+</resources>
