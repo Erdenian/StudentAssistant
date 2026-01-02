@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-01-03
+
 ### Fixed
 - Исправлена лишняя анимация перехода (shared element) при открытии редактора расписания
 - Мелькание клавиатуры при закрытии экранов редактирования после сохранения
@@ -161,7 +163,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2016-12-19
 
 <!-- @formatter:off -->
-[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/0.7.4...develop
+[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/0.8.0...develop
+[0.8.0]: https://github.com/Erdenian/StudentAssistant/compare/0.7.4...0.8.0
 [0.7.4]: https://github.com/Erdenian/StudentAssistant/compare/0.7.3...0.7.4
 [0.7.3]: https://github.com/Erdenian/StudentAssistant/compare/0.7.2...0.7.3
 [0.7.2]: https://github.com/Erdenian/StudentAssistant/compare/0.7.1...0.7.2
