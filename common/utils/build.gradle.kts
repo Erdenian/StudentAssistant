@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kover)
 }
 
 android {
@@ -11,5 +10,9 @@ android {
 dependencies {
     // region Tests
     testImplementation(libs.bundles.test.unit)
+    // endregion
+
+    // region Kotlin
+    implementation(libs.kotlinx.coroutines)
     // endregion
 }

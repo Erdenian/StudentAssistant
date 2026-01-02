@@ -16,4 +16,8 @@ dependencies {
     // region Kotlin
     implementation(libs.kotlinx.serialization)
     // endregion
+
+    // region AndroidX
+    implementation(libs.androidx.navigation3.runtime)
+    // endregion
 }

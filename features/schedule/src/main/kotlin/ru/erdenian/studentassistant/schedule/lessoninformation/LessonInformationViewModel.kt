@@ -9,17 +9,23 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
+import ru.erdenian.studentassistant.utils.Default
 
+/**
+ * ViewModel для экрана информации о занятии.
+ *
+ * Отображает подробную информацию о занятии и связанные с ним домашние задания.
+ *
+ * @param lessonArg занятие, информация о котором отображается.
+ */
 internal class LessonInformationViewModel @AssistedInject constructor(
     application: Application,
     repositoryApi: RepositoryApi,
@@ -42,32 +48,36 @@ internal class LessonInformationViewModel @AssistedInject constructor(
     val operation = operationPrivate.asStateFlow()
 
     private val lessonPrivate = lessonRepository.getFlow(lessonArg.id)
-        .shareIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed())
+        .shareIn(scope = viewModelScope, started = SharingStarted.Default)
 
-    val lesson = lessonPrivate.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = lessonArg,
-    )
+    /**
+     * Поток актуальных данных о занятии.
+     *
+     * Обновляется при изменениях в БД.
+     */
+    val lesson = lessonPrivate.stateIn(viewModelScope, SharingStarted.Default, lessonArg)
 
-    val isDeleted = lessonPrivate.map { it == null }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
+    /**
+     * Поток флага удаления занятия.
+     *
+     * Становится true, если занятие было удалено из БД (например, с другого экрана или при синхронизации).
+     */
+    val isDeleted = lessonPrivate.map { it == null }.stateIn(viewModelScope, SharingStarted.Default, false)
 
-    private val deletedHomeworkIds = MutableStateFlow(emptySet<Long>())
+    /**
+     * Поток списка домашних заданий для данного предмета.
+     */
+    val homeworks = lessonPrivate.flatMapLatest { lesson ->
+        lesson?.let { homeworkRepository.getActualFlow(it.subjectName) } ?: flowOf(emptyList())
+    }.stateIn(viewModelScope, SharingStarted.Default, null)
 
-    val homeworks = combine(
-        lessonPrivate.flatMapLatest { lesson ->
-            lesson?.let { homeworkRepository.getActualFlow(it.subjectName) } ?: flowOf(emptyList())
-        }.onEach { deletedHomeworkIds.value = emptySet() },
-        deletedHomeworkIds,
-    ) { homeworks, deletedIds ->
-        if (deletedIds.isEmpty()) homeworks else homeworks.filter { it.id !in deletedIds }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
-
+    /**
+     * Удаляет домашнее задание по ID.
+     */
     fun deleteHomework(id: Long) {
         operationPrivate.value = Operation.DELETING_HOMEWORK
         viewModelScope.launch {
             homeworkRepository.delete(id)
-            deletedHomeworkIds.value += id
             operationPrivate.value = null
         }
     }

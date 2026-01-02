@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.uikit.view
 
-import android.content.res.Configuration
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,14 +22,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
 /**
- * Карточка пары.
+ * Карточка, отображающая краткую информацию о занятии.
+ *
+ * Используется в списках занятий. Отображает время, аудитории, тип занятия, название предмета и преподавателей.
+ *
+ * @param subjectName название предмета.
+ * @param type тип занятия (например, "Лекция", "Лабораторная работа").
+ * @param teachers список имен преподавателей.
+ * @param classrooms список номеров аудиторий.
+ * @param startTime время начала занятия (уже отформатированное).
+ * @param endTime время окончания занятия (уже отформатированное).
+ * @param modifier модификатор для настройки внешнего вида карточки.
+ * @param onClick действие при клике на карточку.
+ * @param onLongClick действие при длительном нажатии на карточку.
  */
 @Composable
 fun LessonCard(
@@ -136,46 +149,60 @@ fun LessonCard(
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun LessonCardPreview() = AppTheme {
-    LessonCard(
-        subjectName = "Интернет программирование",
-        type = "Лабораторная работа",
-        teachers = listOf("Кожухов Игорь Борисович"),
-        classrooms = listOf("4212а", "4212б"),
-        startTime = "09:00",
-        endTime = "10:30",
-    )
-}
+private data class LessonCardPreviewData(
+    val subjectName: String,
+    val type: String,
+    val teachers: List<String>,
+    val classrooms: List<String>,
+    val startTime: String,
+    val endTime: String,
+)
 
-@Preview
-@Composable
-private fun LessonCardMinimalPreview() = AppTheme {
-    LessonCard(
-        subjectName = "Интернет программирование",
-        type = "",
-        teachers = emptyList(),
-        classrooms = emptyList(),
-        startTime = "09:00",
-        endTime = "10:30",
-    )
-}
-
-@Preview
-@Composable
-private fun LessonCardLongPreview() = AppTheme {
-    LessonCard(
-        subjectName = "Интернет программирование программирование программирование программирование программирование",
-        type = "Лабораторная работа работа работа работа работа работа работа работа работа работа работа работа",
-        teachers = listOf(
-            "Кожухов Игорь Борисович Борисович Борисович Борисович Борисович Борисович Борисович Борисович",
-            "Кожухов Игорь Борисович Борисович Борисович Борисович Борисович Борисович Борисович Борисович",
-            "Кожухов Игорь Борисович Борисович Борисович Борисович Борисович Борисович Борисович Борисович",
+@Suppress("StringLiteralDuplication")
+private class LessonCardPreviewParameterProvider : PreviewParameterProvider<LessonCardPreviewData> {
+    override val values = sequenceOf(
+        LessonCardPreviewData(
+            subjectName = "Интернет программирование",
+            type = "Лабораторная работа",
+            teachers = listOf("Кожухов Игорь Борисович"),
+            classrooms = listOf("4212а", "4212б"),
+            startTime = "09:00",
+            endTime = "10:30",
         ),
-        classrooms = listOf("4212а", "4212б", "4212в", "4212г", "4212д", "4212е", "4212ё", "4212ж", "4212з", "4212и"),
-        startTime = "09:00",
-        endTime = "10:30",
+        LessonCardPreviewData(
+            subjectName = "Интернет программирование",
+            type = "",
+            teachers = emptyList(),
+            classrooms = emptyList(),
+            startTime = "09:00",
+            endTime = "10:30",
+        ),
+        LessonCardPreviewData(
+            subjectName = "Интернет программирование программирование программирование программирование",
+            type = "Лабораторная работа работа работа работа работа работа работа работа работа работа работа работа",
+            teachers = listOf(
+                "Кожухов Игорь Борисович Борисович Борисович Борисович Борисович Борисович Борисович Борисович",
+                "Кожухов Игорь Борисович Борисович Борисович Борисович Борисович Борисович Борисович Борисович",
+                "Кожухов Игорь Борисович Борисович Борисович Борисович Борисович Борисович Борисович Борисович",
+            ),
+            classrooms = listOf("4212а", "4212б", "4212в", "4212г", "4212д", "4212е", "4212ё", "4212ж", "4212з"),
+            startTime = "09:00",
+            endTime = "10:30",
+        ),
+    )
+}
+
+@AppPreviews
+@Composable
+private fun LessonCardPreview(
+    @PreviewParameter(LessonCardPreviewParameterProvider::class) data: LessonCardPreviewData,
+) = AppTheme {
+    LessonCard(
+        subjectName = data.subjectName,
+        type = data.type,
+        teachers = data.teachers,
+        classrooms = data.classrooms,
+        startTime = data.startTime,
+        endTime = data.endTime,
     )
 }

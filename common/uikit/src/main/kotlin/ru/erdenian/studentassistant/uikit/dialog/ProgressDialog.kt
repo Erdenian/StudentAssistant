@@ -2,7 +2,6 @@ package ru.erdenian.studentassistant.uikit.dialog
 
 import android.app.Activity
 import android.content.ContextWrapper
-import android.content.res.Configuration
 import android.view.WindowManager
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,15 +16,28 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.uikit.layout.DelayedVisibility
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
+/**
+ * Модальный диалог прогресса.
+ *
+ * Блокирует взаимодействие с экраном и показывает индикатор загрузки с текстом.
+ * Диалог нельзя закрыть кнопкой "Назад" или кликом вне области.
+ *
+ * @param text текст сообщения, отображаемого под индикатором.
+ * @param visible флаг, регулирующий видимость диалога.
+ * Если false, то диалог не отображается, но экран продолжает быть заблокированным.
+ */
 @Composable
-fun ProgressDialog(text: String) {
+fun ProgressDialog(
+    text: String,
+    visible: Boolean = true,
+) {
     val context = LocalContext.current
     val window = remember(context) {
         var currentContext = context
@@ -41,6 +53,7 @@ fun ProgressDialog(text: String) {
     }
 
     DelayedVisibility {
+        if (!visible) return@DelayedVisibility
         Dialog(
             onDismissRequest = {},
             properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
@@ -63,8 +76,7 @@ private fun ProgressDialogContent(
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@AppPreviews
 @Composable
 private fun ProgressDialogPreview() = AppTheme {
     ProgressDialogContent("Please wait")

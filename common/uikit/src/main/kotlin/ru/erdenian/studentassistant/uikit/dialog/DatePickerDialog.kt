@@ -17,6 +17,18 @@ import java.time.LocalTime
 import java.time.ZoneOffset
 import ru.erdenian.studentassistant.strings.RS
 
+/**
+ * Диалог выбора даты.
+ *
+ * Обертка над Material3 [androidx.compose.material3.DatePickerDialog].
+ * Добавляет кнопку "Сегодня" для быстрого перехода к текущей дате.
+ *
+ * @param onConfirm колбэк, вызываемый при подтверждении выбора.
+ * @param onDismiss колбэк, вызываемый при отмене или закрытии диалога.
+ * @param modifier модификатор.
+ * @param initialSelectedDate изначально выбранная дата (по умолчанию null).
+ * @param datesRange допустимый диапазон дат для выбора. Даты вне диапазона будут недоступны.
+ */
 @Composable
 fun DatePickerDialog(
     onConfirm: (LocalDate) -> Unit,
@@ -56,7 +68,7 @@ fun DatePickerDialog(
                     onConfirm(newValue)
                 },
             ) {
-                Text(text = stringResource(android.R.string.ok))
+                Text(text = stringResource(RS.dpd_ok))
             }
         },
         dismissButton = {
@@ -73,7 +85,7 @@ fun DatePickerDialog(
             TextButton(
                 onClick = onDismiss,
             ) {
-                Text(text = stringResource(android.R.string.cancel))
+                Text(text = stringResource(RS.dpd_cancel))
             }
         },
         modifier = modifier,

@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.schedule.scheduleeditor
 
-import android.annotation.SuppressLint
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -15,11 +14,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.time.DayOfWeek
 import kotlinx.coroutines.launch
-import ru.erdenian.studentassistant.navigation.LocalNavController
+import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
 import ru.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
@@ -31,19 +31,21 @@ internal fun ScheduleEditorScreen(route: ScheduleRoute.ScheduleEditor) {
     val viewModel = viewModel {
         ScheduleComponentHolder.instance.scheduleEditorViewModelFactory.get(route.semesterId)
     }
-    val navController = LocalNavController.current
+    val navController = LocalNavigator.current
 
     val isDeleted by viewModel.isDeleted.collectAsState()
+    val focusManager = LocalFocusManager.current
     LaunchedEffect(isDeleted) {
-        if (isDeleted) navController.popBackStack()
+        if (isDeleted) {
+            focusManager.clearFocus()
+            navController.goBack()
+        }
     }
 
     @Suppress("Wrapping")
     val rememberLessons = remember<@Composable (Int) -> State<List<Lesson>?>>(viewModel) {
         { page ->
-            // https://issuetracker.google.com/issues/368420773
-            @SuppressLint("ProduceStateDoesNotAssignValue")
-            produceState<List<Lesson>?>(null, page) {
+            produceState(null, page) {
                 val dayOfWeek = DayOfWeek.of(page + 1)
                 viewModel.getLessons(dayOfWeek).collect { value = it }
             }
@@ -55,11 +57,11 @@ internal fun ScheduleEditorScreen(route: ScheduleRoute.ScheduleEditor) {
         ScheduleEditorViewModel.Operation.DELETING_LESSON -> RS.sce_delete_lesson_progress
         ScheduleEditorViewModel.Operation.DELETING_SEMESTER -> RS.sce_delete_progress
         null -> null
-    }?.let { ProgressDialog(stringResource(it)) }
+    }?.let { ProgressDialog(text = stringResource(it), visible = !isDeleted) }
 
     var showHomeworksCounterOperation by remember { mutableStateOf(false) }
     if (showHomeworksCounterOperation) {
-        ProgressDialog(stringResource(RS.le_delete_homeworks_progress))
+        ProgressDialog(text = stringResource(RS.le_delete_homeworks_progress), visible = !isDeleted)
     }
 
     var showDeleteSemesterDialog by rememberSaveable { mutableStateOf(false) }
@@ -143,7 +145,7 @@ internal fun ScheduleEditorScreen(route: ScheduleRoute.ScheduleEditor) {
 
     ScheduleEditorContent(
         rememberLessons = rememberLessons,
-        onBackClick = navController::popBackStack,
+        onBackClick = navController::goBack,
         onEditSemesterClick = {
             navController.navigate(ScheduleRoute.SemesterEditor(semesterId = viewModel.semesterId))
         },
@@ -171,7 +173,7 @@ internal fun ScheduleEditorScreen(route: ScheduleRoute.ScheduleEditor) {
         },
         onAddLessonClick = { dayOfWeek ->
             navController.navigate(
-                ScheduleRoute.LessonEditor(semesterId = viewModel.semesterId, dayOfWeekValue = dayOfWeek.value),
+                ScheduleRoute.LessonEditor(semesterId = viewModel.semesterId, dayOfWeek = dayOfWeek),
             )
         },
     )

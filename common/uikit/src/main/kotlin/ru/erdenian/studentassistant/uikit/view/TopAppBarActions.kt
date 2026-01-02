@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.uikit.view
 
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,16 +26,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.AutoMirrored
 import ru.erdenian.studentassistant.uikit.placeholder.PlaceholderHighlight
 import ru.erdenian.studentassistant.uikit.placeholder.fade
 import ru.erdenian.studentassistant.uikit.placeholder.placeholder
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
+/**
+ * Отображает список действий в [TopAppBar].
+ *
+ * Автоматически разделяет действия на те, которые должны быть показаны всегда (в виде иконок),
+ * и те, которые должны быть скрыты в выпадающем меню (overflow menu).
+ *
+ * @param actions список действий [ActionItem].
+ */
 @Suppress("UnusedReceiverParameter")
 @Composable
 fun RowScope.TopAppBarActions(
@@ -51,11 +60,23 @@ fun RowScope.TopAppBarActions(
     )
 }
 
+/**
+ * Представляет элемент действия в меню.
+ *
+ * @property name название действия (используется для contentDescription и текста в меню).
+ * @property loading флаг загрузки. Если true, вместо иконки отображается прогресс-бар, а кнопка неактивна.
+ * @property onClick действие при клике.
+ */
 sealed class ActionItem(
     val name: String,
     val loading: Boolean = false,
     val onClick: () -> Unit,
 ) {
+    /**
+     * Действие, которое всегда отображается в виде иконки в TopAppBar.
+     *
+     * @property imageVector иконка действия.
+     */
     class AlwaysShow(
         name: String,
         val imageVector: ImageVector,
@@ -63,6 +84,9 @@ sealed class ActionItem(
         onClick: () -> Unit,
     ) : ActionItem(name, loading, onClick)
 
+    /**
+     * Действие, которое скрывается в выпадающем меню (три точки).
+     */
     class NeverShow(
         name: String,
         loading: Boolean = false,
@@ -105,7 +129,10 @@ private fun TopAppBarActionsContent(
         if (neverShowActions.isNotEmpty()) {
             Box {
                 IconButton(onClick = onExpandClick) {
-                    Icon(imageVector = AppIcons.MoreVert, contentDescription = null)
+                    Icon(
+                        imageVector = AppIcons.MoreVert,
+                        contentDescription = stringResource(RS.taba_more_options),
+                    )
                 }
 
                 DropdownMenu(
@@ -151,8 +178,7 @@ private fun ColumnScope.DropdownMenuItems(
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@AppPreviews
 @Composable
 private fun TopAppBarActionsPreview() = AppTheme {
     TopAppBar(
@@ -186,8 +212,7 @@ private fun TopAppBarActionsPreview() = AppTheme {
     )
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@AppPreviews
 @Composable
 private fun TopAppBarActionsDropdownPreview() = AppTheme {
     Surface(shape = MaterialTheme.shapes.medium) {

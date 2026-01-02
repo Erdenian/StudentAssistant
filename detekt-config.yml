@@ -1,5 +1,5 @@
 build:
-  maxIssues: 9
+  maxIssues: 7
   excludeCorrectable: false
   weights:
     UnsafeCallOnNullableType: 100500
@@ -165,7 +165,7 @@ complexity:
   StringLiteralDuplication:
     active: true
     excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
-    ignoreAnnotated: ['*Preview']
+    ignoreAnnotated: ['*Preview*']
     threshold: 3
     ignoreAnnotation: true
     excludeStringsWithLessThan5Characters: true
@@ -627,7 +627,7 @@ style:
       - '1'
       - '2'
     ignoreHashCodeFunction: true
-    ignorePropertyDeclaration: false
+    ignorePropertyDeclaration: true
     ignoreLocalVariableDeclaration: false
     ignoreConstantDeclaration: true
     ignoreCompanionObjectPropertyDeclaration: true
@@ -753,7 +753,7 @@ style:
   UnusedPrivateMember:
     active: true
     allowedNames: ''
-    ignoreAnnotated: ['*Preview']
+    ignoreAnnotated: ['*Preview*']
   UnusedPrivateProperty:
     active: true
     allowedNames: '_|ignored|expected|serialVersionUID'
@@ -1134,3 +1134,28 @@ formatting:
     autoCorrect: true
     indentSize: 4
     maxLineLength: 120
+
+compose:
+  ReusedModifierInstance:
+    active: true
+  UnnecessaryEventHandlerParameter:
+    active: true
+  ComposableEventParameterNaming:
+    active: true
+  ComposableParametersOrdering:
+    active: false # https://github.com/appKODE/detekt-rules-compose/issues/40
+  ModifierHeightWithText:
+    active: true
+  MissingModifierDefaultValue:
+    active: true
+  PublicComposablePreview:
+    active: true
+  TopLevelComposableFunctions:
+    active: true
+    allowInObjects: true
+    ignoreAnnotated: ["Stable", "Immutable"]
+  ComposableFunctionName:
+    active: false # https://github.com/appKODE/detekt-rules-compose/issues/35
+  ConditionCouldBeLifted:
+    active: true
+    ignoreCallsWithArgumentNames: ['modifier', 'contentAlignment']

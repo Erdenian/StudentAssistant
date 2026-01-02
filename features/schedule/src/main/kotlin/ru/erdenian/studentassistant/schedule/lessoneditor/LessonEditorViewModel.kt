@@ -24,8 +24,20 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
+import ru.erdenian.studentassistant.utils.Default
 import ru.erdenian.studentassistant.utils.toSingleLine
 
+/**
+ * ViewModel для экрана редактора занятия.
+ *
+ * Поддерживает создание, редактирование и копирование занятий.
+ *
+ * @param semesterId идентификатор расписания.
+ * @param lessonId идентификатор занятия (если редактирование или копирование).
+ * @param copy true, если создается копия существующего занятия.
+ * @param dayOfWeek день недели для нового занятия.
+ * @param subjectName предустановленное название предмета.
+ */
 internal class LessonEditorViewModel @AssistedInject constructor(
     application: Application,
     repositoryApi: RepositoryApi,
@@ -88,6 +100,13 @@ internal class LessonEditorViewModel @AssistedInject constructor(
 
     val lessonRepeat = MutableStateFlow<KClass<out Lesson.Repeat>>(Lesson.Repeat.ByWeekday::class)
 
+    private var initialSubjectName: String? = null
+    private val isSubjectNameChanged
+        get() = initialSubjectName?.let { it != subjectName.value.trim() } == true
+
+    private val donePrivate = MutableStateFlow(false)
+    val done = donePrivate.asStateFlow()
+
     init {
         viewModelScope.launch {
             val vm = this@LessonEditorViewModel
@@ -133,6 +152,9 @@ internal class LessonEditorViewModel @AssistedInject constructor(
         }
     }
 
+    /**
+     * Поток текущей ошибки валидации полей.
+     */
     val error = combine(
         flow = this.subjectName,
         flow2 = startTime,
@@ -147,23 +169,25 @@ internal class LessonEditorViewModel @AssistedInject constructor(
             ((lessonRepeat.value == Lesson.Repeat.ByDates::class) && dates.isEmpty()) -> Error.EMPTY_REPEAT
             else -> null
         }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+    }.stateIn(viewModelScope, SharingStarted.Default, null)
 
     val isEditing = (this.lessonId != null)
 
     val existingSubjects = lessonRepository.getSubjects(semesterId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+        .stateIn(viewModelScope, SharingStarted.Default, emptyList())
     val existingTypes = lessonRepository.getTypes(semesterId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+        .stateIn(viewModelScope, SharingStarted.Default, emptyList())
     val existingTeachers = lessonRepository.getTeachers(semesterId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+        .stateIn(viewModelScope, SharingStarted.Default, emptyList())
     val existingClassrooms = lessonRepository.getClassrooms(semesterId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+        .stateIn(viewModelScope, SharingStarted.Default, emptyList())
 
-    private var initialSubjectName: String? = null
-    private val isSubjectNameChanged
-        get() = initialSubjectName?.let { it != subjectName.value.trim() } == true
-
+    /**
+     * Проверяет, было ли изменено название предмета и является ли редактируемое занятие
+     * не единственным по старому названию.
+     *
+     * Используется для предложения переименовать остальные занятия.
+     */
     suspend fun isSubjectNameChangedAndNotLast() = withContext(Dispatchers.IO) {
         isSubjectNameChanged && lessonRepository.getCount(
             semesterId,
@@ -171,9 +195,11 @@ internal class LessonEditorViewModel @AssistedInject constructor(
         ) > 1
     }
 
-    private val donePrivate = MutableStateFlow(false)
-    val done = donePrivate.asStateFlow()
-
+    /**
+     * Сохраняет занятие.
+     *
+     * @param forceRenameOther если true, переименовывает предмет и у остальных занятий.
+     */
     fun save(forceRenameOther: Boolean = false) {
         check(error.value == null)
 
@@ -270,11 +296,13 @@ internal class LessonEditorViewModel @AssistedInject constructor(
                 if (forceRenameOther) lessonRepository.renameSubject(semesterId, initial, subjectName)
             }
 
-            operationPrivate.value = null
             donePrivate.value = true
         }
     }
 
+    /**
+     * Проверяет, является ли удаляемое занятие последним по данному предмету и есть ли для него домашние задания.
+     */
     suspend fun isLastLessonOfSubjectsAndHasHomeworks(): Boolean = coroutineScope {
         val subjectName = initialSubjectName ?: return@coroutineScope false
         val isLastLesson = async { lessonRepository.getCount(semesterId, subjectName) == 1 }
@@ -282,6 +310,11 @@ internal class LessonEditorViewModel @AssistedInject constructor(
         isLastLesson.await() && hasHomeworks.await()
     }
 
+    /**
+     * Удаляет занятие.
+     *
+     * @param withHomeworks если true, удаляет также все домашние задания по этому предмету.
+     */
     fun delete(withHomeworks: Boolean = false) {
         checkNotNull(lessonId)
         val subjectName = checkNotNull(initialSubjectName)
@@ -296,7 +329,6 @@ internal class LessonEditorViewModel @AssistedInject constructor(
                 deleteHomeworks.await()
             }
 
-            operationPrivate.value = null
             donePrivate.value = true
         }
     }

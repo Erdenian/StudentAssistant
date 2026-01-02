@@ -18,7 +18,13 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
+import ru.erdenian.studentassistant.utils.Default
 
+/**
+ * ViewModel для экрана создания/редактирования расписания.
+ *
+ * @param semesterId ID расписания для редактирования. Если null, создается новое расписание.
+ */
 internal class SemesterEditorViewModel @AssistedInject constructor(
     application: Application,
     repositoryApi: RepositoryApi,
@@ -26,6 +32,7 @@ internal class SemesterEditorViewModel @AssistedInject constructor(
 ) : AndroidViewModel(application) {
 
     private val semesterRepository = repositoryApi.semesterRepository
+    private val lessonRepository = repositoryApi.lessonRepository
 
     @AssistedFactory
     interface Factory {
@@ -58,6 +65,10 @@ internal class SemesterEditorViewModel @AssistedInject constructor(
     val lastDay: MutableStateFlow<LocalDate>
 
     private var initialName: String? = null
+    private var initialFirstDay: LocalDate? = null
+
+    private val donePrivate = MutableStateFlow(false)
+    val done = donePrivate.asStateFlow()
 
     init {
         val today = LocalDate.now().withDayOfMonth(1)
@@ -75,6 +86,7 @@ internal class SemesterEditorViewModel @AssistedInject constructor(
                     initialName = semester.name
 
                     firstDay.value = semester.firstDay
+                    initialFirstDay = semester.firstDay
                     lastDay.value = semester.lastDay
                 } else {
                     donePrivate.value = true
@@ -91,6 +103,9 @@ internal class SemesterEditorViewModel @AssistedInject constructor(
         }
     }
 
+    /**
+     * Поток ошибки валидации.
+     */
     val error = combine(
         flow = name,
         flow2 = firstDay,
@@ -104,24 +119,50 @@ internal class SemesterEditorViewModel @AssistedInject constructor(
             (firstDay >= lastDay) -> Error.WRONG_DATES
             else -> null
         }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+    }.stateIn(viewModelScope, SharingStarted.Default, null)
 
     val isEditing = (semesterId != null)
 
-    private val donePrivate = MutableStateFlow(false)
-    val done = donePrivate.asStateFlow()
+    private val showWeekShiftDialogPrivate = MutableStateFlow(false)
 
-    fun save() {
+    /** Поток управления видимостью диалога предупреждения о сдвиге недель. */
+    val showWeekShiftDialog = showWeekShiftDialogPrivate.asStateFlow()
+
+    /**
+     * Сохраняет изменения или создает новое расписание.
+     *
+     * Если дата начала расписания изменилась и в нем есть нерегулярные занятия,
+     * может потребоваться подтверждение пользователя (через [showWeekShiftDialog]).
+     *
+     * @param confirmWeekShift подтверждает ли пользователь сохранение, несмотря на сдвиг недель.
+     */
+    fun save(confirmWeekShift: Boolean = false) {
         check(error.value == null)
         operationPrivate.value = Operation.SAVING
         viewModelScope.launch {
-            semesterId?.let { id ->
+            if (semesterId != null) {
+                if (!confirmWeekShift &&
+                    (initialFirstDay?.monday() != firstDay.value.monday()) &&
+                    lessonRepository.hasNonRecurringLessons(semesterId)
+                ) {
+                    showWeekShiftDialogPrivate.value = true
+                    operationPrivate.value = null
+                    return@launch
+                }
+
                 semesterRepository.update(
-                    id = id, name = name.value, firstDay = firstDay.value, lastDay = lastDay.value,
+                    id = semesterId, name = name.value, firstDay = firstDay.value, lastDay = lastDay.value,
                 )
-            } ?: semesterRepository.insert(name = name.value, firstDay = firstDay.value, lastDay = lastDay.value)
+            } else {
+                semesterRepository.insert(name = name.value, firstDay = firstDay.value, lastDay = lastDay.value)
+            }
             donePrivate.value = true
-            operationPrivate.value = null
         }
     }
+
+    fun dismissWeekShiftDialog() {
+        showWeekShiftDialogPrivate.value = false
+    }
+
+    private fun LocalDate.monday(): LocalDate = this.minusDays(this.dayOfWeek.value.toLong() - 1L)
 }

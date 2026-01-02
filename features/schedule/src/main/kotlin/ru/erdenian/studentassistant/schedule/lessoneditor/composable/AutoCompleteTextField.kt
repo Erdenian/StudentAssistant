@@ -1,16 +1,21 @@
 package ru.erdenian.studentassistant.schedule.lessoneditor.composable
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
@@ -28,11 +33,25 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.dp
+import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 import ru.erdenian.studentassistant.utils.toSingleLine
 
 private const val DELIMITER = ','
 private const val LENGTH_TO_EXPAND = 2
 
+/**
+ * Текстовое поле с автодополнением.
+ *
+ * Предлагает варианты из [items], фильтруя их по введенному тексту.
+ *
+ * @param value текущий текст.
+ * @param items список всех возможных вариантов для автодополнения.
+ * @param onValueChange колбэк при изменении текста.
+ */
 @Composable
 internal fun AutoCompleteTextField(
     value: String,
@@ -106,6 +125,16 @@ internal fun AutoCompleteTextField(
     )
 }
 
+/**
+ * Текстовое поле с автодополнением для нескольких значений, разделенных запятой.
+ *
+ * Позволяет вводить несколько значений (например, имена преподавателей).
+ * Автодополнение работает для текущего вводимого значения (между запятыми).
+ *
+ * @param value текущий текст.
+ * @param items список всех возможных вариантов для автодополнения.
+ * @param onValueChange колбэк при изменении текста.
+ */
 @Composable
 internal fun MultiAutoCompleteTextField(
     value: String,
@@ -245,7 +274,7 @@ private fun BaseAutoCompleteTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = modifier
-                .menuAnchor(MenuAnchorType.PrimaryEditable)
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
                 .onFocusChanged { focusState ->
                     hasFocus = focusState.hasFocus
                     expanded = false
@@ -282,6 +311,50 @@ private fun BaseAutoCompleteTextField(
                     },
                 )
             }
+        }
+    }
+}
+
+private data class AutoCompleteTextFieldPreviewState(
+    val value: String,
+    val enabled: Boolean,
+)
+
+private class AutoCompleteTextFieldPreviewParameterProvider :
+    PreviewParameterProvider<AutoCompleteTextFieldPreviewState> {
+    override val values = sequenceOf(
+        AutoCompleteTextFieldPreviewState(value = "Text", enabled = true),
+        AutoCompleteTextFieldPreviewState(value = "Text", enabled = false),
+        AutoCompleteTextFieldPreviewState(value = "", enabled = true),
+        AutoCompleteTextFieldPreviewState(
+            value = "Very very very very very very very very very very very very very long text",
+            enabled = true,
+        ),
+    )
+}
+
+@AppPreviews
+@Composable
+private fun AutoCompleteTextFieldPreview(
+    @PreviewParameter(AutoCompleteTextFieldPreviewParameterProvider::class) state: AutoCompleteTextFieldPreviewState,
+) = AppTheme {
+    Surface {
+        Column(modifier = Modifier.padding(16.dp)) {
+            AutoCompleteTextField(
+                value = state.value,
+                items = emptyList(),
+                onValueChange = {},
+                enabled = state.enabled,
+                label = { Text(text = "AutoCompleteTextField") },
+            )
+            Spacer(modifier = Modifier.size(16.dp))
+            MultiAutoCompleteTextField(
+                value = state.value,
+                items = emptyList(),
+                onValueChange = {},
+                enabled = state.enabled,
+                label = { Text(text = "MultiAutoCompleteTextField") },
+            )
         }
     }
 }

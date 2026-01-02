@@ -12,6 +12,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.delay
 
+/**
+ * Компонент, который показывает свой контент с задержкой и анимацией появления.
+ *
+ * Используется для предотвращения мерцания UI при быстрой загрузке данных. Если загрузка
+ * происходит быстрее, чем [delayMillis], индикатор загрузки (контент) так и не появится.
+ *
+ * @param modifier модификатор.
+ * @param delayMillis задержка перед появлением контента в миллисекундах.
+ * @param content контент для отображения.
+ */
 @Composable
 fun DelayedVisibility(
     modifier: Modifier = Modifier,

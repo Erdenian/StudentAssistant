@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="lesson_repeat_types">
+        <item>Па днях тыдня</item>
+        <item>Па датах</item>
+    </string-array>
+
+    <string-array name="lesson_types">
+        <item>Семінар</item>
+        <item>Лекцыя</item>
+        <item>Лабараторная работа</item>
+        <item>Практыка</item>
+        <item>Кансультацыя</item>
+        <item>Экзамен</item>
+        <item>Самастойная работа</item>
+    </string-array>
+
+    <string-array name="repeat_variants">
+        <item>Кожны тыдзень</item>
+        <item>Па няцотных</item>
+        <item>Па цотных</item>
+        <item>Кожны 1-ы тыдзень з 4</item>
+        <item>Кожны 2-і тыдзень з 4</item>
+        <item>Кожны 3-і тыдзень з 4</item>
+        <item>Кожны 4-ы тыдзень з 4</item>
+        <item>Свой варыянт</item>
+    </string-array>
+
+</resources>

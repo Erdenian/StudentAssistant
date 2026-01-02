@@ -1,6 +1,6 @@
 package ru.erdenian.studentassistant.schedule.schedule
 
-import android.content.res.Configuration
+import android.text.format.DateFormat
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,12 +26,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.core.os.ConfigurationCompat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import java.util.Locale
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.repository.api.entity.Semester
@@ -47,10 +51,22 @@ import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.dialog.DatePickerDialog
+import ru.erdenian.studentassistant.uikit.utils.ScreenPreviews
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
 
+/**
+ * UI контент экрана расписания.
+ *
+ * @param semestersNames список названий доступных расписаний для выбора.
+ * @param selectedSemester текущее выбранное расписание.
+ * @param rememberLessons функция для получения состояния списка занятий по дате.
+ * @param onSelectedSemesterChange колбэк выбора другого расписания.
+ * @param onAddSemesterClick колбэк нажатия кнопки добавления расписания.
+ * @param onEditScheduleClick колбэк нажатия кнопки редактирования расписания.
+ * @param onLessonClick колбэк нажатия на карточку занятия.
+ */
 @Composable
 internal fun ScheduleContent(
     semestersNames: List<String>,
@@ -148,8 +164,13 @@ internal fun ScheduleContent(
                     modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal),
                 )
             } else {
-                val shortTitleFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d MMMM") }
-                val fullTitleFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy") }
+                val locale = ConfigurationCompat.getLocales(LocalConfiguration.current).get(0) ?: Locale.getDefault()
+                val shortTitleFormatter = remember(locale) {
+                    DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, "EEEEdMMM"))
+                }
+                val fullTitleFormatter = remember(locale) {
+                    DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, "EEEEdMMMyyyy"))
+                }
 
                 PagerTabStrip(
                     state = state.pagerState,
@@ -162,10 +183,11 @@ internal fun ScheduleContent(
                 HorizontalPager(
                     state = state.pagerState,
                     key = { state.semester.id to state.getDate(it) },
+                    beyondViewportPageCount = 2,
                     modifier = Modifier.fillMaxSize(),
                 ) { page ->
                     val lessons by rememberLessons(state.getDate(page))
-                    LazyLessonsList(lessons = lessons, onLessonClick = onLessonClick)
+                    LazyLessonsList(lessons = lessons, onLessonClick = onLessonClick, canShareElement = true)
                 }
             }
         }
@@ -204,60 +226,47 @@ private data class SemesterWithState(val semester: Semester, val pagerState: Pag
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun ScheduleScreenNoSchedulePreview() = AppTheme {
-    ScheduleContent(
-        semestersNames = emptyList(),
-        selectedSemester = null,
-        rememberLessons = { remember { mutableStateOf(emptyList()) } },
-        onSelectedSemesterChange = {},
-        onAddSemesterClick = {},
-        onEditScheduleClick = {},
-        onLessonClick = {},
+private data class ScheduleContentPreviewData(
+    val semestersNames: List<String>,
+    val selectedSemester: Semester?,
+    val lessons: List<Lesson>?,
+)
+
+private class ScheduleContentPreviewParameterProvider : PreviewParameterProvider<ScheduleContentPreviewData> {
+    override val values = sequenceOf(
+        ScheduleContentPreviewData(
+            semestersNames = emptyList(),
+            selectedSemester = null,
+            lessons = emptyList(),
+        ),
+        ScheduleContentPreviewData(
+            semestersNames = listOf(Semesters.regular.name),
+            selectedSemester = Semesters.regular,
+            lessons = null,
+        ),
+        ScheduleContentPreviewData(
+            semestersNames = listOf(Semesters.regular.name),
+            selectedSemester = Semesters.regular,
+            lessons = emptyList(),
+        ),
+        ScheduleContentPreviewData(
+            semestersNames = listOf(Semesters.long.name),
+            selectedSemester = Semesters.long,
+            lessons = List(10) { Lessons.long },
+        ),
     )
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@ScreenPreviews
 @Composable
-private fun ScheduleScreenLoadingPreview() = AppTheme {
+private fun ScheduleContentPreview(
+    @PreviewParameter(ScheduleContentPreviewParameterProvider::class) data: ScheduleContentPreviewData,
+) = AppTheme {
+    val lessonsState = remember { mutableStateOf(data.lessons) }
     ScheduleContent(
-        semestersNames = listOf(Semesters.regular.name),
-        selectedSemester = Semesters.regular,
-        rememberLessons = { remember { mutableStateOf(null) } },
-        onSelectedSemesterChange = {},
-        onAddSemesterClick = {},
-        onEditScheduleClick = {},
-        onLessonClick = {},
-    )
-}
-
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun ScheduleScreenNoLessonsPreview() = AppTheme {
-    ScheduleContent(
-        semestersNames = listOf(Semesters.regular.name),
-        selectedSemester = Semesters.regular,
-        rememberLessons = { remember { mutableStateOf(emptyList()) } },
-        onSelectedSemesterChange = {},
-        onAddSemesterClick = {},
-        onEditScheduleClick = {},
-        onLessonClick = {},
-    )
-}
-
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun ScheduleScreenPreview() = AppTheme {
-    val lessons = List(10) { Lessons.regular }
-    ScheduleContent(
-        semestersNames = listOf(Semesters.regular.name, Semesters.long.name),
-        selectedSemester = Semesters.regular,
-        rememberLessons = { remember { mutableStateOf(lessons) } },
+        semestersNames = data.semestersNames,
+        selectedSemester = data.selectedSemester,
+        rememberLessons = { lessonsState },
         onSelectedSemesterChange = {},
         onAddSemesterClick = {},
         onEditScheduleClick = {},

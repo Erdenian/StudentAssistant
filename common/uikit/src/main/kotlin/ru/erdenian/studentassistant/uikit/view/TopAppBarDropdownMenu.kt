@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.uikit.view
 
-import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -30,14 +29,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.AutoMirrored
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
+/**
+ * Выпадающее меню для использования в заголовке [TopAppBar].
+ *
+ * Отображает текущий выбранный элемент и стрелку. При нажатии раскрывает список всех элементов.
+ * Используется, например, для переключения между расписаниями.
+ *
+ * @param items список строк для выбора.
+ * @param selectedItem текущий выбранный элемент (отображается в заголовке).
+ * @param onSelectedItemChange колбэк при выборе элемента (индекс, значение).
+ */
 @Composable
 fun TopAppBarDropdownMenu(
     items: List<String>,
@@ -65,6 +74,7 @@ private fun TopAppBarDropdownMenuContent(
     onClick: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
+    @Suppress("ModifierHeightWithText")
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -123,8 +133,7 @@ private fun ColumnScope.DropdownMenuItems(
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@AppPreviews
 @Composable
 private fun TopAppBarDropdownMenuPreview() = AppTheme {
     TopAppBar(
@@ -143,7 +152,7 @@ private fun TopAppBarDropdownMenuPreview() = AppTheme {
     )
 }
 
-@Preview
+@AppPreviews
 @Composable
 private fun TopAppBarDropdownMenuLongPreview() = AppTheme {
     TopAppBar(
@@ -162,8 +171,7 @@ private fun TopAppBarDropdownMenuLongPreview() = AppTheme {
     )
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@AppPreviews
 @Composable
 private fun TopAppBarDropdownMenuItemsPreview() = AppTheme {
     Surface(shape = MaterialTheme.shapes.medium) {

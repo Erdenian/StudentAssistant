@@ -23,6 +23,6 @@ internal fun SettingsScreen() {
         defaultBreakDuration = defaultBreakDuration,
         onDefaultBreakDurationChange = viewModel::setDefaultBreakDuration,
         isAdvancedWeeksSelectorEnabled = isAdvancedWeeksSelectorEnabled,
-        isAdvancedWeeksSelectorEnabledChange = viewModel::setAdvancedWeeksSelectorEnabled,
+        onAdvancedWeeksSelectorEnabledChange = viewModel::setAdvancedWeeksSelectorEnabled,
     )
 }

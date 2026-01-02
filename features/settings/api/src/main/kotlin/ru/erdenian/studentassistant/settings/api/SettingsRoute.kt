@@ -1,9 +1,9 @@
 package ru.erdenian.studentassistant.settings.api
 
+import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
-import ru.erdenian.studentassistant.navigation.Route
 
-sealed interface SettingsRoute : Route {
+sealed interface SettingsRoute : NavKey {
     @Serializable
     data object Settings : SettingsRoute
 }

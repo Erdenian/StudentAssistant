@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.schedule.scheduleeditor
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,8 +22,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.core.os.ConfigurationCompat
 import java.time.DayOfWeek
 import java.time.format.TextStyle
 import java.util.Locale
@@ -37,9 +39,24 @@ import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.AutoMirrored
 import ru.erdenian.studentassistant.uikit.layout.ContextMenuBox
+import ru.erdenian.studentassistant.uikit.utils.ScreenPreviews
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
+/**
+ * UI контент экрана редактора расписания.
+ *
+ * Отображает расписание по дням недели в виде пейджера.
+ *
+ * @param rememberLessons функция для получения списка занятий по индексу страницы (дня недели).
+ * @param onBackClick колбэк нажатия кнопки назад.
+ * @param onEditSemesterClick колбэк нажатия кнопки редактирования данных расписания.
+ * @param onDeleteSemesterClick колбэк нажатия кнопки удаления расписания.
+ * @param onLessonClick колбэк нажатия на занятие.
+ * @param onCopyLessonClick колбэк копирования занятия.
+ * @param onDeleteLessonClick колбэк удаления занятия.
+ * @param onAddLessonClick колбэк добавления нового занятия в указанный день недели.
+ */
 @Composable
 internal fun ScheduleEditorContent(
     rememberLessons: @Composable (page: Int) -> State<List<Lesson>?>,
@@ -51,11 +68,16 @@ internal fun ScheduleEditorContent(
     onDeleteLessonClick: (Lesson) -> Unit,
     onAddLessonClick: (DayOfWeek) -> Unit,
 ) {
-    val daysOfWeekTitles = remember {
-        // TextStyle.FULL_STANDALONE returns number
-        // https://stackoverflow.com/questions/63415047
-        DayOfWeek.entries.map { it.getDisplayName(TextStyle.FULL, Locale.getDefault()) }
+    val daysOfWeekTitles = run {
+        val configuration = LocalConfiguration.current
+        remember(configuration) {
+            val locale = ConfigurationCompat.getLocales(configuration).get(0) ?: Locale.getDefault()
+            // TextStyle.FULL_STANDALONE возвращает число
+            // https://stackoverflow.com/questions/63415047
+            DayOfWeek.entries.map { it.getDisplayName(TextStyle.FULL, locale) }
+        }
     }
+
     val pagerState = rememberPagerState(
         initialPage = 0,
         initialPageOffsetFraction = 0f,
@@ -68,7 +90,10 @@ internal fun ScheduleEditorContent(
                 title = { Text(text = stringResource(RS.sce_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(imageVector = AppIcons.AutoMirrored.ArrowBack, contentDescription = null)
+                        Icon(
+                            imageVector = AppIcons.AutoMirrored.ArrowBack,
+                            contentDescription = stringResource(RS.u_back),
+                        )
                     }
                 },
                 actions = {
@@ -89,7 +114,7 @@ internal fun ScheduleEditorContent(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { onAddLessonClick(DayOfWeek.of(pagerState.currentPage + 1)) }) {
-                Icon(imageVector = AppIcons.Add, contentDescription = null)
+                Icon(imageVector = AppIcons.Add, contentDescription = stringResource(RS.sce_add_lesson))
             }
         },
     ) { paddingValues ->
@@ -106,6 +131,7 @@ internal fun ScheduleEditorContent(
 
             HorizontalPager(
                 state = pagerState,
+                beyondViewportPageCount = 2,
                 modifier = Modifier.fillMaxSize(),
             ) { page ->
                 val lessons by rememberLessons(page)
@@ -144,45 +170,28 @@ internal fun ScheduleEditorContent(
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun ScheduleEditorContentLoadingPreview() = AppTheme {
-    ScheduleEditorContent(
-        rememberLessons = { remember { mutableStateOf(null) } },
-        onBackClick = {},
-        onEditSemesterClick = {},
-        onDeleteSemesterClick = {},
-        onLessonClick = {},
-        onCopyLessonClick = {},
-        onDeleteLessonClick = {},
-        onAddLessonClick = {},
+private data class ScheduleEditorContentPreviewData(
+    val lessons: List<Lesson>?,
+    val isLoading: Boolean = false,
+)
+
+private class ScheduleEditorContentPreviewParameterProvider :
+    PreviewParameterProvider<ScheduleEditorContentPreviewData> {
+    override val values = sequenceOf(
+        ScheduleEditorContentPreviewData(lessons = null, isLoading = true),
+        ScheduleEditorContentPreviewData(lessons = emptyList()),
+        ScheduleEditorContentPreviewData(lessons = List(10) { Lessons.regular }),
     )
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@ScreenPreviews
 @Composable
-private fun ScheduleEditorContentNoLessonsPreview() = AppTheme {
+private fun ScheduleEditorContentPreview(
+    @PreviewParameter(ScheduleEditorContentPreviewParameterProvider::class) data: ScheduleEditorContentPreviewData,
+) = AppTheme {
+    val state = remember { mutableStateOf(data.lessons) }
     ScheduleEditorContent(
-        rememberLessons = { remember { mutableStateOf(emptyList()) } },
-        onBackClick = {},
-        onEditSemesterClick = {},
-        onDeleteSemesterClick = {},
-        onLessonClick = {},
-        onCopyLessonClick = {},
-        onDeleteLessonClick = {},
-        onAddLessonClick = {},
-    )
-}
-
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun ScheduleEditorContentPreview() = AppTheme {
-    val lessons = List(10) { Lessons.regular }
-    ScheduleEditorContent(
-        rememberLessons = { remember { mutableStateOf(lessons) } },
+        rememberLessons = { state },
         onBackClick = {},
         onEditSemesterClick = {},
         onDeleteSemesterClick = {},

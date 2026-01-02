@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.settings.ui
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -13,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import java.time.Duration
 import java.time.LocalTime
 import ru.erdenian.studentassistant.settings.preference.BooleanPreference
@@ -21,7 +19,20 @@ import ru.erdenian.studentassistant.settings.preference.DurationPreference
 import ru.erdenian.studentassistant.settings.preference.TimePreference
 import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.uikit.utils.ScreenPreviews
 
+/**
+ * Отображает список настроек приложения.
+ *
+ * @param defaultStartTime текущее время начала занятий.
+ * @param onDefaultStartTimeChange колбэк изменения времени начала занятий.
+ * @param defaultLessonDuration текущая длительность занятия.
+ * @param onDefaultLessonDurationChange колбэк изменения длительности занятия.
+ * @param defaultBreakDuration текущая длительность перемены.
+ * @param onDefaultBreakDurationChange колбэк изменения длительности перемены.
+ * @param isAdvancedWeeksSelectorEnabled включен ли расширенный выбор недель.
+ * @param onAdvancedWeeksSelectorEnabledChange колбэк изменения настройки расширенного выбора недель.
+ */
 @Composable
 internal fun SettingsContent(
     defaultStartTime: LocalTime,
@@ -31,7 +42,7 @@ internal fun SettingsContent(
     defaultBreakDuration: Duration,
     onDefaultBreakDurationChange: (Duration) -> Unit,
     isAdvancedWeeksSelectorEnabled: Boolean,
-    isAdvancedWeeksSelectorEnabledChange: (Boolean) -> Unit,
+    onAdvancedWeeksSelectorEnabledChange: (Boolean) -> Unit,
 ) {
     val topAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
@@ -67,24 +78,23 @@ internal fun SettingsContent(
                 title = stringResource(RS.st_is_advanced_weeks_selector_enabled),
                 description = stringResource(RS.st_is_advanced_weeks_selector_enabled_description),
                 value = isAdvancedWeeksSelectorEnabled,
-                onValueChange = isAdvancedWeeksSelectorEnabledChange,
+                onValueChange = onAdvancedWeeksSelectorEnabledChange,
             )
         }
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@ScreenPreviews
 @Composable
-private fun SettingsPreview() = AppTheme {
+private fun SettingsContentPreview() = AppTheme {
     SettingsContent(
-        defaultStartTime = LocalTime.now(),
+        defaultStartTime = LocalTime.of(9, 0),
         onDefaultStartTimeChange = {},
-        defaultLessonDuration = Duration.ZERO,
+        defaultLessonDuration = Duration.ofMinutes(90),
         onDefaultLessonDurationChange = {},
-        defaultBreakDuration = Duration.ZERO,
+        defaultBreakDuration = Duration.ofMinutes(10),
         onDefaultBreakDurationChange = {},
         isAdvancedWeeksSelectorEnabled = true,
-        isAdvancedWeeksSelectorEnabledChange = {},
+        onAdvancedWeeksSelectorEnabledChange = {},
     )
 }

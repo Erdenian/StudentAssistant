@@ -1,3 +1,7 @@
+@file:Suppress("UnstableApiUsage")
+
+import java.time.LocalDate
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -9,22 +13,38 @@ plugins {
     alias(libs.plugins.tripletPlay)
 }
 
+// Используем Provider API для чтения файла.
+// Это позволяет Gradle отслеживать изменения в файле и инвалидировать кэш конфигурации автоматически.
+val supportedLocalesProvider = providers
+    .fileContents(layout.projectDirectory.file("src/main/res/xml/locale_config.xml"))
+    .asText
+    .map { content ->
+        Regex("android:name=\"([a-z]{2,3})\"")
+            .findAll(content)
+            .map { it.groupValues[1] }
+            .toSet()
+    }
+
 android {
     namespace = "ru.erdenian.studentassistant"
 
     defaultConfig {
         applicationId = "ru.erdenian.studentassistant"
-        versionCode = 28
-        versionName = "0.7.4"
+        versionCode = 29
+        versionName = "0.8.0"
 
-        resourceConfigurations.retainAll(setOf("ru"))
+        androidResources.localeFilters += supportedLocalesProvider.getOrElse(emptySet())
+
         base.archivesName = "${rootProject.name}-$versionName"
+
+        testInstrumentationRunner = "ru.erdenian.studentassistant.TestRunner"
     }
 
-    // Workaround for: Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so.
+    // Workaround для "Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so."
     // https://issuetracker.google.com/issues/237187538
     // https://issuetracker.google.com/issues/271316809
-    ndkVersion = "26.2.11394342"
+    // Та же версия NDK должна быть установлена в шаге android-actions/setup-android в рабочих процессах GitHub Actions.
+    ndkVersion = "29.0.14206865"
 
     lint {
         checkDependencies = true
@@ -126,19 +146,28 @@ dependencies {
     // region AndroidX
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
-    implementation(libs.androidx.navigation)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.core.splashscreen)
     // endregion
 
     // region Core
     ksp(libs.core.dagger.compiler)
     implementation(libs.core.dagger)
+    // endregion
+
+    // region Tests
+    androidTestImplementation(libs.bundles.test.android)
+    androidTestImplementation(libs.bundles.test.compose)
+    debugImplementation(libs.test.compose.manifest)
+    // endregion
 }
 
 dependencies {
     rootProject.subprojects {
         afterEvaluate {
-            if (plugins.hasPlugin(libs.plugins.kover.get().pluginId)) kover(project(path))
+            apply(plugin = libs.plugins.kover.get().pluginId)
+            kover(project(path))
         }
     }
 }
@@ -166,7 +195,7 @@ rootProject.tasks.register("updateChangelog") {
 
         lines.add(
             lines.indexOf("## [Unreleased]") + 1,
-            "$lineSeparator## [$newVersion] - ${`java.time`.LocalDate.now()}",
+            "$lineSeparator## [$newVersion] - ${LocalDate.now()}",
         )
 
         lines.set(

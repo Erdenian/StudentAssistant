@@ -32,40 +32,41 @@ import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.LayoutDirection
 
 /**
- * Draws some skeleton UI which is typically used whilst content is 'loading'.
+ * Рисует каркас UI, который обычно используется во время "загрузки" контента.
  *
- * To customize the color and shape of the placeholder, you can use the foundation version of
- * [placeholder], along with the values provided by [PlaceholderDefaults].
+ * Чтобы настроить цвет и форму плейсхолдера, вы можете использовать базовую версию
+ * [placeholder] вместе со значениями, предоставляемыми [PlaceholderDefaults].
  *
- * A cross-fade transition will be applied to the content and placeholder UI when the [visible]
- * value changes. The transition can be customized via the [contentFadeTransitionSpec] and
- * [placeholderFadeTransitionSpec] parameters.
+ * Переход cross-fade будет применен к контенту и UI плейсхолдера при изменении значения [visible].
+ * Переход можно настроить с помощью параметров [contentFadeTransitionSpec] и
+ * [placeholderFadeTransitionSpec].
  *
- * You can provide a [PlaceholderHighlight] which runs an highlight animation on the placeholder.
- * The [shimmer] and [fade] implementations are provided for easy usage.
+ * Вы можете предоставить [PlaceholderHighlight], который запускает анимацию подсветки на плейсхолдере.
+ * Реализации [shimmer] и [fade] предоставляются для удобства использования.
  *
- * You can find more information on the pattern at the Material Theming
- * [Placeholder UI](https://material.io/design/communication/launch-screen.html#placeholder-ui)
- * guidelines.
+ * Дополнительную информацию о паттерне можно найти в руководствах Material Theming
+ * [Placeholder UI](https://material.io/design/communication/launch-screen.html#placeholder-ui).
  *
- * @param visible whether the placeholder should be visible or not.
- * @param color the color used to draw the placeholder UI. If [Color.Unspecified] is provided,
- * the placeholder will use [PlaceholderDefaults.color].
- * @param shape desired shape of the placeholder. If null is provided the placeholder
- * will use the small shape set in [MaterialTheme.shapes].
- * @param highlight optional highlight animation.
- * @param placeholderFadeTransitionSpec The transition spec to use when fading the placeholder
- * on/off screen. The boolean parameter defined for the transition is [visible].
- * @param contentFadeTransitionSpec The transition spec to use when fading the content
- * on/off screen. The boolean parameter defined for the transition is [visible].
+ * @param visible должен ли быть виден плейсхолдер.
+ * @param color цвет, используемый для рисования UI плейсхолдера. Если предоставлен [Color.Unspecified],
+ * плейсхолдер будет использовать [PlaceholderDefaults.color].
+ * @param shape желаемая форма плейсхолдера. Если предоставлено null, плейсхолдер
+ * будет использовать небольшую форму, заданную в [MaterialTheme.shapes].
+ * @param highlight необязательная анимация подсветки.
+ * @param placeholderFadeTransitionSpec спецификация перехода, используемая при появлении/исчезновении плейсхолдера
+ * на экране. Булевый параметр, определенный для перехода, - это [visible].
+ * @param contentFadeTransitionSpec спецификация перехода, используемая при появлении/исчезновении контента
+ * на экране. Булевый параметр, определенный для перехода, - это [visible].
  */
 fun Modifier.placeholder(
     visible: Boolean,
     color: Color = Color.Unspecified,
     shape: Shape? = null,
     highlight: PlaceholderHighlight? = null,
-    placeholderFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
-    contentFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
+    placeholderFadeTransitionSpec:
+    @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
+    contentFadeTransitionSpec:
+    @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
 ): Modifier = composed {
     Modifier.placeholderFoundation(
         visible = visible,
@@ -78,30 +79,29 @@ fun Modifier.placeholder(
 }
 
 /**
- * Draws some skeleton UI which is typically used whilst content is 'loading'.
+ * Рисует каркас UI, который обычно используется во время "загрузки" контента.
  *
- * A version of this modifier which uses appropriate values for Material themed apps is available
- * in the 'Placeholder Material' library.
+ * Версия этого модификатора, использующая соответствующие значения для приложений с темой Material, доступна
+ * в библиотеке 'Placeholder Material'.
  *
- * You can provide a [PlaceholderHighlight] which runs an highlight animation on the placeholder.
- * The [shimmer] and [fade] implementations are provided for easy usage.
+ * Вы можете предоставить [PlaceholderHighlight], который запускает анимацию подсветки на плейсхолдере.
+ * Реализации [shimmer] и [fade] предоставляются для удобства использования.
  *
- * A cross-fade transition will be applied to the content and placeholder UI when the [visible]
- * value changes. The transition can be customized via the [contentFadeTransitionSpec] and
- * [placeholderFadeTransitionSpec] parameters.
+ * Переход cross-fade будет применен к контенту и UI плейсхолдера при изменении значения [visible].
+ * Переход можно настроить с помощью параметров [contentFadeTransitionSpec] и
+ * [placeholderFadeTransitionSpec].
  *
- * You can find more information on the pattern at the Material Theming
- * [Placeholder UI](https://material.io/design/communication/launch-screen.html#placeholder-ui)
- * guidelines.
+ * Дополнительную информацию о паттерне можно найти в руководствах Material Theming
+ * [Placeholder UI](https://material.io/design/communication/launch-screen.html#placeholder-ui).
  *
- * @param visible whether the placeholder should be visible or not.
- * @param color the color used to draw the placeholder UI.
- * @param shape desired shape of the placeholder. Defaults to [RectangleShape].
- * @param highlight optional highlight animation.
- * @param placeholderFadeTransitionSpec The transition spec to use when fading the placeholder
- * on/off screen. The boolean parameter defined for the transition is [visible].
- * @param contentFadeTransitionSpec The transition spec to use when fading the content
- * on/off screen. The boolean parameter defined for the transition is [visible].
+ * @param visible должен ли быть виден плейсхолдер.
+ * @param color цвет, используемый для рисования UI плейсхолдера.
+ * @param shape желаемая форма плейсхолдера. По умолчанию [RectangleShape].
+ * @param highlight необязательная анимация подсветки.
+ * @param placeholderFadeTransitionSpec спецификация перехода, используемая при появлении/исчезновении плейсхолдера
+ * на экране. Булевый параметр, определенный для перехода, - это [visible].
+ * @param contentFadeTransitionSpec спецификация перехода, используемая при появлении/исчезновении контента
+ * на экране. Булевый параметр, определенный для перехода, - это [visible].
  */
 @Suppress("MagicNumber")
 private fun Modifier.placeholderFoundation(
@@ -109,8 +109,10 @@ private fun Modifier.placeholderFoundation(
     color: Color,
     shape: Shape = RectangleShape,
     highlight: PlaceholderHighlight? = null,
-    placeholderFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
-    contentFadeTransitionSpec: @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
+    placeholderFadeTransitionSpec:
+    @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
+    contentFadeTransitionSpec:
+    @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<Float> = { spring() },
 ): Modifier = composed(
     inspectorInfo = debugInspectorInfo {
         name = "placeholder"
@@ -121,15 +123,15 @@ private fun Modifier.placeholderFoundation(
         properties["shape"] = shape
     },
 ) {
-    // Values used for caching purposes
+    // Значения, используемые для кэширования
     val lastSize = remember { Ref<Size>() }
     val lastLayoutDirection = remember { Ref<LayoutDirection>() }
     val lastOutline = remember { Ref<Outline>() }
 
-    // The current highlight animation progress
+    // Текущий прогресс анимации подсветки
     var highlightProgress: Float by remember { mutableFloatStateOf(0f) }
 
-    // This is our crossfade transition
+    // Это наш переход crossfade
     val transitionState = remember { MutableTransitionState(visible) }.apply {
         targetState = visible
     }
@@ -146,7 +148,7 @@ private fun Modifier.placeholderFoundation(
         targetValueByState = { placeholderVisible -> if (placeholderVisible) 0f else 1f },
     )
 
-    // Run the optional animation spec and update the progress if the placeholder is visible
+    // Запускаем необязательную спецификацию анимации и обновляем прогресс, если плейсхолдер виден
     val animationSpec = highlight?.animationSpec
     if (animationSpec != null && (visible || placeholderAlpha >= 0.01f)) {
         val infiniteTransition = rememberInfiniteTransition("placeholder_highlight")
@@ -161,10 +163,9 @@ private fun Modifier.placeholderFoundation(
     val paint = remember { Paint() }
     remember(color, shape, highlight) {
         drawWithContent {
-            // Draw the composable content first
+            // Сначала рисуем контент composable
             if (contentAlpha in 0.01f..0.99f) {
-                // If the content alpha is between 1% and 99%, draw it in a layer with
-                // the alpha applied
+                // Если альфа контента между 1% и 99%, рисуем его в слое с примененной альфой
                 paint.alpha = contentAlpha
                 withLayer(paint) {
                     with(this@drawWithContent) {
@@ -172,13 +173,12 @@ private fun Modifier.placeholderFoundation(
                     }
                 }
             } else if (contentAlpha >= 0.99f) {
-                // If the content alpha is > 99%, draw it with no alpha
+                // Если альфа контента > 99%, рисуем его без альфы
                 drawContent()
             }
 
             if (placeholderAlpha in 0.01f..0.99f) {
-                // If the placeholder alpha is between 1% and 99%, draw it in a layer with
-                // the alpha applied
+                // Если альфа плейсхолдера между 1% и 99%, рисуем его в слое с примененной альфой
                 paint.alpha = placeholderAlpha
                 withLayer(paint) {
                     lastOutline.value = drawPlaceholder(
@@ -192,7 +192,7 @@ private fun Modifier.placeholderFoundation(
                     )
                 }
             } else if (placeholderAlpha >= 0.99f) {
-                // If the placeholder alpha is > 99%, draw it with no alpha
+                // Если альфа плейсхолдера > 99%, рисуем его без альфы
                 lastOutline.value = drawPlaceholder(
                     shape = shape,
                     color = color,
@@ -204,7 +204,7 @@ private fun Modifier.placeholderFoundation(
                 )
             }
 
-            // Keep track of the last size & layout direction
+            // Отслеживаем последний размер и направление макета
             lastSize.value = size
             lastLayoutDirection.value = layoutDirection
         }
@@ -220,9 +220,9 @@ private fun DrawScope.drawPlaceholder(
     lastLayoutDirection: LayoutDirection?,
     lastSize: Size?,
 ): Outline? {
-    // shortcut to avoid Outline calculation and allocation
+    // быстрый путь, чтобы избежать вычисления и выделения Outline
     if (shape === RectangleShape) {
-        // Draw the initial background color
+        // Рисуем начальный цвет фона
         drawRect(color = color)
 
         if (highlight != null) {
@@ -231,16 +231,16 @@ private fun DrawScope.drawPlaceholder(
                 alpha = highlight.alpha(progress),
             )
         }
-        // We didn't create an outline so return null
+        // Мы не создали outline, поэтому возвращаем null
         return null
     }
 
-    // Otherwise we need to create an outline from the shape
+    // В противном случае нам нужно создать outline из формы
     val outline = lastOutline.takeIf {
         size == lastSize && layoutDirection == lastLayoutDirection
     } ?: shape.createOutline(size, layoutDirection, this)
 
-    // Draw the placeholder color
+    // Рисуем цвет плейсхолдера
     drawOutline(outline = outline, color = color)
 
     if (highlight != null) {
@@ -251,7 +251,7 @@ private fun DrawScope.drawPlaceholder(
         )
     }
 
-    // Return the outline we used
+    // Возвращаем outline, который мы использовали
     return outline
 }
 

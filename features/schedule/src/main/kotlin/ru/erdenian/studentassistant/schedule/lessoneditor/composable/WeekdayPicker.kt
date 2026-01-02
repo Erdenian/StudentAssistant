@@ -1,220 +1,280 @@
 package ru.erdenian.studentassistant.schedule.lessoneditor.composable
 
-import android.graphics.Paint
-import android.graphics.Rect
-import android.graphics.Typeface
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.compositeOver
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.core.os.ConfigurationCompat
 import java.time.DayOfWeek
 import java.time.format.TextStyle
 import java.util.Locale
+import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
+/**
+ * Компонент для выбора дня недели.
+ *
+ * Отображает дни недели в горизонтальном ряду. Элементы адаптируются под ширину контейнера:
+ * первый элемент прижат к левому краю, последний — к правому, остальные распределяются равномерно между ними.
+ *
+ * Компонент выполнен в стиле Outlined: невыбранные элементы имеют прозрачный фон и обводку,
+ * выбранный элемент заполняется акцентным цветом.
+ *
+ * @param value текущий выбранный день недели [DayOfWeek].
+ * @param onValueChange колбэк, вызываемый при выборе пользователем нового дня недели.
+ * @param modifier [Modifier], применяемый к корневому контейнеру (Row).
+ * @param enabled управляет доступностью компонента. Если значение false, то компонент не реагирует на нажатия
+ * и отображается в полупрозрачном состоянии.
+ * @param colors [WeekdayPickerColors], определяющий цвета компонента в различных состояниях.
+ * См. [WeekdayPickerDefaults.weekdaysPickerColors].
+ */
 @Composable
 internal fun WeekdayPicker(
     value: DayOfWeek,
     onValueChange: (DayOfWeek) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    editable: Boolean = true,
-    colors: WeekdaysPickerColors = WeekdaysPickerDefaults.weekdaysPickerColors(),
+    colors: WeekdayPickerColors = WeekdayPickerDefaults.weekdaysPickerColors(),
 ) {
     val daysOfWeek = run {
-        val locale = Locale.getDefault()
-        remember(locale) {
-            // TextStyle.NARROW_STANDALONE returns number
-            // https://stackoverflow.com/questions/63415047
-            DayOfWeek.entries.associateWith { it.getDisplayName(TextStyle.NARROW, locale).uppercase(locale) }
+        val configuration = LocalConfiguration.current
+        remember(configuration) {
+            val locale = ConfigurationCompat.getLocales(configuration).get(0) ?: Locale.getDefault()
+            DayOfWeek.entries.associateWith { day ->
+                day.getDisplayName(TextStyle.NARROW, locale).uppercase(locale)
+            }
         }
     }
 
-    val backgroundColor = colors.backgroundColor().value
-    val selectedBackgroundColor = colors.selectedBackgroundColor().value
-    val textColor = colors.textColor().value
-    val selectedTextColor = colors.selectedTextColor().value
-
-    val density = LocalDensity.current
-
-    val spacing = 8.dp
-    val spacingPx = with(density) { spacing.toPx().toInt() }
-    val textSize = 16.sp
-    val textSizePx = with(density) { textSize.toPx() }
-
-    Layout(
+    Row(
         modifier = modifier,
-        measurePolicy = { measurables, constraints ->
-            val spacingSum = spacingPx * (daysOfWeek.size - 1)
+    ) {
+        val lastIndex = daysOfWeek.size - 1
+        daysOfWeek.entries.forEachIndexed { index, (day, name) ->
+            // Вычисляем смещение (bias) от -1 (Start) до 1 (End).
+            // Это позволяет прижать первый элемент к началу, последний к концу,
+            // а промежуточные распределить равномерно внутри их слотов (weight).
+            val bias = if (lastIndex > 0) -1f + (2f * index) / lastIndex else 0f
 
-            val width = constraints.maxWidth
-            val height = (width - spacingSum) / daysOfWeek.size
-
-            val childConstraints = constraints.copy(minHeight = height, maxHeight = height)
-            val placeables = measurables.map { it.measure(childConstraints) }
-
-            layout(width, height) {
-                placeables.single().placeRelative(0, 0)
-            }
-        },
-        content = {
-            val selectedPaint = remember(textSizePx, selectedTextColor) {
-                Paint().apply {
-                    this.textSize = textSizePx
-                    color = selectedTextColor.toArgb()
-
-                    isAntiAlias = true
-                    typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-                    textAlign = Paint.Align.CENTER
-                }
-            }
-            val unselectedPaint = remember(textSizePx, textColor) {
-                Paint().apply {
-                    this.textSize = textSizePx
-                    color = textColor.toArgb()
-
-                    isAntiAlias = true
-                    typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-                    textAlign = Paint.Align.CENTER
-                }
-            }
-            val bounds = remember { Rect() }
-
-            Canvas(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .pointerInput(enabled, editable) {
-                        detectTapGestures { offset ->
-                            if (!enabled || !editable) return@detectTapGestures
-
-                            val spacingSum = spacingPx * (daysOfWeek.size - 1)
-                            val dayWidth = (size.width - spacingSum) / 7.0f
-                            val dayWidthWithSpacing = dayWidth + spacingPx
-                            val clickedIndex = (offset.x / dayWidthWithSpacing).toInt()
-
-                            onValueChange(DayOfWeek.of(clickedIndex + 1))
-                        }
-                    },
+            Box(
+                modifier = Modifier.weight(1f),
+                contentAlignment = BiasAlignment(horizontalBias = bias, verticalBias = 0f),
             ) {
-                val spacingSum = spacingPx * (daysOfWeek.size - 1)
-                val dayWidth = (size.width - spacingSum) / 7.0f
-                val dayRadius = dayWidth / 2.0f
-
-                daysOfWeek.entries.forEachIndexed { index, (day, name) ->
-                    val isSelected = (day == value)
-                    val center = Offset((dayWidth + spacingPx) * index + dayRadius, dayRadius)
-                    drawCircle(
-                        color = if (isSelected) selectedBackgroundColor else backgroundColor,
-                        radius = dayRadius,
-                        center = center,
-                    )
-
-                    drawIntoCanvas { canvas ->
-                        selectedPaint.getTextBounds(name, 0, name.length, bounds)
-                        val textVerticalOffset = bounds.height() / 2
-
-                        canvas.nativeCanvas.drawText(
-                            name,
-                            center.x,
-                            center.y + textVerticalOffset,
-                            if (isSelected) selectedPaint else unselectedPaint,
-                        )
-                    }
-                }
+                WeekdayItem(
+                    name = name,
+                    isSelected = (value == day),
+                    onClick = { onValueChange(day) },
+                    colors = colors,
+                    enabled = enabled,
+                    modifier = Modifier
+                        .widthIn(max = 48.dp)
+                        .fillMaxWidth(),
+                )
             }
-        },
-    )
+        }
+    }
 }
 
-internal object WeekdaysPickerDefaults {
+@Composable
+private fun WeekdayItem(
+    name: String,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    colors: WeekdayPickerColors,
+    enabled: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    val targetContainerColor = if (isSelected) {
+        colors.selectedContainerColor().value
+    } else {
+        colors.containerColor().value
+    }
 
+    val targetContentColor = if (isSelected) {
+        colors.selectedContentColor().value
+    } else {
+        colors.contentColor().value
+    }
+
+    val targetBorderColor = if (isSelected) {
+        colors.selectedContainerColor().value
+    } else {
+        colors.borderColor().value
+    }
+
+    val finalContainerColor = if (enabled) targetContainerColor else targetContainerColor.copy(alpha = 0.12f)
+    val finalContentColor = if (enabled) targetContentColor else targetContentColor.copy(alpha = 0.38f)
+    val finalBorderColor = if (enabled) targetBorderColor else targetBorderColor.copy(alpha = 0.12f)
+
+    val containerColor by animateColorAsState(targetValue = finalContainerColor, label = "ContainerColor")
+    val contentColor by animateColorAsState(targetValue = finalContentColor, label = "ContentColor")
+    val borderColor by animateColorAsState(targetValue = finalBorderColor, label = "BorderColor")
+
+    Surface(
+        onClick = onClick,
+        enabled = enabled,
+        shape = CircleShape,
+        color = containerColor,
+        contentColor = contentColor,
+        border = BorderStroke(1.dp, borderColor),
+        modifier = modifier.aspectRatio(1f),
+    ) {
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+            Text(
+                text = name,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleMedium,
+            )
+        }
+    }
+}
+
+/**
+ * Объект, содержащий значения по умолчанию для [WeekdayPicker].
+ */
+internal object WeekdayPickerDefaults {
+
+    /**
+     * Создает экземпляр [WeekdayPickerColors] с заданными цветами.
+     *
+     * @param containerColor цвет фона невыбранного элемента.
+     * @param contentColor цвет текста невыбранного элемента.
+     * @param borderColor цвет обводки невыбранного элемента.
+     * @param selectedContainerColor цвет фона (и обводки) выбранного элемента.
+     * @param selectedContentColor цвет текста выбранного элемента.
+     */
     @Composable
     fun weekdaysPickerColors(
-        backgroundColor: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
-            .compositeOver(MaterialTheme.colorScheme.surface),
-        selectedBackgroundColor: Color = MaterialTheme.colorScheme.primary,
-        textColor: Color = MaterialTheme.colorScheme.onPrimary,
-        selectedTextColor: Color = MaterialTheme.colorScheme.onPrimary,
-    ): WeekdaysPickerColors = DefaultWeekdaysPickerColors(
-        backgroundColor = backgroundColor,
-        selectedBackgroundColor = selectedBackgroundColor,
-        textColor = textColor,
-        selectedTextColor = selectedTextColor,
+        containerColor: Color = Color.Transparent,
+        contentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+        borderColor: Color = MaterialTheme.colorScheme.outline,
+        selectedContainerColor: Color = MaterialTheme.colorScheme.primary,
+        selectedContentColor: Color = MaterialTheme.colorScheme.onPrimary,
+    ): WeekdayPickerColors = DefaultWeekdayPickerColors(
+        containerColor = containerColor,
+        contentColor = contentColor,
+        borderColor = borderColor,
+        selectedContainerColor = selectedContainerColor,
+        selectedContentColor = selectedContentColor,
     )
 }
 
+/**
+ * Представляет набор цветов, используемых в [WeekdayPicker].
+ *
+ * См. [WeekdayPickerDefaults.weekdaysPickerColors] для реализации по умолчанию.
+ */
 @Stable
-internal interface WeekdaysPickerColors {
-
+internal interface WeekdayPickerColors {
+    /** Цвет фона элемента в обычном состоянии. */
     @Composable
-    fun backgroundColor(): State<Color>
+    fun containerColor(): State<Color>
 
+    /** Цвет контента (текста) элемента в обычном состоянии. */
     @Composable
-    fun selectedBackgroundColor(): State<Color>
+    fun contentColor(): State<Color>
 
+    /** Цвет обводки элемента в обычном состоянии. */
     @Composable
-    fun textColor(): State<Color>
+    fun borderColor(): State<Color>
 
+    /** Цвет фона элемента в выбранном состоянии. */
     @Composable
-    fun selectedTextColor(): State<Color>
+    fun selectedContainerColor(): State<Color>
+
+    /** Цвет контента (текста) элемента в выбранном состоянии. */
+    @Composable
+    fun selectedContentColor(): State<Color>
 }
 
 @Immutable
-private class DefaultWeekdaysPickerColors(
-    private val backgroundColor: Color,
-    private val selectedBackgroundColor: Color,
-    private val textColor: Color,
-    private val selectedTextColor: Color,
-) : WeekdaysPickerColors {
+private class DefaultWeekdayPickerColors(
+    private val containerColor: Color,
+    private val contentColor: Color,
+    private val borderColor: Color,
+    private val selectedContainerColor: Color,
+    private val selectedContentColor: Color,
+) : WeekdayPickerColors {
 
     @Composable
-    override fun backgroundColor() = rememberUpdatedState(backgroundColor)
+    override fun containerColor() = rememberUpdatedState(containerColor)
 
     @Composable
-    override fun selectedBackgroundColor() = rememberUpdatedState(selectedBackgroundColor)
+    override fun contentColor() = rememberUpdatedState(contentColor)
 
     @Composable
-    override fun textColor() = rememberUpdatedState(textColor)
+    override fun borderColor() = rememberUpdatedState(borderColor)
 
     @Composable
-    override fun selectedTextColor() = rememberUpdatedState(selectedTextColor)
+    override fun selectedContainerColor() = rememberUpdatedState(selectedContainerColor)
+
+    @Composable
+    override fun selectedContentColor() = rememberUpdatedState(selectedContentColor)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as DefaultWeekdaysPickerColors
+        other as DefaultWeekdayPickerColors
 
-        if (backgroundColor != other.backgroundColor) return false
-        if (selectedBackgroundColor != other.selectedBackgroundColor) return false
-        if (textColor != other.textColor) return false
-        if (selectedTextColor != other.selectedTextColor) return false
+        if (containerColor != other.containerColor) return false
+        if (contentColor != other.contentColor) return false
+        if (borderColor != other.borderColor) return false
+        if (selectedContainerColor != other.selectedContainerColor) return false
+        if (selectedContentColor != other.selectedContentColor) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = backgroundColor.hashCode()
-        result = 31 * result + selectedBackgroundColor.hashCode()
-        result = 31 * result + textColor.hashCode()
-        result = 31 * result + selectedTextColor.hashCode()
+        var result = containerColor.hashCode()
+        result = 31 * result + contentColor.hashCode()
+        result = 31 * result + borderColor.hashCode()
+        result = 31 * result + selectedContainerColor.hashCode()
+        result = 31 * result + selectedContentColor.hashCode()
         return result
+    }
+}
+
+private class WeekdayPickerPreviewParameterProvider : PreviewParameterProvider<Boolean> {
+    override val values = sequenceOf(true, false)
+}
+
+@AppPreviews
+@Composable
+private fun WeekdayPickerPreview(
+    @PreviewParameter(WeekdayPickerPreviewParameterProvider::class) enabled: Boolean,
+) = AppTheme {
+    Surface {
+        WeekdayPicker(
+            value = DayOfWeek.WEDNESDAY,
+            onValueChange = {},
+            enabled = enabled,
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
 }

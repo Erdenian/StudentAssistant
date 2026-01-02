@@ -6,6 +6,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-01-03
+
+### Fixed
+- Исправлена лишняя анимация перехода (shared element) при открытии редактора расписания
+- Мелькание клавиатуры при закрытии экранов редактирования после сохранения
+- Исправлено автоматическое переключение на созданный семестр
+- Исправлено перекрытие текста описания домашнего задания клавиатурой
+- Обновление названий дней недели при смене языка устройства в редакторе расписания
+- Исправлено наложение текста на индикатор в PagerTabStrip при увеличенном масштабе шрифта
+
+### Added
+- Добавлена локализация на английский, немецкий, французский, итальянский, испанский, белорусский, украинский, казахский
+  и чувашский языки
+- Предупреждение при изменении даты начала семестра, если это может нарушить порядок чередования недель у существующих
+  занятий
+
+### Changed
+- Значительно уменьшено время получения списка занятий в определенный день из БД
+- Обновлен дизайн и анимации компонентов выбора дней недели и недель повторения
+- Улучшен дизайн экрана редактирования занятия: обновлены поля выбора времени, оптимизированы отступы
+- Унифицирован дизайн полей выбора даты и времени в редакторах семестра и домашнего задания
+
 ## [0.7.4] - 2025-12-11
 
 ### Fixed
@@ -141,11 +163,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2016-12-19
 
 <!-- @formatter:off -->
-[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/0.7.4...develop
+[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/0.8.0...develop
+[0.8.0]: https://github.com/Erdenian/StudentAssistant/compare/0.7.4...0.8.0
 [0.7.4]: https://github.com/Erdenian/StudentAssistant/compare/0.7.3...0.7.4
 [0.7.3]: https://github.com/Erdenian/StudentAssistant/compare/0.7.2...0.7.3
 [0.7.2]: https://github.com/Erdenian/StudentAssistant/compare/0.7.1...0.7.2
-[0.7.1]: https://github.com/Erdenian/StudentAssistant/compare/0.7.0...0.7.1
+[0.7.1]: https://github.com/Erdenian/StudentAssistant/compare/0.6.0...0.7.1
 [0.7.0]: https://github.com/Erdenian/StudentAssistant/compare/0.6.0...0.7.0
 [0.6.0]: https://github.com/Erdenian/StudentAssistant/compare/0.5.3...0.6.0
 [0.5.3]: https://github.com/Erdenian/StudentAssistant/compare/0.5.2...0.5.3

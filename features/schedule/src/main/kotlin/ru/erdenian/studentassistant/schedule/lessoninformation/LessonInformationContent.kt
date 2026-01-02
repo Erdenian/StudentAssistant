@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.schedule.lessoninformation
 
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -25,11 +24,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.core.os.ConfigurationCompat
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import ru.erdenian.studentassistant.navigation.LocalAnimatedContentScope
+import java.util.Locale
 import ru.erdenian.studentassistant.navigation.LocalSharedTransitionScope
 import ru.erdenian.studentassistant.repository.api.entity.Homework
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
@@ -42,18 +46,30 @@ import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.AutoMirrored
 import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.layout.ContextMenuBox
+import ru.erdenian.studentassistant.uikit.utils.ScreenPreviews
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.LessonCard
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
+/**
+ * UI контент экрана информации о занятии.
+ *
+ * @param lesson занятие.
+ * @param homeworks список домашних заданий по предмету.
+ * @param onBackClick колбэк нажатия назад.
+ * @param onEditClick колбэк нажатия редактирования.
+ * @param onHomeworkClick колбэк нажатия на домашнее задание.
+ * @param onAddHomeworkClick колбэк добавления домашнего задания.
+ * @param onDeleteHomeworkClick колбэк удаления домашнего задания.
+ */
 @Composable
 internal fun LessonInformationContent(
     lesson: Lesson,
     homeworks: List<Homework>?,
     onBackClick: () -> Unit,
-    onEditClick: (Lesson) -> Unit,
+    onEditClick: () -> Unit,
     onHomeworkClick: (Homework) -> Unit,
-    onAddHomeworkClick: (Lesson) -> Unit,
+    onAddHomeworkClick: () -> Unit,
     onDeleteHomeworkClick: (Homework) -> Unit,
 ) = Scaffold(
     topBar = {
@@ -61,7 +77,10 @@ internal fun LessonInformationContent(
             title = { Text(stringResource(RS.li_title)) },
             navigationIcon = {
                 IconButton(onClick = onBackClick) {
-                    Icon(imageVector = AppIcons.AutoMirrored.ArrowBack, contentDescription = null)
+                    Icon(
+                        imageVector = AppIcons.AutoMirrored.ArrowBack,
+                        contentDescription = stringResource(RS.u_back),
+                    )
                 }
             },
             actions = {
@@ -70,7 +89,7 @@ internal fun LessonInformationContent(
                         ActionItem.AlwaysShow(
                             name = stringResource(RS.li_edit),
                             imageVector = AppIcons.Edit,
-                            onClick = { onEditClick(lesson) },
+                            onClick = onEditClick,
                         ),
                     ),
                 )
@@ -78,40 +97,53 @@ internal fun LessonInformationContent(
         )
     },
     floatingActionButton = {
-        FloatingActionButton(onClick = { onAddHomeworkClick(lesson) }) {
-            Icon(imageVector = AppIcons.Add, contentDescription = null)
+        FloatingActionButton(onClick = onAddHomeworkClick) {
+            Icon(imageVector = AppIcons.Add, contentDescription = stringResource(RS.li_add_homework))
         }
     },
 ) { paddingValues ->
     Column(
         modifier = Modifier.padding(paddingValues),
     ) {
-        val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
+        val locale = ConfigurationCompat
+            .getLocales(LocalConfiguration.current)
+            .get(0)
+            ?: Locale.getDefault()
+        val timeFormatter = remember(locale) {
+            DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale)
+        }
 
         AnimatedContent(
             targetState = lesson,
             transitionSpec = { fadeIn() togetherWith fadeOut() },
             label = "LessonInformationLessonCard",
         ) { lessonState ->
-            with(LocalSharedTransitionScope.current) {
-                LessonCard(
-                    subjectName = lessonState.subjectName,
-                    type = lessonState.type,
-                    teachers = lessonState.teachers,
-                    classrooms = lessonState.classrooms,
-                    startTime = lessonState.startTime.format(timeFormatter),
-                    endTime = lessonState.endTime.format(timeFormatter),
-                    modifier = Modifier
-                        .padding(
-                            horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
-                            vertical = MaterialTheme.dimensions.screenPaddingVertical,
-                        )
-                        .sharedElement(
-                            rememberSharedContentState(lesson),
-                            LocalAnimatedContentScope.current,
-                        ),
-                )
-            }
+            val isInspection = LocalInspectionMode.current
+            LessonCard(
+                subjectName = lessonState.subjectName,
+                type = lessonState.type,
+                teachers = lessonState.teachers,
+                classrooms = lessonState.classrooms,
+                startTime = lessonState.startTime.format(timeFormatter),
+                endTime = lessonState.endTime.format(timeFormatter),
+                modifier = Modifier
+                    .padding(
+                        horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
+                        vertical = MaterialTheme.dimensions.screenPaddingVertical,
+                    )
+                    .let { modifier ->
+                        if (!isInspection) {
+                            with(LocalSharedTransitionScope.current) {
+                                modifier.sharedElement(
+                                    rememberSharedContentState(lesson),
+                                    LocalNavAnimatedContentScope.current,
+                                )
+                            }
+                        } else {
+                            modifier
+                        }
+                    },
+            )
         }
 
         HorizontalDivider()
@@ -140,28 +172,29 @@ internal fun LessonInformationContent(
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun LessonInformationContentNoHomeworksPreview() = AppTheme {
-    LessonInformationContent(
-        lesson = Lessons.regular,
-        homeworks = emptyList(),
-        onBackClick = {},
-        onEditClick = {},
-        onHomeworkClick = {},
-        onAddHomeworkClick = {},
-        onDeleteHomeworkClick = {},
+private data class LessonInformationContentPreviewData(
+    val lesson: Lesson,
+    val homeworks: List<Homework>?,
+)
+
+private class LessonInformationContentPreviewParameterProvider :
+    PreviewParameterProvider<LessonInformationContentPreviewData> {
+    override val values = sequenceOf(
+        LessonInformationContentPreviewData(Lessons.regular, null),
+        LessonInformationContentPreviewData(Lessons.long, emptyList()),
+        LessonInformationContentPreviewData(Lessons.regular, List(5) { Homeworks.regular }),
     )
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@ScreenPreviews
 @Composable
-private fun LessonInformationContentPreview() = AppTheme {
+private fun LessonInformationContentPreview(
+    @PreviewParameter(LessonInformationContentPreviewParameterProvider::class)
+    data: LessonInformationContentPreviewData,
+) = AppTheme {
     LessonInformationContent(
-        lesson = Lessons.regular,
-        homeworks = List(10) { Homeworks.regular },
+        lesson = data.lesson,
+        homeworks = data.homeworks,
         onBackClick = {},
         onEditClick = {},
         onHomeworkClick = {},

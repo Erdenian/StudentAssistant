@@ -1,17 +1,8 @@
 package ru.erdenian.studentassistant.settings.di
 
 import ru.erdenian.studentassistant.settings.SettingsDependencies
+import ru.erdenian.studentassistant.utils.BaseComponentHolder
 
-internal object SettingsComponentHolder {
-
-    lateinit var instance: SettingsComponent
-        private set
-
-    @Synchronized
-    fun create(dependencies: SettingsDependencies): SettingsComponent {
-        if (!SettingsComponentHolder::instance.isInitialized) {
-            instance = DaggerSettingsComponent.factory().create(dependencies)
-        }
-        return instance
-    }
-}
+internal object SettingsComponentHolder : BaseComponentHolder<SettingsComponent, SettingsDependencies>(
+    factory = { DaggerSettingsComponent.factory().create(it) },
+)

@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.kotlin.parcelize)
-    alias(libs.plugins.kover)
 }
 
 android {
@@ -18,6 +17,7 @@ ksp {
 dependencies {
     // region Private
     implementation(project(":features:repository:api"))
+    implementation(project(":common:utils"))
     // endregion
 
     // region Tests

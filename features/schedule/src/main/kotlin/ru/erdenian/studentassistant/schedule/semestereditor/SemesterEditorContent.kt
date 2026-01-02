@@ -1,11 +1,11 @@
 package ru.erdenian.studentassistant.schedule.semestereditor
 
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,7 +20,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,11 +32,10 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import ru.erdenian.studentassistant.sampledata.Semesters
 import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppIcons
@@ -48,9 +46,26 @@ import ru.erdenian.studentassistant.uikit.dialog.DatePickerDialog
 import ru.erdenian.studentassistant.uikit.placeholder.PlaceholderHighlight
 import ru.erdenian.studentassistant.uikit.placeholder.fade
 import ru.erdenian.studentassistant.uikit.placeholder.placeholder
+import ru.erdenian.studentassistant.uikit.utils.ScreenPreviews
 import ru.erdenian.studentassistant.uikit.view.ActionItem
+import ru.erdenian.studentassistant.uikit.view.DateField
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 
+/**
+ * UI контент экрана редактора расписания.
+ *
+ * @param isLoading отображать ли состояние загрузки.
+ * @param isEditing режим редактирования (true) или создания (false).
+ * @param name название расписания.
+ * @param firstDay дата начала.
+ * @param lastDay дата окончания.
+ * @param errorMessage сообщение об ошибке валидации названия.
+ * @param onBackClick колбэк нажатия назад.
+ * @param onSaveClick колбэк сохранения.
+ * @param onNameChange колбэк изменения названия.
+ * @param onFirstDayChange колбэк изменения даты начала.
+ * @param onLastDayChange колбэк изменения даты окончания.
+ */
 @Composable
 internal fun SemesterEditorContent(
     isLoading: Boolean,
@@ -70,7 +85,10 @@ internal fun SemesterEditorContent(
             title = { Text(text = stringResource(if (isEditing) RS.se_title_edit else RS.se_title_new)) },
             navigationIcon = {
                 IconButton(onClick = onBackClick) {
-                    Icon(imageVector = AppIcons.AutoMirrored.ArrowBack, contentDescription = null)
+                    Icon(
+                        imageVector = AppIcons.AutoMirrored.ArrowBack,
+                        contentDescription = stringResource(RS.u_back),
+                    )
                 }
             },
             actions = {
@@ -96,6 +114,7 @@ internal fun SemesterEditorContent(
     },
 ) { paddingValues ->
     Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier
             .padding(paddingValues)
             .padding(
@@ -103,81 +122,73 @@ internal fun SemesterEditorContent(
                 vertical = MaterialTheme.dimensions.screenPaddingVertical,
             ),
     ) {
-        val dateFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
         val focusManager = LocalFocusManager.current
         var datePickerData: Pair<LocalDate, (LocalDate) -> Unit>? by remember { mutableStateOf(null) }
 
-        OutlinedTextField(
-            value = name,
-            onValueChange = onNameChange,
-            enabled = !isLoading,
-            label = { Text(text = stringResource(RS.se_name)) },
-            isError = (errorMessage != null),
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.Sentences,
-                imeAction = ImeAction.Done,
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = { focusManager.clearFocus() },
-            ),
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .placeholder(
-                    visible = isLoading,
-                    highlight = PlaceholderHighlight.fade(),
+        Column(
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            OutlinedTextField(
+                value = name,
+                onValueChange = onNameChange,
+                enabled = !isLoading,
+                label = { Text(text = stringResource(RS.se_name)) },
+                isError = (errorMessage != null),
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Done,
                 ),
-        )
-
-        AnimatedVisibility(errorMessage != null) {
-            Text(
-                text = errorMessage.orEmpty(),
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(start = 16.dp),
+                keyboardActions = KeyboardActions(
+                    onDone = { focusManager.clearFocus() },
+                ),
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .placeholder(
+                        visible = isLoading,
+                        highlight = PlaceholderHighlight.fade(),
+                    ),
             )
+
+            AnimatedVisibility(errorMessage != null) {
+                Text(
+                    text = errorMessage.orEmpty(),
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(start = 16.dp),
+                )
+            }
         }
 
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(top = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(
-                text = stringResource(RS.se_first_day),
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.weight(1.0f),
-            )
-            TextButton(
+            DateField(
+                value = firstDay,
+                label = stringResource(RS.se_first_day),
                 onClick = { datePickerData = firstDay to onFirstDayChange },
                 enabled = !isLoading,
-                modifier = Modifier.placeholder(
-                    visible = isLoading,
-                    highlight = PlaceholderHighlight.fade(),
-                ),
-            ) {
-                Text(text = firstDay.format(dateFormatter))
-            }
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(top = 8.dp),
-        ) {
-            Text(
-                text = stringResource(RS.se_last_day),
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.weight(1.0f),
+                modifier = Modifier
+                    .weight(1f)
+                    .placeholder(
+                        visible = isLoading,
+                        highlight = PlaceholderHighlight.fade(),
+                    ),
             )
-            TextButton(
+
+            DateField(
+                value = lastDay,
+                label = stringResource(RS.se_last_day),
                 onClick = { datePickerData = lastDay to onLastDayChange },
                 enabled = !isLoading,
-                modifier = Modifier.placeholder(
-                    visible = isLoading,
-                    highlight = PlaceholderHighlight.fade(),
-                ),
-            ) {
-                Text(text = lastDay.format(dateFormatter))
-            }
+                modifier = Modifier
+                    .weight(1f)
+                    .placeholder(
+                        visible = isLoading,
+                        highlight = PlaceholderHighlight.fade(),
+                    ),
+            )
         }
 
         datePickerData?.let { (initialDate, onConfirm) ->
@@ -193,54 +204,36 @@ internal fun SemesterEditorContent(
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun SemesterEditorLoadingPreview() = AppTheme {
-    SemesterEditorContent(
-        isLoading = true,
-        isEditing = false,
-        name = Semesters.regular.name,
-        firstDay = Semesters.regular.firstDay,
-        lastDay = Semesters.regular.lastDay,
-        errorMessage = null,
-        onBackClick = {},
-        onSaveClick = {},
-        onNameChange = {},
-        onFirstDayChange = {},
-        onLastDayChange = {},
+private data class SemesterEditorContentPreviewData(
+    val isLoading: Boolean,
+    val isEditing: Boolean,
+    val name: String,
+    val errorMessage: String? = null,
+)
+
+private class SemesterEditorContentPreviewParameterProvider :
+    PreviewParameterProvider<SemesterEditorContentPreviewData> {
+    override val values = sequenceOf(
+        SemesterEditorContentPreviewData(isLoading = true, isEditing = false, name = ""),
+        SemesterEditorContentPreviewData(isLoading = false, isEditing = false, name = "", errorMessage = "Error"),
+        SemesterEditorContentPreviewData(isLoading = false, isEditing = false, name = Semesters.regular.name),
+        SemesterEditorContentPreviewData(isLoading = false, isEditing = true, name = Semesters.long.name),
     )
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@ScreenPreviews
 @Composable
-private fun SemesterEditorPreview() = AppTheme {
+private fun SemesterEditorContentPreview(
+    @PreviewParameter(SemesterEditorContentPreviewParameterProvider::class)
+    data: SemesterEditorContentPreviewData,
+) = AppTheme {
     SemesterEditorContent(
-        isLoading = false,
-        isEditing = false,
-        name = Semesters.regular.name,
+        isLoading = data.isLoading,
+        isEditing = data.isEditing,
+        name = data.name,
         firstDay = Semesters.regular.firstDay,
         lastDay = Semesters.regular.lastDay,
-        errorMessage = null,
-        onBackClick = {},
-        onSaveClick = {},
-        onNameChange = {},
-        onFirstDayChange = {},
-        onLastDayChange = {},
-    )
-}
-
-@Preview
-@Composable
-private fun SemesterEditorLongPreview() = AppTheme {
-    SemesterEditorContent(
-        isLoading = false,
-        isEditing = false,
-        name = Semesters.long.name,
-        firstDay = Semesters.long.firstDay,
-        lastDay = Semesters.long.lastDay,
-        errorMessage = null,
+        errorMessage = data.errorMessage,
         onBackClick = {},
         onSaveClick = {},
         onNameChange = {},

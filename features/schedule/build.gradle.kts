@@ -23,12 +23,20 @@ dependencies {
     implementation(project(":features:homeworks:api"))
     // endregion
 
+    // region Tests
+    testImplementation(libs.bundles.test.unit)
+    androidTestImplementation(libs.bundles.test.android)
+    androidTestImplementation(libs.bundles.test.compose)
+    debugImplementation(libs.test.compose.manifest)
+    // endregion
+
     // region Kotlin
     implementation(libs.kotlinx.serialization)
     // endregion
 
     // region AndroidX
     implementation(libs.androidx.lifecycle.viewmodel)
+    implementation(libs.androidx.navigation3.ui)
     // endregion
 
     // region Core

@@ -1,10 +1,25 @@
 package ru.erdenian.studentassistant.settings.preference
 
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import ru.erdenian.studentassistant.style.AppTheme
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
+/**
+ * Настройка с переключателем (Switch).
+ *
+ * @param title заголовок настройки.
+ * @param description описание настройки.
+ * @param value текущее значение.
+ * @param onValueChange колбэк при изменении значения.
+ * @param modifier модификатор.
+ * @param icon иконка настройки.
+ */
 @Composable
 internal fun BooleanPreference(
     title: String,
@@ -21,3 +36,22 @@ internal fun BooleanPreference(
     onClick = { onValueChange(!value) },
     modifier = modifier,
 )
+
+private class BooleanPreviewParameterProvider : PreviewParameterProvider<Boolean> {
+    override val values = sequenceOf(true, false)
+}
+
+@AppPreviews
+@Composable
+private fun BooleanPreferencePreview(
+    @PreviewParameter(BooleanPreviewParameterProvider::class) value: Boolean,
+) = AppTheme {
+    Surface {
+        BooleanPreference(
+            title = "Boolean Preference",
+            description = "Description",
+            value = value,
+            onValueChange = {},
+        )
+    }
+}

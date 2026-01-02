@@ -1,5 +1,8 @@
 package ru.erdenian.studentassistant.schedule.semestereditor
 
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -8,9 +11,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import ru.erdenian.studentassistant.navigation.LocalNavController
+import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
 import ru.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
 import ru.erdenian.studentassistant.schedule.semestereditor.SemesterEditorViewModel.Error
@@ -24,11 +28,15 @@ internal fun SemesterEditorScreen(route: ScheduleRoute.SemesterEditor) {
     val viewModel = viewModel {
         ScheduleComponentHolder.instance.semesterEditorViewModelFactory.get(route.semesterId)
     }
-    val navController = LocalNavController.current
+    val navController = LocalNavigator.current
 
     val done by viewModel.done.collectAsState()
+    val focusManager = LocalFocusManager.current
     LaunchedEffect(done) {
-        if (done) navController.popBackStack()
+        if (done) {
+            focusManager.clearFocus()
+            navController.goBack()
+        }
     }
 
     var isNameChanged by rememberSaveable { mutableStateOf(false) }
@@ -44,7 +52,7 @@ internal fun SemesterEditorScreen(route: ScheduleRoute.SemesterEditor) {
     val name by viewModel.name.collectAsState()
     val nameErrorMessage = errorMessage
         ?.takeIf { (error == Error.EMPTY_NAME) && isNameChanged || (error == Error.SEMESTER_EXISTS) }
-        ?.takeIf { !done } // Error message flashes before navigating back if the database is fast enough
+        ?.takeIf { !done } // Сообщение об ошибке мелькает перед переходом назад, если база данных достаточно быстрая
 
     val firstDay by viewModel.firstDay.collectAsState()
     val lastDay by viewModel.lastDay.collectAsState()
@@ -68,7 +76,29 @@ internal fun SemesterEditorScreen(route: ScheduleRoute.SemesterEditor) {
         }
     }
 
-    if (isSaving) ProgressDialog(stringResource(RS.se_saving))
+    if (isSaving) ProgressDialog(text = stringResource(RS.se_saving), visible = !done)
+
+    val showWeekShiftDialog by viewModel.showWeekShiftDialog.collectAsState()
+    if (showWeekShiftDialog) {
+        AlertDialog(
+            onDismissRequest = viewModel::dismissWeekShiftDialog,
+            title = { Text(text = stringResource(RS.se_warning_week_shift_title)) },
+            text = { Text(text = stringResource(RS.se_warning_week_shift_message)) },
+            dismissButton = {
+                TextButton(
+                    onClick = viewModel::dismissWeekShiftDialog,
+                ) { Text(text = stringResource(RS.se_warning_week_shift_no)) }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.dismissWeekShiftDialog()
+                        viewModel.save(confirmWeekShift = true)
+                    },
+                ) { Text(text = stringResource(RS.se_warning_week_shift_yes)) }
+            },
+        )
+    }
 
     val context = LocalContext.current
 
@@ -79,7 +109,7 @@ internal fun SemesterEditorScreen(route: ScheduleRoute.SemesterEditor) {
         firstDay = firstDay,
         lastDay = lastDay,
         errorMessage = nameErrorMessage,
-        onBackClick = navController::popBackStack,
+        onBackClick = navController::goBack,
         onSaveClick = {
             isNameChanged = true
             errorMessage?.let { context.toast(it) } ?: viewModel.save()

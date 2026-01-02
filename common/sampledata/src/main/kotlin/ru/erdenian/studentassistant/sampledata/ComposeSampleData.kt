@@ -2,10 +2,10 @@
 
 package ru.erdenian.studentassistant.sampledata
 
-import androidx.compose.runtime.Composable
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
+import kotlin.random.Random
 import ru.erdenian.studentassistant.repository.api.entity.Homework
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.repository.api.entity.Semester
@@ -13,26 +13,26 @@ import ru.erdenian.studentassistant.repository.api.entity.Semester
 object Semesters {
 
     val regular
-        @Composable get() = Semester(
+        get() = Semester(
             name = "Семестр 1",
             firstDay = LocalDate.of(2021, 9, 1),
             lastDay = LocalDate.of(2022, 6, 30),
-            id = 0L,
+            id = Random.nextLong(),
         )
 
     val long
-        @Composable get() = Semester(
+        get() = Semester(
             name = "Семестр Семестр Семестр Семестр Семестр Семестр Семестр Семестр Семестр Семестр Семестр Семестр",
             firstDay = LocalDate.of(2021, 9, 1),
             lastDay = LocalDate.of(2022, 6, 30),
-            id = 0L,
+            id = Random.nextLong(),
         )
 }
 
 object Lessons {
 
     val regular
-        @Composable get() = Lesson(
+        get() = Lesson(
             subjectName = "Интернет программирование",
             type = "Лабораторная работа",
             teachers = listOf("Кожухов Игорь Борисович"),
@@ -41,11 +41,11 @@ object Lessons {
             endTime = LocalTime.of(10, 30),
             lessonRepeat = Lesson.Repeat.ByWeekday(dayOfWeek = DayOfWeek.MONDAY, weeks = listOf(true)),
             semesterId = 0L,
-            id = 0L,
+            id = Random.nextLong(),
         )
 
     val minimal
-        @Composable get() = Lesson(
+        get() = Lesson(
             subjectName = "Интернет программирование",
             type = "",
             teachers = emptyList(),
@@ -54,11 +54,11 @@ object Lessons {
             endTime = LocalTime.of(10, 30),
             lessonRepeat = Lesson.Repeat.ByWeekday(dayOfWeek = DayOfWeek.MONDAY, weeks = listOf(true)),
             semesterId = 0L,
-            id = 0L,
+            id = Random.nextLong(),
         )
 
     val long
-        @Composable get() = Lesson(
+        get() = Lesson(
             subjectName = "Интернет программирование программирование программирование программирование",
             type = "Лабораторная работа работа работа работа работа работа работа работа работа работа работа работа",
             teachers = listOf("Кожухов Игорь Борисович Борисович Борисович Борисович Борисович Борисович Борисович"),
@@ -67,29 +67,29 @@ object Lessons {
             endTime = LocalTime.of(10, 30),
             lessonRepeat = Lesson.Repeat.ByWeekday(dayOfWeek = DayOfWeek.MONDAY, weeks = listOf(true)),
             semesterId = 0L,
-            id = 0L,
+            id = Random.nextLong(),
         )
 }
 
 object Homeworks {
 
     val regular
-        @Composable get() = Homework(
+        get() = Homework(
             subjectName = "Интернет программирование",
             description = "Лабораторная работа",
             deadline = LocalDate.of(2021, 10, 2),
             isDone = false,
             semesterId = 0L,
-            id = 0L,
+            id = Random.nextLong(),
         )
 
     val long
-        @Composable get() = Homework(
+        get() = Homework(
             subjectName = "Интернет программирование программирование программирование программирование",
             description = "Лабораторная работа" + " работа".repeat(1000),
             deadline = LocalDate.of(2021, 10, 2),
             isDone = false,
             semesterId = 0L,
-            id = 0L,
+            id = Random.nextLong(),
         )
 }

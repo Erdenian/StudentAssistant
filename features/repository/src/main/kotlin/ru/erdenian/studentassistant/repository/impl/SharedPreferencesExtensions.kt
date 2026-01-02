@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.stateIn
+import ru.erdenian.studentassistant.utils.Default
 
 // region Boolean
 
@@ -65,4 +66,4 @@ private fun <T> SharedPreferences.getFlow(
     }
     registerOnSharedPreferenceChangeListener(listener)
     awaitClose { unregisterOnSharedPreferenceChangeListener(listener) }
-}.stateIn(scope, SharingStarted.WhileSubscribed(), getter())
+}.stateIn(scope, SharingStarted.Default, getter())

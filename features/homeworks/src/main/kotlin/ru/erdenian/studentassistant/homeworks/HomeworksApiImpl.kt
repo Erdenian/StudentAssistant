@@ -1,21 +1,22 @@
 package ru.erdenian.studentassistant.homeworks
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.toRoute
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
 import javax.inject.Inject
+import javax.inject.Singleton
 import ru.erdenian.studentassistant.homeworks.api.HomeworksApi
 import ru.erdenian.studentassistant.homeworks.api.HomeworksRoute
 import ru.erdenian.studentassistant.homeworks.di.HomeworksComponentHolder
 import ru.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorScreen
 import ru.erdenian.studentassistant.homeworks.homeworks.HomeworksScreen
-import ru.erdenian.studentassistant.navigation.composableAnimated
 
 public fun createHomeworksApi(dependencies: HomeworksDependencies): HomeworksApi =
     HomeworksComponentHolder.create(dependencies).api
 
+@Singleton
 internal class HomeworksApiImpl @Inject constructor() : HomeworksApi {
-    override fun addToGraph(builder: NavGraphBuilder) {
-        builder.composableAnimated<HomeworksRoute.Homeworks> { HomeworksScreen() }
-        builder.composableAnimated<HomeworksRoute.HomeworkEditor> { HomeworkEditorScreen(it.toRoute()) }
+    override fun addToGraph(scope: EntryProviderScope<NavKey>) {
+        scope.entry<HomeworksRoute.Homeworks> { HomeworksScreen() }
+        scope.entry<HomeworksRoute.HomeworkEditor> { HomeworkEditorScreen(it) }
     }
 }

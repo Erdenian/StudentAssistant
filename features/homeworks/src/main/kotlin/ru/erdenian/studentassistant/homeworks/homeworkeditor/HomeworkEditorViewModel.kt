@@ -20,7 +20,15 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
+import ru.erdenian.studentassistant.utils.Default
 
+/**
+ * ViewModel для экрана редактора домашнего задания.
+ *
+ * @param semesterId идентификатор расписания.
+ * @param homeworkId идентификатор задания (для редактирования).
+ * @param subjectName предустановленное название предмета (для создания).
+ */
 internal class HomeworkEditorViewModel @AssistedInject constructor(
     application: Application,
     repositoryApi: RepositoryApi,
@@ -68,16 +76,12 @@ internal class HomeworkEditorViewModel @AssistedInject constructor(
 
     val existingSubjects = lessonRepository.getSubjects(semesterId)
         .onEach { areSubjectsLoaded.value = true }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = emptyList(),
-        )
+        .stateIn(viewModelScope, SharingStarted.Default, emptyList())
     val semesterDatesRange = semesterRepository.getFlow(semesterId)
         .filterNotNull()
         .onEach { isSemesterLoaded.value = true }
         .map { it.dateRange }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), LocalDate.now()..LocalDate.now())
+        .stateIn(viewModelScope, SharingStarted.Default, LocalDate.now()..LocalDate.now())
 
     val error = combine(this.subjectName, description) { subjectName, description ->
         when {
@@ -85,11 +89,7 @@ internal class HomeworkEditorViewModel @AssistedInject constructor(
             description.isBlank() -> Error.EMPTY_DESCRIPTION
             else -> null
         }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = null,
-    )
+    }.stateIn(viewModelScope, SharingStarted.Default, null)
 
     val isEditing get() = (homeworkId != null)
     val lessonExists get() = subjectName.value in existingSubjects.value
@@ -106,7 +106,7 @@ internal class HomeworkEditorViewModel @AssistedInject constructor(
                     description.value = homework.description
                     deadline.value = homework.deadline
                 } else {
-                    // Homework was deleted
+                    // Домашнее задание было удалено
                     donePrivate.value = true
                 }
                 isHomeworkLoaded.value = true
@@ -143,7 +143,6 @@ internal class HomeworkEditorViewModel @AssistedInject constructor(
                 )
             }
 
-            operationPrivate.value = null
             donePrivate.value = true
         }
     }
@@ -152,7 +151,6 @@ internal class HomeworkEditorViewModel @AssistedInject constructor(
         operationPrivate.value = Operation.DELETING
         viewModelScope.launch {
             homeworkRepository.delete(checkNotNull(homeworkId))
-            operationPrivate.value = null
             donePrivate.value = true
         }
     }

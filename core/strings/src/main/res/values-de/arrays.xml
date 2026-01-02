@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<string-array name="lesson_repeat_types">
+        <item>Nach Wochentagen</item>
+        <item>Nach Datum</item>
+    </string-array>
+
+    <string-array name="lesson_types">
+        <item>Seminar</item>
+        <item>Vorlesung</item>
+        <item>Laborübung</item>
+        <item>Praktikum</item>
+        <item>Sprechstunde</item>
+        <item>Prüfung</item>
+        <item>Selbststudium</item>
+    </string-array>
+
+    <string-array name="repeat_variants">
+        <item>Jede Woche</item>
+        <item>Ungerade Wochen</item>
+        <item>Gerade Wochen</item>
+        <item>Jede 1. Woche von 4</item>
+        <item>Jede 2. Woche von 4</item>
+        <item>Jede 3. Woche von 4</item>
+        <item>Jede 4. Woche von 4</item>
+        <item>Benutzerdefiniert</item>
+    </string-array>
+
+</resources>

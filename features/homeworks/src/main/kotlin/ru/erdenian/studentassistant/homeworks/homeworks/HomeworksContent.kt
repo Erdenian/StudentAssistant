@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.homeworks.homeworks
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -21,7 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import ru.erdenian.studentassistant.homeworks.composable.LazyHomeworksList
 import ru.erdenian.studentassistant.repository.api.entity.Homework
 import ru.erdenian.studentassistant.repository.api.entity.Semester
@@ -32,10 +32,24 @@ import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.layout.ContextMenuBox
+import ru.erdenian.studentassistant.uikit.utils.ScreenPreviews
 import ru.erdenian.studentassistant.uikit.view.ActionItem
 import ru.erdenian.studentassistant.uikit.view.TopAppBarActions
 import ru.erdenian.studentassistant.uikit.view.TopAppBarDropdownMenu
 
+/**
+ * UI контент экрана домашних заданий.
+ *
+ * @param semesters список названий расписаний.
+ * @param selectedSemester текущее выбранное расписание.
+ * @param overdueHomeworks список просроченных заданий.
+ * @param actualHomeworks список актуальных заданий.
+ * @param pastHomeworks список выполненных/прошедших заданий.
+ * @param onSelectedSemesterChange колбэк выбора расписания.
+ * @param onAddHomeworkClick колбэк добавления задания.
+ * @param onHomeworkClick колбэк клика на задание.
+ * @param onDeleteHomeworkClick колбэк удаления задания.
+ */
 @Composable
 internal fun HomeworksContent(
     semesters: List<String>,
@@ -123,67 +137,58 @@ internal fun HomeworksContent(
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun HomeworksContentNoSchedulePreview() = AppTheme {
-    HomeworksContent(
-        semesters = emptyList(),
-        selectedSemester = null,
-        overdueHomeworks = emptyList(),
-        actualHomeworks = emptyList(),
-        pastHomeworks = emptyList(),
-        onSelectedSemesterChange = {},
-        onAddHomeworkClick = {},
-        onHomeworkClick = {},
-        onDeleteHomeworkClick = {},
+private data class HomeworksContentPreviewData(
+    val semesters: List<String>,
+    val selectedSemester: Semester?,
+    val overdue: List<Homework>?,
+    val actual: List<Homework>?,
+    val past: List<Homework>?,
+)
+
+private class HomeworksContentPreviewParameterProvider : PreviewParameterProvider<HomeworksContentPreviewData> {
+    override val values = sequenceOf(
+        HomeworksContentPreviewData(
+            semesters = emptyList(),
+            selectedSemester = null,
+            overdue = emptyList(),
+            actual = emptyList(),
+            past = emptyList(),
+        ),
+        HomeworksContentPreviewData(
+            semesters = listOf(Semesters.regular.name),
+            selectedSemester = Semesters.regular,
+            overdue = null,
+            actual = null,
+            past = null,
+        ),
+        HomeworksContentPreviewData(
+            semesters = listOf(Semesters.regular.name),
+            selectedSemester = Semesters.regular,
+            overdue = emptyList(),
+            actual = emptyList(),
+            past = emptyList(),
+        ),
+        HomeworksContentPreviewData(
+            semesters = listOf(Semesters.regular.name),
+            selectedSemester = Semesters.regular,
+            overdue = List(3) { Homeworks.regular },
+            actual = List(3) { Homeworks.regular },
+            past = List(3) { Homeworks.regular },
+        ),
     )
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@ScreenPreviews
 @Composable
-private fun HomeworksContentLoadingPreview() = AppTheme {
+private fun HomeworksContentPreview(
+    @PreviewParameter(HomeworksContentPreviewParameterProvider::class) data: HomeworksContentPreviewData,
+) = AppTheme {
     HomeworksContent(
-        semesters = listOf(Semesters.regular.name),
-        selectedSemester = Semesters.regular,
-        overdueHomeworks = null,
-        actualHomeworks = null,
-        pastHomeworks = null,
-        onSelectedSemesterChange = {},
-        onAddHomeworkClick = {},
-        onHomeworkClick = {},
-        onDeleteHomeworkClick = {},
-    )
-}
-
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun HomeworksContentNoHomeworksPreview() = AppTheme {
-    HomeworksContent(
-        semesters = listOf(Semesters.regular.name),
-        selectedSemester = Semesters.regular,
-        overdueHomeworks = emptyList(),
-        actualHomeworks = emptyList(),
-        pastHomeworks = emptyList(),
-        onSelectedSemesterChange = {},
-        onAddHomeworkClick = {},
-        onHomeworkClick = {},
-        onDeleteHomeworkClick = {},
-    )
-}
-
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun HomeworksContentRegularPreview() = AppTheme {
-    HomeworksContent(
-        semesters = listOf(Semesters.regular.name),
-        selectedSemester = Semesters.regular,
-        overdueHomeworks = List(3) { Homeworks.regular },
-        actualHomeworks = List(3) { Homeworks.regular },
-        pastHomeworks = List(3) { Homeworks.regular },
+        semesters = data.semesters,
+        selectedSemester = data.selectedSemester,
+        overdueHomeworks = data.overdue,
+        actualHomeworks = data.actual,
+        pastHomeworks = data.past,
         onSelectedSemesterChange = {},
         onAddHomeworkClick = {},
         onHomeworkClick = {},

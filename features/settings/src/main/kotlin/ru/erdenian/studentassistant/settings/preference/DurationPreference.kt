@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.widget.TimePicker
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -19,9 +20,25 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.os.ConfigurationCompat
 import java.time.Duration
+import java.util.Locale
+import ru.erdenian.studentassistant.strings.RS
+import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.uikit.R
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
+/**
+ * Настройка для выбора продолжительности.
+ *
+ * Использует [TimePicker] в режиме 24 часов для выбора часов и минут, которые интерпретируются как длительность.
+ *
+ * @param title заголовок настройки.
+ * @param value текущая длительность.
+ * @param onValueChange колбэк при изменении длительности.
+ * @param modifier модификатор.
+ * @param icon иконка настройки.
+ */
 @Composable
 internal fun DurationPreference(
     title: String,
@@ -32,9 +49,14 @@ internal fun DurationPreference(
 ) {
     var isShowDialog by rememberSaveable { mutableStateOf(false) }
 
+    val configuration = LocalConfiguration.current
     BasePreference(
         title = title,
-        description = String.format("%02d:%02d", value.toHours(), value.toMinutesPart()),
+        description = String.format(
+            locale = ConfigurationCompat.getLocales(configuration).get(0) ?: Locale.getDefault(),
+            format = "%02d:%02d",
+            value.toHours(), value.toMinutesPart(),
+        ),
         icon = icon,
         onClick = { isShowDialog = true },
         modifier = modifier,
@@ -72,14 +94,14 @@ internal fun DurationPreference(
                         isShowDialog = false
                     },
                 ) {
-                    Text(text = stringResource(android.R.string.ok))
+                    Text(text = stringResource(RS.st_ok))
                 }
             },
             dismissButton = {
                 TextButton(
                     onClick = { isShowDialog = false },
                 ) {
-                    Text(text = stringResource(android.R.string.cancel))
+                    Text(text = stringResource(RS.st_cancel))
                 }
             },
         )
@@ -111,3 +133,15 @@ private var TimePicker.duration: Duration
             currentMinute = value.toMinutesPart()
         }
     }
+
+@AppPreviews
+@Composable
+private fun DurationPreferencePreview() = AppTheme {
+    Surface {
+        DurationPreference(
+            title = "Duration Preference",
+            value = Duration.ofMinutes(90),
+            onValueChange = {},
+        )
+    }
+}

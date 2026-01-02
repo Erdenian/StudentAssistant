@@ -13,4 +13,8 @@ dependencies {
     implementation(project(":core:strings"))
     implementation(project(":core:style"))
     // endregion
+
+    // region AndroidX
+    api(libs.androidx.core.ktx)
+    // endregion
 }

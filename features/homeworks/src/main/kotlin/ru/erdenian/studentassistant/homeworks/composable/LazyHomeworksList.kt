@@ -15,26 +15,44 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.core.os.ConfigurationCompat
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.Locale
 import ru.erdenian.studentassistant.repository.api.entity.Homework
 import ru.erdenian.studentassistant.sampledata.Homeworks
 import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.style.dimensions
 import ru.erdenian.studentassistant.uikit.layout.DelayedVisibility
+import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 import ru.erdenian.studentassistant.uikit.view.HomeworkCard
 
+/**
+ * Список домашних заданий.
+ *
+ * Отображает списки просроченных, актуальных и выполненных заданий с разделителями.
+ *
+ * @param overdueHomeworks список просроченных заданий.
+ * @param actualHomeworks список актуальных заданий.
+ * @param pastHomeworks список прошедших (выполненных) заданий.
+ * @param onHomeworkClick колбэк при клике на задание.
+ * @param modifier модификатор.
+ * @param onLongHomeworkClick колбэк при длительном нажатии на задание.
+ */
 @Composable
 internal fun LazyHomeworksList(
     overdueHomeworks: List<Homework>?,
@@ -74,7 +92,13 @@ internal fun LazyHomeworksList(
                     )
                 }
                 else -> {
-                    val deadlineFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
+                    val locale = ConfigurationCompat
+                        .getLocales(LocalConfiguration.current)
+                        .get(0)
+                        ?: Locale.getDefault()
+                    val deadlineFormatter = remember(locale) {
+                        DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(locale)
+                    }
 
                     LazyColumn(
                         contentPadding = PaddingValues(
@@ -120,35 +144,35 @@ internal fun LazyHomeworksList(
     }
 }
 
-@Preview(showSystemUi = true)
-@Composable
-private fun LazyHomeworksListLoadingPreview() = AppTheme {
-    LazyHomeworksList(
-        overdueHomeworks = null,
-        actualHomeworks = null,
-        pastHomeworks = null,
-        onHomeworkClick = {},
+private data class LazyHomeworksListPreviewData(
+    val overdue: List<Homework>?,
+    val actual: List<Homework>?,
+    val past: List<Homework>?,
+)
+
+private class LazyHomeworksListPreviewParameterProvider : PreviewParameterProvider<LazyHomeworksListPreviewData> {
+    override val values = sequenceOf(
+        LazyHomeworksListPreviewData(
+            List(3) { Homeworks.regular },
+            List(3) { Homeworks.regular },
+            List(3) { Homeworks.regular },
+        ),
+        LazyHomeworksListPreviewData(emptyList(), emptyList(), emptyList()),
+        LazyHomeworksListPreviewData(null, null, null),
     )
 }
 
-@Preview(showSystemUi = true)
+@AppPreviews
 @Composable
-private fun LazyHomeworksListEmptyPreview() = AppTheme {
-    LazyHomeworksList(
-        overdueHomeworks = emptyList(),
-        actualHomeworks = emptyList(),
-        pastHomeworks = emptyList(),
-        onHomeworkClick = {},
-    )
-}
-
-@Preview(showSystemUi = true)
-@Composable
-private fun LazyHomeworksListPreview() = AppTheme {
-    LazyHomeworksList(
-        overdueHomeworks = List(4) { Homeworks.regular },
-        actualHomeworks = List(4) { Homeworks.regular },
-        pastHomeworks = List(4) { Homeworks.regular },
-        onHomeworkClick = {},
-    )
+private fun LazyHomeworksListPreview(
+    @PreviewParameter(LazyHomeworksListPreviewParameterProvider::class) data: LazyHomeworksListPreviewData,
+) = AppTheme {
+    Surface {
+        LazyHomeworksList(
+            overdueHomeworks = data.overdue,
+            actualHomeworks = data.actual,
+            pastHomeworks = data.past,
+            onHomeworkClick = {},
+        )
+    }
 }

@@ -10,10 +10,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.erdenian.studentassistant.homeworks.api.HomeworksRoute
-import ru.erdenian.studentassistant.navigation.LocalNavController
+import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.repository.api.entity.Homework
 import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
 import ru.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
@@ -25,11 +26,15 @@ internal fun LessonInformationScreen(route: ScheduleRoute.LessonInformation) {
     val viewModel = viewModel {
         ScheduleComponentHolder.instance.lessonInformationViewModelFactory.get(route.lesson)
     }
-    val navController = LocalNavController.current
+    val navController = LocalNavigator.current
 
     val isDeleted by viewModel.isDeleted.collectAsState()
+    val focusManager = LocalFocusManager.current
     LaunchedEffect(isDeleted) {
-        if (isDeleted) navController.popBackStack()
+        if (isDeleted) {
+            focusManager.clearFocus()
+            navController.goBack()
+        }
     }
 
     val lesson by viewModel.lesson.collectAsState()
@@ -39,7 +44,7 @@ internal fun LessonInformationScreen(route: ScheduleRoute.LessonInformation) {
     when (operation) {
         LessonInformationViewModel.Operation.DELETING_HOMEWORK -> RS.li_delete_homework_progress
         null -> null
-    }?.let { ProgressDialog(stringResource(it)) }
+    }?.let { ProgressDialog(text = stringResource(it), visible = !isDeleted) }
 
     var homeworkForDeleteDialog: Homework? by rememberSaveable { mutableStateOf(null) }
     homeworkForDeleteDialog?.let { homework ->
@@ -64,15 +69,16 @@ internal fun LessonInformationScreen(route: ScheduleRoute.LessonInformation) {
         )
     }
 
+    val nonNullLesson = lesson ?: return
     LessonInformationContent(
-        lesson = lesson ?: return,
+        lesson = nonNullLesson,
         homeworks = homeworks,
-        onBackClick = navController::popBackStack,
-        onEditClick = { clickedLesson ->
+        onBackClick = navController::goBack,
+        onEditClick = {
             navController.navigate(
                 ScheduleRoute.LessonEditor(
-                    semesterId = clickedLesson.semesterId,
-                    lessonId = clickedLesson.id,
+                    semesterId = nonNullLesson.semesterId,
+                    lessonId = nonNullLesson.id,
                 ),
             )
         },
@@ -81,11 +87,11 @@ internal fun LessonInformationScreen(route: ScheduleRoute.LessonInformation) {
                 HomeworksRoute.HomeworkEditor(semesterId = clickedHomework.semesterId, homeworkId = clickedHomework.id),
             )
         },
-        onAddHomeworkClick = { currentLesson ->
+        onAddHomeworkClick = {
             navController.navigate(
                 HomeworksRoute.HomeworkEditor(
-                    semesterId = currentLesson.semesterId,
-                    subjectName = currentLesson.subjectName,
+                    semesterId = nonNullLesson.semesterId,
+                    subjectName = nonNullLesson.subjectName,
                 ),
             )
         },

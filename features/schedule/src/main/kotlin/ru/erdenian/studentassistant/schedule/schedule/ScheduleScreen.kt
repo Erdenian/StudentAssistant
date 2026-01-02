@@ -1,6 +1,5 @@
 package ru.erdenian.studentassistant.schedule.schedule
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
@@ -10,7 +9,7 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.time.LocalDate
-import ru.erdenian.studentassistant.navigation.LocalNavController
+import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
 import ru.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
@@ -18,7 +17,7 @@ import ru.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
 @Composable
 internal fun ScheduleScreen() {
     val viewModel = viewModel { ScheduleComponentHolder.instance.scheduleViewModel }
-    val navController = LocalNavController.current
+    val navController = LocalNavigator.current
 
     val semesters by viewModel.allSemesters.collectAsState()
     val semestersNames by remember { derivedStateOf { semesters.map { it.name } } }
@@ -27,9 +26,7 @@ internal fun ScheduleScreen() {
     @Suppress("Wrapping")
     val rememberLessons = remember<@Composable (date: LocalDate) -> State<List<Lesson>?>>(viewModel) {
         { date ->
-            // https://issuetracker.google.com/issues/368420773
-            @SuppressLint("ProduceStateDoesNotAssignValue")
-            produceState<List<Lesson>?>(null, date) {
+            produceState(null, date) {
                 viewModel.getLessons(date).collect { value = it }
             }
         }

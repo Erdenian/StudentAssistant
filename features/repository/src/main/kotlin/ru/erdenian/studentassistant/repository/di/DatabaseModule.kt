@@ -13,8 +13,14 @@ internal class DatabaseModule {
 
     @Singleton
     @Provides
-    internal fun scheduleDatabase(application: Application, repositoryConfig: RepositoryConfig) =
-        Room.databaseBuilder(application, ScheduleDatabase::class.java, repositoryConfig.databaseName).build()
+    internal fun scheduleDatabase(application: Application, repositoryConfig: RepositoryConfig): ScheduleDatabase {
+        val name = repositoryConfig.databaseName
+        return if (name != null) {
+            Room.databaseBuilder(application, ScheduleDatabase::class.java, name).build()
+        } else {
+            Room.inMemoryDatabaseBuilder(application, ScheduleDatabase::class.java).build()
+        }
+    }
 
     @Provides
     internal fun semesterDao(database: ScheduleDatabase) = database.semesterDao

@@ -1,0 +1,26 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration name="CI check (Android test)" default="false" factoryName="Gradle" folderName="CI check"
+        type="GradleRunConfiguration">
+        <ExternalSystemSettings>
+            <option name="executionName" />
+            <option name="externalProjectPath" value="$PROJECT_DIR$" />
+            <option name="externalSystemIdString" value="GRADLE" />
+            <option name="scriptParameters"
+                value="-Dorg.gradle.jvmargs=-Xmx6g -Dfile.encoding=UTF-8 -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect" />
+            <option name="taskDescriptions">
+                <list />
+            </option>
+            <option name="taskNames">
+                <list>
+                    <option value="testDeviceDebugAndroidTest" />
+                </list>
+            </option>
+            <option name="vmOptions" />
+        </ExternalSystemSettings>
+        <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+        <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+        <DebugAllEnabled>false</DebugAllEnabled>
+        <RunAsTest>false</RunAsTest>
+        <method v="2" />
+    </configuration>
+</component>
