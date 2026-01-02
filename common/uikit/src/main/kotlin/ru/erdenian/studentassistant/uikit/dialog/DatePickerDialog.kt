@@ -68,7 +68,7 @@ fun DatePickerDialog(
                     onConfirm(newValue)
                 },
             ) {
-                Text(text = stringResource(android.R.string.ok))
+                Text(text = stringResource(RS.dpd_ok))
             }
         },
         dismissButton = {
@@ -85,7 +85,7 @@ fun DatePickerDialog(
             TextButton(
                 onClick = onDismiss,
             ) {
-                Text(text = stringResource(android.R.string.cancel))
+                Text(text = stringResource(RS.dpd_cancel))
             }
         },
         modifier = modifier,

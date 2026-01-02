@@ -84,14 +84,14 @@ fun TimePickerDialog(
             TextButton(
                 onClick = onDismiss,
             ) {
-                Text(text = stringResource(android.R.string.cancel))
+                Text(text = stringResource(RS.tpd_cancel))
             }
         },
         confirmButton = {
             TextButton(
                 onClick = { onConfirm(LocalTime.of(state.hour, state.minute)) },
             ) {
-                Text(text = stringResource(android.R.string.ok))
+                Text(text = stringResource(RS.tpd_ok))
             }
         },
     ) {
