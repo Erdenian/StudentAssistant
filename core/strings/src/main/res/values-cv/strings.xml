@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Student Assistant</string>
+
+    <!-- region schedule -->
+    <string name="lll_free_day">Канмалли кун</string>
+    <string name="lhl_no_homeworks">Килти ӗҫ ҫук</string>
+
+    <string name="s_title">Урок йӗрки</string>
+    <string name="s_calendar">Календарь</string>
+    <string name="s_add">Йӗрке хуш</string>
+    <string name="s_edit">Йӗркене тӳрлет</string>
+    <string name="s_no_schedule">Кунта пушӑ. Университет е шкул расписанине хушӑр.</string>
+
+    <string name="li_title">Урок ҫинчен</string>
+    <string name="li_edit">Тӳрлет</string>
+    <string name="li_add_homework">Килти ӗҫ хуш</string>
+    <string name="li_delete_homework">Кӑларса пӑрах</string>
+    <string name="li_delete_homework_message">Килти ӗҫе кӑларса пӑрахмалла-и?</string>
+    <string name="li_delete_homework_yes">Кӑларса пӑрах</string>
+    <string name="li_delete_homework_no">Пӑрахӑҫла</string>
+    <string name="li_delete_homework_progress">Килти ӗҫе кӑларса пӑрахни…</string>
+
+    <string name="se_title_new">Ҫӗнӗ расписани</string>
+    <string name="se_title_edit">Расписанине тӳрлетни</string>
+    <string name="se_name">Ят</string>
+    <string name="se_first_day">Пӗрремӗш кун</string>
+    <string name="se_last_day">Юлашки кун</string>
+    <string name="se_save">Сыхла</string>
+    <string name="se_saving">Сыхлани…</string>
+    <string name="se_error_empty_name">Ятне ҫырӑр</string>
+    <string name="se_error_name_not_available">Ку ят йышӑннӑ ӗнтӗ</string>
+    <string name="se_error_wrong_dates">Кунсем тӗрӗс мар</string>
+    <string name="se_warning_week_shift_title">Эрне сӳрӗлсе кайни</string>
+    <string name="se_warning_week_shift_message">Эсир семестр пуҫламӑшне улӑштартӑр. Ку уроксем эрне тӑрӑх (мӑшӑрлӑ/мӑшӑрсӑр) тӗрӗс мар тухма пултарать. Малалла?</string>
+    <string name="se_warning_week_shift_yes">Малалла</string>
+    <string name="se_warning_week_shift_no">Пӑрахӑҫла</string>
+
+    <string name="sce_title">Урок редакторӗ</string>
+    <string name="sce_edit">Параметрсем</string>
+    <string name="sce_add_lesson">Урок хуш</string>
+    <string name="sce_delete">Расписанине кӑларса пӑрах</string>
+    <string name="sce_delete_message">Расписанипе урокcене пӗтӗмпех кӑларса пӑрахмалла-и?</string>
+    <string name="sce_delete_yes">Кӑларса пӑрах</string>
+    <string name="sce_delete_no">Пӑрахӑҫла</string>
+    <string name="sce_delete_progress">Расписанине кӑларса пӑрахни…</string>
+    <string name="sce_copy_lesson">Копиле</string>
+    <string name="sce_delete_lesson">Кӑларса пӑрах</string>
+    <string name="sce_delete_lesson_progress">Урока кӑларса пӑрахни…</string>
+
+    <string name="le_title_new">Ҫӗнӗ урок</string>
+    <string name="le_title_edit">Урока тӳрлетни</string>
+    <string name="le_subject_name">Предмет</string>
+    <string name="le_type">Урок тӗсӗ</string>
+    <string name="le_teachers">Вӗрентекенсем</string>
+    <string name="le_classrooms">Пӳлӗмсем</string>
+    <string name="le_start_time">Пуҫламӑш</string>
+    <string name="le_end_time">Вӗҫӗ</string>
+    <string name="le_day_of_week">Эрне кунӗ</string>
+    <string name="le_repeat_type">Тӑтӑшлӑх</string>
+    <string name="le_save">Сыхла</string>
+    <string name="le_save_progress">Сыхлани…</string>
+    <string name="le_error_empty_subject_name">Предмет ятне ҫырӑр</string>
+    <string name="le_error_wrong_time">Пуҫламӑшӗ вӗҫӗнчен ирех пулмалла</string>
+    <string name="le_error_empty_repeat">Хӑш кунсенче иртнине палӑртман</string>
+    <string name="le_rename_others_progress">Ытти уроксене тӗрӗслени…</string>
+    <string name="le_rename_others_title">Ушкӑнпа улӑштарни</string>
+    <string name="le_rename_others_message">Эсир предмет ятне улӑштартӑр. Ытти уроксенче те улӑштармалла-и?</string>
+    <string name="le_rename_others_yes">Улӑштар</string>
+    <string name="le_rename_others_no">Кирлӗ мар</string>
+    <string name="le_rename_others_cancel">Пӑрахӑҫла</string>
+    <string name="le_delete">Урока кӑларса пӑрах</string>
+    <string name="le_delete_message">Ку урока кӑларса пӑрахмалла-и?</string>
+    <string name="le_delete_yes">Кӑларса пӑрах</string>
+    <string name="le_delete_no">Пӑрахӑҫла</string>
+    <string name="le_delete_progress">Кӑларса пӑрахни…</string>
+    <string name="le_delete_homeworks_progress">Килти ӗҫсене тӗрӗслени…</string>
+    <string name="le_delete_homeworks_title">Ҫыхӑннӑ килти ӗҫсем</string>
+    <string name="le_delete_homeworks_message">Ку предмет валли килти ӗҫсем пур. Вӗсене кӑларса пӑрахмалла-и?</string>
+    <string name="le_delete_homeworks_yes">Кӑларса пӑрах</string>
+    <string name="le_delete_homeworks_no">Хӑвар</string>
+    <string name="le_delete_homeworks_cancel">Пӑрахӑҫла</string>
+    <!-- endregion -->
+
+    <!-- region homeworks -->
+    <string name="h_title">Килти ӗҫсем</string>
+    <string name="h_add">Ҫӗнӗ ӗҫ</string>
+    <string name="h_no_schedule">Кунта пушӑ. Килти ӗҫсене ҫырса пыма расписани хушӑр.</string>
+    <string name="h_delete_homework">Кӑларса пӑрах</string>
+    <string name="h_delete_message">Ку ӗҫе кӑларса пӑрахмалла-и?</string>
+    <string name="h_delete_yes">Кӑларса пӑрах</string>
+    <string name="h_delete_no">Пӑрахӑҫла</string>
+    <string name="h_delete_progress">Килти ӗҫе кӑларса пӑрахни…</string>
+
+    <string name="he_title">Килти ӗҫ редакторӗ</string>
+    <string name="he_subject">Предмет</string>
+    <string name="he_description">Ӗҫӗн ӑнлантарӑвӗ</string>
+    <string name="he_deadline_label">Вӑхӑчӗ</string>
+    <string name="he_save">Сыхла</string>
+    <string name="he_save_progress">Сыхлани…</string>
+    <string name="he_error_empty_subject_name">Предмета кӑтартӑр</string>
+    <string name="he_error_empty_description">Ӗҫе ҫырса парӑр</string>
+    <string name="he_unknown_lesson">Ҫӗнӗ предмет</string>
+    <string name="he_unknown_lesson_message">Расписанире ку предмет ҫук. Килти ӗҫе сыхласа предмета списока хушмалла-и?</string>
+    <string name="he_unknown_lesson_yes">Сыхла</string>
+    <string name="he_unknown_lesson_no">Пӑрахӑҫла</string>
+    <string name="he_unknown_lesson_yes_and_create">Сыхла тата урок ту</string>
+    <string name="he_delete">Кӑларса пӑрах</string>
+    <string name="he_delete_message">Килти ӗҫе кӑларса пӑрахмалла-и?</string>
+    <string name="he_delete_yes">Кӑларса пӑрах</string>
+    <string name="he_delete_no">Пӑрахӑҫла</string>
+    <string name="he_delete_progress">Кӑларса пӑрахни…</string>
+    <!-- endregion -->
+
+    <!-- region settings -->
+    <string name="st_title">Настройкӑсем</string>
+    <string name="st_default_start_time">Урок пуҫламӑшӗ</string>
+    <string name="st_default_lesson_duration">Урок тӑсӑлӑвӗ</string>
+    <string name="st_default_break_duration">Тăхтав тӑсӑлӑвӗ</string>
+    <string name="st_is_advanced_weeks_selector_enabled">Анлӑрах эрне суйлавӗ</string>
+    <string name="st_is_advanced_weeks_selector_enabled_description">Урока тӑтӑшлӑхне суйламалли анлӑрах майсем</string>
+    <string name="st_ok">Юрать</string>
+    <string name="st_cancel">Пӑрахӑҫла</string>
+    <!-- endregion -->
+
+    <!-- region uikit -->
+    <string name="u_back">Каялла</string>
+    <string name="taba_more_options">Тата</string>
+    <string name="hc_deadline">%1$s ччен</string>
+    <string name="ws_variants_title">Тӑтӑшлӑх</string>
+    <string name="ws_cycle_length">Цикл тӑсӑлӑвӗ: %1$d</string>
+    <string name="ws_add_week">Эрне хуш</string>
+    <string name="ws_remove_week">Эрнене кӑлар</string>
+    <string name="dpd_today">Паян</string>
+    <string name="dpd_ok">Юрать</string>
+    <string name="dpd_cancel">Пӑрахӑҫла</string>
+    <string name="tpd_select_time">Вӑхӑт суйла</string>
+    <string name="tpd_enter_time">Вӑхӑт ҫыр</string>
+    <string name="tpd_mode_switch">Вӑхӑт кӗртмелли меслет</string>
+    <string name="tpd_ok">Юрать</string>
+    <string name="tpd_cancel">Пӑрахӑҫла</string>
+    <!-- endregion -->
+
+</resources>
