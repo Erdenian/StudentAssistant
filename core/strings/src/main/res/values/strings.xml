@@ -108,7 +108,7 @@
     <!-- Homework Editor -->
     <string name="he_title">Homework editor</string>
     <string name="he_subject">Subject</string>
-    <string name="he_description">Homework description</string>
+    <string name="he_description">Description</string>
     <string name="he_deadline_label">Deadline</string>
     <string name="he_save">Save</string>
     <string name="he_save_progress">Saving…</string>

@@ -107,7 +107,7 @@
     <!-- Homework Editor -->
     <string name="he_title">Редактор задания</string>
     <string name="he_subject">Предмет</string>
-    <string name="he_description">Описание задания</string>
+    <string name="he_description">Описание</string>
     <string name="he_deadline_label">Срок сдачи</string>
     <string name="he_save">Сохранить</string>
     <string name="he_save_progress">Сохранение…</string>
