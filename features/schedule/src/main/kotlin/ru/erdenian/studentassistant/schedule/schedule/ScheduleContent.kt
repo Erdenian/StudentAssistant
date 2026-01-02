@@ -187,7 +187,7 @@ internal fun ScheduleContent(
                     modifier = Modifier.fillMaxSize(),
                 ) { page ->
                     val lessons by rememberLessons(state.getDate(page))
-                    LazyLessonsList(lessons = lessons, onLessonClick = onLessonClick)
+                    LazyLessonsList(lessons = lessons, onLessonClick = onLessonClick, canShareElement = true)
                 }
             }
         }

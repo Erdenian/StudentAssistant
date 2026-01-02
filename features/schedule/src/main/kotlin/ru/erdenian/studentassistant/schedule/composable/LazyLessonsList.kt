@@ -53,6 +53,7 @@ import ru.erdenian.studentassistant.uikit.view.LessonCard
  * @param onLessonClick колбэк при клике на занятие.
  * @param modifier модификатор.
  * @param onLongLessonClick колбэк при длительном нажатии на занятие.
+ * @param canShareElement флаг, разрешающий добавление модификатора sharedElement для анимации перехода.
  */
 @Composable
 internal fun LazyLessonsList(
@@ -60,6 +61,7 @@ internal fun LazyLessonsList(
     onLessonClick: (Lesson) -> Unit,
     modifier: Modifier = Modifier,
     onLongLessonClick: ((Lesson) -> Unit)? = null,
+    canShareElement: Boolean = false,
 ) {
     AnimatedContent(
         targetState = lessons,
@@ -120,7 +122,7 @@ internal fun LazyLessonsList(
                                 modifier = Modifier
                                     .animateItem()
                                     .let { modifier ->
-                                        if (!isInspection) {
+                                        if (canShareElement && !isInspection) {
                                             with(LocalSharedTransitionScope.current) {
                                                 modifier.sharedElement(
                                                     rememberSharedContentState(lesson),

@@ -25,6 +25,7 @@ import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.repository.api.SemesterRepository
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.schedule.MainDispatcherRule
+import ru.erdenian.studentassistant.schedule.scheduleeditor.ScheduleEditorViewModel.Operation
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class ScheduleEditorViewModelTest {
@@ -59,13 +60,23 @@ internal class ScheduleEditorViewModelTest {
         advanceUntilIdle()
 
         coVerify { semesterRepository.delete(semesterId) }
-        assertNull(viewModel.operation.value)
+        assertEquals(Operation.DELETING_SEMESTER, viewModel.operation.value)
         assertTrue(viewModel.isDeleted.value)
     }
 
     @Test
     fun `isLastLessonOfSubjectsAndHasHomeworks true test`() = runTest {
-        val lesson = Lesson("Subject", "T", emptyList(), emptyList(), LocalTime.MIN, LocalTime.MAX, Lesson.Repeat.ByDates(emptySet()), semesterId, 10L)
+        val lesson = Lesson(
+            subjectName = "Subject",
+            type = "T",
+            teachers = emptyList(),
+            classrooms = emptyList(),
+            startTime = LocalTime.MIN,
+            endTime = LocalTime.MAX,
+            lessonRepeat = Lesson.Repeat.ByDates(emptySet()),
+            semesterId = semesterId,
+            id = 10L,
+        )
         coEvery { lessonRepository.getCount(semesterId, "Subject") } returns 1
         coEvery { homeworkRepository.hasHomeworks(semesterId, "Subject") } returns true
 
@@ -74,7 +85,17 @@ internal class ScheduleEditorViewModelTest {
 
     @Test
     fun `isLastLessonOfSubjectsAndHasHomeworks false (count) test`() = runTest {
-        val lesson = Lesson("Subject", "T", emptyList(), emptyList(), LocalTime.MIN, LocalTime.MAX, Lesson.Repeat.ByDates(emptySet()), semesterId, 10L)
+        val lesson = Lesson(
+            subjectName = "Subject",
+            type = "T",
+            teachers = emptyList(),
+            classrooms = emptyList(),
+            startTime = LocalTime.MIN,
+            endTime = LocalTime.MAX,
+            lessonRepeat = Lesson.Repeat.ByDates(emptySet()),
+            semesterId = semesterId,
+            id = 10L,
+        )
         coEvery { lessonRepository.getCount(semesterId, "Subject") } returns 2
         coEvery { homeworkRepository.hasHomeworks(semesterId, "Subject") } returns true
 
@@ -83,7 +104,17 @@ internal class ScheduleEditorViewModelTest {
 
     @Test
     fun `isLastLessonOfSubjectsAndHasHomeworks false (homeworks) test`() = runTest {
-        val lesson = Lesson("Subject", "T", emptyList(), emptyList(), LocalTime.MIN, LocalTime.MAX, Lesson.Repeat.ByDates(emptySet()), semesterId, 10L)
+        val lesson = Lesson(
+            subjectName = "Subject",
+            type = "T",
+            teachers = emptyList(),
+            classrooms = emptyList(),
+            startTime = LocalTime.MIN,
+            endTime = LocalTime.MAX,
+            lessonRepeat = Lesson.Repeat.ByDates(emptySet()),
+            semesterId = semesterId,
+            id = 10L,
+        )
         coEvery { lessonRepository.getCount(semesterId, "Subject") } returns 1
         coEvery { homeworkRepository.hasHomeworks(semesterId, "Subject") } returns false
 
@@ -92,7 +123,17 @@ internal class ScheduleEditorViewModelTest {
 
     @Test
     fun `deleteLesson without homeworks test`() = runTest {
-        val lesson = Lesson("Subject", "T", emptyList(), emptyList(), LocalTime.MIN, LocalTime.MAX, Lesson.Repeat.ByDates(emptySet()), semesterId, 10L)
+        val lesson = Lesson(
+            subjectName = "Subject",
+            type = "T",
+            teachers = emptyList(),
+            classrooms = emptyList(),
+            startTime = LocalTime.MIN,
+            endTime = LocalTime.MAX,
+            lessonRepeat = Lesson.Repeat.ByDates(emptySet()),
+            semesterId = semesterId,
+            id = 10L,
+        )
         coEvery { lessonRepository.delete(lesson.id) } returns Unit
 
         viewModel.deleteLesson(lesson, withHomeworks = false)
@@ -104,7 +145,17 @@ internal class ScheduleEditorViewModelTest {
 
     @Test
     fun `deleteLesson with homeworks test`() = runTest {
-        val lesson = Lesson("Subject", "T", emptyList(), emptyList(), LocalTime.MIN, LocalTime.MAX, Lesson.Repeat.ByDates(emptySet()), semesterId, 10L)
+        val lesson = Lesson(
+            subjectName = "Subject",
+            type = "T",
+            teachers = emptyList(),
+            classrooms = emptyList(),
+            startTime = LocalTime.MIN,
+            endTime = LocalTime.MAX,
+            lessonRepeat = Lesson.Repeat.ByDates(emptySet()),
+            semesterId = semesterId,
+            id = 10L,
+        )
         coEvery { lessonRepository.delete(lesson.id) } returns Unit
         coEvery { homeworkRepository.delete(lesson.subjectName) } returns Unit
 
@@ -118,7 +169,17 @@ internal class ScheduleEditorViewModelTest {
     @Test
     fun `getLessons test`() = runTest {
         val dayOfWeek = java.time.DayOfWeek.MONDAY
-        val lesson = Lesson("Subject", "T", emptyList(), emptyList(), LocalTime.MIN, LocalTime.MAX, Lesson.Repeat.ByWeekday(dayOfWeek, listOf(true)), semesterId, 10L)
+        val lesson = Lesson(
+            subjectName = "Subject",
+            type = "T",
+            teachers = emptyList(),
+            classrooms = emptyList(),
+            startTime = LocalTime.MIN,
+            endTime = LocalTime.MAX,
+            lessonRepeat = Lesson.Repeat.ByWeekday(dayOfWeek, listOf(true)),
+            semesterId = semesterId,
+            id = 10L,
+        )
         every { lessonRepository.getAllFlow(semesterId, dayOfWeek) } returns MutableStateFlow(listOf(lesson))
 
         val results = mutableListOf<List<Lesson>>()

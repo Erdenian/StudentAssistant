@@ -30,9 +30,14 @@ import ru.erdenian.studentassistant.uikit.utils.AppPreviews
  * Диалог нельзя закрыть кнопкой "Назад" или кликом вне области.
  *
  * @param text текст сообщения, отображаемого под индикатором.
+ * @param visible флаг, регулирующий видимость диалога.
+ * Если false, то диалог не отображается, но экран продолжает быть заблокированным.
  */
 @Composable
-fun ProgressDialog(text: String) {
+fun ProgressDialog(
+    text: String,
+    visible: Boolean = true,
+) {
     val context = LocalContext.current
     val window = remember(context) {
         var currentContext = context
@@ -48,6 +53,7 @@ fun ProgressDialog(text: String) {
     }
 
     DelayedVisibility {
+        if (!visible) return@DelayedVisibility
         Dialog(
             onDismissRequest = {},
             properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),

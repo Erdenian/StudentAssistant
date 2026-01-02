@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.erdenian.studentassistant.homeworks.api.HomeworksRoute
@@ -28,8 +29,12 @@ internal fun LessonInformationScreen(route: ScheduleRoute.LessonInformation) {
     val navController = LocalNavigator.current
 
     val isDeleted by viewModel.isDeleted.collectAsState()
+    val focusManager = LocalFocusManager.current
     LaunchedEffect(isDeleted) {
-        if (isDeleted) navController.goBack()
+        if (isDeleted) {
+            focusManager.clearFocus()
+            navController.goBack()
+        }
     }
 
     val lesson by viewModel.lesson.collectAsState()
@@ -39,7 +44,7 @@ internal fun LessonInformationScreen(route: ScheduleRoute.LessonInformation) {
     when (operation) {
         LessonInformationViewModel.Operation.DELETING_HOMEWORK -> RS.li_delete_homework_progress
         null -> null
-    }?.let { ProgressDialog(stringResource(it)) }
+    }?.let { ProgressDialog(text = stringResource(it), visible = !isDeleted) }
 
     var homeworkForDeleteDialog: Homework? by rememberSaveable { mutableStateOf(null) }
     homeworkForDeleteDialog?.let { homework ->

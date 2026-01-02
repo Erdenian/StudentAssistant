@@ -34,7 +34,7 @@ internal fun HomeworksScreen() {
     when (operation) {
         HomeworksViewModel.Operation.DELETING_HOMEWORK -> RS.h_delete_progress
         null -> null
-    }?.let { ProgressDialog(stringResource(it)) }
+    }?.let { ProgressDialog(text = stringResource(it)) }
 
     var homeworkForDeleteDialog: Homework? by rememberSaveable { mutableStateOf(null) }
     homeworkForDeleteDialog?.let { homework ->

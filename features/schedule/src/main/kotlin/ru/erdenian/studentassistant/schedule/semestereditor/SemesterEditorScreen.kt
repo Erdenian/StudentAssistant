@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.erdenian.studentassistant.navigation.LocalNavigator
@@ -30,8 +31,12 @@ internal fun SemesterEditorScreen(route: ScheduleRoute.SemesterEditor) {
     val navController = LocalNavigator.current
 
     val done by viewModel.done.collectAsState()
+    val focusManager = LocalFocusManager.current
     LaunchedEffect(done) {
-        if (done) navController.goBack()
+        if (done) {
+            focusManager.clearFocus()
+            navController.goBack()
+        }
     }
 
     var isNameChanged by rememberSaveable { mutableStateOf(false) }
@@ -71,7 +76,7 @@ internal fun SemesterEditorScreen(route: ScheduleRoute.SemesterEditor) {
         }
     }
 
-    if (isSaving) ProgressDialog(stringResource(RS.se_saving))
+    if (isSaving) ProgressDialog(text = stringResource(RS.se_saving), visible = !done)
 
     val showWeekShiftDialog by viewModel.showWeekShiftDialog.collectAsState()
     if (showWeekShiftDialog) {

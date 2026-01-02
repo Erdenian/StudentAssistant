@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.time.DayOfWeek
@@ -33,8 +34,12 @@ internal fun ScheduleEditorScreen(route: ScheduleRoute.ScheduleEditor) {
     val navController = LocalNavigator.current
 
     val isDeleted by viewModel.isDeleted.collectAsState()
+    val focusManager = LocalFocusManager.current
     LaunchedEffect(isDeleted) {
-        if (isDeleted) navController.goBack()
+        if (isDeleted) {
+            focusManager.clearFocus()
+            navController.goBack()
+        }
     }
 
     @Suppress("Wrapping")
@@ -52,11 +57,11 @@ internal fun ScheduleEditorScreen(route: ScheduleRoute.ScheduleEditor) {
         ScheduleEditorViewModel.Operation.DELETING_LESSON -> RS.sce_delete_lesson_progress
         ScheduleEditorViewModel.Operation.DELETING_SEMESTER -> RS.sce_delete_progress
         null -> null
-    }?.let { ProgressDialog(stringResource(it)) }
+    }?.let { ProgressDialog(text = stringResource(it), visible = !isDeleted) }
 
     var showHomeworksCounterOperation by remember { mutableStateOf(false) }
     if (showHomeworksCounterOperation) {
-        ProgressDialog(stringResource(RS.le_delete_homeworks_progress))
+        ProgressDialog(text = stringResource(RS.le_delete_homeworks_progress), visible = !isDeleted)
     }
 
     var showDeleteSemesterDialog by rememberSaveable { mutableStateOf(false) }

@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.erdenian.studentassistant.homeworks.api.HomeworksRoute
@@ -42,8 +43,10 @@ internal fun HomeworkEditorScreen(route: HomeworksRoute.HomeworkEditor) {
 
     var lessonNameToCreate by remember { mutableStateOf<String?>(null) }
     val done by viewModel.done.collectAsState()
+    val focusManager = LocalFocusManager.current
     LaunchedEffect(done) {
         if (done) {
+            focusManager.clearFocus()
             navController.goBack()
             lessonNameToCreate?.let { subjectName ->
                 navController.navigate(
@@ -91,7 +94,7 @@ internal fun HomeworkEditorScreen(route: HomeworksRoute.HomeworkEditor) {
     }
 
     if (blockingProgressMessageId != null) {
-        ProgressDialog(stringResource(blockingProgressMessageId))
+        ProgressDialog(text = stringResource(blockingProgressMessageId), visible = !done)
     }
 
     var showSaveDialog by rememberSaveable { mutableStateOf(false) }
