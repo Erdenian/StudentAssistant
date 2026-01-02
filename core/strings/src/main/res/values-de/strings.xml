@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Student Assistant</string>
+
+    <!-- region schedule -->
+    <string name="lll_free_day">Freier Tag</string>
+    <string name="lhl_no_homeworks">Keine Hausaufgaben</string>
+
+    <string name="s_title">Stundenplan</string>
+    <string name="s_calendar">Kalender</string>
+    <string name="s_add">Stundenplan hinzufügen</string>
+    <string name="s_edit">Stundenplan bearbeiten</string>
+    <string name="s_no_schedule">Hier ist es leer. Fügen Sie einen Uni- oder Schulstundenplan hinzu.</string>
+
+    <string name="li_title">Infos zur Stunde</string>
+    <string name="li_edit">Bearbeiten</string>
+    <string name="li_add_homework">Hausaufgabe hinzufügen</string>
+    <string name="li_delete_homework">Löschen</string>
+    <string name="li_delete_homework_message">Diese Hausaufgabe löschen?</string>
+    <string name="li_delete_homework_yes">Löschen</string>
+    <string name="li_delete_homework_no">Abbrechen</string>
+    <string name="li_delete_homework_progress">Hausaufgabe wird gelöscht…</string>
+
+    <string name="se_title_new">Neuer Stundenplan</string>
+    <string name="se_title_edit">Stundenplan bearbeiten</string>
+    <string name="se_name">Name</string>
+    <string name="se_first_day">Erster Tag</string>
+    <string name="se_last_day">Letzter Tag</string>
+    <string name="se_save">Speichern</string>
+    <string name="se_saving">Wird gespeichert…</string>
+    <string name="se_error_empty_name">Name eingeben</string>
+    <string name="se_error_name_not_available">Dieser Name wird bereits verwendet</string>
+    <string name="se_error_wrong_dates">Ungültiger Datumsbereich</string>
+    <string name="se_warning_week_shift_title">Wochenverschiebung</string>
+    <string name="se_warning_week_shift_message">Sie haben das Startdatum des Semesters geändert. Dies kann den Wochenrhythmus (gerade/ungerade) für bestehende Stunden stören. Fortfahren?</string>
+    <string name="se_warning_week_shift_yes">Ja, fortfahren</string>
+    <string name="se_warning_week_shift_no">Abbrechen</string>
+
+    <string name="sce_title">Stundeneditor</string>
+    <string name="sce_edit">Parameter</string>
+    <string name="sce_add_lesson">Stunde hinzufügen</string>
+    <string name="sce_delete">Stundenplan löschen</string>
+    <string name="sce_delete_message">Stundenplan und alle Stunden löschen?</string>
+    <string name="sce_delete_yes">Löschen</string>
+    <string name="sce_delete_no">Abbrechen</string>
+    <string name="sce_delete_progress">Stundenplan wird gelöscht…</string>
+    <string name="sce_copy_lesson">Kopieren</string>
+    <string name="sce_delete_lesson">Löschen</string>
+    <string name="sce_delete_lesson_progress">Stunde wird gelöscht…</string>
+
+    <string name="le_title_new">Neue Stunde</string>
+    <string name="le_title_edit">Stunde bearbeiten</string>
+    <string name="le_subject_name">Fach</string>
+    <string name="le_type">Art der Stunde</string>
+    <string name="le_teachers">Lehrer</string>
+    <string name="le_classrooms">Räume</string>
+    <string name="le_start_time">Beginn</string>
+    <string name="le_end_time">Ende</string>
+    <string name="le_day_of_week">Wochentag</string>
+    <string name="le_repeat_type">Wiederholung</string>
+    <string name="le_save">Speichern</string>
+    <string name="le_save_progress">Wird gespeichert…</string>
+    <string name="le_error_empty_subject_name">Fachnamen eingeben</string>
+    <string name="le_error_wrong_time">Startzeit muss vor der Endzeit liegen</string>
+    <string name="le_error_empty_repeat">Keine Wiederholungstage ausgewählt</string>
+    <string name="le_rename_others_progress">Andere Stunden prüfen…</string>
+    <string name="le_rename_others_title">Gruppenumbenennung</string>
+    <string name="le_rename_others_message">Sie haben das Fach umbenannt. Auch für andere Stunden aktualisieren?</string>
+    <string name="le_rename_others_yes">Ja</string>
+    <string name="le_rename_others_no">Nein</string>
+    <string name="le_rename_others_cancel">Abbrechen</string>
+    <string name="le_delete">Stunde löschen</string>
+    <string name="le_delete_message">Diese Stunde löschen?</string>
+    <string name="le_delete_yes">Löschen</string>
+    <string name="le_delete_no">Abbrechen</string>
+    <string name="le_delete_progress">Wird gelöscht…</string>
+    <string name="le_delete_homeworks_progress">Hausaufgaben prüfen…</string>
+    <string name="le_delete_homeworks_title">Verknüpfte Hausaufgaben</string>
+    <string name="le_delete_homeworks_message">Es gibt Hausaufgaben für dieses Fach. Löschen?</string>
+    <string name="le_delete_homeworks_yes">Löschen</string>
+    <string name="le_delete_homeworks_no">Behalten</string>
+    <string name="le_delete_homeworks_cancel">Abbrechen</string>
+    <!-- endregion -->
+
+    <!-- region homeworks -->
+    <string name="h_title">Hausaufgaben</string>
+    <string name="h_add">Neue Hausaufgabe</string>
+    <string name="h_no_schedule">Hier ist es leer. Fügen Sie einen Stundenplan hinzu, um Hausaufgaben zu speichern.</string>
+    <string name="h_delete_homework">Löschen</string>
+    <string name="h_delete_message">Diese Hausaufgabe löschen?</string>
+    <string name="h_delete_yes">Löschen</string>
+    <string name="h_delete_no">Abbrechen</string>
+    <string name="h_delete_progress">Hausaufgabe wird gelöscht…</string>
+
+    <string name="he_title">Hausaufgabeneditor</string>
+    <string name="he_subject">Fach</string>
+    <string name="he_description">Beschreibung</string>
+    <string name="he_deadline_label">Frist</string>
+    <string name="he_save">Speichern</string>
+    <string name="he_save_progress">Wird gespeichert…</string>
+    <string name="he_error_empty_subject_name">Fach eingeben</string>
+    <string name="he_error_empty_description">Beschreibung eingeben</string>
+    <string name="he_unknown_lesson">Neues Fach</string>
+    <string name="he_unknown_lesson_message">Das Fach ist nicht im Stundenplan. Hausaufgabe speichern und Fach zur Liste hinzufügen?</string>
+    <string name="he_unknown_lesson_yes">Speichern</string>
+    <string name="he_unknown_lesson_no">Abbrechen</string>
+    <string name="he_unknown_lesson_yes_and_create">Speichern und Stunde erstellen</string>
+    <string name="he_delete">Löschen</string>
+    <string name="he_delete_message">Hausaufgabe löschen?</string>
+    <string name="he_delete_yes">Löschen</string>
+    <string name="he_delete_no">Abbrechen</string>
+    <string name="he_delete_progress">Wird gelöscht…</string>
+    <!-- endregion -->
+
+    <!-- region settings -->
+    <string name="st_title">Einstellungen</string>
+    <string name="st_default_start_time">Unterrichtsbeginn</string>
+    <string name="st_default_lesson_duration">Dauer der Stunde</string>
+    <string name="st_default_break_duration">Pausendauer</string>
+    <string name="st_is_advanced_weeks_selector_enabled">Erweiterte Wochenauswahl</string>
+    <string name="st_is_advanced_weeks_selector_enabled_description">Flexiblere Wochenauswahl für Stundenwiederholungen</string>
+    <string name="st_ok">OK</string>
+    <string name="st_cancel">Abbrechen</string>
+    <!-- endregion -->
+
+    <!-- region uikit -->
+    <string name="u_back">Zurück</string>
+    <string name="taba_more_options">Mehr Optionen</string>
+    <string name="hc_deadline">Bis %1$s</string>
+    <string name="ws_variants_title">Wiederholung</string>
+    <string name="ws_cycle_length">Zykluslänge: %1$d</string>
+    <string name="ws_add_week">Woche hinzufügen</string>
+    <string name="ws_remove_week">Woche entfernen</string>
+    <string name="dpd_today">Heute</string>
+    <string name="dpd_ok">OK</string>
+    <string name="dpd_cancel">Abbrechen</string>
+    <string name="tpd_select_time">Zeit auswählen</string>
+    <string name="tpd_enter_time">Zeit eingeben</string>
+    <string name="tpd_mode_switch">Eingabemodus</string>
+    <string name="tpd_ok">OK</string>
+    <string name="tpd_cancel">Abbrechen</string>
+    <!-- endregion -->
+</resources>

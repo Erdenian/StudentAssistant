@@ -21,7 +21,7 @@ android {
         versionCode = 28
         versionName = "0.7.4"
 
-        androidResources.localeFilters += setOf("en", "ru")
+        androidResources.localeFilters += setOf("en", "ru", "fr", "it", "de", "es")
         base.archivesName = "${rootProject.name}-$versionName"
 
         testInstrumentationRunner = "ru.erdenian.studentassistant.TestRunner"

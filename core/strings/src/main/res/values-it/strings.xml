@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Student Assistant</string>
+
+    <!-- region schedule -->
+    <string name="lll_free_day">Giorno libero</string>
+    <string name="lhl_no_homeworks">Nessun compito</string>
+
+    <string name="s_title">Orario</string>
+    <string name="s_calendar">Calendario</string>
+    <string name="s_add">Aggiungi orario</string>
+    <string name="s_edit">Modifica orario</string>
+    <string name="s_no_schedule">È vuoto qui. Aggiungi un orario universitario o scolastico.</string>
+
+    <string name="li_title">Info lezione</string>
+    <string name="li_edit">Modifica</string>
+    <string name="li_add_homework">Aggiungi compito</string>
+    <string name="li_delete_homework">Elimina</string>
+    <string name="li_delete_homework_message">Eliminare questo compito?</string>
+    <string name="li_delete_homework_yes">Elimina</string>
+    <string name="li_delete_homework_no">Annulla</string>
+    <string name="li_delete_homework_progress">Eliminazione compito…</string>
+
+    <string name="se_title_new">Nuovo orario</string>
+    <string name="se_title_edit">Modifica orario</string>
+    <string name="se_name">Nome</string>
+    <string name="se_first_day">Primo giorno</string>
+    <string name="se_last_day">Ultimo giorno</string>
+    <string name="se_save">Salva</string>
+    <string name="se_saving">Salvataggio…</string>
+    <string name="se_error_empty_name">Inserisci nome</string>
+    <string name="se_error_name_not_available">Questo nome è già in uso</string>
+    <string name="se_error_wrong_dates">Intervallo di date non valido</string>
+    <string name="se_warning_week_shift_title">Spostamento settimane</string>
+    <string name="se_warning_week_shift_message">Hai cambiato la data di inizio del semestre. Questo potrebbe alterare l\'alternanza delle settimane (pari/dispari) per le lezioni esistenti. Continuare?</string>
+    <string name="se_warning_week_shift_yes">Sì, continua</string>
+    <string name="se_warning_week_shift_no">Annulla</string>
+
+    <string name="sce_title">Editor lezioni</string>
+    <string name="sce_edit">Parametri</string>
+    <string name="sce_add_lesson">Aggiungi lezione</string>
+    <string name="sce_delete">Elimina orario</string>
+    <string name="sce_delete_message">Eliminare l\'orario e tutte le lezioni?</string>
+    <string name="sce_delete_yes">Elimina</string>
+    <string name="sce_delete_no">Annulla</string>
+    <string name="sce_delete_progress">Eliminazione orario…</string>
+    <string name="sce_copy_lesson">Copia</string>
+    <string name="sce_delete_lesson">Elimina</string>
+    <string name="sce_delete_lesson_progress">Eliminazione lezione…</string>
+
+    <string name="le_title_new">Nuova lezione</string>
+    <string name="le_title_edit">Modifica lezione</string>
+    <string name="le_subject_name">Materia</string>
+    <string name="le_type">Tipo di lezione</string>
+    <string name="le_teachers">Insegnanti</string>
+    <string name="le_classrooms">Aule</string>
+    <string name="le_start_time">Inizio</string>
+    <string name="le_end_time">Fine</string>
+    <string name="le_day_of_week">Giorno della settimana</string>
+    <string name="le_repeat_type">Ripetizione</string>
+    <string name="le_save">Salva</string>
+    <string name="le_save_progress">Salvataggio…</string>
+    <string name="le_error_empty_subject_name">Inserisci il nome della materia</string>
+    <string name="le_error_wrong_time">L\'ora di inizio deve essere precedente all\'ora di fine</string>
+    <string name="le_error_empty_repeat">Nessun giorno di ripetizione selezionato</string>
+    <string name="le_rename_others_progress">Controllo altre lezioni…</string>
+    <string name="le_rename_others_title">Rinominazione di gruppo</string>
+    <string name="le_rename_others_message">Hai rinominato la materia. Aggiornarla anche per le altre lezioni?</string>
+    <string name="le_rename_others_yes">Sì</string>
+    <string name="le_rename_others_no">No</string>
+    <string name="le_rename_others_cancel">Annulla</string>
+    <string name="le_delete">Elimina lezione</string>
+    <string name="le_delete_message">Eliminare questa lezione?</string>
+    <string name="le_delete_yes">Elimina</string>
+    <string name="le_delete_no">Annulla</string>
+    <string name="le_delete_progress">Eliminazione…</string>
+    <string name="le_delete_homeworks_progress">Controllo compiti…</string>
+    <string name="le_delete_homeworks_title">Compiti collegati</string>
+    <string name="le_delete_homeworks_message">Ci sono compiti per questa materia. Eliminarli?</string>
+    <string name="le_delete_homeworks_yes">Elimina</string>
+    <string name="le_delete_homeworks_no">Mantieni</string>
+    <string name="le_delete_homeworks_cancel">Annulla</string>
+    <!-- endregion -->
+
+    <!-- region homeworks -->
+    <string name="h_title">Compiti</string>
+    <string name="h_add">Nuovo compito</string>
+    <string name="h_no_schedule">È vuoto qui. Aggiungi un orario per salvare i compiti.</string>
+    <string name="h_delete_homework">Elimina</string>
+    <string name="h_delete_message">Eliminare questo compito?</string>
+    <string name="h_delete_yes">Elimina</string>
+    <string name="h_delete_no">Annulla</string>
+    <string name="h_delete_progress">Eliminazione compito…</string>
+
+    <string name="he_title">Editor compito</string>
+    <string name="he_subject">Materia</string>
+    <string name="he_description">Descrizione</string>
+    <string name="he_deadline_label">Scadenza</string>
+    <string name="he_save">Salva</string>
+    <string name="he_save_progress">Salvataggio…</string>
+    <string name="he_error_empty_subject_name">Inserisci materia</string>
+    <string name="he_error_empty_description">Inserisci descrizione</string>
+    <string name="he_unknown_lesson">Nuova materia</string>
+    <string name="he_unknown_lesson_message">La materia non è nell\'orario. Salvare il compito e aggiungere la materia alla lista?</string>
+    <string name="he_unknown_lesson_yes">Salva</string>
+    <string name="he_unknown_lesson_no">Annulla</string>
+    <string name="he_unknown_lesson_yes_and_create">Salva e crea lezione</string>
+    <string name="he_delete">Elimina</string>
+    <string name="he_delete_message">Eliminare il compito?</string>
+    <string name="he_delete_yes">Elimina</string>
+    <string name="he_delete_no">Annulla</string>
+    <string name="he_delete_progress">Eliminazione…</string>
+    <!-- endregion -->
+
+    <!-- region settings -->
+    <string name="st_title">Impostazioni</string>
+    <string name="st_default_start_time">Ora inizio lezioni</string>
+    <string name="st_default_lesson_duration">Durata lezione</string>
+    <string name="st_default_break_duration">Durata pausa</string>
+    <string name="st_is_advanced_weeks_selector_enabled">Selettore settimane avanzato</string>
+    <string name="st_is_advanced_weeks_selector_enabled_description">Selezione più flessibile delle settimane per la ripetizione delle lezioni</string>
+    <string name="st_ok">OK</string>
+    <string name="st_cancel">Annulla</string>
+    <!-- endregion -->
+
+    <!-- region uikit -->
+    <string name="u_back">Indietro</string>
+    <string name="taba_more_options">Altre opzioni</string>
+    <string name="hc_deadline">Fino al %1$s</string>
+    <string name="ws_variants_title">Ripetizione</string>
+    <string name="ws_cycle_length">Lunghezza ciclo: %1$d</string>
+    <string name="ws_add_week">Aggiungi settimana</string>
+    <string name="ws_remove_week">Rimuovi settimana</string>
+    <string name="dpd_today">Oggi</string>
+    <string name="dpd_ok">OK</string>
+    <string name="dpd_cancel">Annulla</string>
+    <string name="tpd_select_time">Seleziona ora</string>
+    <string name="tpd_enter_time">Inserisci ora</string>
+    <string name="tpd_mode_switch">Modalità di input</string>
+    <string name="tpd_ok">OK</string>
+    <string name="tpd_cancel">Annulla</string>
+    <!-- endregion -->
+</resources>
