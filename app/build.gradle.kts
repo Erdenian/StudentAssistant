@@ -13,6 +13,18 @@ plugins {
     alias(libs.plugins.tripletPlay)
 }
 
+// Используем Provider API для чтения файла.
+// Это позволяет Gradle отслеживать изменения в файле и инвалидировать кэш конфигурации автоматически.
+val supportedLocalesProvider = providers
+    .fileContents(layout.projectDirectory.file("src/main/res/xml/locale_config.xml"))
+    .asText
+    .map { content ->
+        Regex("android:name=\"([a-z]{2,3})\"")
+            .findAll(content)
+            .map { it.groupValues[1] }
+            .toSet()
+    }
+
 android {
     namespace = "ru.erdenian.studentassistant"
 
@@ -21,7 +33,8 @@ android {
         versionCode = 28
         versionName = "0.7.4"
 
-        androidResources.localeFilters += "ru"
+        androidResources.localeFilters += supportedLocalesProvider.getOrElse(emptySet())
+
         base.archivesName = "${rootProject.name}-$versionName"
 
         testInstrumentationRunner = "ru.erdenian.studentassistant.TestRunner"

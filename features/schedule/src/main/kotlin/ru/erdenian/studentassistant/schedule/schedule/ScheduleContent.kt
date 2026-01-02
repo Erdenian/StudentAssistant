@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.schedule.schedule
 
+import android.text.format.DateFormat
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,13 +26,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.core.os.ConfigurationCompat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import java.util.Locale
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.repository.api.entity.Semester
@@ -160,8 +164,13 @@ internal fun ScheduleContent(
                     modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal),
                 )
             } else {
-                val shortTitleFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d MMMM") }
-                val fullTitleFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy") }
+                val locale = ConfigurationCompat.getLocales(LocalConfiguration.current).get(0) ?: Locale.getDefault()
+                val shortTitleFormatter = remember(locale) {
+                    DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, "EEEEdMMM"))
+                }
+                val fullTitleFormatter = remember(locale) {
+                    DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, "EEEEdMMMyyyy"))
+                }
 
                 PagerTabStrip(
                     state = state.pagerState,

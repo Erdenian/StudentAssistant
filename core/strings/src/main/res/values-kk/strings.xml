@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Student Assistant</string>
+
+    <!-- region schedule -->
+
+    <!-- LazyLessonsList -->
+    <string name="lll_free_day">Бос күн</string>
+
+    <!-- LazyHomeworksList -->
+    <string name="lhl_no_homeworks">Үй тапсырмасы жоқ</string>
+
+    <!-- Schedule -->
+    <string name="s_title">Сабақ кестесі</string>
+    <string name="s_calendar">Күнтізбе</string>
+    <string name="s_add">Кесте қосу</string>
+    <string name="s_edit">Кестені өңдеу</string>
+    <string name="s_no_schedule">Мұнда әзірге бос. Университет немесе мектеп кестесін қосыңыз.</string>
+
+    <!-- Lesson Information -->
+    <string name="li_title">Сабақ туралы ақпарат</string>
+    <string name="li_edit">Өзгерту</string>
+    <string name="li_add_homework">Тапсырма қосу</string>
+    <string name="li_delete_homework">Жою</string>
+    <string name="li_delete_homework_message">Бұл тапсырманы жою керек пе?</string>
+    <string name="li_delete_homework_yes">Жою</string>
+    <string name="li_delete_homework_no">Болдырмау</string>
+    <string name="li_delete_homework_progress">Тапсырма жойылуда…</string>
+
+    <!-- Semester Editor -->
+    <string name="se_title_new">Жаңа кесте</string>
+    <string name="se_title_edit">Кестені өңдеу</string>
+    <string name="se_name">Атауы</string>
+    <string name="se_first_day">Бірінші күн</string>
+    <string name="se_last_day">Соңғы күн</string>
+    <string name="se_save">Сақтау</string>
+    <string name="se_saving">Сақталуда…</string>
+    <string name="se_error_empty_name">Атауын енгізіңіз</string>
+    <string name="se_error_name_not_available">Бұл атау қолданылуда</string>
+    <string name="se_error_wrong_dates">Күндер дұрыс емес</string>
+    <string name="se_warning_week_shift_title">Апталардың ауысуы</string>
+    <string name="se_warning_week_shift_message">Сіз семестрдің басталу күнін өзгерттіңіз. Бұл бар сабақтардың апталық кезегін (жұп/тақ) бұзуы мүмкін. Жалғастыру керек пе?</string>
+    <string name="se_warning_week_shift_yes">Иә, жалғастыру</string>
+    <string name="se_warning_week_shift_no">Болдырмау</string>
+
+    <!-- Schedule Editor -->
+    <string name="sce_title">Сабақ редакторы</string>
+    <string name="sce_edit">Кесте параметрлері</string>
+    <string name="sce_add_lesson">Сабақ қосу</string>
+    <string name="sce_delete">Кестені жою</string>
+    <string name="sce_delete_message">Кестені және барлық сабақтарды жою керек пе?</string>
+    <string name="sce_delete_yes">Жою</string>
+    <string name="sce_delete_no">Болдырмау</string>
+    <string name="sce_delete_progress">Кесте жойылуда…</string>
+    <string name="sce_copy_lesson">Көшіру</string>
+    <string name="sce_delete_lesson">Жою</string>
+    <string name="sce_delete_lesson_progress">Сабақ жойылуда…</string>
+
+    <!-- Lesson Editor -->
+    <string name="le_title_new">Жаңа сабақ</string>
+    <string name="le_title_edit">Сабақты өңдеу</string>
+    <string name="le_subject_name">Пән</string>
+    <string name="le_type">Сабақ түрі</string>
+    <string name="le_teachers">Оқытушылар</string>
+    <string name="le_classrooms">Аудиториялар</string>
+    <string name="le_start_time">Басталуы</string>
+    <string name="le_end_time">Аяқталуы</string>
+    <string name="le_day_of_week">Апта күні</string>
+    <string name="le_repeat_type">Қайталау</string>
+    <string name="le_save">Сақтау</string>
+    <string name="le_save_progress">Сақталуда…</string>
+    <string name="le_error_empty_subject_name">Пән атауын көрсетіңіз</string>
+    <string name="le_error_wrong_time">Басталу уақыты аяқталу уақытынан ерте болуы керек</string>
+    <string name="le_error_empty_repeat">Қайталау күндері таңдалмаған</string>
+    <string name="le_rename_others_progress">Басқа сабақтарды тексеру…</string>
+    <string name="le_rename_others_title">Топтық қайта атау</string>
+    <string name="le_rename_others_message">Сіз пән атауын өзгерттіңіз. Басқа сабақтарда да жаңарту керек пе?</string>
+    <string name="le_rename_others_yes">Иә</string>
+    <string name="le_rename_others_no">Жоқ</string>
+    <string name="le_rename_others_cancel">Болдырмау</string>
+    <string name="le_delete">Сабақты жою</string>
+    <string name="le_delete_message">Бұл сабақты жою керек пе?</string>
+    <string name="le_delete_yes">Жою</string>
+    <string name="le_delete_no">Болдырмау</string>
+    <string name="le_delete_progress">Жойылуда…</string>
+    <string name="le_delete_homeworks_progress">Тапсырмаларды тексеру…</string>
+    <string name="le_delete_homeworks_title">Байланысты тапсырмалар</string>
+    <string name="le_delete_homeworks_message">Бұл пән бойынша үй тапсырмалары бар. Оларды жою керек пе?</string>
+    <string name="le_delete_homeworks_yes">Жою</string>
+    <string name="le_delete_homeworks_no">Қалдыру</string>
+    <string name="le_delete_homeworks_cancel">Болдырмау</string>
+
+    <!-- endregion -->
+
+    <!-- region homeworks -->
+
+    <!-- Homeworks -->
+    <string name="h_title">Тапсырмалар</string>
+    <string name="h_add">Жаңа тапсырма</string>
+    <string name="h_no_schedule">Мұнда әзірге бос. Үй тапсырмаларын жазу үшін кесте қосыңыз.</string>
+    <string name="h_delete_homework">Жою</string>
+    <string name="h_delete_message">Бұл тапсырманы жою керек пе?</string>
+    <string name="h_delete_yes">Жою</string>
+    <string name="h_delete_no">Болдырмау</string>
+    <string name="h_delete_progress">Тапсырма жойылуда…</string>
+
+    <!-- Homework Editor -->
+    <string name="he_title">Тапсырма редакторы</string>
+    <string name="he_subject">Пән</string>
+    <string name="he_description">Сипаттамасы</string>
+    <string name="he_deadline_label">Тапсыру мерзімі</string>
+    <string name="he_save">Сақтау</string>
+    <string name="he_save_progress">Сақталуда…</string>
+    <string name="he_error_empty_subject_name">Пәнді көрсетіңіз</string>
+    <string name="he_error_empty_description">Тапсырма мәтінін енгізіңіз</string>
+    <string name="he_unknown_lesson">Жаңа пән</string>
+    <string name="he_unknown_lesson_message">Пән кестеде жоқ. Тапсырманы сақтап, пәнді тізімге қосу керек пе?</string>
+    <string name="he_unknown_lesson_yes">Сақтау</string>
+    <string name="he_unknown_lesson_no">Болдырмау</string>
+    <string name="he_unknown_lesson_yes_and_create">Сақтау және сабақ құру</string>
+    <string name="he_delete">Жою</string>
+    <string name="he_delete_message">Тапсырманы жою керек пе?</string>
+    <string name="he_delete_yes">Жою</string>
+    <string name="he_delete_no">Болдырмау</string>
+    <string name="he_delete_progress">Жойылуда…</string>
+
+    <!-- endregion -->
+
+    <!-- region settings -->
+
+    <!-- Settings -->
+    <string name="st_title">Параметрлер</string>
+    <string name="st_default_start_time">Сабақтың басталуы</string>
+    <string name="st_default_lesson_duration">Сабақтың ұзақтығы</string>
+    <string name="st_default_break_duration">Үзіліс ұзақтығы</string>
+    <string name="st_is_advanced_weeks_selector_enabled">Кеңейтілген апта таңдау</string>
+    <string name="st_is_advanced_weeks_selector_enabled_description">Сабақты қайталау үшін апталарды икемді таңдау</string>
+    <string name="st_ok">ОК</string>
+    <string name="st_cancel">Болдырмау</string>
+
+    <!-- endregion -->
+
+    <!-- region uikit -->
+
+    <!-- Common icons -->
+    <string name="u_back">Артқа</string>
+
+    <!-- TopAppBarActions -->
+    <string name="taba_more_options">Тағы</string>
+
+    <!--HomeworkCard -->
+    <string name="hc_deadline">%1$s дейін</string>
+
+    <!-- WeeksSelector -->
+    <string name="ws_variants_title">Қайталау</string>
+    <string name="ws_cycle_length">Цикл ұзындығы: %1$d</string>
+    <string name="ws_add_week">Апта қосу</string>
+    <string name="ws_remove_week">Аптаны алып тастау</string>
+
+    <!-- DatePickerDialog -->
+    <string name="dpd_today">Бүгін</string>
+    <string name="dpd_ok">ОК</string>
+    <string name="dpd_cancel">Болдырмау</string>
+
+    <!-- TimePickerDialog -->
+    <string name="tpd_select_time">Уақытты таңдаңыз</string>
+    <string name="tpd_enter_time">Уақытты енгізіңіз</string>
+    <string name="tpd_mode_switch">Енгізу режимі</string>
+    <string name="tpd_ok">ОК</string>
+    <string name="tpd_cancel">Болдырмау</string>
+
+    <!-- endregion -->
+
+</resources>

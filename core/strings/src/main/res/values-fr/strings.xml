@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Student Assistant</string>
+
+    <!-- region schedule -->
+
+    <!-- LazyLessonsList -->
+    <string name="lll_free_day">Jour libre</string>
+
+    <!-- LazyHomeworksList -->
+    <string name="lhl_no_homeworks">Pas de devoirs</string>
+
+    <!-- Schedule -->
+    <string name="s_title">Emploi du temps</string>
+    <string name="s_calendar">Calendrier</string>
+    <string name="s_add">Ajouter un emploi du temps</string>
+    <string name="s_edit">Modifier l\'emploi du temps</string>
+    <string name="s_no_schedule">C\'est vide ici. Ajoutez un emploi du temps universitaire ou scolaire.</string>
+
+    <!-- Lesson Information -->
+    <string name="li_title">Infos sur le cours</string>
+    <string name="li_edit">Modifier</string>
+    <string name="li_add_homework">Ajouter un devoir</string>
+    <string name="li_delete_homework">Supprimer</string>
+    <string name="li_delete_homework_message">Supprimer ce devoir ?</string>
+    <string name="li_delete_homework_yes">Supprimer</string>
+    <string name="li_delete_homework_no">Annuler</string>
+    <string name="li_delete_homework_progress">Suppression du devoir…</string>
+
+    <!-- Semester Editor -->
+    <string name="se_title_new">Nouvel emploi du temps</string>
+    <string name="se_title_edit">Modifier l\'emploi du temps</string>
+    <string name="se_name">Nom</string>
+    <string name="se_first_day">Premier jour</string>
+    <string name="se_last_day">Dernier jour</string>
+    <string name="se_save">Enregistrer</string>
+    <string name="se_saving">Enregistrement…</string>
+    <string name="se_error_empty_name">Entrez un nom</string>
+    <string name="se_error_name_not_available">Ce nom est déjà utilisé</string>
+    <string name="se_error_wrong_dates">Plage de dates invalide</string>
+    <string name="se_warning_week_shift_title">Décalage des semaines</string>
+    <string name="se_warning_week_shift_message">Vous avez modifié la date de début du semestre. Cela peut perturber l\'alternance des semaines (paires/impaires) pour les cours existants. Continuer ?</string>
+    <string name="se_warning_week_shift_yes">Oui, continuer</string>
+    <string name="se_warning_week_shift_no">Annuler</string>
+
+    <!-- Schedule Editor -->
+    <string name="sce_title">Éditeur de cours</string>
+    <string name="sce_edit">Paramètres</string>
+    <string name="sce_add_lesson">Ajouter un cours</string>
+    <string name="sce_delete">Supprimer l\'emploi du temps</string>
+    <string name="sce_delete_message">Supprimer l\'emploi du temps et tous les cours ?</string>
+    <string name="sce_delete_yes">Supprimer</string>
+    <string name="sce_delete_no">Annuler</string>
+    <string name="sce_delete_progress">Suppression de l\'emploi du temps…</string>
+    <string name="sce_copy_lesson">Copier</string>
+    <string name="sce_delete_lesson">Supprimer</string>
+    <string name="sce_delete_lesson_progress">Suppression du cours…</string>
+
+    <!-- Lesson Editor -->
+    <string name="le_title_new">Nouveau cours</string>
+    <string name="le_title_edit">Modifier le cours</string>
+    <string name="le_subject_name">Matière</string>
+    <string name="le_type">Type de cours</string>
+    <string name="le_teachers">Enseignants</string>
+    <string name="le_classrooms">Salles</string>
+    <string name="le_start_time">Début</string>
+    <string name="le_end_time">Fin</string>
+    <string name="le_day_of_week">Jour de la semaine</string>
+    <string name="le_repeat_type">Répétition</string>
+    <string name="le_save">Enregistrer</string>
+    <string name="le_save_progress">Enregistrement…</string>
+    <string name="le_error_empty_subject_name">Entrez le nom de la matière</string>
+    <string name="le_error_wrong_time">L\'heure de début doit être avant l\'heure de fin</string>
+    <string name="le_error_empty_repeat">Aucun jour de répétition sélectionné</string>
+    <string name="le_rename_others_progress">Vérification des autres cours…</string>
+    <string name="le_rename_others_title">Renommage groupé</string>
+    <string name="le_rename_others_message">Vous avez renommé la matière. Mettre à jour pour les autres cours aussi ?</string>
+    <string name="le_rename_others_yes">Oui</string>
+    <string name="le_rename_others_no">Non</string>
+    <string name="le_rename_others_cancel">Annuler</string>
+    <string name="le_delete">Supprimer le cours</string>
+    <string name="le_delete_message">Supprimer ce cours ?</string>
+    <string name="le_delete_yes">Supprimer</string>
+    <string name="le_delete_no">Annuler</string>
+    <string name="le_delete_progress">Suppression…</string>
+    <string name="le_delete_homeworks_progress">Vérification des devoirs…</string>
+    <string name="le_delete_homeworks_title">Devoirs liés</string>
+    <string name="le_delete_homeworks_message">Il y a des devoirs pour cette matière. Les supprimer ?</string>
+    <string name="le_delete_homeworks_yes">Supprimer</string>
+    <string name="le_delete_homeworks_no">Garder</string>
+    <string name="le_delete_homeworks_cancel">Annuler</string>
+
+    <!-- endregion -->
+
+    <!-- region homeworks -->
+
+    <!-- Homeworks -->
+    <string name="h_title">Devoirs</string>
+    <string name="h_add">Nouveau devoir</string>
+    <string name="h_no_schedule">C\'est vide ici. Ajoutez un emploi du temps pour enregistrer les devoirs.</string>
+    <string name="h_delete_homework">Supprimer</string>
+    <string name="h_delete_message">Supprimer ce devoir ?</string>
+    <string name="h_delete_yes">Supprimer</string>
+    <string name="h_delete_no">Annuler</string>
+    <string name="h_delete_progress">Suppression du devoir…</string>
+
+    <!-- Homework Editor -->
+    <string name="he_title">Éditeur de devoir</string>
+    <string name="he_subject">Matière</string>
+    <string name="he_description">Description</string>
+    <string name="he_deadline_label">Date limite</string>
+    <string name="he_save">Enregistrer</string>
+    <string name="he_save_progress">Enregistrement…</string>
+    <string name="he_error_empty_subject_name">Entrez la matière</string>
+    <string name="he_error_empty_description">Entrez la description</string>
+    <string name="he_unknown_lesson">Nouvelle matière</string>
+    <string name="he_unknown_lesson_message">La matière n\'est pas dans l\'emploi du temps. Enregistrer le devoir et ajouter la matière à la liste ?</string>
+    <string name="he_unknown_lesson_yes">Enregistrer</string>
+    <string name="he_unknown_lesson_no">Annuler</string>
+    <string name="he_unknown_lesson_yes_and_create">Enregistrer et créer le cours</string>
+    <string name="he_delete">Supprimer</string>
+    <string name="he_delete_message">Supprimer le devoir ?</string>
+    <string name="he_delete_yes">Supprimer</string>
+    <string name="he_delete_no">Annuler</string>
+    <string name="he_delete_progress">Suppression…</string>
+
+    <!-- endregion -->
+
+    <!-- region settings -->
+
+    <!-- Settings -->
+    <string name="st_title">Paramètres</string>
+    <string name="st_default_start_time">Heure de début des cours</string>
+    <string name="st_default_lesson_duration">Durée du cours</string>
+    <string name="st_default_break_duration">Durée de la pause</string>
+    <string name="st_is_advanced_weeks_selector_enabled">Sélecteur de semaines avancé</string>
+    <string name="st_is_advanced_weeks_selector_enabled_description">Sélection plus flexible des semaines pour la répétition des cours</string>
+    <string name="st_ok">OK</string>
+    <string name="st_cancel">Annuler</string>
+
+    <!-- endregion -->
+
+    <!-- region uikit -->
+
+    <!-- Common icons -->
+    <string name="u_back">Retour</string>
+
+    <!-- TopAppBarActions -->
+    <string name="taba_more_options">Plus d\'options</string>
+
+    <!--HomeworkCard -->
+    <string name="hc_deadline">Jusqu\'au %1$s</string>
+
+    <!-- WeeksSelector -->
+    <string name="ws_variants_title">Répétition</string>
+    <string name="ws_cycle_length">Longueur du cycle : %1$d</string>
+    <string name="ws_add_week">Ajouter une semaine</string>
+    <string name="ws_remove_week">Supprimer une semaine</string>
+
+    <!-- DatePickerDialog -->
+    <string name="dpd_today">Aujourd\'hui</string>
+    <string name="dpd_ok">OK</string>
+    <string name="dpd_cancel">Annuler</string>
+
+    <!-- TimePickerDialog -->
+    <string name="tpd_select_time">Sélectionner l\'heure</string>
+    <string name="tpd_enter_time">Entrer l\'heure</string>
+    <string name="tpd_mode_switch">Mode de saisie</string>
+    <string name="tpd_ok">OK</string>
+    <string name="tpd_cancel">Annuler</string>
+
+    <!-- endregion -->
+
+</resources>

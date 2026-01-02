@@ -23,6 +23,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.os.ConfigurationCompat
 import java.time.Duration
 import java.util.Locale
+import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.uikit.R
 import ru.erdenian.studentassistant.uikit.utils.AppPreviews
@@ -93,14 +94,14 @@ internal fun DurationPreference(
                         isShowDialog = false
                     },
                 ) {
-                    Text(text = stringResource(android.R.string.ok))
+                    Text(text = stringResource(RS.st_ok))
                 }
             },
             dismissButton = {
                 TextButton(
                     onClick = { isShowDialog = false },
                 ) {
-                    Text(text = stringResource(android.R.string.cancel))
+                    Text(text = stringResource(RS.st_cancel))
                 }
             },
         )

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<string-array name="lesson_repeat_types">
+        <item>Par jours de la semaine</item>
+        <item>Par dates</item>
+    </string-array>
+
+    <string-array name="lesson_types">
+        <item>Séminaire</item>
+        <item>Cours magistral</item>
+        <item>Travaux pratiques</item>
+        <item>Travaux dirigés</item>
+        <item>Consultation</item>
+        <item>Examen</item>
+        <item>Travail personnel</item>
+    </string-array>
+
+    <string-array name="repeat_variants">
+        <item>Chaque semaine</item>
+        <item>Semaines impaires</item>
+        <item>Semaines paires</item>
+        <item>Toutes les 1re semaines sur 4</item>
+        <item>Toutes les 2e semaines sur 4</item>
+        <item>Toutes les 3e semaines sur 4</item>
+        <item>Toutes les 4e semaines sur 4</item>
+        <item>Personnalisé</item>
+    </string-array>
+
+</resources>

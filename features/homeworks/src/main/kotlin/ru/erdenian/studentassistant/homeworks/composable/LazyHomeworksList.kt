@@ -22,13 +22,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.core.os.ConfigurationCompat
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.Locale
 import ru.erdenian.studentassistant.repository.api.entity.Homework
 import ru.erdenian.studentassistant.sampledata.Homeworks
 import ru.erdenian.studentassistant.strings.RS
@@ -89,7 +92,13 @@ internal fun LazyHomeworksList(
                     )
                 }
                 else -> {
-                    val deadlineFormatter = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT) }
+                    val locale = ConfigurationCompat
+                        .getLocales(LocalConfiguration.current)
+                        .get(0)
+                        ?: Locale.getDefault()
+                    val deadlineFormatter = remember(locale) {
+                        DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(locale)
+                    }
 
                     LazyColumn(
                         contentPadding = PaddingValues(

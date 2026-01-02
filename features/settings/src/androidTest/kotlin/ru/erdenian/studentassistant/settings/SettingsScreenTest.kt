@@ -10,12 +10,14 @@ import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.core.os.ConfigurationCompat
 import androidx.test.core.app.ApplicationProvider
 import io.mockk.mockk
 import java.time.Duration
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.Locale
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -80,7 +82,8 @@ internal class SettingsScreenTest {
         launchScreen()
 
         val title = context.getString(RS.st_default_start_time)
-        val timeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
+        val locale = ConfigurationCompat.getLocales(context.resources.configuration).get(0) ?: Locale.getDefault()
+        val timeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale)
 
         val initialTimeStr = fakeSettingsRepository.defaultStartTime.format(timeFormatter)
         composeTestRule.onNodeWithText(title).assertIsDisplayed()
@@ -88,7 +91,7 @@ internal class SettingsScreenTest {
 
         composeTestRule.onNodeWithText(title).performClick()
 
-        val okButtonText = context.getString(android.R.string.ok)
+        val okButtonText = context.getString(RS.tpd_ok)
         composeTestRule.onNodeWithText(okButtonText).assertIsDisplayed()
         composeTestRule.onNodeWithText(okButtonText).performClick()
         composeTestRule.onNodeWithText(okButtonText).assertDoesNotExist()
@@ -105,7 +108,7 @@ internal class SettingsScreenTest {
 
         composeTestRule.onNodeWithText(title).performClick()
 
-        val okButtonText = context.getString(android.R.string.ok)
+        val okButtonText = context.getString(RS.st_ok)
         composeTestRule.onNodeWithText(okButtonText).assertIsDisplayed()
 
         composeTestRule.onNodeWithText(okButtonText).performClick()
@@ -123,7 +126,7 @@ internal class SettingsScreenTest {
 
         composeTestRule.onNodeWithText(title).performClick()
 
-        val cancelButtonText = context.getString(android.R.string.cancel)
+        val cancelButtonText = context.getString(RS.st_cancel)
         composeTestRule.onNodeWithText(cancelButtonText).performClick()
 
         assertEquals(Duration.ofMinutes(10), fakeSettingsRepository.defaultBreakDuration)

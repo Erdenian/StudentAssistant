@@ -2,29 +2,29 @@
 <resources>
 
     <string-array name="lesson_repeat_types">
-        <item>По дням недели</item>
-        <item>По датам</item>
+        <item>By days of week</item>
+        <item>By dates</item>
     </string-array>
 
     <string-array name="lesson_types">
-        <item>Семинар</item>
-        <item>Лекция</item>
-        <item>Лабораторная работа</item>
-        <item>Практика</item>
-        <item>Консультация</item>
-        <item>Экзамен</item>
-        <item>Самостоятельная работа</item>
+        <item>Seminar</item>
+        <item>Lecture</item>
+        <item>Laboratory work</item>
+        <item>Practical work</item>
+        <item>Consultation</item>
+        <item>Exam</item>
+        <item>Independent work</item>
     </string-array>
 
     <string-array name="repeat_variants">
-        <item>Каждую неделю</item>
-        <item>По нечётным</item>
-        <item>По чётным</item>
-        <item>По первым числителям</item>
-        <item>По первым знаменателям</item>
-        <item>По вторым числителям</item>
-        <item>По вторым знаменателям</item>
-        <item>Своё</item>
+        <item>Every week</item>
+        <item>Every odd week</item>
+        <item>Every even week</item>
+        <item>Every 1st week of 4</item>
+        <item>Every 2nd week of 4</item>
+        <item>Every 3rd week of 4</item>
+        <item>Every 4th week of 4</item>
+        <item>Custom</item>
     </string-array>
 
 </resources>

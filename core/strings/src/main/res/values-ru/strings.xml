@@ -1,0 +1,174 @@
+<resources>
+
+    <string name="app_name">Student Assistant</string>
+
+    <!-- region schedule -->
+
+    <!-- LazyLessonsList -->
+    <string name="lll_free_day">Выходной</string>
+
+    <!-- LazyHomeworksList -->
+    <string name="lhl_no_homeworks">Нет заданий</string>
+
+    <!-- Schedule -->
+    <string name="s_title">Расписание</string>
+    <string name="s_calendar">Календарь</string>
+    <string name="s_add">Добавить расписание</string>
+    <string name="s_edit">Редактировать расписание</string>
+    <string name="s_no_schedule">Здесь пока пусто. Добавьте расписание университета или школы.</string>
+
+    <!-- Lesson Information -->
+    <string name="li_title">Информация о занятии</string>
+    <string name="li_edit">Изменить</string>
+    <string name="li_add_homework">Добавить задание</string>
+    <string name="li_delete_homework">Удалить</string>
+    <string name="li_delete_homework_message">Удалить это задание?</string>
+    <string name="li_delete_homework_yes">Удалить</string>
+    <string name="li_delete_homework_no">Отмена</string>
+    <string name="li_delete_homework_progress">Удаление задания…</string>
+
+    <!-- Semester Editor -->
+    <string name="se_title_new">Новое расписание</string>
+    <string name="se_title_edit">Редактирование расписания</string>
+    <string name="se_name">Название</string>
+    <string name="se_first_day">Первый день</string>
+    <string name="se_last_day">Последний день</string>
+    <string name="se_save">Сохранить</string>
+    <string name="se_saving">Сохранение…</string>
+    <string name="se_error_empty_name">Введите название</string>
+    <string name="se_error_name_not_available">Это имя уже используется</string>
+    <string name="se_error_wrong_dates">Некорректный диапазон дат</string>
+    <string name="se_warning_week_shift_title">Сдвиг недель</string>
+    <string name="se_warning_week_shift_message">Вы изменили дату начала семестра. Это может нарушить чередование недель (чётные/нечётные) у существующих занятий. Продолжить?</string>
+    <string name="se_warning_week_shift_yes">Да, продолжить</string>
+    <string name="se_warning_week_shift_no">Отмена</string>
+
+    <!-- Schedule Editor -->
+    <string name="sce_title">Редактор занятий</string>
+    <string name="sce_edit">Параметры расписания</string>
+    <string name="sce_add_lesson">Добавить занятие</string>
+    <string name="sce_delete">Удалить расписание</string>
+    <string name="sce_delete_message">Удалить расписание и все занятия?</string>
+    <string name="sce_delete_yes">Удалить</string>
+    <string name="sce_delete_no">Отмена</string>
+    <string name="sce_delete_progress">Удаление расписания…</string>
+    <string name="sce_copy_lesson">Копировать</string>
+    <string name="sce_delete_lesson">Удалить</string>
+    <string name="sce_delete_lesson_progress">Удаление занятия…</string>
+
+    <!-- Lesson Editor -->
+    <string name="le_title_new">Новое занятие</string>
+    <string name="le_title_edit">Редактирование занятия</string>
+    <string name="le_subject_name">Предмет</string>
+    <string name="le_type">Тип занятия</string>
+    <string name="le_teachers">Преподаватели</string>
+    <string name="le_classrooms">Аудитории</string>
+    <string name="le_start_time">Начало</string>
+    <string name="le_end_time">Конец</string>
+    <string name="le_day_of_week">День недели</string>
+    <string name="le_repeat_type">Повторение</string>
+    <string name="le_save">Сохранить</string>
+    <string name="le_save_progress">Сохранение…</string>
+    <string name="le_error_empty_subject_name">Укажите название предмета</string>
+    <string name="le_error_wrong_time">Время начала должно быть раньше времени окончания</string>
+    <string name="le_error_empty_repeat">Не выбраны дни для повторения</string>
+    <string name="le_rename_others_progress">Проверка других занятий…</string>
+    <string name="le_rename_others_title">Групповое переименование</string>
+    <string name="le_rename_others_message">Вы переименовали предмет. Обновить его у остальных занятий?</string>
+    <string name="le_rename_others_yes">Да</string>
+    <string name="le_rename_others_no">Нет</string>
+    <string name="le_rename_others_cancel">Отмена</string>
+    <string name="le_delete">Удалить занятие</string>
+    <string name="le_delete_message">Удалить это занятие?</string>
+    <string name="le_delete_yes">Удалить</string>
+    <string name="le_delete_no">Отмена</string>
+    <string name="le_delete_progress">Удаление…</string>
+    <string name="le_delete_homeworks_progress">Проверка заданий…</string>
+    <string name="le_delete_homeworks_title">Связанные задания</string>
+    <string name="le_delete_homeworks_message">По этому предмету есть домашние задания. Удалить их?</string>
+    <string name="le_delete_homeworks_yes">Удалить</string>
+    <string name="le_delete_homeworks_no">Оставить</string>
+    <string name="le_delete_homeworks_cancel">Отмена</string>
+
+    <!-- endregion -->
+
+    <!-- region homeworks -->
+
+    <!-- Homeworks -->
+    <string name="h_title">Задания</string>
+    <string name="h_add">Новое задание</string>
+    <string name="h_no_schedule">Здесь пока пусто. Добавьте расписание, чтобы записывать домашние задания.</string>
+    <string name="h_delete_homework">Удалить</string>
+    <string name="h_delete_message">Удалить это задание?</string>
+    <string name="h_delete_yes">Удалить</string>
+    <string name="h_delete_no">Отмена</string>
+    <string name="h_delete_progress">Удаление задания…</string>
+
+    <!-- Homework Editor -->
+    <string name="he_title">Редактор задания</string>
+    <string name="he_subject">Предмет</string>
+    <string name="he_description">Описание</string>
+    <string name="he_deadline_label">Срок сдачи</string>
+    <string name="he_save">Сохранить</string>
+    <string name="he_save_progress">Сохранение…</string>
+    <string name="he_error_empty_subject_name">Укажите предмет</string>
+    <string name="he_error_empty_description">Введите текст задания</string>
+    <string name="he_unknown_lesson">Новый предмет</string>
+    <string name="he_unknown_lesson_message">Предмета нет в расписании. Сохранить задание и добавить предмет в список?</string>
+    <string name="he_unknown_lesson_yes">Сохранить</string>
+    <string name="he_unknown_lesson_no">Отмена</string>
+    <string name="he_unknown_lesson_yes_and_create">Сохранить и создать занятие</string>
+    <string name="he_delete">Удалить</string>
+    <string name="he_delete_message">Удалить задание?</string>
+    <string name="he_delete_yes">Удалить</string>
+    <string name="he_delete_no">Отмена</string>
+    <string name="he_delete_progress">Удаление…</string>
+
+    <!-- endregion -->
+
+    <!-- region settings -->
+
+    <!-- Settings -->
+    <string name="st_title">Настройки</string>
+    <string name="st_default_start_time">Начало занятий</string>
+    <string name="st_default_lesson_duration">Длительность занятия</string>
+    <string name="st_default_break_duration">Длительность перемены</string>
+    <string name="st_is_advanced_weeks_selector_enabled">Расширенный выбор недель</string>
+    <string name="st_is_advanced_weeks_selector_enabled_description">Более гибкий выбор недель для повторения занятия</string>
+    <string name="st_ok">ОК</string>
+    <string name="st_cancel">Отмена</string>
+
+    <!-- endregion -->
+
+    <!-- region uikit -->
+
+    <!-- Common icons -->
+    <string name="u_back">Назад</string>
+
+    <!-- TopAppBarActions -->
+    <string name="taba_more_options">Ещё</string>
+
+    <!--HomeworkCard -->
+    <string name="hc_deadline">До %1$s</string>
+
+    <!-- WeeksSelector -->
+    <string name="ws_variants_title">Повторение</string>
+    <string name="ws_cycle_length">Длина цикла: %1$d</string>
+    <string name="ws_add_week">Добавить неделю</string>
+    <string name="ws_remove_week">Убрать неделю</string>
+
+    <!-- DatePickerDialog -->
+    <string name="dpd_today">Сегодня</string>
+    <string name="dpd_ok">ОК</string>
+    <string name="dpd_cancel">Отмена</string>
+
+    <!-- TimePickerDialog -->
+    <string name="tpd_select_time">Выберите время</string>
+    <string name="tpd_enter_time">Введите время</string>
+    <string name="tpd_mode_switch">Режим ввода</string>
+    <string name="tpd_ok">ОК</string>
+    <string name="tpd_cancel">Отмена</string>
+
+    <!-- endregion -->
+
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="lesson_repeat_types">
+        <item>Эрне кунӗсем тӑрӑх</item>
+        <item>Кунсем тӑрӑх</item>
+    </string-array>
+
+    <string-array name="lesson_types">
+        <item>Семинар</item>
+        <item>Лекци</item>
+        <item>Лаборатори ӗҫӗ</item>
+        <item>Практика</item>
+        <item>Консультаци</item>
+        <item>Экзамен</item>
+        <item>Хам тӗллӗн ӗҫлени</item>
+    </string-array>
+
+    <string-array name="repeat_variants">
+        <item>Кашни эрнере</item>
+        <item>Мӑшӑрсӑр эрне (1, 3…)</item>
+        <item>Мӑшӑрлӑ эрне (2, 4…)</item>
+        <item>4 эрнерен 1-мӗшӗнче</item>
+        <item>4 эрнерен 2-мӗшӗнче</item>
+        <item>4 эрнерен 3-мӗшӗнче</item>
+        <item>4 эрнерен 4-мӗшӗнче</item>
+        <item>Хамӑн</item>
+    </string-array>
+
+</resources>
