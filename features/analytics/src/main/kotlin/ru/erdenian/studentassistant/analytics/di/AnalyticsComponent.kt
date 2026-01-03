@@ -7,7 +7,10 @@ import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 
 @Singleton
 @Component(
-    modules = [AnalyticsApiModule::class],
+    modules = [
+        AnalyticsApiModule::class,
+        AnalyticsAggregationModule::class,
+    ],
     dependencies = [AnalyticsDependencies::class],
 )
 internal interface AnalyticsComponent {

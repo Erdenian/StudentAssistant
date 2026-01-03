@@ -5,20 +5,17 @@ plugins {
 }
 
 android {
-    namespace = "ru.erdenian.studentassistant.analytics"
+    namespace = "ru.erdenian.studentassistant.analytics.firebase"
 }
 
 dependencies {
     // region Private
     implementation(project(":features:analytics:api"))
-    implementation(project(":features:analytics:firebase"))
-    debugImplementation(project(":features:analytics:logcat"))
-
-    implementation(project(":common:utils"))
     // endregion
 
-    // region AndroidX
-    implementation(libs.androidx.core.ktx)
+    // region Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
     // endregion
 
     // region Core
