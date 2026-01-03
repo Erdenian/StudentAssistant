@@ -50,7 +50,9 @@ import ru.erdenian.studentassistant.style.AppIcons
 import ru.erdenian.studentassistant.style.AutoMirrored
 
 @Composable
-internal fun StudentAssistantApp() {
+internal fun StudentAssistantApp(
+    analytics: Analytics = MainComponentHolder.instance.analyticsApi.analytics,
+) {
     val navigationState = rememberNavigationState(
         startRoute = ScheduleRoute.Schedule,
         topLevelRoutes = setOf(ScheduleRoute.Schedule, HomeworksRoute.Homeworks, SettingsRoute.Settings),
@@ -58,9 +60,7 @@ internal fun StudentAssistantApp() {
     val navigator = remember { Navigator(navigationState) }
 
     // Отслеживание переходов по экранам для аналитики
-    LaunchedEffect(navigationState) {
-        val analytics = MainComponentHolder.instance.analyticsApi.analytics
-
+    LaunchedEffect(navigationState, analytics) {
         snapshotFlow {
             val topLevelRoute = navigationState.topLevelRoute
             val backStack = navigationState.backStacks[topLevelRoute]
