@@ -83,6 +83,8 @@ include(
     ":features:homeworks:api",
     ":features:settings",
     ":features:settings:api",
+    ":features:analytics",
+    ":features:analytics:api",
 
     ":common:navigation",
     ":common:uikit",

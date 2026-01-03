@@ -140,6 +140,8 @@ dependencies {
     implementation(project(":features:homeworks:api"))
     implementation(project(":features:settings"))
     implementation(project(":features:settings:api"))
+    implementation(project(":features:analytics"))
+    implementation(project(":features:analytics:api"))
     // endregion
 
     // region Kotlin
