@@ -19,3 +19,10 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Сохраняем имена классов, реализующих NavKey.
+# Это необходимо для аналитики (событие screen_view), так как мы используем
+# simpleName класса в качестве имени экрана (screen_name).
+# Если это правило удалить, R8 обфусцирует имена классов (например, в "a", "b"),
+# и в аналитике будет невозможно разобрать, какой экран открывал пользователь.
+-keepnames class * implements androidx.navigation3.runtime.NavKey

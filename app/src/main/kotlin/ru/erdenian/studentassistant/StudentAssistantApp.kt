@@ -21,9 +21,11 @@ import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -31,6 +33,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
+import kotlinx.coroutines.flow.distinctUntilChanged
+import ru.erdenian.studentassistant.analytics.api.Analytics
 import ru.erdenian.studentassistant.di.MainComponentHolder
 import ru.erdenian.studentassistant.homeworks.api.HomeworksRoute
 import ru.erdenian.studentassistant.navigation.LocalNavigator
@@ -52,6 +56,24 @@ internal fun StudentAssistantApp() {
         topLevelRoutes = setOf(ScheduleRoute.Schedule, HomeworksRoute.Homeworks, SettingsRoute.Settings),
     )
     val navigator = remember { Navigator(navigationState) }
+
+    // Отслеживание переходов по экранам для аналитики
+    LaunchedEffect(navigationState) {
+        val analytics = MainComponentHolder.instance.analyticsApi.analytics
+
+        snapshotFlow {
+            val topLevelRoute = navigationState.topLevelRoute
+            val backStack = navigationState.backStacks[topLevelRoute]
+            backStack?.lastOrNull() ?: topLevelRoute
+        }
+            .distinctUntilChanged()
+            .collect { currentRoute ->
+                analytics.logEvent(
+                    name = Analytics.EVENT_SCREEN_VIEW,
+                    params = mapOf(Analytics.PARAM_SCREEN_CLASS to (currentRoute::class.simpleName ?: "Unknown")),
+                )
+            }
+    }
 
     CompositionLocalProvider(LocalNavigator provides navigator) {
         Scaffold(
