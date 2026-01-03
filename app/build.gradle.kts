@@ -9,6 +9,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kover)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 
     alias(libs.plugins.tripletPlay)
 }
@@ -150,6 +152,12 @@ dependencies {
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.core.splashscreen)
+    // endregion
+
+    // region Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
     // endregion
 
     // region Core

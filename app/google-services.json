@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "949323383246",
+    "project_id": "student-assistant-ru",
+    "storage_bucket": "student-assistant-ru.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:949323383246:android:d63eea9c213c3797d6ab9f",
+        "android_client_info": {
+          "package_name": "ru.erdenian.studentassistant"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4toJn5v0x7hHkYhhjPZH7BFvFVJIfvPg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:949323383246:android:ad5426070865f538d6ab9f",
+        "android_client_info": {
+          "package_name": "ru.erdenian.studentassistant.debug"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4toJn5v0x7hHkYhhjPZH7BFvFVJIfvPg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
