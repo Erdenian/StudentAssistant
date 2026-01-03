@@ -32,4 +32,8 @@ class FirebaseAnalytics @Inject constructor(
         }
         firebaseAnalytics.logEvent(name, bundle)
     }
+
+    override fun setUserProperty(name: String, value: String?) {
+        firebaseAnalytics.setUserProperty(name, value)
+    }
 }

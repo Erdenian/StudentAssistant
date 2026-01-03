@@ -31,4 +31,13 @@ interface Analytics {
      * Если тип не поддерживается системой аналитики напрямую, он будет преобразован в строку через [toString].
      */
     fun logEvent(name: String, params: Map<String, Any> = emptyMap())
+
+    /**
+     * Устанавливает свойство пользователя.
+     * Это свойство будет прикрепляться ко всем последующим событиям.
+     *
+     * @param name название свойства (например, "theme").
+     * @param value значение свойства (например, "dark"). Передача null удаляет свойство.
+     */
+    fun setUserProperty(name: String, value: String?)
 }
