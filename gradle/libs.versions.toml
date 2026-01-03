@@ -28,6 +28,9 @@ kotlin_parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref =
 kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "plugins_kotlin" }
 kotlin_ksp = { id = "com.google.devtools.ksp", version = "2.3.4" }
 
+google_services = { id = "com.google.gms.google-services", version = "4.4.4" }
+firebase_crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.6" }
+
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "plugins_detekt" }
 kover = { id = "org.jetbrains.kotlinx.kover", version = "0.9.4" }
 tripletPlay = { id = "com.github.triplet.play", version = "3.13.0" }
@@ -63,6 +66,12 @@ kotlinx_serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-
 
 # region Android Tools
 androidTools_desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version = "2.1.5" }
+# endregion
+
+# region Firebase
+firebase_bom = { group = "com.google.firebase", name = "firebase-bom", version = "33.16.0" }
+firebase_crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
+firebase_analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 # endregion
 
 # region Compose
