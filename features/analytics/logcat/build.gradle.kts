@@ -13,6 +13,10 @@ dependencies {
     implementation(project(":features:analytics:api"))
     // endregion
 
+    // region AndroidX
+    implementation(libs.androidx.core)
+    // endregion
+
     // region Core
     ksp(libs.core.dagger.compiler)
     implementation(libs.core.dagger)
