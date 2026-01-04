@@ -13,22 +13,36 @@ internal class FullLessonTest {
     @Test
     fun byWeekdayTest() {
         FullLesson(
-            LessonEntity("name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), 1L, 10L),
-            listOf(TeacherEntity("teacher", 10L)),
-            listOf(ClassroomEntity("classroom", 10L)),
-            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
-            emptySet(),
+            lesson = LessonEntity(
+                subjectName = "name",
+                type = "type",
+                startTime = LocalTime.of(10, 0),
+                endTime = LocalTime.of(12, 0),
+                semesterId = 1L,
+                id = 10L,
+            ),
+            teachers = listOf(TeacherEntity("teacher", 10L)),
+            classrooms = listOf(ClassroomEntity("classroom", 10L)),
+            byWeekday = ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
+            byDates = emptySet(),
         )
     }
 
     @Test
     fun byDatesTest() {
         FullLesson(
-            LessonEntity("name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), 1L, 10L),
-            listOf(TeacherEntity("teacher", 10L)),
-            listOf(ClassroomEntity("classroom", 10L)),
-            null,
-            setOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L)),
+            lesson = LessonEntity(
+                subjectName = "name",
+                type = "type",
+                startTime = LocalTime.of(10, 0),
+                endTime = LocalTime.of(12, 0),
+                semesterId = 1L,
+                id = 10L,
+            ),
+            teachers = listOf(TeacherEntity("teacher", 10L)),
+            classrooms = listOf(ClassroomEntity("classroom", 10L)),
+            byWeekday = null,
+            byDates = setOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L)),
         )
     }
 
@@ -36,11 +50,18 @@ internal class FullLessonTest {
     fun noRepeatsTest() {
         assertThrows(IllegalArgumentException::class.java) {
             FullLesson(
-                LessonEntity("name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), 1L, 10L),
-                listOf(TeacherEntity("teacher", 10L)),
-                listOf(ClassroomEntity("classroom", 10L)),
-                null,
-                emptySet(),
+                lesson = LessonEntity(
+                    subjectName = "name",
+                    type = "type",
+                    startTime = LocalTime.of(10, 0),
+                    endTime = LocalTime.of(12, 0),
+                    semesterId = 1L,
+                    id = 10L,
+                ),
+                teachers = listOf(TeacherEntity("teacher", 10L)),
+                classrooms = listOf(ClassroomEntity("classroom", 10L)),
+                byWeekday = null,
+                byDates = emptySet(),
             )
         }
     }
@@ -49,11 +70,18 @@ internal class FullLessonTest {
     fun multipleRepeatsTest() {
         assertThrows(IllegalArgumentException::class.java) {
             FullLesson(
-                LessonEntity("name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), 1L, 10L),
-                listOf(TeacherEntity("teacher", 10L)),
-                listOf(ClassroomEntity("classroom", 10L)),
-                ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
-                setOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L)),
+                lesson = LessonEntity(
+                    subjectName = "name",
+                    type = "type",
+                    startTime = LocalTime.of(10, 0),
+                    endTime = LocalTime.of(12, 0),
+                    semesterId = 1L,
+                    id = 10L,
+                ),
+                teachers = listOf(TeacherEntity("teacher", 10L)),
+                classrooms = listOf(ClassroomEntity("classroom", 10L)),
+                byWeekday = ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
+                byDates = setOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L)),
             )
         }
     }
@@ -61,13 +89,18 @@ internal class FullLessonTest {
     @Test
     fun propertiesTest() {
         val lesson1 = FullLesson(
-            LessonEntity(
-                "name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), 1L, 10L,
+            lesson = LessonEntity(
+                subjectName = "name",
+                type = "type",
+                startTime = LocalTime.of(10, 0),
+                endTime = LocalTime.of(12, 0),
+                semesterId = 1L,
+                id = 10L,
             ),
-            listOf(TeacherEntity("teacher", 10L)),
-            listOf(ClassroomEntity("classroom", 10L)),
-            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
-            emptySet(),
+            teachers = listOf(TeacherEntity("teacher", 10L)),
+            classrooms = listOf(ClassroomEntity("classroom", 10L)),
+            byWeekday = ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
+            byDates = emptySet(),
         ).toLesson()
         assertEquals("name", lesson1.subjectName)
         assertEquals("type", lesson1.type)
@@ -81,11 +114,18 @@ internal class FullLessonTest {
         assertEquals(listOf(true), (lesson1.lessonRepeat as Lesson.Repeat.ByWeekday).weeks)
 
         val lesson2 = FullLesson(
-            LessonEntity("name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), 1L, 10L),
-            listOf(TeacherEntity("teacher", 10L)),
-            listOf(ClassroomEntity("classroom", 10L)),
-            null,
-            setOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L)),
+            lesson = LessonEntity(
+                subjectName = "name",
+                type = "type",
+                startTime = LocalTime.of(10, 0),
+                endTime = LocalTime.of(12, 0),
+                semesterId = 1L,
+                id = 10L,
+            ),
+            teachers = listOf(TeacherEntity("teacher", 10L)),
+            classrooms = listOf(ClassroomEntity("classroom", 10L)),
+            byWeekday = null,
+            byDates = setOf(ByDateEntity(LocalDate.of(2020, 4, 25), 10L)),
         ).toLesson()
         assertEquals(setOf(LocalDate.of(2020, 4, 25)), (lesson2.lessonRepeat as Lesson.Repeat.ByDates).dates)
     }

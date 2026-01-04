@@ -28,7 +28,12 @@ internal class HomeworkRepositoryImplTest {
     @Test
     fun `insert and get test`() = runTest(testDispatcher) {
         val semesterId = 1L
-        repository.insert("Math", "HW1", LocalDate.of(2025, 2, 14), semesterId)
+        repository.insert(
+            subjectName = "Math",
+            description = "HW1",
+            deadline = LocalDate.of(2025, 2, 14),
+            semesterId = semesterId,
+        )
 
         val all = fakeHomeworkDao.homeworks.value
         assertEquals(1, all.size)
@@ -48,9 +53,22 @@ internal class HomeworkRepositoryImplTest {
 
     @Test
     fun `update test`() = runTest(testDispatcher) {
-        val id = fakeHomeworkDao.insert(HomeworkEntity("Math", "HW1", LocalDate.of(2025, 2, 14), 1L))
+        val id = fakeHomeworkDao.insert(
+            HomeworkEntity(
+                subjectName = "Math",
+                description = "HW1",
+                deadline = LocalDate.of(2025, 2, 14),
+                semesterId = 1L,
+            ),
+        )
 
-        repository.update(id, "New Math", "HW2", LocalDate.of(2025, 2, 15), 1L)
+        repository.update(
+            id = id,
+            subjectName = "New Math",
+            description = "HW2",
+            deadline = LocalDate.of(2025, 2, 15),
+            semesterId = 1L,
+        )
 
         val updated = repository.get(id)
         assertEquals("New Math", updated?.subjectName)
@@ -59,7 +77,14 @@ internal class HomeworkRepositoryImplTest {
 
     @Test
     fun `delete by id test`() = runTest(testDispatcher) {
-        val id = fakeHomeworkDao.insert(HomeworkEntity("Math", "HW1", LocalDate.of(2025, 2, 14), 1L))
+        val id = fakeHomeworkDao.insert(
+            HomeworkEntity(
+                subjectName = "Math",
+                description = "HW1",
+                deadline = LocalDate.of(2025, 2, 14),
+                semesterId = 1L,
+            ),
+        )
         assertNotNull(repository.get(id))
 
         repository.delete(id)
@@ -69,9 +94,30 @@ internal class HomeworkRepositoryImplTest {
     @Test
     fun `delete by subject test`() = runTest(testDispatcher) {
         val date = LocalDate.of(2025, 2, 14)
-        fakeHomeworkDao.insert(HomeworkEntity("Math", "HW1", date, 1L))
-        fakeHomeworkDao.insert(HomeworkEntity("Math", "HW2", date, 1L))
-        fakeHomeworkDao.insert(HomeworkEntity("Physics", "HW1", date, 1L))
+        fakeHomeworkDao.insert(
+            HomeworkEntity(
+                subjectName = "Math",
+                description = "HW1",
+                deadline = date,
+                semesterId = 1L,
+            ),
+        )
+        fakeHomeworkDao.insert(
+            HomeworkEntity(
+                subjectName = "Math",
+                description = "HW2",
+                deadline = date,
+                semesterId = 1L,
+            ),
+        )
+        fakeHomeworkDao.insert(
+            HomeworkEntity(
+                subjectName = "Physics",
+                description = "HW1",
+                deadline = date,
+                semesterId = 1L,
+            ),
+        )
 
         repository.delete("Math")
 
@@ -82,13 +128,13 @@ internal class HomeworkRepositoryImplTest {
     @Test
     fun `allFlow filtering by selected semester test`() = runTest(testDispatcher) {
         val today = LocalDate.of(2025, 2, 14)
-        val s1 = SemesterEntity("S1", today, today.plusMonths(1), id = 1)
-        val s2 = SemesterEntity("S2", today, today.plusMonths(1), id = 2)
+        val s1 = SemesterEntity(name = "S1", firstDay = today, lastDay = today.plusMonths(1), id = 1)
+        val s2 = SemesterEntity(name = "S2", firstDay = today, lastDay = today.plusMonths(1), id = 2)
         fakeSemesterDao.insert(s1)
         fakeSemesterDao.insert(s2)
 
-        fakeHomeworkDao.insert(HomeworkEntity("H1", "D", today, 1L))
-        fakeHomeworkDao.insert(HomeworkEntity("H2", "D", today, 2L))
+        fakeHomeworkDao.insert(HomeworkEntity(subjectName = "H1", description = "D", deadline = today, semesterId = 1L))
+        fakeHomeworkDao.insert(HomeworkEntity(subjectName = "H2", description = "D", deadline = today, semesterId = 2L))
 
         // Выбор расписания 1
         selectedSemesterRepository.selectSemester(1L)
@@ -105,14 +151,21 @@ internal class HomeworkRepositoryImplTest {
 
     @Test
     fun `getCount tests`() = runTest(testDispatcher) {
-        val s1 = SemesterEntity("S1", LocalDate.now(), LocalDate.now(), id = 1)
+        val s1 = SemesterEntity(name = "S1", firstDay = LocalDate.now(), lastDay = LocalDate.now(), id = 1)
         fakeSemesterDao.insert(s1)
         selectedSemesterRepository.selectSemester(1L)
 
         assertEquals(0, repository.getCount())
         assertEquals(0, repository.getCount("Math"))
 
-        fakeHomeworkDao.insert(HomeworkEntity("Math", "D", LocalDate.now(), 1L))
+        fakeHomeworkDao.insert(
+            HomeworkEntity(
+                subjectName = "Math",
+                description = "D",
+                deadline = LocalDate.now(),
+                semesterId = 1L,
+            ),
+        )
 
         assertEquals(1, repository.getCount())
         assertEquals(1, repository.getCount("Math"))
@@ -122,18 +175,39 @@ internal class HomeworkRepositoryImplTest {
     @Test
     fun `hasHomeworks test`() = runTest(testDispatcher) {
         assertFalse(repository.hasHomeworks(1L, "Math"))
-        fakeHomeworkDao.insert(HomeworkEntity("Math", "D", LocalDate.now(), 1L))
+        fakeHomeworkDao.insert(
+            HomeworkEntity(
+                subjectName = "Math",
+                description = "D",
+                deadline = LocalDate.now(),
+                semesterId = 1L,
+            ),
+        )
         assertTrue(repository.hasHomeworks(1L, "Math"))
     }
 
     @Test
     fun `getAllFlow by subject test`() = runTest(testDispatcher) {
-        val s1 = SemesterEntity("S1", LocalDate.now(), LocalDate.now(), id = 1)
+        val s1 = SemesterEntity(name = "S1", firstDay = LocalDate.now(), lastDay = LocalDate.now(), id = 1)
         fakeSemesterDao.insert(s1)
         selectedSemesterRepository.selectSemester(1L)
 
-        fakeHomeworkDao.insert(HomeworkEntity("Math", "D1", LocalDate.now(), 1L))
-        fakeHomeworkDao.insert(HomeworkEntity("Physics", "D2", LocalDate.now(), 1L))
+        fakeHomeworkDao.insert(
+            HomeworkEntity(
+                subjectName = "Math",
+                description = "D1",
+                deadline = LocalDate.now(),
+                semesterId = 1L,
+            ),
+        )
+        fakeHomeworkDao.insert(
+            HomeworkEntity(
+                subjectName = "Physics",
+                description = "D2",
+                deadline = LocalDate.now(),
+                semesterId = 1L,
+            ),
+        )
 
         val list = repository.getAllFlow("Math").first()
         assertEquals(1, list.size)
@@ -143,7 +217,7 @@ internal class HomeworkRepositoryImplTest {
     @Test
     fun `time based flows tests`() = runTest(testDispatcher) {
         val today = LocalDate.of(2025, 2, 14)
-        val s1 = SemesterEntity("S1", today, today, id = 1)
+        val s1 = SemesterEntity(name = "S1", firstDay = today, lastDay = today, id = 1)
         fakeSemesterDao.insert(s1)
         selectedSemesterRepository.selectSemester(1L)
 
@@ -154,9 +228,27 @@ internal class HomeworkRepositoryImplTest {
 
         // Фиксируем дату "сегодня" для этого теста, так как репозиторий использует LocalDate.now()
         val realToday = LocalDate.now()
-        val overdueHw = HomeworkEntity("Overdue", "D", realToday.minusDays(1), 1L, isDone = false)
-        val pastHw = HomeworkEntity("Past", "D", realToday.minusDays(1), 1L, isDone = true)
-        val actualHw = HomeworkEntity("Actual", "D", realToday, 1L, isDone = false)
+        val overdueHw = HomeworkEntity(
+            subjectName = "Overdue",
+            description = "D",
+            deadline = realToday.minusDays(1),
+            semesterId = 1L,
+            isDone = false,
+        )
+        val pastHw = HomeworkEntity(
+            subjectName = "Past",
+            description = "D",
+            deadline = realToday.minusDays(1),
+            semesterId = 1L,
+            isDone = true,
+        )
+        val actualHw = HomeworkEntity(
+            subjectName = "Actual",
+            description = "D",
+            deadline = realToday,
+            semesterId = 1L,
+            isDone = false,
+        )
 
         fakeHomeworkDao.insert(overdueHw)
         fakeHomeworkDao.insert(pastHw)

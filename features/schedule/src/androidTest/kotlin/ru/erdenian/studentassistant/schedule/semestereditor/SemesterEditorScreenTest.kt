@@ -86,7 +86,12 @@ internal class SemesterEditorScreenTest {
 
     @Test
     fun verifyEditSemester() {
-        val semester = Semester("Old Name", LocalDate.now(), LocalDate.now().plusMonths(1), 1L)
+        val semester = Semester(
+            name = "Old Name",
+            firstDay = LocalDate.now(),
+            lastDay = LocalDate.now().plusMonths(1),
+            id = 1L,
+        )
         semesterRepository.semesters.value = listOf(semester)
 
         val navigator = mockk<Navigator>(relaxed = true)
@@ -108,7 +113,7 @@ internal class SemesterEditorScreenTest {
     fun verifyErrorDuplicateName() {
         val navigator = mockk<Navigator>(relaxed = true)
         semesterRepository.semesters.value = listOf(
-            Semester("Семестр 1", LocalDate.now(), LocalDate.now().plusMonths(1), 1L),
+            Semester(name = "Семестр 1", firstDay = LocalDate.now(), lastDay = LocalDate.now().plusMonths(1), id = 1L),
         )
 
         composeTestRule.setContent {

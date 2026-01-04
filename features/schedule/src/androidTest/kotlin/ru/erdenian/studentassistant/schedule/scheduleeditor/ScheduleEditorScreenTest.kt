@@ -19,6 +19,7 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.test.core.app.ApplicationProvider
 import io.mockk.mockk
 import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.LocalTime
 import kotlinx.serialization.Serializable
 import org.junit.Assert.assertEquals
@@ -32,6 +33,7 @@ import ru.erdenian.studentassistant.navigation.LocalSharedTransitionScope
 import ru.erdenian.studentassistant.navigation.Navigator
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
+import ru.erdenian.studentassistant.repository.api.entity.Semester
 import ru.erdenian.studentassistant.schedule.FakeHomeworkRepository
 import ru.erdenian.studentassistant.schedule.FakeLessonRepository
 import ru.erdenian.studentassistant.schedule.FakeSelectedSemesterRepository
@@ -86,15 +88,15 @@ internal class ScheduleEditorScreenTest {
     @Test
     fun verifyLessonListInEditor() {
         val lesson = Lesson(
-            "Algebra",
-            "Seminar",
-            emptyList(),
-            emptyList(),
-            LocalTime.of(10, 0),
-            LocalTime.of(11, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
-            semesterId,
-            10L,
+            subjectName = "Algebra",
+            type = "Seminar",
+            teachers = emptyList(),
+            classrooms = emptyList(),
+            startTime = LocalTime.of(10, 0),
+            endTime = LocalTime.of(11, 30),
+            lessonRepeat = Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
+            semesterId = semesterId,
+            id = 10L,
         )
         lessonRepository.lessons.value = listOf(lesson)
 
@@ -120,15 +122,15 @@ internal class ScheduleEditorScreenTest {
     @Test
     fun verifyLessonContextMenuDelete() {
         val lesson = Lesson(
-            "Algebra",
-            "Seminar",
-            emptyList(),
-            emptyList(),
-            LocalTime.of(10, 0),
-            LocalTime.of(11, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
-            semesterId,
-            10L,
+            subjectName = "Algebra",
+            type = "Seminar",
+            teachers = emptyList(),
+            classrooms = emptyList(),
+            startTime = LocalTime.of(10, 0),
+            endTime = LocalTime.of(11, 30),
+            lessonRepeat = Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
+            semesterId = semesterId,
+            id = 10L,
         )
         lessonRepository.lessons.value = listOf(lesson)
 
@@ -164,11 +166,11 @@ internal class ScheduleEditorScreenTest {
     @Test
     fun verifyDeleteSemester() {
         semesterRepository.semesters.value = listOf(
-            ru.erdenian.studentassistant.repository.api.entity.Semester(
-                "S1",
-                java.time.LocalDate.now(),
-                java.time.LocalDate.now(),
-                semesterId,
+            Semester(
+                name = "S1",
+                firstDay = LocalDate.now(),
+                lastDay = LocalDate.now(),
+                id = semesterId,
             ),
         )
 

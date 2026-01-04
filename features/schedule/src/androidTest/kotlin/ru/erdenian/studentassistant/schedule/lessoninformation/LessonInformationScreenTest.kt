@@ -78,15 +78,15 @@ internal class LessonInformationScreenTest {
     @Test
     fun verifyLessonDetailsDisplay() {
         val lesson = Lesson(
-            "Biology",
-            "Lecture",
-            listOf("Teacher 1"),
-            listOf("Room 101"),
-            LocalTime.of(12, 0),
-            LocalTime.of(13, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.FRIDAY, listOf(true)),
-            semesterId,
-            10L,
+            subjectName = "Biology",
+            type = "Lecture",
+            teachers = listOf("Teacher 1"),
+            classrooms = listOf("Room 101"),
+            startTime = LocalTime.of(12, 0),
+            endTime = LocalTime.of(13, 30),
+            lessonRepeat = Lesson.Repeat.ByWeekday(DayOfWeek.FRIDAY, listOf(true)),
+            semesterId = semesterId,
+            id = 10L,
         )
         lessonRepository.lessons.value = listOf(lesson)
 

@@ -79,14 +79,28 @@ internal class HomeworksViewModelTest {
 
     @Test
     fun `logHomeworkClicked test`() {
-        val homework = Homework("Subject", "Description", LocalDate.now(), false, 1L, 10L)
+        val homework = Homework(
+            subjectName = "Subject",
+            description = "Description",
+            deadline = LocalDate.now(),
+            isDone = false,
+            semesterId = 1L,
+            id = 10L,
+        )
         viewModel.logHomeworkClicked(homework)
         verify { analytics.logEvent("homework_clicked", mapOf("subject_name" to "Subject")) }
     }
 
     @Test
     fun `deleteHomework test`() = runTest {
-        val homework = Homework("Subject", "Description", LocalDate.now(), false, 1L, 10L)
+        val homework = Homework(
+            subjectName = "Subject",
+            description = "Description",
+            deadline = LocalDate.now(),
+            isDone = false,
+            semesterId = 1L,
+            id = 10L,
+        )
         overdueFlow.value = listOf(homework)
         coEvery { homeworkRepository.delete(homework.id) } returns Unit
 

@@ -28,7 +28,14 @@ internal class HomeworkDaoTest {
 
     @Before
     fun setUp() = runTest {
-        semesterDao.insert(SemesterEntity("S1", today, today.plusMonths(1), semesterId))
+        semesterDao.insert(
+            SemesterEntity(
+                name = "S1",
+                firstDay = today,
+                lastDay = today.plusMonths(1),
+                id = semesterId,
+            ),
+        )
     }
 
     @After
@@ -36,7 +43,7 @@ internal class HomeworkDaoTest {
 
     @Test
     fun insertAndGet() = runTest {
-        val hw = HomeworkEntity("Subj", "Desc", today, semesterId)
+        val hw = HomeworkEntity(subjectName = "Subj", description = "Desc", deadline = today, semesterId = semesterId)
         val id = homeworkDao.insert(hw)
 
         val loaded = homeworkDao.get(id)
@@ -47,7 +54,7 @@ internal class HomeworkDaoTest {
 
     @Test
     fun update() = runTest {
-        val hw = HomeworkEntity("Subj", "Desc", today, semesterId)
+        val hw = HomeworkEntity(subjectName = "Subj", description = "Desc", deadline = today, semesterId = semesterId)
         val id = homeworkDao.insert(hw)
 
         val updated = hw.copy(id = id, subjectName = "New Name")
@@ -59,7 +66,7 @@ internal class HomeworkDaoTest {
 
     @Test
     fun delete() = runTest {
-        val hw = HomeworkEntity("Subj", "Desc", today, semesterId)
+        val hw = HomeworkEntity(subjectName = "Subj", description = "Desc", deadline = today, semesterId = semesterId)
         val id = homeworkDao.insert(hw)
         homeworkDao.delete(id)
         assertNull(homeworkDao.get(id))
@@ -67,9 +74,30 @@ internal class HomeworkDaoTest {
 
     @Test
     fun deleteBySubject() = runTest {
-        homeworkDao.insert(HomeworkEntity("Subj", "D1", today, semesterId))
-        homeworkDao.insert(HomeworkEntity("Subj", "D2", today, semesterId))
-        homeworkDao.insert(HomeworkEntity("Other", "D3", today, semesterId))
+        homeworkDao.insert(
+            HomeworkEntity(
+                subjectName = "Subj",
+                description = "D1",
+                deadline = today,
+                semesterId = semesterId,
+            ),
+        )
+        homeworkDao.insert(
+            HomeworkEntity(
+                subjectName = "Subj",
+                description = "D2",
+                deadline = today,
+                semesterId = semesterId,
+            ),
+        )
+        homeworkDao.insert(
+            HomeworkEntity(
+                subjectName = "Other",
+                description = "D3",
+                deadline = today,
+                semesterId = semesterId,
+            ),
+        )
 
         homeworkDao.delete("Subj")
         assertEquals(1, homeworkDao.getAllFlow(semesterId).first().size)
@@ -78,9 +106,27 @@ internal class HomeworkDaoTest {
 
     @Test
     fun getActualFlow() = runTest {
-        val hwPast = HomeworkEntity("Past", "D", today.minusDays(1), semesterId, isDone = false)
-        val hwFuture = HomeworkEntity("Future", "D", today.plusDays(1), semesterId, isDone = false)
-        val hwDone = HomeworkEntity("Done", "D", today.plusDays(1), semesterId, isDone = true)
+        val hwPast = HomeworkEntity(
+            subjectName = "Past",
+            description = "D",
+            deadline = today.minusDays(1),
+            semesterId = semesterId,
+            isDone = false,
+        )
+        val hwFuture = HomeworkEntity(
+            subjectName = "Future",
+            description = "D",
+            deadline = today.plusDays(1),
+            semesterId = semesterId,
+            isDone = false,
+        )
+        val hwDone = HomeworkEntity(
+            subjectName = "Done",
+            description = "D",
+            deadline = today.plusDays(1),
+            semesterId = semesterId,
+            isDone = true,
+        )
 
         homeworkDao.insert(hwPast)
         homeworkDao.insert(hwFuture)
@@ -95,8 +141,20 @@ internal class HomeworkDaoTest {
 
     @Test
     fun getOverdueFlow() = runTest {
-        val hwOverdue = HomeworkEntity("Over", "D", today.minusDays(1), semesterId, isDone = false)
-        val hwDonePast = HomeworkEntity("Done", "D", today.minusDays(1), semesterId, isDone = true)
+        val hwOverdue = HomeworkEntity(
+            subjectName = "Over",
+            description = "D",
+            deadline = today.minusDays(1),
+            semesterId = semesterId,
+            isDone = false,
+        )
+        val hwDonePast = HomeworkEntity(
+            subjectName = "Done",
+            description = "D",
+            deadline = today.minusDays(1),
+            semesterId = semesterId,
+            isDone = true,
+        )
 
         homeworkDao.insert(hwOverdue)
         homeworkDao.insert(hwDonePast)
@@ -108,8 +166,20 @@ internal class HomeworkDaoTest {
 
     @Test
     fun getPastFlow() = runTest {
-        val hwOverdue = HomeworkEntity("Over", "D", today.minusDays(1), semesterId, isDone = false)
-        val hwDonePast = HomeworkEntity("Done", "D", today.minusDays(1), semesterId, isDone = true)
+        val hwOverdue = HomeworkEntity(
+            subjectName = "Over",
+            description = "D",
+            deadline = today.minusDays(1),
+            semesterId = semesterId,
+            isDone = false,
+        )
+        val hwDonePast = HomeworkEntity(
+            subjectName = "Done",
+            description = "D",
+            deadline = today.minusDays(1),
+            semesterId = semesterId,
+            isDone = true,
+        )
 
         homeworkDao.insert(hwOverdue)
         homeworkDao.insert(hwDonePast)
@@ -122,7 +192,14 @@ internal class HomeworkDaoTest {
     @Test
     fun hasHomeworks() = runTest {
         assertFalse(homeworkDao.hasHomeworks(semesterId, "Math"))
-        homeworkDao.insert(HomeworkEntity("Math", "Desc", today, semesterId))
+        homeworkDao.insert(
+            HomeworkEntity(
+                subjectName = "Math",
+                description = "Desc",
+                deadline = today,
+                semesterId = semesterId,
+            ),
+        )
         assertTrue(homeworkDao.hasHomeworks(semesterId, "Math"))
     }
 }

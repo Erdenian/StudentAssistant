@@ -69,7 +69,14 @@ internal class LessonEditorViewModelTest {
     @Test
     fun `init new lesson test`() = runTest {
         val viewModel = LessonEditorViewModel(
-            application, repositoryApi, analyticsApi, semesterId, null, false, DayOfWeek.MONDAY, null,
+            application = application,
+            repositoryApi = repositoryApi,
+            analyticsApi = analyticsApi,
+            semesterId = semesterId,
+            lessonId = null,
+            copy = false,
+            dayOfWeek = DayOfWeek.MONDAY,
+            subjectName = null,
         )
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
         advanceUntilIdle()
@@ -83,15 +90,22 @@ internal class LessonEditorViewModelTest {
     @Test
     fun `init existing lesson test`() = runTest {
         val lesson = Lesson(
-            "Subject", "Type", listOf("T1"), listOf("C1"),
-            LocalTime.of(10, 0), LocalTime.of(11, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.FRIDAY, listOf(true, false)),
-            semesterId, 10L,
+            subjectName = "Subject", type = "Type", teachers = listOf("T1"), classrooms = listOf("C1"),
+            startTime = LocalTime.of(10, 0), endTime = LocalTime.of(11, 30),
+            lessonRepeat = Lesson.Repeat.ByWeekday(DayOfWeek.FRIDAY, listOf(true, false)),
+            semesterId = semesterId, id = 10L,
         )
         coEvery { lessonRepository.get(10L) } returns lesson
 
         val viewModel = LessonEditorViewModel(
-            application, repositoryApi, analyticsApi, semesterId, 10L, false, null, null,
+            application = application,
+            repositoryApi = repositoryApi,
+            analyticsApi = analyticsApi,
+            semesterId = semesterId,
+            lessonId = 10L,
+            copy = false,
+            dayOfWeek = null,
+            subjectName = null,
         )
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
         advanceUntilIdle()
@@ -107,7 +121,14 @@ internal class LessonEditorViewModelTest {
     @Test
     fun `save new lesson test`() = runTest {
         val viewModel = LessonEditorViewModel(
-            application, repositoryApi, analyticsApi, semesterId, null, false, DayOfWeek.MONDAY, null,
+            application = application,
+            repositoryApi = repositoryApi,
+            analyticsApi = analyticsApi,
+            semesterId = semesterId,
+            lessonId = null,
+            copy = false,
+            dayOfWeek = DayOfWeek.MONDAY,
+            subjectName = null,
         )
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
         advanceUntilIdle()
@@ -141,7 +162,14 @@ internal class LessonEditorViewModelTest {
     @Test
     fun `save reduces weeks cycle test`() = runTest {
         val viewModel = LessonEditorViewModel(
-            application, repositoryApi, analyticsApi, semesterId, null, false, DayOfWeek.MONDAY, null,
+            application = application,
+            repositoryApi = repositoryApi,
+            analyticsApi = analyticsApi,
+            semesterId = semesterId,
+            lessonId = null,
+            copy = false,
+            dayOfWeek = DayOfWeek.MONDAY,
+            subjectName = null,
         )
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
         advanceUntilIdle()
@@ -170,7 +198,14 @@ internal class LessonEditorViewModelTest {
     @Test
     fun `save reduces constant weeks cycle test`() = runTest {
         val viewModel = LessonEditorViewModel(
-            application, repositoryApi, analyticsApi, semesterId, null, false, DayOfWeek.MONDAY, null,
+            application = application,
+            repositoryApi = repositoryApi,
+            analyticsApi = analyticsApi,
+            semesterId = semesterId,
+            lessonId = null,
+            copy = false,
+            dayOfWeek = DayOfWeek.MONDAY,
+            subjectName = null,
         )
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
         advanceUntilIdle()
@@ -199,7 +234,14 @@ internal class LessonEditorViewModelTest {
     @Test
     fun `save reduces mixed weeks cycle test`() = runTest {
         val viewModel = LessonEditorViewModel(
-            application, repositoryApi, analyticsApi, semesterId, null, false, DayOfWeek.MONDAY, null,
+            application = application,
+            repositoryApi = repositoryApi,
+            analyticsApi = analyticsApi,
+            semesterId = semesterId,
+            lessonId = null,
+            copy = false,
+            dayOfWeek = DayOfWeek.MONDAY,
+            subjectName = null,
         )
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
         advanceUntilIdle()
@@ -228,7 +270,14 @@ internal class LessonEditorViewModelTest {
     @Test
     fun `save does not reduce irreducible weeks cycle test`() = runTest {
         val viewModel = LessonEditorViewModel(
-            application, repositoryApi, analyticsApi, semesterId, null, false, DayOfWeek.MONDAY, null,
+            application = application,
+            repositoryApi = repositoryApi,
+            analyticsApi = analyticsApi,
+            semesterId = semesterId,
+            lessonId = null,
+            copy = false,
+            dayOfWeek = DayOfWeek.MONDAY,
+            subjectName = null,
         )
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
         advanceUntilIdle()
@@ -257,16 +306,23 @@ internal class LessonEditorViewModelTest {
     @Test
     fun `isSubjectNameChangedAndNotLast test`() = runTest {
         val lesson = Lesson(
-            "Subject", "Type", listOf("T1"), listOf("C1"),
-            LocalTime.of(10, 0), LocalTime.of(11, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.FRIDAY, listOf(true)),
-            semesterId, 10L,
+            subjectName = "Subject", type = "Type", teachers = listOf("T1"), classrooms = listOf("C1"),
+            startTime = LocalTime.of(10, 0), endTime = LocalTime.of(11, 30),
+            lessonRepeat = Lesson.Repeat.ByWeekday(DayOfWeek.FRIDAY, listOf(true)),
+            semesterId = semesterId, id = 10L,
         )
         coEvery { lessonRepository.get(10L) } returns lesson
         coEvery { lessonRepository.getCount(semesterId, "Subject") } returns 2
 
         val viewModel = LessonEditorViewModel(
-            application, repositoryApi, analyticsApi, semesterId, 10L, false, null, null,
+            application = application,
+            repositoryApi = repositoryApi,
+            analyticsApi = analyticsApi,
+            semesterId = semesterId,
+            lessonId = 10L,
+            copy = false,
+            dayOfWeek = null,
+            subjectName = null,
         )
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
         advanceUntilIdle()
@@ -286,7 +342,14 @@ internal class LessonEditorViewModelTest {
     @Test
     fun `error test`() = runTest {
         val viewModel = LessonEditorViewModel(
-            application, repositoryApi, analyticsApi, semesterId, null, false, DayOfWeek.MONDAY, null,
+            application = application,
+            repositoryApi = repositoryApi,
+            analyticsApi = analyticsApi,
+            semesterId = semesterId,
+            lessonId = null,
+            copy = false,
+            dayOfWeek = DayOfWeek.MONDAY,
+            subjectName = null,
         )
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.error.collect() }
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }

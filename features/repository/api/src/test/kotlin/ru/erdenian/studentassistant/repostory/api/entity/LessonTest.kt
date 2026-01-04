@@ -29,9 +29,15 @@ internal class LessonTest {
         val start = LocalTime.of(9, 0)
         val end = LocalTime.of(10, 30)
         val lesson = Lesson(
-            "subject", "type", listOf("t"), listOf("c"),
-            start, end,
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)), 1L, 10L,
+            subjectName = "subject",
+            type = "type",
+            teachers = listOf("t"),
+            classrooms = listOf("c"),
+            startTime = start,
+            endTime = end,
+            lessonRepeat = Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
+            semesterId = 1L,
+            id = 10L,
         )
 
         assertEquals(start..end, lesson.timeRange)
@@ -40,9 +46,15 @@ internal class LessonTest {
     @Test
     fun compareToTest() {
         val base = Lesson(
-            "subject", "type", listOf("t"), listOf("c"),
-            LocalTime.of(9, 0), LocalTime.of(10, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)), 1L, 10L,
+            subjectName = "subject",
+            type = "type",
+            teachers = listOf("t"),
+            classrooms = listOf("c"),
+            startTime = LocalTime.of(9, 0),
+            endTime = LocalTime.of(10, 30),
+            lessonRepeat = Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
+            semesterId = 1L,
+            id = 10L,
         )
 
         assertEquals(0, base.compareTo(base.copy()))

@@ -34,20 +34,42 @@ internal class SemesterDaoTest {
     @Test
     fun insertTest() = runTest {
         assertEquals(emptyList<SemesterEntity>(), semesterDao.getAllFlow().first())
-        val semester1 = SemesterEntity("name1", LocalDate.of(2022, 1, 1), LocalDate.of(2022, 2, 1))
-        val semester2 = SemesterEntity("name2", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 2, 1), 123L)
+        val semester1 = SemesterEntity(
+            name = "name1",
+            firstDay = LocalDate.of(2022, 1, 1),
+            lastDay = LocalDate.of(2022, 2, 1),
+        )
+        val semester2 = SemesterEntity(
+            name = "name2",
+            firstDay = LocalDate.of(2023, 1, 1),
+            lastDay = LocalDate.of(2023, 2, 1),
+            id = 123L,
+        )
         val id1 = semesterDao.insert(semester1)
         assertNotEquals(0L, id1)
         assertEquals(123L, semesterDao.insert(semester2))
         assertEquals(listOf(semester1.copy(id = id1), semester2), semesterDao.getAllFlow().first())
         assertThrows(SQLiteConstraintException::class.java) {
             runBlocking {
-                semesterDao.insert(SemesterEntity("name3", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 2, 1), 123L))
+                semesterDao.insert(
+                    SemesterEntity(
+                        name = "name3",
+                        firstDay = LocalDate.of(2023, 1, 1),
+                        lastDay = LocalDate.of(2023, 2, 1),
+                        id = 123L,
+                    ),
+                )
             }
         }
         assertThrows(SQLiteConstraintException::class.java) {
             runBlocking {
-                semesterDao.insert(SemesterEntity("name2", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 2, 1)))
+                semesterDao.insert(
+                    SemesterEntity(
+                        name = "name2",
+                        firstDay = LocalDate.of(2023, 1, 1),
+                        lastDay = LocalDate.of(2023, 2, 1),
+                    ),
+                )
             }
         }
     }
@@ -55,9 +77,18 @@ internal class SemesterDaoTest {
     @Test
     fun updateTest() = runTest {
         assertEquals(emptyList<SemesterEntity>(), semesterDao.getAllFlow().first())
-        val semester = SemesterEntity("name", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 2, 1))
+        val semester = SemesterEntity(
+            name = "name",
+            firstDay = LocalDate.of(2023, 1, 1),
+            lastDay = LocalDate.of(2023, 2, 1),
+        )
         val id = semesterDao.insert(semester)
-        val updatedSemester = SemesterEntity("new_name", LocalDate.of(2022, 1, 1), LocalDate.of(2022, 2, 1), id)
+        val updatedSemester = SemesterEntity(
+            name = "new_name",
+            firstDay = LocalDate.of(2022, 1, 1),
+            lastDay = LocalDate.of(2022, 2, 1),
+            id = id,
+        )
         semesterDao.update(updatedSemester)
         assertEquals(listOf(updatedSemester), semesterDao.getAllFlow().first())
     }
@@ -65,36 +96,72 @@ internal class SemesterDaoTest {
     @Test
     fun deleteTest() = runTest {
         assertEquals(emptyList<SemesterEntity>(), semesterDao.getAllFlow().first())
-        val semester1 = SemesterEntity("name1", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 2, 1), 1L)
+        val semester1 = SemesterEntity(
+            name = "name1",
+            firstDay = LocalDate.of(2023, 1, 1),
+            lastDay = LocalDate.of(2023, 2, 1),
+            id = 1L,
+        )
         semesterDao.insert(semester1)
-        val semester2 = SemesterEntity("name2", LocalDate.of(2022, 1, 1), LocalDate.of(2022, 2, 1), 2L)
+        val semester2 = SemesterEntity(
+            name = "name2",
+            firstDay = LocalDate.of(2022, 1, 1),
+            lastDay = LocalDate.of(2022, 2, 1),
+            id = 2L,
+        )
         semesterDao.insert(semester2)
         assertEquals(listOf(semester2, semester1), semesterDao.getAllFlow().first())
 
         assertEquals(0, database.lessonDao.getAllFlow(semester1.id).first().size)
         database.lessonDao.insert(
-            LessonEntity("name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), semester1.id),
-            setOf(TeacherEntity("teacher")),
-            setOf(ClassroomEntity("classroom")),
-            setOf(ByDateEntity(LocalDate.of(2020, 4, 25))),
+            lesson = LessonEntity(
+                subjectName = "name",
+                type = "type",
+                startTime = LocalTime.of(10, 0),
+                endTime = LocalTime.of(12, 0),
+                semesterId = semester1.id,
+            ),
+            teachers = setOf(TeacherEntity("teacher")),
+            classrooms = setOf(ClassroomEntity("classroom")),
+            byDates = setOf(ByDateEntity(LocalDate.of(2020, 4, 25))),
         )
         assertEquals(1, database.lessonDao.getAllFlow(semester1.id).first().size)
 
         assertEquals(0, database.homeworkDao.getAllFlow(semester1.id).first().size)
-        database.homeworkDao.insert(HomeworkEntity("name", "description", LocalDate.of(2023, 2, 15), semester1.id))
+        database.homeworkDao.insert(
+            HomeworkEntity(
+                subjectName = "name",
+                description = "description",
+                deadline = LocalDate.of(2023, 2, 15),
+                semesterId = semester1.id,
+            ),
+        )
         assertEquals(1, database.homeworkDao.getAllFlow(semester1.id).first().size)
 
         assertEquals(0, database.lessonDao.getAllFlow(semester2.id).first().size)
         database.lessonDao.insert(
-            LessonEntity("name", "type", LocalTime.of(10, 0), LocalTime.of(12, 0), semester2.id),
-            setOf(TeacherEntity("teacher")),
-            setOf(ClassroomEntity("classroom")),
-            setOf(ByDateEntity(LocalDate.of(2020, 4, 25))),
+            lesson = LessonEntity(
+                subjectName = "name",
+                type = "type",
+                startTime = LocalTime.of(10, 0),
+                endTime = LocalTime.of(12, 0),
+                semesterId = semester2.id,
+            ),
+            teachers = setOf(TeacherEntity("teacher")),
+            classrooms = setOf(ClassroomEntity("classroom")),
+            byDates = setOf(ByDateEntity(LocalDate.of(2020, 4, 25))),
         )
         assertEquals(1, database.lessonDao.getAllFlow(semester2.id).first().size)
 
         assertEquals(0, database.homeworkDao.getAllFlow(semester2.id).first().size)
-        database.homeworkDao.insert(HomeworkEntity("name", "description", LocalDate.of(2023, 2, 15), semester2.id))
+        database.homeworkDao.insert(
+            HomeworkEntity(
+                subjectName = "name",
+                description = "description",
+                deadline = LocalDate.of(2023, 2, 15),
+                semesterId = semester2.id,
+            ),
+        )
         assertEquals(1, database.homeworkDao.getAllFlow(semester2.id).first().size)
 
         semesterDao.delete(9999L)
@@ -140,7 +207,12 @@ internal class SemesterDaoTest {
         val id = 123L
         assertNull(semesterDao.get(id))
 
-        val semester = SemesterEntity("name", LocalDate.of(2022, 1, 1), LocalDate.of(2022, 2, 1), id)
+        val semester = SemesterEntity(
+            name = "name",
+            firstDay = LocalDate.of(2022, 1, 1),
+            lastDay = LocalDate.of(2022, 2, 1),
+            id = id,
+        )
         semesterDao.insert(semester)
         assertEquals(semester, semesterDao.get(id))
 
@@ -157,7 +229,12 @@ internal class SemesterDaoTest {
         val id = 123L
         assertNull(semesterDao.getFlow(id).first())
 
-        val semester = SemesterEntity("name", LocalDate.of(2022, 1, 1), LocalDate.of(2022, 2, 1), id)
+        val semester = SemesterEntity(
+            name = "name",
+            firstDay = LocalDate.of(2022, 1, 1),
+            lastDay = LocalDate.of(2022, 2, 1),
+            id = id,
+        )
         semesterDao.insert(semester)
         assertEquals(semester, semesterDao.getFlow(id).first())
 
@@ -169,11 +246,32 @@ internal class SemesterDaoTest {
     @Test
     fun getNamesFlowTest() = runTest {
         assertEquals(emptyList<String>(), semesterDao.getNamesFlow().first())
-        semesterDao.insert(SemesterEntity("name1", LocalDate.of(2018, 1, 1), LocalDate.of(2019, 1, 1), 1L))
+        semesterDao.insert(
+            SemesterEntity(
+                name = "name1",
+                firstDay = LocalDate.of(2018, 1, 1),
+                lastDay = LocalDate.of(2019, 1, 1),
+                id = 1L,
+            ),
+        )
         assertEquals(listOf("name1"), semesterDao.getNamesFlow().first())
-        semesterDao.insert(SemesterEntity("name2", LocalDate.of(2022, 1, 1), LocalDate.of(2023, 1, 1), 3L))
+        semesterDao.insert(
+            SemesterEntity(
+                name = "name2",
+                firstDay = LocalDate.of(2022, 1, 1),
+                lastDay = LocalDate.of(2023, 1, 1),
+                id = 3L,
+            ),
+        )
         assertEquals(listOf("name1", "name2"), semesterDao.getNamesFlow().first())
-        semesterDao.insert(SemesterEntity("name3", LocalDate.of(2020, 1, 1), LocalDate.of(2021, 1, 1), 2L))
+        semesterDao.insert(
+            SemesterEntity(
+                name = "name3",
+                firstDay = LocalDate.of(2020, 1, 1),
+                lastDay = LocalDate.of(2021, 1, 1),
+                id = 2L,
+            ),
+        )
         assertEquals(listOf("name1", "name3", "name2"), semesterDao.getNamesFlow().first())
     }
 }

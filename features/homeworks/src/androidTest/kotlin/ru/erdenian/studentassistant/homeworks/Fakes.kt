@@ -52,12 +52,12 @@ internal class FakeHomeworkRepository : HomeworkRepository {
 
     override suspend fun insert(subjectName: String, description: String, deadline: LocalDate, semesterId: Long) {
         val newHomework = Homework(
-            subjectName,
-            description,
-            deadline,
-            false,
-            semesterId,
-            (homeworks.value.maxOfOrNull { it.id } ?: 0) + 1,
+            subjectName = subjectName,
+            description = description,
+            deadline = deadline,
+            isDone = false,
+            semesterId = semesterId,
+            id = (homeworks.value.maxOfOrNull { it.id } ?: 0) + 1,
         )
         homeworks.update { it + newHomework }
     }
@@ -78,7 +78,14 @@ internal class FakeHomeworkRepository : HomeworkRepository {
         deadline: LocalDate,
         semesterId: Long,
     ) {
-        val updated = Homework(subjectName, description, deadline, false, semesterId, id)
+        val updated = Homework(
+            subjectName = subjectName,
+            description = description,
+            deadline = deadline,
+            isDone = false,
+            semesterId = semesterId,
+            id = id,
+        )
         homeworks.update { list -> list.map { if (it.id == id) updated else it } }
     }
 

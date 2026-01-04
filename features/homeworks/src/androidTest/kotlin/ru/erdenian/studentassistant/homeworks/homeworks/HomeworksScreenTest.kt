@@ -85,7 +85,7 @@ internal class HomeworksScreenTest {
 
     @Test
     fun verifyNoHomeworksState() {
-        val semester = Semester("S1", LocalDate.now(), LocalDate.now(), 1L)
+        val semester = Semester(name = "S1", firstDay = LocalDate.now(), lastDay = LocalDate.now(), id = 1L)
         selectedSemesterRepository.selectedSemester.value = semester
         semesterRepository.semesters.value = listOf(semester)
 
@@ -101,12 +101,26 @@ internal class HomeworksScreenTest {
 
     @Test
     fun verifyHomeworksListDisplay() {
-        val semester = Semester("S1", LocalDate.now(), LocalDate.now(), 1L)
+        val semester = Semester(name = "S1", firstDay = LocalDate.now(), lastDay = LocalDate.now(), id = 1L)
         selectedSemesterRepository.selectedSemester.value = semester
         semesterRepository.semesters.value = listOf(semester)
 
-        val hwActual = Homework("Math", "Task 1", LocalDate.now(), false, 1L, 10L)
-        val hwOverdue = Homework("Physics", "Task 2", LocalDate.now().minusDays(1), false, 1L, 11L)
+        val hwActual = Homework(
+            subjectName = "Math",
+            description = "Task 1",
+            deadline = LocalDate.now(),
+            isDone = false,
+            semesterId = 1L,
+            id = 10L,
+        )
+        val hwOverdue = Homework(
+            subjectName = "Physics",
+            description = "Task 2",
+            deadline = LocalDate.now().minusDays(1),
+            isDone = false,
+            semesterId = 1L,
+            id = 11L,
+        )
 
         homeworkRepository.actual.value = listOf(hwActual)
         homeworkRepository.overdue.value = listOf(hwOverdue)
@@ -125,11 +139,18 @@ internal class HomeworksScreenTest {
 
     @Test
     fun verifyDeleteHomework() {
-        val semester = Semester("S1", LocalDate.now(), LocalDate.now(), 1L)
+        val semester = Semester(name = "S1", firstDay = LocalDate.now(), lastDay = LocalDate.now(), id = 1L)
         selectedSemesterRepository.selectedSemester.value = semester
         semesterRepository.semesters.value = listOf(semester)
 
-        val homework = Homework("Math", "Task 1", LocalDate.now(), false, 1L, 10L)
+        val homework = Homework(
+            subjectName = "Math",
+            description = "Task 1",
+            deadline = LocalDate.now(),
+            isDone = false,
+            semesterId = 1L,
+            id = 10L,
+        )
         homeworkRepository.actual.value = listOf(homework)
         // Также добавляем в общий список, чтобы FakeRepo мог удалить корректно
         homeworkRepository.homeworks.value = listOf(homework)
@@ -158,7 +179,7 @@ internal class HomeworksScreenTest {
 
     @Test
     fun verifyNavigationToCreateHomework() {
-        val semester = Semester("S1", LocalDate.now(), LocalDate.now(), 1L)
+        val semester = Semester(name = "S1", firstDay = LocalDate.now(), lastDay = LocalDate.now(), id = 1L)
         selectedSemesterRepository.selectedSemester.value = semester
         semesterRepository.semesters.value = listOf(semester)
 
@@ -176,11 +197,18 @@ internal class HomeworksScreenTest {
 
     @Test
     fun verifyNavigationToEditHomework() {
-        val semester = Semester("S1", LocalDate.now(), LocalDate.now(), 1L)
+        val semester = Semester(name = "S1", firstDay = LocalDate.now(), lastDay = LocalDate.now(), id = 1L)
         selectedSemesterRepository.selectedSemester.value = semester
         semesterRepository.semesters.value = listOf(semester)
 
-        val homework = Homework("Math", "Task 1", LocalDate.now(), false, 1L, 10L)
+        val homework = Homework(
+            subjectName = "Math",
+            description = "Task 1",
+            deadline = LocalDate.now(),
+            isDone = false,
+            semesterId = 1L,
+            id = 10L,
+        )
         homeworkRepository.actual.value = listOf(homework)
 
         val navigator = mockk<Navigator>(relaxed = true)

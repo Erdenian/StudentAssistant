@@ -55,15 +55,15 @@ internal class LessonRepositoryImplTest {
     @Test
     fun `insert and get test`() = runTest(testDispatcher) {
         repository.insert(
-            "Subj",
-            "Type",
-            setOf("T1"),
-            setOf("C1"),
-            LocalTime.of(9, 0),
-            LocalTime.of(10, 30),
-            1L,
-            DayOfWeek.MONDAY,
-            listOf(true),
+            subjectName = "Subj",
+            type = "Type",
+            teachers = setOf("T1"),
+            classrooms = setOf("C1"),
+            startTime = LocalTime.of(9, 0),
+            endTime = LocalTime.of(10, 30),
+            semesterId = 1L,
+            dayOfWeek = DayOfWeek.MONDAY,
+            weeks = listOf(true),
         )
 
         // Так как мы не можем легко предсказать ID при вставке через репозиторий (он возвращает Unit),
@@ -85,14 +85,14 @@ internal class LessonRepositoryImplTest {
     @Test
     fun `insert by dates test`() = runTest(testDispatcher) {
         repository.insert(
-            "Subj",
-            "Type",
-            emptySet(),
-            emptySet(),
-            LocalTime.MIN,
-            LocalTime.MAX,
-            1L,
-            setOf(LocalDate.of(2025, 2, 14)),
+            subjectName = "Subj",
+            type = "Type",
+            teachers = emptySet(),
+            classrooms = emptySet(),
+            startTime = LocalTime.MIN,
+            endTime = LocalTime.MAX,
+            semesterId = 1L,
+            dates = setOf(LocalDate.of(2025, 2, 14)),
         )
         val lesson = fakeLessonDao.lessons.value.last()
         assertEquals(1, lesson.byDates.size)
@@ -102,52 +102,91 @@ internal class LessonRepositoryImplTest {
     @Test
     fun `update by weekday test`() = runTest(testDispatcher) {
         fakeLessonDao.insert(
-            LessonEntity("L1", "T", LocalTime.MIN, LocalTime.MAX, 1L, 10L),
-            emptySet(), emptySet(), ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
+            lesson = LessonEntity(
+                subjectName = "L1",
+                type = "T",
+                startTime = LocalTime.MIN,
+                endTime = LocalTime.MAX,
+                semesterId = 1L,
+                id = 10L,
+            ),
+            teachers = emptySet(),
+            classrooms = emptySet(),
+            byWeekday = ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
         )
 
         repository.update(
-            10L,
-            "New",
-            "T",
-            emptySet(),
-            emptySet(),
-            LocalTime.MIN,
-            LocalTime.MAX,
-            1L,
-            DayOfWeek.TUESDAY,
-            listOf(true),
+            id = 10L,
+            subjectName = "New",
+            type = "T",
+            teachers = emptySet(),
+            classrooms = emptySet(),
+            startTime = LocalTime.MIN,
+            endTime = LocalTime.MAX,
+            semesterId = 1L,
+            dayOfWeek = DayOfWeek.TUESDAY,
+            weeks = listOf(true),
         )
         val updated = repository.get(10L)
         assertEquals("New", updated?.subjectName)
         assertEquals(
             DayOfWeek.TUESDAY,
-            (updated?.lessonRepeat as ru.erdenian.studentassistant.repository.api.entity.Lesson.Repeat.ByWeekday).dayOfWeek,
+            (updated?.lessonRepeat as ru.erdenian.studentassistant.repository.api.entity.Lesson.Repeat.ByWeekday)
+                .dayOfWeek,
         )
     }
 
     @Test
     fun `update by dates test`() = runTest(testDispatcher) {
         fakeLessonDao.insert(
-            LessonEntity("L1", "T", LocalTime.MIN, LocalTime.MAX, 1L, 10L),
-            emptySet(), emptySet(), ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
+            lesson = LessonEntity(
+                subjectName = "L1",
+                type = "T",
+                startTime = LocalTime.MIN,
+                endTime = LocalTime.MAX,
+                semesterId = 1L,
+                id = 10L,
+            ),
+            teachers = emptySet(),
+            classrooms = emptySet(),
+            byWeekday = ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
         )
 
         val date = LocalDate.of(2023, 1, 1)
-        repository.update(10L, "New", "T", emptySet(), emptySet(), LocalTime.MIN, LocalTime.MAX, 1L, setOf(date))
+        repository.update(
+            id = 10L,
+            subjectName = "New",
+            type = "T",
+            teachers = emptySet(),
+            classrooms = emptySet(),
+            startTime = LocalTime.MIN,
+            endTime = LocalTime.MAX,
+            semesterId = 1L,
+            dates = setOf(date),
+        )
         val updated = repository.get(10L)
         assertEquals("New", updated?.subjectName)
         assertEquals(
             setOf(date),
-            (updated?.lessonRepeat as ru.erdenian.studentassistant.repository.api.entity.Lesson.Repeat.ByDates).dates,
+            (updated?.lessonRepeat as ru.erdenian.studentassistant.repository.api.entity.Lesson.Repeat.ByDates)
+                .dates,
         )
     }
 
     @Test
     fun `delete test`() = runTest(testDispatcher) {
         fakeLessonDao.insert(
-            LessonEntity("L1", "T", LocalTime.MIN, LocalTime.MAX, 1L, 10L),
-            emptySet(), emptySet(), ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
+            lesson = LessonEntity(
+                subjectName = "L1",
+                type = "T",
+                startTime = LocalTime.MIN,
+                endTime = LocalTime.MAX,
+                semesterId = 1L,
+                id = 10L,
+            ),
+            teachers = emptySet(),
+            classrooms = emptySet(),
+            byWeekday = ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
         )
         assertNotNull(repository.get(10L))
         repository.delete(10L)
@@ -157,15 +196,22 @@ internal class LessonRepositoryImplTest {
     @Test
     fun `getAllFlow(date) correctly calculates week number`() = runTest(testDispatcher) {
         val start = LocalDate.of(2023, 9, 4) // Понедельник
-        val semester = SemesterEntity("S1", start, start.plusMonths(4), id = 1)
+        val semester = SemesterEntity(name = "S1", firstDay = start, lastDay = start.plusMonths(4), id = 1)
         fakeSemesterDao.insert(semester)
         selectedSemesterRepository.selectSemester(semester.id)
 
         fakeLessonDao.insert(
-            LessonEntity("L1", "Type", LocalTime.of(9, 0), LocalTime.of(10, 30), 1L, 100L),
-            emptySet(),
-            emptySet(),
-            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 100L),
+            lesson = LessonEntity(
+                subjectName = "L1",
+                type = "Type",
+                startTime = LocalTime.of(9, 0),
+                endTime = LocalTime.of(10, 30),
+                semesterId = 1L,
+                id = 100L,
+            ),
+            teachers = emptySet(),
+            classrooms = emptySet(),
+            byWeekday = ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 100L),
         )
 
         // Проверка недели 0 (Дата начала)
@@ -188,8 +234,17 @@ internal class LessonRepositoryImplTest {
     @Test
     fun `renameSubject test`() = runTest(testDispatcher) {
         fakeLessonDao.insert(
-            LessonEntity("Old", "T", LocalTime.MIN, LocalTime.MAX, 1L, 10L),
-            emptySet(), emptySet(), ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
+            lesson = LessonEntity(
+                subjectName = "Old",
+                type = "T",
+                startTime = LocalTime.MIN,
+                endTime = LocalTime.MAX,
+                semesterId = 1L,
+                id = 10L,
+            ),
+            teachers = emptySet(),
+            classrooms = emptySet(),
+            byWeekday = ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
         )
 
         repository.renameSubject(1L, "Old", "New")
@@ -201,8 +256,17 @@ internal class LessonRepositoryImplTest {
         assertEquals(settingsRepository.defaultStartTime, repository.getNextStartTime(1L, DayOfWeek.MONDAY))
 
         fakeLessonDao.insert(
-            LessonEntity("L1", "T", LocalTime.of(10, 0), LocalTime.of(11, 30), 1L, 10L),
-            emptySet(), emptySet(), ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
+            lesson = LessonEntity(
+                subjectName = "L1",
+                type = "T",
+                startTime = LocalTime.of(10, 0),
+                endTime = LocalTime.of(11, 30),
+                semesterId = 1L,
+                id = 10L,
+            ),
+            teachers = emptySet(),
+            classrooms = emptySet(),
+            byWeekday = ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
         )
 
         val expected = LocalTime.of(11, 30).plus(settingsRepository.defaultBreakDuration)
@@ -213,10 +277,17 @@ internal class LessonRepositoryImplTest {
     fun `getCount test`() = runTest(testDispatcher) {
         assertEquals(0, repository.getCount(1L))
         fakeLessonDao.insert(
-            LessonEntity("L1", "T", LocalTime.MIN, LocalTime.MAX, 1L, 10L),
-            emptySet(),
-            emptySet(),
-            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
+            lesson = LessonEntity(
+                subjectName = "L1",
+                type = "T",
+                startTime = LocalTime.MIN,
+                endTime = LocalTime.MAX,
+                semesterId = 1L,
+                id = 10L,
+            ),
+            teachers = emptySet(),
+            classrooms = emptySet(),
+            byWeekday = ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
         )
         assertEquals(1, repository.getCount(1L))
     }
@@ -225,10 +296,17 @@ internal class LessonRepositoryImplTest {
     fun `getCount subject test`() = runTest(testDispatcher) {
         assertEquals(0, repository.getCount(1L, "S"))
         fakeLessonDao.insert(
-            LessonEntity("S", "T", LocalTime.MIN, LocalTime.MAX, 1L, 10L),
-            emptySet(),
-            emptySet(),
-            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
+            lesson = LessonEntity(
+                subjectName = "S",
+                type = "T",
+                startTime = LocalTime.MIN,
+                endTime = LocalTime.MAX,
+                semesterId = 1L,
+                id = 10L,
+            ),
+            teachers = emptySet(),
+            classrooms = emptySet(),
+            byWeekday = ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
         )
         assertEquals(1, repository.getCount(1L, "S"))
     }
@@ -236,10 +314,17 @@ internal class LessonRepositoryImplTest {
     @Test
     fun `helper flows test`() = runTest(testDispatcher) {
         fakeLessonDao.insert(
-            LessonEntity("S", "Type1", LocalTime.MIN, LocalTime.MAX, 1L, 10L),
-            setOf(TeacherEntity("Teach1")),
-            setOf(ClassroomEntity("Class1")),
-            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
+            lesson = LessonEntity(
+                subjectName = "S",
+                type = "Type1",
+                startTime = LocalTime.MIN,
+                endTime = LocalTime.MAX,
+                semesterId = 1L,
+                id = 10L,
+            ),
+            teachers = setOf(TeacherEntity("Teach1")),
+            classrooms = setOf(ClassroomEntity("Class1")),
+            byWeekday = ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
         )
 
         assertEquals(listOf("S"), repository.getSubjects(1L).first())
@@ -259,15 +344,33 @@ internal class LessonRepositoryImplTest {
 
         // Каждую неделю -> False
         fakeLessonDao.insert(
-            LessonEntity("L1", "", LocalTime.MIN, LocalTime.MAX, 1L, 10L),
-            emptySet(), emptySet(), ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
+            lesson = LessonEntity(
+                subjectName = "L1",
+                type = "",
+                startTime = LocalTime.MIN,
+                endTime = LocalTime.MAX,
+                semesterId = 1L,
+                id = 10L,
+            ),
+            teachers = emptySet(),
+            classrooms = emptySet(),
+            byWeekday = ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true), 10L),
         )
         assertFalse(repository.hasNonRecurringLessons(1L))
 
         // Через неделю -> True
         fakeLessonDao.insert(
-            LessonEntity("L2", "", LocalTime.MIN, LocalTime.MAX, 1L, 20L),
-            emptySet(), emptySet(), ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true, false), 20L),
+            lesson = LessonEntity(
+                subjectName = "L2",
+                type = "",
+                startTime = LocalTime.MIN,
+                endTime = LocalTime.MAX,
+                semesterId = 1L,
+                id = 20L,
+            ),
+            teachers = emptySet(),
+            classrooms = emptySet(),
+            byWeekday = ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true, false), 20L),
         )
         assertTrue(repository.hasNonRecurringLessons(1L))
     }

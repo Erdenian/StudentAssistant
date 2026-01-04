@@ -94,7 +94,7 @@ internal class FakeLessonDao : LessonDao() {
         byWeekday: ByWeekdayEntity,
     ) {
         delete(lesson.id)
-        insert(lesson, teachers, classrooms, byWeekday)
+        insert(lesson = lesson, teachers = teachers, classrooms = classrooms, byWeekday = byWeekday)
     }
 
     override suspend fun update(
@@ -104,7 +104,7 @@ internal class FakeLessonDao : LessonDao() {
         byDates: Set<ByDateEntity>,
     ) {
         delete(lesson.id)
-        insert(lesson, teachers, classrooms, byDates)
+        insert(lesson = lesson, teachers = teachers, classrooms = classrooms, byDates = byDates)
     }
 
     public override suspend fun insert(lesson: LessonEntity): Long {
@@ -196,12 +196,14 @@ internal class FakeLessonDao : LessonDao() {
             list.map { full ->
                 if (full.lesson.semesterId == semesterId && full.lesson.subjectName == oldName) {
                     full.copy(lesson = full.lesson.copy(subjectName = newName))
-                } else full
+                } else {
+                    full
+                }
             }
         }
     }
 
-    override suspend fun renameHomeworksSubject(semesterId: Long, oldName: String, newName: String) {}
+    override suspend fun renameHomeworksSubject(semesterId: Long, oldName: String, newName: String) = Unit
 
     override fun getTypesFlow(semesterId: Long): Flow<List<String>> =
         lessons.map { list ->
@@ -230,7 +232,8 @@ internal class FakeLessonDao : LessonDao() {
         lessons.value
             .filter { it.lesson.semesterId == semesterId && it.byWeekday?.dayOfWeek == dayOfWeek }
             .maxByOrNull { it.lesson.endTime }
-            ?.lesson?.endTime
+            ?.lesson
+            ?.endTime
 }
 
 internal class FakeHomeworkDao : HomeworkDao {

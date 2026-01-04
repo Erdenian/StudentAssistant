@@ -71,7 +71,12 @@ internal class HomeworkEditorScreenTest {
     }
 
     private fun initData() {
-        val semester = Semester("S1", LocalDate.now(), LocalDate.now().plusMonths(1), semesterId)
+        val semester = Semester(
+            name = "S1",
+            firstDay = LocalDate.now(),
+            lastDay = LocalDate.now().plusMonths(1),
+            id = semesterId,
+        )
         semesterRepository.semesters.value = listOf(semester)
         lessonRepository.subjects.value = listOf("Math", "Physics")
     }
@@ -117,7 +122,14 @@ internal class HomeworkEditorScreenTest {
     @Test
     fun verifyEditHomework() {
         initData()
-        val homework = Homework("Math", "Old Desc", LocalDate.now(), false, semesterId, 10L)
+        val homework = Homework(
+            subjectName = "Math",
+            description = "Old Desc",
+            deadline = LocalDate.now(),
+            isDone = false,
+            semesterId = semesterId,
+            id = 10L,
+        )
         homeworkRepository.homeworks.value = listOf(homework)
 
         val navigator = mockk<Navigator>(relaxed = true)
@@ -143,7 +155,14 @@ internal class HomeworkEditorScreenTest {
     @Test
     fun verifyDeleteHomework() {
         initData()
-        val homework = Homework("Math", "Desc", LocalDate.now(), false, semesterId, 10L)
+        val homework = Homework(
+            subjectName = "Math",
+            description = "Desc",
+            deadline = LocalDate.now(),
+            isDone = false,
+            semesterId = semesterId,
+            id = 10L,
+        )
         homeworkRepository.homeworks.value = listOf(homework)
 
         val navigator = mockk<Navigator>(relaxed = true)

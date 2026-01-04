@@ -38,9 +38,24 @@ internal class SelectedSemesterRepositoryImplTest {
     @Test
     fun `test default selection logic`() = runTest(testDispatcher) {
         val now = fixedNow
-        val past = SemesterEntity("Past", now.minusMonths(5), now.minusMonths(2), id = 1)
-        val current = SemesterEntity("Current", now.minusMonths(1), now.plusMonths(1), id = 2)
-        val future = SemesterEntity("Future", now.plusMonths(2), now.plusMonths(5), id = 3)
+        val past = SemesterEntity(
+            name = "Past",
+            firstDay = now.minusMonths(5),
+            lastDay = now.minusMonths(2),
+            id = 1,
+        )
+        val current = SemesterEntity(
+            name = "Current",
+            firstDay = now.minusMonths(1),
+            lastDay = now.plusMonths(1),
+            id = 2,
+        )
+        val future = SemesterEntity(
+            name = "Future",
+            firstDay = now.plusMonths(2),
+            lastDay = now.plusMonths(5),
+            id = 3,
+        )
 
         // Scenario 1: Only Past exists
         fakeSemesterDao.insert(past)
@@ -63,8 +78,18 @@ internal class SelectedSemesterRepositoryImplTest {
     fun `test manual selection`() = runTest(testDispatcher) {
         val repository = SelectedSemesterRepositoryImpl(TestScope(testDispatcher), fakeSemesterDao)
 
-        val s1 = SemesterEntity("S1", LocalDate.of(2020, 1, 1), LocalDate.of(2020, 6, 1), id = 1)
-        val s2 = SemesterEntity("S2", LocalDate.of(2020, 9, 1), LocalDate.of(2021, 1, 1), id = 2)
+        val s1 = SemesterEntity(
+            name = "S1",
+            firstDay = LocalDate.of(2020, 1, 1),
+            lastDay = LocalDate.of(2020, 6, 1),
+            id = 1,
+        )
+        val s2 = SemesterEntity(
+            name = "S2",
+            firstDay = LocalDate.of(2020, 9, 1),
+            lastDay = LocalDate.of(2021, 1, 1),
+            id = 2,
+        )
         fakeSemesterDao.insert(s1)
         fakeSemesterDao.insert(s2)
 
@@ -81,7 +106,12 @@ internal class SelectedSemesterRepositoryImplTest {
     fun `test deletion clears selection`() = runTest(testDispatcher) {
         val repository = SelectedSemesterRepositoryImpl(TestScope(testDispatcher), fakeSemesterDao)
 
-        val s1 = SemesterEntity("S1", LocalDate.of(2020, 1, 1), LocalDate.of(2020, 6, 1), id = 1)
+        val s1 = SemesterEntity(
+            name = "S1",
+            firstDay = LocalDate.of(2020, 1, 1),
+            lastDay = LocalDate.of(2020, 6, 1),
+            id = 1,
+        )
         fakeSemesterDao.insert(s1)
         repository.selectSemester(s1.id)
         assertEquals(s1.toSemester(), repository.selectedFlow.first())
