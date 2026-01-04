@@ -13,6 +13,8 @@
             <option name="taskNames">
                 <list>
                     <option value="detektMain" />
+                    <option value="detektTest" />
+                    <option value="detektDebugAndroidTest" />
                     <option value="lintDebug" />
                     <option value="testDebugUnitTest" />
                     <option value=":app:koverHtmlReportDebug" />
