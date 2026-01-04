@@ -290,7 +290,7 @@
 Перед созданием pull request все изменения должны быть проверены с помощью следующих команд:
 
 * `detektMain` — анализ кода на соответствие стилю и правилам проекта
-* `:app:lintDebug` — статический анализ кода и проверка на потенциальные проблемы
+* `lintDebug` — статический анализ кода и проверка на потенциальные проблемы
 * `testDebugUnitTest` — запуск unit-тестов
 * `:app:koverHtmlReportDebug` и `:app:koverXmlReportDebug`— генерация отчетов о покрытии кода тестами
 * `:app:assembleDebug` — сборка debug-версии приложения
@@ -301,7 +301,7 @@
 ```shell
 ./gradlew \
     detektMain \
-    :app:lintDebug \
+    lintDebug \
     testDebugUnitTest \
     :app:koverHtmlReportDebug \
     :app:koverXmlReportDebug \

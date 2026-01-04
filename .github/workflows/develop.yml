@@ -31,7 +31,7 @@ jobs:
       # Run
       # --------------------------------------
       - uses: actions/checkout@v6
-      - run: ./gradlew :app:lintDebug testDebugUnitTest :app:koverHtmlReportDebug :app:koverXmlReportDebug :app:assembleDebug :app:bundleDebug
+      - run: ./gradlew lintDebug testDebugUnitTest :app:koverHtmlReportDebug :app:koverXmlReportDebug :app:assembleDebug :app:bundleDebug
       - run: ./gradlew testDeviceDebugAndroidTest '-Dorg.gradle.jvmargs=-Xmx6g -Dfile.encoding=UTF-8' '-Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect'
       # --------------------------------------
       # Analyze

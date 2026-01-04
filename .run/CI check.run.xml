@@ -13,7 +13,7 @@
             <option name="taskNames">
                 <list>
                     <option value="detektMain" />
-                    <option value=":app:lintDebug" />
+                    <option value="lintDebug" />
                     <option value="testDebugUnitTest" />
                     <option value=":app:koverHtmlReportDebug" />
                     <option value=":app:koverXmlReportDebug" />
