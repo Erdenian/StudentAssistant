@@ -88,5 +88,6 @@ internal class SettingsViewModelTest {
         viewModel.setAdvancedWeeksSelectorEnabled(expected)
         verify { settingsRepository.isAdvancedWeeksSelectorEnabled = expected }
         verify { analytics.logEvent("advanced_weeks_selector_changed", any()) }
+        verify { analytics.setUserProperty("is_advanced_weeks_selector_enabled", expected.toString()) }
     }
 }

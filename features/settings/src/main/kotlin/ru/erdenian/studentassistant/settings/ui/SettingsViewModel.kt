@@ -87,6 +87,10 @@ internal class SettingsViewModel @Inject constructor(
             name = "advanced_weeks_selector_changed",
             params = mapOf("is_enabled" to enabled),
         )
+        analytics.setUserProperty(
+            name = "is_advanced_weeks_selector_enabled",
+            value = enabled.toString(),
+        )
     }
 
     override fun onCleared() {

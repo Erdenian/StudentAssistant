@@ -50,8 +50,8 @@
 Содержит только публичные контракты:
 * **Маршруты (Routes):** `Sealed interfaces`, описывающие экраны фичи (например, `ScheduleRoute`). Наследуются от
   `NavKey`. Маршруты объявляются как `Serializable` sealed интерфейсы/классы.
-* **Интерфейс API:** Интерфейс (например, `ScheduleApi`) с методом `addToGraph`, который регистрирует экраны в
-  навигации.
+* **Интерфейс API:** Интерфейс (например, `ScheduleApi`) со свойством `navGraphContributor`, реализация которого
+  регистрирует экраны в навигации через метод `addTo`.
 * **Общие сущности:** Data-классы, необходимые другим модулям.
 
 #### 2. Implementation модуль (`:features:myfeature`)
@@ -80,7 +80,8 @@
     * `Navigator` — управляет переходами.
 * Маршруты (`Routes`) строго типизированы через Kotlin Serialization, объявляются как `Serializable` sealed
   интерфейсы/классы (например, `ScheduleRoute`, `HomeworksRoute`) внутри `api` подмодулей фич.
-* Регистрация экранов происходит в методе `addToGraph` внутри реализации API фичи.
+* Регистрация экранов происходит в методе `addTo` интерфейса `NavGraphContributor`, который предоставляется через API
+  фичи.
 
 ### Dependency Injection (Dagger 2)
 * Используется классический Dagger 2 (не Hilt).
@@ -365,4 +366,4 @@
 
 ### 14.4. Свойства пользователя (User Properties)
 Используйте `setUserProperty` для атрибутов, которые редко меняются и описывают сегмент пользователя.
-* Примеры: `theme_preference` (light/dark/system).
+* Примеры: `theme` (light/dark), `is_advanced_weeks_selector_enabled` (true/false).
