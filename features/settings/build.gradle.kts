@@ -17,6 +17,7 @@ dependencies {
 
     implementation(project(":features:repository:api"))
     implementation(project(":features:settings:api"))
+    implementation(project(":features:analytics:api"))
     // endregion
 
     // region Tests

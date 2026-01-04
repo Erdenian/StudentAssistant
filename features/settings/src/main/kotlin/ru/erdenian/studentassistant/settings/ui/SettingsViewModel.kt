@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import java.time.Duration
 import java.time.LocalTime
 import javax.inject.Inject
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.settings.di.SettingsComponentHolder
 
@@ -18,9 +19,11 @@ import ru.erdenian.studentassistant.settings.di.SettingsComponentHolder
 internal class SettingsViewModel @Inject constructor(
     application: Application,
     repositoryApi: RepositoryApi,
+    analyticsApi: AnalyticsApi,
 ) : AndroidViewModel(application) {
 
     private val settingsRepository = repositoryApi.settingsRepository
+    private val analytics = analyticsApi.analytics
 
     /**
      * Поток текущего времени начала первого занятия по умолчанию.
@@ -32,6 +35,10 @@ internal class SettingsViewModel @Inject constructor(
      */
     fun setDefaultStartTime(time: LocalTime) {
         settingsRepository.defaultStartTime = time
+        analytics.logEvent(
+            name = "default_start_time_changed",
+            params = mapOf("time" to time.toString()),
+        )
     }
 
     /**
@@ -44,6 +51,10 @@ internal class SettingsViewModel @Inject constructor(
      */
     fun setDefaultLessonDuration(duration: Duration) {
         settingsRepository.defaultLessonDuration = duration
+        analytics.logEvent(
+            name = "default_lesson_duration_changed",
+            params = mapOf("duration_minutes" to duration.toMinutes()),
+        )
     }
 
     /**
@@ -56,6 +67,10 @@ internal class SettingsViewModel @Inject constructor(
      */
     fun setDefaultBreakDuration(duration: Duration) {
         settingsRepository.defaultBreakDuration = duration
+        analytics.logEvent(
+            name = "default_break_duration_changed",
+            params = mapOf("duration_minutes" to duration.toMinutes()),
+        )
     }
 
     /**
@@ -68,6 +83,10 @@ internal class SettingsViewModel @Inject constructor(
      */
     fun setAdvancedWeeksSelectorEnabled(enabled: Boolean) {
         settingsRepository.isAdvancedWeeksSelectorEnabled = enabled
+        analytics.logEvent(
+            name = "advanced_weeks_selector_changed",
+            params = mapOf("is_enabled" to enabled),
+        )
     }
 
     override fun onCleared() {

@@ -11,6 +11,8 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
+import ru.erdenian.studentassistant.analytics.api.Analytics
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.repository.api.SettingsRepository
 import ru.erdenian.studentassistant.settings.MainDispatcherRule
@@ -25,6 +27,10 @@ internal class SettingsViewModelTest {
     private val repositoryApi = mockk<RepositoryApi> {
         every { settingsRepository } returns this@SettingsViewModelTest.settingsRepository
     }
+    private val analytics = mockk<Analytics>(relaxed = true)
+    private val analyticsApi = mockk<AnalyticsApi> {
+        every { analytics } returns this@SettingsViewModelTest.analytics
+    }
 
     private val defaultStartTimeFlow = MutableStateFlow(LocalTime.of(9, 0))
     private val defaultLessonDurationFlow = MutableStateFlow(Duration.ofMinutes(90))
@@ -38,7 +44,7 @@ internal class SettingsViewModelTest {
         every { settingsRepository.getAdvancedWeeksSelectorFlow(any()) } returns isAdvancedWeeksSelectorEnabledFlow
     }
 
-    private val viewModel by lazy { SettingsViewModel(application, repositoryApi) }
+    private val viewModel by lazy { SettingsViewModel(application, repositoryApi, analyticsApi) }
 
     @Test
     fun `defaultStartTime flow and setter test`() = runTest {
@@ -48,6 +54,7 @@ internal class SettingsViewModelTest {
 
         viewModel.setDefaultStartTime(expected)
         verify { settingsRepository.defaultStartTime = expected }
+        verify { analytics.logEvent("default_start_time_changed", any()) }
     }
 
     @Test
@@ -58,6 +65,7 @@ internal class SettingsViewModelTest {
 
         viewModel.setDefaultLessonDuration(expected)
         verify { settingsRepository.defaultLessonDuration = expected }
+        verify { analytics.logEvent("default_lesson_duration_changed", any()) }
     }
 
     @Test
@@ -68,6 +76,7 @@ internal class SettingsViewModelTest {
 
         viewModel.setDefaultBreakDuration(expected)
         verify { settingsRepository.defaultBreakDuration = expected }
+        verify { analytics.logEvent("default_break_duration_changed", any()) }
     }
 
     @Test
@@ -78,5 +87,6 @@ internal class SettingsViewModelTest {
 
         viewModel.setAdvancedWeeksSelectorEnabled(expected)
         verify { settingsRepository.isAdvancedWeeksSelectorEnabled = expected }
+        verify { analytics.logEvent("advanced_weeks_selector_changed", any()) }
     }
 }
