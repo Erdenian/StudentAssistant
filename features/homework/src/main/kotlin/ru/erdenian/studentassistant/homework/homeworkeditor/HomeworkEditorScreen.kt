@@ -15,8 +15,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import ru.erdenian.studentassistant.homework.api.HomeworksRoute
-import ru.erdenian.studentassistant.homework.di.HomeworksComponentHolder
+import ru.erdenian.studentassistant.homework.api.HomeworkRoute
+import ru.erdenian.studentassistant.homework.di.HomeworkComponentHolder
 import ru.erdenian.studentassistant.homework.homeworkeditor.HomeworkEditorViewModel.Error
 import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
@@ -26,13 +26,13 @@ import ru.erdenian.studentassistant.utils.toSingleLine
 import ru.erdenian.studentassistant.utils.toast
 
 @Composable
-internal fun HomeworkEditorScreen(route: HomeworksRoute.HomeworkEditor) {
+internal fun HomeworkEditorScreen(route: HomeworkRoute.HomeworkEditor) {
     val viewModel = viewModel {
         val semesterId = route.semesterId
         val subjectName = route.subjectName
         val homeworkId = route.homeworkId
 
-        val factory = HomeworksComponentHolder.instance.homeworkEditorViewModelFactory
+        val factory = HomeworkComponentHolder.instance.homeworkEditorViewModelFactory
         when {
             (homeworkId != null) -> factory.get(semesterId, homeworkId)
             (subjectName != null) -> factory.get(semesterId, subjectName)

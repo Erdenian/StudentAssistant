@@ -24,9 +24,9 @@ import ru.erdenian.studentassistant.homework.FakeHomeworkRepository
 import ru.erdenian.studentassistant.homework.FakeLessonRepository
 import ru.erdenian.studentassistant.homework.FakeSelectedSemesterRepository
 import ru.erdenian.studentassistant.homework.FakeSemesterRepository
-import ru.erdenian.studentassistant.homework.HomeworksDependencies
-import ru.erdenian.studentassistant.homework.api.HomeworksRoute
-import ru.erdenian.studentassistant.homework.di.HomeworksComponentHolder
+import ru.erdenian.studentassistant.homework.HomeworkDependencies
+import ru.erdenian.studentassistant.homework.api.HomeworkRoute
+import ru.erdenian.studentassistant.homework.di.HomeworkComponentHolder
 import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.navigation.Navigator
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
@@ -48,9 +48,9 @@ internal class HomeworksScreenTest {
 
     @Before
     fun setUp() {
-        HomeworksComponentHolder.clear()
+        HomeworkComponentHolder.clear()
 
-        val dependencies = object : HomeworksDependencies {
+        val dependencies = object : HomeworkDependencies {
             override val application: Application = ApplicationProvider.getApplicationContext()
             override val repositoryApi: RepositoryApi = object : RepositoryApi {
                 override val selectedSemesterRepository = this@HomeworksScreenTest.selectedSemesterRepository
@@ -66,7 +66,7 @@ internal class HomeworksScreenTest {
                 }
             }
         }
-        HomeworksComponentHolder.create(dependencies)
+        HomeworkComponentHolder.create(dependencies)
     }
 
     @Test
@@ -192,7 +192,7 @@ internal class HomeworksScreenTest {
 
         composeTestRule.onNodeWithContentDescription(context.getString(RS.h_add)).performClick()
 
-        verify { navigator.navigate(HomeworksRoute.HomeworkEditor(semesterId = 1L)) }
+        verify { navigator.navigate(HomeworkRoute.HomeworkEditor(semesterId = 1L)) }
     }
 
     @Test
@@ -220,6 +220,6 @@ internal class HomeworksScreenTest {
 
         composeTestRule.onNodeWithText("Task 1").performClick()
 
-        verify { navigator.navigate(HomeworksRoute.HomeworkEditor(semesterId = 1L, homeworkId = 10L)) }
+        verify { navigator.navigate(HomeworkRoute.HomeworkEditor(semesterId = 1L, homeworkId = 10L)) }
     }
 }

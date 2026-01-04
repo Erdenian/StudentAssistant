@@ -23,9 +23,9 @@ import ru.erdenian.studentassistant.homework.FakeHomeworkRepository
 import ru.erdenian.studentassistant.homework.FakeLessonRepository
 import ru.erdenian.studentassistant.homework.FakeSelectedSemesterRepository
 import ru.erdenian.studentassistant.homework.FakeSemesterRepository
-import ru.erdenian.studentassistant.homework.HomeworksDependencies
-import ru.erdenian.studentassistant.homework.api.HomeworksRoute
-import ru.erdenian.studentassistant.homework.di.HomeworksComponentHolder
+import ru.erdenian.studentassistant.homework.HomeworkDependencies
+import ru.erdenian.studentassistant.homework.api.HomeworkRoute
+import ru.erdenian.studentassistant.homework.di.HomeworkComponentHolder
 import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.navigation.Navigator
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
@@ -49,9 +49,9 @@ internal class HomeworkEditorScreenTest {
 
     @Before
     fun setUp() {
-        HomeworksComponentHolder.clear()
+        HomeworkComponentHolder.clear()
 
-        val dependencies = object : HomeworksDependencies {
+        val dependencies = object : HomeworkDependencies {
             override val application: Application = ApplicationProvider.getApplicationContext()
             override val repositoryApi: RepositoryApi = object : RepositoryApi {
                 override val selectedSemesterRepository = this@HomeworkEditorScreenTest.selectedSemesterRepository
@@ -67,7 +67,7 @@ internal class HomeworkEditorScreenTest {
                 }
             }
         }
-        HomeworksComponentHolder.create(dependencies)
+        HomeworkComponentHolder.create(dependencies)
     }
 
     private fun initData() {
@@ -87,7 +87,7 @@ internal class HomeworkEditorScreenTest {
 
         composeTestRule.setContent {
             CompositionLocalProvider(LocalNavigator provides navigator) {
-                HomeworkEditorScreen(route = HomeworksRoute.HomeworkEditor(semesterId))
+                HomeworkEditorScreen(route = HomeworkRoute.HomeworkEditor(semesterId))
             }
         }
 
@@ -105,7 +105,7 @@ internal class HomeworkEditorScreenTest {
 
         composeTestRule.setContent {
             CompositionLocalProvider(LocalNavigator provides navigator) {
-                HomeworkEditorScreen(route = HomeworksRoute.HomeworkEditor(semesterId))
+                HomeworkEditorScreen(route = HomeworkRoute.HomeworkEditor(semesterId))
             }
         }
 
@@ -136,7 +136,7 @@ internal class HomeworkEditorScreenTest {
 
         composeTestRule.setContent {
             CompositionLocalProvider(LocalNavigator provides navigator) {
-                HomeworkEditorScreen(route = HomeworksRoute.HomeworkEditor(semesterId, homeworkId = 10L))
+                HomeworkEditorScreen(route = HomeworkRoute.HomeworkEditor(semesterId, homeworkId = 10L))
             }
         }
 
@@ -169,7 +169,7 @@ internal class HomeworkEditorScreenTest {
 
         composeTestRule.setContent {
             CompositionLocalProvider(LocalNavigator provides navigator) {
-                HomeworkEditorScreen(route = HomeworksRoute.HomeworkEditor(semesterId, homeworkId = 10L))
+                HomeworkEditorScreen(route = HomeworkRoute.HomeworkEditor(semesterId, homeworkId = 10L))
             }
         }
 
@@ -189,7 +189,7 @@ internal class HomeworkEditorScreenTest {
 
         composeTestRule.setContent {
             CompositionLocalProvider(LocalNavigator provides navigator) {
-                HomeworkEditorScreen(route = HomeworksRoute.HomeworkEditor(semesterId))
+                HomeworkEditorScreen(route = HomeworkRoute.HomeworkEditor(semesterId))
             }
         }
 
@@ -213,7 +213,7 @@ internal class HomeworkEditorScreenTest {
 
         composeTestRule.setContent {
             CompositionLocalProvider(LocalNavigator provides navigator) {
-                HomeworkEditorScreen(route = HomeworksRoute.HomeworkEditor(semesterId))
+                HomeworkEditorScreen(route = HomeworkRoute.HomeworkEditor(semesterId))
             }
         }
 

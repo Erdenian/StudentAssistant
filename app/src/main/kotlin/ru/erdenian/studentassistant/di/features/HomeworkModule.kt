@@ -5,24 +5,24 @@ import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
 import ru.erdenian.studentassistant.di.MainComponent
-import ru.erdenian.studentassistant.homework.HomeworksDependencies
-import ru.erdenian.studentassistant.homework.api.HomeworksApi
-import ru.erdenian.studentassistant.homework.createHomeworksApi
+import ru.erdenian.studentassistant.homework.HomeworkDependencies
+import ru.erdenian.studentassistant.homework.api.HomeworkApi
+import ru.erdenian.studentassistant.homework.createHomeworkApi
 import ru.erdenian.studentassistant.navigation.NavGraphContributor
 
 @Module
-internal interface HomeworksModule {
+internal interface HomeworkModule {
 
     @Binds
-    fun dependencies(dependencies: MainComponent): HomeworksDependencies
+    fun dependencies(dependencies: MainComponent): HomeworkDependencies
 
     companion object {
 
         @Provides
-        fun api(dependencies: HomeworksDependencies) = createHomeworksApi(dependencies)
+        fun api(dependencies: HomeworkDependencies) = createHomeworkApi(dependencies)
 
         @Provides
         @IntoSet
-        fun navGraphContributor(api: HomeworksApi): NavGraphContributor = api.navGraphContributor
+        fun navGraphContributor(api: HomeworkApi): NavGraphContributor = api.navGraphContributor
     }
 }
