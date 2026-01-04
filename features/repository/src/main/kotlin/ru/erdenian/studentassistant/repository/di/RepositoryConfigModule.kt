@@ -2,40 +2,28 @@ package ru.erdenian.studentassistant.repository.di
 
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
-import dagger.Reusable
-import javax.inject.Singleton
+import javax.inject.Named
+import kotlinx.coroutines.CoroutineScope
 import ru.erdenian.studentassistant.repository.RepositoryConfig
-import ru.erdenian.studentassistant.repository.database.dao.SemesterDao
-import ru.erdenian.studentassistant.repository.impl.SelectedSemesterRepositoryImpl
-import ru.erdenian.studentassistant.repository.impl.SemesterRepositoryImpl
-import ru.erdenian.studentassistant.repository.impl.SettingsRepositoryImpl
 
 @Module
 internal class RepositoryConfigModule {
 
-    @Singleton
     @Provides
-    fun selectedSemesterRepositoryImpl(
-        repositoryConfig: RepositoryConfig,
-        semesterDao: SemesterDao,
-    ) = SelectedSemesterRepositoryImpl(repositoryConfig.applicationCoroutineScope, semesterDao)
+    @Named("application")
+    fun provideApplicationCoroutineScope(repositoryConfig: RepositoryConfig): CoroutineScope =
+        repositoryConfig.applicationCoroutineScope
 
-    @Singleton
     @Provides
-    fun semesterRepositoryImpl(
-        repositoryConfig: RepositoryConfig,
-        semesterDao: SemesterDao,
-        selectedSemesterRepositoryImpl: SelectedSemesterRepositoryImpl,
-    ) = SemesterRepositoryImpl(repositoryConfig.applicationCoroutineScope, semesterDao, selectedSemesterRepositoryImpl)
-
-    @Reusable
-    @Provides
-    fun settingsRepositoryImpl(
+    @Named("settings")
+    fun provideSettingsPreferences(
         application: Application,
         repositoryConfig: RepositoryConfig,
-    ) = SettingsRepositoryImpl(
-        application.getSharedPreferences(repositoryConfig.settingsPreferencesName, Context.MODE_PRIVATE),
+    ): SharedPreferences = application.getSharedPreferences(
+        repositoryConfig.settingsPreferencesName,
+        Context.MODE_PRIVATE,
     )
 }
