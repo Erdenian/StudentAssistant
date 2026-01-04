@@ -9,6 +9,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kover)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 
     alias(libs.plugins.tripletPlay)
 }
@@ -111,6 +113,7 @@ android {
 
     buildTypes {
         debug {
+            applicationIdSuffix = ".debug"
             signingConfig = signingConfigs.getByName("debug")
         }
         release {
@@ -127,6 +130,7 @@ dependencies {
     implementation(project(":core:style"))
     implementation(project(":core:strings"))
 
+    implementation(project(":common:utils"))
     implementation(project(":common:navigation"))
 
     implementation(project(":features:repository"))
@@ -137,6 +141,8 @@ dependencies {
     implementation(project(":features:homeworks:api"))
     implementation(project(":features:settings"))
     implementation(project(":features:settings:api"))
+    implementation(project(":features:analytics"))
+    implementation(project(":features:analytics:api"))
     // endregion
 
     // region Kotlin
@@ -149,6 +155,11 @@ dependencies {
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.core.splashscreen)
+    // endregion
+
+    // region Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
     // endregion
 
     // region Core

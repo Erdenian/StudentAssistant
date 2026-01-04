@@ -2,23 +2,24 @@ package ru.erdenian.studentassistant.di
 
 import android.app.Application
 import ru.erdenian.studentassistant.repository.RepositoryConfig
+import ru.erdenian.studentassistant.utils.BaseComponentHolder
 
-internal object MainComponentHolder {
+internal object MainComponentHolder : BaseComponentHolder<MainComponent, MainComponentHolder.Dependencies>(
+    factory = { (application, repositoryConfig) ->
+        DaggerMainComponent.factory().create(
+            application = application,
+            repositoryConfig = repositoryConfig,
+        )
+    },
+) {
 
-    lateinit var instance: MainComponent
-        private set
+    data class Dependencies(
+        val application: Application,
+        val repositoryConfig: RepositoryConfig,
+    )
 
-    @Synchronized
     fun create(
         application: Application,
         repositoryConfig: RepositoryConfig,
-    ): MainComponent {
-        if (!MainComponentHolder::instance.isInitialized) {
-            instance = DaggerMainComponent.factory().create(
-                application = application,
-                repositoryConfig = repositoryConfig,
-            )
-        }
-        return instance
-    }
+    ): MainComponent = create(Dependencies(application, repositoryConfig))
 }

@@ -7,6 +7,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import io.mockk.verify
 import java.time.LocalDate
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +24,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import ru.erdenian.studentassistant.analytics.api.Analytics
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.homeworks.MainDispatcherRule
 import ru.erdenian.studentassistant.repository.api.HomeworkRepository
 import ru.erdenian.studentassistant.repository.api.LessonRepository
@@ -41,10 +44,14 @@ internal class HomeworkEditorViewModelTest {
     private val semesterRepository = mockk<SemesterRepository>()
     private val lessonRepository = mockk<LessonRepository>()
     private val homeworkRepository = mockk<HomeworkRepository>(relaxed = true)
+    private val analytics = mockk<Analytics>(relaxed = true)
     private val repositoryApi = mockk<RepositoryApi> {
         every { semesterRepository } returns this@HomeworkEditorViewModelTest.semesterRepository
         every { lessonRepository } returns this@HomeworkEditorViewModelTest.lessonRepository
         every { homeworkRepository } returns this@HomeworkEditorViewModelTest.homeworkRepository
+    }
+    private val analyticsApi = mockk<AnalyticsApi> {
+        every { analytics } returns this@HomeworkEditorViewModelTest.analytics
     }
 
     private val semesterId = 1L
@@ -72,7 +79,7 @@ internal class HomeworkEditorViewModelTest {
 
     @Test
     fun `init new homework test`() = runTest {
-        val viewModel = HomeworkEditorViewModel(application, repositoryApi, semesterId, null, null)
+        val viewModel = HomeworkEditorViewModel(application, repositoryApi, analyticsApi, semesterId, null, null)
         // Сбор потоков необходим, чтобы во ViewModel сработали onEach, устанавливающие флаги загрузки
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.existingSubjects.collect() }
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.semesterDatesRange.collect() }
@@ -92,7 +99,7 @@ internal class HomeworkEditorViewModelTest {
         val homework = Homework("Subject", "Description", today, false, semesterId, 10L)
         coEvery { homeworkRepository.get(homework.id) } returns homework
 
-        val viewModel = HomeworkEditorViewModel(application, repositoryApi, semesterId, homework.id, null)
+        val viewModel = HomeworkEditorViewModel(application, repositoryApi, analyticsApi, semesterId, homework.id, null)
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.existingSubjects.collect() }
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.semesterDatesRange.collect() }
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
@@ -105,8 +112,36 @@ internal class HomeworkEditorViewModelTest {
     }
 
     @Test
+    fun `logUnknownSubjectAction test`() {
+        val viewModel = HomeworkEditorViewModel(application, repositoryApi, analyticsApi, semesterId, null, null)
+
+        viewModel.subjectName.value = "Subject name"
+        viewModel.logUnknownSubjectAction(true)
+        verify {
+            analytics.logEvent(
+                name = "homework_unknown_subject_decision",
+                params = mapOf(
+                    "action" to "save_and_create",
+                    "subject_name" to "Subject name",
+                ),
+            )
+        }
+
+        viewModel.logUnknownSubjectAction(false)
+        verify {
+            analytics.logEvent(
+                name = "homework_unknown_subject_decision",
+                params = mapOf(
+                    "action" to "save",
+                    "subject_name" to "Subject name",
+                ),
+            )
+        }
+    }
+
+    @Test
     fun `save new homework test`() = runTest {
-        val viewModel = HomeworkEditorViewModel(application, repositoryApi, semesterId, null, null)
+        val viewModel = HomeworkEditorViewModel(application, repositoryApi, analyticsApi, semesterId, null, null)
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.existingSubjects.collect() }
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.semesterDatesRange.collect() }
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
@@ -127,6 +162,7 @@ internal class HomeworkEditorViewModelTest {
                 semesterId = semesterId,
             )
         }
+        coVerify { analytics.logEvent("homework_created", mapOf("subject_name" to "Subject")) }
         assertTrue(viewModel.done.value)
     }
 
@@ -135,7 +171,7 @@ internal class HomeworkEditorViewModelTest {
         val homework = Homework("Subject", "Description", today, false, semesterId, 10L)
         coEvery { homeworkRepository.get(homework.id) } returns homework
 
-        val viewModel = HomeworkEditorViewModel(application, repositoryApi, semesterId, homework.id, null)
+        val viewModel = HomeworkEditorViewModel(application, repositoryApi, analyticsApi, semesterId, homework.id, null)
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.existingSubjects.collect() }
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.semesterDatesRange.collect() }
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
@@ -154,6 +190,7 @@ internal class HomeworkEditorViewModelTest {
                 semesterId = semesterId,
             )
         }
+        coVerify { analytics.logEvent("homework_edited", mapOf("subject_name" to "New Subject")) }
         assertTrue(viewModel.done.value)
     }
 
@@ -163,7 +200,7 @@ internal class HomeworkEditorViewModelTest {
         val homework = Homework("Subject", "Description", today, false, semesterId, homeworkId)
         coEvery { homeworkRepository.get(homeworkId) } returns homework
 
-        val viewModel = HomeworkEditorViewModel(application, repositoryApi, semesterId, homeworkId, null)
+        val viewModel = HomeworkEditorViewModel(application, repositoryApi, analyticsApi, semesterId, homeworkId, null)
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.existingSubjects.collect() }
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.semesterDatesRange.collect() }
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
@@ -173,12 +210,13 @@ internal class HomeworkEditorViewModelTest {
         advanceUntilIdle()
 
         coVerify { homeworkRepository.delete(homeworkId) }
+        coVerify { analytics.logEvent("homework_deleted", mapOf("subject_name" to "Subject")) }
         assertTrue(viewModel.done.value)
     }
 
     @Test
     fun `error test`() = runTest {
-        val viewModel = HomeworkEditorViewModel(application, repositoryApi, semesterId, null, null)
+        val viewModel = HomeworkEditorViewModel(application, repositoryApi, analyticsApi, semesterId, null, null)
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.existingSubjects.collect() }
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.semesterDatesRange.collect() }
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.error.collect() }
@@ -198,12 +236,12 @@ internal class HomeworkEditorViewModelTest {
 
     @Test
     fun `lessonExists test`() = runTest {
-        val viewModel = HomeworkEditorViewModel(application, repositoryApi, semesterId, null, null)
+        val viewModel = HomeworkEditorViewModel(application, repositoryApi, analyticsApi, semesterId, null, null)
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.existingSubjects.collect() }
         advanceUntilIdle()
 
         // subjectsFlow имеет значения "Subject1", "Subject2"
-        
+
         viewModel.subjectName.value = "Subject1"
         assertTrue(viewModel.lessonExists)
 

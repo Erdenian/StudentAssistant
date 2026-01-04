@@ -2,6 +2,8 @@ package ru.erdenian.studentassistant.repository.impl
 
 import java.time.LocalDate
 import javax.inject.Inject
+import javax.inject.Named
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -10,8 +12,9 @@ import ru.erdenian.studentassistant.repository.api.SemesterRepository
 import ru.erdenian.studentassistant.repository.database.dao.SemesterDao
 import ru.erdenian.studentassistant.repository.database.entity.SemesterEntity
 
+@Singleton
 internal class SemesterRepositoryImpl @Inject constructor(
-    coroutineScope: CoroutineScope,
+    @Named("application") coroutineScope: CoroutineScope,
     private val semesterDao: SemesterDao,
     private val selectedSemesterRepository: SelectedSemesterRepositoryImpl,
 ) : SemesterRepository {

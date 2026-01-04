@@ -108,30 +108,11 @@ internal fun DurationPreference(
     }
 }
 
-@Suppress("DEPRECATION")
 private var TimePicker.duration: Duration
-    get() {
-        val hours: Int
-        val minutes: Int
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            hours = hour
-            minutes = minute
-        } else {
-            hours = currentHour
-            minutes = currentMinute
-        }
-
-        return Duration.ofHours(hours.toLong()).plusMinutes(minutes.toLong())
-    }
+    get() = Duration.ofHours(hour.toLong()).plusMinutes(minute.toLong())
     set(value) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            hour = value.toHours().toInt()
-            minute = value.toMinutesPart()
-        } else {
-            currentHour = value.toHours().toInt()
-            currentMinute = value.toMinutesPart()
-        }
+        hour = value.toHours().toInt()
+        minute = value.toMinutesPart()
     }
 
 @AppPreviews

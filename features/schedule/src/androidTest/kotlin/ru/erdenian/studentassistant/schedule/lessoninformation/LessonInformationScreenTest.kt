@@ -19,6 +19,8 @@ import kotlinx.serialization.Serializable
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import ru.erdenian.studentassistant.analytics.api.Analytics
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.navigation.LocalSharedTransitionScope
 import ru.erdenian.studentassistant.navigation.Navigator
@@ -59,6 +61,12 @@ internal class LessonInformationScreenTest {
                 override val semesterRepository = this@LessonInformationScreenTest.semesterRepository
                 override val selectedSemesterRepository = this@LessonInformationScreenTest.selectedSemesterRepository
                 override val settingsRepository = this@LessonInformationScreenTest.settingsRepository
+            }
+            override val analyticsApi: AnalyticsApi = object : AnalyticsApi {
+                override val analytics = object : Analytics {
+                    override fun logEvent(name: String, params: Map<String, Any>) = Unit
+                    override fun setUserProperty(name: String, value: String?) = Unit
+                }
             }
         }
         ScheduleComponentHolder.create(dependencies)

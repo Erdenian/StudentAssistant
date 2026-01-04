@@ -5,6 +5,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import java.time.LocalDate
 import java.time.LocalTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,6 +22,8 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
+import ru.erdenian.studentassistant.analytics.api.Analytics
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.repository.api.HomeworkRepository
 import ru.erdenian.studentassistant.repository.api.LessonRepository
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
@@ -37,14 +40,18 @@ internal class LessonInformationViewModelTest {
     private val application = mockk<Application>()
     private val lessonRepository = mockk<LessonRepository>()
     private val homeworkRepository = mockk<HomeworkRepository>()
+    private val analytics = mockk<Analytics>(relaxed = true)
     private val repositoryApi = mockk<RepositoryApi> {
         every { lessonRepository } returns this@LessonInformationViewModelTest.lessonRepository
         every { homeworkRepository } returns this@LessonInformationViewModelTest.homeworkRepository
     }
+    private val analyticsApi = mockk<AnalyticsApi> {
+        every { analytics } returns this@LessonInformationViewModelTest.analytics
+    }
 
     private val lesson = Lesson(
         "Subject", "T", emptyList(), emptyList(), LocalTime.MIN, LocalTime.MAX,
-        Lesson.Repeat.ByDates(emptySet()), 1L, 10L
+        Lesson.Repeat.ByDates(emptySet()), 1L, 10L,
     )
 
     private val lessonFlow = MutableStateFlow<Lesson?>(lesson)
@@ -56,7 +63,7 @@ internal class LessonInformationViewModelTest {
     }
 
     private val viewModel by lazy {
-        LessonInformationViewModel(application, repositoryApi, lesson)
+        LessonInformationViewModel(application, repositoryApi, analyticsApi, lesson)
     }
 
     @Test
@@ -71,6 +78,25 @@ internal class LessonInformationViewModelTest {
         assertEquals(lesson, viewModel.lesson.value)
         assertFalse(viewModel.isDeleted.value)
         assertEquals(emptyList<Homework>(), viewModel.homeworks.value)
+    }
+
+    @Test
+    fun `logEditLessonClicked test`() {
+        viewModel.logEditLessonClicked()
+        verify { analytics.logEvent("lesson_edit_clicked", any()) }
+    }
+
+    @Test
+    fun `logAddHomeworkClicked test`() {
+        viewModel.logAddHomeworkClicked()
+        verify { analytics.logEvent("homework_add_clicked", any()) }
+    }
+
+    @Test
+    fun `logHomeworkClicked test`() {
+        val homework = Homework("Subject", "D", LocalDate.MAX, false, 1L, 100L)
+        viewModel.logHomeworkClicked(homework)
+        verify { analytics.logEvent("homework_clicked", mapOf("subject_name" to "Subject")) }
     }
 
     @Test
@@ -90,6 +116,7 @@ internal class LessonInformationViewModelTest {
         advanceUntilIdle()
 
         coVerify { homeworkRepository.delete(homework.id) }
+        verify { analytics.logEvent("homework_deleted", any()) }
     }
 
     @Test

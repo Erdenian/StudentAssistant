@@ -75,6 +75,7 @@ internal fun LessonInformationScreen(route: ScheduleRoute.LessonInformation) {
         homeworks = homeworks,
         onBackClick = navController::goBack,
         onEditClick = {
+            viewModel.logEditLessonClicked()
             navController.navigate(
                 ScheduleRoute.LessonEditor(
                     semesterId = nonNullLesson.semesterId,
@@ -83,11 +84,13 @@ internal fun LessonInformationScreen(route: ScheduleRoute.LessonInformation) {
             )
         },
         onHomeworkClick = { clickedHomework ->
+            viewModel.logHomeworkClicked(clickedHomework)
             navController.navigate(
                 HomeworksRoute.HomeworkEditor(semesterId = clickedHomework.semesterId, homeworkId = clickedHomework.id),
             )
         },
         onAddHomeworkClick = {
+            viewModel.logAddHomeworkClicked()
             navController.navigate(
                 HomeworksRoute.HomeworkEditor(
                     semesterId = nonNullLesson.semesterId,

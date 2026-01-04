@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.utils.Default
 
@@ -32,6 +33,7 @@ import ru.erdenian.studentassistant.utils.Default
 internal class HomeworkEditorViewModel @AssistedInject constructor(
     application: Application,
     repositoryApi: RepositoryApi,
+    analyticsApi: AnalyticsApi,
     @Assisted val semesterId: Long,
     @Assisted private val homeworkId: Long?,
     @Assisted subjectName: String?,
@@ -40,6 +42,7 @@ internal class HomeworkEditorViewModel @AssistedInject constructor(
     private val semesterRepository = repositoryApi.semesterRepository
     private val lessonRepository = repositoryApi.lessonRepository
     private val homeworkRepository = repositoryApi.homeworkRepository
+    private val analytics = analyticsApi.analytics
 
     @AssistedFactory
     abstract class Factory {
@@ -121,6 +124,24 @@ internal class HomeworkEditorViewModel @AssistedInject constructor(
         }
     }
 
+    /**
+     * Отправляет событие аналитики о выборе действия для несуществующего предмета.
+     *
+     * @param createLesson true, если пользователь выбрал "Сохранить и создать занятие".
+     */
+    fun logUnknownSubjectAction(createLesson: Boolean) {
+        analytics.logEvent(
+            name = "homework_unknown_subject_decision",
+            params = mapOf(
+                "action" to if (createLesson) "save_and_create" else "save",
+                "subject_name" to subjectName.value,
+            ),
+        )
+    }
+
+    /**
+     * Сохраняет домашнее задание (создает новое или обновляет существующее).
+     */
     fun save() {
         check(error.value == null)
 
@@ -134,6 +155,10 @@ internal class HomeworkEditorViewModel @AssistedInject constructor(
                     deadline = deadline.value,
                     semesterId = semesterId,
                 )
+                analytics.logEvent(
+                    name = "homework_edited",
+                    params = mapOf("subject_name" to subjectName.value),
+                )
             } else {
                 homeworkRepository.insert(
                     subjectName = subjectName.value,
@@ -141,16 +166,27 @@ internal class HomeworkEditorViewModel @AssistedInject constructor(
                     deadline = deadline.value,
                     semesterId = semesterId,
                 )
+                analytics.logEvent(
+                    name = "homework_created",
+                    params = mapOf("subject_name" to subjectName.value),
+                )
             }
 
             donePrivate.value = true
         }
     }
 
+    /**
+     * Удаляет текущее домашнее задание.
+     */
     fun delete() {
         operationPrivate.value = Operation.DELETING
         viewModelScope.launch {
             homeworkRepository.delete(checkNotNull(homeworkId))
+            analytics.logEvent(
+                name = "homework_deleted",
+                params = mapOf("subject_name" to subjectName.value),
+            )
             donePrivate.value = true
         }
     }

@@ -20,6 +20,8 @@ import kotlinx.serialization.Serializable
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import ru.erdenian.studentassistant.analytics.api.Analytics
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.navigation.LocalSharedTransitionScope
 import ru.erdenian.studentassistant.navigation.Navigator
@@ -60,6 +62,12 @@ internal class ScheduleScreenTest {
                 override val lessonRepository = this@ScheduleScreenTest.lessonRepository
                 override val homeworkRepository = this@ScheduleScreenTest.homeworkRepository
                 override val settingsRepository = this@ScheduleScreenTest.settingsRepository
+            }
+            override val analyticsApi: AnalyticsApi = object : AnalyticsApi {
+                override val analytics = object : Analytics {
+                    override fun logEvent(name: String, params: Map<String, Any>) = Unit
+                    override fun setUserProperty(name: String, value: String?) = Unit
+                }
             }
         }
         ScheduleComponentHolder.create(dependencies)

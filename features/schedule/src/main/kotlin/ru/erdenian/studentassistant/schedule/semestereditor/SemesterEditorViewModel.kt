@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.utils.Default
 
@@ -28,11 +29,13 @@ import ru.erdenian.studentassistant.utils.Default
 internal class SemesterEditorViewModel @AssistedInject constructor(
     application: Application,
     repositoryApi: RepositoryApi,
+    analyticsApi: AnalyticsApi,
     @Assisted private val semesterId: Long?,
 ) : AndroidViewModel(application) {
 
     private val semesterRepository = repositoryApi.semesterRepository
     private val lessonRepository = repositoryApi.lessonRepository
+    private val analytics = analyticsApi.analytics
 
     @AssistedFactory
     interface Factory {
@@ -153,8 +156,16 @@ internal class SemesterEditorViewModel @AssistedInject constructor(
                 semesterRepository.update(
                     id = semesterId, name = name.value, firstDay = firstDay.value, lastDay = lastDay.value,
                 )
+                analytics.logEvent(
+                    name = "semester_edited",
+                    params = mapOf("name" to name.value),
+                )
             } else {
                 semesterRepository.insert(name = name.value, firstDay = firstDay.value, lastDay = lastDay.value)
+                analytics.logEvent(
+                    name = "semester_created",
+                    params = mapOf("name" to name.value),
+                )
             }
             donePrivate.value = true
         }

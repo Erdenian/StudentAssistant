@@ -147,15 +147,18 @@ internal fun ScheduleEditorScreen(route: ScheduleRoute.ScheduleEditor) {
         rememberLessons = rememberLessons,
         onBackClick = navController::goBack,
         onEditSemesterClick = {
+            viewModel.logEditSemesterClicked()
             navController.navigate(ScheduleRoute.SemesterEditor(semesterId = viewModel.semesterId))
         },
         onDeleteSemesterClick = { showDeleteSemesterDialog = true },
         onLessonClick = { lesson ->
+            viewModel.logLessonClick(lesson)
             navController.navigate(
                 ScheduleRoute.LessonEditor(semesterId = viewModel.semesterId, lessonId = lesson.id, copy = false),
             )
         },
         onCopyLessonClick = { lesson ->
+            viewModel.logCopyLessonClick(lesson)
             navController.navigate(
                 ScheduleRoute.LessonEditor(semesterId = viewModel.semesterId, lessonId = lesson.id, copy = true),
             )
@@ -163,7 +166,7 @@ internal fun ScheduleEditorScreen(route: ScheduleRoute.ScheduleEditor) {
         onDeleteLessonClick = { lesson ->
             showHomeworksCounterOperation = true
             coroutineScope.launch {
-                if (viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson)) {
+                if (viewModel.isLastLessonOfSubjectAndHasHomeworks(lesson)) {
                     lessonForDeleteWithHomeworksDialog = lesson
                 } else {
                     lessonForDeleteWithoutHomeworksDialog = lesson
@@ -172,6 +175,7 @@ internal fun ScheduleEditorScreen(route: ScheduleRoute.ScheduleEditor) {
             }
         },
         onAddLessonClick = { dayOfWeek ->
+            viewModel.logAddLessonClick()
             navController.navigate(
                 ScheduleRoute.LessonEditor(semesterId = viewModel.semesterId, dayOfWeek = dayOfWeek),
             )

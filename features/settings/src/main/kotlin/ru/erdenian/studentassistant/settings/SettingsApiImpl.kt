@@ -4,6 +4,7 @@ import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import javax.inject.Inject
 import javax.inject.Singleton
+import ru.erdenian.studentassistant.navigation.NavGraphContributor
 import ru.erdenian.studentassistant.settings.api.SettingsApi
 import ru.erdenian.studentassistant.settings.api.SettingsRoute
 import ru.erdenian.studentassistant.settings.di.SettingsComponentHolder
@@ -14,7 +15,9 @@ public fun createSettingsApi(dependencies: SettingsDependencies): SettingsApi =
 
 @Singleton
 internal class SettingsApiImpl @Inject constructor() : SettingsApi {
-    override fun addToGraph(scope: EntryProviderScope<NavKey>) {
-        scope.entry<SettingsRoute.Settings> { SettingsScreen() }
+    override val navGraphContributor = object : NavGraphContributor {
+        override fun addTo(scope: EntryProviderScope<NavKey>) {
+            scope.entry<SettingsRoute.Settings> { SettingsScreen() }
+        }
     }
 }

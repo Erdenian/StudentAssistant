@@ -17,6 +17,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import ru.erdenian.studentassistant.analytics.api.Analytics
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.navigation.Navigator
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
@@ -57,6 +59,12 @@ internal class LessonEditorScreenTest {
                 override val homeworkRepository = this@LessonEditorScreenTest.homeworkRepository
                 override val selectedSemesterRepository = this@LessonEditorScreenTest.selectedSemesterRepository
                 override val settingsRepository = this@LessonEditorScreenTest.settingsRepository
+            }
+            override val analyticsApi: AnalyticsApi = object : AnalyticsApi {
+                override val analytics = object : Analytics {
+                    override fun logEvent(name: String, params: Map<String, Any>) = Unit
+                    override fun setUserProperty(name: String, value: String?) = Unit
+                }
             }
         }
         ScheduleComponentHolder.create(dependencies)

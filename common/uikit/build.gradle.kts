@@ -15,6 +15,6 @@ dependencies {
     // endregion
 
     // region AndroidX
-    api(libs.androidx.core.ktx)
+    api(libs.androidx.core)
     // endregion
 }

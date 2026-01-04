@@ -13,6 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/SplashTheme">
 
+        <!-- Отключаем автоматическое отслеживание экранов, так как используем ручное для Compose -->
+        <meta-data
+            android:name="google_analytics_automatic_screen_reporting_enabled"
+            android:value="false" />
+
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenLayout|screenSize"

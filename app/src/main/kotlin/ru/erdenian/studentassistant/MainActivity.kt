@@ -3,6 +3,7 @@ package ru.erdenian.studentassistant
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,12 +21,24 @@ internal class MainActivity : AppCompatActivity() {
         installSplashScreen().setKeepOnScreenCondition { showSplashScreen }
 
         setContent {
+            val isDarkTheme = isSystemInDarkTheme()
             LaunchedEffect(Unit) {
-                MainComponentHolder.instance.repositoryApi.selectedSemesterRepository.await()
+                val mainComponent = MainComponentHolder.instance
+                val analytics = mainComponent.analyticsApi.analytics
+
+                analytics.setUserProperty("theme", if (isDarkTheme) "dark" else "light")
+                analytics.setUserProperty(
+                    name = "is_advanced_weeks_selector_enabled",
+                    value = mainComponent.repositoryApi.settingsRepository.isAdvancedWeeksSelectorEnabled.toString(),
+                )
+
+                mainComponent.repositoryApi.selectedSemesterRepository.await()
+
+                analytics.logEvent("app_opened")
                 showSplashScreen = false
             }
 
-            AppTheme { StudentAssistantApp() }
+            AppTheme(isDarkTheme = isDarkTheme) { StudentAssistantApp() }
         }
     }
 }
