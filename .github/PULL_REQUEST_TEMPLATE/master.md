@@ -4,3 +4,5 @@
 
 - [ ] Поднятие `versionCode` и `versionName` в файле `app/build.gradle.kts`
 - [ ] Обновление `CHANGELOG.md` (фиксация версии и даты)
+- [ ] Обновление `README.md` при необходимости
+- [ ] Обновление `AGENTS.md` при необходимости
