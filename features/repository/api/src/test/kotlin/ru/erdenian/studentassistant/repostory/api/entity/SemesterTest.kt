@@ -19,7 +19,7 @@ class SemesterTest {
         val start = LocalDate.of(2023, 2, 13)
         val end = LocalDate.of(2023, 5, 31)
         val semester = Semester("semester1", start, end, 1L)
-        
+
         assertEquals(start..end, semester.dateRange)
     }
 

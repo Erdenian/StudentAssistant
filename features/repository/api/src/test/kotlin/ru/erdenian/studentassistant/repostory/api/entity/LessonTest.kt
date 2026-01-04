@@ -33,7 +33,7 @@ internal class LessonTest {
             start, end,
             Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)), 1L, 10L,
         )
-        
+
         assertEquals(start..end, lesson.timeRange)
     }
 

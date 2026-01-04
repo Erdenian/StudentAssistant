@@ -33,13 +33,13 @@ internal class HomeworkRepositoryImplTest {
         val all = fakeHomeworkDao.homeworks.value
         assertEquals(1, all.size)
         assertEquals("Math", all[0].subjectName)
-        
+
         // Проверка get
         val id = all[0].id
         val loaded = repository.get(id)
         assertNotNull(loaded)
         assertEquals("Math", loaded?.subjectName)
-        
+
         // Проверка getFlow
         val loadedFlow = repository.getFlow(id).first()
         assertNotNull(loadedFlow)
@@ -49,9 +49,9 @@ internal class HomeworkRepositoryImplTest {
     @Test
     fun `update test`() = runTest(testDispatcher) {
         val id = fakeHomeworkDao.insert(HomeworkEntity("Math", "HW1", LocalDate.of(2025, 2, 14), 1L))
-        
+
         repository.update(id, "New Math", "HW2", LocalDate.of(2025, 2, 15), 1L)
-        
+
         val updated = repository.get(id)
         assertEquals("New Math", updated?.subjectName)
         assertEquals("HW2", updated?.description)
@@ -102,78 +102,78 @@ internal class HomeworkRepositoryImplTest {
         assertEquals(1, list2.size)
         assertEquals("H2", list2[0].subjectName)
     }
-    
+
     @Test
     fun `getCount tests`() = runTest(testDispatcher) {
         val s1 = SemesterEntity("S1", LocalDate.now(), LocalDate.now(), id = 1)
         fakeSemesterDao.insert(s1)
         selectedSemesterRepository.selectSemester(1L)
-        
+
         assertEquals(0, repository.getCount())
         assertEquals(0, repository.getCount("Math"))
-        
+
         fakeHomeworkDao.insert(HomeworkEntity("Math", "D", LocalDate.now(), 1L))
-        
+
         assertEquals(1, repository.getCount())
         assertEquals(1, repository.getCount("Math"))
         assertEquals(0, repository.getCount("Physics"))
     }
-    
+
     @Test
     fun `hasHomeworks test`() = runTest(testDispatcher) {
         assertFalse(repository.hasHomeworks(1L, "Math"))
         fakeHomeworkDao.insert(HomeworkEntity("Math", "D", LocalDate.now(), 1L))
         assertTrue(repository.hasHomeworks(1L, "Math"))
     }
-    
+
     @Test
     fun `getAllFlow by subject test`() = runTest(testDispatcher) {
         val s1 = SemesterEntity("S1", LocalDate.now(), LocalDate.now(), id = 1)
         fakeSemesterDao.insert(s1)
         selectedSemesterRepository.selectSemester(1L)
-        
+
         fakeHomeworkDao.insert(HomeworkEntity("Math", "D1", LocalDate.now(), 1L))
         fakeHomeworkDao.insert(HomeworkEntity("Physics", "D2", LocalDate.now(), 1L))
-        
+
         val list = repository.getAllFlow("Math").first()
         assertEquals(1, list.size)
         assertEquals("Math", list[0].subjectName)
     }
-    
+
     @Test
     fun `time based flows tests`() = runTest(testDispatcher) {
         val today = LocalDate.of(2025, 2, 14)
         val s1 = SemesterEntity("S1", today, today, id = 1)
         fakeSemesterDao.insert(s1)
         selectedSemesterRepository.selectSemester(1L)
-        
+
         // В FakeHomeworkDao логика следующая:
         // Просроченные (Overdue): дедлайн < сегодня И не сделано
         // Прошедшие (Past): дедлайн < сегодня И сделано
         // Актуальные (Actual): дедлайн >= сегодня (независимо от статуса выполнения)
-        
+
         // Фиксируем дату "сегодня" для этого теста, так как репозиторий использует LocalDate.now()
         val realToday = LocalDate.now()
         val overdueHw = HomeworkEntity("Overdue", "D", realToday.minusDays(1), 1L, isDone = false)
         val pastHw = HomeworkEntity("Past", "D", realToday.minusDays(1), 1L, isDone = true)
         val actualHw = HomeworkEntity("Actual", "D", realToday, 1L, isDone = false)
-        
+
         fakeHomeworkDao.insert(overdueHw)
         fakeHomeworkDao.insert(pastHw)
         fakeHomeworkDao.insert(actualHw)
-        
+
         val overdueList = repository.overdueFlow.first()
         assertEquals(1, overdueList.size)
         assertEquals("Overdue", overdueList[0].subjectName)
-        
+
         val pastList = repository.pastFlow.first()
         assertEquals(1, pastList.size)
         assertEquals("Past", pastList[0].subjectName)
-        
+
         val actualList = repository.actualFlow.first()
         assertEquals(1, actualList.size)
         assertEquals("Actual", actualList[0].subjectName)
-        
+
         // Проверка getActualFlow(subjectName)
         val actualListSubject = repository.getActualFlow("Actual").first()
         assertEquals(1, actualListSubject.size)
