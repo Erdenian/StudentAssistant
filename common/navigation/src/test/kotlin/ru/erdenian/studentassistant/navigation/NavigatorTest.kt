@@ -27,7 +27,7 @@ internal class NavigatorTest {
         val otherStack = mockk<NavBackStack<NavKey>>(relaxed = true)
         val backStacks: Map<NavKey, NavBackStack<NavKey>> = mapOf(
             RouteStart to startStack,
-            RouteOtherTop to otherStack
+            RouteOtherTop to otherStack,
         )
 
         // Мокаем поведение списка для .first()
@@ -37,7 +37,7 @@ internal class NavigatorTest {
         val state = NavigationState(
             startRoute = RouteStart,
             topLevelRoute = mutableStateOf(RouteStart),
-            backStacks = backStacks
+            backStacks = backStacks,
         )
         val navigator = Navigator(state)
 
@@ -53,13 +53,13 @@ internal class NavigatorTest {
         val otherStack = mockk<NavBackStack<NavKey>>(relaxed = true)
         val backStacks: Map<NavKey, NavBackStack<NavKey>> = mapOf(
             RouteStart to startStack,
-            RouteOtherTop to otherStack
+            RouteOtherTop to otherStack,
         )
 
         val state = NavigationState(
             startRoute = RouteStart,
             topLevelRoute = mutableStateOf(RouteStart),
-            backStacks = backStacks
+            backStacks = backStacks,
         )
         val navigator = Navigator(state)
 
@@ -78,7 +78,7 @@ internal class NavigatorTest {
         val state = NavigationState(
             startRoute = RouteStart,
             topLevelRoute = mutableStateOf(RouteStart),
-            backStacks = backStacks
+            backStacks = backStacks,
         )
         val navigator = Navigator(state)
 
@@ -104,7 +104,7 @@ internal class NavigatorTest {
         val state = NavigationState(
             startRoute = RouteStart,
             topLevelRoute = mutableStateOf(RouteStart),
-            backStacks = backStacks
+            backStacks = backStacks,
         )
         val navigator = Navigator(state)
 
@@ -120,7 +120,7 @@ internal class NavigatorTest {
         val otherStack = mockk<NavBackStack<NavKey>>(relaxed = true)
         val backStacks: Map<NavKey, NavBackStack<NavKey>> = mapOf(
             RouteStart to startStack,
-            RouteOtherTop to otherStack
+            RouteOtherTop to otherStack,
         )
 
         // Мокаем поведение списка для .last()
@@ -131,7 +131,7 @@ internal class NavigatorTest {
         val state = NavigationState(
             startRoute = RouteStart,
             topLevelRoute = mutableStateOf(RouteOtherTop),
-            backStacks = backStacks
+            backStacks = backStacks,
         )
         val navigator = Navigator(state)
 
@@ -147,13 +147,13 @@ internal class NavigatorTest {
         val otherStack = mockk<NavBackStack<NavKey>>()
         val backStacks: Map<NavKey, NavBackStack<NavKey>> = mapOf(
             RouteStart to startStack,
-            RouteOtherTop to otherStack
+            RouteOtherTop to otherStack,
         )
 
         val state = NavigationState(
             startRoute = RouteStart,
             topLevelRoute = mutableStateOf(RouteStart),
-            backStacks = backStacks
+            backStacks = backStacks,
         )
 
         assertEquals(listOf(RouteStart), state.stacksInUse)

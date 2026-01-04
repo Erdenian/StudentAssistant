@@ -9,7 +9,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import ru.erdenian.studentassistant.analytics.api.Analytics
-import ru.erdenian.studentassistant.homeworks.api.HomeworksRoute
+import ru.erdenian.studentassistant.homework.api.HomeworkRoute
 import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
 import ru.erdenian.studentassistant.settings.api.SettingsRoute
 import ru.erdenian.studentassistant.strings.RS
@@ -37,7 +37,7 @@ internal class AnalyticsTrackingTest {
         // 2. Переходим в Задания
         composeTestRule.onNodeWithText(context.getString(RS.h_title)).performClick()
         composeTestRule.waitForIdle()
-        assertLastScreenEvent(fakeAnalytics, HomeworksRoute.Homeworks::class.simpleName!!)
+        assertLastScreenEvent(fakeAnalytics, HomeworkRoute.Homeworks::class.simpleName!!)
 
         // 3. Переходим в Настройки
         composeTestRule.onNodeWithText(context.getString(RS.st_title)).performClick()

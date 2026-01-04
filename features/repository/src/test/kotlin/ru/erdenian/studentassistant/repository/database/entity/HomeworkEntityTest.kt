@@ -12,18 +12,18 @@ internal class HomeworkEntityTest {
     fun subjectNameTest() {
         assertThrows(IllegalArgumentException::class.java) {
             HomeworkEntity(
-                "",
-                "description",
-                LocalDate.of(2023, 2, 15),
-                semesterId,
+                subjectName = "",
+                description = "description",
+                deadline = LocalDate.of(2023, 2, 15),
+                semesterId = semesterId,
             )
         }
         assertThrows(IllegalArgumentException::class.java) {
             HomeworkEntity(
-                "    ",
-                "description",
-                LocalDate.of(2023, 2, 15),
-                semesterId,
+                subjectName = "    ",
+                description = "description",
+                deadline = LocalDate.of(2023, 2, 15),
+                semesterId = semesterId,
             )
         }
     }
@@ -32,18 +32,18 @@ internal class HomeworkEntityTest {
     fun descriptionTest() {
         assertThrows(IllegalArgumentException::class.java) {
             HomeworkEntity(
-                "name",
-                "",
-                LocalDate.of(2023, 2, 15),
-                semesterId,
+                subjectName = "name",
+                description = "",
+                deadline = LocalDate.of(2023, 2, 15),
+                semesterId = semesterId,
             )
         }
         assertThrows(IllegalArgumentException::class.java) {
             HomeworkEntity(
-                "name",
-                "     ",
-                LocalDate.of(2023, 2, 15),
-                semesterId,
+                subjectName = "name",
+                description = "     ",
+                deadline = LocalDate.of(2023, 2, 15),
+                semesterId = semesterId,
             )
         }
     }
@@ -51,10 +51,10 @@ internal class HomeworkEntityTest {
     @Test
     fun successfulTest() {
         HomeworkEntity(
-            "name",
-            "description",
-            LocalDate.of(2023, 2, 15),
-            semesterId,
+            subjectName = "name",
+            description = "description",
+            deadline = LocalDate.of(2023, 2, 15),
+            semesterId = semesterId,
         )
     }
 }

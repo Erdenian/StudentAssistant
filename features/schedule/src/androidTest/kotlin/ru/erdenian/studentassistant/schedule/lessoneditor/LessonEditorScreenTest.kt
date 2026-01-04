@@ -94,15 +94,15 @@ internal class LessonEditorScreenTest {
     @Test
     fun verifyEditLesson() {
         val lesson = Lesson(
-            "Математика",
-            "Лекция",
-            emptyList(),
-            emptyList(),
-            LocalTime.of(9, 0),
-            LocalTime.of(10, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
-            semesterId,
-            10L,
+            subjectName = "Математика",
+            type = "Лекция",
+            teachers = emptyList(),
+            classrooms = emptyList(),
+            startTime = LocalTime.of(9, 0),
+            endTime = LocalTime.of(10, 30),
+            lessonRepeat = Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
+            semesterId = semesterId,
+            id = 10L,
         )
         lessonRepository.lessons.value = listOf(lesson)
 
@@ -124,15 +124,15 @@ internal class LessonEditorScreenTest {
     @Test
     fun verifyDeleteLessonDialogWithoutHomeworks() {
         val lesson = Lesson(
-            "Математика",
-            "Лекция",
-            emptyList(),
-            emptyList(),
-            LocalTime.of(9, 0),
-            LocalTime.of(10, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
-            semesterId,
-            10L,
+            subjectName = "Математика",
+            type = "Лекция",
+            teachers = emptyList(),
+            classrooms = emptyList(),
+            startTime = LocalTime.of(9, 0),
+            endTime = LocalTime.of(10, 30),
+            lessonRepeat = Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
+            semesterId = semesterId,
+            id = 10L,
         )
         lessonRepository.lessons.value = listOf(lesson)
         homeworkRepository.hasHomeworksResult = false
@@ -158,15 +158,15 @@ internal class LessonEditorScreenTest {
     @Test
     fun verifyDeleteLessonDialogWithHomeworks() {
         val lesson = Lesson(
-            "Математика",
-            "Лекция",
-            emptyList(),
-            emptyList(),
-            LocalTime.of(9, 0),
-            LocalTime.of(10, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
-            semesterId,
-            10L,
+            subjectName = "Математика",
+            type = "Лекция",
+            teachers = emptyList(),
+            classrooms = emptyList(),
+            startTime = LocalTime.of(9, 0),
+            endTime = LocalTime.of(10, 30),
+            lessonRepeat = Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
+            semesterId = semesterId,
+            id = 10L,
         )
         lessonRepository.lessons.value = listOf(lesson)
 
@@ -198,26 +198,26 @@ internal class LessonEditorScreenTest {
     fun verifyRenameOthersDialog() {
         // Два урока с одинаковым предметом
         val lesson1 = Lesson(
-            "Математика",
-            "Лекция",
-            emptyList(),
-            emptyList(),
-            LocalTime.of(9, 0),
-            LocalTime.of(10, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
-            semesterId,
-            10L,
+            subjectName = "Математика",
+            type = "Лекция",
+            teachers = emptyList(),
+            classrooms = emptyList(),
+            startTime = LocalTime.of(9, 0),
+            endTime = LocalTime.of(10, 30),
+            lessonRepeat = Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
+            semesterId = semesterId,
+            id = 10L,
         )
         val lesson2 = Lesson(
-            "Математика",
-            "Практика",
-            emptyList(),
-            emptyList(),
-            LocalTime.of(11, 0),
-            LocalTime.of(12, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
-            semesterId,
-            11L,
+            subjectName = "Математика",
+            type = "Практика",
+            teachers = emptyList(),
+            classrooms = emptyList(),
+            startTime = LocalTime.of(11, 0),
+            endTime = LocalTime.of(12, 30),
+            lessonRepeat = Lesson.Repeat.ByWeekday(DayOfWeek.MONDAY, listOf(true)),
+            semesterId = semesterId,
+            id = 11L,
         )
         lessonRepository.lessons.value = listOf(lesson1, lesson2)
 

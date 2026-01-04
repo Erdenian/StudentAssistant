@@ -96,21 +96,21 @@ internal class ScheduleScreenTest {
     @Test
     fun verifyLessonDisplay() {
         val today = LocalDate.now()
-        val semester = Semester("S1", today.minusDays(1), today.plusDays(7), 1L)
+        val semester = Semester(name = "S1", firstDay = today.minusDays(1), lastDay = today.plusDays(7), id = 1L)
         semesterRepository.semesters.value = listOf(semester)
         selectedSemesterRepository.selectedSemester.value = semester
         lessonRepository.semesters = listOf(semester)
 
         val lesson = Lesson(
-            "Physics",
-            "Lab",
-            emptyList(),
-            emptyList(),
-            LocalTime.of(10, 0),
-            LocalTime.of(11, 30),
-            Lesson.Repeat.ByWeekday(today.dayOfWeek, listOf(true)),
-            1L,
-            10L,
+            subjectName = "Physics",
+            type = "Lab",
+            teachers = emptyList(),
+            classrooms = emptyList(),
+            startTime = LocalTime.of(10, 0),
+            endTime = LocalTime.of(11, 30),
+            lessonRepeat = Lesson.Repeat.ByWeekday(today.dayOfWeek, listOf(true)),
+            semesterId = 1L,
+            id = 10L,
         )
         lessonRepository.lessons.value = listOf(lesson)
 

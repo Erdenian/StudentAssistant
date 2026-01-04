@@ -23,7 +23,7 @@ internal class SemesterRepositoryImplTest {
     @Test
     fun `insert selects new semester test`() = runTest(testDispatcher) {
         val today = LocalDate.of(2025, 2, 14)
-        repository.insert("S1", today, today.plusMonths(1))
+        repository.insert(name = "S1", firstDay = today, lastDay = today.plusMonths(1))
 
         val selected = selectedSemesterRepository.selectedFlow.first()
         assertNotNull(selected)
@@ -33,7 +33,7 @@ internal class SemesterRepositoryImplTest {
     @Test
     fun `delete clears selection if selected test`() = runTest(testDispatcher) {
         val today = LocalDate.of(2025, 2, 14)
-        repository.insert("S1", today, today.plusMonths(1))
+        repository.insert(name = "S1", firstDay = today, lastDay = today.plusMonths(1))
         val s1 = repository.allFlow.first()[0]
 
         repository.delete(s1.id)
@@ -43,10 +43,10 @@ internal class SemesterRepositoryImplTest {
     @Test
     fun `update works test`() = runTest(testDispatcher) {
         val today = LocalDate.of(2025, 2, 14)
-        repository.insert("S1", today, today.plusMonths(1))
+        repository.insert(name = "S1", firstDay = today, lastDay = today.plusMonths(1))
         val s1 = repository.allFlow.first()[0]
 
-        repository.update(s1.id, "S1_Updated", s1.firstDay, s1.lastDay)
+        repository.update(id = s1.id, name = "S1_Updated", firstDay = s1.firstDay, lastDay = s1.lastDay)
 
         val updated = repository.get(s1.id)
         assertEquals("S1_Updated", updated?.name)
@@ -55,8 +55,8 @@ internal class SemesterRepositoryImplTest {
     @Test
     fun `names flow test`() = runTest(testDispatcher) {
         val today = LocalDate.of(2025, 2, 14)
-        repository.insert("S1", today, today.plusMonths(1))
-        repository.insert("S2", today, today.plusMonths(1))
+        repository.insert(name = "S1", firstDay = today, lastDay = today.plusMonths(1))
+        repository.insert(name = "S2", firstDay = today, lastDay = today.plusMonths(1))
 
         val names = repository.namesFlow.first()
         assertEquals(setOf("S1", "S2"), names.toSet())
@@ -65,7 +65,7 @@ internal class SemesterRepositoryImplTest {
     @Test
     fun `get and getFlow test`() = runTest(testDispatcher) {
         val today = LocalDate.of(2025, 2, 14)
-        repository.insert("S1", today, today.plusMonths(1))
+        repository.insert(name = "S1", firstDay = today, lastDay = today.plusMonths(1))
         val s1 = repository.allFlow.first()[0]
 
         // get

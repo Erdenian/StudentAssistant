@@ -7,11 +7,11 @@ import javax.inject.Singleton
 import ru.erdenian.studentassistant.analytics.AnalyticsDependencies
 import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.di.features.AnalyticsModule
-import ru.erdenian.studentassistant.di.features.HomeworksModule
+import ru.erdenian.studentassistant.di.features.HomeworkModule
 import ru.erdenian.studentassistant.di.features.RepositoryModule
 import ru.erdenian.studentassistant.di.features.ScheduleModule
 import ru.erdenian.studentassistant.di.features.SettingsModule
-import ru.erdenian.studentassistant.homeworks.HomeworksDependencies
+import ru.erdenian.studentassistant.homework.HomeworkDependencies
 import ru.erdenian.studentassistant.navigation.NavGraphContributor
 import ru.erdenian.studentassistant.repository.RepositoryConfig
 import ru.erdenian.studentassistant.repository.RepositoryDependencies
@@ -23,7 +23,7 @@ import ru.erdenian.studentassistant.settings.SettingsDependencies
 @Component(
     modules = [
         ScheduleModule::class,
-        HomeworksModule::class,
+        HomeworkModule::class,
         SettingsModule::class,
         RepositoryModule::class,
         AnalyticsModule::class,
@@ -31,7 +31,7 @@ import ru.erdenian.studentassistant.settings.SettingsDependencies
 )
 internal interface MainComponent :
     ScheduleDependencies,
-    HomeworksDependencies,
+    HomeworkDependencies,
     SettingsDependencies,
     RepositoryDependencies,
     AnalyticsDependencies {

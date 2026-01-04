@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-<string-array name="lesson_repeat_types">
+    <string-array name="lesson_repeat_types">
         <item>По днях тижня</item>
         <item>По датах</item>
     </string-array>

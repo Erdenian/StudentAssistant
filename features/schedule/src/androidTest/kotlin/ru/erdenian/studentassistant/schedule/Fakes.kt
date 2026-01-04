@@ -40,12 +40,12 @@ internal class FakeSemesterRepository : SemesterRepository {
 
     override suspend fun insert(name: String, firstDay: LocalDate, lastDay: LocalDate) {
         val id = (semesters.value.maxOfOrNull { it.id } ?: 0) + 1
-        semesters.update { it + Semester(name, firstDay, lastDay, id) }
+        semesters.update { it + Semester(name = name, firstDay = firstDay, lastDay = lastDay, id = id) }
     }
 
     override suspend fun update(id: Long, name: String, firstDay: LocalDate, lastDay: LocalDate) {
         semesters.update { list ->
-            list.map { if (it.id == id) Semester(name, firstDay, lastDay, id) else it }
+            list.map { if (it.id == id) Semester(name = name, firstDay = firstDay, lastDay = lastDay, id = id) else it }
         }
     }
 
@@ -119,15 +119,15 @@ internal class FakeLessonRepository : LessonRepository {
     ) {
         val id = (lessons.value.maxOfOrNull { it.id } ?: 0) + 1
         val lesson = Lesson(
-            subjectName,
-            type,
-            teachers.toList(),
-            classrooms.toList(),
-            startTime,
-            endTime,
-            Lesson.Repeat.ByWeekday(dayOfWeek, weeks),
-            semesterId,
-            id,
+            subjectName = subjectName,
+            type = type,
+            teachers = teachers.toList(),
+            classrooms = classrooms.toList(),
+            startTime = startTime,
+            endTime = endTime,
+            lessonRepeat = Lesson.Repeat.ByWeekday(dayOfWeek, weeks),
+            semesterId = semesterId,
+            id = id,
         )
         lessons.update { it + lesson }
     }
@@ -144,15 +144,15 @@ internal class FakeLessonRepository : LessonRepository {
     ) {
         val id = (lessons.value.maxOfOrNull { it.id } ?: 0) + 1
         val lesson = Lesson(
-            subjectName,
-            type,
-            teachers.toList(),
-            classrooms.toList(),
-            startTime,
-            endTime,
-            Lesson.Repeat.ByDates(dates),
-            semesterId,
-            id,
+            subjectName = subjectName,
+            type = type,
+            teachers = teachers.toList(),
+            classrooms = classrooms.toList(),
+            startTime = startTime,
+            endTime = endTime,
+            lessonRepeat = Lesson.Repeat.ByDates(dates),
+            semesterId = semesterId,
+            id = id,
         )
         lessons.update { it + lesson }
     }
@@ -170,15 +170,15 @@ internal class FakeLessonRepository : LessonRepository {
         weeks: List<Boolean>,
     ) {
         val updated = Lesson(
-            subjectName,
-            type,
-            teachers.toList(),
-            classrooms.toList(),
-            startTime,
-            endTime,
-            Lesson.Repeat.ByWeekday(dayOfWeek, weeks),
-            semesterId,
-            id,
+            subjectName = subjectName,
+            type = type,
+            teachers = teachers.toList(),
+            classrooms = classrooms.toList(),
+            startTime = startTime,
+            endTime = endTime,
+            lessonRepeat = Lesson.Repeat.ByWeekday(dayOfWeek, weeks),
+            semesterId = semesterId,
+            id = id,
         )
         lessons.update { list -> list.map { if (it.id == id) updated else it } }
     }
@@ -195,15 +195,15 @@ internal class FakeLessonRepository : LessonRepository {
         dates: Set<LocalDate>,
     ) {
         val updated = Lesson(
-            subjectName,
-            type,
-            teachers.toList(),
-            classrooms.toList(),
-            startTime,
-            endTime,
-            Lesson.Repeat.ByDates(dates),
-            semesterId,
-            id,
+            subjectName = subjectName,
+            type = type,
+            teachers = teachers.toList(),
+            classrooms = classrooms.toList(),
+            startTime = startTime,
+            endTime = endTime,
+            lessonRepeat = Lesson.Repeat.ByDates(dates),
+            semesterId = semesterId,
+            id = id,
         )
         lessons.update { list -> list.map { if (it.id == id) updated else it } }
     }
@@ -237,19 +237,19 @@ internal class FakeLessonRepository : LessonRepository {
     }
 
     override fun getAllFlow(semesterId: Long, dayOfWeek: DayOfWeek): Flow<List<Lesson>> = lessons.map { list ->
-        list.filter { it.semesterId == semesterId && (it.lessonRepeat as? Lesson.Repeat.ByWeekday)?.dayOfWeek == dayOfWeek }
+        list.filter {
+            it.semesterId == semesterId &&
+                (it.lessonRepeat as? Lesson.Repeat.ByWeekday)?.dayOfWeek == dayOfWeek
+        }
     }
 
     override suspend fun getCount(semesterId: Long): Int = lessons.value.count { it.semesterId == semesterId }
 
     override val hasLessonsFlow: Flow<Boolean> = lessons.map { it.isNotEmpty() }
 
-    override suspend fun hasNonRecurringLessons(semesterId: Long): Boolean {
-        return lessons.value.any {
-            it.semesterId == semesterId && (it.lessonRepeat as? Lesson.Repeat.ByWeekday)?.weeks?.contains(
-                false,
-            ) == true
-        }
+    override suspend fun hasNonRecurringLessons(semesterId: Long) = lessons.value.any {
+        it.semesterId == semesterId &&
+            (it.lessonRepeat as? Lesson.Repeat.ByWeekday)?.weeks?.contains(false) == true
     }
 
     override suspend fun getCount(semesterId: Long, subjectName: String): Int =
@@ -273,7 +273,5 @@ internal class FakeLessonRepository : LessonRepository {
     override fun getClassrooms(semesterId: Long): Flow<List<String>> =
         lessons.map { list -> list.filter { it.semesterId == semesterId }.flatMap { it.classrooms }.distinct() }
 
-    override suspend fun getNextStartTime(semesterId: Long, dayOfWeek: DayOfWeek): LocalTime {
-        return LocalTime.of(9, 0)
-    }
+    override suspend fun getNextStartTime(semesterId: Long, dayOfWeek: DayOfWeek): LocalTime = LocalTime.of(9, 0)
 }

@@ -9,33 +9,75 @@ internal class LessonEntityTest {
     @Test
     fun subjectNameTest() {
         assertThrows(IllegalArgumentException::class.java) {
-            LessonEntity("", "type", LocalTime.of(18, 40), LocalTime.of(19, 10), 1L)
+            LessonEntity(
+                subjectName = "",
+                type = "type",
+                startTime = LocalTime.of(18, 40),
+                endTime = LocalTime.of(19, 10),
+                semesterId = 1L,
+            )
         }
         assertThrows(IllegalArgumentException::class.java) {
-            LessonEntity("   ", "type", LocalTime.of(18, 40), LocalTime.of(19, 10), 1L)
+            LessonEntity(
+                subjectName = "   ",
+                type = "type",
+                startTime = LocalTime.of(18, 40),
+                endTime = LocalTime.of(19, 10),
+                semesterId = 1L,
+            )
         }
     }
 
     @Test
     fun typeTest() {
         assertThrows(IllegalArgumentException::class.java) {
-            LessonEntity("name", "", LocalTime.of(18, 40), LocalTime.of(19, 10), 1L)
-            LessonEntity("name", "    ", LocalTime.of(18, 40), LocalTime.of(19, 10), 1L)
+            LessonEntity(
+                subjectName = "name",
+                type = "",
+                startTime = LocalTime.of(18, 40),
+                endTime = LocalTime.of(19, 10),
+                semesterId = 1L,
+            )
+            LessonEntity(
+                subjectName = "name",
+                type = "    ",
+                startTime = LocalTime.of(18, 40),
+                endTime = LocalTime.of(19, 10),
+                semesterId = 1L,
+            )
         }
     }
 
     @Test
     fun timeTest() {
         assertThrows(IllegalArgumentException::class.java) {
-            LessonEntity("name", "type", LocalTime.of(19, 10), LocalTime.of(18, 40), 1L)
+            LessonEntity(
+                subjectName = "name",
+                type = "type",
+                startTime = LocalTime.of(19, 10),
+                endTime = LocalTime.of(18, 40),
+                semesterId = 1L,
+            )
         }
         assertThrows(IllegalArgumentException::class.java) {
-            LessonEntity("name", "type", LocalTime.of(18, 40), LocalTime.of(18, 40), 1L)
+            LessonEntity(
+                subjectName = "name",
+                type = "type",
+                startTime = LocalTime.of(18, 40),
+                endTime = LocalTime.of(18, 40),
+                semesterId = 1L,
+            )
         }
     }
 
     @Test
     fun successfulTest() {
-        LessonEntity("name", "type", LocalTime.of(18, 40), LocalTime.of(19, 10), 1L)
+        LessonEntity(
+            subjectName = "name",
+            type = "type",
+            startTime = LocalTime.of(18, 40),
+            endTime = LocalTime.of(19, 10),
+            semesterId = 1L,
+        )
     }
 }

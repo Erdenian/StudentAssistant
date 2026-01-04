@@ -53,7 +53,12 @@ internal class ScheduleEditorViewModelTest {
     private val semesterId = 1L
 
     private val viewModel by lazy {
-        ScheduleEditorViewModel(application, repositoryApi, analyticsApi, semesterId)
+        ScheduleEditorViewModel(
+            application = application,
+            repositoryApi = repositoryApi,
+            analyticsApi = analyticsApi,
+            semesterId = semesterId,
+        )
     }
 
     @Test

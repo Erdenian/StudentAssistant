@@ -81,15 +81,15 @@ internal class ScheduleViewModelTest {
     @Test
     fun `logLessonClick test`() {
         val lesson = Lesson(
-            "Subject",
-            "Type",
-            emptyList(),
-            emptyList(),
-            LocalTime.MIN,
-            LocalTime.MAX,
-            Lesson.Repeat.ByDates(emptySet()),
-            1L,
-            10L,
+            subjectName = "Subject",
+            type = "Type",
+            teachers = emptyList(),
+            classrooms = emptyList(),
+            startTime = LocalTime.MIN,
+            endTime = LocalTime.MAX,
+            lessonRepeat = Lesson.Repeat.ByDates(emptySet()),
+            semesterId = 1L,
+            id = 10L,
         )
         viewModel.logLessonClick(lesson)
         verify { analytics.logEvent("lesson_clicked", any()) }

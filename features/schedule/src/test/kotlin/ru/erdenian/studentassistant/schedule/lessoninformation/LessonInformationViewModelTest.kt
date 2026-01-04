@@ -50,8 +50,15 @@ internal class LessonInformationViewModelTest {
     }
 
     private val lesson = Lesson(
-        "Subject", "T", emptyList(), emptyList(), LocalTime.MIN, LocalTime.MAX,
-        Lesson.Repeat.ByDates(emptySet()), 1L, 10L,
+        subjectName = "Subject",
+        type = "T",
+        teachers = emptyList(),
+        classrooms = emptyList(),
+        startTime = LocalTime.MIN,
+        endTime = LocalTime.MAX,
+        lessonRepeat = Lesson.Repeat.ByDates(emptySet()),
+        semesterId = 1L,
+        id = 10L,
     )
 
     private val lessonFlow = MutableStateFlow<Lesson?>(lesson)
@@ -63,7 +70,12 @@ internal class LessonInformationViewModelTest {
     }
 
     private val viewModel by lazy {
-        LessonInformationViewModel(application, repositoryApi, analyticsApi, lesson)
+        LessonInformationViewModel(
+            application = application,
+            repositoryApi = repositoryApi,
+            analyticsApi = analyticsApi,
+            lessonArg = lesson,
+        )
     }
 
     @Test
@@ -94,7 +106,14 @@ internal class LessonInformationViewModelTest {
 
     @Test
     fun `logHomeworkClicked test`() {
-        val homework = Homework("Subject", "D", LocalDate.MAX, false, 1L, 100L)
+        val homework = Homework(
+            subjectName = "Subject",
+            description = "D",
+            deadline = LocalDate.MAX,
+            isDone = false,
+            semesterId = 1L,
+            id = 100L,
+        )
         viewModel.logHomeworkClicked(homework)
         verify { analytics.logEvent("homework_clicked", mapOf("subject_name" to "Subject")) }
     }
@@ -102,7 +121,14 @@ internal class LessonInformationViewModelTest {
     @Test
     fun `deleteHomework test`() = runTest {
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.homeworks.collect() }
-        val homework = Homework("Subject", "D", LocalDate.MAX, false, 1L, 100L)
+        val homework = Homework(
+            subjectName = "Subject",
+            description = "D",
+            deadline = LocalDate.MAX,
+            isDone = false,
+            semesterId = 1L,
+            id = 100L,
+        )
         homeworksFlow.value = listOf(homework)
         coEvery { homeworkRepository.delete(homework.id) } returns Unit
 

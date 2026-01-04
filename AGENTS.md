@@ -114,7 +114,7 @@
   задает `stopTimeoutMillis = 5_000L` для корректной обработки смены конфигурации.
 * **Строки:** Все строки должны быть вынесены в модуль `:core:strings`.
 * **Code Style:** Проект использует `detekt`. Конфигурация лежит в `detekt-config.yml`. Перед коммитом запускайте
-  `detektMain`.
+  `detektMain detektTest detektDebugAndroidTest`.
 * **Документация:** При выяснении новых подробностей о написании кода нужно также обновлять AGENTS.md и README.md. На
   неочевидные моменты нужно добавлять комментарии в код. Вся документация и комментарии должны быть на русском языке,
   старые комментарии на английском языке при изменении файла нужно переводить на русский.
@@ -293,7 +293,7 @@
 
 Перед созданием pull request все изменения должны быть проверены с помощью следующих команд:
 
-* `detektMain` — анализ кода на соответствие стилю и правилам проекта
+* `detektMain detektTest detektDebugAndroidTest` — анализ кода на соответствие стилю и правилам проекта
 * `lintDebug` — статический анализ кода и проверка на потенциальные проблемы
 * `testDebugUnitTest` — запуск unit-тестов
 * `:app:koverHtmlReportDebug` и `:app:koverXmlReportDebug`— генерация отчетов о покрытии кода тестами
@@ -304,7 +304,7 @@
 Полная команда для запуска всех проверок
 ```shell
 ./gradlew \
-    detektMain \
+    detektMain detektTest detektDebugAndroidTest \
     lintDebug \
     testDebugUnitTest \
     :app:koverHtmlReportDebug \

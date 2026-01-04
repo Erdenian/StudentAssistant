@@ -26,7 +26,7 @@ jobs:
       # Run
       # --------------------------------------
       - uses: actions/checkout@v6
-      - run: ./gradlew detektMain
+      - run: ./gradlew detektMain detektTest detektDebugAndroidTest
       # --------------------------------------
       # Analyze
       # --------------------------------------
