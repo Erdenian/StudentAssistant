@@ -130,6 +130,7 @@ dependencies {
     implementation(project(":core:style"))
     implementation(project(":core:strings"))
 
+    implementation(project(":common:utils"))
     implementation(project(":common:navigation"))
 
     implementation(project(":features:repository"))

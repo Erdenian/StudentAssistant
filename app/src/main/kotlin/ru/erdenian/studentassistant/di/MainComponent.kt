@@ -12,15 +12,12 @@ import ru.erdenian.studentassistant.di.features.RepositoryModule
 import ru.erdenian.studentassistant.di.features.ScheduleModule
 import ru.erdenian.studentassistant.di.features.SettingsModule
 import ru.erdenian.studentassistant.homeworks.HomeworksDependencies
-import ru.erdenian.studentassistant.homeworks.api.HomeworksApi
 import ru.erdenian.studentassistant.navigation.NavGraphContributor
 import ru.erdenian.studentassistant.repository.RepositoryConfig
 import ru.erdenian.studentassistant.repository.RepositoryDependencies
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.schedule.ScheduleDependencies
-import ru.erdenian.studentassistant.schedule.api.ScheduleApi
 import ru.erdenian.studentassistant.settings.SettingsDependencies
-import ru.erdenian.studentassistant.settings.api.SettingsApi
 
 @Singleton
 @Component(
@@ -48,10 +45,6 @@ internal interface MainComponent :
     }
 
     override val repositoryApi: RepositoryApi
-
-    val scheduleApi: ScheduleApi
-    val homeworksApi: HomeworksApi
-    val settingsApi: SettingsApi
     val analyticsApi: AnalyticsApi
 
     val navGraphContributors: Set<NavGraphContributor>
