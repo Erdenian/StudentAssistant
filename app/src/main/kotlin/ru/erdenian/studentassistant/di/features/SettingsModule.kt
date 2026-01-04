@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.di.features
 
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
@@ -10,15 +11,18 @@ import ru.erdenian.studentassistant.settings.api.SettingsApi
 import ru.erdenian.studentassistant.settings.createSettingsApi
 
 @Module
-internal class SettingsModule {
+internal interface SettingsModule {
 
-    @Provides
-    fun dependencies(dependencies: MainComponent): SettingsDependencies = dependencies
+    @Binds
+    fun dependencies(dependencies: MainComponent): SettingsDependencies
 
-    @Provides
-    fun api(dependencies: SettingsDependencies) = createSettingsApi(dependencies)
+    companion object {
 
-    @Provides
-    @IntoSet
-    fun navGraphContributor(api: SettingsApi): NavGraphContributor = api.navGraphContributor
+        @Provides
+        fun api(dependencies: SettingsDependencies) = createSettingsApi(dependencies)
+
+        @Provides
+        @IntoSet
+        fun navGraphContributor(api: SettingsApi): NavGraphContributor = api.navGraphContributor
+    }
 }

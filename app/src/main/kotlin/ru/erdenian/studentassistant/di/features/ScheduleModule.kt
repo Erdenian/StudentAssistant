@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.di.features
 
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
@@ -10,15 +11,18 @@ import ru.erdenian.studentassistant.schedule.api.ScheduleApi
 import ru.erdenian.studentassistant.schedule.createScheduleApi
 
 @Module
-internal class ScheduleModule {
+internal interface ScheduleModule {
 
-    @Provides
-    fun dependencies(dependencies: MainComponent): ScheduleDependencies = dependencies
+    @Binds
+    fun dependencies(dependencies: MainComponent): ScheduleDependencies
 
-    @Provides
-    fun api(dependencies: ScheduleDependencies) = createScheduleApi(dependencies)
+    companion object {
 
-    @Provides
-    @IntoSet
-    fun navGraphContributor(api: ScheduleApi): NavGraphContributor = api.navGraphContributor
+        @Provides
+        fun api(dependencies: ScheduleDependencies) = createScheduleApi(dependencies)
+
+        @Provides
+        @IntoSet
+        fun navGraphContributor(api: ScheduleApi): NavGraphContributor = api.navGraphContributor
+    }
 }

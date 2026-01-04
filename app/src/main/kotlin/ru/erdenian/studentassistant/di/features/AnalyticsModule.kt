@@ -1,5 +1,6 @@
 package ru.erdenian.studentassistant.di.features
 
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import ru.erdenian.studentassistant.analytics.AnalyticsDependencies
@@ -7,11 +8,13 @@ import ru.erdenian.studentassistant.analytics.createAnalyticsApi
 import ru.erdenian.studentassistant.di.MainComponent
 
 @Module
-internal class AnalyticsModule {
+internal interface AnalyticsModule {
 
-    @Provides
-    fun dependencies(mainComponent: MainComponent): AnalyticsDependencies = mainComponent
+    @Binds
+    fun dependencies(mainComponent: MainComponent): AnalyticsDependencies
 
-    @Provides
-    fun api(dependencies: AnalyticsDependencies) = createAnalyticsApi(dependencies)
+    companion object {
+        @Provides
+        fun api(dependencies: AnalyticsDependencies) = createAnalyticsApi(dependencies)
+    }
 }
