@@ -60,7 +60,7 @@ internal class ScheduleViewModel @Inject constructor(
     }
 
     /**
-     * Выбирает расписание по идентификатору.
+     * Выбирает расписание по идентификатору и отправляет событие аналитики.
      *
      * Также очищает кэш потоков занятий, так как они зависят от выбранного расписания.
      *
@@ -72,14 +72,23 @@ internal class ScheduleViewModel @Inject constructor(
         analytics.logEvent("semester_switched")
     }
 
+    /**
+     * Отправляет событие аналитики при нажатии на кнопку добавления расписания.
+     */
     fun logAddSemesterClicked() {
         analytics.logEvent("semester_add_clicked")
     }
 
+    /**
+     * Отправляет событие аналитики при нажатии на кнопку редактирования расписания.
+     */
     fun logEditScheduleClicked() {
         analytics.logEvent("schedule_edit_clicked")
     }
 
+    /**
+     * Отправляет событие аналитики при нажатии на занятие.
+     */
     fun logLessonClick(lesson: Lesson) {
         analytics.logEvent(
             name = "lesson_clicked",

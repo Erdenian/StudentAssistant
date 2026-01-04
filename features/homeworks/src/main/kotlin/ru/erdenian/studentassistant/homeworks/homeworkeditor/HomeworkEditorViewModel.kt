@@ -124,6 +124,11 @@ internal class HomeworkEditorViewModel @AssistedInject constructor(
         }
     }
 
+    /**
+     * Отправляет событие аналитики о выборе действия для несуществующего предмета.
+     *
+     * @param createLesson true, если пользователь выбрал "Сохранить и создать занятие".
+     */
     fun logUnknownSubjectAction(createLesson: Boolean) {
         analytics.logEvent(
             name = "homework_unknown_subject_decision",
@@ -134,6 +139,9 @@ internal class HomeworkEditorViewModel @AssistedInject constructor(
         )
     }
 
+    /**
+     * Сохраняет домашнее задание (создает новое или обновляет существующее).
+     */
     fun save() {
         check(error.value == null)
 
@@ -168,6 +176,9 @@ internal class HomeworkEditorViewModel @AssistedInject constructor(
         }
     }
 
+    /**
+     * Удаляет текущее домашнее задание.
+     */
     fun delete() {
         operationPrivate.value = Operation.DELETING
         viewModelScope.launch {

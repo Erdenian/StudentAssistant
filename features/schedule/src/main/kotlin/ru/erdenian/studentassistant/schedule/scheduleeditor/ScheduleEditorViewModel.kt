@@ -82,14 +82,23 @@ internal class ScheduleEditorViewModel @AssistedInject constructor(
         }
     }
 
+    /**
+     * Отправляет событие аналитики при нажатии на кнопку добавления занятия.
+     */
     fun logAddLessonClick() {
         analytics.logEvent("lesson_add_clicked")
     }
 
+    /**
+     * Отправляет событие аналитики при нажатии на кнопку редактирования семестра.
+     */
     fun logEditSemesterClicked() {
         analytics.logEvent("semester_edit_clicked")
     }
 
+    /**
+     * Отправляет событие аналитики при нажатии на занятие.
+     */
     fun logLessonClick(lesson: Lesson) {
         analytics.logEvent(
             name = "lesson_clicked",
@@ -100,6 +109,9 @@ internal class ScheduleEditorViewModel @AssistedInject constructor(
         )
     }
 
+    /**
+     * Отправляет событие аналитики при нажатии на кнопку копирования занятия.
+     */
     fun logCopyLessonClick(lesson: Lesson) {
         analytics.logEvent(
             name = "lesson_copy_clicked",

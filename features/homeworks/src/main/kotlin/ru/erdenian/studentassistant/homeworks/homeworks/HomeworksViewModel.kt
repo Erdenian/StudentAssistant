@@ -43,6 +43,11 @@ internal class HomeworksViewModel @Inject constructor(
     val allSemesters = semesterRepository.allFlow
         .stateIn(viewModelScope, SharingStarted.Default, listOfNotNull(selectedSemester.value))
 
+    /**
+     * Выбирает семестр для отображения заданий.
+     *
+     * @param semesterId идентификатор семестра.
+     */
     fun selectSemester(semesterId: Long) {
         selectedSemesterRepository.selectSemester(semesterId)
         analytics.logEvent("semester_switched")
@@ -63,10 +68,16 @@ internal class HomeworksViewModel @Inject constructor(
      */
     val past = homeworkRepository.pastFlow.asStateFlowWithLoader()
 
+    /**
+     * Отправляет событие аналитики при нажатии на кнопку добавления задания.
+     */
     fun logAddHomeworkClicked() {
         analytics.logEvent("homework_add_clicked")
     }
 
+    /**
+     * Отправляет событие аналитики при нажатии на конкретное задание.
+     */
     fun logHomeworkClicked(homework: Homework) {
         analytics.logEvent(
             name = "homework_clicked",
@@ -74,6 +85,9 @@ internal class HomeworksViewModel @Inject constructor(
         )
     }
 
+    /**
+     * Удаляет домашнее задание.
+     */
     fun deleteHomework(id: Long) {
         operationPrivate.value = Operation.DELETING_HOMEWORK
         viewModelScope.launch {

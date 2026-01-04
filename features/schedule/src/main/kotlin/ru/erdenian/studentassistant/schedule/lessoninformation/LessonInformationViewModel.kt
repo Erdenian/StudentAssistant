@@ -75,6 +75,9 @@ internal class LessonInformationViewModel @AssistedInject constructor(
         lesson?.let { homeworkRepository.getActualFlow(it.subjectName) } ?: flowOf(emptyList())
     }.stateIn(viewModelScope, SharingStarted.Default, null)
 
+    /**
+     * Отправляет событие аналитики при нажатии на кнопку редактирования занятия.
+     */
     fun logEditLessonClicked() {
         analytics.logEvent(
             name = "lesson_edit_clicked",
@@ -85,6 +88,9 @@ internal class LessonInformationViewModel @AssistedInject constructor(
         )
     }
 
+    /**
+     * Отправляет событие аналитики при нажатии на кнопку добавления домашнего задания.
+     */
     fun logAddHomeworkClicked() {
         analytics.logEvent(
             name = "homework_add_clicked",
@@ -94,6 +100,9 @@ internal class LessonInformationViewModel @AssistedInject constructor(
         )
     }
 
+    /**
+     * Отправляет событие аналитики при нажатии на домашнее задание.
+     */
     fun logHomeworkClicked(homework: Homework) {
         analytics.logEvent(
             name = "homework_clicked",
@@ -101,6 +110,9 @@ internal class LessonInformationViewModel @AssistedInject constructor(
         )
     }
 
+    /**
+     * Удаляет домашнее задание.
+     */
     fun deleteHomework(id: Long) {
         operationPrivate.value = Operation.DELETING_HOMEWORK
         viewModelScope.launch {
