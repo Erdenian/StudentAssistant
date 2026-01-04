@@ -84,9 +84,7 @@ internal fun StudentAssistantApp(
                 SharedTransitionLayout {
                     CompositionLocalProvider(LocalSharedTransitionScope provides this) {
                         val entryProvider = entryProvider {
-                            MainComponentHolder.instance.scheduleApi.addToGraph(this)
-                            MainComponentHolder.instance.homeworksApi.addToGraph(this)
-                            MainComponentHolder.instance.settingsApi.addToGraph(this)
+                            MainComponentHolder.instance.navGraphContributors.forEach { it.addTo(this) }
                         }
                         val transitionTransform = ContentTransform(
                             fadeIn(animationSpec = tween()),

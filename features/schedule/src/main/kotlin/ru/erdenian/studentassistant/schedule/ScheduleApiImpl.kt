@@ -4,6 +4,7 @@ import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import javax.inject.Inject
 import javax.inject.Singleton
+import ru.erdenian.studentassistant.navigation.NavGraphContributor
 import ru.erdenian.studentassistant.schedule.api.ScheduleApi
 import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
 import ru.erdenian.studentassistant.schedule.di.ScheduleComponentHolder
@@ -18,11 +19,13 @@ public fun createScheduleApi(dependencies: ScheduleDependencies): ScheduleApi =
 
 @Singleton
 internal class ScheduleApiImpl @Inject constructor() : ScheduleApi {
-    override fun addToGraph(scope: EntryProviderScope<NavKey>) {
-        scope.entry<ScheduleRoute.Schedule> { ScheduleScreen() }
-        scope.entry<ScheduleRoute.SemesterEditor> { SemesterEditorScreen(it) }
-        scope.entry<ScheduleRoute.ScheduleEditor> { ScheduleEditorScreen(it) }
-        scope.entry<ScheduleRoute.LessonEditor> { LessonEditorScreen(it) }
-        scope.entry<ScheduleRoute.LessonInformation> { LessonInformationScreen(it) }
+    override val navGraphContributor = object : NavGraphContributor {
+        override fun addTo(scope: EntryProviderScope<NavKey>) {
+            scope.entry<ScheduleRoute.Schedule> { ScheduleScreen() }
+            scope.entry<ScheduleRoute.SemesterEditor> { SemesterEditorScreen(it) }
+            scope.entry<ScheduleRoute.ScheduleEditor> { ScheduleEditorScreen(it) }
+            scope.entry<ScheduleRoute.LessonEditor> { LessonEditorScreen(it) }
+            scope.entry<ScheduleRoute.LessonInformation> { LessonInformationScreen(it) }
+        }
     }
 }

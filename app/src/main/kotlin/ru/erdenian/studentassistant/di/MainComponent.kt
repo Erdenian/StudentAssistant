@@ -13,6 +13,7 @@ import ru.erdenian.studentassistant.di.features.ScheduleModule
 import ru.erdenian.studentassistant.di.features.SettingsModule
 import ru.erdenian.studentassistant.homeworks.HomeworksDependencies
 import ru.erdenian.studentassistant.homeworks.api.HomeworksApi
+import ru.erdenian.studentassistant.navigation.NavGraphContributor
 import ru.erdenian.studentassistant.repository.RepositoryConfig
 import ru.erdenian.studentassistant.repository.RepositoryDependencies
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
@@ -52,4 +53,6 @@ internal interface MainComponent :
     val homeworksApi: HomeworksApi
     val settingsApi: SettingsApi
     val analyticsApi: AnalyticsApi
+
+    val navGraphContributors: Set<NavGraphContributor>
 }

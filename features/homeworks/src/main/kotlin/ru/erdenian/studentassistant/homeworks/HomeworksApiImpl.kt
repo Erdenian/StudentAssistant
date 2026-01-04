@@ -9,14 +9,17 @@ import ru.erdenian.studentassistant.homeworks.api.HomeworksRoute
 import ru.erdenian.studentassistant.homeworks.di.HomeworksComponentHolder
 import ru.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorScreen
 import ru.erdenian.studentassistant.homeworks.homeworks.HomeworksScreen
+import ru.erdenian.studentassistant.navigation.NavGraphContributor
 
 public fun createHomeworksApi(dependencies: HomeworksDependencies): HomeworksApi =
     HomeworksComponentHolder.create(dependencies).api
 
 @Singleton
 internal class HomeworksApiImpl @Inject constructor() : HomeworksApi {
-    override fun addToGraph(scope: EntryProviderScope<NavKey>) {
-        scope.entry<HomeworksRoute.Homeworks> { HomeworksScreen() }
-        scope.entry<HomeworksRoute.HomeworkEditor> { HomeworkEditorScreen(it) }
+    override val navGraphContributor = object : NavGraphContributor {
+        override fun addTo(scope: EntryProviderScope<NavKey>) {
+            scope.entry<HomeworksRoute.Homeworks> { HomeworksScreen() }
+            scope.entry<HomeworksRoute.HomeworkEditor> { HomeworkEditorScreen(it) }
+        }
     }
 }

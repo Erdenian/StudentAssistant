@@ -1,8 +1,7 @@
 package ru.erdenian.studentassistant.homeworks.api
 
-import androidx.navigation3.runtime.EntryProviderScope
-import androidx.navigation3.runtime.NavKey
+import ru.erdenian.studentassistant.navigation.NavGraphContributor
 
 interface HomeworksApi {
-    fun addToGraph(scope: EntryProviderScope<NavKey>)
+    val navGraphContributor: NavGraphContributor
 }
