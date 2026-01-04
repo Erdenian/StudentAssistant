@@ -7,6 +7,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import io.mockk.verify
 import java.time.LocalDate
 import java.time.Month
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -24,6 +25,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import ru.erdenian.studentassistant.analytics.api.Analytics
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.repository.api.LessonRepository
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.repository.api.SemesterRepository
@@ -39,9 +42,13 @@ internal class SemesterEditorViewModelTest {
     private val application = mockk<Application>()
     private val semesterRepository = mockk<SemesterRepository>()
     private val lessonRepository = mockk<LessonRepository>()
+    private val analytics = mockk<Analytics>(relaxed = true)
     private val repositoryApi = mockk<RepositoryApi> {
         every { semesterRepository } returns this@SemesterEditorViewModelTest.semesterRepository
         every { lessonRepository } returns this@SemesterEditorViewModelTest.lessonRepository
+    }
+    private val analyticsApi = mockk<AnalyticsApi> {
+        every { analytics } returns this@SemesterEditorViewModelTest.analytics
     }
 
     private val namesFlow = MutableStateFlow(listOf("Semester 1", "Semester 2"))
@@ -66,7 +73,7 @@ internal class SemesterEditorViewModelTest {
 
     @Test
     fun `init new semester test`() = runTest {
-        val viewModel = SemesterEditorViewModel(application, repositoryApi, null)
+        val viewModel = SemesterEditorViewModel(application, repositoryApi, analyticsApi, null)
         // Подписываемся на error, чтобы запустить загрузку имен
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.error.collect() }
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
@@ -90,7 +97,7 @@ internal class SemesterEditorViewModelTest {
         val semester = Semester("Semester 3", LocalDate.of(2023, 2, 1), LocalDate.of(2023, 5, 31), 10L)
         coEvery { semesterRepository.get(semester.id) } returns semester
 
-        val viewModel = SemesterEditorViewModel(application, repositoryApi, semester.id)
+        val viewModel = SemesterEditorViewModel(application, repositoryApi, analyticsApi, semester.id)
         // Подписываемся на error, чтобы запустить загрузку имен
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.error.collect() }
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
@@ -104,7 +111,7 @@ internal class SemesterEditorViewModelTest {
 
     @Test
     fun `save new semester test`() = runTest {
-        val viewModel = SemesterEditorViewModel(application, repositoryApi, null)
+        val viewModel = SemesterEditorViewModel(application, repositoryApi, analyticsApi, null)
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.error.collect() }
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
         advanceUntilIdle()
@@ -121,6 +128,7 @@ internal class SemesterEditorViewModelTest {
                 lastDay = any(),
             )
         }
+        verify { analytics.logEvent("semester_created", mapOf("name" to "New Semester")) }
         assertTrue(viewModel.done.value)
     }
 
@@ -131,7 +139,7 @@ internal class SemesterEditorViewModelTest {
         coEvery { semesterRepository.update(any(), any(), any(), any()) } returns Unit
         coEvery { lessonRepository.hasNonRecurringLessons(semester.id) } returns false
 
-        val viewModel = SemesterEditorViewModel(application, repositoryApi, semester.id)
+        val viewModel = SemesterEditorViewModel(application, repositoryApi, analyticsApi, semester.id)
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.error.collect() }
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
         advanceUntilIdle()
@@ -148,6 +156,7 @@ internal class SemesterEditorViewModelTest {
                 lastDay = semester.lastDay,
             )
         }
+        verify { analytics.logEvent("semester_edited", mapOf("name" to "Updated Semester")) }
         assertTrue(viewModel.done.value)
     }
 
@@ -158,7 +167,7 @@ internal class SemesterEditorViewModelTest {
         coEvery { semesterRepository.get(semester.id) } returns semester
         coEvery { lessonRepository.hasNonRecurringLessons(semester.id) } returns true
 
-        val viewModel = SemesterEditorViewModel(application, repositoryApi, semester.id)
+        val viewModel = SemesterEditorViewModel(application, repositoryApi, analyticsApi, semester.id)
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.error.collect() }
         advanceUntilIdle()
 
@@ -190,7 +199,7 @@ internal class SemesterEditorViewModelTest {
         coEvery { semesterRepository.update(any(), any(), any(), any()) } returns Unit
         coEvery { lessonRepository.hasNonRecurringLessons(semester.id) } returns true
 
-        val viewModel = SemesterEditorViewModel(application, repositoryApi, semester.id)
+        val viewModel = SemesterEditorViewModel(application, repositoryApi, analyticsApi, semester.id)
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.error.collect() }
         advanceUntilIdle()
 
@@ -205,7 +214,7 @@ internal class SemesterEditorViewModelTest {
 
     @Test
     fun `error test`() = runTest {
-        val viewModel = SemesterEditorViewModel(application, repositoryApi, null)
+        val viewModel = SemesterEditorViewModel(application, repositoryApi, analyticsApi, null)
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.error.collect() }
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.operation.collect() }
         advanceUntilIdle()

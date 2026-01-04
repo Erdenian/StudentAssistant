@@ -15,7 +15,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
+import ru.erdenian.studentassistant.repository.api.entity.Homework
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.utils.Default
 
@@ -29,11 +31,13 @@ import ru.erdenian.studentassistant.utils.Default
 internal class LessonInformationViewModel @AssistedInject constructor(
     application: Application,
     repositoryApi: RepositoryApi,
+    analyticsApi: AnalyticsApi,
     @Assisted lessonArg: Lesson,
 ) : AndroidViewModel(application) {
 
     private val lessonRepository = repositoryApi.lessonRepository
     private val homeworkRepository = repositoryApi.homeworkRepository
+    private val analytics = analyticsApi.analytics
 
     @AssistedFactory
     interface Factory {
@@ -71,13 +75,37 @@ internal class LessonInformationViewModel @AssistedInject constructor(
         lesson?.let { homeworkRepository.getActualFlow(it.subjectName) } ?: flowOf(emptyList())
     }.stateIn(viewModelScope, SharingStarted.Default, null)
 
-    /**
-     * Удаляет домашнее задание по ID.
-     */
+    fun logEditLessonClicked() {
+        analytics.logEvent(
+            name = "lesson_edit_clicked",
+            params = mapOf(
+                "subject_name" to lesson.value?.subjectName.orEmpty(),
+                "type" to lesson.value?.type.orEmpty(),
+            ),
+        )
+    }
+
+    fun logAddHomeworkClicked() {
+        analytics.logEvent(
+            name = "homework_add_clicked",
+            params = mapOf(
+                "subject_name" to lesson.value?.subjectName.orEmpty(),
+            ),
+        )
+    }
+
+    fun logHomeworkClicked(homework: Homework) {
+        analytics.logEvent(
+            name = "homework_clicked",
+            params = mapOf("subject_name" to homework.subjectName),
+        )
+    }
+
     fun deleteHomework(id: Long) {
         operationPrivate.value = Operation.DELETING_HOMEWORK
         viewModelScope.launch {
             homeworkRepository.delete(id)
+            analytics.logEvent("homework_deleted")
             operationPrivate.value = null
         }
     }
