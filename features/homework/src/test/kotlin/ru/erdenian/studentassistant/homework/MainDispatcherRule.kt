@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.homeworks
+package ru.erdenian.studentassistant.homework
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

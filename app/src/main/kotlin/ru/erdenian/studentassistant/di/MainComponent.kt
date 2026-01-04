@@ -11,7 +11,7 @@ import ru.erdenian.studentassistant.di.features.HomeworksModule
 import ru.erdenian.studentassistant.di.features.RepositoryModule
 import ru.erdenian.studentassistant.di.features.ScheduleModule
 import ru.erdenian.studentassistant.di.features.SettingsModule
-import ru.erdenian.studentassistant.homeworks.HomeworksDependencies
+import ru.erdenian.studentassistant.homework.HomeworksDependencies
 import ru.erdenian.studentassistant.navigation.NavGraphContributor
 import ru.erdenian.studentassistant.repository.RepositoryConfig
 import ru.erdenian.studentassistant.repository.RepositoryDependencies

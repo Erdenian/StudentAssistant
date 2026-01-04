@@ -1,6 +1,6 @@
-package ru.erdenian.studentassistant.homeworks.di
+package ru.erdenian.studentassistant.homework.di
 
-import ru.erdenian.studentassistant.homeworks.HomeworksDependencies
+import ru.erdenian.studentassistant.homework.HomeworksDependencies
 import ru.erdenian.studentassistant.utils.BaseComponentHolder
 
 internal object HomeworksComponentHolder : BaseComponentHolder<HomeworksComponent, HomeworksDependencies>(

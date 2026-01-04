@@ -1,11 +1,11 @@
-package ru.erdenian.studentassistant.homeworks.di
+package ru.erdenian.studentassistant.homework.di
 
 import dagger.Component
 import javax.inject.Singleton
-import ru.erdenian.studentassistant.homeworks.HomeworksDependencies
-import ru.erdenian.studentassistant.homeworks.api.HomeworksApi
-import ru.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorViewModel
-import ru.erdenian.studentassistant.homeworks.homeworks.HomeworksViewModel
+import ru.erdenian.studentassistant.homework.HomeworksDependencies
+import ru.erdenian.studentassistant.homework.api.HomeworksApi
+import ru.erdenian.studentassistant.homework.homeworkeditor.HomeworkEditorViewModel
+import ru.erdenian.studentassistant.homework.homeworks.HomeworksViewModel
 
 @Singleton
 @Component(

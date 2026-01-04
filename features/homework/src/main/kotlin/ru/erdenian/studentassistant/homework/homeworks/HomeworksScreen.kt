@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.homeworks.homeworks
+package ru.erdenian.studentassistant.homework.homeworks
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
@@ -11,8 +11,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import ru.erdenian.studentassistant.homeworks.api.HomeworksRoute
-import ru.erdenian.studentassistant.homeworks.di.HomeworksComponentHolder
+import ru.erdenian.studentassistant.homework.api.HomeworksRoute
+import ru.erdenian.studentassistant.homework.di.HomeworksComponentHolder
 import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.repository.api.entity.Homework
 import ru.erdenian.studentassistant.strings.RS

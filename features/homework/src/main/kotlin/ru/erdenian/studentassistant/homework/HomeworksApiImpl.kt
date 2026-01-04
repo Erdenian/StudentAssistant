@@ -1,14 +1,14 @@
-package ru.erdenian.studentassistant.homeworks
+package ru.erdenian.studentassistant.homework
 
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import javax.inject.Inject
 import javax.inject.Singleton
-import ru.erdenian.studentassistant.homeworks.api.HomeworksApi
-import ru.erdenian.studentassistant.homeworks.api.HomeworksRoute
-import ru.erdenian.studentassistant.homeworks.di.HomeworksComponentHolder
-import ru.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorScreen
-import ru.erdenian.studentassistant.homeworks.homeworks.HomeworksScreen
+import ru.erdenian.studentassistant.homework.api.HomeworksApi
+import ru.erdenian.studentassistant.homework.api.HomeworksRoute
+import ru.erdenian.studentassistant.homework.di.HomeworksComponentHolder
+import ru.erdenian.studentassistant.homework.homeworkeditor.HomeworkEditorScreen
+import ru.erdenian.studentassistant.homework.homeworks.HomeworksScreen
 import ru.erdenian.studentassistant.navigation.NavGraphContributor
 
 public fun createHomeworksApi(dependencies: HomeworksDependencies): HomeworksApi =

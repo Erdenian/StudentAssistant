@@ -9,7 +9,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import ru.erdenian.studentassistant.analytics.api.Analytics
-import ru.erdenian.studentassistant.homeworks.api.HomeworksRoute
+import ru.erdenian.studentassistant.homework.api.HomeworksRoute
 import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
 import ru.erdenian.studentassistant.settings.api.SettingsRoute
 import ru.erdenian.studentassistant.strings.RS

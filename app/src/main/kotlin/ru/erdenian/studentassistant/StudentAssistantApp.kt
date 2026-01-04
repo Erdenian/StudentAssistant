@@ -36,7 +36,7 @@ import androidx.navigation3.ui.NavDisplay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import ru.erdenian.studentassistant.analytics.api.Analytics
 import ru.erdenian.studentassistant.di.MainComponentHolder
-import ru.erdenian.studentassistant.homeworks.api.HomeworksRoute
+import ru.erdenian.studentassistant.homework.api.HomeworksRoute
 import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.navigation.LocalSharedTransitionScope
 import ru.erdenian.studentassistant.navigation.NavigationState

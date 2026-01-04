@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.homeworks.api
+package ru.erdenian.studentassistant.homework.api
 
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable

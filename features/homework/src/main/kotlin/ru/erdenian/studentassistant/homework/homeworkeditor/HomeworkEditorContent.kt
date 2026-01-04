@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.homeworks.homeworkeditor
+package ru.erdenian.studentassistant.homework.homeworkeditor
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement

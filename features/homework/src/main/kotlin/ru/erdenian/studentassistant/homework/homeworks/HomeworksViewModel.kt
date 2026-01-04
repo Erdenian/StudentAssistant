@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.homeworks.homeworks
+package ru.erdenian.studentassistant.homework.homeworks
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

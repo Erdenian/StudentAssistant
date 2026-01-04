@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.homeworks.homeworkeditor
+package ru.erdenian.studentassistant.homework.homeworkeditor
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
@@ -15,9 +15,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import ru.erdenian.studentassistant.homeworks.api.HomeworksRoute
-import ru.erdenian.studentassistant.homeworks.di.HomeworksComponentHolder
-import ru.erdenian.studentassistant.homeworks.homeworkeditor.HomeworkEditorViewModel.Error
+import ru.erdenian.studentassistant.homework.api.HomeworksRoute
+import ru.erdenian.studentassistant.homework.di.HomeworksComponentHolder
+import ru.erdenian.studentassistant.homework.homeworkeditor.HomeworkEditorViewModel.Error
 import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.schedule.api.ScheduleRoute
 import ru.erdenian.studentassistant.strings.RS

@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.homeworks.homeworks
+package ru.erdenian.studentassistant.homework.homeworks
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import ru.erdenian.studentassistant.homeworks.composable.LazyHomeworksList
+import ru.erdenian.studentassistant.homework.composable.LazyHomeworksList
 import ru.erdenian.studentassistant.repository.api.entity.Homework
 import ru.erdenian.studentassistant.repository.api.entity.Semester
 import ru.erdenian.studentassistant.sampledata.Homeworks

@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.homeworks.homeworks
+package ru.erdenian.studentassistant.homework.homeworks
 
 import android.app.Application
 import io.mockk.coEvery
@@ -19,7 +19,7 @@ import org.junit.Rule
 import org.junit.Test
 import ru.erdenian.studentassistant.analytics.api.Analytics
 import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
-import ru.erdenian.studentassistant.homeworks.MainDispatcherRule
+import ru.erdenian.studentassistant.homework.MainDispatcherRule
 import ru.erdenian.studentassistant.repository.api.HomeworkRepository
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.repository.api.SelectedSemesterRepository

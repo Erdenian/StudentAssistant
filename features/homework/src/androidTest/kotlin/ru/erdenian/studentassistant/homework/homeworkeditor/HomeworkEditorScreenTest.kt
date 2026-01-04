@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.homeworks.homeworkeditor
+package ru.erdenian.studentassistant.homework.homeworkeditor
 
 import android.app.Application
 import android.content.Context
@@ -19,13 +19,13 @@ import org.junit.Rule
 import org.junit.Test
 import ru.erdenian.studentassistant.analytics.api.Analytics
 import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
-import ru.erdenian.studentassistant.homeworks.FakeHomeworkRepository
-import ru.erdenian.studentassistant.homeworks.FakeLessonRepository
-import ru.erdenian.studentassistant.homeworks.FakeSelectedSemesterRepository
-import ru.erdenian.studentassistant.homeworks.FakeSemesterRepository
-import ru.erdenian.studentassistant.homeworks.HomeworksDependencies
-import ru.erdenian.studentassistant.homeworks.api.HomeworksRoute
-import ru.erdenian.studentassistant.homeworks.di.HomeworksComponentHolder
+import ru.erdenian.studentassistant.homework.FakeHomeworkRepository
+import ru.erdenian.studentassistant.homework.FakeLessonRepository
+import ru.erdenian.studentassistant.homework.FakeSelectedSemesterRepository
+import ru.erdenian.studentassistant.homework.FakeSemesterRepository
+import ru.erdenian.studentassistant.homework.HomeworksDependencies
+import ru.erdenian.studentassistant.homework.api.HomeworksRoute
+import ru.erdenian.studentassistant.homework.di.HomeworksComponentHolder
 import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.navigation.Navigator
 import ru.erdenian.studentassistant.repository.api.RepositoryApi

@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.homeworks.composable
+package ru.erdenian.studentassistant.homework.composable
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn

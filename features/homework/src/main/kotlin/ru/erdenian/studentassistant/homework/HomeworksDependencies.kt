@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.homeworks
+package ru.erdenian.studentassistant.homework
 
 import android.app.Application
 import ru.erdenian.studentassistant.analytics.api.AnalyticsApi

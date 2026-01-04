@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.homeworks.api
+package ru.erdenian.studentassistant.homework.api
 
 import ru.erdenian.studentassistant.navigation.NavGraphContributor
 

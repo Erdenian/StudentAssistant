@@ -1,4 +1,4 @@
-package ru.erdenian.studentassistant.homeworks
+package ru.erdenian.studentassistant.homework
 
 import java.time.DayOfWeek
 import java.time.LocalDate

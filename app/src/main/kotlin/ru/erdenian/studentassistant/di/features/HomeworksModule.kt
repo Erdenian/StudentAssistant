@@ -5,9 +5,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
 import ru.erdenian.studentassistant.di.MainComponent
-import ru.erdenian.studentassistant.homeworks.HomeworksDependencies
-import ru.erdenian.studentassistant.homeworks.api.HomeworksApi
-import ru.erdenian.studentassistant.homeworks.createHomeworksApi
+import ru.erdenian.studentassistant.homework.HomeworksDependencies
+import ru.erdenian.studentassistant.homework.api.HomeworksApi
+import ru.erdenian.studentassistant.homework.createHomeworksApi
 import ru.erdenian.studentassistant.navigation.NavGraphContributor
 
 @Module
