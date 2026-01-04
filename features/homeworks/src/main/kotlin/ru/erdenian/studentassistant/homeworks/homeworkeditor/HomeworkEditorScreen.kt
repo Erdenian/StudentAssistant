@@ -112,6 +112,7 @@ internal fun HomeworkEditorScreen(route: HomeworksRoute.HomeworkEditor) {
             confirmButton = {
                 TextButton(
                     onClick = {
+                        viewModel.logUnknownSubjectAction(true)
                         lessonNameToCreate = subjectName
                         viewModel.save()
                         showSaveDialog = false
@@ -120,6 +121,7 @@ internal fun HomeworkEditorScreen(route: HomeworksRoute.HomeworkEditor) {
                 )
                 TextButton(
                     onClick = {
+                        viewModel.logUnknownSubjectAction(false)
                         viewModel.save()
                         showSaveDialog = false
                     },

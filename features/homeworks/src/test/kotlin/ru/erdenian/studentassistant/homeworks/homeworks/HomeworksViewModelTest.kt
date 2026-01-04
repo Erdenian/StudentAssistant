@@ -5,6 +5,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import java.time.LocalDate
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +17,8 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
+import ru.erdenian.studentassistant.analytics.api.Analytics
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.homeworks.MainDispatcherRule
 import ru.erdenian.studentassistant.repository.api.HomeworkRepository
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
@@ -34,10 +37,14 @@ internal class HomeworksViewModelTest {
     private val selectedSemesterRepository = mockk<SelectedSemesterRepository>(relaxed = true)
     private val semesterRepository = mockk<SemesterRepository>(relaxed = true)
     private val homeworkRepository = mockk<HomeworkRepository>(relaxed = true)
+    private val analytics = mockk<Analytics>(relaxed = true)
     private val repositoryApi = mockk<RepositoryApi> {
         every { selectedSemesterRepository } returns this@HomeworksViewModelTest.selectedSemesterRepository
         every { semesterRepository } returns this@HomeworksViewModelTest.semesterRepository
         every { homeworkRepository } returns this@HomeworksViewModelTest.homeworkRepository
+    }
+    private val analyticsApi = mockk<AnalyticsApi> {
+        every { analytics } returns this@HomeworksViewModelTest.analytics
     }
 
     private val selectedSemesterFlow = MutableStateFlow<Semester?>(null)
@@ -54,13 +61,27 @@ internal class HomeworksViewModelTest {
         every { homeworkRepository.pastFlow } returns pastFlow
     }
 
-    private val viewModel by lazy { HomeworksViewModel(application, repositoryApi) }
+    private val viewModel by lazy { HomeworksViewModel(application, repositoryApi, analyticsApi) }
 
     @Test
     fun `selectSemester test`() {
         val id = 10L
         viewModel.selectSemester(id)
         coVerify { selectedSemesterRepository.selectSemester(id) }
+        verify { analytics.logEvent("semester_switched", emptyMap()) }
+    }
+
+    @Test
+    fun `logAddHomeworkClicked test`() {
+        viewModel.logAddHomeworkClicked()
+        verify { analytics.logEvent("homework_add_clicked", emptyMap()) }
+    }
+
+    @Test
+    fun `logHomeworkClicked test`() {
+        val homework = Homework("Subject", "Description", LocalDate.now(), false, 1L, 10L)
+        viewModel.logHomeworkClicked(homework)
+        verify { analytics.logEvent("homework_clicked", mapOf("subject_name" to "Subject")) }
     }
 
     @Test
@@ -77,7 +98,8 @@ internal class HomeworksViewModelTest {
         viewModel.deleteHomework(homework.id)
         advanceUntilIdle()
 
-        // Проверяем, что удаление вызвалось в репозитории
+        // Проверяем, что удаление вызвалось в репозитории и событие отправлено без параметров
         coVerify { homeworkRepository.delete(homework.id) }
+        coVerify { analytics.logEvent("homework_deleted", emptyMap()) }
     }
 }

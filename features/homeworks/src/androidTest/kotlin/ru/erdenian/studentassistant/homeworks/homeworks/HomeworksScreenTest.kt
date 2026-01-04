@@ -18,6 +18,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import ru.erdenian.studentassistant.analytics.api.Analytics
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.homeworks.FakeHomeworkRepository
 import ru.erdenian.studentassistant.homeworks.FakeLessonRepository
 import ru.erdenian.studentassistant.homeworks.FakeSelectedSemesterRepository
@@ -56,6 +58,12 @@ internal class HomeworksScreenTest {
                 override val homeworkRepository = this@HomeworksScreenTest.homeworkRepository
                 override val lessonRepository = this@HomeworksScreenTest.lessonRepository
                 override val settingsRepository: SettingsRepository = mockk()
+            }
+            override val analyticsApi: AnalyticsApi = object : AnalyticsApi {
+                override val analytics = object : Analytics {
+                    override fun logEvent(name: String, params: Map<String, Any>) = Unit
+                    override fun setUserProperty(name: String, value: String?) = Unit
+                }
             }
         }
         HomeworksComponentHolder.create(dependencies)

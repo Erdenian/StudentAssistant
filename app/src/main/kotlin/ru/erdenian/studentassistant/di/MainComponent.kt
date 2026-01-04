@@ -45,7 +45,7 @@ internal interface MainComponent :
     }
 
     override val repositoryApi: RepositoryApi
-    val analyticsApi: AnalyticsApi
+    override val analyticsApi: AnalyticsApi
 
     val navGraphContributors: Set<NavGraphContributor>
 }

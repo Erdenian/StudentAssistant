@@ -66,8 +66,12 @@ internal fun HomeworksScreen() {
         actualHomeworks = actualHomeworks,
         pastHomeworks = pastHomeworks,
         onSelectedSemesterChange = { viewModel.selectSemester(semesters[it].id) },
-        onAddHomeworkClick = { navController.navigate(HomeworksRoute.HomeworkEditor(semesterId = it.id)) },
+        onAddHomeworkClick = { semester ->
+            viewModel.logAddHomeworkClicked()
+            navController.navigate(HomeworksRoute.HomeworkEditor(semesterId = semester.id))
+        },
         onHomeworkClick = { homework ->
+            viewModel.logHomeworkClicked(homework)
             navController.navigate(
                 HomeworksRoute.HomeworkEditor(semesterId = homework.semesterId, homeworkId = homework.id),
             )
