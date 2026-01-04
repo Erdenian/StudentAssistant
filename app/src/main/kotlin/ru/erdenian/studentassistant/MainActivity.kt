@@ -23,7 +23,7 @@ internal class MainActivity : AppCompatActivity() {
             LaunchedEffect(Unit) {
                 val mainComponent = MainComponentHolder.instance
                 mainComponent.repositoryApi.selectedSemesterRepository.await()
-                mainComponent.analyticsApi.analytics.logEvent("app_open")
+                mainComponent.analyticsApi.analytics.logEvent("app_opened")
                 showSplashScreen = false
             }
 
