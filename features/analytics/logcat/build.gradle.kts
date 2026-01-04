@@ -13,6 +13,11 @@ dependencies {
     implementation(project(":features:analytics:api"))
     // endregion
 
+    // region Tests
+    testImplementation(libs.bundles.test.unit)
+    androidTestImplementation(libs.bundles.test.android)
+    // endregion
+
     // region AndroidX
     implementation(libs.androidx.core)
     // endregion
