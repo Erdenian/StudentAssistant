@@ -10,7 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import ru.erdenian.studentassistant.repository.RepositoryConfig
 
 @Module
-internal class RepositoryConfigModule {
+internal object RepositoryConfigModule {
 
     @Provides
     @Named("application")
