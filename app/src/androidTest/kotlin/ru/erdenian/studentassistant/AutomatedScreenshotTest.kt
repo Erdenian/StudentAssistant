@@ -50,87 +50,557 @@ internal class AutomatedScreenshotTest {
         "kk" to "kk",
     )
 
+    private data class LessonData(
+        val subject: String,
+        val type: String,
+        val teacher: String,
+        val room: String,
+        val start: LocalTime,
+        val end: LocalTime,
+    )
+
+    private data class HomeworkData(
+        val subject: String,
+        val description: String,
+    )
+
     private data class LocalizedData(
         val semesterName: String,
-        val subjectName: String,
-        val teacherName: String,
-        val lectureType: String,
-        val seminarType: String,
-        val homeworkDescription: String,
+        val lessons: List<LessonData>,
+        val homeworks: List<HomeworkData>,
     )
 
     private val localizedData = mapOf(
         "en" to LocalizedData(
-            semesterName = "Semester 1",
-            subjectName = "Calculus",
-            teacherName = "John Doe",
-            lectureType = "Lecture",
-            seminarType = "Seminar",
-            homeworkDescription = "Solve problems",
+            semesterName = "Fall Semester",
+            lessons = listOf(
+                LessonData(
+                    subject = "Introduction to CS",
+                    type = "Lecture",
+                    teacher = "Prof. John Smith",
+                    room = "Hall A",
+                    start = LocalTime.of(9, 0),
+                    end = LocalTime.of(10, 20),
+                ),
+                LessonData(
+                    subject = "Physics: Mechanics",
+                    type = "Lecture",
+                    teacher = "Dr. Emily White",
+                    room = "Room 304",
+                    start = LocalTime.of(10, 30),
+                    end = LocalTime.of(11, 50),
+                ),
+                LessonData(
+                    subject = "Linear Algebra",
+                    type = "Lecture",
+                    teacher = "Dr. Alan Turing",
+                    room = "Room 101",
+                    start = LocalTime.of(12, 30),
+                    end = LocalTime.of(13, 50),
+                ),
+                LessonData(
+                    subject = "Calculus I",
+                    type = "Recitation",
+                    teacher = "Jane Doe, MSc",
+                    room = "Room 205",
+                    start = LocalTime.of(14, 0),
+                    end = LocalTime.of(15, 20),
+                ),
+            ),
+            homeworks = listOf(
+                HomeworkData(
+                    subject = "Calculus I",
+                    description = "Complete Problem Set #4 (Derivatives). Submit via portal.",
+                ),
+                HomeworkData(
+                    subject = "Physics: Mechanics",
+                    description = "Lab Report 2: Newton's Laws. Include error analysis.",
+                ),
+                HomeworkData(
+                    subject = "Introduction to CS",
+                    description = "Project: Implement a Binary Search Tree in Java.",
+                ),
+                HomeworkData(
+                    subject = "Linear Algebra",
+                    description = "Read Chapter 5. Solve exercises 5.1 - 5.10 (odd numbers).",
+                ),
+                HomeworkData(
+                    subject = "Introduction to CS",
+                    description = "Prepare for the midterm exam (topics: Loops, Arrays, OOP).",
+                ),
+            ),
         ),
         "ru" to LocalizedData(
             semesterName = "Семестр 1",
-            subjectName = "Матанализ",
-            teacherName = "Кожухов Игорь Борисович",
-            lectureType = "Лекция",
-            seminarType = "Семинар",
-            homeworkDescription = "Решить примеры",
+            lessons = listOf(
+                LessonData(
+                    subject = "Основы программирования",
+                    type = "Лекция",
+                    teacher = "Гайдук Игорь Олегович",
+                    room = "1201 м",
+                    start = LocalTime.of(9, 0),
+                    end = LocalTime.of(10, 20),
+                ),
+                LessonData(
+                    subject = "Физика",
+                    type = "Лекция",
+                    teacher = "Трифонов Алексей Юрьевич",
+                    room = "1202 м",
+                    start = LocalTime.of(10, 30),
+                    end = LocalTime.of(11, 50),
+                ),
+                LessonData(
+                    subject = "Линейная алгебра",
+                    type = "Лекция",
+                    teacher = "Кожухов Игорь Борисович",
+                    room = "1204 м",
+                    start = LocalTime.of(12, 30),
+                    end = LocalTime.of(13, 50),
+                ),
+                LessonData(
+                    subject = "Математический анализ",
+                    type = "Практика",
+                    teacher = "Шевченко Александр Игоревич",
+                    room = "3244",
+                    start = LocalTime.of(14, 0),
+                    end = LocalTime.of(15, 20),
+                ),
+            ),
+            homeworks = listOf(
+                HomeworkData(
+                    subject = "Математический анализ",
+                    description = "Типовой расчет №2: Пределы и производные. Вариант 12.",
+                ),
+                HomeworkData(
+                    subject = "Физика",
+                    description = "Оформить отчет по лабораторной работе (Термодинамика) + графики.",
+                ),
+                HomeworkData(
+                    subject = "Основы программирования",
+                    description = "Курсовая: Разработать ER-диаграмму БД для библиотеки.",
+                ),
+                HomeworkData(
+                    subject = "Линейная алгебра",
+                    description = "Подготовиться к коллоквиуму по теме «Матрицы и определители».",
+                ),
+                HomeworkData(
+                    subject = "Основы программирования",
+                    description = "Реализовать алгоритм быстрой сортировки (QuickSort).",
+                ),
+            ),
         ),
         "fr" to LocalizedData(
-            semesterName = "Semestre 1",
-            subjectName = "Analyse",
-            teacherName = "Jean Dupont",
-            lectureType = "Cours magistral",
-            seminarType = "Séminaire",
-            homeworkDescription = "Résoudre les problèmes",
+            semesterName = "Semestre d'automne",
+            lessons = listOf(
+                LessonData(
+                    subject = "Introduction à la programmation",
+                    type = "Cours magistral",
+                    teacher = "Pr. Michel Dupont",
+                    room = "Amphi B",
+                    start = LocalTime.of(9, 0),
+                    end = LocalTime.of(10, 20),
+                ),
+                LessonData(
+                    subject = "Physique : Mécanique",
+                    type = "Cours magistral",
+                    teacher = "Dr. Sophie Martin",
+                    room = "Salle 102",
+                    start = LocalTime.of(10, 30),
+                    end = LocalTime.of(11, 50),
+                ),
+                LessonData(
+                    subject = "Algèbre linéaire",
+                    type = "Cours magistral",
+                    teacher = "Pr. Jean Renard",
+                    room = "Amphi A",
+                    start = LocalTime.of(12, 30),
+                    end = LocalTime.of(13, 50),
+                ),
+                LessonData(
+                    subject = "Analyse mathématique",
+                    type = "Travaux dirigés",
+                    teacher = "Mme Claire Dubois",
+                    room = "Salle 204",
+                    start = LocalTime.of(14, 0),
+                    end = LocalTime.of(15, 20),
+                ),
+            ),
+            homeworks = listOf(
+                HomeworkData(
+                    subject = "Analyse mathématique",
+                    description = "Exercices 1 à 5 sur les suites numériques (Fiche TD 3).",
+                ),
+                HomeworkData(
+                    subject = "Physique : Mécanique",
+                    description = "Rédiger le compte-rendu du TP n°2 (Lois de Newton).",
+                ),
+                HomeworkData(
+                    subject = "Introduction à la programmation",
+                    description = "Projet : Créer une base de données SQL simple.",
+                ),
+                HomeworkData(
+                    subject = "Algèbre linéaire",
+                    description = "Réviser pour le partiel : Espaces vectoriels.",
+                ),
+                HomeworkData(
+                    subject = "Introduction à la programmation",
+                    description = "Implémenter le tri à bulles en Java.",
+                ),
+            ),
         ),
         "it" to LocalizedData(
-            semesterName = "Semestre 1",
-            subjectName = "Analisi",
-            teacherName = "Mario Rossi",
-            lectureType = "Lezione",
-            seminarType = "Seminario",
-            homeworkDescription = "Risolvere i problemi",
+            semesterName = "Primo Semestre",
+            lessons = listOf(
+                LessonData(
+                    subject = "Fondamenti di Informatica",
+                    type = "Lezione",
+                    teacher = "Prof. Mario Rossi",
+                    room = "Aula Magna",
+                    start = LocalTime.of(9, 0),
+                    end = LocalTime.of(10, 20),
+                ),
+                LessonData(
+                    subject = "Fisica Generale I",
+                    type = "Lezione",
+                    teacher = "Prof.ssa Anna Bianchi",
+                    room = "Aula 3",
+                    start = LocalTime.of(10, 30),
+                    end = LocalTime.of(11, 50),
+                ),
+                LessonData(
+                    subject = "Algebra Lineare",
+                    type = "Lezione",
+                    teacher = "Prof. Giuseppe Verdi",
+                    room = "Aula 1",
+                    start = LocalTime.of(12, 30),
+                    end = LocalTime.of(13, 50),
+                ),
+                LessonData(
+                    subject = "Analisi Matematica I",
+                    type = "Esercitazione",
+                    teacher = "Dott. Laura Esposito",
+                    room = "Aula 4B",
+                    start = LocalTime.of(14, 0),
+                    end = LocalTime.of(15, 20),
+                ),
+            ),
+            homeworks = listOf(
+                HomeworkData(
+                    subject = "Analisi Matematica I",
+                    description = "Svolgere gli esercizi sulle derivate parziali (Capitolo 4).",
+                ),
+                HomeworkData(
+                    subject = "Fisica Generale I",
+                    description = "Relazione di laboratorio: Esperienza sul pendolo.",
+                ),
+                HomeworkData(
+                    subject = "Fondamenti di Informatica",
+                    description = "Progetto database: schema E-R per una biblioteca.",
+                ),
+                HomeworkData(
+                    subject = "Algebra Lineare",
+                    description = "Risolvere il sistema di equazioni lineari (Metodo di Gauss).",
+                ),
+                HomeworkData(
+                    subject = "Fondamenti di Informatica",
+                    description = "Scrivere un programma per ordinare un array.",
+                ),
+            ),
         ),
         "de" to LocalizedData(
-            semesterName = "Semester 1",
-            subjectName = "Analysis",
-            teacherName = "Max Mustermann",
-            lectureType = "Vorlesung",
-            seminarType = "Seminar",
-            homeworkDescription = "Aufgaben lösen",
+            semesterName = "Wintersemester",
+            lessons = listOf(
+                LessonData(
+                    subject = "Einführung in die Informatik",
+                    type = "Vorlesung",
+                    teacher = "Prof. Dr. Müller",
+                    room = "Audimax",
+                    start = LocalTime.of(9, 0),
+                    end = LocalTime.of(10, 20),
+                ),
+                LessonData(
+                    subject = "Physik I: Mechanik",
+                    type = "Vorlesung",
+                    teacher = "Prof. Dr. Schmidt",
+                    room = "HS 2",
+                    start = LocalTime.of(10, 30),
+                    end = LocalTime.of(11, 50),
+                ),
+                LessonData(
+                    subject = "Lineare Algebra",
+                    type = "Vorlesung",
+                    teacher = "Prof. Dr. Weber",
+                    room = "HS 1",
+                    start = LocalTime.of(12, 30),
+                    end = LocalTime.of(13, 50),
+                ),
+                LessonData(
+                    subject = "Analysis I",
+                    type = "Übung",
+                    teacher = "Dr. Wagner",
+                    room = "Raum 304",
+                    start = LocalTime.of(14, 0),
+                    end = LocalTime.of(15, 20),
+                ),
+            ),
+            homeworks = listOf(
+                HomeworkData(
+                    subject = "Analysis I",
+                    description = "Übungsblatt 5: Konvergenz von Folgen und Reihen.",
+                ),
+                HomeworkData(
+                    subject = "Physik I: Mechanik",
+                    description = "Versuchsprotokoll abgeben: Thermodynamik.",
+                ),
+                HomeworkData(
+                    subject = "Einführung in die Informatik",
+                    description = "Datenbankschema für eine Bibliothek entwerfen.",
+                ),
+                HomeworkData(
+                    subject = "Lineare Algebra",
+                    description = "Lösen von Gleichungssystemen (Gauß-Verfahren).",
+                ),
+                HomeworkData(
+                    subject = "Einführung in die Informatik",
+                    description = "Implementierung des Quicksort-Algorithmus.",
+                ),
+            ),
         ),
         "es" to LocalizedData(
-            semesterName = "Semestre 1",
-            subjectName = "Cálculo",
-            teacherName = "Juan Pérez",
-            lectureType = "Conferencia",
-            seminarType = "Seminario",
-            homeworkDescription = "Resolver problemas",
+            semesterName = "Primer Semestre",
+            lessons = listOf(
+                LessonData(
+                    subject = "Fundamentos de Programación",
+                    type = "Clase teórica",
+                    teacher = "Prof. García",
+                    room = "Aula 101",
+                    start = LocalTime.of(9, 0),
+                    end = LocalTime.of(10, 20),
+                ),
+                LessonData(
+                    subject = "Física: Mecánica",
+                    type = "Clase teórica",
+                    teacher = "Dra. Rodríguez",
+                    room = "Lab 3",
+                    start = LocalTime.of(10, 30),
+                    end = LocalTime.of(11, 50),
+                ),
+                LessonData(
+                    subject = "Álgebra Lineal",
+                    type = "Clase teórica",
+                    teacher = "Prof. Martínez",
+                    room = "Aula 205",
+                    start = LocalTime.of(12, 30),
+                    end = LocalTime.of(13, 50),
+                ),
+                LessonData(
+                    subject = "Cálculo I",
+                    type = "Práctica",
+                    teacher = "Lic. López",
+                    room = "Aula 10",
+                    start = LocalTime.of(14, 0),
+                    end = LocalTime.of(15, 20),
+                ),
+            ),
+            homeworks = listOf(
+                HomeworkData(
+                    subject = "Cálculo I",
+                    description = "Resolver problemas de derivadas (Ejercicios 1-10).",
+                ),
+                HomeworkData(
+                    subject = "Física: Mecánica",
+                    description = "Entregar informe de laboratorio (Termodinámica).",
+                ),
+                HomeworkData(
+                    subject = "Fundamentos de Programación",
+                    description = "Diseñar el esquema de base de datos para una biblioteca.",
+                ),
+                HomeworkData(
+                    subject = "Álgebra Lineal",
+                    description = "Resolver sistema de ecuaciones (Método de Gauss).",
+                ),
+                HomeworkData(
+                    subject = "Fundamentos de Programación",
+                    description = "Implementar algoritmo de ordenamiento rápido (QuickSort).",
+                ),
+            ),
         ),
         "be" to LocalizedData(
             semesterName = "Семестр 1",
-            subjectName = "Матаналіз",
-            teacherName = "Кажухоў Ігар Барысавіч",
-            lectureType = "Лекцыя",
-            seminarType = "Семінар",
-            homeworkDescription = "Рашыць прыклады",
+            lessons = listOf(
+                LessonData(
+                    subject = "Асновы праграмавання",
+                    type = "Лекцыя",
+                    teacher = "Гайдук Ігар Алегавіч",
+                    room = "1201 м",
+                    start = LocalTime.of(9, 0),
+                    end = LocalTime.of(10, 20),
+                ),
+                LessonData(
+                    subject = "Фізіка",
+                    type = "Лекцыя",
+                    teacher = "Трыфанаў Аляксей Юр'евіч",
+                    room = "1202 м",
+                    start = LocalTime.of(10, 30),
+                    end = LocalTime.of(11, 50),
+                ),
+                LessonData(
+                    subject = "Лінейная алгебра",
+                    type = "Лекцыя",
+                    teacher = "Кажухоў Ігар Барысавіч",
+                    room = "1204 м",
+                    start = LocalTime.of(12, 30),
+                    end = LocalTime.of(13, 50),
+                ),
+                LessonData(
+                    subject = "Матэматычны аналіз",
+                    type = "Практыка",
+                    teacher = "Шаўчэнка Аляксандр Ігаравіч",
+                    room = "3244",
+                    start = LocalTime.of(14, 0),
+                    end = LocalTime.of(15, 20),
+                ),
+            ),
+            homeworks = listOf(
+                HomeworkData(
+                    subject = "Матэматычны аналіз",
+                    description = "Індывідуальнае заданне №1: Ліміты функцый.",
+                ),
+                HomeworkData(
+                    subject = "Фізіка",
+                    description = "Падрыхтаваць справаздачу па лабараторнай працы (Тэрмадынаміка).",
+                ),
+                HomeworkData(
+                    subject = "Асновы праграмавання",
+                    description = "Распрацаваць схему базы дадзеных для бібліятэкі.",
+                ),
+                HomeworkData(
+                    subject = "Лінейная алгебра",
+                    description = "Рашыць сістэму лінейных раўнанняў метадам Гаўса.",
+                ),
+                HomeworkData(
+                    subject = "Асновы праграмавання",
+                    description = "Рэалізаваць алгарытм хуткай сарціроўкі.",
+                ),
+            ),
         ),
         "uk" to LocalizedData(
             semesterName = "Семестр 1",
-            subjectName = "Матаналіз",
-            teacherName = "Кожухов Ігор Борисович",
-            lectureType = "Лекція",
-            seminarType = "Семінар",
-            homeworkDescription = "Вирішити приклади",
+            lessons = listOf(
+                LessonData(
+                    subject = "Основи програмування",
+                    type = "Лекція",
+                    teacher = "Гайдук Ігор Олегович",
+                    room = "1201 м",
+                    start = LocalTime.of(9, 0),
+                    end = LocalTime.of(10, 20),
+                ),
+                LessonData(
+                    subject = "Фізика",
+                    type = "Лекція",
+                    teacher = "Трифонов Олексій Юрійович",
+                    room = "1202 м",
+                    start = LocalTime.of(10, 30),
+                    end = LocalTime.of(11, 50),
+                ),
+                LessonData(
+                    subject = "Лінійна алгебра",
+                    type = "Лекція",
+                    teacher = "Кожухов Ігор Борисович",
+                    room = "1204 м",
+                    start = LocalTime.of(12, 30),
+                    end = LocalTime.of(13, 50),
+                ),
+                LessonData(
+                    subject = "Математичний аналіз",
+                    type = "Практика",
+                    teacher = "Шевченко Олександр Ігорович",
+                    room = "3244",
+                    start = LocalTime.of(14, 0),
+                    end = LocalTime.of(15, 20),
+                ),
+            ),
+            homeworks = listOf(
+                HomeworkData(
+                    subject = "Математичний аналіз",
+                    description = "Розрахункова робота: Обчислити границі та похідні.",
+                ),
+                HomeworkData(
+                    subject = "Фізика",
+                    description = "Підготувати звіт з лабораторної роботи (Термодинамика).",
+                ),
+                HomeworkData(
+                    subject = "Основи програмування",
+                    description = "Розробити схему бази даних для бібліотеки.",
+                ),
+                HomeworkData(
+                    subject = "Лінійна алгебра",
+                    description = "Розв'язати систему лінійних рівнянь методом Гауса.",
+                ),
+                HomeworkData(
+                    subject = "Основи програмування",
+                    description = "Реалізувати алгоритм швидкого сортування (QuickSort).",
+                ),
+            ),
         ),
         "kk" to LocalizedData(
             semesterName = "1-семестр",
-            subjectName = "Матанализ",
-            teacherName = "Кожухов Игорь Борисович",
-            lectureType = "Дәріс",
-            seminarType = "Семинар",
-            homeworkDescription = "Есептерді шығару",
+            lessons = listOf(
+                LessonData(
+                    subject = "Бағдарламалау негіздері",
+                    type = "Дәріс",
+                    teacher = "Ахметов Арман Әлиұлы",
+                    room = "101 дәрісхана",
+                    start = LocalTime.of(9, 0),
+                    end = LocalTime.of(10, 20),
+                ),
+                LessonData(
+                    subject = "Физика",
+                    type = "Дәріс",
+                    teacher = "Омаров Болат Бақытұлы",
+                    room = "202 зертхана",
+                    start = LocalTime.of(10, 30),
+                    end = LocalTime.of(11, 50),
+                ),
+                LessonData(
+                    subject = "Сызықтық алгебра",
+                    type = "Дәріс",
+                    teacher = "Сүлейменов Серік Саматұлы",
+                    room = "305 дәрісхана",
+                    start = LocalTime.of(12, 30),
+                    end = LocalTime.of(13, 50),
+                ),
+                LessonData(
+                    subject = "Математикалық талдау",
+                    type = "Тәжірибелік сабақ",
+                    teacher = "Ысқақова Гүлнар Ғабитқызы",
+                    room = "304 аудитория",
+                    start = LocalTime.of(14, 0),
+                    end = LocalTime.of(15, 20),
+                ),
+            ),
+            homeworks = listOf(
+                HomeworkData(
+                    subject = "Математикалық талдау",
+                    description = "Туындыларды есептеу, 1-10 есептерді шығару.",
+                ),
+                HomeworkData(
+                    subject = "Физика",
+                    description = "Зертханалық жұмыс бойынша есеп беру (Термодинамика).",
+                ),
+                HomeworkData(
+                    subject = "Бағдарламалау негіздері",
+                    description = "Кітапхана үшін деректер қорының схемасын құру.",
+                ),
+                HomeworkData(
+                    subject = "Сызықтық алгебра",
+                    description = "Сызықтық теңдеулер жүйесін Гаусс әдісімен шешу.",
+                ),
+                HomeworkData(
+                    subject = "Бағдарламалау негіздері",
+                    description = "Жылдам сұрыптау (QuickSort) алгоритмін жүзеге асыру.",
+                ),
+            ),
         ),
     )
 
@@ -195,6 +665,7 @@ internal class AutomatedScreenshotTest {
             }
 
             val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
+            val currentData = localizedData.getValue(langCode)
 
             // 1. Расписание
             if (isScreenshotMode) takeScreenshot(targetContext, folderName, "1")
@@ -207,7 +678,7 @@ internal class AutomatedScreenshotTest {
             // 3. Детали урока
             val scheduleTitle = targetContext.getString(RS.s_title)
             composeTestRule.onNodeWithText(scheduleTitle).performClick()
-            composeTestRule.onNodeWithText("3329").performClick()
+            composeTestRule.onNodeWithText(currentData.lessons.last().room).performClick()
             if (isScreenshotMode) takeScreenshot(targetContext, folderName, "3")
 
             // 4. Редактор расписания
@@ -249,37 +720,30 @@ internal class AutomatedScreenshotTest {
             .first()
         val semesterId = semester.id
 
-        api.lessonRepository.insert(
-            subjectName = data.subjectName,
-            type = data.lectureType,
-            teachers = setOf(data.teacherName),
-            classrooms = setOf("1204"),
-            startTime = LocalTime.of(9, 0),
-            endTime = LocalTime.of(10, 30),
-            semesterId = semesterId,
-            dayOfWeek = DayOfWeek.MONDAY,
-            weeks = listOf(true),
-        )
-        api.lessonRepository.insert(
-            subjectName = data.subjectName,
-            type = data.seminarType,
-            teachers = setOf(data.teacherName),
-            classrooms = setOf("3329"),
-            startTime = LocalTime.of(10, 40),
-            endTime = LocalTime.of(12, 10),
-            semesterId = semesterId,
-            dayOfWeek = DayOfWeek.MONDAY,
-            weeks = listOf(true),
-        )
+        data.lessons.forEach { lesson ->
+            api.lessonRepository.insert(
+                subjectName = lesson.subject,
+                type = lesson.type,
+                teachers = setOf(lesson.teacher),
+                classrooms = setOf(lesson.room),
+                startTime = lesson.start,
+                endTime = lesson.end,
+                semesterId = semesterId,
+                dayOfWeek = DayOfWeek.MONDAY,
+                weeks = listOf(true),
+            )
+        }
 
-        // Датой сдачи ставим понедельник через месяц
-        val deadline = today.minusDays(today.dayOfWeek.value - 1L).plusMonths(1)
-        api.homeworkRepository.insert(
-            subjectName = data.subjectName,
-            description = data.homeworkDescription,
-            deadline = deadline,
-            semesterId = semesterId,
-        )
+        val nextMonday = today.with(DayOfWeek.MONDAY).plusWeeks(1)
+        data.homeworks.forEachIndexed { index, homework ->
+            val deadline = nextMonday.plusDays(index.toLong())
+            api.homeworkRepository.insert(
+                subjectName = homework.subject,
+                description = homework.description,
+                deadline = deadline,
+                semesterId = semesterId,
+            )
+        }
     }
 
     private fun setLocale(language: String) {
