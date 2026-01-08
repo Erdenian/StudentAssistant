@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <string-array name="lesson_repeat_types">
         <item>Эрне кунӗсем тӑрӑх</item>
         <item>Кунсем тӑрӑх</item>
     </string-array>
 
-    <string-array name="lesson_types">
-        <item>Семинар</item>
+    <string-array name="lesson_types" tools:ignore="InconsistentArrays">
+        <item>Заняти</item>
+        <item>Урок</item>
         <item>Лекци</item>
+        <item>Семинар</item>
         <item>Лаборатори ӗҫӗ</item>
         <item>Практика</item>
-        <item>Консультаци</item>
+        <item>Зачет</item>
         <item>Экзамен</item>
+        <item>Консультаци</item>
+        <item>Курс ӗҫӗ</item>
         <item>Хам тӗллӗн ӗҫлени</item>
+        <item>Факультатив</item>
     </string-array>
 
     <string-array name="repeat_variants">

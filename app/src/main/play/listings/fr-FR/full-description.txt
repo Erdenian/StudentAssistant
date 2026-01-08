@@ -1,11 +1,11 @@
 Student Assistant est une application pour gérer votre emploi du temps et vos devoirs.
 
 Fonctionnalités :
-- Gestion de l'emploi du temps semestriel avec ajout de matières, d'enseignants, de salles et d'horaires
+- Gestion de l'emploi du temps avec ajout de matières, d'enseignants, de salles et d'horaires
 - Support des cours répétitifs : par jours de la semaine ou avec une sélection flexible des semaines (ex : semaines paires/impaires)
 - Devoirs avec date limite, description et lien avec les matières
 - Support de plusieurs emplois du temps — idéal pour les changements de semestre ou les cursus parallèles
-- Paramétrage de l'heure de début des cours, de la durée des leçons et des pauses
+- Paramétrage de l'heure de début des cours, de la durée des cours et des pauses
 - Autocomplétion lors de la saisie des noms de matières et d'enseignants
 
 L'application fonctionne entièrement hors ligne, ne nécessite pas de connexion Internet et ne collecte aucune donnée utilisateur.

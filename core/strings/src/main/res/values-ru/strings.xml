@@ -31,15 +31,15 @@
     <string name="se_title_new">Новое расписание</string>
     <string name="se_title_edit">Редактирование расписания</string>
     <string name="se_name">Название</string>
-    <string name="se_first_day">Первый день</string>
-    <string name="se_last_day">Последний день</string>
+    <string name="se_first_day">Дата начала</string>
+    <string name="se_last_day">Дата окончания</string>
     <string name="se_save">Сохранить</string>
     <string name="se_saving">Сохранение…</string>
     <string name="se_error_empty_name">Введите название</string>
-    <string name="se_error_name_not_available">Это имя уже используется</string>
+    <string name="se_error_name_not_available">Это название уже используется</string>
     <string name="se_error_wrong_dates">Некорректный диапазон дат</string>
     <string name="se_warning_week_shift_title">Сдвиг недель</string>
-    <string name="se_warning_week_shift_message">Вы изменили дату начала семестра. Это может нарушить чередование недель (чётные/нечётные) у существующих занятий. Продолжить?</string>
+    <string name="se_warning_week_shift_message">Вы изменили дату начала расписания. Это может нарушить чередование недель (чётные/нечётные) для существующих занятий. Продолжить?</string>
     <string name="se_warning_week_shift_yes">Да, продолжить</string>
     <string name="se_warning_week_shift_no">Отмена</string>
 
@@ -132,7 +132,7 @@
     <string name="st_title">Настройки</string>
     <string name="st_default_start_time">Начало занятий</string>
     <string name="st_default_lesson_duration">Длительность занятия</string>
-    <string name="st_default_break_duration">Длительность перемены</string>
+    <string name="st_default_break_duration">Длительность перерыва</string>
     <string name="st_is_advanced_weeks_selector_enabled">Расширенный выбор недель</string>
     <string name="st_is_advanced_weeks_selector_enabled_description">Более гибкий выбор недель для повторения занятия</string>
     <string name="st_ok">ОК</string>

@@ -1,29 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <string-array name="lesson_repeat_types">
         <item>Par jours de la semaine</item>
         <item>Par dates</item>
     </string-array>
 
-    <string-array name="lesson_types">
-        <item>Séminaire</item>
+    <string-array name="lesson_types" tools:ignore="InconsistentArrays">
+        <item>Cours</item>
         <item>Cours magistral</item>
-        <item>Travaux pratiques</item>
         <item>Travaux dirigés</item>
-        <item>Consultation</item>
+        <item>Travaux pratiques</item>
+        <item>Séminaire</item>
+        <item>Partiel</item>
         <item>Examen</item>
+        <item>Soutenance</item>
+        <item>Conférence</item>
+        <item>Consultation</item>
         <item>Travail personnel</item>
+        <item>Option</item>
     </string-array>
 
     <string-array name="repeat_variants">
         <item>Chaque semaine</item>
         <item>Semaines impaires</item>
         <item>Semaines paires</item>
-        <item>Toutes les 1re semaines sur 4</item>
-        <item>Toutes les 2e semaines sur 4</item>
-        <item>Toutes les 3e semaines sur 4</item>
-        <item>Toutes les 4e semaines sur 4</item>
+        <item>Semaine 1 sur 4</item>
+        <item>Semaine 2 sur 4</item>
+        <item>Semaine 3 sur 4</item>
+        <item>Semaine 4 sur 4</item>
         <item>Personnalisé</item>
     </string-array>
 
