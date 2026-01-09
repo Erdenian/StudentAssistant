@@ -38,6 +38,8 @@ internal class AutomatedScreenshotTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
+    private val baseDate = LocalDate.now()
+
     private val locales = listOf(
         "en" to "en-US",
         "ru" to "ru-RU",
@@ -629,7 +631,7 @@ internal class AutomatedScreenshotTest {
             runBlocking {
                 withTimeout(5_000L) {
                     clearDatabase(repositoryApi)
-                    populateDatabase(repositoryApi, langCode)
+                    populateDatabase(repositoryApi, langCode, baseDate)
                 }
             }
 
@@ -649,9 +651,8 @@ internal class AutomatedScreenshotTest {
             // 4. На первой итерации скроллим до понедельника, если сегодня не понедельник
             // Делаем это только на первой итерации, так как выбранная дата сохраняется при смене локали
             if (langCode == iterations.first().first) {
-                val today = LocalDate.now()
-                val monday = today.with(DayOfWeek.MONDAY)
-                val daysDiff = ChronoUnit.DAYS.between(today, monday).toInt()
+                val monday = baseDate.with(DayOfWeek.MONDAY)
+                val daysDiff = ChronoUnit.DAYS.between(LocalDate.now(), monday).toInt()
 
                 if (daysDiff != 0) {
                     val swipes = abs(daysDiff)
@@ -704,14 +705,13 @@ internal class AutomatedScreenshotTest {
         api.selectedSemesterRepository.selectedFlow.filter { it == null }.first()
     }
 
-    private suspend fun populateDatabase(api: RepositoryApi, langCode: String) {
+    private suspend fun populateDatabase(api: RepositoryApi, langCode: String, baseDate: LocalDate) {
         val data = localizedData.getValue(langCode)
-        val today = LocalDate.now()
 
         api.semesterRepository.insert(
             name = data.semesterName,
-            firstDay = LocalDate.of(today.year - 1, 1, 1),
-            lastDay = LocalDate.of(today.year + 1, 12, 31),
+            firstDay = LocalDate.of(baseDate.year - 1, 1, 1),
+            lastDay = LocalDate.of(baseDate.year + 1, 12, 31),
         )
 
         // Ждем выбора именно НАШЕГО нового расписания
@@ -735,7 +735,7 @@ internal class AutomatedScreenshotTest {
             )
         }
 
-        val nextMonday = today.with(DayOfWeek.MONDAY).plusWeeks(1)
+        val nextMonday = baseDate.with(DayOfWeek.MONDAY).plusWeeks(1)
         data.homeworks.forEachIndexed { index, homework ->
             val deadline = nextMonday.plusDays(index.toLong())
             api.homeworkRepository.insert(
