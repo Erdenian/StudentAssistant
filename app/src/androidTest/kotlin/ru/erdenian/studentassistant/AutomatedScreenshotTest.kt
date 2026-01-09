@@ -636,7 +636,7 @@ internal class AutomatedScreenshotTest {
             // 3. Ждем инициализации данных
             runBlocking {
                 withTimeout(5000L) {
-                    // Ждем, пока выберется именно тот семестр, который мы создали (по имени)
+                    // Ждем, пока выберется именно то расписание, которое мы создали (по имени)
                     // Это защитит от использования старого ID
                     val targetName = localizedData[langCode]!!.semesterName
                     repositoryApi.selectedSemesterRepository.selectedFlow
@@ -675,7 +675,7 @@ internal class AutomatedScreenshotTest {
             composeTestRule.onNodeWithText(homeworksTitle).performClick()
             if (isScreenshotMode) takeScreenshot(targetContext, folderName, "2")
 
-            // 3. Детали урока
+            // 3. Детали занятия
             val scheduleTitle = targetContext.getString(RS.s_title)
             composeTestRule.onNodeWithText(scheduleTitle).performClick()
             composeTestRule.onNodeWithText(currentData.lessons.last().room).performClick()
@@ -698,7 +698,7 @@ internal class AutomatedScreenshotTest {
         val semesters = api.semesterRepository.allFlow.first()
         semesters.forEach { api.semesterRepository.delete(it.id) }
 
-        // Ждем, пока репозиторий сбросит выбор семестра в null.
+        // Ждем, пока репозиторий сбросит выбор расписания в null.
         // Это гарантирует, что мы не подхватим старый ID в следующей итерации.
         api.selectedSemesterRepository.selectedFlow.filter { it == null }.first()
     }
@@ -713,7 +713,7 @@ internal class AutomatedScreenshotTest {
             lastDay = LocalDate.of(today.year + 1, 12, 31),
         )
 
-        // Ждем выбора именно НАШЕГО нового семестра
+        // Ждем выбора именно НАШЕГО нового расписания
         val semester = api.selectedSemesterRepository.selectedFlow
             .filterNotNull()
             .filter { it.name == data.semesterName }

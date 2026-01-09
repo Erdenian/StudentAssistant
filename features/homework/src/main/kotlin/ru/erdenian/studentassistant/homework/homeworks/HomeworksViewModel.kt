@@ -44,9 +44,9 @@ internal class HomeworksViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.Default, listOfNotNull(selectedSemester.value))
 
     /**
-     * Выбирает семестр для отображения заданий.
+     * Выбирает расписание для отображения заданий.
      *
-     * @param semesterId идентификатор семестра.
+     * @param semesterId идентификатор расписания.
      */
     fun selectSemester(semesterId: Long) {
         selectedSemesterRepository.selectSemester(semesterId)

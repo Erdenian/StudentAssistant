@@ -103,7 +103,7 @@ internal class FakeHomeworkRepository : HomeworkRepository {
 internal class FakeLessonRepository : LessonRepository {
     val lessons = MutableStateFlow<List<Lesson>>(emptyList())
 
-    // Ссылка на семестры нужна для вычисления номера недели
+    // Ссылка на расписания нужна для вычисления номера недели
     var semesters: List<Semester> = emptyList()
 
     override suspend fun insert(
