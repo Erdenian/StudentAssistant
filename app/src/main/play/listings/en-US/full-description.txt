@@ -1,17 +1,17 @@
 Student Assistant is an app for managing your study schedule and homework.
 
 Features:
-- Maintain a study schedule with the ability to add subjects, teachers, classrooms, and class times
-- Support for repeating classes: by days of the week or with flexible week selection (e.g., odd/even weeks only)
+- Manage your study schedule: add subjects, teachers, classrooms, and class times
+- Support for recurring classes: by days of the week or with flexible week selection (e.g., odd/even weeks)
 - Homework management with deadlines, descriptions, and subject linking
-- Multiple schedules support — suitable for changing semesters or parallel programs
-- Customizable class start times, class durations, and breaks
+- Support for multiple schedules — ideal for schedule changes or parallel programs
+- Customizable settings for class start times, duration, and breaks
 - Autocomplete for subject names and teachers
 
 The app works completely offline, requires no internet connection, and does not collect user data.
 
 Developed using modern Android architecture principles: Modularity, Jetpack Compose, and safe state management.
 
-The source code is open source — you can study, modify, or contribute to the project.
+The project is open source — you can study, modify, or contribute to the project.
 
 Designed for students and schoolchildren who want to keep their studies organized without unnecessary complexity.

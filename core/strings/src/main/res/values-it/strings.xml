@@ -120,7 +120,7 @@
     <string name="he_unknown_lesson_no">Annulla</string>
     <string name="he_unknown_lesson_yes_and_create">Salva e crea lezione</string>
     <string name="he_delete">Elimina</string>
-    <string name="he_delete_message">Eliminare il compito?</string>
+    <string name="he_delete_message">Eliminare questo compito?</string>
     <string name="he_delete_yes">Elimina</string>
     <string name="he_delete_no">Annulla</string>
     <string name="he_delete_progress">Eliminazione…</string>

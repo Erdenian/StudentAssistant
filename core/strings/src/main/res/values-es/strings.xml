@@ -120,7 +120,7 @@
     <string name="he_unknown_lesson_no">Cancelar</string>
     <string name="he_unknown_lesson_yes_and_create">Guardar y crear clase</string>
     <string name="he_delete">Eliminar</string>
-    <string name="he_delete_message">¿Eliminar tarea?</string>
+    <string name="he_delete_message">¿Eliminar esta tarea?</string>
     <string name="he_delete_yes">Eliminar</string>
     <string name="he_delete_no">Cancelar</string>
     <string name="he_delete_progress">Eliminando…</string>

@@ -4,7 +4,7 @@ Características:
 - Gestión del horario de estudios con posibilidad de añadir asignaturas, profesores, aulas y horarios de clase
 - Soporte para clases recurrentes: por días de la semana o con selección flexible de semanas (ej. solo semanas pares/impares)
 - Tareas con fecha límite, descripción y vinculación a asignaturas
-- Múltiples horarios: adecuado para cambios de semestre o programas paralelos
+- Múltiples horarios: adecuado para cambios de horario o programas paralelos
 - Configuración de la hora de inicio de clases, duración de las clases y descansos
 - Autocompletado al introducir nombres de asignaturas y profesores
 

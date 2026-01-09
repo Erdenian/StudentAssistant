@@ -36,7 +36,7 @@
     <string name="se_last_day">End date</string>
     <string name="se_save">Save</string>
     <string name="se_saving">Saving…</string>
-    <string name="se_error_empty_name">Enter name</string>
+    <string name="se_error_empty_name">Enter a name</string>
     <string name="se_error_name_not_available">This name is already in use</string>
     <string name="se_error_wrong_dates">Invalid date range</string>
     <string name="se_warning_week_shift_title">Week shift</string>
@@ -70,7 +70,7 @@
     <string name="le_repeat_type">Repeat</string>
     <string name="le_save">Save</string>
     <string name="le_save_progress">Saving…</string>
-    <string name="le_error_empty_subject_name">Enter subject name</string>
+    <string name="le_error_empty_subject_name">Enter a subject name</string>
     <string name="le_error_wrong_time">Start time must be before end time</string>
     <string name="le_error_empty_repeat">No repeat days selected</string>
     <string name="le_rename_others_progress">Checking other classes…</string>
@@ -112,15 +112,15 @@
     <string name="he_deadline_label">Deadline</string>
     <string name="he_save">Save</string>
     <string name="he_save_progress">Saving…</string>
-    <string name="he_error_empty_subject_name">Enter subject</string>
-    <string name="he_error_empty_description">Enter description</string>
+    <string name="he_error_empty_subject_name">Enter a subject</string>
+    <string name="he_error_empty_description">Enter a description</string>
     <string name="he_unknown_lesson">New subject</string>
     <string name="he_unknown_lesson_message">The subject is not in the schedule. Save homework and add subject to the list?</string>
     <string name="he_unknown_lesson_yes">Save</string>
     <string name="he_unknown_lesson_no">Cancel</string>
     <string name="he_unknown_lesson_yes_and_create">Save and create class</string>
     <string name="he_delete">Delete</string>
-    <string name="he_delete_message">Delete homework?</string>
+    <string name="he_delete_message">Delete this homework?</string>
     <string name="he_delete_yes">Delete</string>
     <string name="he_delete_no">Cancel</string>
     <string name="he_delete_progress">Deleting…</string>

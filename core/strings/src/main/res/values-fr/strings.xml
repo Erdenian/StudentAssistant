@@ -120,7 +120,7 @@
     <string name="he_unknown_lesson_no">Annuler</string>
     <string name="he_unknown_lesson_yes_and_create">Enregistrer et créer le cours</string>
     <string name="he_delete">Supprimer</string>
-    <string name="he_delete_message">Supprimer le devoir ?</string>
+    <string name="he_delete_message">Supprimer ce devoir ?</string>
     <string name="he_delete_yes">Supprimer</string>
     <string name="he_delete_no">Annuler</string>
     <string name="he_delete_progress">Suppression…</string>

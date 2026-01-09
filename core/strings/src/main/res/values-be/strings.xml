@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">Student Assistant</string>
@@ -36,7 +37,7 @@
     <string name="se_save">Захаваць</string>
     <string name="se_saving">Захаванне…</string>
     <string name="se_error_empty_name">Увядзіце назву</string>
-    <string name="se_error_name_not_available">Гэта назва ўжо выкарыстоўваецца</string>
+    <string name="se_error_name_not_available">Гэтая назва ўжо выкарыстоўваецца</string>
     <string name="se_error_wrong_dates">Няправільны дыяпазон дат</string>
     <string name="se_warning_week_shift_title">Зрух тыдняў</string>
     <string name="se_warning_week_shift_message">Вы змянілі дату пачатку раскладу. Гэта можа парушыць чаргаванне тыдняў (цотныя/няцотныя) для існуючых заняткаў. Працягнуць?</string>

@@ -287,7 +287,7 @@ internal class AutomatedScreenshotTest {
             homeworks = listOf(
                 HomeworkData(
                     subject = "Analisi Matematica I",
-                    description = "Svolgere gli esercizi sulle derivate parziali (Capitolo 4).",
+                    description = "Svolgere gli esercizi sulle derivate (Capitolo 4).",
                 ),
                 HomeworkData(
                     subject = "Fisica Generale I",
@@ -464,7 +464,7 @@ internal class AutomatedScreenshotTest {
             homeworks = listOf(
                 HomeworkData(
                     subject = "Матэматычны аналіз",
-                    description = "Індывідуальнае заданне №1: Ліміты функцый.",
+                    description = "Індывідуальнае заданне №1: Граніцы функцый.",
                 ),
                 HomeworkData(
                     subject = "Фізіка",
@@ -527,7 +527,7 @@ internal class AutomatedScreenshotTest {
                 ),
                 HomeworkData(
                     subject = "Фізика",
-                    description = "Підготувати звіт з лабораторної роботи (Термодинамика).",
+                    description = "Підготувати звіт з лабораторної роботи (Термодинаміка).",
                 ),
                 HomeworkData(
                     subject = "Основи програмування",
@@ -586,7 +586,7 @@ internal class AutomatedScreenshotTest {
                 ),
                 HomeworkData(
                     subject = "Физика",
-                    description = "Зертханалық жұмыс бойынша есеп беру (Термодинамика).",
+                    description = "Зертханалық жұмыс бойынша есеп беру (Термодинаміка).",
                 ),
                 HomeworkData(
                     subject = "Бағдарламалау негіздері",
@@ -647,6 +647,7 @@ internal class AutomatedScreenshotTest {
             }
 
             // 4. На первой итерации скроллим до понедельника, если сегодня не понедельник
+            // Делаем это только на первой итерации, так как выбранная дата сохраняется при смене локали
             if (langCode == iterations.first().first) {
                 val today = LocalDate.now()
                 val monday = today.with(DayOfWeek.MONDAY)

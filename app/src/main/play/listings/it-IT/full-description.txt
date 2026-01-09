@@ -1,10 +1,10 @@
-Student Assistant è un'app per gestire il tuo orario scolastico o universitario e i compiti a casa.
+Student Assistant è un'app per gestire il tuo orario scolastico o universitario e i compiti.
 
 Caratteristiche:
 - Gestione dell'orario scolastico o universitario con possibilità di aggiungere materie, insegnanti, aule e orari delle lezioni
 - Supporto per lezioni ricorrenti: per giorni della settimana o con selezione flessibile delle settimane (es. solo settimane pari/dispari)
-- Compiti a casa con scadenze, descrizioni e collegamento alle materie
-- Supporto per più orari: adatto per cambi di semestre o programmi paralleli
+- Compiti con scadenze, descrizioni e collegamento alle materie
+- Supporto per più orari: adatto per cambi di orario o programmi paralleli
 - Impostazione dell'orario di inizio delle lezioni, della durata delle lezioni e delle pause
 - Completamento automatico per i nomi delle materie e degli insegnanti
 
