@@ -171,7 +171,6 @@ dependencies {
     // region Tests
     androidTestImplementation(libs.bundles.test.android)
     androidTestImplementation(libs.bundles.test.compose)
-    androidTestImplementation(libs.test.androidx.espressoCore)
     debugImplementation(libs.test.compose.manifest)
     // endregion
 }
