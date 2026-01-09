@@ -1,6 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
 import java.time.LocalDate
+import org.gradle.internal.extensions.stdlib.capitalized
 
 plugins {
     alias(libs.plugins.android.application)
@@ -222,6 +223,178 @@ rootProject.tasks.register("updateChangelog") {
         changelogFile.delete()
         changelogFile.writeText(lines.joinToString(lineSeparator) + lineSeparator)
     }
+}
+
+// endregion
+
+// region Screenshots
+
+abstract class GenerateScreenshotsTask : DefaultTask() {
+
+    @get:Input
+    abstract val adbPath: Property<String>
+
+    @get:Input
+    abstract val appPackage: Property<String>
+
+    @get:Input
+    abstract val testPackage: Property<String>
+
+    @get:Input
+    abstract val testRunner: Property<String>
+
+    @get:Input
+    abstract val testClass: Property<String>
+
+    @get:InputFiles
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    abstract val sources: ConfigurableFileTree
+
+    @get:Internal
+    abstract val tempDir: DirectoryProperty
+
+    @get:OutputDirectory
+    abstract val outputDir: DirectoryProperty
+
+    @get:Inject
+    abstract val execOperations: ExecOperations
+
+    @get:Inject
+    abstract val fs: FileSystemOperations
+
+    init {
+        group = "android"
+        description = "Generates screenshots for all supported locales using an automated test."
+    }
+
+    @TaskAction
+    fun run() {
+        val adb = adbPath.get()
+        val pkg = appPackage.get()
+        val deviceDir = "/sdcard/Android/data/$pkg/files/screenshots"
+        val localTemp = tempDir.get().asFile
+        val localFinal = outputDir.get().asFile
+
+        // Вспомогательная функция для запуска adb
+        fun adb(vararg args: String) {
+            val stdout = `java.io`.ByteArrayOutputStream()
+            execOperations.exec {
+                executable = adb
+                args(*args)
+                standardOutput = stdout
+            }
+            val output = stdout.toString()
+            println(output)
+
+            // Дополнительно проверяем есть ли проваленные тесты
+            if (output.contains("FAILURES!!!")) {
+                throw GradleException("Instrumentation tests failed. See output above.")
+            }
+        }
+
+        fun shell(vararg command: String) {
+            adb("shell", *command)
+        }
+
+        println("=== 1. Очистка старых скриншотов на устройстве ===")
+        shell("rm", "-rf", deviceDir)
+
+        // @formatter:off
+        println("=== 2. Настройка Demo Mode и отключение анимаций ===")
+        // Demo Mode
+        shell("settings", "put", "global", "sysui_demo_allowed", "1")
+        shell("am", "broadcast", "-a", "com.android.systemui.demo", "-e", "command", "enter")
+        shell("am", "broadcast", "-a", "com.android.systemui.demo", "-e", "command", "clock", "-e", "hhmm", "1400")
+        shell("am", "broadcast", "-a", "com.android.systemui.demo", "-e", "command", "network", "-e", "mobile", "show", "-e", "level", "4", "-e", "datatype", "lte")
+        shell("am", "broadcast", "-a", "com.android.systemui.demo", "-e", "command", "network", "-e", "wifi", "show", "-e", "level", "4", "-e", "fully", "true")
+        shell("am", "broadcast", "-a", "com.android.systemui.demo", "-e", "command", "battery", "-e", "level", "100", "-e", "plugged", "false")
+        shell("am", "broadcast", "-a", "com.android.systemui.demo", "-e", "command", "notifications", "-e", "visible", "false")
+        
+        // Отключение анимаций (0 = выкл)
+        shell("settings", "put", "global", "window_animation_scale", "0")
+        shell("settings", "put", "global", "transition_animation_scale", "0")
+        shell("settings", "put", "global", "animator_duration_scale", "0")
+
+        println("=== 3. Запуск теста генерации скриншотов ===")
+        // Передаем аргумент is_screenshot_mode=true
+        shell("am", "instrument", "-w", "-r", "-e", "class", testClass.get(), "-e", "is_screenshot_mode", "true", "${testPackage.get()}/${testRunner.get()}")
+        // @formatter:on
+
+        println("=== 4. Выключение Demo Mode и включение анимаций ===")
+        // Включение анимаций (1 = вкл)
+        shell("settings", "put", "global", "window_animation_scale", "1")
+        shell("settings", "put", "global", "transition_animation_scale", "1")
+        shell("settings", "put", "global", "animator_duration_scale", "1")
+
+        shell("am", "broadcast", "-a", "com.android.systemui.demo", "-e", "command", "exit")
+
+        println("=== 5. Копирование скриншотов в проект ===")
+        // Очищаем локальную временную папку
+        localTemp.deleteRecursively()
+        localTemp.mkdirs()
+
+        adb("pull", "$deviceDir/.", localTemp.absolutePath)
+
+        localTemp.listFiles()?.forEach { langDir ->
+            if (!langDir.isDirectory) return@forEach
+
+            val langCode = langDir.name
+            val targetDir = localFinal.resolve("$langCode/graphics/phone-screenshots")
+
+            println("Processing $langCode -> $targetDir")
+            targetDir.mkdirs()
+
+            // Удаляем старые png
+            targetDir.listFiles { it.extension == "png" }?.forEach { it.delete() }
+
+            // Копируем новые
+            fs.copy {
+                from(langDir)
+                into(targetDir)
+                include("*.png")
+            }
+        }
+
+        println("=== 6. Очистка временных файлов ===")
+        localTemp.deleteRecursively()
+
+        println("=== Готово! Скриншоты обновлены. ===")
+    }
+}
+
+tasks.register<GenerateScreenshotsTask>("generateScreenshots") {
+    val buildType = "debug"
+
+    dependsOn(tasks.named("install${buildType.capitalized()}"))
+    dependsOn(tasks.named("install${buildType.capitalized()}AndroidTest"))
+
+    val android = project.extensions.getByName("android") as com.android.build.gradle.BaseExtension
+    val applicationId = android.defaultConfig.applicationId
+    val debugSuffix = android.buildTypes.getByName(buildType).applicationIdSuffix
+    val pkg = applicationId + debugSuffix
+
+    adbPath.set(android.sdkDirectory.resolve("platform-tools/adb").absolutePath)
+    appPackage.set(pkg)
+    testPackage.set("$pkg.test")
+    testRunner.set(android.defaultConfig.testInstrumentationRunner)
+
+    val testClassName = "ru.erdenian.studentassistant.AutomatedScreenshotTest"
+    testClass.set(testClassName)
+
+    // Валидация существования файла теста на этапе конфигурации Gradle.
+    val relativeTestPath = "src/androidTest/kotlin/" + testClassName.replace('.', '/') + ".kt"
+    val testFile = layout.projectDirectory.file(relativeTestPath)
+    if (!testFile.asFile.exists()) {
+        throw GradleException("Test source file not found for class $testClassName. Expected at: $relativeTestPath")
+    }
+
+    // Отслеживаем всю папку src, НО исключаем папку с ресурсами Play Store (куда мы пишем скриншоты),
+    // чтобы избежать циклического перезапуска задачи.
+    sources.from(layout.projectDirectory.dir("src"))
+    sources.exclude("main/play/**")
+
+    tempDir.set(layout.buildDirectory.dir("screenshots_tmp"))
+    outputDir.set(layout.projectDirectory.dir("src/main/play/listings"))
 }
 
 // endregion

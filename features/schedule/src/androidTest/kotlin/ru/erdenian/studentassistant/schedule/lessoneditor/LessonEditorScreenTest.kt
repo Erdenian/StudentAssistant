@@ -170,8 +170,8 @@ internal class LessonEditorScreenTest {
         )
         lessonRepository.lessons.value = listOf(lesson)
 
-        // Симулируем наличие домашки и то, что это последний урок такого типа
-        // (FakeLessonRepository.getCount вернет 1, так как урок в списке один)
+        // Симулируем наличие домашки и то, что это последнее занятие такого типа
+        // (FakeLessonRepository.getCount вернет 1, так как занятие в списке одно)
         homeworkRepository.hasHomeworksResult = true
 
         val navigator = mockk<Navigator>(relaxed = true)
@@ -196,7 +196,7 @@ internal class LessonEditorScreenTest {
 
     @Test
     fun verifyRenameOthersDialog() {
-        // Два урока с одинаковым предметом
+        // Два занятия с одинаковым предметом
         val lesson1 = Lesson(
             subjectName = "Математика",
             type = "Лекция",
@@ -240,7 +240,7 @@ internal class LessonEditorScreenTest {
 
         composeTestRule.waitForIdle()
 
-        // Проверяем, что оба урока переименованы (FakeRepo реализует renameSubject)
+        // Проверяем, что оба занятия переименованы (FakeRepo реализует renameSubject)
         val lessons = lessonRepository.lessons.value
         assertEquals("Алгебра", lessons.find { it.id == 10L }?.subjectName)
         assertEquals("Алгебра", lessons.find { it.id == 11L }?.subjectName)

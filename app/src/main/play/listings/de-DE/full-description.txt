@@ -1,0 +1,17 @@
+Student Assistant ist eine App zur Verwaltung Ihres Stundenplans und Ihrer Hausaufgaben.
+
+Funktionen:
+- Verwaltung des Stundenplans mit Hinzufügen von Fächern, Lehrenden, Räumen und Unterrichtszeiten
+- Unterstützung für wiederkehrende Stunden: nach Wochentagen oder mit flexibler Wochenauswahl (z. B. nur gerade/ungerade Wochen)
+- Hausaufgaben mit Fristen, Beschreibungen und Verknüpfung zu Fächern
+- Mehrere Stundenpläne – geeignet für den Wechsel des Stundenplans oder parallele Programme
+- Einstellung von Unterrichtsbeginn, Stunden- und Pausendauer
+- Autovervollständigung bei der Eingabe von Fächern und Namen der Lehrenden
+
+Die App funktioniert vollständig offline, benötigt keine Internetverbindung und sammelt keine Nutzerdaten.
+
+Entwickelt unter Verwendung moderner Android-Architekturprinzipien: Modularität, Jetpack Compose, sicheres Zustandsmanagement.
+
+Der Quellcode ist Open Source – Sie können ihn studieren, ändern oder zur Entwicklung des Projekts beitragen.
+
+Gedacht für Studenten und Schüler, die Ordnung in ihrem Studium ohne unnötige Komplexität halten wollen.

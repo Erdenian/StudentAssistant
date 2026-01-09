@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <string-array name="lesson_repeat_types">
         <item>Апта күндері бойынша</item>
         <item>Күндер бойынша</item>
     </string-array>
 
-    <string-array name="lesson_types">
-        <item>Семинар</item>
+    <string-array name="lesson_types" tools:ignore="InconsistentArrays">
+        <item>Сабақ</item>
         <item>Дәріс</item>
+        <item>Семинар</item>
         <item>Зертханалық жұмыс</item>
-        <item>Практика</item>
-        <item>Кеңес беру</item>
+        <item>Тәжірибелік сабақ</item>
+        <item>Сынақ</item>
         <item>Емтихан</item>
+        <item>Кеңес беру</item>
+        <item>Курстық жұмыс</item>
         <item>Өздік жұмыс</item>
+        <item>Факультатив</item>
     </string-array>
 
     <string-array name="repeat_variants">

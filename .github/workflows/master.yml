@@ -106,4 +106,4 @@ jobs:
       # Publish
       # --------------------------------------
       - name: Publish
-        run: ./gradlew publishReleaseBundle
+        run: ./gradlew :app:publishReleaseBundle :app:publishReleaseListing

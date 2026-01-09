@@ -52,6 +52,7 @@ test_mockk_android = { group = "io.mockk", name = "mockk-android", version.ref =
 test_androidx_junitKtx = { group = "androidx.test.ext", name = "junit-ktx", version = "1.3.0" }
 test_androidx_core = { group = "androidx.test", name = "core-ktx", version.ref = "test_androidx_common" }
 test_androidx_runner = { group = "androidx.test", name = "runner", version.ref = "test_androidx_common" }
+test_androidx_espressoCore = { group = "androidx.test.espresso", name = "espresso-core", version = "3.7.0" }
 
 # Compose
 test_compose_junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
@@ -69,7 +70,7 @@ androidTools_desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk
 # endregion
 
 # region Firebase
-firebase_bom = { group = "com.google.firebase", name = "firebase-bom", version = "33.16.0" }
+firebase_bom = { group = "com.google.firebase", name = "firebase-bom", version = "34.7.0" }
 firebase_crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 firebase_analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 # endregion
@@ -115,7 +116,8 @@ test_android = [
     "test_androidx_junitKtx",
     "test_androidx_core",
     "test_androidx_runner",
-    "test_mockk_android"
+    "test_mockk_android",
+    "test_androidx_espressoCore"
 ]
 
 test_compose = [

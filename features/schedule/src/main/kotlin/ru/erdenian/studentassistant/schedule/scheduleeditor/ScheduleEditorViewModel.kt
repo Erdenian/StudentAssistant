@@ -90,7 +90,7 @@ internal class ScheduleEditorViewModel @AssistedInject constructor(
     }
 
     /**
-     * Отправляет событие аналитики при нажатии на кнопку редактирования семестра.
+     * Отправляет событие аналитики при нажатии на кнопку редактирования расписания.
      */
     fun logEditSemesterClicked() {
         analytics.logEvent("semester_edit_clicked")

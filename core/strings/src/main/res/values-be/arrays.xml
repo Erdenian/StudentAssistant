@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <string-array name="lesson_repeat_types">
         <item>Па днях тыдня</item>
         <item>Па датах</item>
     </string-array>
 
-    <string-array name="lesson_types">
-        <item>Семінар</item>
+    <string-array name="lesson_types" tools:ignore="InconsistentArrays">
+        <item>Занятак</item>
+        <item>Урок</item>
         <item>Лекцыя</item>
+        <item>Семінар</item>
         <item>Лабараторная работа</item>
         <item>Практыка</item>
-        <item>Кансультацыя</item>
+        <item>Залік</item>
         <item>Экзамен</item>
+        <item>Кансультацыя</item>
+        <item>Курсавая работа</item>
         <item>Самастойная работа</item>
+        <item>Факультатыў</item>
     </string-array>
 
     <string-array name="repeat_variants">
