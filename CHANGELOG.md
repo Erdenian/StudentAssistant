@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Улучшение и исправление текстовок на всех языках
+
 ## [0.8.0] - 2026-01-03
 
 ### Fixed
