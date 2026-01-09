@@ -257,6 +257,14 @@
 * **Строковые ресурсы:** Описания должны быть вынесены в `strings.xml` модуля `:core:strings`.
 * **Именование:** При создании строк для `contentDescription` соблюдайте правила именования из раздела 12.
 
+### 11.5. Анимации и переходы
+* **Shared Element Transitions:** Используется `SharedTransitionLayout` (экспериментальный API) в корне навигации.
+    * Доступ к scope: `LocalSharedTransitionScope.current`.
+    * Анимируемые элементы должны использовать модификатор `.sharedElement(...)` или `.sharedBounds(...)`.
+    * **Важно:** При использовании `AnimatedContent` внутри экранов (например, в `LazyLessonsList`) необходимо корректно
+      пробрасывать scope и ключи.
+* **Predictive Back:** Поддерживается на уровне `NavDisplay` в `StudentAssistantApp`.
+
 ## 12. Работа со строковыми ресурсами (strings.xml)
 Все строковые ресурсы находятся в модуле `:core:strings`.
 

@@ -43,8 +43,7 @@ We may employ third-party companies and individuals to facilitate our Service, p
 assist us in analyzing how our Service is used.
 
 Links to the privacy policy of third-party service providers used by the app:
-* [Google Play Services](https://www.google.com/policies/privacy/)
-* [Google Analytics for Firebase](https://firebase.google.com/policies/analytics)
+* [Google Services (Play Services, Firebase Analytics)](https://policies.google.com/privacy)
 * [Firebase Crashlytics](https://firebase.google.com/support/privacy/)
 
 ## 3. Cookies
