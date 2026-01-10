@@ -1,5 +1,10 @@
 # Privacy Policy
 
+**Languages:**
+[English](README.md) | [Русский](ru.md)
+
+---
+
 **Last updated:** January 10, 2026
 
 Erdenian Apps built the Student Assistant app as an Open Source app. This Service is provided by Erdenian Apps at no
