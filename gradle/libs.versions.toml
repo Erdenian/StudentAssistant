@@ -10,9 +10,9 @@ androidx_room = "2.8.4"
 androidx_navigation3 = "1.0.0"
 androidx_core = "1.17.0"
 
-core_dagger = "2.57.2"
+core_dagger = "2.59"
 
-test_mockk = "1.14.6" # Не использовать версию 1.14.7: https://github.com/mockk/mockk/issues/1473
+test_mockk = "1.14.9"
 test_androidx_common = "1.7.0"
 
 [plugins]
@@ -26,7 +26,7 @@ kotlin_jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "plugins_kotlin" }
 kotlin_compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "plugins_kotlin" }
 kotlin_parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "plugins_kotlin" }
 kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "plugins_kotlin" }
-kotlin_ksp = { id = "com.google.devtools.ksp", version = "2.3.4" }
+kotlin_ksp = { id = "com.google.devtools.ksp", version = "2.3.5" }
 
 google_services = { id = "com.google.gms.google-services", version = "4.4.4" }
 firebase_crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.6" }
@@ -62,7 +62,7 @@ test_compose_manifest = { group = "androidx.compose.ui", name = "ui-test-manifes
 
 # region KotlinX
 kotlinx_coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx_coroutines" }
-kotlinx_serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.9.0" }
+kotlinx_serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.10.0" }
 # endregion
 
 # region Android Tools
@@ -70,13 +70,13 @@ androidTools_desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk
 # endregion
 
 # region Firebase
-firebase_bom = { group = "com.google.firebase", name = "firebase-bom", version = "34.7.0" }
+firebase_bom = { group = "com.google.firebase", name = "firebase-bom", version = "34.8.0" }
 firebase_crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 firebase_analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 # endregion
 
 # region Compose
-androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version = "2025.12.01" }
+androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version = "2026.01.00" }
 androidx_compose_ui = { group = "androidx.compose.ui", name = "ui" }
 androidx_compose_ui_tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx_compose_foundation = { group = "androidx.compose.foundation", name = "foundation" }
