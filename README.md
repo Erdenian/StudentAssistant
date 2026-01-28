@@ -3,6 +3,8 @@
 Приложение для студентов и школьников, которое помогает организовать учебу: вести расписание занятий и отслеживать
 домашние задания. Простое, удобное и с открытым исходным кодом.
 
+<a href='https://play.google.com/store/apps/details?id=ru.erdenian.studentassistant'><img alt='Доступно в Google Play' src='https://play.google.com/intl/ru_ru/badges/static/images/badges/ru_badge_web_generic.png' height="80"/></a>
+
 ---
 
 ## Основные функции
