@@ -1,6 +1,6 @@
 [versions]
 
-plugins_android = "8.13.2"
+plugins_android = "9.0.0"
 plugins_kotlin = "2.3.10"
 plugins_detekt = "1.23.8"
 
@@ -33,7 +33,7 @@ firebase_crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.
 
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "plugins_detekt" }
 kover = { id = "org.jetbrains.kotlinx.kover", version = "0.9.7" }
-tripletPlay = { id = "com.github.triplet.play", version = "3.13.0" }
+tripletPlay = { id = "com.github.triplet.play", version = "4.0.0" }
 
 [libraries]
 

@@ -54,7 +54,7 @@ tasks.register<Delete>("clean") {
 
 fun subprojectsAfterEvaluate(action: Action<in Project>) = subprojects { afterEvaluate(action) }
 
-typealias AndroidExtensions = com.android.build.api.dsl.CommonExtension<*, *, *, *, *, *>
+typealias AndroidExtensions = com.android.build.api.dsl.CommonExtension
 
 fun Project.configureAndroidIfExists(action: AndroidExtensions.() -> Unit) {
     val androidExtension = extensions.findByName("android") as? AndroidExtensions
@@ -148,14 +148,14 @@ subprojectsAfterEvaluate {
             }
         }
 
-        compileOptions {
+        compileOptions.apply {
             isCoreLibraryDesugaringEnabled = true
 
             sourceCompatibility = JavaVersion.VERSION_11
             targetCompatibility = JavaVersion.VERSION_11
         }
 
-        packaging {
+        packaging.apply {
             resources {
                 excludes += "META-INF/LICENSE.md"
                 excludes += "META-INF/LICENSE-notice.md"
