@@ -21,7 +21,6 @@ android_application = { id = "com.android.application", version.ref = "plugins_a
 android_library = { id = "com.android.library", version.ref = "plugins_android" }
 android_lint = { id = "com.android.lint", version.ref = "plugins_android" }
 
-kotlin_android = { id = "org.jetbrains.kotlin.android", version.ref = "plugins_kotlin" }
 kotlin_jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "plugins_kotlin" }
 kotlin_compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "plugins_kotlin" }
 kotlin_parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "plugins_kotlin" }
