@@ -1,16 +1,16 @@
 [versions]
 
 plugins_android = "8.13.2"
-plugins_kotlin = "2.3.0"
+plugins_kotlin = "2.3.10"
 plugins_detekt = "1.23.8"
 
 kotlinx_coroutines = "1.10.2"
 
 androidx_room = "2.8.4"
-androidx_navigation3 = "1.0.0"
+androidx_navigation3 = "1.0.1"
 androidx_core = "1.17.0"
 
-core_dagger = "2.59"
+core_dagger = "2.59.1"
 
 test_mockk = "1.14.9"
 test_androidx_common = "1.7.0"
@@ -32,7 +32,7 @@ google_services = { id = "com.google.gms.google-services", version = "4.4.4" }
 firebase_crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.6" }
 
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "plugins_detekt" }
-kover = { id = "org.jetbrains.kotlinx.kover", version = "0.9.4" }
+kover = { id = "org.jetbrains.kotlinx.kover", version = "0.9.7" }
 tripletPlay = { id = "com.github.triplet.play", version = "3.13.0" }
 
 [libraries]
@@ -70,13 +70,13 @@ androidTools_desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk
 # endregion
 
 # region Firebase
-firebase_bom = { group = "com.google.firebase", name = "firebase-bom", version = "34.8.0" }
+firebase_bom = { group = "com.google.firebase", name = "firebase-bom", version = "34.9.0" }
 firebase_crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 firebase_analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 # endregion
 
 # region Compose
-androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version = "2026.01.00" }
+androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version = "2026.02.00" }
 androidx_compose_ui = { group = "androidx.compose.ui", name = "ui" }
 androidx_compose_ui_tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx_compose_foundation = { group = "androidx.compose.foundation", name = "foundation" }
@@ -92,7 +92,7 @@ androidx_lifecycle_viewmodel = { group = "androidx.lifecycle", name = "lifecycle
 androidx_room_compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx_room" }
 androidx_room = { group = "androidx.room", name = "room-ktx", version.ref = "androidx_room" }
 androidx_appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.1" }
-androidx_activity = { group = "androidx.activity", name = "activity-compose", version = "1.12.2" }
+androidx_activity = { group = "androidx.activity", name = "activity-compose", version = "1.12.4" }
 androidx_navigation3_runtime = { group = "androidx.navigation3", name = "navigation3-runtime", version.ref = "androidx_navigation3" }
 androidx_navigation3_ui = { group = "androidx.navigation3", name = "navigation3-ui", version.ref = "androidx_navigation3" }
 androidx_core_splashscreen = { group = "androidx.core", name = "core-splashscreen", version = "1.2.0" }
