@@ -4,6 +4,7 @@ import java.time.DayOfWeek
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -17,6 +18,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import ru.erdenian.studentassistant.repository.api.SettingsRepository
+import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.repository.database.entity.ByWeekdayEntity
 import ru.erdenian.studentassistant.repository.database.entity.ClassroomEntity
 import ru.erdenian.studentassistant.repository.database.entity.LessonEntity
@@ -34,19 +36,19 @@ internal class LessonRepositoryImplTest {
 
     private val settingsRepository = object : SettingsRepository {
         override var defaultStartTime: LocalTime = LocalTime.of(9, 0)
-        override fun getDefaultStartTimeFlow(scope: kotlinx.coroutines.CoroutineScope) =
+        override fun getDefaultStartTimeFlow(scope: CoroutineScope) =
             MutableStateFlow(defaultStartTime)
 
         override var defaultLessonDuration: Duration = Duration.ofMinutes(90)
-        override fun getDefaultLessonDurationFlow(scope: kotlinx.coroutines.CoroutineScope) =
+        override fun getDefaultLessonDurationFlow(scope: CoroutineScope) =
             MutableStateFlow(defaultLessonDuration)
 
         override var defaultBreakDuration: Duration = Duration.ofMinutes(10)
-        override fun getDefaultBreakDurationFlow(scope: kotlinx.coroutines.CoroutineScope) =
+        override fun getDefaultBreakDurationFlow(scope: CoroutineScope) =
             MutableStateFlow(defaultBreakDuration)
 
         override var isAdvancedWeeksSelectorEnabled: Boolean = false
-        override fun getAdvancedWeeksSelectorFlow(scope: kotlinx.coroutines.CoroutineScope) =
+        override fun getAdvancedWeeksSelectorFlow(scope: CoroutineScope) =
             MutableStateFlow(isAdvancedWeeksSelectorEnabled)
     }
 
@@ -131,8 +133,7 @@ internal class LessonRepositoryImplTest {
         assertEquals("New", updated?.subjectName)
         assertEquals(
             DayOfWeek.TUESDAY,
-            (updated?.lessonRepeat as ru.erdenian.studentassistant.repository.api.entity.Lesson.Repeat.ByWeekday)
-                .dayOfWeek,
+            (updated?.lessonRepeat as? Lesson.Repeat.ByWeekday)?.dayOfWeek,
         )
     }
 
@@ -168,8 +169,7 @@ internal class LessonRepositoryImplTest {
         assertEquals("New", updated?.subjectName)
         assertEquals(
             setOf(date),
-            (updated?.lessonRepeat as ru.erdenian.studentassistant.repository.api.entity.Lesson.Repeat.ByDates)
-                .dates,
+            (updated?.lessonRepeat as? Lesson.Repeat.ByDates)?.dates,
         )
     }
 

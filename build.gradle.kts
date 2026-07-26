@@ -60,7 +60,8 @@ subprojects {
     detekt {
         toolVersion = detektVersion
         buildUponDefaultConfig = true
-        parallel = true
+        baseline = file("detekt/baseline.xml")
+        parallel = false // https://github.com/detekt/detekt/issues/9121
     }
 
     tasks.withType<dev.detekt.gradle.Detekt>().configureEach {

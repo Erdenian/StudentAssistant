@@ -12,7 +12,7 @@ class FirebaseAnalytics @Inject constructor(
     application: Application,
 ) : Analytics {
 
-    private val firebaseAnalytics = FirebaseAnalytics.getInstance(application)
+    private val instance = FirebaseAnalytics.getInstance(application)
 
     override fun logEvent(name: String, params: Map<String, Any>) {
         val bundle = Bundle().apply {
@@ -30,10 +30,10 @@ class FirebaseAnalytics @Inject constructor(
                 }
             }
         }
-        firebaseAnalytics.logEvent(name, bundle)
+        instance.logEvent(name, bundle)
     }
 
     override fun setUserProperty(name: String, value: String?) {
-        firebaseAnalytics.setUserProperty(name, value)
+        instance.setUserProperty(name, value)
     }
 }

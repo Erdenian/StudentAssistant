@@ -128,6 +128,7 @@ internal fun LessonInformationContent(
                     )
                     .let { modifier ->
                         if (!isInspection) {
+                            @Suppress("NestedScopeFunctions")
                             with(LocalSharedTransitionScope.current) {
                                 modifier.sharedElement(
                                     rememberSharedContentState(lesson),

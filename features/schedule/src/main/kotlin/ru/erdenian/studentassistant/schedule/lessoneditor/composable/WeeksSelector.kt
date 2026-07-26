@@ -99,10 +99,11 @@ internal fun WeeksSelector(
             if (isAdvancedMode) {
                 allIndices.toList()
             } else {
-                (listOf(0, 1, 2) + selectedRepeatVariantIndex)
+                (listOf(0, 1, 2) + selectedRepeatVariantIndex).asSequence()
                     .filter { it in allIndices }
                     .distinct()
                     .sorted()
+                    .toList()
             }
         }
     }

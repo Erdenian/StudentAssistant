@@ -62,6 +62,7 @@ fun TimePickerDialog(
             )
         },
         modeToggleButton = {
+            @Suppress("StatementWrapping")
             IconButton(
                 modifier = modifier,
                 onClick = when (mode) {

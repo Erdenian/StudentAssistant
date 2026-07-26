@@ -88,6 +88,7 @@ complexity:
     includeStaticDeclarations: true
     includePrivateDeclarations: true
     ignoreOverloaded: true
+    excludes: ['**/*Dao.kt', '**/*Repository.kt']
   CyclomaticComplexMethod:
     active: true
     allowedComplexity: 14
@@ -112,10 +113,12 @@ complexity:
   LargeClass:
     active: true
     allowedLines: 600
+    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
   LongMethod:
     active: true
     allowedLines: 60
     ignoreAnnotated: ['Composable']
+    excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
   LongParameterList:
     active: false
     allowedFunctionParameters: 5
@@ -156,7 +159,7 @@ complexity:
     ignoreAnnotated: ['*Preview*']
   TooManyFunctions:
     active: true
-    excludes: ['**/*Dao.kt', '**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/*Dao.kt', '**/*Repository*.kt', '**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     allowedFunctionsPerFile: 11
     allowedFunctionsPerClass: 11
     allowedFunctionsPerInterface: 11
@@ -838,6 +841,7 @@ style:
   UseDataClass:
     active: true
     allowVars: false
+    ignoreAnnotated: ['Stable']
   UseEmptyCounterpart:
     active: true
   UseIfEmptyOrIfBlank:

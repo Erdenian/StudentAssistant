@@ -97,13 +97,13 @@ internal fun SemesterEditorContent(
                     transitionSpec = { fadeIn() togetherWith fadeOut() },
                     contentAlignment = Alignment.Center,
                     label = "SemesterEditorTopAppbar",
-                ) { isLoading ->
+                ) { loading ->
                     TopAppBarActions(
                         actions = listOf(
                             ActionItem.AlwaysShow(
                                 name = stringResource(RS.se_save),
                                 imageVector = AppIcons.Check,
-                                loading = isLoading,
+                                loading = loading,
                                 onClick = onSaveClick,
                             ),
                         ),

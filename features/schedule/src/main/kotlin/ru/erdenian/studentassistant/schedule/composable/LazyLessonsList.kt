@@ -120,16 +120,17 @@ internal fun LazyLessonsList(
                                 },
                                 modifier = Modifier
                                     .animateItem()
-                                    .let { modifier ->
+                                    .let { animateModifier ->
                                         if (canShareElement && !isInspection) {
+                                            @Suppress("NestedScopeFunctions")
                                             with(LocalSharedTransitionScope.current) {
-                                                modifier.sharedElement(
+                                                animateModifier.sharedElement(
                                                     rememberSharedContentState(lesson),
                                                     LocalNavAnimatedContentScope.current,
                                                 )
                                             }
                                         } else {
-                                            modifier
+                                            animateModifier
                                         }
                                     },
                             )

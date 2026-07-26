@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>FunctionNameMaxLength:SettingsViewModel.kt:SettingsViewModel$fun setAdvancedWeeksSelectorEnabled</ID>
+  </CurrentIssues>
+</SmellBaseline>

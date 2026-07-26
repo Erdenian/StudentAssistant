@@ -70,7 +70,7 @@ data class Lesson(
      */
     @Serializable
     @Parcelize
-    sealed class Repeat : Parcelable {
+    sealed interface Repeat : Parcelable {
 
         /**
          * Повторение по дням недели.
@@ -88,7 +88,7 @@ data class Lesson(
             @Serializable(with = DayOfWeekSerializer::class)
             val dayOfWeek: DayOfWeek,
             val weeks: List<Boolean>,
-        ) : Repeat()
+        ) : Repeat
 
         /**
          * Повторение по датам.
@@ -101,7 +101,7 @@ data class Lesson(
         @Serializable
         data class ByDates(
             val dates: Set<@Serializable(with = LocalDateSerializer::class) LocalDate>,
-        ) : Repeat()
+        ) : Repeat
 
         private object DayOfWeekSerializer : KSerializer<DayOfWeek> {
             override val descriptor = PrimitiveSerialDescriptor("java.time.DayOfWeek", PrimitiveKind.INT)
