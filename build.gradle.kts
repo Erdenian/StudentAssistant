@@ -15,12 +15,13 @@ plugins {
     alias(libs.plugins.kover)
 }
 
-val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
-    output.set(rootProject.layout.buildDirectory.file("reports/detekt/report.xml"))
+val reportMerge by tasks.registering(dev.detekt.gradle.report.ReportMergeTask::class) {
+    output.set(rootProject.layout.buildDirectory.file("reports/detekt/merge.sarif"))
 }
 
+val detektVersion = libs.versions.plugins.detekt.get()
 subprojects {
-    apply(plugin = "io.gitlab.arturbosch.detekt")
+    apply(plugin = "dev.detekt")
 
     dependencies {
         detektPlugins(rootProject.libs.detekt.formatting)
@@ -28,21 +29,25 @@ subprojects {
     }
 
     detekt {
-        parallel = true
+        toolVersion = detektVersion
         config.setFrom("${project.rootDir}/detekt-config.yml")
+        buildUponDefaultConfig = true
+        parallel = true
     }
 
-    tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
         reports {
-            sarif.required.set(false)
-            txt.required.set(false)
+            checkstyle.required.set(false)
             html.required.set(true)
-            xml.required.set(true)
+            sarif.required.set(true)
+            markdown.required.set(false)
         }
         finalizedBy(reportMerge)
     }
 
-    reportMerge { input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.xmlReportFile }) }
+    reportMerge {
+        input.from(tasks.withType<dev.detekt.gradle.Detekt>().map { it.reports.sarif.outputLocation })
+    }
 }
 
 tasks.register<Delete>("clean") {
