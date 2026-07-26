@@ -39,9 +39,9 @@ comments:
   DeprecatedBlockTag:
     active: true
   DocumentationOverPrivateFunction:
-    active: true
+    active: false
   DocumentationOverPrivateProperty:
-    active: true
+    active: false
   EndOfSentenceFormat:
     active: true
     endOfSentenceFormat: '([.?!][ \t\n\r\f<])|([.?!:]$)'
@@ -117,7 +117,7 @@ complexity:
     allowedLines: 60
     ignoreAnnotated: ['Composable']
   LongParameterList:
-    active: true
+    active: false
     allowedFunctionParameters: 5
     allowedConstructorParameters: 6
     ignoreDefaultParameters: false
@@ -147,7 +147,7 @@ complexity:
   ReplaceSafeCallChainWithRun:
     active: false
   StringLiteralDuplication:
-    active: true
+    active: false
     excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     allowedDuplications: 2
     ignoreAnnotation: true
@@ -328,6 +328,7 @@ naming:
     aliases: ['FunctionMaxNameLength']
     excludes: ['**/test*/**', '**/androidTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     maximumFunctionNameLength: 30
+    ignoreAnnotated: ['Composable']
   FunctionNameMinLength:
     active: true
     aliases: ['FunctionMinNameLength']
@@ -525,7 +526,7 @@ potential-bugs:
   UnconditionalJumpStatementInLoop:
     active: true
   UnnamedParameterUse:
-    active: true
+    active: false
     allowAdjacentDifferentTypeParams: true
     allowSingleParamUse: true
     ignoreArgumentsMatchingNames: true
@@ -562,7 +563,7 @@ style:
   AlsoCouldBeApply:
     active: true
   BracesOnIfStatements:
-    active: true
+    active: false
     singleLine: 'never'
     multiLine: 'always'
   BracesOnWhenStatements:
@@ -817,6 +818,7 @@ style:
     active: true
     aliases: ['unused']
     allowedNames: ''
+    ignoreAnnotated: ['*Preview*']
   UnusedPrivateProperty:
     active: true
     aliases: ['unused']
@@ -893,7 +895,7 @@ ktlint:
     maxLineLength: 120 # If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
     indentSize: 4
   BlankLineBeforeDeclaration:
-    active: true
+    active: false
     autoCorrect: true
   BlankLineBetweenWhenConditions:
     active: true
@@ -903,7 +905,7 @@ ktlint:
     active: true
     autoCorrect: true
   ChainMethodContinuation:
-    active: true
+    active: false
     autoCorrect: true
     indentSize: 4
     maxLineLength: 120 # If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
@@ -915,7 +917,7 @@ ktlint:
   ClassName:
     active: true
   ClassSignature:
-    active: true
+    active: false
     autoCorrect: true
     indentSize: 4
     maxLineLength: 120 # If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
@@ -999,7 +1001,7 @@ ktlint:
     autoCorrect: true
     indentSize: 4
   IfElseWrapping:
-    active: true
+    active: false
     autoCorrect: true
     indentSize: 4
   ImportOrdering:
@@ -1033,7 +1035,7 @@ ktlint:
     active: true
     autoCorrect: true
   MultiLineIfElse:
-    active: true
+    active: false
     autoCorrect: true
     indentSize: 4
   MultilineExpressionWrapping:

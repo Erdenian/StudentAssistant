@@ -158,7 +158,6 @@ private data class LessonCardPreviewData(
     val endTime: String,
 )
 
-@Suppress("StringLiteralDuplication")
 private class LessonCardPreviewParameterProvider : PreviewParameterProvider<LessonCardPreviewData> {
     override val values = sequenceOf(
         LessonCardPreviewData(

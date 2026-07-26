@@ -266,7 +266,6 @@ private data class WeeksSelectorPreviewState(
     val isAdvancedMode: Boolean,
 )
 
-@Suppress("StringLiteralDuplication")
 private class WeeksSelectorPreviewParameterProvider : PreviewParameterProvider<WeeksSelectorPreviewState> {
     override val values = sequenceOf(
         WeeksSelectorPreviewState(weeks = listOf(true, false), isAdvancedMode = false),
