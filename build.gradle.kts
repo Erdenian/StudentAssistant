@@ -30,7 +30,6 @@ subprojects {
 
     detekt {
         toolVersion = detektVersion
-        config.setFrom("${project.rootDir}/detekt-config.yml")
         buildUponDefaultConfig = true
         parallel = true
     }
