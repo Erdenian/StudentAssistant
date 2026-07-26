@@ -22,14 +22,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import androidx.core.os.ConfigurationCompat
 import java.time.DayOfWeek
 import java.time.format.TextStyle
-import java.util.Locale
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.sampledata.Lessons
 import ru.erdenian.studentassistant.schedule.composable.LazyLessonsList
@@ -69,9 +67,8 @@ internal fun ScheduleEditorContent(
     onAddLessonClick: (DayOfWeek) -> Unit,
 ) {
     val daysOfWeekTitles = run {
-        val configuration = LocalConfiguration.current
-        remember(configuration) {
-            val locale = ConfigurationCompat.getLocales(configuration).get(0) ?: Locale.getDefault()
+        val locale = LocalLocale.current.platformLocale
+        remember(locale) {
             // TextStyle.FULL_STANDALONE возвращает число
             // https://stackoverflow.com/questions/63415047
             DayOfWeek.entries.map { it.getDisplayName(TextStyle.FULL, locale) }

@@ -14,14 +14,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.unit.dp
-import androidx.core.os.ConfigurationCompat
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import java.util.Locale
 import ru.erdenian.studentassistant.style.AppIcons
 
 /**
@@ -46,7 +44,7 @@ fun DateField(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     dateFormatter: DateTimeFormatter = run {
-        val locale = ConfigurationCompat.getLocales(LocalConfiguration.current).get(0) ?: Locale.getDefault()
+        val locale = LocalLocale.current.platformLocale
         remember(locale) { DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(locale) }
     },
 ) {
@@ -82,7 +80,7 @@ fun TimeField(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     timeFormatter: DateTimeFormatter = run {
-        val locale = ConfigurationCompat.getLocales(LocalConfiguration.current).get(0) ?: Locale.getDefault()
+        val locale = LocalLocale.current.platformLocale
         remember(locale) { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale) }
     },
 ) {

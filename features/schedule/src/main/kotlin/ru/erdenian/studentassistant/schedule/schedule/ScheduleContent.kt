@@ -26,16 +26,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import androidx.core.os.ConfigurationCompat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import java.util.Locale
 import kotlinx.coroutines.launch
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.repository.api.entity.Semester
@@ -164,7 +162,7 @@ internal fun ScheduleContent(
                     modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal),
                 )
             } else {
-                val locale = ConfigurationCompat.getLocales(LocalConfiguration.current).get(0) ?: Locale.getDefault()
+                val locale = LocalLocale.current.platformLocale
                 val shortTitleFormatter = remember(locale) {
                     DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, "EEEEdMMM"))
                 }

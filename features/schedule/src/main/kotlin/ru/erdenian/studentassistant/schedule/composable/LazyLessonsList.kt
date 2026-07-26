@@ -21,18 +21,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import androidx.core.os.ConfigurationCompat
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import java.util.Locale
 import ru.erdenian.studentassistant.navigation.LocalSharedTransitionScope
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.sampledata.Lessons
@@ -95,10 +93,7 @@ internal fun LazyLessonsList(
                             items = lessonsState,
                             key = { it.id },
                         ) { lesson ->
-                            val locale = ConfigurationCompat
-                                .getLocales(LocalConfiguration.current)
-                                .get(0)
-                                ?: Locale.getDefault()
+                            val locale = LocalLocale.current.platformLocale
                             val timeFormatter = remember(locale) {
                                 DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale)
                             }
