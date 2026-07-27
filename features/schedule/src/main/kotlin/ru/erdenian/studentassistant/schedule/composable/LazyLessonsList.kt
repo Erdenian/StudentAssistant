@@ -74,13 +74,17 @@ internal fun LazyLessonsList(
             modifier = Modifier.fillMaxSize(),
         ) {
             when {
-                (lessonsState == null) -> DelayedVisibility { CircularProgressIndicator() }
-                lessonsState.isEmpty() -> Text(
-                    text = stringResource(RS.lll_free_day),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal),
-                )
-                else ->
+                (lessonsState == null) -> {
+                    DelayedVisibility { CircularProgressIndicator() }
+                }
+                lessonsState.isEmpty() -> {
+                    Text(
+                        text = stringResource(RS.lll_free_day),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal),
+                    )
+                }
+                else -> {
                     LazyColumn(
                         contentPadding = PaddingValues(
                             horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
@@ -131,6 +135,7 @@ internal fun LazyLessonsList(
                             )
                         }
                     }
+                }
             }
         }
     }

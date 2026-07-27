@@ -869,7 +869,8 @@ style:
 
 ktlint:
   active: true
-  android: true
+  code_style: 'intellij_idea'
+  indentStyle: 'space'
   autoCorrect: false
   AnnotationOnSeparateLine:
     active: false
@@ -882,14 +883,14 @@ ktlint:
     active: false
     autoCorrect: true
     indentSize: 4
-    maxLineLength: 120
+    maxLineLength: 120 # If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
     ignoreRuleParameterThreshold: 8
   BackingPropertyNaming:
     active: true
   BinaryExpressionWrapping:
     active: true
     autoCorrect: true
-    maxLineLength: 120
+    maxLineLength: 120 # If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
     indentSize: 4
   BlankLineBeforeDeclaration:
     active: true
@@ -905,7 +906,7 @@ ktlint:
     active: true
     autoCorrect: true
     indentSize: 4
-    maxLineLength: 120
+    maxLineLength: 120 # If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
     forceMultilineWhenChainOperatorCountGreaterOrEqualThan: 4
   ChainWrapping:
     active: true
@@ -917,7 +918,7 @@ ktlint:
     active: true
     autoCorrect: true
     indentSize: 4
-    maxLineLength: 120
+    maxLineLength: 120 # If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
   CommentSpacing:
     active: true
     autoCorrect: true
@@ -929,16 +930,26 @@ ktlint:
     active: true
     autoCorrect: true
     indentSize: 4
+  ContextReceiverListWrapping:
+    active: true
+    autoCorrect: true
+    maxLineLength: 120 # If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
+    indentSize: 4
   ContextReceiverMapping:
     active: true
     autoCorrect: true
-    maxLineLength: 120
+    maxLineLength: 120 # If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
     indentSize: 4
   EnumEntryNameCase:
     active: true
-    # aliases: ['EnumEntryName']
+    aliases: ['EnumEntryName']
     autoCorrect: true
+    enumEntryNameCasing: 'upper_or_camel_cases'
   EnumWrapping:
+    active: true
+    autoCorrect: true
+    indentSize: 4
+  ExpressionOperandWrapping:
     active: true
     autoCorrect: true
     indentSize: 4
@@ -955,24 +966,24 @@ ktlint:
     active: true
     autoCorrect: true
     indentSize: 4
-    maxLineLength: 120
+    maxLineLength: 120 # If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
   FunctionLiteral:
     active: true
     autoCorrect: true
     indentSize: 4
-    maxLineLength: 120
+    maxLineLength: 120 # If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
   FunctionName:
     active: false
   FunctionReturnTypeSpacing:
     active: true
     autoCorrect: true
-    maxLineLength: 120
+    maxLineLength: 120 # If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
   FunctionSignature:
     active: false
     autoCorrect: true
     forceMultilineWhenParameterCountGreaterOrEqualThan: 2147483647
     functionBodyExpressionWrapping: 'default'
-    maxLineLength: 120
+    maxLineLength: 120 # If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
     indentSize: 4
   FunctionStartOfBodySpacing:
     active: true
@@ -994,11 +1005,12 @@ ktlint:
   ImportOrdering:
     active: true
     autoCorrect: true
-    layout: '*,^'
+    layout: '*,^' # If the 'code_style' ruleset property is set to 'android', the default is '*', otherwise '*,java.**,javax.**,kotlin.**,^'.
   Indentation:
     active: true
     autoCorrect: true
     indentSize: 4
+    indentWhenArrowOnNewLine: false
   Kdoc:
     active: true
   KdocWrapping:
@@ -1006,15 +1018,17 @@ ktlint:
     autoCorrect: true
     indentSize: 4
   MaximumLineLength:
-    active: false
-    # aliases: ['MaxLineLength']
-    maxLineLength: 120
+    active: true
+    aliases: ['MaxLineLength']
+    maxLineLength: 120 # If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
     ignoreBackTickedIdentifier: false
+    excludes: ['**/*Dao.kt']
   MixedConditionOperators:
     active: true
   ModifierListSpacing:
     active: true
     autoCorrect: true
+    indentSize: 4
   ModifierOrdering:
     active: true
     autoCorrect: true
@@ -1026,8 +1040,9 @@ ktlint:
     active: false
     autoCorrect: true
     indentSize: 4
+    functionBodyExpressionWrapping: 'multiline'
   MultilineLoop:
-    active: false
+    active: true
     autoCorrect: true
     indentSize: 4
   NoBlankLineBeforeRbrace:
@@ -1092,24 +1107,25 @@ ktlint:
   ParameterListSpacing:
     active: true
     autoCorrect: true
-    maxLineLength: 120
+    maxLineLength: 120 # If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
   ParameterListWrapping:
     active: true
     autoCorrect: true
-    maxLineLength: 120
+    maxLineLength: 120 # If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
     indentSize: 4
   ParameterWrapping:
     active: true
     autoCorrect: true
     indentSize: 4
-    maxLineLength: 120
+    maxLineLength: 120 # If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
   PropertyName:
-    active: false
+    active: true
+    constantNamingStyle: 'screaming_snake_case'
   PropertyWrapping:
     active: true
     autoCorrect: true
     indentSize: 4
-    maxLineLength: 120
+    maxLineLength: 120 # If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
   SpacingAroundAngleBrackets:
     active: true
     autoCorrect: true
@@ -1167,14 +1183,17 @@ ktlint:
     active: true
     autoCorrect: true
     indentSize: 4
+  ThenSpacing:
+    active: true
+    autoCorrect: true
   TrailingCommaOnCallSite:
     active: true
     autoCorrect: true
-    useTrailingCommaOnCallSite: true
+    useTrailingCommaOnCallSite: true # If the 'code_style' ruleset property is set to 'android', the default is 'false', otherwise 'true'.
   TrailingCommaOnDeclarationSite:
     active: true
     autoCorrect: true
-    useTrailingCommaOnDeclarationSite: true
+    useTrailingCommaOnDeclarationSite: true # If the 'code_style' ruleset property is set to 'android', the default is 'false', otherwise 'true'.
   TryCatchFinallySpacing:
     active: true
     autoCorrect: true
@@ -1198,11 +1217,15 @@ ktlint:
     active: true
   ValueParameterComment:
     active: true
+  WhenEntryBracing:
+    active: true
+    autoCorrect: true
+    indentSize: 4
   Wrapping:
     active: true
     autoCorrect: true
     indentSize: 4
-    maxLineLength: 120
+    maxLineLength: 120 # If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
 
 #compose:
 #  ReusedModifierInstance:
