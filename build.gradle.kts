@@ -17,6 +17,35 @@ plugins {
 
 val reportMerge by tasks.registering(dev.detekt.gradle.report.ReportMergeTask::class) {
     output.set(rootProject.layout.buildDirectory.file("reports/detekt/merge.sarif"))
+
+    doLast {
+        val sarifFile = output.get().asFile
+        if (sarifFile.exists()) {
+            val content = sarifFile.readText()
+
+            // Парсим JSON через регулярное выражение, чтобы избежать проблем с classpath зависимостями
+            val ruleRegex = """"ruleId"\s*:\s*"([^"]+)"""".toRegex()
+            val counts = ruleRegex.findAll(content)
+                .map { it.groupValues[1] }
+                .groupingBy { it }
+                .eachCount()
+                .toList()
+                .sortedByDescending { it.second }
+
+            if (counts.isNotEmpty()) {
+                val total = counts.sumOf { it.second }
+                println("\n" + "=".repeat(65))
+                println("📊 DETEKT ISSUES SUMMARY (Total: $total)")
+                println("=".repeat(65))
+                counts.forEach { (rule, count) ->
+                    println("${rule.padEnd(60, ' ')} : $count")
+                }
+                println("=".repeat(65) + "\n")
+            } else {
+                println("\n🎉 No Detekt issues found!\n")
+            }
+        }
+    }
 }
 
 val detektVersion = libs.versions.plugins.detekt.get()
