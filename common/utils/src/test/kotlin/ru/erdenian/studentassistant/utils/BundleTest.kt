@@ -19,9 +19,15 @@ internal class BundleTest {
 
         // В Unit-тестах android.jar SDK_INT = 0, поэтому всегда выполняется ветка else (Legacy API)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-            every { bundle.getParcelable<Parcelable>(key) } returns parcelable
+            every {
+                @Suppress("DEPRECATION")
+                bundle.getParcelable<Parcelable>(key)
+            } returns parcelable
             assertEquals(parcelable, bundle.getParcelableCompat<Parcelable>(key))
-            verify { bundle.getParcelable<Parcelable>(key) }
+            verify {
+                @Suppress("DEPRECATION")
+                bundle.getParcelable<Parcelable>(key)
+            }
         } else {
             // Этот блок для API 33+ (Tiramisu)
             every { bundle.getParcelable(key, Parcelable::class.java) } returns parcelable

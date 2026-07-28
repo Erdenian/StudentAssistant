@@ -3,8 +3,5 @@
   <ManuallySuppressedIssues/>
   <CurrentIssues>
     <ID>CognitiveComplexMethod:AutomatedScreenshotTest.kt:AutomatedScreenshotTest$@Test fun generateScreenshots</ID>
-    <ID>Deprecation:AnalyticsTrackingTest.kt:AnalyticsTrackingTest$createAndroidComposeRule</ID>
-    <ID>Deprecation:AppSmokeTest.kt:AppSmokeTest$createAndroidComposeRule</ID>
-    <ID>Deprecation:AutomatedScreenshotTest.kt:AutomatedScreenshotTest$createAndroidComposeRule</ID>
   </CurrentIssues>
 </SmellBaseline>

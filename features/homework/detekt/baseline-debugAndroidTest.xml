@@ -1,8 +1,0 @@
-<?xml version="1.0" ?>
-<SmellBaseline>
-  <ManuallySuppressedIssues/>
-  <CurrentIssues>
-    <ID>Deprecation:HomeworkEditorScreenTest.kt:HomeworkEditorScreenTest$createComposeRule</ID>
-    <ID>Deprecation:HomeworksScreenTest.kt:HomeworksScreenTest$createComposeRule</ID>
-  </CurrentIssues>
-</SmellBaseline>
