@@ -1,35 +1,36 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration name="CI check" default="false" factoryName="Gradle" folderName="CI check"
-        type="GradleRunConfiguration">
-        <ExternalSystemSettings>
-            <option name="executionName" />
-            <option name="externalProjectPath" value="$PROJECT_DIR$" />
-            <option name="externalSystemIdString" value="GRADLE" />
-            <option name="scriptParameters"
-                value="-Dorg.gradle.jvmargs=-Xmx6g -Dfile.encoding=UTF-8 -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect" />
-            <option name="taskDescriptions">
-                <list />
-            </option>
-            <option name="taskNames">
-                <list>
-                    <option value="detektMain" />
-                    <option value="detektTest" />
-                    <option value="detektDebugAndroidTest" />
-                    <option value="lintDebug" />
-                    <option value="testDebugUnitTest" />
-                    <option value=":app:koverHtmlReportDebug" />
-                    <option value=":app:koverXmlReportDebug" />
-                    <option value=":app:assembleDebug" />
-                    <option value=":app:bundleDebug" />
-                    <option value="testDeviceDebugAndroidTest" />
-                </list>
-            </option>
-            <option name="vmOptions" />
-        </ExternalSystemSettings>
-        <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-        <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-        <DebugAllEnabled>false</DebugAllEnabled>
-        <RunAsTest>false</RunAsTest>
-        <method v="2" />
-    </configuration>
+  <configuration default="false" name="CI check" type="GradleRunConfiguration" factoryName="Gradle" folderName="CI check">
+    <ExternalSystemSettings>
+      <option name="executionName" />
+      <option name="externalProjectPath" value="$PROJECT_DIR$" />
+      <option name="externalSystemIdString" value="GRADLE" />
+      <option name="scriptParameters" value="-Dorg.gradle.jvmargs=-Xmx6g -Dfile.encoding=UTF-8 -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect" />
+      <option name="taskDescriptions">
+        <list />
+      </option>
+      <option name="taskNames">
+        <list>
+          <option value="detektMain" />
+          <option value="detektTest" />
+          <option value="detektDebugAndroidTest" />
+          <option value="lintDebug" />
+          <option value="testDebugUnitTest" />
+          <option value=":app:koverHtmlReportDebug" />
+          <option value=":app:koverXmlReportDebug" />
+          <option value=":app:assembleDebug" />
+          <option value=":app:bundleDebug" />
+          <option value="testDeviceDebugAndroidTest" />
+        </list>
+      </option>
+      <option name="vmOptions" />
+    </ExternalSystemSettings>
+    <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+    <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+    <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
+    <DebugAllEnabled>false</DebugAllEnabled>
+    <RunAsTest>false</RunAsTest>
+    <GradleProfilingDisabled>false</GradleProfilingDisabled>
+    <GradleCoverageDisabled>false</GradleCoverageDisabled>
+    <method v="2" />
+  </configuration>
 </component>
