@@ -94,7 +94,6 @@ internal class SettingsViewModel @Inject constructor(
     }
 
     override fun onCleared() {
-        super.onCleared()
         // Очищаем граф зависимостей фичи настроек, так как пользователь покинул экран
         SettingsComponentHolder.clear()
     }

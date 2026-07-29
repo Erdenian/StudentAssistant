@@ -17,16 +17,19 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun AppTheme(
     isDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
-    val dimensions = if (LocalConfiguration.current.screenWidthDp <= 820) DefaultDimensions else LargeScreenDimensions
+    val screenWidth = with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
+    val dimensions = if (screenWidth <= 820.dp) DefaultDimensions else LargeScreenDimensions
     val isDynamicColor = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
 
     @Suppress("KotlinConstantConditions")
