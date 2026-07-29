@@ -84,7 +84,6 @@ private data class HomeworkCardPreviewData(
     val deadline: String,
 )
 
-@Suppress("StringLiteralDuplication")
 private class HomeworkCardPreviewParameterProvider : PreviewParameterProvider<HomeworkCardPreviewData> {
     override val values = sequenceOf(
         HomeworkCardPreviewData(

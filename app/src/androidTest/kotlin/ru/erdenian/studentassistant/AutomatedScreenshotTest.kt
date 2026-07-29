@@ -3,7 +3,7 @@ package ru.erdenian.studentassistant
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
@@ -19,8 +19,8 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 import kotlin.math.abs
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -629,7 +629,7 @@ internal class AutomatedScreenshotTest {
 
             // 2. Заполняем БД
             runBlocking {
-                withTimeout(5_000L) {
+                withTimeout(5.seconds) {
                     clearDatabase(repositoryApi)
                     populateDatabase(repositoryApi, langCode, baseDate)
                 }
@@ -637,18 +637,17 @@ internal class AutomatedScreenshotTest {
 
             // 3. Ждем инициализации данных
             runBlocking {
-                withTimeout(5000L) {
+                withTimeout(5.seconds) {
                     // Ждем, пока выберется именно то расписание, которое мы создали (по имени)
                     // Это защитит от использования старого ID
-                    val targetName = localizedData[langCode]!!.semesterName
+                    val targetName = localizedData.getValue(langCode).semesterName
                     repositoryApi.selectedSemesterRepository.selectedFlow
                         .filterNotNull()
-                        .filter { it.name == targetName }
-                        .first()
+                        .first { it.name == targetName }
                 }
             }
 
-            // 4. На первой итерации скроллим до понедельника, если сегодня не понедельник
+            // 4. На первой итерации скроллим до понедельника, если сегодня не понедельник.
             // Делаем это только на первой итерации, так как выбранная дата сохраняется при смене локали
             if (langCode == iterations.first().first) {
                 val monday = baseDate.with(DayOfWeek.MONDAY)
@@ -702,7 +701,7 @@ internal class AutomatedScreenshotTest {
 
         // Ждем, пока репозиторий сбросит выбор расписания в null.
         // Это гарантирует, что мы не подхватим старый ID в следующей итерации.
-        api.selectedSemesterRepository.selectedFlow.filter { it == null }.first()
+        api.selectedSemesterRepository.selectedFlow.first { it == null }
     }
 
     private suspend fun populateDatabase(api: RepositoryApi, langCode: String, baseDate: LocalDate) {
@@ -717,8 +716,7 @@ internal class AutomatedScreenshotTest {
         // Ждем выбора именно НАШЕГО нового расписания
         val semester = api.selectedSemesterRepository.selectedFlow
             .filterNotNull()
-            .filter { it.name == data.semesterName }
-            .first()
+            .first { it.name == data.semesterName }
         val semesterId = semester.id
 
         data.lessons.forEach { lesson ->

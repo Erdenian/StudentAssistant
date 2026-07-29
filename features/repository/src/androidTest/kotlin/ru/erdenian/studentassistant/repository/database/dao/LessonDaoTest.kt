@@ -79,7 +79,7 @@ internal class LessonDaoTest {
             lesson = lesson1.lesson.copy(id = id1),
             teachers = lesson1.teachers.map { it.copy(lessonId = id1, id = 1L) },
             classrooms = lesson1.classrooms.map { it.copy(lessonId = id1, id = 1L) },
-            byWeekday = checkNotNull(lesson1.byWeekday).copy(lessonId = id1),
+            byWeekday = lesson1.byWeekday.copy(lessonId = id1),
             byDates = emptySet(),
         )
         assertEquals(listOf(expected1), lessonDao.getAllFlow(semesterId).first())
@@ -644,16 +644,28 @@ internal class LessonDaoTest {
             semesterId = semesterId,
         )
         lessonDao.insert(
-            lesson1, emptySet(), emptySet(),
-            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(false, true)),
+            lesson = lesson1,
+            teachers = emptySet(),
+            classrooms = emptySet(),
+            byWeekday = ByWeekdayEntity(DayOfWeek.MONDAY, listOf(false, true)),
         )
 
         // Week 0 -> Остаток 0 -> Индекс 1 -> '0' (false)
-        val resWeek0 = lessonDao.getAllFlow(semesterId, DayOfWeek.MONDAY, 0, LocalDate.MIN).first()
+        val resWeek0 = lessonDao.getAllFlow(
+            semesterId = semesterId,
+            dayOfWeek = DayOfWeek.MONDAY,
+            weekNumber = 0,
+            date = LocalDate.MIN,
+        ).first()
         assertTrue(resWeek0.isEmpty())
 
         // Week 1 -> Остаток 1 -> Индекс 2 -> '1' (true)
-        val resWeek1 = lessonDao.getAllFlow(semesterId, DayOfWeek.MONDAY, 1, LocalDate.MIN).first()
+        val resWeek1 = lessonDao.getAllFlow(
+            semesterId = semesterId,
+            dayOfWeek = DayOfWeek.MONDAY,
+            weekNumber = 1,
+            date = LocalDate.MIN,
+        ).first()
         assertEquals(1, resWeek1.size)
         assertEquals("Even", resWeek1[0].lesson.subjectName)
     }
@@ -669,17 +681,29 @@ internal class LessonDaoTest {
             semesterId = semesterId,
         )
         lessonDao.insert(
-            lesson, emptySet(), emptySet(),
-            setOf(ByDateEntity(targetDate)),
+            lesson = lesson,
+            teachers = emptySet(),
+            classrooms = emptySet(),
+            byDates = setOf(ByDateEntity(targetDate)),
         )
 
         // Запрос по этой дате
-        val res = lessonDao.getAllFlow(semesterId, targetDate.dayOfWeek, 10, targetDate).first()
+        val res = lessonDao.getAllFlow(
+            semesterId = semesterId,
+            dayOfWeek = targetDate.dayOfWeek,
+            weekNumber = 10,
+            date = targetDate,
+        ).first()
         assertEquals(1, res.size)
         assertEquals("Date", res[0].lesson.subjectName)
 
         // Запрос по другой дате
-        val resOther = lessonDao.getAllFlow(semesterId, targetDate.dayOfWeek, 10, targetDate.plusDays(1)).first()
+        val resOther = lessonDao.getAllFlow(
+            semesterId = semesterId,
+            dayOfWeek = targetDate.dayOfWeek,
+            weekNumber = 10,
+            date = targetDate.plusDays(1),
+        ).first()
         assertTrue(resOther.isEmpty())
     }
 
@@ -696,8 +720,10 @@ internal class LessonDaoTest {
             semesterId = semesterId,
         )
         val lessonEveryWeekId = lessonDao.insert(
-            lessonEveryWeek, emptySet(), emptySet(),
-            ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
+            lesson = lessonEveryWeek,
+            teachers = emptySet(),
+            classrooms = emptySet(),
+            byWeekday = ByWeekdayEntity(DayOfWeek.MONDAY, listOf(true)),
         )
         assertFalse(lessonDao.hasNonRecurringLessons(semesterId))
 
@@ -710,8 +736,10 @@ internal class LessonDaoTest {
             semesterId = semesterId,
         )
         val lessonOddId = lessonDao.insert(
-            lessonOdd, emptySet(), emptySet(),
-            ByWeekdayEntity(DayOfWeek.TUESDAY, listOf(true, false)),
+            lesson = lessonOdd,
+            teachers = emptySet(),
+            classrooms = emptySet(),
+            byWeekday = ByWeekdayEntity(DayOfWeek.TUESDAY, listOf(true, false)),
         )
         assertTrue(lessonDao.hasNonRecurringLessons(semesterId))
 
@@ -728,8 +756,10 @@ internal class LessonDaoTest {
             semesterId = semesterId,
         )
         val lessonEvenId = lessonDao.insert(
-            lessonEven, emptySet(), emptySet(),
-            ByWeekdayEntity(DayOfWeek.WEDNESDAY, listOf(false, true)),
+            lesson = lessonEven,
+            teachers = emptySet(),
+            classrooms = emptySet(),
+            byWeekday = ByWeekdayEntity(DayOfWeek.WEDNESDAY, listOf(false, true)),
         )
         assertTrue(lessonDao.hasNonRecurringLessons(semesterId))
 
@@ -745,8 +775,10 @@ internal class LessonDaoTest {
             semesterId = semesterId,
         )
         lessonDao.insert(
-            lessonByDate, emptySet(), emptySet(),
-            setOf(ByDateEntity(LocalDate.now())),
+            lesson = lessonByDate,
+            teachers = emptySet(),
+            classrooms = emptySet(),
+            byDates = setOf(ByDateEntity(LocalDate.now())),
         )
         assertFalse(lessonDao.hasNonRecurringLessons(semesterId))
     }

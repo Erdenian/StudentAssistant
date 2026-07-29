@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>FunctionNameMaxLength:RepositoryConfigModule.kt:RepositoryConfigModule$@Provides @Named("application") fun provideApplicationCoroutineScope: CoroutineScope</ID>
+    <ID>PropertyUsedBeforeDeclaration:SelectedSemesterRepositoryImpl.kt:SelectedSemesterRepositoryImpl$selectedSemesterIdFlow</ID>
+  </CurrentIssues>
+</SmellBaseline>

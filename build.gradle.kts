@@ -3,7 +3,6 @@
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
-    alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.ksp) apply false
     alias(libs.plugins.kotlin.compose) apply false
@@ -16,12 +15,42 @@ plugins {
     alias(libs.plugins.kover)
 }
 
-val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
-    output.set(rootProject.layout.buildDirectory.file("reports/detekt/report.xml"))
+val reportMerge = tasks.register<dev.detekt.gradle.report.ReportMergeTask>("reportMerge") {
+    output.set(rootProject.layout.buildDirectory.file("reports/detekt/merge.sarif"))
+
+    doLast {
+        val sarifFile = output.get().asFile
+        if (sarifFile.exists()) {
+            val content = sarifFile.readText()
+
+            // Парсим JSON через регулярное выражение, чтобы избежать проблем с classpath зависимостями
+            val ruleRegex = """"ruleId"\s*:\s*"([^"]+)"""".toRegex()
+            val counts = ruleRegex.findAll(content)
+                .map { it.groupValues[1] }
+                .groupingBy { it }
+                .eachCount()
+                .toList()
+                .sortedByDescending { it.second }
+
+            if (counts.isNotEmpty()) {
+                val total = counts.sumOf { it.second }
+                println("\n" + "=".repeat(65))
+                println("📊 DETEKT ISSUES SUMMARY (Total: $total)")
+                println("=".repeat(65))
+                counts.forEach { (rule, count) ->
+                    println("${rule.padEnd(60, ' ')} : $count")
+                }
+                println("=".repeat(65) + "\n")
+            } else {
+                println("\n🎉 No Detekt issues found!\n")
+            }
+        }
+    }
 }
 
+val detektVersion = libs.versions.plugins.detekt.get()
 subprojects {
-    apply(plugin = "io.gitlab.arturbosch.detekt")
+    apply(plugin = "dev.detekt")
 
     dependencies {
         detektPlugins(rootProject.libs.detekt.formatting)
@@ -29,21 +58,25 @@ subprojects {
     }
 
     detekt {
-        parallel = true
-        config.setFrom("${project.rootDir}/detekt-config.yml")
+        toolVersion = detektVersion
+        buildUponDefaultConfig = true
+        baseline = file("detekt/baseline.xml")
+        parallel = false // https://github.com/detekt/detekt/issues/9121
     }
 
-    tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
         reports {
-            sarif.required.set(false)
-            txt.required.set(false)
+            checkstyle.required.set(false)
             html.required.set(true)
-            xml.required.set(true)
+            sarif.required.set(true)
+            markdown.required.set(false)
         }
         finalizedBy(reportMerge)
     }
 
-    reportMerge { input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.xmlReportFile }) }
+    reportMerge {
+        input.from(tasks.withType<dev.detekt.gradle.Detekt>().map { it.reports.sarif.outputLocation })
+    }
 }
 
 tasks.register<Delete>("clean") {
@@ -54,7 +87,7 @@ tasks.register<Delete>("clean") {
 
 fun subprojectsAfterEvaluate(action: Action<in Project>) = subprojects { afterEvaluate(action) }
 
-typealias AndroidExtensions = com.android.build.api.dsl.CommonExtension<*, *, *, *, *, *>
+typealias AndroidExtensions = com.android.build.api.dsl.CommonExtension
 
 fun Project.configureAndroidIfExists(action: AndroidExtensions.() -> Unit) {
     val androidExtension = extensions.findByName("android") as? AndroidExtensions
@@ -78,11 +111,9 @@ subprojects {
         compilerOptions {
             jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
             freeCompilerArgs.addAll(
-                "-Xjvm-default=all",
                 "-opt-in=kotlin.RequiresOptIn",
-                "-Xannotation-default-target=param-property",
-
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+
                 "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
                 "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
                 "-opt-in=androidx.compose.animation.ExperimentalSharedTransitionApi",
@@ -148,14 +179,14 @@ subprojectsAfterEvaluate {
             }
         }
 
-        compileOptions {
+        compileOptions.apply {
             isCoreLibraryDesugaringEnabled = true
 
             sourceCompatibility = JavaVersion.VERSION_11
             targetCompatibility = JavaVersion.VERSION_11
         }
 
-        packaging {
+        packaging.apply {
             resources {
                 excludes += "META-INF/LICENSE.md"
                 excludes += "META-INF/LICENSE-notice.md"
@@ -180,7 +211,10 @@ subprojectsAfterEvaluate {
         project.dependencies {
             if (project.plugins.hasPlugin(libs.plugins.kotlin.compose.get().pluginId)) {
                 val bom = platform(libs.androidx.compose.bom)
-                "implementation"(bom)
+
+                if (project.plugins.hasPlugin(libs.plugins.android.library.get().pluginId)) "api"(bom)
+                else "implementation"(bom)
+
                 "androidTestImplementation"(bom)
             }
 

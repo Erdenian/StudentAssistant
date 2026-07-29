@@ -23,15 +23,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import androidx.core.os.ConfigurationCompat
 import java.time.DayOfWeek
 import java.time.format.TextStyle
-import java.util.Locale
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.uikit.utils.AppPreviews
 
@@ -61,9 +59,8 @@ internal fun WeekdayPicker(
     colors: WeekdayPickerColors = WeekdayPickerDefaults.weekdaysPickerColors(),
 ) {
     val daysOfWeek = run {
-        val configuration = LocalConfiguration.current
-        remember(configuration) {
-            val locale = ConfigurationCompat.getLocales(configuration).get(0) ?: Locale.getDefault()
+        val locale = LocalLocale.current.platformLocale
+        remember(locale) {
             DayOfWeek.entries.associateWith { day ->
                 day.getDisplayName(TextStyle.NARROW, locale).uppercase(locale)
             }

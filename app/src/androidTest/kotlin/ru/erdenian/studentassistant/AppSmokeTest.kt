@@ -2,7 +2,7 @@ package ru.erdenian.studentassistant
 
 import android.content.Context
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -26,7 +26,8 @@ internal class AppSmokeTest {
         composeTestRule.waitUntil(timeoutMillis = 5000) {
             composeTestRule
                 .onAllNodesWithText(noScheduleText)
-                .fetchSemanticsNodes().isNotEmpty()
+                .fetchSemanticsNodes()
+                .isNotEmpty()
         }
         composeTestRule.onNodeWithText(noScheduleText).assertIsDisplayed()
 
@@ -38,7 +39,8 @@ internal class AppSmokeTest {
         composeTestRule.waitUntil(timeoutMillis = 3000) {
             composeTestRule
                 .onAllNodesWithText(noScheduleHomeworksText)
-                .fetchSemanticsNodes().isNotEmpty()
+                .fetchSemanticsNodes()
+                .isNotEmpty()
         }
         composeTestRule.onNodeWithText(noScheduleHomeworksText).assertIsDisplayed()
 
@@ -50,7 +52,8 @@ internal class AppSmokeTest {
         composeTestRule.waitUntil(timeoutMillis = 3000) {
             composeTestRule
                 .onAllNodesWithText(settingsTitle)
-                .fetchSemanticsNodes().isNotEmpty()
+                .fetchSemanticsNodes()
+                .isNotEmpty()
         }
         composeTestRule.onNodeWithText(settingsTitle).assertIsDisplayed()
 
@@ -59,7 +62,8 @@ internal class AppSmokeTest {
         composeTestRule.waitUntil(timeoutMillis = 3000) {
             composeTestRule
                 .onAllNodesWithText(noScheduleText)
-                .fetchSemanticsNodes().isNotEmpty()
+                .fetchSemanticsNodes()
+                .isNotEmpty()
         }
         composeTestRule.onNodeWithText(noScheduleText).assertIsDisplayed()
     }

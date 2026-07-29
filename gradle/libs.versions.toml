@@ -1,18 +1,18 @@
 [versions]
 
-plugins_android = "8.13.2"
-plugins_kotlin = "2.3.10"
-plugins_detekt = "1.23.8"
+plugins_android = "9.3.1"
+plugins_kotlin = "2.4.10"
+plugins_detekt = "2.0.0-alpha.5"
 
-kotlinx_coroutines = "1.10.2"
+kotlinx_coroutines = "1.11.0"
 
 androidx_room = "2.8.4"
-androidx_navigation3 = "1.0.1"
-androidx_core = "1.17.0"
+androidx_navigation3 = "1.1.4"
+androidx_core = "1.19.0"
 
-core_dagger = "2.59.1"
+core_dagger = "2.60.1"
 
-test_mockk = "1.14.9"
+test_mockk = "1.14.11"
 test_androidx_common = "1.7.0"
 
 [plugins]
@@ -21,23 +21,22 @@ android_application = { id = "com.android.application", version.ref = "plugins_a
 android_library = { id = "com.android.library", version.ref = "plugins_android" }
 android_lint = { id = "com.android.lint", version.ref = "plugins_android" }
 
-kotlin_android = { id = "org.jetbrains.kotlin.android", version.ref = "plugins_kotlin" }
 kotlin_jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "plugins_kotlin" }
 kotlin_compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "plugins_kotlin" }
 kotlin_parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "plugins_kotlin" }
 kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "plugins_kotlin" }
-kotlin_ksp = { id = "com.google.devtools.ksp", version = "2.3.5" }
+kotlin_ksp = { id = "com.google.devtools.ksp", version = "2.3.10" }
 
-google_services = { id = "com.google.gms.google-services", version = "4.4.4" }
-firebase_crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.6" }
+google_services = { id = "com.google.gms.google-services", version = "4.5.0" }
+firebase_crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.7" }
 
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "plugins_detekt" }
-kover = { id = "org.jetbrains.kotlinx.kover", version = "0.9.7" }
-tripletPlay = { id = "com.github.triplet.play", version = "3.13.0" }
+detekt = { id = "dev.detekt", version.ref = "plugins_detekt" }
+kover = { id = "org.jetbrains.kotlinx.kover", version = "0.9.9" }
+tripletPlay = { id = "com.github.triplet.play", version = "4.0.0" }
 
 [libraries]
 
-detekt_formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "plugins_detekt" }
+detekt_formatting = { group = "dev.detekt", name = "detekt-rules-ktlint-wrapper", version.ref = "plugins_detekt" }
 detekt_rulesCompose = { group = "ru.kode", name = "detekt-rules-compose", version = "1.4.0" }
 
 # region Testing
@@ -62,7 +61,7 @@ test_compose_manifest = { group = "androidx.compose.ui", name = "ui-test-manifes
 
 # region KotlinX
 kotlinx_coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx_coroutines" }
-kotlinx_serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.10.0" }
+kotlinx_serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.11.0" }
 # endregion
 
 # region Android Tools
@@ -70,13 +69,13 @@ androidTools_desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk
 # endregion
 
 # region Firebase
-firebase_bom = { group = "com.google.firebase", name = "firebase-bom", version = "34.9.0" }
+firebase_bom = { group = "com.google.firebase", name = "firebase-bom", version = "34.16.0" }
 firebase_crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 firebase_analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 # endregion
 
 # region Compose
-androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version = "2026.02.00" }
+androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version = "2026.06.01" }
 androidx_compose_ui = { group = "androidx.compose.ui", name = "ui" }
 androidx_compose_ui_tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx_compose_foundation = { group = "androidx.compose.foundation", name = "foundation" }
@@ -88,11 +87,11 @@ androidx_compose_material_icons_extended = { group = "androidx.compose.material"
 
 # region AndroidX
 androidx_core = { group = "androidx.core", name = "core-ktx", version.ref = "androidx_core" }
-androidx_lifecycle_viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-navigation3", version = "2.10.0" }
+androidx_lifecycle_viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-navigation3", version = "2.11.0" }
 androidx_room_compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx_room" }
 androidx_room = { group = "androidx.room", name = "room-ktx", version.ref = "androidx_room" }
 androidx_appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.1" }
-androidx_activity = { group = "androidx.activity", name = "activity-compose", version = "1.12.4" }
+androidx_activity = { group = "androidx.activity", name = "activity-compose", version = "1.13.0" }
 androidx_navigation3_runtime = { group = "androidx.navigation3", name = "navigation3-runtime", version.ref = "androidx_navigation3" }
 androidx_navigation3_ui = { group = "androidx.navigation3", name = "navigation3-ui", version.ref = "androidx_navigation3" }
 androidx_core_splashscreen = { group = "androidx.core", name = "core-splashscreen", version = "1.2.0" }

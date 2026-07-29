@@ -1,6 +1,9 @@
 [*]
 insert_final_newline = true
 
+[{**/detekt/baseline*.xml,.run/*.run.xml,gradle.properties}]
+ij_formatter_enabled = false
+
 [{*.kt,*.kts}]
 # Этот параметр не работает, поэтому оставляем настройки форматирования в Project.xml
 # https://youtrack.jetbrains.com/issue/KTIJ-22516

@@ -1,3 +1,5 @@
+@file:Suppress("UnnecessaryFullyQualifiedName")
+
 package ru.erdenian.studentassistant.analytics.di
 
 @dagger.Module(

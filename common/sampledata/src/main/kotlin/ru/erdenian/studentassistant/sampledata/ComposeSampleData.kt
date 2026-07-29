@@ -1,5 +1,3 @@
-@file:Suppress("StringLiteralDuplication")
-
 package ru.erdenian.studentassistant.sampledata
 
 import java.time.DayOfWeek

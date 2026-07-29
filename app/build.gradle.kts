@@ -5,7 +5,6 @@ import org.gradle.internal.extensions.stdlib.capitalized
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
@@ -368,15 +367,17 @@ tasks.register<GenerateScreenshotsTask>("generateScreenshots") {
     dependsOn(tasks.named("install${buildType.capitalized()}"))
     dependsOn(tasks.named("install${buildType.capitalized()}AndroidTest"))
 
-    val android = project.extensions.getByName("android") as com.android.build.gradle.BaseExtension
-    val applicationId = android.defaultConfig.applicationId
-    val debugSuffix = android.buildTypes.getByName(buildType).applicationIdSuffix
+    val android = project.extensions.getByType<com.android.build.api.dsl.ApplicationExtension>()
+    val androidComponents =
+        project.extensions.getByType<com.android.build.api.variant.ApplicationAndroidComponentsExtension>()
+    val applicationId = checkNotNull(android.defaultConfig.applicationId)
+    val debugSuffix = checkNotNull(android.buildTypes.getByName(buildType).applicationIdSuffix)
     val pkg = applicationId + debugSuffix
 
-    adbPath.set(android.sdkDirectory.resolve("platform-tools/adb").absolutePath)
+    adbPath.set(androidComponents.sdkComponents.adb.map { it.asFile.absolutePath })
     appPackage.set(pkg)
     testPackage.set("$pkg.test")
-    testRunner.set(android.defaultConfig.testInstrumentationRunner)
+    testRunner.set(checkNotNull(android.defaultConfig.testInstrumentationRunner))
 
     val testClassName = "ru.erdenian.studentassistant.AutomatedScreenshotTest"
     testClass.set(testClassName)

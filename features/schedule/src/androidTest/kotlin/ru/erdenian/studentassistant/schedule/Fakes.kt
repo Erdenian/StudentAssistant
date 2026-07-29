@@ -237,9 +237,9 @@ internal class FakeLessonRepository : LessonRepository {
     }
 
     override fun getAllFlow(semesterId: Long, dayOfWeek: DayOfWeek): Flow<List<Lesson>> = lessons.map { list ->
-        list.filter {
-            it.semesterId == semesterId &&
-                (it.lessonRepeat as? Lesson.Repeat.ByWeekday)?.dayOfWeek == dayOfWeek
+        list.filter { lesson ->
+            lesson.semesterId == semesterId &&
+                (lesson.lessonRepeat as? Lesson.Repeat.ByWeekday)?.dayOfWeek == dayOfWeek
         }
     }
 
@@ -247,31 +247,54 @@ internal class FakeLessonRepository : LessonRepository {
 
     override val hasLessonsFlow: Flow<Boolean> = lessons.map { it.isNotEmpty() }
 
-    override suspend fun hasNonRecurringLessons(semesterId: Long) = lessons.value.any {
-        it.semesterId == semesterId &&
-            (it.lessonRepeat as? Lesson.Repeat.ByWeekday)?.weeks?.contains(false) == true
+    override suspend fun hasNonRecurringLessons(semesterId: Long) = lessons.value.any { lesson ->
+        lesson.semesterId == semesterId &&
+            (lesson.lessonRepeat as? Lesson.Repeat.ByWeekday)?.weeks?.contains(false) == true
     }
 
     override suspend fun getCount(semesterId: Long, subjectName: String): Int =
         lessons.value.count { it.semesterId == semesterId && it.subjectName == subjectName }
 
-    override fun getSubjects(semesterId: Long): Flow<List<String>> =
-        lessons.map { list -> list.filter { it.semesterId == semesterId }.map { it.subjectName }.distinct() }
+    override fun getSubjects(semesterId: Long): Flow<List<String>> = lessons.map { list ->
+        list.asSequence()
+            .filter { it.semesterId == semesterId }
+            .map { it.subjectName }
+            .distinct()
+            .toList()
+    }
 
     override suspend fun renameSubject(semesterId: Long, oldName: String, newName: String) {
         lessons.update { list ->
-            list.map { if (it.semesterId == semesterId && it.subjectName == oldName) it.copy(subjectName = newName) else it }
+            list.map { lesson ->
+                if (lesson.semesterId == semesterId && lesson.subjectName == oldName) lesson.copy(subjectName = newName)
+                else lesson
+            }
         }
     }
 
-    override fun getTypes(semesterId: Long): Flow<List<String>> =
-        lessons.map { list -> list.filter { it.semesterId == semesterId }.map { it.type }.distinct() }
+    override fun getTypes(semesterId: Long): Flow<List<String>> = lessons.map { list ->
+        list.asSequence()
+            .filter { it.semesterId == semesterId }
+            .map { it.type }
+            .distinct()
+            .toList()
+    }
 
-    override fun getTeachers(semesterId: Long): Flow<List<String>> =
-        lessons.map { list -> list.filter { it.semesterId == semesterId }.flatMap { it.teachers }.distinct() }
+    override fun getTeachers(semesterId: Long): Flow<List<String>> = lessons.map { list ->
+        list.asSequence()
+            .filter { it.semesterId == semesterId }
+            .flatMap { it.teachers }
+            .distinct()
+            .toList()
+    }
 
-    override fun getClassrooms(semesterId: Long): Flow<List<String>> =
-        lessons.map { list -> list.filter { it.semesterId == semesterId }.flatMap { it.classrooms }.distinct() }
+    override fun getClassrooms(semesterId: Long): Flow<List<String>> = lessons.map { list ->
+        list.asSequence()
+            .filter { it.semesterId == semesterId }
+            .flatMap { it.classrooms }
+            .distinct()
+            .toList()
+    }
 
     override suspend fun getNextStartTime(semesterId: Long, dayOfWeek: DayOfWeek): LocalTime = LocalTime.of(9, 0)
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CognitiveComplexMethod:LessonEditorViewModel.kt:LessonEditorViewModel$fun save</ID>
+    <ID>FunctionNameMaxLength:LessonEditorViewModel.kt:LessonEditorViewModel$suspend fun isLastLessonOfSubjectAndHasHomeworks: Boolean</ID>
+    <ID>FunctionNameMaxLength:ScheduleEditorViewModel.kt:ScheduleEditorViewModel$suspend fun isLastLessonOfSubjectAndHasHomeworks: Boolean</ID>
+    <ID>LongMethod:LessonEditorViewModel.kt:LessonEditorViewModel$fun save</ID>
+  </CurrentIssues>
+</SmellBaseline>

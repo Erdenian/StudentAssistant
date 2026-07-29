@@ -192,10 +192,8 @@ internal class LessonEditorViewModel @AssistedInject constructor(
      * Используется для предложения переименовать остальные занятия.
      */
     suspend fun isSubjectNameChangedAndNotLast() = withContext(Dispatchers.IO) {
-        isSubjectNameChanged && lessonRepository.getCount(
-            semesterId,
-            initialSubjectName ?: return@withContext false,
-        ) > 1
+        isSubjectNameChanged &&
+            lessonRepository.getCount(semesterId, initialSubjectName ?: return@withContext false) > 1
     }
 
     /**

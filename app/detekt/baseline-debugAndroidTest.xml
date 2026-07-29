@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CognitiveComplexMethod:AutomatedScreenshotTest.kt:AutomatedScreenshotTest$@Test fun generateScreenshots</ID>
+  </CurrentIssues>
+</SmellBaseline>

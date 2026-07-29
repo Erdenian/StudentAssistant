@@ -1,7 +1,8 @@
 package ru.erdenian.studentassistant
 
 import android.content.Context
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
@@ -18,7 +19,7 @@ internal class AnalyticsTrackingTest {
 
     // Используем ComponentActivity, чтобы не запускалась MainActivity с её логикой сплеша
     @get:Rule
-    val composeTestRule = createAndroidComposeRule<androidx.activity.ComponentActivity>()
+    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     private val context = ApplicationProvider.getApplicationContext<Context>()
 

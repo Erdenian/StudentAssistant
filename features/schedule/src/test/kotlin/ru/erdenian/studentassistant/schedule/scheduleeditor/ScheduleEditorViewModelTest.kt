@@ -6,6 +6,7 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import java.time.DayOfWeek
 import java.time.LocalTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -229,7 +230,7 @@ internal class ScheduleEditorViewModelTest {
 
     @Test
     fun `getLessons test`() = runTest {
-        val dayOfWeek = java.time.DayOfWeek.MONDAY
+        val dayOfWeek = DayOfWeek.MONDAY
         val lesson = Lesson(
             subjectName = "Subject",
             type = "T",

@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CognitiveComplexMethod:Placeholder.kt:@Suppress("MagicNumber") private fun Modifier.placeholderFoundation: Modifier</ID>
+    <ID>LongMethod:Placeholder.kt:@Suppress("MagicNumber") private fun Modifier.placeholderFoundation: Modifier</ID>
+  </CurrentIssues>
+</SmellBaseline>
