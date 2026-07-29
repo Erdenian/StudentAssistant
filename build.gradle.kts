@@ -16,6 +16,9 @@ plugins {
 }
 
 val reportMerge = tasks.register<dev.detekt.gradle.report.ReportMergeTask>("reportMerge") {
+    group = "verification"
+    description = "Merges all Detekt SARIF reports into a single file"
+
     output.set(rootProject.layout.buildDirectory.file("reports/detekt/merge.sarif"))
 
     doLast {
@@ -80,6 +83,9 @@ subprojects {
 }
 
 tasks.register<Delete>("clean") {
+    group = "build"
+    description = "Deletes the build directory"
+
     delete(rootProject.layout.buildDirectory)
 }
 

@@ -192,8 +192,12 @@ play {
 // region Release
 
 rootProject.tasks.register("updateChangelog") {
+    group = "release"
+    description = "Updates CHANGELOG.md with the new version and clears play store release notes"
+
     val changelogFile = rootProject.file("CHANGELOG.md")
     val newVersion = checkNotNull(android.defaultConfig.versionName)
+    val releaseNotesDir = file("src/main/play/release-notes")
 
     doFirst {
         val lines = changelogFile.readLines().toMutableList()
@@ -221,6 +225,13 @@ rootProject.tasks.register("updateChangelog") {
 
         changelogFile.delete()
         changelogFile.writeText(lines.joinToString(lineSeparator) + lineSeparator)
+
+        // Сбрасываем содержимое файлов release notes, чтобы они появились в git status
+        if (releaseNotesDir.exists()) {
+            releaseNotesDir.walk().filter { it.isFile && it.name == "beta.txt" }.forEach { file ->
+                file.writeText("TODO: Обновите release notes для ${file.parentFile.name}\n")
+            }
+        }
     }
 }
 
