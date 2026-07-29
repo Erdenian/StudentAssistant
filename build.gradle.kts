@@ -15,7 +15,7 @@ plugins {
     alias(libs.plugins.kover)
 }
 
-val reportMerge by tasks.registering(dev.detekt.gradle.report.ReportMergeTask::class) {
+val reportMerge = tasks.register<dev.detekt.gradle.report.ReportMergeTask>("reportMerge") {
     output.set(rootProject.layout.buildDirectory.file("reports/detekt/merge.sarif"))
 
     doLast {
@@ -111,11 +111,9 @@ subprojects {
         compilerOptions {
             jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
             freeCompilerArgs.addAll(
-                "-Xjvm-default=all",
                 "-opt-in=kotlin.RequiresOptIn",
-                "-Xannotation-default-target=param-property",
-
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+
                 "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
                 "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
                 "-opt-in=androidx.compose.animation.ExperimentalSharedTransitionApi",
@@ -213,7 +211,10 @@ subprojectsAfterEvaluate {
         project.dependencies {
             if (project.plugins.hasPlugin(libs.plugins.kotlin.compose.get().pluginId)) {
                 val bom = platform(libs.androidx.compose.bom)
-                "implementation"(bom)
+
+                if (project.plugins.hasPlugin(libs.plugins.android.library.get().pluginId)) "api"(bom)
+                else "implementation"(bom)
+
                 "androidTestImplementation"(bom)
             }
 
