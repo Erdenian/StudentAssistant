@@ -7,7 +7,7 @@ import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
@@ -20,6 +20,8 @@ import kotlinx.serialization.Serializable
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import ru.erdenian.studentassistant.analytics.api.Analytics
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.navigation.LocalSharedTransitionScope
 import ru.erdenian.studentassistant.navigation.Navigator
@@ -61,6 +63,12 @@ internal class ScheduleScreenTest {
                 override val homeworkRepository = this@ScheduleScreenTest.homeworkRepository
                 override val settingsRepository = this@ScheduleScreenTest.settingsRepository
             }
+            override val analyticsApi: AnalyticsApi = object : AnalyticsApi {
+                override val analytics = object : Analytics {
+                    override fun logEvent(name: String, params: Map<String, Any>) = Unit
+                    override fun setUserProperty(name: String, value: String?) = Unit
+                }
+            }
         }
         ScheduleComponentHolder.create(dependencies)
     }
@@ -88,21 +96,21 @@ internal class ScheduleScreenTest {
     @Test
     fun verifyLessonDisplay() {
         val today = LocalDate.now()
-        val semester = Semester("S1", today.minusDays(1), today.plusDays(7), 1L)
+        val semester = Semester(name = "S1", firstDay = today.minusDays(1), lastDay = today.plusDays(7), id = 1L)
         semesterRepository.semesters.value = listOf(semester)
         selectedSemesterRepository.selectedSemester.value = semester
         lessonRepository.semesters = listOf(semester)
 
         val lesson = Lesson(
-            "Physics",
-            "Lab",
-            emptyList(),
-            emptyList(),
-            LocalTime.of(10, 0),
-            LocalTime.of(11, 30),
-            Lesson.Repeat.ByWeekday(today.dayOfWeek, listOf(true)),
-            1L,
-            10L,
+            subjectName = "Physics",
+            type = "Lab",
+            teachers = emptyList(),
+            classrooms = emptyList(),
+            startTime = LocalTime.of(10, 0),
+            endTime = LocalTime.of(11, 30),
+            lessonRepeat = Lesson.Repeat.ByWeekday(today.dayOfWeek, listOf(true)),
+            semesterId = 1L,
+            id = 10L,
         )
         lessonRepository.lessons.value = listOf(lesson)
 

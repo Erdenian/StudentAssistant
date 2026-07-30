@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.kotlin.compose)
 }
@@ -17,6 +16,7 @@ dependencies {
 
     implementation(project(":features:repository:api"))
     implementation(project(":features:settings:api"))
+    implementation(project(":features:analytics:api"))
     // endregion
 
     // region Tests

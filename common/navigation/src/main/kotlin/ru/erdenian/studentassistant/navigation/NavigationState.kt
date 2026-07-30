@@ -89,7 +89,7 @@ fun NavigationState.toEntries(
     }
 
     return stacksInUse
-        .flatMap { decoratedEntries[it] ?: emptyList() }
+        .flatMap { decoratedEntries[it].orEmpty() }
         .toMutableStateList()
 }
 

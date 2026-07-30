@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.utils.Default
@@ -24,6 +25,7 @@ import ru.erdenian.studentassistant.utils.Default
 internal class ScheduleViewModel @Inject constructor(
     application: Application,
     repositoryApi: RepositoryApi,
+    analyticsApi: AnalyticsApi,
 ) : AndroidViewModel(application) {
 
     private companion object {
@@ -34,6 +36,7 @@ internal class ScheduleViewModel @Inject constructor(
     private val selectedSemesterRepository = repositoryApi.selectedSemesterRepository
     private val semesterRepository = repositoryApi.semesterRepository
     private val lessonRepository = repositoryApi.lessonRepository
+    private val analytics = analyticsApi.analytics
 
     /**
      * Поток текущего выбранного расписания.
@@ -57,7 +60,7 @@ internal class ScheduleViewModel @Inject constructor(
     }
 
     /**
-     * Выбирает расписание по идентификатору.
+     * Выбирает расписание по идентификатору и отправляет событие аналитики.
      *
      * Также очищает кэш потоков занятий, так как они зависят от выбранного расписания.
      *
@@ -66,6 +69,34 @@ internal class ScheduleViewModel @Inject constructor(
     fun selectSemester(semesterId: Long) {
         lessonsFlows.clear()
         selectedSemesterRepository.selectSemester(semesterId)
+        analytics.logEvent("semester_switched")
+    }
+
+    /**
+     * Отправляет событие аналитики при нажатии на кнопку добавления расписания.
+     */
+    fun logAddSemesterClicked() {
+        analytics.logEvent("semester_add_clicked")
+    }
+
+    /**
+     * Отправляет событие аналитики при нажатии на кнопку редактирования расписания.
+     */
+    fun logEditScheduleClicked() {
+        analytics.logEvent("schedule_edit_clicked")
+    }
+
+    /**
+     * Отправляет событие аналитики при нажатии на занятие.
+     */
+    fun logLessonClick(lesson: Lesson) {
+        analytics.logEvent(
+            name = "lesson_clicked",
+            params = mapOf(
+                "subject_name" to lesson.subjectName,
+                "type" to lesson.type,
+            ),
+        )
     }
 
     /**

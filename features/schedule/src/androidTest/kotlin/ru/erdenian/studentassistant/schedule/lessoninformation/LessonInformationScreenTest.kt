@@ -6,7 +6,7 @@ import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
@@ -19,6 +19,8 @@ import kotlinx.serialization.Serializable
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import ru.erdenian.studentassistant.analytics.api.Analytics
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.navigation.LocalSharedTransitionScope
 import ru.erdenian.studentassistant.navigation.Navigator
@@ -60,6 +62,12 @@ internal class LessonInformationScreenTest {
                 override val selectedSemesterRepository = this@LessonInformationScreenTest.selectedSemesterRepository
                 override val settingsRepository = this@LessonInformationScreenTest.settingsRepository
             }
+            override val analyticsApi: AnalyticsApi = object : AnalyticsApi {
+                override val analytics = object : Analytics {
+                    override fun logEvent(name: String, params: Map<String, Any>) = Unit
+                    override fun setUserProperty(name: String, value: String?) = Unit
+                }
+            }
         }
         ScheduleComponentHolder.create(dependencies)
     }
@@ -70,15 +78,15 @@ internal class LessonInformationScreenTest {
     @Test
     fun verifyLessonDetailsDisplay() {
         val lesson = Lesson(
-            "Biology",
-            "Lecture",
-            listOf("Teacher 1"),
-            listOf("Room 101"),
-            LocalTime.of(12, 0),
-            LocalTime.of(13, 30),
-            Lesson.Repeat.ByWeekday(DayOfWeek.FRIDAY, listOf(true)),
-            semesterId,
-            10L,
+            subjectName = "Biology",
+            type = "Lecture",
+            teachers = listOf("Teacher 1"),
+            classrooms = listOf("Room 101"),
+            startTime = LocalTime.of(12, 0),
+            endTime = LocalTime.of(13, 30),
+            lessonRepeat = Lesson.Repeat.ByWeekday(DayOfWeek.FRIDAY, listOf(true)),
+            semesterId = semesterId,
+            id = 10L,
         )
         lessonRepository.lessons.value = listOf(lesson)
 

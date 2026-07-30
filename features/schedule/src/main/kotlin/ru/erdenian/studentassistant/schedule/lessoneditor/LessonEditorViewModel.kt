@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.utils.Default
@@ -41,6 +42,7 @@ import ru.erdenian.studentassistant.utils.toSingleLine
 internal class LessonEditorViewModel @AssistedInject constructor(
     application: Application,
     repositoryApi: RepositoryApi,
+    analyticsApi: AnalyticsApi,
     @Assisted private val semesterId: Long,
     @Assisted lessonId: Long?,
     @Assisted copy: Boolean,
@@ -51,6 +53,7 @@ internal class LessonEditorViewModel @AssistedInject constructor(
     private val lessonRepository = repositoryApi.lessonRepository
     private val homeworkRepository = repositoryApi.homeworkRepository
     private val settingsRepository = repositoryApi.settingsRepository
+    private val analytics = analyticsApi.analytics
 
     @AssistedFactory
     abstract class Factory {
@@ -189,10 +192,8 @@ internal class LessonEditorViewModel @AssistedInject constructor(
      * Используется для предложения переименовать остальные занятия.
      */
     suspend fun isSubjectNameChangedAndNotLast() = withContext(Dispatchers.IO) {
-        isSubjectNameChanged && lessonRepository.getCount(
-            semesterId,
-            initialSubjectName ?: return@withContext false,
-        ) > 1
+        isSubjectNameChanged &&
+            lessonRepository.getCount(semesterId, initialSubjectName ?: return@withContext false) > 1
     }
 
     /**
@@ -250,6 +251,13 @@ internal class LessonEditorViewModel @AssistedInject constructor(
                             dayOfWeek = dayOfWeek.value,
                             weeks = weeksValue,
                         )
+                        analytics.logEvent(
+                            name = "lesson_edited",
+                            params = mapOf(
+                                "subject_name" to subjectName,
+                                "type" to type,
+                            ),
+                        )
                     } else {
                         lessonRepository.insert(
                             subjectName = subjectName,
@@ -261,6 +269,13 @@ internal class LessonEditorViewModel @AssistedInject constructor(
                             semesterId = semesterId,
                             dayOfWeek = dayOfWeek.value,
                             weeks = weeksValue,
+                        )
+                        analytics.logEvent(
+                            name = "lesson_created",
+                            params = mapOf(
+                                "subject_name" to subjectName,
+                                "type" to type,
+                            ),
                         )
                     }
                 }
@@ -277,6 +292,13 @@ internal class LessonEditorViewModel @AssistedInject constructor(
                             semesterId = semesterId,
                             dates = dates.value,
                         )
+                        analytics.logEvent(
+                            name = "lesson_edited",
+                            params = mapOf(
+                                "subject_name" to subjectName,
+                                "type" to type,
+                            ),
+                        )
                     } else {
                         lessonRepository.insert(
                             subjectName = subjectName,
@@ -288,12 +310,29 @@ internal class LessonEditorViewModel @AssistedInject constructor(
                             semesterId = semesterId,
                             dates = dates.value,
                         )
+                        analytics.logEvent(
+                            name = "lesson_created",
+                            params = mapOf(
+                                "subject_name" to subjectName,
+                                "type" to type,
+                            ),
+                        )
                     }
                 }
             }
 
             initialSubjectName?.let { initial ->
-                if (forceRenameOther) lessonRepository.renameSubject(semesterId, initial, subjectName)
+                if (forceRenameOther) {
+                    lessonRepository.renameSubject(semesterId, initial, subjectName)
+                    analytics.logEvent(
+                        name = "lesson_renamed_group",
+                        params = mapOf(
+                            "previous_subject_name" to initial,
+                            "subject_name" to subjectName,
+                            "type" to type,
+                        ),
+                    )
+                }
             }
 
             donePrivate.value = true
@@ -303,7 +342,7 @@ internal class LessonEditorViewModel @AssistedInject constructor(
     /**
      * Проверяет, является ли удаляемое занятие последним по данному предмету и есть ли для него домашние задания.
      */
-    suspend fun isLastLessonOfSubjectsAndHasHomeworks(): Boolean = coroutineScope {
+    suspend fun isLastLessonOfSubjectAndHasHomeworks(): Boolean = coroutineScope {
         val subjectName = initialSubjectName ?: return@coroutineScope false
         val isLastLesson = async { lessonRepository.getCount(semesterId, subjectName) == 1 }
         val hasHomeworks = async { homeworkRepository.hasHomeworks(semesterId, subjectName) }
@@ -328,7 +367,13 @@ internal class LessonEditorViewModel @AssistedInject constructor(
                 deleteLesson.await()
                 deleteHomeworks.await()
             }
-
+            analytics.logEvent(
+                name = "lesson_deleted",
+                params = mapOf(
+                    "with_homeworks" to withHomeworks,
+                    "subject_name" to subjectName,
+                ),
+            )
             donePrivate.value = true
         }
     }

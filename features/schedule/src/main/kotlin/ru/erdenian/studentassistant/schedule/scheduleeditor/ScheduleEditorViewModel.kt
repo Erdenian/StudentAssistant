@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.repository.api.entity.Lesson
 import ru.erdenian.studentassistant.utils.Default
@@ -30,6 +31,7 @@ import ru.erdenian.studentassistant.utils.Default
 internal class ScheduleEditorViewModel @AssistedInject constructor(
     application: Application,
     repositoryApi: RepositoryApi,
+    analyticsApi: AnalyticsApi,
     @Assisted val semesterId: Long,
 ) : AndroidViewModel(application) {
 
@@ -41,6 +43,7 @@ internal class ScheduleEditorViewModel @AssistedInject constructor(
     private val semesterRepository = repositoryApi.semesterRepository
     private val lessonRepository = repositoryApi.lessonRepository
     private val homeworkRepository = repositoryApi.homeworkRepository
+    private val analytics = analyticsApi.analytics
 
     @AssistedFactory
     interface Factory {
@@ -80,12 +83,53 @@ internal class ScheduleEditorViewModel @AssistedInject constructor(
     }
 
     /**
+     * Отправляет событие аналитики при нажатии на кнопку добавления занятия.
+     */
+    fun logAddLessonClick() {
+        analytics.logEvent("lesson_add_clicked")
+    }
+
+    /**
+     * Отправляет событие аналитики при нажатии на кнопку редактирования расписания.
+     */
+    fun logEditSemesterClicked() {
+        analytics.logEvent("semester_edit_clicked")
+    }
+
+    /**
+     * Отправляет событие аналитики при нажатии на занятие.
+     */
+    fun logLessonClick(lesson: Lesson) {
+        analytics.logEvent(
+            name = "lesson_clicked",
+            params = mapOf(
+                "subject_name" to lesson.subjectName,
+                "type" to lesson.type,
+            ),
+        )
+    }
+
+    /**
+     * Отправляет событие аналитики при нажатии на кнопку копирования занятия.
+     */
+    fun logCopyLessonClick(lesson: Lesson) {
+        analytics.logEvent(
+            name = "lesson_copy_clicked",
+            params = mapOf(
+                "subject_name" to lesson.subjectName,
+                "type" to lesson.type,
+            ),
+        )
+    }
+
+    /**
      * Удаляет текущее расписание.
      */
     fun deleteSemester() {
         operationPrivate.value = Operation.DELETING_SEMESTER
         viewModelScope.launch {
             semesterRepository.delete(semesterId)
+            analytics.logEvent("semester_deleted")
             isDeletedPrivate.value = true
         }
     }
@@ -95,7 +139,7 @@ internal class ScheduleEditorViewModel @AssistedInject constructor(
      *
      * Используется для отображения диалога с предложением удалить также и домашние задания.
      */
-    suspend fun isLastLessonOfSubjectsAndHasHomeworks(lesson: Lesson): Boolean = coroutineScope {
+    suspend fun isLastLessonOfSubjectAndHasHomeworks(lesson: Lesson): Boolean = coroutineScope {
         val subjectName = lesson.subjectName
         val isLastLesson = async { lessonRepository.getCount(semesterId, subjectName) == 1 }
         val hasHomeworks = async { homeworkRepository.hasHomeworks(semesterId, subjectName) }
@@ -118,6 +162,14 @@ internal class ScheduleEditorViewModel @AssistedInject constructor(
                 deleteLesson.await()
                 deleteHomeworks.await()
             }
+            analytics.logEvent(
+                name = "lesson_deleted",
+                params = mapOf(
+                    "with_homeworks" to withHomeworks,
+                    "subject_name" to lesson.subjectName,
+                    "type" to lesson.type,
+                ),
+            )
             operationPrivate.value = null
         }
     }

@@ -24,6 +24,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
@@ -110,8 +112,10 @@ internal fun PagerTabStrip(
             val notSelectedTabTextColor = colors.notSelectedTabTextColor().value
             val tabIndicatorColor = colors.tabIndicatorColor().value
 
-            val page = state.currentPage + state.currentPageOffsetFraction.roundToInt()
-            val offset = 1 - abs(abs(state.currentPageOffsetFraction) % 1 - 0.5f) * 2.0f
+            val page by remember { derivedStateOf { state.currentPage + state.currentPageOffsetFraction.roundToInt() } }
+            val offset by remember {
+                derivedStateOf { 1 - abs(abs(state.currentPageOffsetFraction) % 1 - 0.5f) * 2.0f }
+            }
             val animatedCurrentTabTextColor = selectedTabTextColor.transitionTo(notSelectedTabTextColor, offset)
             val animatedUnderscoreAlpha = tabIndicatorColor.alpha * (1 - offset)
 
@@ -260,7 +264,6 @@ private fun Color.transitionTo(color: Color, progress: Float): Color {
     )
 }
 
-@Suppress("StringLiteralDuplication")
 private class PageCountPreviewParameterProvider : PreviewParameterProvider<Int> {
     override val values = sequenceOf(10, 0)
 }

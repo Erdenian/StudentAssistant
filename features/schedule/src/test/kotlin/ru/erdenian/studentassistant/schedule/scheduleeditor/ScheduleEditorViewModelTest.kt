@@ -5,6 +5,8 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
+import java.time.DayOfWeek
 import java.time.LocalTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +21,8 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
+import ru.erdenian.studentassistant.analytics.api.Analytics
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.repository.api.HomeworkRepository
 import ru.erdenian.studentassistant.repository.api.LessonRepository
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
@@ -37,16 +41,25 @@ internal class ScheduleEditorViewModelTest {
     private val semesterRepository = mockk<SemesterRepository>()
     private val lessonRepository = mockk<LessonRepository>()
     private val homeworkRepository = mockk<HomeworkRepository>()
+    private val analytics = mockk<Analytics>(relaxed = true)
     private val repositoryApi = mockk<RepositoryApi> {
         every { semesterRepository } returns this@ScheduleEditorViewModelTest.semesterRepository
         every { lessonRepository } returns this@ScheduleEditorViewModelTest.lessonRepository
         every { homeworkRepository } returns this@ScheduleEditorViewModelTest.homeworkRepository
     }
+    private val analyticsApi = mockk<AnalyticsApi> {
+        every { analytics } returns this@ScheduleEditorViewModelTest.analytics
+    }
 
     private val semesterId = 1L
 
     private val viewModel by lazy {
-        ScheduleEditorViewModel(application, repositoryApi, semesterId)
+        ScheduleEditorViewModel(
+            application = application,
+            repositoryApi = repositoryApi,
+            analyticsApi = analyticsApi,
+            semesterId = semesterId,
+        )
     }
 
     @Test
@@ -60,12 +73,59 @@ internal class ScheduleEditorViewModelTest {
         advanceUntilIdle()
 
         coVerify { semesterRepository.delete(semesterId) }
+        verify { analytics.logEvent("semester_deleted", any()) }
         assertEquals(Operation.DELETING_SEMESTER, viewModel.operation.value)
         assertTrue(viewModel.isDeleted.value)
     }
 
     @Test
-    fun `isLastLessonOfSubjectsAndHasHomeworks true test`() = runTest {
+    fun `logAddLessonClick test`() {
+        viewModel.logAddLessonClick()
+        verify { analytics.logEvent("lesson_add_clicked", any()) }
+    }
+
+    @Test
+    fun `logEditSemesterClicked test`() {
+        viewModel.logEditSemesterClicked()
+        verify { analytics.logEvent("semester_edit_clicked", any()) }
+    }
+
+    @Test
+    fun `logLessonClick test`() {
+        val lesson = Lesson(
+            subjectName = "Subject",
+            type = "Type",
+            teachers = emptyList(),
+            classrooms = emptyList(),
+            startTime = LocalTime.MIN,
+            endTime = LocalTime.MAX,
+            lessonRepeat = Lesson.Repeat.ByDates(emptySet()),
+            semesterId = semesterId,
+            id = 10L,
+        )
+        viewModel.logLessonClick(lesson)
+        verify { analytics.logEvent("lesson_clicked", mapOf("subject_name" to "Subject", "type" to "Type")) }
+    }
+
+    @Test
+    fun `logCopyLessonClick test`() {
+        val lesson = Lesson(
+            subjectName = "Subject",
+            type = "Type",
+            teachers = emptyList(),
+            classrooms = emptyList(),
+            startTime = LocalTime.MIN,
+            endTime = LocalTime.MAX,
+            lessonRepeat = Lesson.Repeat.ByDates(emptySet()),
+            semesterId = semesterId,
+            id = 10L,
+        )
+        viewModel.logCopyLessonClick(lesson)
+        verify { analytics.logEvent("lesson_copy_clicked", mapOf("subject_name" to "Subject", "type" to "Type")) }
+    }
+
+    @Test
+    fun `isLastLessonOfSubjectAndHasHomeworks true test`() = runTest {
         val lesson = Lesson(
             subjectName = "Subject",
             type = "T",
@@ -80,11 +140,11 @@ internal class ScheduleEditorViewModelTest {
         coEvery { lessonRepository.getCount(semesterId, "Subject") } returns 1
         coEvery { homeworkRepository.hasHomeworks(semesterId, "Subject") } returns true
 
-        assertTrue(viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson))
+        assertTrue(viewModel.isLastLessonOfSubjectAndHasHomeworks(lesson))
     }
 
     @Test
-    fun `isLastLessonOfSubjectsAndHasHomeworks false (count) test`() = runTest {
+    fun `isLastLessonOfSubjectAndHasHomeworks false (count) test`() = runTest {
         val lesson = Lesson(
             subjectName = "Subject",
             type = "T",
@@ -99,11 +159,11 @@ internal class ScheduleEditorViewModelTest {
         coEvery { lessonRepository.getCount(semesterId, "Subject") } returns 2
         coEvery { homeworkRepository.hasHomeworks(semesterId, "Subject") } returns true
 
-        assertFalse(viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson))
+        assertFalse(viewModel.isLastLessonOfSubjectAndHasHomeworks(lesson))
     }
 
     @Test
-    fun `isLastLessonOfSubjectsAndHasHomeworks false (homeworks) test`() = runTest {
+    fun `isLastLessonOfSubjectAndHasHomeworks false (homeworks) test`() = runTest {
         val lesson = Lesson(
             subjectName = "Subject",
             type = "T",
@@ -118,7 +178,7 @@ internal class ScheduleEditorViewModelTest {
         coEvery { lessonRepository.getCount(semesterId, "Subject") } returns 1
         coEvery { homeworkRepository.hasHomeworks(semesterId, "Subject") } returns false
 
-        assertFalse(viewModel.isLastLessonOfSubjectsAndHasHomeworks(lesson))
+        assertFalse(viewModel.isLastLessonOfSubjectAndHasHomeworks(lesson))
     }
 
     @Test
@@ -141,6 +201,7 @@ internal class ScheduleEditorViewModelTest {
 
         coVerify { lessonRepository.delete(lesson.id) }
         coVerify(exactly = 0) { homeworkRepository.delete(any<String>()) }
+        verify { analytics.logEvent("lesson_deleted", any()) }
     }
 
     @Test
@@ -164,11 +225,12 @@ internal class ScheduleEditorViewModelTest {
 
         coVerify { lessonRepository.delete(lesson.id) }
         coVerify { homeworkRepository.delete(lesson.subjectName) }
+        verify { analytics.logEvent("lesson_deleted", any()) }
     }
 
     @Test
     fun `getLessons test`() = runTest {
-        val dayOfWeek = java.time.DayOfWeek.MONDAY
+        val dayOfWeek = DayOfWeek.MONDAY
         val lesson = Lesson(
             subjectName = "Subject",
             type = "T",

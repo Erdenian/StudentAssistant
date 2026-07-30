@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Student Assistant</string>
-
     <!-- region schedule -->
 
     <!-- LazyLessonsList -->
@@ -32,15 +30,15 @@
     <string name="se_title_new">Новий розклад</string>
     <string name="se_title_edit">Редагування розкладу</string>
     <string name="se_name">Назва</string>
-    <string name="se_first_day">Перший день</string>
-    <string name="se_last_day">Останній день</string>
+    <string name="se_first_day">Дата початку</string>
+    <string name="se_last_day">Дата закінчення</string>
     <string name="se_save">Зберегти</string>
     <string name="se_saving">Збереження…</string>
     <string name="se_error_empty_name">Введіть назву</string>
-    <string name="se_error_name_not_available">Це ім\'я вже використовується</string>
+    <string name="se_error_name_not_available">Ця назва вже використовується</string>
     <string name="se_error_wrong_dates">Некоректний діапазон дат</string>
     <string name="se_warning_week_shift_title">Зсув тижнів</string>
-    <string name="se_warning_week_shift_message">Ви змінили дату початку семестру. Це може порушити чергування тижнів (парні/непарні) в існуючих заняттях. Продовжити?</string>
+    <string name="se_warning_week_shift_message">Ви змінили дату початку розкладу. Це може порушити чергування тижнів (парні/непарні) для існуючих занять. Продовжити?</string>
     <string name="se_warning_week_shift_yes">Так, продовжити</string>
     <string name="se_warning_week_shift_no">Скасувати</string>
 

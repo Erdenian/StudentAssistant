@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>FunctionNameMaxLength:NavigationState.kt:private fun &lt;T : Any&gt; NavEntry&lt;T&gt;.disableUserInteractionOnNavigation</ID>
+  </CurrentIssues>
+</SmellBaseline>

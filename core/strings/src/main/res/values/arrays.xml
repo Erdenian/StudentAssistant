@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <string-array name="lesson_repeat_types">
         <item>By days of week</item>
         <item>By dates</item>
     </string-array>
 
-    <string-array name="lesson_types">
-        <item>Seminar</item>
+    <string-array name="lesson_types" tools:ignore="InconsistentArrays">
+        <item>Class</item>
+        <item>Lesson</item>
         <item>Lecture</item>
-        <item>Laboratory work</item>
-        <item>Practical work</item>
-        <item>Consultation</item>
+        <item>Seminar</item>
+        <item>Tutorial</item>
+        <item>Lab</item>
+        <item>Recitation</item>
+        <item>Workshop</item>
+        <item>Office Hours</item>
+        <item>Midterm</item>
+        <item>Final Exam</item>
         <item>Exam</item>
-        <item>Independent work</item>
+        <item>Elective</item>
     </string-array>
 
     <string-array name="repeat_variants">

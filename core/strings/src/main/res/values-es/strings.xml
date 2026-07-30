@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Student Assistant</string>
-
     <!-- region schedule -->
 
     <!-- LazyLessonsList -->
@@ -16,7 +14,7 @@
     <string name="s_calendar">Calendario</string>
     <string name="s_add">Añadir horario</string>
     <string name="s_edit">Editar horario</string>
-    <string name="s_no_schedule">Está vacío aquí. Añade un horario universitario o escolar.</string>
+    <string name="s_no_schedule">No hay horarios aún. Añade un horario universitario o escolar.</string>
 
     <!-- Lesson Information -->
     <string name="li_title">Info de la clase</string>
@@ -32,21 +30,21 @@
     <string name="se_title_new">Nuevo horario</string>
     <string name="se_title_edit">Editar horario</string>
     <string name="se_name">Nombre</string>
-    <string name="se_first_day">Primer día</string>
-    <string name="se_last_day">Último día</string>
+    <string name="se_first_day">Fecha de inicio</string>
+    <string name="se_last_day">Fecha de fin</string>
     <string name="se_save">Guardar</string>
     <string name="se_saving">Guardando…</string>
     <string name="se_error_empty_name">Introduce un nombre</string>
     <string name="se_error_name_not_available">Este nombre ya está en uso</string>
     <string name="se_error_wrong_dates">Rango de fechas inválido</string>
     <string name="se_warning_week_shift_title">Cambio de semanas</string>
-    <string name="se_warning_week_shift_message">Has cambiado la fecha de inicio del semestre. Esto puede alterar la alternancia de semanas (pares/impares) para las clases existentes. ¿Continuar?</string>
+    <string name="se_warning_week_shift_message">Has cambiado la fecha de inicio del horario. Esto puede alterar la alternancia de semanas (pares/impares) para las clases existentes. ¿Continuar?</string>
     <string name="se_warning_week_shift_yes">Sí, continuar</string>
     <string name="se_warning_week_shift_no">Cancelar</string>
 
     <!-- Schedule Editor -->
     <string name="sce_title">Editor de clases</string>
-    <string name="sce_edit">Parámetros</string>
+    <string name="sce_edit">Parámetros del horario</string>
     <string name="sce_add_lesson">Añadir clase</string>
     <string name="sce_delete">Eliminar horario</string>
     <string name="sce_delete_message">¿Eliminar el horario y todas las clases?</string>
@@ -98,7 +96,7 @@
     <!-- Homeworks -->
     <string name="h_title">Tareas</string>
     <string name="h_add">Nueva tarea</string>
-    <string name="h_no_schedule">Está vacío aquí. Añade un horario para guardar tareas.</string>
+    <string name="h_no_schedule">No hay tareas. Añade un horario para guardar tareas.</string>
     <string name="h_delete_homework">Eliminar</string>
     <string name="h_delete_message">¿Eliminar esta tarea?</string>
     <string name="h_delete_yes">Eliminar</string>
@@ -120,7 +118,7 @@
     <string name="he_unknown_lesson_no">Cancelar</string>
     <string name="he_unknown_lesson_yes_and_create">Guardar y crear clase</string>
     <string name="he_delete">Eliminar</string>
-    <string name="he_delete_message">¿Eliminar tarea?</string>
+    <string name="he_delete_message">¿Eliminar esta tarea?</string>
     <string name="he_delete_yes">Eliminar</string>
     <string name="he_delete_no">Cancelar</string>
     <string name="he_delete_progress">Eliminando…</string>

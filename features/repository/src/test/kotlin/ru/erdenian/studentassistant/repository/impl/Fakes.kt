@@ -94,7 +94,7 @@ internal class FakeLessonDao : LessonDao() {
         byWeekday: ByWeekdayEntity,
     ) {
         delete(lesson.id)
-        insert(lesson, teachers, classrooms, byWeekday)
+        insert(lesson = lesson, teachers = teachers, classrooms = classrooms, byWeekday = byWeekday)
     }
 
     override suspend fun update(
@@ -104,7 +104,7 @@ internal class FakeLessonDao : LessonDao() {
         byDates: Set<ByDateEntity>,
     ) {
         delete(lesson.id)
-        insert(lesson, teachers, classrooms, byDates)
+        insert(lesson = lesson, teachers = teachers, classrooms = classrooms, byDates = byDates)
     }
 
     public override suspend fun insert(lesson: LessonEntity): Long {
@@ -146,10 +146,7 @@ internal class FakeLessonDao : LessonDao() {
 
     override fun getAllFlow(semesterId: Long, dayOfWeek: DayOfWeek): Flow<List<FullLesson>> =
         lessons.map { list ->
-            list.filter {
-                it.lesson.semesterId == semesterId &&
-                    it.byWeekday?.dayOfWeek == dayOfWeek
-            }.sorted()
+            list.filter { it.lesson.semesterId == semesterId && it.byWeekday?.dayOfWeek == dayOfWeek }.sorted()
         }
 
     override fun getAllFlow(
@@ -163,7 +160,7 @@ internal class FakeLessonDao : LessonDao() {
 
             val weekdayMatch = full.byWeekday?.let { w ->
                 w.dayOfWeek == dayOfWeek && w.weeks[weekNumber % w.weeks.size]
-            } ?: false
+            } == true
 
             val dateMatch = full.byDates.any { it.date == date }
 
@@ -186,51 +183,66 @@ internal class FakeLessonDao : LessonDao() {
     override suspend fun getCount(semesterId: Long, subjectName: String): Int =
         lessons.value.count { it.lesson.semesterId == semesterId && it.lesson.subjectName == subjectName }
 
-    override fun getSubjectsFlow(semesterId: Long): Flow<List<String>> =
-        lessons.map { list ->
-            list.filter { it.lesson.semesterId == semesterId }.map { it.lesson.subjectName }.distinct().sorted()
-        }
+    override fun getSubjectsFlow(semesterId: Long): Flow<List<String>> = lessons.map { list ->
+        list.asSequence()
+            .filter { it.lesson.semesterId == semesterId }
+            .map { it.lesson.subjectName }
+            .distinct()
+            .sorted()
+            .toList()
+    }
 
     override suspend fun renameLessonsSubject(semesterId: Long, oldName: String, newName: String) {
         lessons.update { list ->
             list.map { full ->
                 if (full.lesson.semesterId == semesterId && full.lesson.subjectName == oldName) {
                     full.copy(lesson = full.lesson.copy(subjectName = newName))
-                } else full
+                } else {
+                    full
+                }
             }
         }
     }
 
-    override suspend fun renameHomeworksSubject(semesterId: Long, oldName: String, newName: String) {}
+    override suspend fun renameHomeworksSubject(semesterId: Long, oldName: String, newName: String) = Unit
 
-    override fun getTypesFlow(semesterId: Long): Flow<List<String>> =
-        lessons.map { list ->
-            list.filter { it.lesson.semesterId == semesterId }.map { it.lesson.type }.distinct().sorted()
-        }
+    override fun getTypesFlow(semesterId: Long): Flow<List<String>> = lessons.map { list ->
+        list.asSequence()
+            .filter { it.lesson.semesterId == semesterId }
+            .map { it.lesson.type }
+            .distinct()
+            .sorted()
+            .toList()
+    }
 
     override fun getTeachersFlow(semesterId: Long): Flow<List<String>> =
         lessons.map { list ->
-            list.filter { it.lesson.semesterId == semesterId }
+            list.asSequence()
+                .filter { it.lesson.semesterId == semesterId }
                 .flatMap { it.teachers }
                 .map { it.name }
                 .distinct()
                 .sorted()
+                .toList()
         }
 
     override fun getClassroomsFlow(semesterId: Long): Flow<List<String>> =
         lessons.map { list ->
-            list.filter { it.lesson.semesterId == semesterId }
+            list.asSequence()
+                .filter { it.lesson.semesterId == semesterId }
                 .flatMap { it.classrooms }
                 .map { it.name }
                 .distinct()
                 .sorted()
+                .toList()
         }
 
     override suspend fun getLastEndTime(semesterId: Long, dayOfWeek: DayOfWeek): LocalTime? =
         lessons.value
             .filter { it.lesson.semesterId == semesterId && it.byWeekday?.dayOfWeek == dayOfWeek }
             .maxByOrNull { it.lesson.endTime }
-            ?.lesson?.endTime
+            ?.lesson
+            ?.endTime
 }
 
 internal class FakeHomeworkDao : HomeworkDao {

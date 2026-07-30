@@ -4,34 +4,37 @@ import android.app.Application
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
-import ru.erdenian.studentassistant.di.features.HomeworksModule
+import ru.erdenian.studentassistant.analytics.AnalyticsDependencies
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
+import ru.erdenian.studentassistant.di.features.AnalyticsModule
+import ru.erdenian.studentassistant.di.features.HomeworkModule
 import ru.erdenian.studentassistant.di.features.RepositoryModule
 import ru.erdenian.studentassistant.di.features.ScheduleModule
 import ru.erdenian.studentassistant.di.features.SettingsModule
-import ru.erdenian.studentassistant.homeworks.HomeworksDependencies
-import ru.erdenian.studentassistant.homeworks.api.HomeworksApi
+import ru.erdenian.studentassistant.homework.HomeworkDependencies
+import ru.erdenian.studentassistant.navigation.NavGraphContributor
 import ru.erdenian.studentassistant.repository.RepositoryConfig
 import ru.erdenian.studentassistant.repository.RepositoryDependencies
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.schedule.ScheduleDependencies
-import ru.erdenian.studentassistant.schedule.api.ScheduleApi
 import ru.erdenian.studentassistant.settings.SettingsDependencies
-import ru.erdenian.studentassistant.settings.api.SettingsApi
 
 @Singleton
 @Component(
     modules = [
         ScheduleModule::class,
-        HomeworksModule::class,
+        HomeworkModule::class,
         SettingsModule::class,
         RepositoryModule::class,
+        AnalyticsModule::class,
     ],
 )
 internal interface MainComponent :
     ScheduleDependencies,
-    HomeworksDependencies,
+    HomeworkDependencies,
     SettingsDependencies,
-    RepositoryDependencies {
+    RepositoryDependencies,
+    AnalyticsDependencies {
 
     @Component.Factory
     interface Factory {
@@ -42,8 +45,7 @@ internal interface MainComponent :
     }
 
     override val repositoryApi: RepositoryApi
+    override val analyticsApi: AnalyticsApi
 
-    val scheduleApi: ScheduleApi
-    val homeworksApi: HomeworksApi
-    val settingsApi: SettingsApi
+    val navGraphContributors: Set<NavGraphContributor>
 }

@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
 
@@ -15,6 +14,6 @@ dependencies {
     // endregion
 
     // region AndroidX
-    api(libs.androidx.core.ktx)
+    api(libs.androidx.core)
     // endregion
 }

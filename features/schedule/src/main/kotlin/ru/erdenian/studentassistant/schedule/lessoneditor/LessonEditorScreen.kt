@@ -242,7 +242,7 @@ internal fun LessonEditorScreen(route: ScheduleRoute.LessonEditor) {
         onDeleteClick = {
             customOperationMessageId = RS.le_delete_homeworks_progress
             coroutineScope.launch {
-                if (viewModel.isLastLessonOfSubjectsAndHasHomeworks()) {
+                if (viewModel.isLastLessonOfSubjectAndHasHomeworks()) {
                     showDeleteWithHomeworksDialog = true
                 } else {
                     showDeleteWithoutHomeworksDialog = true

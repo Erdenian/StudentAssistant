@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -17,6 +17,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import ru.erdenian.studentassistant.analytics.api.Analytics
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.navigation.Navigator
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
@@ -56,6 +58,12 @@ internal class SemesterEditorScreenTest {
                 override val selectedSemesterRepository = this@SemesterEditorScreenTest.selectedSemesterRepository
                 override val settingsRepository = this@SemesterEditorScreenTest.settingsRepository
             }
+            override val analyticsApi: AnalyticsApi = object : AnalyticsApi {
+                override val analytics = object : Analytics {
+                    override fun logEvent(name: String, params: Map<String, Any>) = Unit
+                    override fun setUserProperty(name: String, value: String?) = Unit
+                }
+            }
         }
         ScheduleComponentHolder.create(dependencies)
     }
@@ -78,7 +86,12 @@ internal class SemesterEditorScreenTest {
 
     @Test
     fun verifyEditSemester() {
-        val semester = Semester("Old Name", LocalDate.now(), LocalDate.now().plusMonths(1), 1L)
+        val semester = Semester(
+            name = "Old Name",
+            firstDay = LocalDate.now(),
+            lastDay = LocalDate.now().plusMonths(1),
+            id = 1L,
+        )
         semesterRepository.semesters.value = listOf(semester)
 
         val navigator = mockk<Navigator>(relaxed = true)
@@ -100,7 +113,7 @@ internal class SemesterEditorScreenTest {
     fun verifyErrorDuplicateName() {
         val navigator = mockk<Navigator>(relaxed = true)
         semesterRepository.semesters.value = listOf(
-            Semester("Семестр 1", LocalDate.now(), LocalDate.now().plusMonths(1), 1L),
+            Semester(name = "Семестр 1", firstDay = LocalDate.now(), lastDay = LocalDate.now().plusMonths(1), id = 1L),
         )
 
         composeTestRule.setContent {

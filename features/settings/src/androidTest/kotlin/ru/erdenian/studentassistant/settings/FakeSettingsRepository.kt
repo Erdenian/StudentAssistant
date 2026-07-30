@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import ru.erdenian.studentassistant.repository.api.SettingsRepository
 
+@Suppress("BackingPropertyNaming")
 internal class FakeSettingsRepository : SettingsRepository {
 
     private val _defaultStartTimeFlow = MutableStateFlow(LocalTime.of(9, 0))

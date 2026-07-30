@@ -322,7 +322,8 @@ internal fun LessonEditorContent(
             }
 
             // Weeks
-            key(isProgress) { // Чтобы сбросить состояние WeekSelector при завершении загрузки
+            // Добавляем key, чтобы сбросить состояние WeekSelector при завершении загрузки
+            key(isProgress) {
                 WeeksSelector(
                     weeks = weeks,
                     onWeeksChange = onWeeksChange,

@@ -7,7 +7,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.isToggleable
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.core.os.ConfigurationCompat
@@ -24,6 +24,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import ru.erdenian.studentassistant.analytics.api.Analytics
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.navigation.LocalNavigator
 import ru.erdenian.studentassistant.navigation.Navigator
 import ru.erdenian.studentassistant.repository.api.HomeworkRepository
@@ -56,6 +58,12 @@ internal class SettingsScreenTest {
                 override val semesterRepository: SemesterRepository = mockk()
                 override val lessonRepository: LessonRepository = mockk()
                 override val homeworkRepository: HomeworkRepository = mockk()
+            }
+            override val analyticsApi: AnalyticsApi = object : AnalyticsApi {
+                override val analytics = object : Analytics {
+                    override fun logEvent(name: String, params: Map<String, Any>) = Unit
+                    override fun setUserProperty(name: String, value: String?) = Unit
+                }
             }
         }
 

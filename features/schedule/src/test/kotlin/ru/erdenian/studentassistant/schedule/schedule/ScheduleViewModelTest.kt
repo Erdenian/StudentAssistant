@@ -5,6 +5,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import java.time.LocalDate
+import java.time.LocalTime
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -12,6 +13,8 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
+import ru.erdenian.studentassistant.analytics.api.Analytics
+import ru.erdenian.studentassistant.analytics.api.AnalyticsApi
 import ru.erdenian.studentassistant.repository.api.LessonRepository
 import ru.erdenian.studentassistant.repository.api.RepositoryApi
 import ru.erdenian.studentassistant.repository.api.SelectedSemesterRepository
@@ -29,10 +32,14 @@ internal class ScheduleViewModelTest {
     private val selectedSemesterRepository = mockk<SelectedSemesterRepository>(relaxed = true)
     private val semesterRepository = mockk<SemesterRepository>()
     private val lessonRepository = mockk<LessonRepository>()
+    private val analytics = mockk<Analytics>(relaxed = true)
     private val repositoryApi = mockk<RepositoryApi> {
         every { selectedSemesterRepository } returns this@ScheduleViewModelTest.selectedSemesterRepository
         every { semesterRepository } returns this@ScheduleViewModelTest.semesterRepository
         every { lessonRepository } returns this@ScheduleViewModelTest.lessonRepository
+    }
+    private val analyticsApi = mockk<AnalyticsApi> {
+        every { analytics } returns this@ScheduleViewModelTest.analytics
     }
 
     private val selectedSemesterFlow = MutableStateFlow<Semester?>(null)
@@ -43,7 +50,7 @@ internal class ScheduleViewModelTest {
         every { semesterRepository.allFlow } returns allSemestersFlow
     }
 
-    private val viewModel by lazy { ScheduleViewModel(application, repositoryApi) }
+    private val viewModel by lazy { ScheduleViewModel(application, repositoryApi, analyticsApi) }
 
     @Test
     fun `init test`() {
@@ -56,6 +63,36 @@ internal class ScheduleViewModelTest {
         val semesterId = 10L
         viewModel.selectSemester(semesterId)
         verify { selectedSemesterRepository.selectSemester(semesterId) }
+        verify { analytics.logEvent("semester_switched", any()) }
+    }
+
+    @Test
+    fun `logAddSemesterClicked test`() {
+        viewModel.logAddSemesterClicked()
+        verify { analytics.logEvent("semester_add_clicked", any()) }
+    }
+
+    @Test
+    fun `logEditScheduleClicked test`() {
+        viewModel.logEditScheduleClicked()
+        verify { analytics.logEvent("schedule_edit_clicked", any()) }
+    }
+
+    @Test
+    fun `logLessonClick test`() {
+        val lesson = Lesson(
+            subjectName = "Subject",
+            type = "Type",
+            teachers = emptyList(),
+            classrooms = emptyList(),
+            startTime = LocalTime.MIN,
+            endTime = LocalTime.MAX,
+            lessonRepeat = Lesson.Repeat.ByDates(emptySet()),
+            semesterId = 1L,
+            id = 10L,
+        )
+        viewModel.logLessonClick(lesson)
+        verify { analytics.logEvent("lesson_clicked", any()) }
     }
 
     @Test

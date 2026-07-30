@@ -51,7 +51,7 @@ internal fun SemesterEditorScreen(route: ScheduleRoute.SemesterEditor) {
 
     val name by viewModel.name.collectAsState()
     val nameErrorMessage = errorMessage
-        ?.takeIf { (error == Error.EMPTY_NAME) && isNameChanged || (error == Error.SEMESTER_EXISTS) }
+        ?.takeIf { ((error == Error.EMPTY_NAME) && isNameChanged) || (error == Error.SEMESTER_EXISTS) }
         ?.takeIf { !done } // Сообщение об ошибке мелькает перед переходом назад, если база данных достаточно быстрая
 
     val firstDay by viewModel.firstDay.collectAsState()

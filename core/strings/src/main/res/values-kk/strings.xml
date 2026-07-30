@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Student Assistant</string>
-
     <!-- region schedule -->
 
     <!-- LazyLessonsList -->
@@ -32,15 +30,15 @@
     <string name="se_title_new">Жаңа кесте</string>
     <string name="se_title_edit">Кестені өңдеу</string>
     <string name="se_name">Атауы</string>
-    <string name="se_first_day">Бірінші күн</string>
-    <string name="se_last_day">Соңғы күн</string>
+    <string name="se_first_day">Басталу күні</string>
+    <string name="se_last_day">Аяқталу күні</string>
     <string name="se_save">Сақтау</string>
     <string name="se_saving">Сақталуда…</string>
     <string name="se_error_empty_name">Атауын енгізіңіз</string>
     <string name="se_error_name_not_available">Бұл атау қолданылуда</string>
     <string name="se_error_wrong_dates">Күндер дұрыс емес</string>
     <string name="se_warning_week_shift_title">Апталардың ауысуы</string>
-    <string name="se_warning_week_shift_message">Сіз семестрдің басталу күнін өзгерттіңіз. Бұл бар сабақтардың апталық кезегін (жұп/тақ) бұзуы мүмкін. Жалғастыру керек пе?</string>
+    <string name="se_warning_week_shift_message">Сіз кестенің басталу күнін өзгерттіңіз. Бұл бар сабақтардың апталық кезегін (жұп/тақ) бұзуы мүмкін. Жалғастыру керек пе?</string>
     <string name="se_warning_week_shift_yes">Иә, жалғастыру</string>
     <string name="se_warning_week_shift_no">Болдырмау</string>
 

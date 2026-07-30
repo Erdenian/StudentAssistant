@@ -18,11 +18,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.os.ConfigurationCompat
 import java.time.Duration
-import java.util.Locale
 import ru.erdenian.studentassistant.strings.RS
 import ru.erdenian.studentassistant.style.AppTheme
 import ru.erdenian.studentassistant.uikit.R
@@ -49,11 +48,10 @@ internal fun DurationPreference(
 ) {
     var isShowDialog by rememberSaveable { mutableStateOf(false) }
 
-    val configuration = LocalConfiguration.current
     BasePreference(
         title = title,
         description = String.format(
-            locale = ConfigurationCompat.getLocales(configuration).get(0) ?: Locale.getDefault(),
+            locale = LocalLocale.current.platformLocale,
             format = "%02d:%02d",
             value.toHours(), value.toMinutesPart(),
         ),
@@ -108,30 +106,11 @@ internal fun DurationPreference(
     }
 }
 
-@Suppress("DEPRECATION")
 private var TimePicker.duration: Duration
-    get() {
-        val hours: Int
-        val minutes: Int
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            hours = hour
-            minutes = minute
-        } else {
-            hours = currentHour
-            minutes = currentMinute
-        }
-
-        return Duration.ofHours(hours.toLong()).plusMinutes(minutes.toLong())
-    }
+    get() = Duration.ofHours(hour.toLong()).plusMinutes(minute.toLong())
     set(value) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            hour = value.toHours().toInt()
-            minute = value.toMinutesPart()
-        } else {
-            currentHour = value.toHours().toInt()
-            currentMinute = value.toMinutesPart()
-        }
+        hour = value.toHours().toInt()
+        minute = value.toMinutesPart()
     }
 
 @AppPreviews

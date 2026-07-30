@@ -1,14 +1,17 @@
 package ru.erdenian.studentassistant.repository.impl
 
 import android.content.SharedPreferences
+import dagger.Reusable
 import java.time.Duration
 import java.time.LocalTime
 import javax.inject.Inject
+import javax.inject.Named
 import kotlinx.coroutines.CoroutineScope
 import ru.erdenian.studentassistant.repository.api.SettingsRepository
 
+@Reusable
 internal class SettingsRepositoryImpl @Inject constructor(
-    private val sharedPreferences: SharedPreferences,
+    @Named("settings") private val sharedPreferences: SharedPreferences,
 ) : SettingsRepository {
 
     companion object {

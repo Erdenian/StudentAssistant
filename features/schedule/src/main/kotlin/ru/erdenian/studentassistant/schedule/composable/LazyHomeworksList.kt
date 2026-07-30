@@ -56,13 +56,17 @@ internal fun LazyHomeworksList(
             modifier = Modifier.fillMaxSize(),
         ) {
             when {
-                (homeworksState == null) -> DelayedVisibility { CircularProgressIndicator() }
-                homeworksState.isEmpty() -> Text(
-                    text = stringResource(RS.lhl_no_homeworks),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal),
-                )
-                else ->
+                (homeworksState == null) -> {
+                    DelayedVisibility { CircularProgressIndicator() }
+                }
+                homeworksState.isEmpty() -> {
+                    Text(
+                        text = stringResource(RS.lhl_no_homeworks),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.screenPaddingHorizontal),
+                    )
+                }
+                else -> {
                     LazyColumn(
                         contentPadding = PaddingValues(
                             horizontal = MaterialTheme.dimensions.screenPaddingHorizontal,
@@ -93,12 +97,12 @@ internal fun LazyHomeworksList(
                             )
                         }
                     }
+                }
             }
         }
     }
 }
 
-@Suppress("StringLiteralDuplication")
 private class LazyHomeworksListPreviewParameterProvider : PreviewParameterProvider<List<Homework>?> {
     override val values = sequenceOf(
         null,
