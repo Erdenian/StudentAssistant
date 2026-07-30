@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.1] - 2026-07-30
+
 ### Changed
 - Улучшение и исправление текстовок на всех языках
 
@@ -166,7 +168,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2016-12-19
 
 <!-- @formatter:off -->
-[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/0.8.0...develop
+[Unreleased]: https://github.com/Erdenian/StudentAssistant/compare/0.8.1...develop
+[0.8.1]: https://github.com/Erdenian/StudentAssistant/compare/0.8.0...0.8.1
 [0.8.0]: https://github.com/Erdenian/StudentAssistant/compare/0.7.4...0.8.0
 [0.7.4]: https://github.com/Erdenian/StudentAssistant/compare/0.7.3...0.7.4
 [0.7.3]: https://github.com/Erdenian/StudentAssistant/compare/0.7.2...0.7.3
