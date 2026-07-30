@@ -51,7 +51,6 @@ android {
     lint {
         checkDependencies = true
         checkAllWarnings = true
-        xmlReport = false
         checkTestSources = true
     }
 
@@ -177,7 +176,7 @@ dependencies {
 dependencies {
     rootProject.subprojects {
         afterEvaluate {
-            apply(plugin = libs.plugins.kover.get().pluginId)
+            pluginManager.apply(libs.plugins.kover.get().pluginId)
             kover(project(path))
         }
     }
@@ -192,8 +191,12 @@ play {
 // region Release
 
 rootProject.tasks.register("updateChangelog") {
+    group = "release"
+    description = "Updates CHANGELOG.md with the new version and clears play store release notes"
+
     val changelogFile = rootProject.file("CHANGELOG.md")
     val newVersion = checkNotNull(android.defaultConfig.versionName)
+    val releaseNotesDir = file("src/main/play/release-notes")
 
     doFirst {
         val lines = changelogFile.readLines().toMutableList()
@@ -221,6 +224,13 @@ rootProject.tasks.register("updateChangelog") {
 
         changelogFile.delete()
         changelogFile.writeText(lines.joinToString(lineSeparator) + lineSeparator)
+
+        // Сбрасываем содержимое файлов release notes, чтобы они появились в git status
+        if (releaseNotesDir.exists()) {
+            releaseNotesDir.walk().filter { it.isFile && it.name == "beta.txt" }.forEach { file ->
+                file.writeText("TODO: Обновите release notes для ${file.parentFile.name}\n")
+            }
+        }
     }
 }
 
@@ -260,11 +270,6 @@ abstract class GenerateScreenshotsTask : DefaultTask() {
 
     @get:Inject
     abstract val fs: FileSystemOperations
-
-    init {
-        group = "android"
-        description = "Generates screenshots for all supported locales using an automated test."
-    }
 
     @TaskAction
     fun run() {
@@ -362,6 +367,9 @@ abstract class GenerateScreenshotsTask : DefaultTask() {
 }
 
 tasks.register<GenerateScreenshotsTask>("generateScreenshots") {
+    group = "android"
+    description = "Generates screenshots for all supported locales using an automated test."
+
     val buildType = "debug"
 
     dependsOn(tasks.named("install${buildType.capitalized()}"))
