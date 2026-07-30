@@ -51,9 +51,8 @@ val reportMerge = tasks.register<dev.detekt.gradle.report.ReportMergeTask>("repo
     }
 }
 
-val detektVersion = libs.versions.plugins.detekt.get()
 subprojects {
-    apply(plugin = "dev.detekt")
+    pluginManager.apply(rootProject.libs.plugins.detekt.get().pluginId)
 
     dependencies {
         detektPlugins(rootProject.libs.detekt.formatting)
@@ -61,7 +60,7 @@ subprojects {
     }
 
     detekt {
-        toolVersion = detektVersion
+        toolVersion = rootProject.libs.versions.plugins.detekt.get()
         buildUponDefaultConfig = true
         baseline = file("detekt/baseline.xml")
         parallel = false // https://github.com/detekt/detekt/issues/9121
@@ -144,7 +143,7 @@ subprojects {
 
 subprojectsAfterEvaluate {
     if (project.plugins.hasPlugin(libs.plugins.kotlin.jvm.get().pluginId)) {
-        project.plugins.apply(libs.plugins.android.lint.get().pluginId)
+        project.pluginManager.apply(libs.plugins.android.lint.get().pluginId)
     }
 }
 
@@ -200,9 +199,11 @@ subprojectsAfterEvaluate {
         }
 
         testOptions.unitTests.all { it.jvmArgs("--add-opens=java.base/java.time=ALL-UNNAMED") }
+        //noinspection WrongGradleMethod
         tasks.withType(Test::class) { jvmArgs = listOf("-XX:+EnableDynamicAgentLoading") }
 
         val androidTestDir = project.file("src/androidTest")
+        //noinspection WrongGradleMethod
         val androidTestExists = androidTestDir.exists() && androidTestDir.walk().any { it.isFile }
 
         if (androidTestExists) {
@@ -214,6 +215,7 @@ subprojectsAfterEvaluate {
             }
         }
 
+        //noinspection WrongGradleMethod
         project.dependencies {
             if (project.plugins.hasPlugin(libs.plugins.kotlin.compose.get().pluginId)) {
                 val bom = platform(libs.androidx.compose.bom)

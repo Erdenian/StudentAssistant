@@ -51,7 +51,6 @@ android {
     lint {
         checkDependencies = true
         checkAllWarnings = true
-        xmlReport = false
         checkTestSources = true
     }
 
@@ -177,7 +176,7 @@ dependencies {
 dependencies {
     rootProject.subprojects {
         afterEvaluate {
-            apply(plugin = libs.plugins.kover.get().pluginId)
+            pluginManager.apply(libs.plugins.kover.get().pluginId)
             kover(project(path))
         }
     }
@@ -271,11 +270,6 @@ abstract class GenerateScreenshotsTask : DefaultTask() {
 
     @get:Inject
     abstract val fs: FileSystemOperations
-
-    init {
-        group = "android"
-        description = "Generates screenshots for all supported locales using an automated test."
-    }
 
     @TaskAction
     fun run() {
@@ -373,6 +367,9 @@ abstract class GenerateScreenshotsTask : DefaultTask() {
 }
 
 tasks.register<GenerateScreenshotsTask>("generateScreenshots") {
+    group = "android"
+    description = "Generates screenshots for all supported locales using an automated test."
+
     val buildType = "debug"
 
     dependsOn(tasks.named("install${buildType.capitalized()}"))
