@@ -32,8 +32,8 @@ android {
 
     defaultConfig {
         applicationId = "ru.erdenian.studentassistant"
-        versionCode = 29
-        versionName = "0.8.0"
+        versionCode = 30
+        versionName = "0.8.1"
 
         androidResources.localeFilters += supportedLocalesProvider.getOrElse(emptySet())
 
